@@ -67,9 +67,9 @@ const config = {
       // Replace with your project's social card
       image: "img/reductstore-social-card.png",
       navbar: {
-        title: "My Site",
+        title: "ReductStore",
         logo: {
-          alt: "My Site Logo",
+          alt: "ReductStore Logo",
           src: "img/logo.png",
         },
         items: [
