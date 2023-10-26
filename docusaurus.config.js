@@ -14,7 +14,7 @@ const config = {
   url: "https://github.com",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/",
+  baseUrl: "/docs/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -24,7 +24,7 @@ const config = {
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
 
-  //   When deploying to GitHub Pages, it is better to use an explicit "trailingSlash" site config.
+  // When deploying to GitHub Pages, it is better to use an explicit "trailingSlash" site config.
   // Otherwise, GitHub Pages will add an extra trailing slash to your site urls only on direct-access (not when navigation) with a server redirect.
   // This behavior can have SEO impacts and create relative link issues.
   trailingSlash: false,
@@ -97,7 +97,7 @@ const config = {
             items: [
               {
                 label: "Tutorial",
-                to: "/docs/intro",
+                to: "/docs/docs/intro",
               },
             ],
           },
