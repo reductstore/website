@@ -1,0 +1,76 @@
+---
+title: "ReductStore v1.4.0 in Rust has been released"
+description: Announcing ReductStore v1.4.0! Written entirely in Rust, this version comes with breaking API changes, continuous query additions, and updated client SDKs. Stay tuned for more features in the next release.
+authors: alexey
+tags: [news]
+slug: news/reductstore-v1_4_0-released
+date: 2023-06-09
+---
+
+I am happy to announce that we have completed the migration from C++ to Rust, and have released a stable version ([v1.4.0](https://github.com/reductstore/reductstore/releases/tag/v1.4.0)) that is entirely written in Rust. 🤩
+
+It was not an easy journey. After six weeks of coding, we encountered numerous regressions and changes in behavior. I needed to release two alpha and two beta versions with production testing to clean up the database. Now, it is finally ready!
+
+<!--truncate-->
+
+## Breaking changes
+
+Unfortunately, when you rewrite your application using a completely different stack, it is not easy to keep identical behavior. Therefore, some changes had to be made to the API. In the C++ version, JSON responses were sent with integers represented as strings.
+
+```jsx
+GET http://127.0.0.1:8383/api/v1/info
+{
+   "bucket_count":"1",
+   "defaults":{
+      "bucket":{
+         "max_block_records":"1024",
+         "max_block_size":"64000000",
+         "quota_size":"0",
+         "quota_type":"NONE"
+      }
+   },
+   "latest_record":"1400081",
+   "oldest_record":"1",
+   "uptime":"6",
+   "usage":"717458496",
+   "version":"1.4.0-beta.2"
+}
+```
+
+I use Protobuf as a fast binary serializer for metadata in the storage engine and JSON serializer for HTTP communication. The official C++ Protobuf implementation uses strings for integers because it is believed (and I agree) that JavaScript cannot handle big integers correctly, at least not out of the box. However, when I moved to `Prost!`, the integers are sent as actual integers. I worked around this change in the client SDKs, but it is still a breaking change and I apologize for any inconvenience it may cause. I could call the Rust version v2.0, but the data format is the same and they are compatible. Therefore, I decided to save the major version for changes that break data compatibility, and users will need to migrate accordingly.
+
+## Continuous Queries
+
+In addition to Rust's safety and security, this release also enables continuous queries. This allows you to subscribe to new changes, and it works similarly to MQTT or Kafka subscription. While it may not be a complete replacement, reacting quickly to changes is critical for many applications. It can also be useful for integrating ReductStore with other technologies. For instance, you could subscribe to new records and send their labels to a time-series database (TSDB) for long-term storage. Here's a simple Python example that demonstrates how to subscribe to all changes made from now on for records with the `good` label equal to `True`:
+
+```python
+async for record in bucket.subscribe(
+    "entry-1",
+    start=int(time_ns() / 10000),
+    poll_interval=0.2,
+    include=dict(good=True),
+):
+    print(
+        f"Subscriber: Good record received: ts={record.timestamp}, labels={record.labels}"
+    )
+```
+
+## All Client SDKs Are Updated
+
+We updated our SDKs to v1.4.0 due to changes in the API. They are fully compatible with the latest ReductStore release. Check here:
+
+- [Python Client SDK](https://github.com/reductstore/reduct-py)
+- [JavaScript Client SDK](https://github.com/reductstore/reduct-js)
+- [C++ Client SDK](https://github.com/reductstore/reduct-cpp)
+
+## What is Next?
+
+We have already planned Release v1.5.0 and will be implementing the following features:
+
+- Batching small records into one request can make writing and reading small blobs more efficient. [#236](https://github.com/reductstore/reductstore/issues/236)
+- HEAD endpoint to read the metadata of a record without downloading its content., [#214](https://github.com/reductstore/reductstore/issues/214)
+- and Rust Client SDK!!!, [#289](https://github.com/reductstore/reductstore/issues/289)
+
+I hope you find this release useful. If you have any questions or feedback, don’t hesitate to reach out in [Discord](https://discord.gg/8wPtPGJYsn) or by opening a discussion on [GitHub](https://github.com/reductstore/reductstore/discussions).
+
+Thanks for using [ReductStore](https://www.reduct.store/)!

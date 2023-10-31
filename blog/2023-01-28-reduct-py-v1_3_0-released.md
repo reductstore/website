@@ -1,0 +1,100 @@
+---
+title: "Introducing the New Release of ReductStore Python SDK: v1.3.0: Labels Support and More"
+description: "Introducing v1.3.0 of the ReductStore Client SDK for Python: Enhancements to Labels and Content-Type"
+authors: alexey
+tags: [news, sdks, tutorials]
+slug: news/sdks/tutorials/reduct-py-v1_3_0-released
+date: 2023-01-26
+---
+
+We are happy to announce the release of [version 1.3.0](https://github.com/reductstore/reduct-py/releases/tag/v1.3.0)
+of the ReductStore SDK for Python! This release introduces several new features to help users better organize and filter
+their data.
+
+One of the most notable new features is the ability to attach labels to data when writing and querying. Labels are
+key-value pairs that can be used to classify and categorize data.
+For example, you might use labels to store metadata about a record, such as its md5 sum or class.
+To start using labels, you need the version of
+the ReductStore database higher than [1.3.0](https://github.com/reductstore/reductstore/blob/main/CHANGELOG.md#130---2023-01-26).
+
+<!--truncate-->
+
+Here's an example of how to use labels when writing data:
+
+```python
+from reduct import Client
+
+client = Client("https://play.reduct.store", api_token="reduct")
+bucket = await client.create_bucket("my_data", exist_ok=True)
+await bucket.write(
+    "entry-1", b"something", labels={"label1": 123, "label2": 0.1, "label3": "hey"}
+)
+```
+
+In this example, we're attaching the labels `{"label1": 123, "label2": 0.1, "label3": "hey"}` to the data.
+
+When reading data, you can access the labels that were attached to it:
+
+```python
+# Read the data back, if no timestamp is specified, the latest record is returned
+async with bucket.read("entry-1") as record:
+    assert record.labels == {"label1": "123", "label2": "0.1", "label3": "hey"}
+
+    data = await record.read_all()
+    assert data == b"something"
+```
+
+Another new feature in this release is the ability to query data based on labels.
+The query method now accepts two new parameters, include and exclude, which allow you to filter the results of a query
+based on the labels attached to the data.
+
+For example, you can use the include parameter to query for records that have specific labels:
+
+```python
+async for record in bucket.query(
+        "entry-1", include={"label1": "value1", "label2": "value2"}
+):
+    # Do something with the record
+    pass
+```
+
+This query returns all records with `label1` equals `value1` and `label2` equals to `value2`, and ignores all other
+labels.
+
+On the other hand, you can use the exclude parameter to query for records that do not have specific labels:
+
+```python
+async for record in bucket.query(
+        "entry-1", exclude={"label1": "value1", "label2": "value2"}
+):
+    # Do something with the record
+    pass
+```
+
+This query returns all records that not have `label1` equals `value1` and `label2` equals to `value2`.
+
+Additionally, You can also pass `Content-Type` header for read and write operations, this header will be added to all
+the requests that read and write data.
+
+```python
+await bucket.write(
+    "entry-1", b"{'some': 'json'}", content_type="application/json"
+)
+
+async with bucket.read("entry-1") as record:
+    assert record.content_type == "application/json"
+```
+
+With these new features, you can more easily organize and filter your data, making it easier to find the information you
+need. We encourage you to upgrade to this latest version of the SDK and start taking advantage of these new
+capabilities:
+
+```
+pip install reduct-py==1.3.0
+```
+
+We hope you enjoy the new features and improvements in this release, and as always, we welcome your feedback and
+suggestions for future updates. Don't hesitate to reach out in [Discord](https://discord.gg/8wPtPGJYsn)
+or by opening a discussion on [GitHub](https://github.com/reductstore/reductstore/discussions).
+
+Thanks for using [ReductStore](https://www.reduct.store)!

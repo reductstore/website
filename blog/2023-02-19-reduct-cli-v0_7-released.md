@@ -1,0 +1,40 @@
+---
+title: CLI Client for ReductStore v0.7.0 has been released
+description: Release notes for CLI Client for ReductStore v0.7.0 with improved rcli export command.
+authors: alexey
+tags: [news, cli]
+slug: news/cli/reduct-cli-v0_7-released
+date: 2023-02-19
+---
+
+
+Hey everyone,
+
+I'm happy to announce that we have
+released [Reduct CLI client v0.7.0](https://github.com/reductstore/reduct-cli/releases/tag/v0.7.0) with some minor
+improvements and bug fixes. We started using the tool in real applications and faced some problems exporting data from a
+ReductStore instance when the connection is slow and we have many entries to download asynchronously.
+
+First of all, it wasn't very convenient to count all needed entries in the `rcli export` command. Now we can use
+wildcards:
+
+```
+rcli export folder instance/bucket ./export_path  --entries=sensor-*
+```
+
+<!--truncate-->
+
+More over, the `rcli export` command used the query API with default TTL 5 seconds for a query. When the internet
+connection was slow, it may have taken more than 5 seconds to request the next record in the query. The query could
+expire and the CLI would receive the 404 HTTP error. Now the CLI client uses the TTL equal to the number of parallel
+tasks multiplied by the timeout. By default, the TTL is 50 seconds (10 parallel tasks * 5 second timeout). This makes
+the data export more robust and allows a user to change the TTL by using the `parallel` and `timeout` options.
+
+```
+rcli --parallel 5 --timeout 3 export folder  instance/bucket ./export_path # TTL is 15 second
+```
+
+if you have any questions or feedback, don't hesitate to reach out in [Discord](https://discord.gg/8wPtPGJYsn)
+or by opening a discussion on [GitHub](https://github.com/reductstore/reductstore/discussions).
+
+Thanks for using [ReductStore](https://www.reduct.store)!

@@ -1,0 +1,32 @@
+---
+title: "ReductStore v1.2.1 Released"
+description: ReductStore v1.2.0 is released with a new HTTP method to get permission for the current API token
+authors: alexey
+tags: [news]
+slug: news/reductstore-v1_2_1-released
+date: 2022-12-19
+---
+
+Hello, everyone!
+
+We're excited to announce the release
+of [ReductStore v1.2.0](https://github.com/reductstore/reductstore/releases/tag/v1.2.0). In this update, we've made some
+important changes to
+improve the way tokens and buckets are managed. Specifically, when you create a new token, the database will now check
+to ensure that the buckets specified in the token's permissions actually exist. This will help prevent errors and ensure
+that users have the proper access to the appropriate buckets.
+
+<!--truncate-->
+
+We've also added a new endpoint, `GET /api/v1/me`, which allows users to retrieve their current permissions. This can be
+useful for checking what actions a user is allowed to perform, or for debugging purposes.
+
+In addition to these changes, we've made a few updates to the branding of the project. As you may know, ReductStore was
+previously known as Reduct Storage. We decided to rename the project to ReductStore in order to have a shorter name and
+a cool domain (https://reduct.store).
+
+We hope these updates will improve your experience with ReductStore. As always, if you have any questions or feedback,
+don't hesitate to reach out in [Discord](https://discord.gg/8wPtPGJYsn) or by opening a discussion
+on [GitHub](https://github.com/reductstore/reductstore/discussions).
+
+Thank you for using ReductStore!

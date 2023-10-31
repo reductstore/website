@@ -1,0 +1,67 @@
+---
+title: Data Reduction and Why It Is Important For Edge Computing
+description: Data reduction is a critical aspect of edge computing that helps to optimize system efficiency and minimize resource usage. 
+authors: alexey
+tags: [edge-computing]
+slug: edge-computing/data-reduction-on-edge
+date: 2023-04-05
+---
+
+Before we dive into the importance of data reduction for edge computing, it is important to define both terms. 
+Data reduction refers to the process of reducing the amount of data that needs to be transmitted or stored, while still maintaining the necessary information and level of accuracy. 
+This can be achieved through techniques such as compression, aggregation, and filtering.
+
+<!--truncate-->
+
+On the other hand, edge computing involves processing data at or near the source rather than transmitting it back to a central location such as a cloud server. 
+This allows for faster processing times and reduced network latency.
+
+Now that we have a better understanding of these concepts, let's explore why data reduction is particularly important for edge computing.
+
+## The Importance of Data Reduction for Edge Computing
+
+Data reduction is crucial for edge computing due to the limitations of edge devices. 
+These devices often have limited processing power, storage capacity, and network connectivity. 
+Therefore, transmitting large amounts of data from these devices can consume valuable resources and cause delays in processing times.
+
+By implementing data reduction techniques on the edge device itself, unnecessary or redundant data can be filtered out before transmission or storage. 
+This reduces the amount of data that needs to be processed and transmitted, resulting in faster response times and reduced network traffic.
+
+Overall, incorporating effective data reduction strategies into edge computing workflows is critical for maximizing system efficiency while minimizing resource usage.
+
+## How ReductStore Could Be Useful
+
+If your application involves blob data such as images captured by a computer vision camera, sound recordings, or binary formats, it requires a unique method of storing and tracking data over time. 
+This is where [ReductStore](https://www.reduct.store) comes into play, as an ideal solution for managing time series databases specifically designed for edge devices that handle blob data.
+
+### Bucket FIFO Quota
+
+Like several other databases and data storage systems, ReductStore arranges data into buckets. 
+However, in case your application generates data constantly, it is only a matter of time before your edge device's disk space gets depleted. 
+This highlights the significance of having a quota for your buckets, and eliminating outdated data once you hit the limit. 
+Simply put, ReductStore's buckets serve as large ring buffers for storing information efficiently.
+
+### Labeling and Queering Data
+
+Apart from its bucket quota, ReductStore also provides labeling and querying capabilities. 
+By assigning relevant metadata to data, searching and filtering through large datasets becomes easier. 
+This feature can prove to be particularly beneficial for edge devices that may generate an extensive amount of data, but only a portion of it is necessary for analysis or decision-making.
+
+Moreover, ReductStore's query API enables the retrieval of specific data points or data ranges based on time stamps or other criteria that are efficient.
+This helps simplify the process of obtaining critical information from edge devices without having to sift through irrelevant or duplicate data.
+
+For instance, suppose your application detects objects in images and categorizes them; in that case, you can write those images into the database with labels containing classes, object numbers and confidence levels. 
+Later on, you can execute queries to fetch specific images with certain classes or object numbers.
+
+## Conclusion
+
+In conclusion, data reduction is a critical aspect of edge computing that helps to optimize system efficiency and minimize resource usage.
+By implementing techniques such as compression, aggregation, and filtering on the edge device itself, unnecessary or redundant data can be eliminated before transmission or storage.
+This results in faster response times and reduced network traffic, which is particularly important for edge devices with limited processing power and storage capacity.
+Additionally, tools like ReductStore can help manage blob data efficiently by providing features such as bucket quotas, labeling, and querying capabilities.
+Overall, incorporating effective data reduction strategies into edge computing workflows can lead to significant benefits in terms of performance and resource utilization.
+
+I hope you found this article helpful. If you have any questions or feedback, don't hesitate to reach out in [Discord](https://discord.gg/8wPtPGJYsn)
+or by opening a discussion on [GitHub](https://github.com/reductstore/reductstore/discussions).
+
+Thanks for reading!

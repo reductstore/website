@@ -1,0 +1,46 @@
+---
+title: "ReductStore v1.5.0 has been released"
+description: ReductStore released version 1.5.0 featuring two important features to increase data downloading speed and new HEAD versions of endpoints to read and query records without HTTP body.
+authors: alexey
+tags: [news]
+slug: news/reductstore-v1_5_0-released
+date: 2023-07-02
+---
+
+
+Hello everyone,
+
+I'm happy to announce that the [next minor version](https://github.com/reductstore/reductstore/releases/tag/v1.5.0) of [ReductStore](https://www.reduct.store) has been released. For the last month, we worked hard to improve the user experience when querying data from the database. And in this release, we deliver two important features:
+
+- Batching multiple records into an HTTP response for read operations
+- Reading only meta information about a record without its body.
+
+Let me show you how it works in detail and how you can use it.
+
+<!--truncate-->
+
+## Batching Records
+
+ReductStore provides an HTTP API that has many benefits, but data querying may slow down due to latency and HTTP overhead, especially for small blobs. The goal of ReductStore is to be suitable for data of any size, and since version 1.5.0, the database can batch multiple records in one HTTP request. This can increase the speed of downloading data by **up to 80 times**, depending on the size of the records.
+
+If you're interested in details, you can read about the `GET /api/v1/b/:bucket/:entry/batch` endpoint [here](https://docs.reduct.store/http-api/entry-api). However, if you use one of our client SDKs, you just need to update to the latest version without making any changes to your code.
+
+## Reading Only Meta Information
+
+Sometimes we don’t need the content of your blob records, but only meta information like size, labels or timestamp. For this case, ReductStore provides `HEAD` versions of endpoints to read and query records without HTTP body.
+
+This is an example, how to use it in python:
+
+```python
+bucket = await reduct_client.get_bucket("test")
+async for rec in bucket.query("data", head=True):
+    count += rec.size
+```
+
+## Client SDKs
+
+Traditionally, we have aligned our official SDKs for [Python](https://github.com/reductstore/reduct-py), [C++](https://github.com/reductstore/reduct-cpp), and [JavaScript](https://github.com/reductstore/reduct-js) with the latest API so that you can use the latest features.
+
+I hope you find this release useful. If you have any questions or feedback, don’t hesitate to reach out in [Discord](https://discord.gg/8wPtPGJYsn) or by opening a discussion on [GitHub](https://github.com/reductstore/reductstore/discussions).
+
+Thanks for using [ReductStore](https://www.reduct.store/)!

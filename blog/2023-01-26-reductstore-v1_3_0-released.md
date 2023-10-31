@@ -1,0 +1,61 @@
+---
+title: "ReductStore v1.3.0 Released"
+description: Introducing version 1.3 of Reductstore, a high-performance database with improved filtering capabilities and label support for enhanced organization and querying
+authors: alexey
+tags: [news]
+slug: news/reductstore-v1_3_0-released
+date: 2023-01-26
+---
+
+Hello everyone,
+
+We are excited to announce the release of [version 1.3.0](https://github.com/reductstore/reductstore/releases/tag/v1.3.0) of the ReductStore database! This update brings a number of new
+features and improvements that we believe will enhance your experience with the database.
+
+## License Change
+
+First and foremost, we've changed the project license, switching from AGPLv3 to MPL-2.0 which allows usage of the program
+as a service over the network in proprietary software. This change is made to avoid any misunderstanding in the future,
+and to align with our goal of encouraging contributions back to the project while allowing everyone to use it for free.
+
+<!--truncate-->
+
+## Label Support
+
+We have added support for labels on `POST|GET /api/v1/:bucket/:entry` requests. These labels can be
+sent and received as headers with the prefix `x-reduct-label-`, making it easier to categorize and filter your data.
+
+```shell
+# Write two records with timestamp 10000 and 20000
+curl -d "some_data_1" \
+  -X POST \
+  --header "x-reduct-label-quality: good" \
+  --header "Content-Type: text/plain" \
+  "http://127.0.0.1:8383/api/v1/b/my_data/entry_1?ts=10000"
+```
+
+We've also added `include-<label>` and `exclude-<label>` query parameters for the `GET /api/v1/:bucket/:entry/q` endpoint.
+These new parameters allow you to filter records based on specific label values, making it easier to find the data you
+need.
+
+```shell
+curl "http://127.0.0.1:8383/api/v1/b/my_data/entry_1/q?include-quality=good"
+```
+
+## Other Improvements
+
+Additionally, we've added the ability to store the `Content-Type` header for a record when writing it, so that the record
+can be returned with the same header. This ensures that your data is always returned in the format you expect.
+Thanks to [@rtadepalli](https://github.com/rtadepalli) for contributing this feature!
+
+Finally, we've updated the Web Console to version 1.2.0 and have renamed error header `-x-reduct-error` to `x-reduct-error`
+to make it more consistent.
+
+Please note that our [client SDKs](https://github.com/reductstore/reductstore#client-sdks) will soon be updated to support the new version of the API. We recommend that you upgrade to this new version as soon as possible to take advantage of these new features and improvements.
+
+We hope you enjoy the new features and improvements in this release, and as always, we welcome your feedback and
+suggestions for future updates. Don't hesitate to reach out in [Discord](https://discord.gg/8wPtPGJYsn)
+or by opening a discussion on [GitHub](https://github.com/reductstore/reductstore/discussions).
+
+Thanks for using ReductStore!
+

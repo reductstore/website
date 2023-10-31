@@ -16,7 +16,7 @@ The server API provides HTTP methods for checking the status of the server, list
     <>
       You can use this method to get stats of the storage and check its version. If authentication is enabled, the method needs a valid API token.
       <pre><code>
-      {`curl --header "Authorization: Bearer \${API_TOKEN}" http://127.0.0.1:8383/api/v1/info`}
+      {`curl --header "authorsization: Bearer \${API_TOKEN}" http://127.0.0.1:8383/api/v1/info`}
       </code></pre>
     </>
   }
@@ -49,7 +49,7 @@ The server API provides HTTP methods for checking the status of the server, list
     },
     {
       status: "401",
-      message: "Unauthorized",
+      message: "Unauthorsized",
       summary: "If authentication is enabled and access token is invalid or empty"
     }
   ]}
@@ -63,7 +63,7 @@ The server API provides HTTP methods for checking the status of the server, list
     <>
       You can use this method to browse the buckets of the storage. If authentication is enabled, the method needs a valid API token.
       <pre><code>
-      {`curl --header "Authorization: Bearer \${API_TOKEN}" http://127.0.0.1:8383/api/v1/list`}
+      {`curl --header "authorsization: Bearer \${API_TOKEN}" http://127.0.0.1:8383/api/v1/list`}
       </code></pre>
     </>
   }
@@ -91,7 +91,7 @@ The server API provides HTTP methods for checking the status of the server, list
     },
     {
       status: "401",
-      message: "Unauthorized",
+      message: "Unauthorsized",
       summary: "If authentication is enabled and access token is invalid or empty"
     }
   ]}
