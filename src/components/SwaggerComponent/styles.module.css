@@ -1,0 +1,204 @@
+/* Base Component Styles */
+.swaggerComponent {
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 20px 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Styles */
+.swaggerHeader {
+  padding: 10px 15px;
+  background-color: #f6f8fa;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.methodPathContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.methodBadge {
+  padding: 2px 8px;
+  margin-left: 5px;
+  border-radius: 20px;
+  font-size: 0.8em;
+  font-weight: bold;
+  margin-right: 10px;
+  text-transform: uppercase;
+}
+
+.path {
+  color: #6c757d; /* Dimmed */
+  font-weight: 500;
+}
+
+.summary {
+  font-weight: bold;
+}
+
+/* Arrow Styles */
+.toggleArrow {
+  margin-right: 5px;
+  user-select: none;
+}
+
+/* Details Section Styles */
+.swaggerDetails {
+  padding: 15px;
+  background-color: #ffffff;
+  border-top: 1px solid #e1e4e8;
+}
+
+.section {
+  margin-top: 30px;
+}
+
+.response {
+  margin-top: 10px;
+  border-top: 1px solid transparent;
+  padding-top: 10px;
+}
+
+.response + .response {
+  border-top-color: #e1e4e8;
+}
+
+.responseHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.responseDescription {
+  margin-top: 5px;
+  padding-left: 10px;
+}
+
+.responseTextContainer {
+  font-weight: bold;
+}
+
+/* Dimmed summary text */
+.responseSummaryAndArrow {
+  display: flex;
+  align-items: center;
+  color: #999; 
+}
+
+.responseSummary {
+  margin-right: 8px;
+}
+
+/* State Styles */
+.open {
+  background-color: #e9ecef;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+/* Method Badge Colors */
+.get {
+  background-color: #346ddb;
+  color: #ffffff;
+}
+
+.post {
+  background-color: #008847;
+  color: #ffffff;
+}
+
+.put {
+  background-color: #b95e04;
+  color: #ffffff;
+}
+
+.delete {
+  background-color: #d33d3d;
+  color: #ffffff;
+}
+
+.head {
+  background-color: #6c757d;
+  color: #ffffff;
+}
+
+/* Status Code Styles */
+.bullet {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.informational {
+  background-color: #17a2b8;
+}
+
+.successful {
+  background-color: #28a745;
+}
+
+.redirection {
+  background-color: #ffc107;
+}
+
+.clientError {
+  background-color: #dc3545;
+}
+
+.serverError {
+  background-color: #6c757d;
+}
+
+
+/* Parameter Styles */
+.parameter {
+  margin-bottom: 10px;
+}
+
+.parametersSection {
+  margin-top: 20px;
+}
+
+.parameterTypeTitle {
+  margin-bottom: 10px;
+}
+
+.parameterRow {
+  display: flex;
+  margin-bottom: 15px;
+  padding-top: 15px;
+  color: #999;
+  border-top: 1px solid transparent;
+}
+
+.parameterRow + .parameterRow {
+  border-top-color: #e1e4e8; 
+}
+
+.parameterName,
+.parameterDataType,
+.parameterSummary {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.parameterSummary {
+  flex: 2;
+}
+
+.requiredAsterisk {
+  color: #dc3545; 
+  margin-left: 5px;
+}
+
