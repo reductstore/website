@@ -1,0 +1,78 @@
+---
+title: "ReductStore 1.6.0 has been released with new license and client SDK for Rust"
+description: The article announces the release of ReductStore 1.6.0, a time-series database designed for managing large amounts of blob data. The update includes a new license, client SDK for Rust, and new features in HTTP API 1.6.0.
+authors: alexey
+tags: [news]
+slug: news/reductstore-v1_6_0-released
+date: 2023-08-15
+---
+
+We are pleased to announce the release of the latest minor version of [ReductStore](https://www.reduct.store), [1.6.0](https://github.com/reductstore/reductstore/releases/tag/v1.6.0). ReductStore is a time series database designed for storing and managing large amounts of blob data.
+
+To download the latest released version, please visit our [Download Page](https://www.reduct.store/download). 
+
+## What is new in 1.6.0?
+
+### Business Source License (BUSL-1.1)
+
+We have updated the ReductStore license to the Business Source License (BUSL-1.1). This license permits free usage of the database for development, research, and testing purposes. Furthermore, it can be used in a production environment for free, provided that the Aggregate Financial Capacity of the company is less than $2,000,000 for the previous year. For additional information, please refer to [here](https://github.com/reductstore/reductstore/blob/main/LICENSE).
+
+We believe that the new license strikes a good balance between freedom and revenue generation. This balance is necessary to maintain and improve our technology, and to bring benefits to its users.
+
+<!--truncate-->
+
+## Client SDK for Rust
+
+ReductStore was rewritten from C++ to Rust a few months ago. We are delighted to be part of the Rust community and have taken a new step towards Rust with the Client SDK. The SDK is powered by [reqwest](https://github.com/seanmonstar/reqwest) and enables asynchronous integration of the database into Rust applications:
+
+```rust
+use bytes::Bytes;
+use reduct_rs::{ReductClient, HttpError};
+use std::str::from_utf8;
+use std::time::SystemTime;
+
+use tokio;
+
+#[tokio::main]
+async fn main() -> Result<(), HttpError> {
+    let client = ReductClient::builder()
+        .url("http://127.0.0.1:8383")
+        .build();
+
+    let timestamp = SystemTime::now();
+
+    let bucket = client.create_bucket("test").exist_ok(true).send().await?;
+    bucket
+        .write_record("entry-1")
+        .timestamp(timestamp)
+        .data(Bytes::from("Hello, World!"))
+        .send()
+        .await?;
+
+    let record = bucket
+        .read_record("entry-1")
+        .timestamp(timestamp)
+        .send()
+        .await?;
+
+    println!("Record: {:?}", record);
+    println!(
+        "Data: {}",
+        from_utf8(&record.bytes().await?.to_vec()).unwrap()
+    );
+
+    Ok(())
+}
+```
+
+## HTTP API 1.6: Removing Entries and Limited Queries
+
+The new API includes  the `DELETE /api/v1/b/:bucket/:entry` endpoint, that allows you to delete an entry from a bucket. When using ReductStore on an edge device, it functions as a large FIFO buffer with a fixed size. In this case, manual deletion of data is unnecessary, as it is automatically overwritten. However, this feature can be useful when storing data without quotas and you would like to remove entries that are no longer in use or were uploaded by mistake.
+
+Another new feature is the `limit` parameter in the query request (`GET api/v1/b/:bucket/:entry/q`). When a user requests data for a time interval, they may not know how many records are stored because queries work as iterators to avoid spikes for big requests. With the new feature, you can specify a maximum number of records for a request if you only need a certain amount of data.
+
+Traditionally, we have aligned our official SDKs for [Python](https://github.com/reductstore/reduct-py), [C++](https://github.com/reductstore/reduct-cpp), and [JavaScript](https://github.com/reductstore/reduct-js) with the latest API so that you can use the latest features.
+
+I hope you find this release useful. If you have any questions or feedback, don’t hesitate to reach out in [Discord](https://discord.gg/8wPtPGJYsn) or by opening a discussion on [GitHub](https://github.com/reductstore/reductstore/discussions).
+
+Thanks for using [ReductStore](https://www.reduct.store/)!

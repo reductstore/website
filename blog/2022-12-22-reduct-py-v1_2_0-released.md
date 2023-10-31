@@ -1,0 +1,55 @@
+---
+title: "ReductStore Client SDK for Python v1.2.0: New Features and Example Use"
+description: Release notes for ReductStore Client SDK for Python v1.2.0 with usage examples
+authors: alexey
+tags: [news, sdks, tutorials]
+slug: news/sdks/tutorials/reduct-py-v1_2_0-released
+date: 2022-12-22
+---
+
+Hello, everyone!
+We are excited to announce the release of
+the [Python client SDK v1.2.0](https://github.com/reductstore/reduct-py/releases/tag/v1.2.0)! This release includes
+support for the
+[ReductStore HTTP API v1.2](https://github.com/reductstore/reductstore/releases/tag/v1.2.0) and several other
+improvements.
+
+<!--truncate-->
+
+One of the new features in this release is the `Client.me()` method. This method allows you to get information about the
+current token being used to authenticate with the ReductStore instance. It returns a `FullTokenInfo` object, which
+contains
+information about the token, including its name, creation time, and permissions.
+
+To use the method, simply call it on a Client instance:
+
+```python
+from reduct import Client
+
+client = Client('https://play.reduct.store', api_token='my-token')
+
+# Get the current token info
+token_info = await client.me()
+
+# Print the token name and creation time
+print(f"Token name: {token_info.name}")
+print(f"Token created at: {token_info.created_at}")
+
+# Print the token permissions
+print(f"Full access: {token_info.permissions.full_access}")
+print(f"Read access: {token_info.permissions.read}")
+print(f"Write access: {token_info.permissions.write}")
+```
+
+In addition to the `Client.me` method, this release also includes improvements to the documentation and a migration to
+using a
+`pyproject.toml` file to manage dependencies.
+
+To upgrade to the latest version of the reduct-py SDK, run the following command:
+
+```
+pip install -U reduct-py
+```
+
+if you have any questions or feedback, don't hesitate to reach out in [Discord](https://discord.gg/8wPtPGJYsn)
+or by opening a discussion on [GitHub](https://github.com/reductstore/reductstore/discussions).

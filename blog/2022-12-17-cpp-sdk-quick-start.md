@@ -1,0 +1,148 @@
+---
+title: "How to integrate ReductStore into your C++ application"
+description: "A quick start guide to integrate ReductStore into your C++ application by using the ReductStore C++ SDK."
+authors: alexey
+tags: [tutorials, sdks]
+slug: tutorials/sdks/cpp-sdk-quick-start
+date: 2022-12-17
+---
+
+<head>
+    <link rel="canonical" href="https://cpp.reduct.store/en/latest/docs/quick-start" />
+</head>
+
+This guide will help you get started with the [ReductStore C++ SDK](https://github.com/reductstore/reduct-cpp).
+
+## Requirements
+
+The ReductStore C++ SDK is written in C++20 and uses CMake as a build system. To install it, you will need:
+
+* C++ compiler with C++20 support (we use GCC-11.2)
+* cmake 3.18 or higher
+* conan 1.40 or higher (it is optional, but [**conan**](https://conan.io) is a convenient package manager)
+
+Currently, we have only tested the SDK on Linux AMD64, but if you need to port it to another
+operating system or platform, you can create an [issue](https://github.com/reductstore/reduct-cpp/issues/new/choose)
+for assistance.
+
+## Installing
+
+To install the ReductStore C++ SDK, follow these steps:
+
+<!--truncate-->
+
+```
+git clone https://github.com/reductstore/reduct-cpp.git
+cd reduct-cpp
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake --build .
+sudo cmake --build . --target install
+```
+
+## Simple Application
+
+Let's create a simple C++ application that connects to the storage, creates a bucket, and writes and reads some data. We
+will need two files: `CMakeLists.txt` and `main.cc`.
+
+```
+touch CMakeLists.txt main.cc
+```
+
+Here is the `CMakeLists.txt` file:
+
+```cmake
+cmake_minimum_required(VERSION 3.18)
+
+project(ReductCppExamples)
+set(CMAKE_CXX_STANDARD 20)
+
+
+find_package(ReductCpp 1.1.0)
+find_package(ZLIB)
+find_package(OpenSSL)
+
+add_executable(usage-example usage_example.cc)
+target_link_libraries(usage-example ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+```
+
+And here is the code in `main.cc`:
+
+```cpp
+#include <reduct/client.h>
+
+#include <iostream>
+
+using reduct::IBucket;
+using reduct::IClient;
+
+int main() {
+  auto client = IClient::Build("http://127.0.0.1:8383");
+
+  // Get information about the server
+  auto [info, err] = client->GetInfo();
+  if (err) {
+    std::cerr << "Error: " << err;
+    return -1;
+  }
+
+  std::cout << "Server version: " << info.version;
+  // Create a bucket
+  auto [bucket, create_err] = client->GetOrCreateBucket("bucket");
+  if (create_err) {
+    std::cerr << "Error: " << create_err;
+    return -1;
+  }
+
+  // Write some data
+  IBucket::Time start = IBucket::Time::clock::now();
+  [[maybe_unused]] auto write_err = bucket->Write("entry-1", {}, [](auto rec) { rec->WriteAll("some_data1"); });
+  write_err = bucket->Write("entry-1", {}, [](auto rec) { rec->WriteAll("some_data2"); });
+  write_err = bucket->Write("entry-1", {}, [](auto rec) { rec->WriteAll("some_data3"); });
+
+  // Walk through the data
+  err = bucket->Query("entry-1", start, IBucket::Time::clock::now(), std::nullopt, [](auto&& record) {
+    std::string blob;
+    auto read_err = record.Read([&blob](auto chunk) {
+      blob.append(chunk);
+      return true;
+    });
+
+    if (!read_err) {
+      std::cout << "Read blob: " << blob;
+    }
+
+    return true;
+  });
+}
+
+
+```
+
+To compile the example, use the following commands:
+
+```
+mkdir build && cd build
+cmake ..
+cmake --build .
+```
+
+Before you can run the example, you will need to start the storage as a Docker container:
+
+```
+docker run -p 8383:8383  reductstorage/engine:latest
+```
+
+You can then run the example with the following command:
+
+```
+./usage-example
+```
+
+## Next Steps
+
+You can find more detailed documentation and examples
+in [the Reference API section](https://cpp.reduct.store/en/latest/docs/api_reference/). You can also
+refer to the [ReductStore HTTP API](https://docs.reduct.store/http-api) documentation for a complete reference
+of the available API calls.

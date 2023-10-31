@@ -1,0 +1,113 @@
+---
+title: 6 weeks with Rust
+description: a post about my experience with migrating ReductStore from C++ to Rust
+authors: alexey
+tags: [news]
+slug: news/6-weeks-with-rust
+date: 2023-05-09
+---
+
+I previously wrote about [my plan to rewrite ReductStore](https://www.reduct.store/news/we-move-to-rust/) in Rust. I am
+happy to announce that the migration is now [complete](https://github.com/reductstore/reductstore). It was a very interesting experience, and I would like to share it
+here.
+
+## Project Design before Migration
+
+I wrote [ReductStore](https://reduct.store) in C++20, utilizing coroutines and ranges.
+
+For the HTTP frontend, I used *uWebSockets* as an HTTP server and its event loop for coroutines.
+
+The storage engine was implemented from scratch.
+
+I used *Protobuf* as a JSON and binary serializer in both the HTTP frontend and the storage engine. Many of the
+structures were shared between the two.
+
+I managed dependencies with Conan and used CMake as a build system.
+
+Codebase about 20k lines with unit tests.
+
+## About Me
+
+I have been developing in C++ and Python for about five years. Mostly, I write services for data acquisition,
+processing, and storage. I like OOP, design patterns, and my C++ smells Java. However, I avoid using exceptions and
+follow the RAII approach.
+
+In Rust, I have only written the "Hello, World" example.
+
+I work on the project in my spare time 10-20 hours a week.
+
+## Migration
+
+Initially, I planned to use the [cxx.rs](http://cxx.rs/) library and rewrite the project in small steps by wrapping Rust
+code and integrating it into C++.
+
+[SPOILER] I wasn't able to handle this...
+
+<!--truncate-->
+
+### Step 1. Rewrite util functions and classes
+
+ReductStore has its own simple logger and uses environment variables for configuration. The code was trivial and it was
+good to start with Rust.
+
+Here, I learned the basics of Rust memory management, borrowing, and references. All these concepts I already knew from
+C++, so it was easy to understand. However, *rustc* did not want to compile my code in the beginning.
+
+The biggest problem was that [cxx.](http://cxx.es/)rs throws an exception when a Rust function returns an `Err`. It did
+not work for me because I did not use exceptions and my C++ functions returned a structure with a result or an error. I
+had to write additional wrappers to work around it. This was a very buggy layer and a source of frustration for me.
+
+### Step 2. Authentication module
+
+ReductStore offers token authentication and an API for token management. I implemented it in C++ using OOP patterns such
+as Repository and Strategy. This was a great opportunity for me to learn Rust's traits and dynamic polymorphism.
+
+During the process, I also discovered `prost`. In comparison with the C++ implementation and especially the Python
+implementation by Google, `prost` is amazing. However, it seems like magic to me, mostly because I don't understand how
+it works in detail.
+
+Although I was able to integrate the new authentication module in C++, the cost was too high. As a result, I decided to
+move forward with the next steps without C++ integration.
+
+### Step 3. Storage engine
+
+The storage engine was designed to store records in pre-allocated blocks and provide parallel read/write streaming to
+the same block. The engine can also be configured to remove old blocks to keep a bucket quota. Thus, it should keep
+track of all readers and writers and remove a block only when it is no longer in use.
+
+Next, it was time to learn about Rust's smart pointers. My background in C++ helped me a lot here. However, I was a bit
+surprised that I had to use nested pointers for mutable access (<code>Rc&lt;RefCell&lt;T&gt;&gt;</code>) instead of <code>MutRc&lt;T&gt;</code>.
+
+Although the storage engine was the biggest part of the project, it didn't take too long to rewrite because it only uses
+a file system and *Protobuf*. Thus, I didn't have to learn many new things.
+
+### Step 4. HTTP fronted
+
+Well... here, I broke my neck. The C++ implementation of the HTTP layer was asynchronous, so I wanted the same in Rust.
+I first tried to use *hyper*, but unfortunately, I couldn't make it work with JSON and streaming bodies in the same
+service. I realized that I had to learn a lot about hyper, which doesn't have rich documentation, before starting to use
+it.
+
+Then I tried *axum* and it worked. The framework is really awesome, and I felt as if I was using Python Flask or Fast
+API.
+
+However, I later discovered that my <code>*Rc&lt;RefCell&gt;*</code> wasn't thread-safe and had to refactor the storage engine. 😕
+
+### Step 5. Remove main.cc and CMake lists
+
+That was the easiest part. I like using C++, but I hate its build systems. Therefore, I felt a bit sorry when I deleted
+the last CMakeLists.txt.
+
+## After migration
+
+Now, ReductStore is written in Rust and developed as a Rust project. I'm planning to write a client SDK and rewritte
+Reduct CLI in Rust. I also would like to provide the storage engine separated from the HTTP backend as a feature, so
+that you can use it in you Rust applications if you need keep a history of data.
+
+The project is open source ad contributions are welcome.
+
+## TL;DR
+
+If you're a C++ developer you shouldn't have any problems to learn Rust. However, if you decided to rewrite you C++
+codebase, it isn't so easy.  [Cxx.rs](http://Cxx.rs) library is useful, but the glue code is ugly and buggy. For me it
+would make sense to rewrite my code in one step
