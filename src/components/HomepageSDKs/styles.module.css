@@ -1,0 +1,30 @@
+.homepageSDKs {
+  margin-bottom: var(--homepage-section-space);
+}
+
+.sdkIcons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.sdkIcon {
+  display: inline-block;
+  color: var(--ifm-color-primary);
+  transition: color 0.2s ease-in-out;
+}
+
+.sdkIcon:hover {
+  color: var(--ifm-color-primary-hover);
+}
+
+.hideOnMobile {
+  display: none;
+}
+
+@media (min-width: 997px) {
+  .hideOnMobile {
+    display: block;
+  }
+}
+
