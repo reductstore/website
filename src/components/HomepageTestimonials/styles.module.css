@@ -1,0 +1,23 @@
+.testimonials {
+  margin-bottom: var(--homepage-section-space);
+  text-align: center;
+}
+
+.testimonialImage {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.message {
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.authorInfo {
+  text-align: right;
+}
+
+.authorName {
+  font-weight: bold;
+}
