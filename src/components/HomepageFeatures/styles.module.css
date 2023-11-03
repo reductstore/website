@@ -1,6 +1,6 @@
 .features {
-  padding-top: 4rem;
-  padding-bottom: 4rem;
+  margin-top: var(--homepage-section-space);
+  margin-bottom: var(--homepage-section-space);
 }
 
 .feature {
