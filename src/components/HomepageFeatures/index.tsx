@@ -1,53 +1,24 @@
-import React from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.css';
+import React from "react";
+import {
+  FaClock,
+  FaInfinity,
+  FaTachometerAlt,
+  FaTags,
+  FaCloudUploadAlt,
+  FaLayerGroup,
+} from "react-icons/fa";
+import styles from "./styles.module.css";
 
-type FeatureItem = {
-  title: string;
-  Svg: React.ComponentType<React.ComponentProps<'svg'>>;
-  description: JSX.Element;
-};
-
-const FeatureList: FeatureItem[] = [
-  {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
-    description: (
-      <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
-      </>
-    ),
-  },
-  {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
-    description: (
-      <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
-      </>
-    ),
-  },
-  {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
-    description: (
-      <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
-      </>
-    ),
-  },
-];
-
-function Feature({title, Svg, description}: FeatureItem) {
+function Feature({ IconComponent, title, description }) {
   return (
-    <div className={clsx('col col--4')}>
-      <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
-      </div>
-      <div className="text--center padding-horiz--md">
+    <div className="col col--4">
+      <div className={styles.feature}>
+        <div className={styles.featureIcon}>
+          <IconComponent
+            size="3em"
+            style={{ color: "var(--ifm-color-primary)" }}
+          />
+        </div>
         <h3>{title}</h3>
         <p>{description}</p>
       </div>
@@ -55,14 +26,43 @@ function Feature({title, Svg, description}: FeatureItem) {
   );
 }
 
-export default function HomepageFeatures(): JSX.Element {
+export default function HomepageFeatures() {
   return (
     <section className={styles.features}>
       <div className="container">
         <div className="row">
-          {FeatureList.map((props, idx) => (
-            <Feature key={idx} {...props} />
-          ))}
+          <Feature
+            IconComponent={FaClock}
+            title="Time Series Blob Storage"
+            description="Capture and access blob data as time series, tailored for edge computing, computer vision, and IoT."
+          />
+          <Feature
+            IconComponent={FaInfinity}
+            title="No Size Limit for Blobs"
+            description="ReductStore handles blob data without size limits; your disk capacity is the only boundary."
+          />
+          <Feature
+            IconComponent={FaTachometerAlt}
+            title="Real-Time FIFO Quota"
+            description="Ensure optimal storage management with FIFO quotas, preventing disk space shortages in real-time."
+          />
+        </div>
+        <div className="row">
+          <Feature
+            IconComponent={FaTags}
+            title="Data Labeling & Filtering"
+            description="Manage your time-series blob data with ease: annotate, filter, and save AI labels or meta-data."
+          />
+          <Feature
+            IconComponent={FaCloudUploadAlt}
+            title="Advanced HTTP(S) API"
+            description="Integrate and communicate with ReductStore using our feature-rich and secure API."
+          />
+          <Feature
+            IconComponent={FaLayerGroup}
+            title="Efficient Data Batching"
+            description="Minimize network overhead in areas with high latency by fetching records in batched HTTP responses."
+          />
         </div>
       </div>
     </section>

@@ -6,8 +6,9 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "ReductStore Documentation",
-  tagline: "ReductStore Documentation",
+  title: "ReductStore",
+  tagline:
+    "A Time-Series Database for Blob Data, Optimized for Edge Computing, Computer Vision, and IoT.",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
