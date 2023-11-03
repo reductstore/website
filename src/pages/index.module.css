@@ -16,6 +16,26 @@
   }
 }
 
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.headerLogo {
+  margin-right: 1rem;
+  width: 50px;
+  margin-bottom: 1rem;
+}
+
+.heroTitle {
+  margin-bottom: 1rem;
+}
+
+.heroSubTitle {
+  margin-bottom: 3rem;
+}
+
 .buttons {
   display: flex;
   align-items: center;
