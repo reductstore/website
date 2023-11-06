@@ -18,7 +18,7 @@ function HomepageCTA() {
             </p>
             <Link
               className="button button--primary button--lg"
-              to="/docs/docs/getting-started"
+              to="/docs/reductai"
             >
               Explore AI Edge Computing with ReductStore
             </Link>
