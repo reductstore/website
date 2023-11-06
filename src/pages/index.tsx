@@ -8,10 +8,14 @@ import HomepageFeatures from "../components/HomepageFeatures";
 import styles from "./index.module.css";
 import HomepageTestimonials from "../components/HomepageTestimonials";
 import HomepageSDKs from "../components/HomepageSDKs";
+import HomepageWebConsole from "../components/HomepageWebConsole";
+import HomepageCLI from "../components/HomepageCLI";
+import HomepageCTA from "../components/HomepageCTA";
+
+const LogoImg = require("@site/static/img/logo.png").default;
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
-  const LogoImg = require("@site/static/img/logo.png").default;
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
@@ -46,9 +50,19 @@ export default function Home(): JSX.Element {
     >
       <HomepageHeader />
       <main>
-        <HomepageFeatures />
-        <HomepageTestimonials />
-        <HomepageSDKs />
+        <div className="container">
+          <HomepageFeatures />
+          <hr />
+          <HomepageTestimonials />
+          <hr />
+          <HomepageSDKs />
+          <hr />
+          <HomepageWebConsole />
+          <hr />
+          <HomepageCLI />
+          <hr />
+          <HomepageCTA />
+        </div>
       </main>
     </Layout>
   );

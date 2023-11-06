@@ -67,7 +67,7 @@ export default function SwaggerComponent({
   );
 
   return (
-    <div className={styles.swaggerComponent}>
+    <section className={styles.swaggerComponent}>
       <div
         className={clsx(styles.swaggerHeader, isOpen && styles.open)}
         onClick={() => setIsOpen(!isOpen)}
@@ -168,7 +168,7 @@ export default function SwaggerComponent({
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 }
 

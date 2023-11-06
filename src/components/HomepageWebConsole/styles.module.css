@@ -1,0 +1,10 @@
+.WebConsoleSection {
+  margin-top: var(--homepage-section-space);
+  margin-bottom: var(--homepage-section-space);
+}
+
+.WebConsoleImage {
+  max-width: 80%;
+  height: auto;
+  margin-bottom: 1rem;
+}

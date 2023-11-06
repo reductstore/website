@@ -34,26 +34,24 @@ const testimonials = [
 function HomepageTestimonials() {
   return (
     <section className={styles.testimonials}>
-      <div className="container">
-        <div className="row">
-          {testimonials.map((testimonial, index) => (
-            <div key={index} className="col col--4">
-              <img
-                src={testimonial.image}
-                alt={`${testimonial.company} logo`}
-                className={styles.testimonialImage}
-              />
-              <div className={styles.message}>
-                <span>"{testimonial.message}"</span>
-              </div>
-              <div className={styles.authorInfo}>
-                <div className={styles.authorName}>{testimonial.author}</div>
-                {testimonial.position} at{" "}
-                <a href={testimonial.homepage}>{testimonial.company}</a>
-              </div>
+      <div className="row">
+        {testimonials.map((testimonial, index) => (
+          <div key={index} className="col col--4">
+            <img
+              src={testimonial.image}
+              alt={`${testimonial.company} logo`}
+              className={styles.testimonialImage}
+            />
+            <div className={styles.message}>
+              <span>"{testimonial.message}"</span>
             </div>
-          ))}
-        </div>
+            <div className={styles.authorInfo}>
+              <div className={styles.authorName}>{testimonial.author}</div>
+              {testimonial.position} at{" "}
+              <a href={testimonial.homepage}>{testimonial.company}</a>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );

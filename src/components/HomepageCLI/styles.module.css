@@ -1,0 +1,10 @@
+.cliSection {
+  margin-top: var(--homepage-section-space);
+  margin-bottom: var(--homepage-section-space);
+}
+
+.cliImage {
+  max-width: 80%;
+  height: auto;
+  margin-bottom: 1rem;
+}
