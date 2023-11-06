@@ -81,6 +81,9 @@ const config = {
             label: "Docs",
           },
           { to: "/blog", label: "Blog", position: "left" },
+          { to: "/download", label: "Download", position: "left" },
+          { to: "/pricing", label: "Pricing", position: "left" },
+          { to: "/reductai", label: "ReductAI", position: "left" },
           {
             href: "https://github.com/reductstore/reductstore",
             label: "GitHub",
