@@ -31,28 +31,23 @@ Entries
 function HomepageCLI() {
   return (
     <section className={styles.cliSection}>
-      <div className={"container"}>
-        <div className="row">
-          <div
-            className={clsx(
-              "col col--7 hideOnMobile",
-              styles.cliImageContainer
-            )}
-          >
-            <CodeBlock className="language-bash">{resonseCLI}</CodeBlock>
-          </div>
-          <div className={"col col--5 text--center"}>
-            <h3>Web Console</h3>
-            <p>
-              ReductStore has an integrated{" "}
-              <strong>
-                <a href="https://github.com/reductstore/web-console">
-                  web console
-                </a>
-              </strong>{" "}
-              that allows you to easily manage your data and access to it.
-            </p>
-          </div>
+      <div className="row">
+        <div
+          className={clsx("col col--7 hideOnMobile", styles.cliImageContainer)}
+        >
+          <CodeBlock className="language-bash">{resonseCLI}</CodeBlock>
+        </div>
+        <div className={"col col--5 text--center"}>
+          <h3>Web Console</h3>
+          <p>
+            ReductStore has an integrated{" "}
+            <strong>
+              <a href="https://github.com/reductstore/web-console">
+                web console
+              </a>
+            </strong>{" "}
+            that allows you to easily manage your data and access to it.
+          </p>
         </div>
       </div>
     </section>

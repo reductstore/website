@@ -1,4 +1,5 @@
 .homepageSDKs {
+  margin-top: var(--homepage-section-space);
   margin-bottom: var(--homepage-section-space);
 }
 
