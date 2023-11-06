@@ -17,14 +17,3 @@
 .sdkIcon:hover {
   color: var(--ifm-color-primary-hover);
 }
-
-.hideOnMobile {
-  display: none;
-}
-
-@media (min-width: 997px) {
-  .hideOnMobile {
-    display: block;
-  }
-}
-
