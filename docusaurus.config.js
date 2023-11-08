@@ -45,15 +45,16 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl: "https://github.com/reductstore/docs/tree/main",
         },
         blog: {
+          blogTitle:
+            "ReductStore Blog: Insights on edge computing, computer vision, and IoT",
+          blogDescription:
+            "Welcome to the ReductStore Blog – your source for expert articles, updates, and discussions on managing and leveraging time series databases for blob data in edge computing, computer vision, and IoT. Stay informed with our latest content.",
+          postsPerPage: "ALL",
           showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl: "https://github.com/reductstore/homepage",
+          editUrl: "https://github.com/reductstore/docs/tree/main",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
