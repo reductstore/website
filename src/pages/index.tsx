@@ -45,8 +45,9 @@ export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
+      title="ReductStore: Efficient Time Series Database for Blob Data Storage"
+      description="ReductStore offers a specialized time series database tailored for blob data storage. 
+      Ideal for edge computing, computer vision, and IoT applications with high-performance writing and real-time querying capabilities."
     >
       <HomepageHeader />
       <main>

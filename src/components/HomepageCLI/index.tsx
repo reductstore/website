@@ -3,6 +3,32 @@ import clsx from "clsx";
 import styles from "./styles.module.css";
 import CodeBlock from "@theme/CodeBlock";
 
+function HomepageCLI() {
+  return (
+    <section className={styles.cliSection}>
+      <div className="row">
+        <div className={clsx("col col--7 hideOnMobile", styles.cliImage)}>
+          <CodeBlock className="language-bash">{resonseCLI}</CodeBlock>
+        </div>
+        <div className={"col col--5 text--center"}>
+          <h3>CLI Client</h3>
+          <p>
+            You can manage your ReductStore instance and export data from it by
+            using{" "}
+            <strong>
+              <a href="https://github.com/reductstore/web-console">
+                ReducStore CLI client
+              </a>
+            </strong>
+            . The client is cross-platform, written in Python and available as a
+            PIP package.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 const resonseCLI = `
 reduct@store % pip install reduct-cli
 reduct@store % rcli alias  add -L  https://play.reduct.store -t reduct play
@@ -27,31 +53,5 @@ Entries
 │ test │ 57154   │ 30 GB │ 2022-12-20T1… │ 2022-12-20T19… │ 3 hour(s) │
 └──────┴─────────┴───────┴───────────────┴────────────────┴───────────┘
 `.trim();
-
-function HomepageCLI() {
-  return (
-    <section className={styles.cliSection}>
-      <div className="row">
-        <div
-          className={clsx("col col--7 hideOnMobile", styles.cliImageContainer)}
-        >
-          <CodeBlock className="language-bash">{resonseCLI}</CodeBlock>
-        </div>
-        <div className={"col col--5 text--center"}>
-          <h3>Web Console</h3>
-          <p>
-            ReductStore has an integrated{" "}
-            <strong>
-              <a href="https://github.com/reductstore/web-console">
-                web console
-              </a>
-            </strong>{" "}
-            that allows you to easily manage your data and access to it.
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 export default HomepageCLI;
