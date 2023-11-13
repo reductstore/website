@@ -4,12 +4,12 @@ import CodeBlock from '@theme/CodeBlock';
 
 export default function ClientCLI(): JSX.Element {
   return (
-    <div className="container">
+    <>
       <h3>CLI Client</h3>
       <CodeBlock className="language-bash">
         {cliClientCode}
       </CodeBlock>
-    </div>
+    </>
   );
 }
 

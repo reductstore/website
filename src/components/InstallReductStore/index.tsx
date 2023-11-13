@@ -14,7 +14,7 @@ export default function InstallReductStore(): JSX.Element {
   const [activeTab, setActiveTab] = useState("docker");
 
   return (
-    <div className="container">
+    <>
       <h3>ReductStore Server</h3>
       <ul className={clsx("tabs", styles.tabs)}>
         {["docker", "linux", "macOs", "windows", "azure"].map((tab) => (
@@ -37,6 +37,6 @@ export default function InstallReductStore(): JSX.Element {
         {activeTab === 'windows' && <WindowsInstall />}
         {activeTab === 'azure' && <AzureInstall />}
       </div>
-    </div>
+    </>
   );
 }
