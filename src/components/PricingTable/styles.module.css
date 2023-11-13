@@ -1,0 +1,16 @@
+.pricingTable {
+  margin-top: var(--ifm-spacing-vertical);
+  margin-bottom: var(--ifm-spacing-vertical);
+}
+
+.plan {
+  text-align: center;
+}
+
+.enterprise .card {
+  border-color: var(--ifm-color-primary); /* Change this to match your theme */
+}
+
+.enterprise .button {
+  background-color: var(--ifm-color-primary); /* Change this to match your theme */
+}

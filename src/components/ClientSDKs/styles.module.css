@@ -1,0 +1,8 @@
+.tabs {
+  margin-top: var(--ifm-spacing-vertical);
+  margin-bottom: var(--ifm-spacing-vertical);
+}
+
+.tabContent {
+  text-align: left;
+}

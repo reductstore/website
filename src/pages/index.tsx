@@ -42,7 +42,6 @@ function HomepageHeader() {
 }
 
 export default function Home(): JSX.Element {
-  const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
       title="ReductStore: Efficient Time Series Database for Blob Data"
