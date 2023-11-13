@@ -8,7 +8,7 @@ export default function ClientSDKs(): JSX.Element {
   const [activeTab, setActiveTab] = useState("Python");
 
   return (
-    <div className="container">
+    <>
       <h3>Client SDKs</h3>
       <ul className={clsx("tabs", styles.tabs)}>
         {["Python", "Node.js", "C++ (cmake)", "Rust"].map((tab) => (
@@ -46,7 +46,8 @@ export default function ClientSDKs(): JSX.Element {
           </CodeBlock>
         )}
       </div>
-    </div>
+    </>
+
   );
 }
 
