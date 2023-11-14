@@ -1,16 +1,22 @@
 .pricingTable {
-  margin-top: var(--ifm-spacing-vertical);
-  margin-bottom: var(--ifm-spacing-vertical);
+  justify-content: center;
+  gap: 2em;
 }
 
 .plan {
-  text-align: center;
+  border: 2px solid #ccc; 
+  padding: 1em;
+  border-radius: 25px;
+  max-width: 400px;
 }
 
-.enterprise .card {
-  border-color: var(--ifm-color-primary); /* Change this to match your theme */
+.enterprise {
+  border-color: var(--ifm-color-primary); 
 }
 
-.enterprise .button {
-  background-color: var(--ifm-color-primary); /* Change this to match your theme */
+.planCard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: left;
 }

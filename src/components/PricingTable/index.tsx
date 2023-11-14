@@ -1,6 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
+import Link from "@docusaurus/Link";
 
 function PricingPlan({
   title,
@@ -12,12 +13,8 @@ function PricingPlan({
   isEnterprise,
 }) {
   return (
-    <div
-      className={clsx("col col--6", styles.plan, {
-        [styles.enterprise]: isEnterprise,
-      })}
-    >
-      <div className="card">
+    <div className={clsx("col col--5", styles.plan, { [styles.enterprise]: isEnterprise })}>
+      <div className={styles.planCard}>
         <div className="card__header">
           <h2>{title}</h2>
         </div>
@@ -31,9 +28,14 @@ function PricingPlan({
           </ul>
         </div>
         <div className="card__footer">
-          <a href={buttonUrl} className="button button--primary">
+          <Link to={buttonUrl} className={clsx("button button--lg button--block",
+            {
+              "button--primary": isEnterprise,
+              "button--secondary": !isEnterprise,
+            }
+          )}>
             {buttonLabel}
-          </a>
+          </Link>
         </div>
       </div>
     </div>
@@ -42,8 +44,8 @@ function PricingPlan({
 
 export default function PricingTable() {
   return (
-    <section className={styles.pricingTable}>
-      <div className="row">
+    <section>
+      <div className={clsx("row", styles.pricingTable)}>
         <PricingPlan
           title="Community"
           price="Totally Free of Charge"
