@@ -70,7 +70,7 @@ export default function PricingTable() {
             "Continuous Support and Guidance",
           ]}
           buttonUrl="/contact"
-          buttonLabel="Contact Sales"
+          buttonLabel="Contact Us"
           isEnterprise={true}
         />
       </div>

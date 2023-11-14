@@ -15,7 +15,7 @@ Company’s products and purchase them.
 The terms “we,” “us,” and “our” refer to the Company.
 “You” refers to you, as a user of our Site or our Service.
 By accessing our Site or our Service, you accept our Privacy Policy (found
-here: [https://www.reduct.store/privacy-policy](https://www.reduct.store/privacy_policy)), and you consent to our collection, storage, use and disclosure of your
+here: [https://www.reduct.store/privacy](https://www.reduct.store/privacy)), and you consent to our collection, storage, use and disclosure of your
 Personal Information as described in this Privacy Policy.
 
 ## I. INFORMATION WE COLLECT

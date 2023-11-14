@@ -90,7 +90,7 @@ export default function HelpForm() {
         </button>
         <Link
           className={clsx("row", styles.privacyPolicy)}
-          to="/privacy_policy"
+          to="/privacy"
           target="_blank"
         >
           Privacy Policy
