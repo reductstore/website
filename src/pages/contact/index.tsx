@@ -1,17 +1,18 @@
 import React from "react";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
+import SimpleHeader from "@site/src/components/SimpleHeader";
+import HelpForm from "@site/src/components/HelpForm";
 
-export default function Contact(): JSX.Element {
-  const { siteConfig } = useDocusaurusContext();
+export default function ContactPage() {
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
+      title="ReductStore Contact"
+      description="Contact page for ReductStore with contact details and contact form"
     >
       <main>
+        <SimpleHeader pageTitle="Contact Us" />
         <div className="container">
-          <p>Contact</p>
+          <HelpForm />
         </div>
       </main>
     </Layout>
