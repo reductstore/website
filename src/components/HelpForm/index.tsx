@@ -74,7 +74,7 @@ export default function HelpForm() {
         <textarea
           id="message"
           name="message"
-          placeholder="Enter a topic, like 'notifications'"
+          placeholder="I need help with..."
           rows={4}
           className={styles.textarea}
         ></textarea>
