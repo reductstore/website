@@ -19,7 +19,7 @@ export default function ReductAI(): JSX.Element {
             <div className="col col--6">
               <WhitePaperForm />
             </div>
-            <div className="col col--6 hideOnMobile">
+            <div className="col col--4 col--offset-1 hideOnMobile">
               <img
                 src={LogoImg}
                 alt="White Paper Cover"
