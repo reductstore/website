@@ -85,7 +85,8 @@ const config = {
           { to: "/blog", label: "Blog", position: "left" },
           { to: "/download", label: "Download", position: "left" },
           { to: "/pricing", label: "Pricing", position: "left" },
-          { to: "/reductai", label: "ReductAI", position: "left" },
+          { to: "/reductai", label: "Reduct AI", position: "left" },
+          { to: "/contact", label: "Contact Us", position: "left" },
           {
             href: "https://github.com/reductstore/reductstore",
             label: "GitHub",
@@ -97,11 +98,19 @@ const config = {
         style: "dark",
         links: [
           {
-            title: "Docs",
+            title: "Ressource",
             items: [
               {
                 label: "Getting Started",
                 to: "/docs/docs/getting-started",
+              },
+              {
+                label: "Blog",
+                href: "https://www.reduct.store/blog",
+              },
+              {
+                label: "GitHub",
+                href: "https://github.com/reductstore",
               },
             ],
           },
@@ -119,15 +128,28 @@ const config = {
             ],
           },
           {
-            title: "More",
+            title: "Legal",
             items: [
               {
-                label: "Blog",
-                href: "https://www.reduct.store/blog",
+                label: "Privacy Policy",
+                to: "/privacy",
               },
               {
-                label: "GitHub",
-                href: "https://github.com/reductstore",
+                label: "Terms And Conditions",
+                to: "/terms",
+              },
+            ],
+          },
+          {
+            title: "Contact Us",
+            items: [
+              {
+                label: "info@reduct.store",
+                to: "mailto:info@reduct.store",
+              },
+              {
+                label: "Contact Form",
+                to: "/contact",
               },
             ],
           },

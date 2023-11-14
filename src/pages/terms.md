@@ -207,7 +207,7 @@ This extends to any form of copying, reproduction, or transmission unless expres
 ## 5. Data Protection
 
 5.1. In performing the Services, ReductStore will comply with the ReductStore Privacy Policy, which is available
-at [https://www.reduct.store/privacy_policy/](https://www.reduct.store/privacy_policy/) and incorporated herein by
+at [https://www.reduct.store/privacy/](https://www.reduct.store/privacy/) and incorporated herein by
 reference.
 
 5.2. Unless otherwise specified in Your Subscription, Your Content may not include any sensitive or special data that
