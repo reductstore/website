@@ -1,17 +1,32 @@
 import React from "react";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import SimpleHeader from "@site/src/components/SimpleHeader";
 import Layout from "@theme/Layout";
+import WhitePaperForm from "@site/src/components/WhitePaperForm";
+import styles from './styles.module.css';
+
+const LogoImg = require("@site/static/img/whitepaper/whitepaper.jpg").default;
 
 export default function ReductAI(): JSX.Element {
-  const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
+      title="Reduct AI - White Paper"
+      description="ReductAI is a platform for building and deploying AI models."
     >
       <main>
+        <SimpleHeader pageTitle="Reduct AI" />
         <div className="container">
-          <p>Reduct AI</p>
+          <div className="row">
+            <div className="col col--6">
+              <WhitePaperForm />
+            </div>
+            <div className="col col--6 hideOnMobile">
+              <img
+                src={LogoImg}
+                alt="White Paper Cover"
+                className={styles.whitePaperImage}
+              />
+            </div>
+          </div>
         </div>
       </main>
     </Layout>

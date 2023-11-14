@@ -26,7 +26,6 @@ export default function HelpForm() {
     );
   }
 
-
   return (
     <form className={styles.helpForm} onSubmit={handleSubmit}>
 
@@ -82,7 +81,7 @@ export default function HelpForm() {
       </div>
       <div className="col">
         <button
-          className={clsx(styles.submitButton, "row button button--primary")}
+          className={"row button button--primary"}
           type="submit"
           disabled={state.submitting}
         >
