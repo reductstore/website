@@ -1,0 +1,7 @@
+.whitePaperImage {
+  margin-bottom: var(--reduct-bottom-page-margin);
+  width: 500px;
+  height: auto;
+  border: 3px solid #dddddd;
+  border-radius: 15px;
+}

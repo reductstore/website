@@ -1,0 +1,35 @@
+.whitePaperForm {
+  margin-bottom: var(--reduct-bottom-page-margin);
+  max-width: 700px;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.inputGroup {
+  margin-bottom: 20px;
+
+}
+
+.inputField {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.inputField:focus {
+  outline: none;
+  border: 2px solid var(--ifm-color-primary);
+}
+
+.errorMessage {
+  color: red;
+  margin-bottom: 20px;
+}
+
+.privacyPolicy {
+  margin-top: 20px;
+}
