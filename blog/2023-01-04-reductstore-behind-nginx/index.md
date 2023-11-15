@@ -5,6 +5,7 @@ authors: alexey
 tags: [tutorials]
 slug: tutorials/reductstore-behind-nginx
 date: 2023-01-04
+image: ./img/social-card.jpg
 ---
 
 I think, [NGINX][1] doesn't need any introductions. It is one of the most widely used HTTP servers and reverse proxies.

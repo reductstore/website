@@ -5,6 +5,7 @@ authors: anthony
 tags: [Advice, Database]
 slug: advice/database/mqtt-data-storage
 date: 2023-07-07
+image: ./img/social-card.jpg
 ---
 
 Choosing the right database can be overwhelming–trust me, I know.

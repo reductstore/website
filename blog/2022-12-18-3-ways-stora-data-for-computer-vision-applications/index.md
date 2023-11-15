@@ -5,6 +5,7 @@ authors: alexey
 tags: [tutorials, computer-vision]
 slug: tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications
 date: 2022-12-10
+image: ./img/social-card.jpg
 ---
 
 When it comes to computer vision, data storage is a critical component. You need to be able to store images for model
