@@ -4,6 +4,7 @@ description: Explore the process of deploying open-source AI models for real-tim
 authors: anthony
 tags: [Computer Vision, Edge Computing, AI]
 slug: computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection
+image: /img/randy-fath-chess.jpeg
 date: 2023-10-15
 ---
 

@@ -1,42 +1,103 @@
+import Link from '@docusaurus/Link';
 import React from 'react';
-import './SocialShareBar.css'; // Assuming you put the CSS in a separate file
+import { FaFacebookF, FaTwitter, FaPinterestP, FaTumblr, FaRedditAlien, FaLinkedinIn, FaEnvelope } from 'react-icons/fa';
+import styles from './styles.module.css';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import { useLocation } from "@docusaurus/router";
 
 interface SocialShareBarProps {
-  url: string;
-  title: string;
-  description?: string;
+  frontMatter: {
+    author: string;
+    date: Date;
+    description: string;
+    slug: string;
+    tags: string[];
+    title: string;
+  };
 }
 
-const SocialShareBar: React.FC<SocialShareBarProps> = ({ url, title, description }) => {
-  const encodedUrl = encodeURIComponent(url);
-  const encodedTitle = encodeURIComponent(title);
-  const encodedDescription = encodeURIComponent(description || '');
+const joinUrlParts = (parts: string[]): string => {
+  return parts
+    .map(part => part.replace(/(^\/|\/$)/g, ''))
+    .filter(part => part !== '')
+    .join('/');
+};
 
-  const openPopup = (href: string) => {
-    window.open(href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0');
-    return false;
-  };
+const SocialShareBar: React.FC<SocialShareBarProps> = ({ frontMatter }) => {
+  const { siteConfig } = useDocusaurusContext();
+  const location = useLocation();
+  const { pathname } = location;
+  const fullUrl = joinUrlParts([siteConfig.url, pathname]);
+  const blogUrl = joinUrlParts([siteConfig.url, siteConfig.baseUrl, 'blog']);
+  const pageTitle = frontMatter.title;
+
+  if (fullUrl === blogUrl)
+    return null;
 
   return (
-    <div id="share-bar">
-      <div className="share-buttons">
-        Share this:
-        <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
-          onClick={() => openPopup(`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`)}
-          title="Share on Facebook">
-          <i className="fa fa-facebook-official share-button"></i>
-        </a>
-        <a href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`}
-          onClick={() => openPopup(`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`)}
-          title="Share on Twitter">
-          <i className="fa fa-twitter share-button"></i>
-        </a>
-        {/* ... Other social media links ... */}
-        <a href={`mailto:?subject=${encodedTitle}&body=Check out this site ${encodedUrl}`}
-          title="Share via Email">
-          <i className="fa fa-envelope share-button"></i>
-        </a>
-      </div>
+    <div className={styles.shareBar}>
+      Share this post:
+      <Link href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fullUrl)}`}
+        className={styles.shareButton}
+        title="Share on Facebook"
+        onClick={e => {
+          e.preventDefault();
+          window.open(e.currentTarget.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0');
+        }}>
+        <FaFacebookF />
+      </Link>
+      <Link href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(pageTitle)}&url=${encodeURIComponent(fullUrl)}`}
+        className={styles.shareButton}
+        title="Share on Twitter"
+        onClick={e => {
+          e.preventDefault();
+          window.open(e.currentTarget.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0');
+        }}>
+        <FaTwitter />
+      </Link>
+      <Link href={`http://pinterest.com/pin/create/button/?url=${encodeURIComponent(fullUrl)}`}
+        className={styles.shareButton}
+        title="Share on Pinterest"
+        onClick={e => {
+          e.preventDefault();
+          window.open(e.currentTarget.href, 'pop-up', 'left=20,top=20,width=900,height=500,toolbar=1,resizable=0');
+        }}>
+        <FaPinterestP />
+      </Link>
+      <Link href={`http://www.tumblr.com/share/link?url=${encodeURIComponent(fullUrl)}`}
+        className={styles.shareButton}
+        title="Share on Tumblr"
+        onClick={e => {
+          e.preventDefault();
+          window.open(e.currentTarget.href, 'pop-up', 'left=20,top=20,width=900,height=500,toolbar=1,resizable=0');
+        }}>
+        <FaTumblr />
+      </Link>
+      <Link href={`http://www.reddit.com/submit?url=${encodeURIComponent(fullUrl)}`}
+        className={styles.shareButton}
+        title="Share on Reddit"
+        onClick={e => {
+          e.preventDefault();
+          window.open(e.currentTarget.href, 'pop-up', 'left=20,top=20,width=900,height=500,toolbar=1,resizable=0');
+        }}>
+        <FaRedditAlien />
+      </Link>
+
+
+      <Link href={`https://www.linkedin.com/sharing/share-offsite?url=${encodeURIComponent(fullUrl)}`}
+        className={styles.shareButton}
+        title="Share on LinkedIn"
+        onClick={e => {
+          e.preventDefault();
+          window.open(e.currentTarget.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0');
+        }}>
+        <FaLinkedinIn />
+      </Link>
+      <Link href={`mailto:?subject=${encodeURIComponent(pageTitle)}&body=Check out this site ${encodeURIComponent(fullUrl)}`}
+        className={styles.shareButton}
+        title="Share via Email">
+        <FaEnvelope />
+      </Link>
     </div>
   );
 };
