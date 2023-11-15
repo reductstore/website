@@ -82,8 +82,6 @@ const SocialShareBar: React.FC<SocialShareBarProps> = ({ frontMatter }) => {
         }}>
         <FaRedditAlien />
       </Link>
-
-
       <Link href={`https://www.linkedin.com/sharing/share-offsite?url=${encodeURIComponent(fullUrl)}`}
         className={styles.shareButton}
         title="Share on LinkedIn"
