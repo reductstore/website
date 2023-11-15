@@ -5,7 +5,7 @@ authors: anthony
 tags: [Computer Vision, Edge Computing, AI]
 slug: computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection
 date: 2023-10-15
-image: ./img/randy-fath-chess.jpeg
+image: ./img/social-card.jpg
 ---
 
 ![Photo by Randy Fath](./img/randy-fath-chess.jpeg)<small>Photo by <a href="https://unsplash.com/@randyfath?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" target="_blank" rel="noopener noreferrer">Randy Fath</a> on <a href="https://unsplash.com/photos/G1yhU1Ej-9A?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" target="_blank" rel="noopener noreferrer">Unsplash</a></small>
