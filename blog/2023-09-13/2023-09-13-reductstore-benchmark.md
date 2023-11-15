@@ -5,6 +5,7 @@ authors: anthony
 tags: [comparison, iot]
 slug: comparison/iot/reductstore-benchmark
 date: 2023-09-13
+image: ./img/social-card.jpg
 ---
 
 Benchmarks don't lie, let's put the systems to the ultimate test.

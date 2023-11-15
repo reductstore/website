@@ -5,6 +5,7 @@ authors: alexey
 tags: [tutorials, computer-vision, sdks]
 slug: tutorials/computer-vision/sdks/cats-dataset
 date: 2023-03-07
+image: ./img/social-card.jpg
 ---
 
 <head>
