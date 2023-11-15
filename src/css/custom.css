@@ -45,3 +45,9 @@
     display: block;
   }
 }
+
+/* CSS for all images */
+img {
+  max-width: 100%;
+  height: auto;
+}
