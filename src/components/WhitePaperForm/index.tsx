@@ -33,58 +33,66 @@ export default function WhitePaperForm() {
     );
   }
 
+  const titleText = "AI on the Edge: The Game-Changing Architecture for Every IoT Engineer."
+  const subtitleText = "Dive into challenges and solutions to effectively run AI models on edge devices with our white paper."
+
   return (
-    <form className={styles.whitePaperForm} onSubmit={handleSubmit}>
-      <div className={styles.inputGroup}>
-        <label htmlFor="InputNameWhitePaper">Name</label>
-        <input
-          type="text"
-          id="InputNameWhitePaper"
-          name="name"
-          className={styles.inputField}
-        />
-        <ValidationError prefix="Name" field="name" errors={state.errors} />
-      </div>
+    <>
+      <h2>{titleText}</h2>
+      <p>{subtitleText}</p>
 
-      <div className={styles.inputGroup}>
-        <label htmlFor="InputCompanyWhitePaper">Company</label>
-        <input
-          type="text"
-          id="InputCompanyWhitePaper"
-          name="company"
-          className={styles.inputField}
-        />
-        <ValidationError prefix="Company" field="company" errors={state.errors} />
-      </div>
+      <form className={styles.whitePaperForm} onSubmit={handleSubmit}>
+        <div className={styles.inputGroup}>
+          <label htmlFor="InputNameWhitePaper">Name</label>
+          <input
+            type="text"
+            id="InputNameWhitePaper"
+            name="name"
+            className={styles.inputField}
+          />
+          <ValidationError prefix="Name" field="name" errors={state.errors} />
+        </div>
 
-      <div className={styles.inputGroup}>
-        <label htmlFor="InputEmailWhitePaper">Email</label>
-        <input
-          type="email"
-          id="InputEmailWhitePaper"
-          name="email"
-          required
-          className={styles.inputField}
-        />
-        <ValidationError prefix="Email" field="email" errors={state.errors} />
-      </div>
+        <div className={styles.inputGroup}>
+          <label htmlFor="InputCompanyWhitePaper">Company</label>
+          <input
+            type="text"
+            id="InputCompanyWhitePaper"
+            name="company"
+            className={styles.inputField}
+          />
+          <ValidationError prefix="Company" field="company" errors={state.errors} />
+        </div>
 
-      <div className="col">
-        <button
-          className={"row button button--primary"}
-          type="submit"
-          disabled={state.submitting}
-        >
-          DOWNLOAD
-        </button>
-        <Link
-          className={clsx("row", styles.privacyPolicy)}
-          to="/privacy"
-          target="_blank"
-        >
-          Privacy Policy
-        </Link>
-      </div>
-    </form>
+        <div className={styles.inputGroup}>
+          <label htmlFor="InputEmailWhitePaper">Email</label>
+          <input
+            type="email"
+            id="InputEmailWhitePaper"
+            name="email"
+            required
+            className={styles.inputField}
+          />
+          <ValidationError prefix="Email" field="email" errors={state.errors} />
+        </div>
+
+        <div className="col">
+          <button
+            className={"row button button--primary"}
+            type="submit"
+            disabled={state.submitting}
+          >
+            DOWNLOAD
+          </button>
+          <Link
+            className={clsx("row", styles.privacyPolicy)}
+            to="/privacy"
+            target="_blank"
+          >
+            Privacy Policy
+          </Link>
+        </div>
+      </form>
+    </>
   );
 }
