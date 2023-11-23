@@ -14,6 +14,8 @@ interface SocialShareBarProps {
     tags: string[];
     title: string;
   };
+  mt?: number;
+  mb?: number;
 }
 
 const joinUrlParts = (parts: string[]): string => {
@@ -23,7 +25,7 @@ const joinUrlParts = (parts: string[]): string => {
     .join('/');
 };
 
-const SocialShareBar: React.FC<SocialShareBarProps> = ({ frontMatter }) => {
+const SocialShareBar: React.FC<SocialShareBarProps> = ({ frontMatter, mt, mb }) => {
   const { siteConfig } = useDocusaurusContext();
   const location = useLocation();
   const { pathname } = location;
@@ -34,9 +36,13 @@ const SocialShareBar: React.FC<SocialShareBarProps> = ({ frontMatter }) => {
   if (fullUrl === blogUrl)
     return null;
 
+  const marginStyles = {
+    marginTop: mt ? `${mt}rem` : undefined,
+    marginBottom: mb ? `${mb}rem` : undefined
+  };
   return (
-    <div className={styles.shareBar}>
-      Share this post:
+    <div className={styles.shareBar} style={marginStyles}>
+      <strong>Share this post:</strong>
       <Link href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fullUrl)}`}
         className={styles.shareButton}
         title="Share on Facebook"
