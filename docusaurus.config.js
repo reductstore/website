@@ -97,7 +97,21 @@ const config = {
         style: "dark",
         links: [
           {
-            title: "Ressource",
+            title: "Contact Us",
+            items: [
+              {
+                label:
+                  "ReductStore LLC, 651 N BROAD ST STE 201, MIDDLETOWN, DE 19709",
+                to: "/contact",
+              },
+              {
+                label: "info@reduct.store",
+                to: "mailto:info@reduct.store",
+              },
+            ],
+          },
+          {
+            title: "Links",
             items: [
               {
                 label: "Getting Started",
@@ -105,30 +119,8 @@ const config = {
               },
               {
                 label: "Blog",
-                href: "https://www.reduct.store/blog",
+                to: "/blog",
               },
-              {
-                label: "GitHub",
-                href: "https://github.com/reductstore",
-              },
-            ],
-          },
-          {
-            title: "Community",
-            items: [
-              {
-                label: "Discord",
-                href: "https://discord.com/invite/BWrCncF5EP",
-              },
-              {
-                label: "Linkedin",
-                href: "https://www.linkedin.com/company/reductstore",
-              },
-            ],
-          },
-          {
-            title: "Legal",
-            items: [
               {
                 label: "Privacy Policy",
                 to: "/privacy",
@@ -140,15 +132,23 @@ const config = {
             ],
           },
           {
-            title: "Contact Us",
+            title: "Social",
             items: [
               {
-                label: "info@reduct.store",
-                to: "mailto:info@reduct.store",
+                label: "GitHub",
+                href: "https://github.com/reductstore",
               },
               {
-                label: "Contact Form",
-                to: "/contact",
+                label: "Discord",
+                href: "https://discord.com/invite/BWrCncF5EP",
+              },
+              {
+                label: "LinkedIn",
+                href: "https://www.linkedin.com/company/reductstore",
+              },
+              {
+                label: "Twitter",
+                href: "https://twitter.com/reductstore",
               },
             ],
           },
