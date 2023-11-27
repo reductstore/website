@@ -86,11 +86,6 @@ const config = {
           { to: "/pricing", label: "Pricing", position: "left" },
           { to: "/reductai", label: "Reduct AI", position: "left" },
           { to: "/contact", label: "Contact Us", position: "left" },
-          {
-            href: "https://github.com/reductstore/reductstore",
-            label: "GitHub",
-            position: "right",
-          },
         ],
       },
       footer: {
@@ -159,6 +154,11 @@ const config = {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
         additionalLanguages: ["rust"],
+      },
+      colorMode: {
+        defaultMode: "light",
+        disableSwitch: false,
+        respectPrefersColorScheme: false,
       },
     }),
 };
