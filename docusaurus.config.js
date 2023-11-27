@@ -74,6 +74,7 @@ const config = {
           alt: "ReductStore Logo",
           src: "img/logo.png",
         },
+        hideOnScroll: true,
         items: [
           {
             type: "docSidebar",
