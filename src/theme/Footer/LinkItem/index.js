@@ -11,6 +11,8 @@ import {
   faDiscord,
 } from "@fortawesome/free-brands-svg-icons";
 
+const IconSize = { height: "1rem" };
+
 export default function FooterLinkItem({ item }) {
   const { to, href, label, prependBaseUrlToHref, ...props } = item;
   const toUrl = useBaseUrl(to);
@@ -19,13 +21,13 @@ export default function FooterLinkItem({ item }) {
   const getSocialIcon = (label) => {
     switch (label) {
       case "GitHub":
-        return <FontAwesomeIcon icon={faGithub} />;
-      case "Twitter":
-        return <FontAwesomeIcon icon={faXTwitter} />;
+        return <FontAwesomeIcon icon={faGithub} style={IconSize} />;
+      case "X":
+        return <FontAwesomeIcon icon={faXTwitter} style={IconSize} />;
       case "LinkedIn":
-        return <FontAwesomeIcon icon={faLinkedin} />;
+        return <FontAwesomeIcon icon={faLinkedin} style={IconSize} />;
       case "Discord":
-        return <FontAwesomeIcon icon={faDiscord} />;
+        return <FontAwesomeIcon icon={faDiscord} style={IconSize} />;
       default:
         return null;
     }
