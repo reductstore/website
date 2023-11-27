@@ -7,7 +7,7 @@ import styles from "./styles.module.css";
 export default function HomepageSDKs() {
   return (
     <section className={styles.homepageSDKs}>
-      <div className="row">
+      <div className="row" style={{ display: 'flex', alignItems: 'center' }}>
         <div className={"col col--7 hideOnMobile"}>
           <CodeSnippetExample />
         </div>

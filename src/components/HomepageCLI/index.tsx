@@ -6,7 +6,7 @@ import CodeBlock from "@theme/CodeBlock";
 function HomepageCLI() {
   return (
     <section className={styles.cliSection}>
-      <div className="row">
+      <div className="row" style={{ display: 'flex', alignItems: 'center' }}>
         <div className={clsx("col col--7 hideOnMobile", styles.cliImage)}>
           <CodeBlock className="language-bash">{resonseCLI}</CodeBlock>
         </div>

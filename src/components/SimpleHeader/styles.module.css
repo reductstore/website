@@ -1,8 +1,8 @@
-.softHeroBanner {
+.Banner {
   padding: 1.5rem 0;
 }
 
-.heroTitle {
+.BannerTitle {
   font-size: 2rem;
   text-align: left;
 }

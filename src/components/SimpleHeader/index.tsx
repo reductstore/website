@@ -2,14 +2,14 @@ import React from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 
-function SoftHeader({ pageTitle }) {
+function SimpleHeader({ pageTitle }) {
   return (
-    <header className={clsx("hero", styles.softHeroBanner)}>
+    <header className={styles.Banner}>
       <div className="container">
-        <h1 className={clsx("hero__title", styles.heroTitle)}>{pageTitle}</h1>
+        <h1 className={styles.BannerTitle}>{pageTitle}</h1>
       </div>
     </header>
   );
 }
 
-export default SoftHeader;
+export default SimpleHeader;

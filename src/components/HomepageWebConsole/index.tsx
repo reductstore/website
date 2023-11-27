@@ -8,7 +8,7 @@ function HomepageWebConsole() {
   return (
     <section className={styles.WebConsoleSection}>
       <div className={"container"}>
-        <div className="row">
+        <div className="row" style={{ display: 'flex', alignItems: 'center' }}>
           <div className={"col col--5 text--center"}>
             <h3>Web Console</h3>
             <p>
