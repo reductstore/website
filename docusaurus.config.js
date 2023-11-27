@@ -14,12 +14,12 @@ const config = {
   url: "https://reductstore.github.io",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/docs/",
+  baseUrl: "/website/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: "reductstore", // Usually your GitHub org/user name.
-  projectName: "docs", // Usually your repo name.
+  projectName: "website", // Usually your repo name.
 
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
