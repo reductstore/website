@@ -147,7 +147,7 @@ const config = {
                 href: "https://www.linkedin.com/company/reductstore",
               },
               {
-                label: "Twitter",
+                label: "X",
                 href: "https://twitter.com/reductstore",
               },
             ],
