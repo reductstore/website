@@ -18,7 +18,7 @@ export default function AzureInstall() {
         </Link></strong>
         . For more detailed information and guidance, refer to our{" "}
         <strong><Link
-          to="/docs/getting-started"
+          to="/docs/azure"
         >
           official documentation
         </Link></strong>

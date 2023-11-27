@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# ⚙ HTTP API Reference
+# 🗂️ HTTP API Reference
 
 ReductStore provides an HTTP API for interacting with the database. In order to use the API, you must first authenticate using a token, which you can be provisioned one with the `RS_API_TOKEN` [environment variable ](./configuration)or created with [the Token API](./http-api/token-authentication).
 

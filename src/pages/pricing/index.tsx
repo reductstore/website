@@ -13,7 +13,7 @@ export default function Pricing(): JSX.Element {
         <SimpleHeader pageTitle="Pricing" />
         <div className="container">
           <p>
-            Transparency and freedom with our Business Source License. Explore,
+            Transparency and freedom with our <a href="https://github.com/reductstore/reductstore/blob/main/LICENSE">Business Source License</a>. Explore,
             customize, and share our source code - it's your playground for
             innovation, whether for commercial or non-commercial initiatives.
           </p>

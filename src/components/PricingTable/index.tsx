@@ -49,11 +49,11 @@ export default function PricingTable() {
         <PricingPlan
           title="Community"
           price="Totally Free of Charge"
-          description="Ideal for entities with finances below $2M"
+          description="For entities with finances below $2M"
           features={[
             "Unbounded Usage",
-            "Open Source & Free",
             "No Limitations on Features",
+            "Source Code Publicly Available",
           ]}
           buttonUrl="https://docs.reduct.store/"
           buttonLabel="Get Started"
@@ -64,7 +64,6 @@ export default function PricingTable() {
           price="Custom Pricing"
           description="For larger firms needing custom solutions"
           features={[
-            "Unlimited Usage",
             "Free Development Usage",
             "Storage-Based Pricing",
             "Continuous Support and Guidance",
