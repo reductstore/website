@@ -50,7 +50,7 @@ const config = {
           blogTitle:
             "ReductStore Blog: Insights on edge computing, computer vision, and IoT",
           blogDescription:
-            "Welcome to the ReductStore Blog – your source for expert articles, updates, and discussions on managing and leveraging time series databases for blob data in edge computing, computer vision, and IoT. Stay informed with our latest content.",
+            "Welcome to ReductStore's Blog – your source for expert articles, updates, and discussions on managing and leveraging time series databases for blob data in edge computing, computer vision, and IoT. Stay informed with our latest content.",
           blogSidebarTitle: "All posts",
           blogSidebarCount: "ALL",
           showReadingTime: true,
@@ -66,13 +66,21 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      // Declare some <meta> tags
+      metadata: [
+        {
+          name: "keywords",
+          content:
+            "ReductStore, Time-Series Database, Blob Data Management, Edge Computing Database, IoT Data Solutions, Computer Vision Data Storage",
+        },
+      ],
       // Replace with your project's social card
       image: "img/reductstore-social-card.jpg",
       navbar: {
         title: "ReductStore",
         logo: {
           alt: "ReductStore Logo",
-          src: "img/logo.png",
+          src: "img/logo.webp",
         },
         hideOnScroll: true,
         items: [

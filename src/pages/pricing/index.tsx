@@ -6,8 +6,10 @@ import SimpleHeader from "@site/src/components/SimpleHeader";
 export default function Pricing(): JSX.Element {
   return (
     <Layout
-      title="ReductStore Pricing"
-      description="Price page for ReductStore with pricing plans and pricing details"
+      title="Pricing: Tailored Solutions for Every Scale"
+      description="Explore ReductStore's clear and flexible pricing. 
+      Our Community Edition is free for small entities, offering complete feature access and public source code. 
+      For larger businesses, the Enterprise Edition provides custom solutions with storage-based pricing and dedicated support."
     >
       <main>
         <SimpleHeader pageTitle="Pricing" />

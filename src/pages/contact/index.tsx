@@ -6,8 +6,9 @@ import HelpForm from "@site/src/components/HelpForm";
 export default function ContactPage() {
   return (
     <Layout
-      title="ReductStore Contact"
-      description="Contact page for ReductStore with contact details and contact form"
+      title="Get in Touch: Contact Us for Support, Inquiries, or Feedback"
+      description="Reach out to the ReductStore team for support, inquiries, or feedback. 
+      Whether you're experiencing issues, have questions about our products, or just want to say hello, our dedicated team is here to assist you."
     >
       <main>
         <SimpleHeader pageTitle="Contact Us" />

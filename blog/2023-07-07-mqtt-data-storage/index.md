@@ -10,7 +10,7 @@ image: ./img/social-card.jpg
 
 Choosing the right database can be overwhelming–trust me, I know.
 
-![Photo by Jan Antonin Kolar](./img/jan-antonin-kolar.jpeg)<small>Photo by <a href="https://unsplash.com/ja/@jankolar?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noopener noreferrer">Jan Antonin Kolar</a> on <a href="https://unsplash.com/photos/lRoX0shwjUQ?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noopener noreferrer">Unsplash</a></small>
+![Photo by Jan Antonin Kolar](./img/jan-antonin-kolar.webp)<small>Photo by <a href="https://unsplash.com/ja/@jankolar?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noopener noreferrer">Jan Antonin Kolar</a> on <a href="https://unsplash.com/photos/lRoX0shwjUQ?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noopener noreferrer">Unsplash</a></small>
 
 Since joining ReductStore's project, I've been exploring alternative solutions to get a better understanding about how the project fits into current echosystem. I found all kind of databases, from the most popular ones to the most obscure ones.
 
@@ -37,7 +37,7 @@ MQTT is a publish-subscribe messaging protocol that allows devices to send and r
 
 In an MQTT-based system, devices (known as publishers) publish messages to a central broker, which then distributes these messages to other devices (known as subscribers) that have subscribed to specific topics. The subscriber can then process the message and take appropriate action. For example, a sensor may publish a message containing its current temperature, which is then received by a subscriber that has subscribed to the topic "temperature".
 
-![Example of Pub/Sub architecture](./img/example-pub-sub.jpeg "Example of Pub/Sub architecture")<small>Example of Pub/Sub architecture (image by authors)</small>
+![Example of Pub/Sub architecture](./img/example-pub-sub.webp "Example of Pub/Sub architecture")<small>Example of Pub/Sub architecture (image by authors)</small>
 
 MQTT is easy to use and keeps subscription and publishing tasks separate. To get info from a device, you don't need to know all its details like its address or password. You just need to connect to a "middleman" called a broker and know the topic's name. This pattern offers many advantages for IoT over other protocols, such as HTTP, which requires servers and clients to be aware of each other's details and communicate directly.
 

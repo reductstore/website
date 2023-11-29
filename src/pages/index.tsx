@@ -12,7 +12,7 @@ import HomepageWebConsole from "../components/HomepageWebConsole";
 import HomepageCLI from "../components/HomepageCLI";
 import HomepageCTA from "../components/HomepageCTA";
 
-const LogoImg = require("@site/static/img/logo.png").default;
+const LogoImg = require("@site/static/img/logo.webp").default;
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -44,9 +44,10 @@ function HomepageHeader() {
 export default function Home(): JSX.Element {
   return (
     <Layout
-      title="ReductStore: Efficient Time Series Database for Blob Data"
-      description="ReductStore offers a specialized time series database tailored for blob data. 
-      Ideal for edge computing, computer vision, and IoT applications with high-performance writing and real-time querying capabilities."
+      title="Efficient Time-Series Database for Blob Data, Optimized for Edge Computing, Computer Vision, and IoT"
+      description="ReductStore is a time series database designed specifically for storing and managing large amounts of blob data. 
+      It offers high performance for writing and real-time querying, making it suitable for edge computing, computer vision, and IoT applications.
+      ReductStore is licensed under the Business Source License 1.1."
     >
       <HomepageHeader />
       <main>

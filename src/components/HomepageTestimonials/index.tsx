@@ -9,7 +9,7 @@ const testimonials = [
     position: "CEO and Co-founder",
     company: "PANDA GmbH",
     homepage: "https://panda.technology",
-    image: require("@site/static/img/testimonials/panda.png").default,
+    image: require("@site/static/img/testimonials/panda.webp").default,
   },
   {
     message:
@@ -18,7 +18,7 @@ const testimonials = [
     position: "Founder",
     company: "Mounte AB",
     homepage: "https://mounte.se",
-    image: require("@site/static/img/testimonials/mounte.png").default,
+    image: require("@site/static/img/testimonials/mounte.webp").default,
   },
   {
     message:
@@ -27,7 +27,7 @@ const testimonials = [
     position: "Founder",
     company: "Metric Space UG",
     homepage: "https://www.metric-space.ai/",
-    image: require("@site/static/img/testimonials/metric-space.png").default,
+    image: require("@site/static/img/testimonials/metric-space.webp").default,
   },
 ];
 

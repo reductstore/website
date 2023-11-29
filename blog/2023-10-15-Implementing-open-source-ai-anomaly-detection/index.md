@@ -8,7 +8,7 @@ date: 2023-10-15
 image: ./img/social-card.jpg
 ---
 
-![Photo by Randy Fath](./img/randy-fath-chess.jpeg)<small>Photo by <a href="https://unsplash.com/@randyfath?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" target="_blank" rel="noopener noreferrer">Randy Fath</a> on <a href="https://unsplash.com/photos/G1yhU1Ej-9A?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" target="_blank" rel="noopener noreferrer">Unsplash</a></small>
+![Photo by Randy Fath](./img/randy-fath-chess.webp)<small>Photo by <a href="https://unsplash.com/@randyfath?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" target="_blank" rel="noopener noreferrer">Randy Fath</a> on <a href="https://unsplash.com/photos/G1yhU1Ej-9A?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" target="_blank" rel="noopener noreferrer">Unsplash</a></small>
 
 
 The journey of taking an open-source artificial intelligence (AI) model from a laboratory setting to real-world implementation can seem daunting. However, with the right understanding and approach, this transition becomes a manageable task. 
@@ -39,7 +39,7 @@ Real-time implementation of open-source models for this purpose allows these sec
 
 [Anomalib](https://github.com/openvinotoolkit/anomalib) is an open-source library for unsupervised anomaly detection in images. It offers a collection of state-of-the-art models that can be trained on your specific images.
 
-![Anomalib](./img/anomalib_image_example.jpeg)
+![Anomalib](./img/anomalib_image_example.webp)
 <small>Example of an anomaly detected with [Anomalib](https://github.com/openvinotoolkit/anomalib)</small>
 
 For achieving the best training results, it is advised to obtain a suitable quantity of images that are free from any abnormalities. It is preferable to have a few hundred images for this purpose. Furthermore, in order to perform testing and validation, it is recommended to acquire a few images that do include anomalies as well.
@@ -105,7 +105,7 @@ Once satisfied with its performance and reliability, you can then switch over fr
 
 To better visualize how ReductStore can integrate with your machine learning workflow, from data capture to inference, consider the following diagram. It provides an overview of how we can make the most out of AI labels and models stationed at the edge.
 
-![ML Data Flow Diagram](./img/reductai.jpg)
+![ML Data Flow Diagram](./img/reductai.webp)
 <small>Diagram illustrating the flow of data capture, storage, inference, and training with ReductStore.</small>
 
 AI labels indicate the outcomes of your model's evaluation on each picture, like the presence or absence of an anomaly in our case. By storing these labels alongside your images in ReductStore, you streamline your system's workflow and make the whole process simpler.

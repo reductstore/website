@@ -2,7 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 
-const CliImage = require("@site/static/img/web-console.png").default;
+const CliImage = require("@site/static/img/web-console.webp").default;
 
 function HomepageWebConsole() {
   return (
