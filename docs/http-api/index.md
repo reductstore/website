@@ -1,5 +1,7 @@
 ---
 sidebar_position: 4
+title: 🗂️ HTTP API Reference
+description: HTTP API documentation for interacting with the database.
 ---
 
 # 🗂️ HTTP API Reference

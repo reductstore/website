@@ -9,8 +9,9 @@ import Link from "@docusaurus/Link";
 export default function DownloadPage(): JSX.Element {
   return (
     <Layout
-      title="Download ReductStore"
-      description="Download page for ReductStore and its SDKs with download links and instructions for Linux, Windows, and macOS."
+      title="Download for Linux, Windows, and macOS: Get Started in Minutes"
+      description="Get started with ReductStore by downloading our latest software and SDKs for Linux, Windows, and macOS. 
+      This page provides direct download links and step-by-step instructions to ensure a smooth installation process."
     >
       <main>
         <SimpleHeader pageTitle="Download ReductStore" />

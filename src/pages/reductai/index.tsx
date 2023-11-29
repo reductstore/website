@@ -4,13 +4,13 @@ import Layout from "@theme/Layout";
 import WhitePaperForm from "@site/src/components/WhitePaperForm";
 import styles from './styles.module.css';
 
-const LogoImg = require("@site/static/img/whitepaper/whitepaper.jpg").default;
+const LogoImg = require("@site/static/img/whitepaper/whitepaper.webp").default;
 
 export default function ReductAI(): JSX.Element {
   return (
     <Layout
-      title="Reduct AI - White Paper"
-      description="ReductAI is a platform for building and deploying AI models."
+      title="Reduct AI: Pioneering AI Model Deployment on IoT Edge"
+      description="Dive into our white paper on Reduct AI, detailing our approache for building and deploying AI models in IoT edge environments."
     >
       <main>
         <SimpleHeader pageTitle="Reduct AI" />
