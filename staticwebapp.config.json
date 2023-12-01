@@ -1,8 +1,173 @@
 {
   "routes": [
     {
+      "route": "/docs",
+      "redirect": "/docs/getting-started",
+      "statusCode": 301
+    },
+    {
       "route": "/computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection",
       "redirect": "/blog/computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/reductstore-v1_7_0-released",
+      "redirect": "/blog/news/reductstore-v1_7_0-released",
+      "statusCode": 301
+    },
+    {
+      "route": "/comparison/iot/reductstore-benchmark",
+      "redirect": "/blog/comparison/iot/reductstore-benchmark",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/reductstore-v1_6_0-released",
+      "redirect": "/blog/news/reductstore-v1_6_0-released",
+      "statusCode": 301
+    },
+    {
+      "route": "/advice/database/mqtt-data-storage",
+      "redirect": "/blog/advice/database/mqtt-data-storage",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/reductstore-v1_5_0-released",
+      "redirect": "/blog/news/reductstore-v1_5_0-released",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/reductstore-v1_4_0-released",
+      "redirect": "/blog/news/reductstore-v1_4_0-released",
+      "statusCode": 301
+    },
+    {
+      "route": "/tutorials/sdks/subscription-cpp",
+      "redirect": "/blog/tutorials/sdks/subscription-cpp",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/6-weeks-with-rust",
+      "redirect": "/blog/news/6-weeks-with-rust",
+      "statusCode": 301
+    },
+    {
+      "route": "/edge-computing/data-reduction-on-edge",
+      "redirect": "/blog/edge-computing/data-reduction-on-edge",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/we-move-to-rust",
+      "redirect": "/blog/news/we-move-to-rust",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/cli/reduct-cli-v0_8-released",
+      "redirect": "/blog/news/cli/reduct-cli-v0_8-released",
+      "statusCode": 301
+    },
+    {
+      "route": "/tutorials/computer-vision/sdks/cats-datasets",
+      "redirect": "/blog/tutorials/computer-vision/sdks/cats-datasets",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/tutorials/snap-support",
+      "redirect": "/blog/news/tutorials/snap-support",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/sdks/tutorials/reduct-cpp-v1_3_0-released",
+      "redirect": "/blog/news/sdks/tutorials/reduct-cpp-v1_3_0-released",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/cli/reduct-cli-v0_7-released",
+      "redirect": "/blog/news/cli/reduct-cli-v0_7-released",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/sdks/tutorials/reduct-js-v1_3_0-released",
+      "redirect": "/blog/news/sdks/tutorials/reduct-js-v1_3_0-released",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/cli/reduct-cli-v0_6-released",
+      "redirect": "/blog/news/cli/reduct-cli-v0_6-released",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/sdks/tutorials/reduct-py-v1_3_0-released",
+      "redirect": "/blog/news/sdks/tutorials/reduct-py-v1_3_0-released",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/reductstore-v1_3_0-released",
+      "redirect": "/blog/news/reductstore-v1_3_0-released",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/cli/reduct-cli-v0_5_0-released",
+      "redirect": "/blog/news/cli/reduct-cli-v0_5_0-released",
+      "statusCode": 301
+    },
+    {
+      "route": "/tutorials/sdks/js-sdk-quick-start",
+      "redirect": "/blog/tutorials/sdks/js-sdk-quick-start",
+      "statusCode": 301
+    },
+    {
+      "route": "/tutorials/sdks/py-sdk-quick-start",
+      "redirect": "/blog/tutorials/sdks/py-sdk-quick-start",
+      "statusCode": 301
+    },
+    {
+      "route": "/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio",
+      "redirect": "/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio",
+      "statusCode": 301
+    },
+    {
+      "route": "/tutorials/reductstore-behind-nginx",
+      "redirect": "/blog/tutorials/reductstore-behind-nginx",
+      "statusCode": 301
+    },
+    {
+      "route": "/tutorials/iot/how-to-keep-mqtt-data-node",
+      "redirect": "/blog/tutorials/iot/how-to-keep-mqtt-data-node",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/cli/reduct-cli-v0_4_0-released",
+      "redirect": "/blog/news/cli/reduct-cli-v0_4_0-released",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/sdks/tutorials/reduct-js-v1_2_0-released",
+      "redirect": "/blog/news/sdks/tutorials/reduct-js-v1_2_0-released",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/sdks/tutorials/reduct-py-v1_2_0-released",
+      "redirect": "/blog/news/sdks/tutorials/reduct-py-v1_2_0-released",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/sdks/tutorials/reduct-cpp-v1_2_0-released",
+      "redirect": "/blog/news/sdks/tutorials/reduct-cpp-v1_2_0-released",
+      "statusCode": 301
+    },
+    {
+      "route": "/news/reductstore-v1_2_1-released",
+      "redirect": "/blog/news/reductstore-v1_2_1-released",
+      "statusCode": 301
+    },
+    {
+      "route": "/tutorials/sdks/cpp-sdk-quick-start",
+      "redirect": "/blog/tutorials/sdks/cpp-sdk-quick-start",
+      "statusCode": 301
+    },
+    {
+      "route": "/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications",
+      "redirect": "/blog/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications",
       "statusCode": 301
     }
   ]
