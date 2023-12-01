@@ -1,0 +1,9 @@
+{
+  "routes": [
+    {
+      "route": "/computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection",
+      "redirect": "/blog/computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection",
+      "statusCode": 301
+    }
+  ]
+}
