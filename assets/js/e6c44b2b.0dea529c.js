@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkclassic=self.webpackChunkclassic||[]).push([[6149],{2277:s=>{s.exports=JSON.parse('{"label":"cli","permalink":"/blog/tags/cli","allTagsPath":"/blog/tags","count":5,"unlisted":false}')}}]);
