@@ -55,7 +55,7 @@ export default function PricingTable() {
             "No Limitations on Features",
             "Source Code Publicly Available",
           ]}
-          buttonUrl="https://docs.reduct.store/"
+          buttonUrl="/docs/getting-started"
           buttonLabel="Get Started"
           isEnterprise={false}
         />
