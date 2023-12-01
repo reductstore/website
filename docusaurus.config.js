@@ -37,6 +37,8 @@ const config = {
     locales: ["en"],
   },
 
+  plugins: ["docusaurus-plugin-umami"],
+
   presets: [
     [
       "classic",
@@ -66,6 +68,12 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      // Umami analytics
+      umami: {
+        websiteid: "bd5bb2a0-56a0-4f1c-aba3-c8cf9e517e74",
+        src: "https://eu.umami.is/script.js", // Replace with your actual script src
+      },
+
       // Declare some <meta> tags
       metadata: [
         {
@@ -170,17 +178,6 @@ const config = {
         respectPrefersColorScheme: false,
       },
     }),
-  plugins: [
-    [
-      "@dipakparmar/docusaurus-plugin-umami",
-      /** @type {import('@dipakparmar/docusaurus-plugin-umami').Options} */
-      ({
-        websiteID: "bd5bb2a0-56a0-4f1c-aba3-c8cf9e517e74",
-        analyticsDomain: "https://eu.umami.is",
-        scriptName: "script.js",
-      }),
-    ],
-  ],
 };
 
 export default config;
