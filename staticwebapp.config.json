@@ -6,6 +6,41 @@
       "statusCode": 301
     },
     {
+      "route": "/configuration",
+      "redirect": "/docs/configuration",
+      "statusCode": 301
+    },
+    {
+      "route": "/how-does-it-work",
+      "redirect": "/docs/how-does-it-work",
+      "statusCode": 301
+    },
+    {
+      "route": "/http-api",
+      "redirect": "/docs/http-api",
+      "statusCode": 301
+    },
+    {
+      "route": "/http-api/server-api",
+      "redirect": "/docs/http-api/server-api",
+      "statusCode": 301
+    },
+    {
+      "route": "/http-api/bucket-api",
+      "redirect": "/docs/http-api/bucket-api",
+      "statusCode": 301
+    },
+    {
+      "route": "/http-api/entry-api",
+      "redirect": "/docs/http-api/entry-api",
+      "statusCode": 301
+    },
+    {
+      "route": "/http-api/token-authentication",
+      "redirect": "/docs/http-api/token-authentication",
+      "statusCode": 301
+    },
+    {
       "route": "/computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection",
       "redirect": "/blog/computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection",
       "statusCode": 301
