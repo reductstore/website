@@ -170,6 +170,16 @@ const config = {
         respectPrefersColorScheme: false,
       },
     }),
+  plugins: [
+    [
+      "@dipakparmar/docusaurus-plugin-umami",
+      /** @type {import('@dipakparmar/docusaurus-plugin-umami').Options} */
+      ({
+        websiteID: "bd5bb2a0-56a0-4f1c-aba3-c8cf9e517e74",
+        analyticsDomain: "https://eu.umami.is/script.js",
+      }),
+    ],
+  ],
 };
 
 export default config;
