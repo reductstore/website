@@ -11,7 +11,7 @@ const config = {
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
-  url: "https://reductstore.github.io",
+  url: "https://reduct.store",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: "/",
@@ -68,6 +68,14 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      // Algolia search integration
+      // algolia: {
+      //   appId: "PRYY64U3U1",
+      //   apiKey: "19614063f4b4f798bfe7f3a8135fd488",
+      //   indexName: "reduct",
+      //   contextualSearch: true,
+      // },
+
       // Umami analytics
       umami: {
         websiteid: "bd5bb2a0-56a0-4f1c-aba3-c8cf9e517e74",
