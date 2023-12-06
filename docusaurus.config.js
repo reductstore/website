@@ -69,12 +69,13 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Algolia search integration
-      // algolia: {
-      //   appId: "PRYY64U3U1",
-      //   apiKey: "19614063f4b4f798bfe7f3a8135fd488",
-      //   indexName: "reduct",
-      //   contextualSearch: true,
-      // },
+      algolia: {
+        appId: "PRYY64U3U1",
+        apiKey: "19614063f4b4f798bfe7f3a8135fd488",
+        indexName: "reduct",
+        contextualSearch: false,
+        searchParameters: {},
+      },
 
       // Umami analytics
       umami: {
