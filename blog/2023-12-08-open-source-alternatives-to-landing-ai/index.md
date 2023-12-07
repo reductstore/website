@@ -112,19 +112,17 @@ Here are some projects that I would recommend to watch:
 
 
 ## On-Premise Alternative to LandingEdge
-When seeking an on-premise alternative to [LandingEdge](<https://landing.ai/videos/landingedge-intro/>) for sophisticated edge computing and computer vision tasks, [ReductStore](<https://reduct.store/>) emerges as a compelling solution. This Time-Series Database is tailored for Blob Data, emphasizing optimizations that cater to the unique demands of Edge Computing, IoT, and Computer Vision applications. Key features of ReductStore include:
+When seeking an on-premise alternative to [LandingEdge](<https://landing.ai/videos/landingedge-intro/>) for sophisticated edge computing and computer vision tasks, [ReductStore](<https://reduct.store/>) emerges as a compelling solution. This Time-Series Database is tailored for Blob Data, emphasizing optimizations that cater to the unique demands of Edge Computing, IoT, and Computer Vision applications. 
+
+Some of the key features of ReductStore include:
 
 - **Time Series Blob Storage:** Efficient handling of sequential data storage which is crucial for time-sensitive applications.
 
-- **No Size Limit for Blobs:** The ability to store large amounts of unstructured data without constraints.
+- **Real-Time FIFO Quota:** Preventing disk space shortage where storage capacity is limited.
 
-- **Real-Time FIFO Quota Management:** Ensuring that the most recent data has priority access while maintaining system performance.
+- **Data Labeling:** Annotate, filter, and save AI labels or meta-data for each image.
 
-- **Data Labeling & Filtering:** Tools that facilitate the organization and retrieval of relevant datasets swiftly.
-
-- **Data Batching:** Grouping data points enhances processing efficiency, essential in machine learning workflows.
-
-ReductStore offers a robust infrastructure designed with high-throughput ingestion and real-time analysis in mind, making it an attractive choice for businesses requiring on-premise deployment with powerful edge analytics capabilities.
+- **Data Batching:** Grouping data to minimize network overhead in areas with high latency by fetching records in batched HTTP responses.
 
 ## Conclusion
 In conclusion, the exploration of open-source alternatives to proprietary machine learning platforms reveals a rich ecosystem with specialized tools for each aspect of MLOps.
