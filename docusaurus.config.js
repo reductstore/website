@@ -1,7 +1,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-import { themes as prismThemes } from "prism-react-renderer";
+import {themes as prismThemes} from "prism-react-renderer";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -106,12 +106,19 @@ const config = {
             sidebarId: "docSidebar",
             position: "left",
             label: "Docs",
+            to: "/docs/getting-started",
           },
+
           { to: "/blog", label: "Blog", position: "left" },
           { to: "/download", label: "Download", position: "left" },
           { to: "/pricing", label: "Pricing", position: "left" },
           { to: "/reductai", label: "Reduct AI", position: "left" },
           { to: "/contact", label: "Contact Us", position: "left" },
+          {
+            type: 'docsVersionDropdown',
+            position: 'right',
+            dropdownActiveClassDisabled: true,
+          },
         ],
       },
       footer: {
