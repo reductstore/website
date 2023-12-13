@@ -1,0 +1,120 @@
+---
+sidebar_position: 2
+title: Server API
+description: The server API provides HTTP methods for checking the status of the server, listing the available buckets, and retrieving the permissions for the current API token.
+---
+
+import SwaggerComponent from "@site/src/components/SwaggerComponent";
+
+# Server API
+
+The server API provides HTTP methods for checking the status of the server, listing the available buckets, and retrieving the permissions for the current API token.
+
+<SwaggerComponent
+  method="get"
+  path="/api/v1/info"
+  summary="Get statistical information about the storage"
+  description={
+    <>
+      You can use this method to get stats of the storage and check its version. If authentication is enabled, the method needs a valid API token.
+      <pre><code>
+      {`curl --header "authorsization: Bearer \${API_TOKEN}" http://127.0.0.1:8383/api/v1/info`}
+      </code></pre>
+    </>
+  }
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "Returns information in JSON format",
+      description: (
+        <>
+          <pre><code>
+          {`{
+    "version": "string",
+    "bucket_count": "integer",  // number of buckets in storage
+    "usage": "integer",         // disk usage in bytes
+    "uptime": "integer",        // reductstore uptime in seconds
+    "oldest_record": "integer", // unix timestamp of oldest record in microseconds
+    "latest_record": "integer"  // unix timestamp of latest record in microseconds
+    "defaults":{
+    "bucket":{                  // default settings for a new bucket
+        "max_block_size": "integer",            // max block content_length in bytes
+        "max_block_records": "integer",         // max number of records in a block
+        "quota_type": Union["NONE", "FIFO"],    // quota type
+        "quota_size": "integer"                 // quota content_length in bytes
+    }
+}`}
+          </code></pre>
+        </>
+      )
+    },
+    {
+      status: "401",
+      message: "Unauthorsized",
+      summary: "If authentication is enabled and access token is invalid or empty"
+    }
+  ]}
+/>
+
+<SwaggerComponent
+  method="get"
+  path="/api/v1/list"
+  summary="Get a list of the buckets with their stats"
+  description={
+    <>
+      You can use this method to browse the buckets of the storage. If authentication is enabled, the method needs a valid API token.
+      <pre><code>
+      {`curl --header "authorsization: Bearer \${API_TOKEN}" http://127.0.0.1:8383/api/v1/list`}
+      </code></pre>
+    </>
+  }
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      description: (
+        <>
+          <pre><code>
+          {`{
+    "buckets": [
+      {
+        "name": "string",         // name of the bucket
+        "entry_count": "integer", // number of entries in the bucket
+        "size": "integer",        // size of stored data in the bucket in bytes
+        "oldest_record": "integer", // unix timestamp of oldest record in microseconds
+        "latest_record": "integer"  // unix timestamp of latest record in microseconds
+      }
+    ]
+}`}
+          </code></pre>
+        </>
+      )
+    },
+    {
+      status: "401",
+      message: "Unauthorsized",
+      summary: "If authentication is enabled and access token is invalid or empty"
+    }
+  ]}
+/>
+
+<SwaggerComponent
+  method="head"
+  path="/api/v1/alive"
+  summary="Check if the storage engine is working"
+  description={
+    <>
+      You can use this method for health checks in Docker or Kubernetes environment. The method has anonymous access.
+      <pre><code>
+      {`curl --head http://127.0.0.1:8383/api/v1/alive`}
+      </code></pre>
+    </>
+  }
+  responses={[
+    {
+      status: "200",
+      message: "OK"
+    }
+  ]}
+/>
