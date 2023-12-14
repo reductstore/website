@@ -7,15 +7,15 @@ slug: news/reductstore-v1_6_0-released
 date: 2023-08-15
 ---
 
-We are pleased to announce the release of the latest minor version of [ReductStore](https://www.reduct.store), [1.6.0](https://github.com/reductstore/reductstore/releases/tag/v1.6.0). ReductStore is a time series database designed for storing and managing large amounts of blob data.
+We are pleased to announce the release of the latest minor version of [**ReductStore**](https://www.reduct.store), [**1.6.0**](https://github.com/reductstore/reductstore/releases/tag/v1.6.0). ReductStore is a time series database designed for storing and managing large amounts of blob data.
 
-To download the latest released version, please visit our [Download Page](https://www.reduct.store/download). 
+To download the latest released version, please visit our [**Download Page**](https://www.reduct.store/download). 
 
 ## What is new in 1.6.0?
 
 ### Business Source License (BUSL-1.1)
 
-We have updated the ReductStore license to the Business Source License (BUSL-1.1). This license permits free usage of the database for development, research, and testing purposes. Furthermore, it can be used in a production environment for free, provided that the Aggregate Financial Capacity of the company is less than $2,000,000 for the previous year. For additional information, please refer to [here](https://github.com/reductstore/reductstore/blob/main/LICENSE).
+We have updated the ReductStore license to the Business Source License (BUSL-1.1). This license permits free usage of the database for development, research, and testing purposes. Furthermore, it can be used in a production environment for free, provided that the Aggregate Financial Capacity of the company is less than $2,000,000 for the previous year. For additional information, please refer to [**here**](https://github.com/reductstore/reductstore/blob/main/LICENSE).
 
 We believe that the new license strikes a good balance between freedom and revenue generation. This balance is necessary to maintain and improve our technology, and to bring benefits to its users.
 
@@ -23,7 +23,7 @@ We believe that the new license strikes a good balance between freedom and reven
 
 ## Client SDK for Rust
 
-ReductStore was rewritten from C++ to Rust a few months ago. We are delighted to be part of the Rust community and have taken a new step towards Rust with the Client SDK. The SDK is powered by [reqwest](https://github.com/seanmonstar/reqwest) and enables asynchronous integration of the database into Rust applications:
+ReductStore was rewritten from C++ to Rust a few months ago. We are delighted to be part of the Rust community and have taken a new step towards Rust with the Client SDK. The SDK is powered by [**reqwest**](https://github.com/seanmonstar/reqwest) and enables asynchronous integration of the database into Rust applications:
 
 ```rust
 use bytes::Bytes;
@@ -71,8 +71,8 @@ The new API includes  the `DELETE /api/v1/b/:bucket/:entry` endpoint, that allow
 
 Another new feature is the `limit` parameter in the query request (`GET api/v1/b/:bucket/:entry/q`). When a user requests data for a time interval, they may not know how many records are stored because queries work as iterators to avoid spikes for big requests. With the new feature, you can specify a maximum number of records for a request if you only need a certain amount of data.
 
-Traditionally, we have aligned our official SDKs for [Python](https://github.com/reductstore/reduct-py), [C++](https://github.com/reductstore/reduct-cpp), and [JavaScript](https://github.com/reductstore/reduct-js) with the latest API so that you can use the latest features.
+Traditionally, we have aligned our official SDKs for [**Python**](https://github.com/reductstore/reduct-py), [**C++**](https://github.com/reductstore/reduct-cpp), and [**JavaScript**](https://github.com/reductstore/reduct-js) with the latest API so that you can use the latest features.
 
-I hope you find this release useful. If you have any questions or feedback, don’t hesitate to reach out in [Discord](https://discord.gg/8wPtPGJYsn) or by opening a discussion on [GitHub](https://github.com/reductstore/reductstore/discussions).
+I hope you find this release useful. If you have any questions or feedback, don’t hesitate to reach out in [**Discord**](https://discord.gg/8wPtPGJYsn) or by opening a discussion on [**GitHub**](https://github.com/reductstore/reductstore/discussions).
 
-Thanks for using [ReductStore](https://www.reduct.store/)!
+Thanks for using [**ReductStore**](https://www.reduct.store/)!

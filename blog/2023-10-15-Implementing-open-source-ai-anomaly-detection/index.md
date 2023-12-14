@@ -37,14 +37,14 @@ Real-time implementation of open-source models for this purpose allows these sec
 
 ## Anomalib: A Deep Learning Library for Anomaly Detection in Images
 
-[Anomalib](https://github.com/openvinotoolkit/anomalib) is an open-source library for unsupervised anomaly detection in images. It offers a collection of state-of-the-art models that can be trained on your specific images.
+[**Anomalib**](https://github.com/openvinotoolkit/anomalib) is an open-source library for unsupervised anomaly detection in images. It offers a collection of state-of-the-art models that can be trained on your specific images.
 
 ![Anomalib](./img/anomalib_image_example.webp)
-<small>Example of an anomaly detected with [Anomalib](https://github.com/openvinotoolkit/anomalib)</small>
+<small>Example of an anomaly detected with [**Anomalib**](https://github.com/openvinotoolkit/anomalib)</small>
 
 For achieving the best training results, it is advised to obtain a suitable quantity of images that are free from any abnormalities. It is preferable to have a few hundred images for this purpose. Furthermore, in order to perform testing and validation, it is recommended to acquire a few images that do include anomalies as well.
 
-If your images have anomalies, you'll need to make a mask highlighting these areas. You don't need a sophisticated tool for that. For example with [GIMP](https://www.gimp.org/), it's as simple as:
+If your images have anomalies, you'll need to make a mask highlighting these areas. You don't need a sophisticated tool for that. For example with [**GIMP**](https://www.gimp.org/), it's as simple as:
 - Drag and drop your original image (e.g., "001.png”) into GIMP.
 - Go to the Layer menu and select New Layer.
 - With the new layer selected, use the Pencil tool set to white to mark the anomalies.
@@ -53,15 +53,15 @@ If your images have anomalies, you'll need to make a mask highlighting these are
 
 Keep in mind that masks are for testing, not training. Thus, only a few anomaly images are required for this.
 
-Afterward, you can train one of the Anomalib models and test its performance under simulated conditions. I would recommend [EfficientAd](https://arxiv.org/abs/2303.14535) or [FastFlow](https://arxiv.org/abs/2111.07677) for real-time applications, as they are significantly faster than other models as of October 2023. Additionally, you can explore [Anomaly Detection on Paper With Code](https://paperswithcode.com/task/anomaly-detection) to find the ideal model for your specific use case.
+Afterward, you can train one of the Anomalib models and test its performance under simulated conditions. I would recommend [**EfficientAd**](https://arxiv.org/abs/2303.14535) or [**FastFlow**](https://arxiv.org/abs/2111.07677) for real-time applications, as they are significantly faster than other models as of October 2023. Additionally, you can explore [**Anomaly Detection on Paper With Code**](https://paperswithcode.com/task/anomaly-detection) to find the ideal model for your specific use case.
 
-The easiest way to get started with Anomalib, is to clone their [repository from Github](https://github.com/openvinotoolkit/anomalib) and use the train script as follows:
+The easiest way to get started with Anomalib, is to clone their [**repository from Github**](https://github.com/openvinotoolkit/anomalib) and use the train script as follows:
 
 ```bash
 python tools/train.py --config <path/to/model/config.yaml> --model <model name>
 ```
 
-Sample config files are available in the repo, and it lets you set the paths of the folders containing your pictures for training and testing. Then, once your model is trained and validated, you can use the inference script to test it under simulated conditions on a single image or a folder of images. For example, with [PyTorch](https://pytorch.org/), you can run the inference script as follows:
+Sample config files are available in the repo, and it lets you set the paths of the folders containing your pictures for training and testing. Then, once your model is trained and validated, you can use the inference script to test it under simulated conditions on a single image or a folder of images. For example, with [**PyTorch**](https://pytorch.org/), you can run the inference script as follows:
 
 ```bash
 python tools/inference/torch_inference.py \
@@ -74,7 +74,7 @@ This will generate a visualization that highlights the areas of the image that t
 
 ## From Lab to Live: Implementing Your Models With ONNX or OpenVINO
 
-Once your model has been trained and validated using Anomalib, the next step is to prepare it for real-time implementation. This is where [ONNX](https://onnx.ai/) (Open Neural Network Exchange) or [OpenVINO](https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/overview.html) (Open Visual Inference and Neural network Optimization) comes into play.
+Once your model has been trained and validated using Anomalib, the next step is to prepare it for real-time implementation. This is where [**ONNX**](https://onnx.ai/) (Open Neural Network Exchange) or [**OpenVINO**](https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/overview.html) (Open Visual Inference and Neural network Optimization) comes into play.
 
 ONNX offers a standardized platform that allows you to export your trained model into a format that can be easily implemented and run in various environments.
 
@@ -101,7 +101,7 @@ Once satisfied with its performance and reliability, you can then switch over fr
 
 ### ReductStore: Storing AI Labels and Models at the Edge with a Time-Series Database for Blob Data
 
-[ReductStore](https://www.reduct.store/) is an innovative time-series database designed specifically for managing Blob data, making it ideal for our needs in real-time unsupervised anomaly detection. The true strength of ReductStore lies in its ability to store not just raw data but also AI labels within the metadata and models at the edge.
+[**ReductStore**](https://www.reduct.store/) is an innovative time-series database designed specifically for managing Blob data, making it ideal for our needs in real-time unsupervised anomaly detection. The true strength of ReductStore lies in its ability to store not just raw data but also AI labels within the metadata and models at the edge.
 
 To better visualize how ReductStore can integrate with your machine learning workflow, from data capture to inference, consider the following diagram. It provides an overview of how we can make the most out of AI labels and models stationed at the edge.
 

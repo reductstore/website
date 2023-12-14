@@ -7,11 +7,11 @@ slug: tutorials/sdks/subscription-cpp
 date: 2023-06-04
 ---
 
-This article provides an introduction to [ReductStore](https://www.reduct.store/) and explains how to use the [Reduct C++ SDK](https://github.com/reductstore/reduct-cpp) to subscribe to data from the database.
+This article provides an introduction to [**ReductStore**](https://www.reduct.store/) and explains how to use the [**Reduct C++ SDK**](https://github.com/reductstore/reduct-cpp) to subscribe to data from the database.
 
 ## Prerequisites
 
-To subscribe to new records, we should use a continuous query, which has been supported by [ReductStore](https://www.reduct.store) since version v1.4. We can use the following Docker command to run it:
+To subscribe to new records, we should use a continuous query, which has been supported by [**ReductStore**](https://www.reduct.store) since version v1.4. We can use the following Docker command to run it:
 
 ```bash
 docker pull reduct/store:latest
@@ -19,7 +19,7 @@ docker run -p 8383:8383 reduct/store:latest
 
 ```
 
-Now, we need to install the [Reduct Client SDK for C++](https://github.com/reductstore/reduct-cpp). Please refer to [these instructions](https://cpp.reduct.store/en/latest/docs/quick-start/).
+Now, we need to install the [**Reduct Client SDK for C++**](https://github.com/reductstore/reduct-cpp). Please refer to [**these instructions**](https://cpp.reduct.store/en/latest/docs/quick-start/).
 
 <!--truncate-->
 
@@ -185,10 +185,10 @@ In ReductStore, **queries work as iterators**. It doesn't matter how many record
 
 ## How could it be useful?
 
-ReductStore is an [open source database](https://github.com/reductstore/reductstore) focused on edge computing and AI/ML applications. Its continuous queries work as a **publish-subscription communication model,** similar to MQTT. You can use the database as a message broker or easily integrate it with your warehouse by creating a program that subscribes to new records and writes them or only labels them to another database.
+ReductStore is an [**open source database**](https://github.com/reductstore/reductstore) focused on edge computing and AI/ML applications. Its continuous queries work as a **publish-subscription communication model,** similar to MQTT. You can use the database as a message broker or easily integrate it with your warehouse by creating a program that subscribes to new records and writes them or only labels them to another database.
 
-You can use this feature in a **Python or JavaScript application** by using the [Python](https://github.com/reductstore/reduct-py) and [JavaScript](https://github.com/reductstore/reduct-js) client SDKs.
+You can use this feature in a **Python or JavaScript application** by using the [**Python**](https://github.com/reductstore/reduct-py) and [**JavaScript**](https://github.com/reductstore/reduct-js) client SDKs.
 
-I hope you find this release useful. If you have any questions or feedback, don’t hesitate to reach out in [Discord](https://discord.gg/8wPtPGJYsn) or by opening a discussion on [GitHub](https://github.com/reductstore/reductstore/discussions).
+I hope you find this release useful. If you have any questions or feedback, don’t hesitate to reach out in [**Discord**](https://discord.gg/8wPtPGJYsn) or by opening a discussion on [**GitHub**](https://github.com/reductstore/reductstore/discussions).
 
-Thanks for using [ReductStore](https://www.reduct.store/)!
+Thanks for using [**ReductStore**](https://www.reduct.store/)!

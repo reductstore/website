@@ -14,9 +14,9 @@ Benchmarks don't lie, let's put the systems to the ultimate test.
 
 For anyone deeply immersed in the engineering world of Edge Computing, Computer Vision, or IoT, you'll want to read further to understand why a time series database for blob data is needed and where it stands out.
 
-Enter our contest: First, we have [ReductStore](https://www.reduct.store)—a time series database for blob data—specifically designed for edge devices. 
+Enter our contest: First, we have [**ReductStore**](https://www.reduct.store)—a time series database for blob data—specifically designed for edge devices. 
 
-Its counterpart? The duo of [MinIO](https://min.io) and [InfluxDB](https://www.influxdata.com), each optimized for their niche in blob storage and time-series data respectively. 
+Its counterpart? The duo of [**MinIO**](https://min.io) and [**InfluxDB**](https://www.influxdata.com), each optimized for their niche in blob storage and time-series data respectively. 
 
 When directly compared, which system takes the lead in performance?
 
@@ -34,7 +34,7 @@ The blob size is not static; it varies from a small 1KiB to a larger 1MiB. This 
 
 And, of course, we kept an eye on the clock. For each batch read of the 1,000 blobs, our stopwatch was on, capturing the efficiency with which each system accessed and retrieved the data.
 
-For more details and code, you can visit our **[Benchmark GitHub Repository](https://github.com/reductstore/benchmark)**.
+For more details and code, you can visit our **[**Benchmark GitHub Repository**](https://github.com/reductstore/benchmark)**.
 
 To get a better idea of the environment, let's take a look at the system architectures shown in the figure below.
 
