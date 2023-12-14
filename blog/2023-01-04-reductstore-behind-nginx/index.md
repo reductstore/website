@@ -80,7 +80,7 @@ NGINX, we keep our engines in a private zone and access them through the reverse
 ### NGINX Configuration
 
 Now we need to setup NGINX. For this, we create our own `nginx.conf` file and mount it to the container as a volume.
-You can find the full configuration [here](https://github.com/reductstore/nginx-example/blob/main/nginx/nginx.conf).
+You can find the full configuration [**here**](https://github.com/reductstore/nginx-example/blob/main/nginx/nginx.conf).
 Here are our changes:
 
 ```
@@ -117,8 +117,8 @@ The idea is very simple. We specify our storage engines as upstream servers _sto
 we map paths `/storage-1/` and `/storage-2/` to the upstream servers by using the _location_ directive.
 
 If you run everything together with `docker-compose up` you can find the both engines available
-on [http://127.0.0.1/storage-1/](http://127.0.0.1/storage-1/)
-and [http://127.0.0.1/storage-2/](http://127.0.0.1/storage-2/)
+on [**http://127.0.0.1/storage-1/**](http://127.0.0.1/storage-1/)
+and [**http://127.0.0.1/storage-2/**](http://127.0.0.1/storage-2/)
 
 ### Conclusions
 

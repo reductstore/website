@@ -59,13 +59,13 @@ docker-compose up
 ```
 
 Docker Compose downloaded the images and ran the containers. Pay attention that we published ports 1883 for MQTT
-protocol and 8383 for [ReductStore HTTP API](/docs/http-api).
+protocol and 8383 for [**ReductStore HTTP API**](/docs/http-api).
 
 ### Write NodeJS script
 
 Now we're ready to make hands dirty with code. Let's initialize the NPM package and
-install [MQTT Client](https://www.npmjs.com/package/async-mqtt) and
-[JavaScript Client SDK](https://www.npmjs.com/package/reduct-js).
+install [**MQTT Client**](https://www.npmjs.com/package/async-mqtt) and
+[**JavaScript Client SDK**](https://www.npmjs.com/package/reduct-js).
 
 ```
 $ npm init
@@ -134,7 +134,7 @@ the same [SDK][2].
 ### Publish data to MQTT topic
 
 When you launch the script, it does nothing because there is no data from MQTT. You have to publish something to topic
-`mqtt_data`. I prefer to use [mosquitto_pub](https://mosquitto.org/man/mosquitto_pub-1.html). For Ubuntu users, it is a
+`mqtt_data`. I prefer to use [**mosquitto_pub**](https://mosquitto.org/man/mosquitto_pub-1.html). For Ubuntu users, it is a
 part of the `mosquitto-clients` package:
 
 ```
@@ -197,7 +197,7 @@ What is why we use `BigInt`.
 As you can see, the MQTT protocol and ReductStore very simple technologies that can be used together very easily in
 NodeJS.
 You can find the source code of the example [here][5]. If you have any questions or problems running it. Feel free to
-make [an issue](https://github.com/reductstore/reduct-js/issues/new).
+make [**an issue**](https://github.com/reductstore/reduct-js/issues/new).
 
 I hope this tutorial has been helpful. Thanks!
 
