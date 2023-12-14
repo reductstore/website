@@ -20,7 +20,7 @@ function HomepageCTA() {
               className="button button--primary button--lg"
               to="/reductai"
             >
-              Explore AI Edge Computing with ReductStore
+              Explore Reduct AI
             </Link>
           </div>
         </div>
