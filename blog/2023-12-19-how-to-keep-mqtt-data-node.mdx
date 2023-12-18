@@ -2,14 +2,14 @@
 title: "How to keep a history of MQTT data with Node.js"
 description: "A tutorial to keep a history of MQTT messages with Node.js by using the ReductStore Client SDK for JavaScript."
 authors: alexey
-tags: [tutorials, iot]
+tags: [tutorials, iot, mqtt]
 slug: tutorials/iot/how-to-keep-mqtt-data-node
 date: 2023-12-19
 ---
 
-The [MQTT protocol](https://mqtt.org/) is widely used in IoT applications because of its simplicity and ability to connect different data sources to applications using a publish/subscribe model. While many MQTT brokers support persistent sessions and can store message history as long as an MQTT client is not available, there may be cases where data needs to be stored for a longer period. In such cases, it is recommended to use a time series database. There are many options available, but if you need to store unstructured data such as images, sensor data, or [Protobuf](https://protobuf.dev/) messages, consider using [ReductStore](https://www.reduct.store). It is a time series database specifically designed for storing large amounts of blob data and optimized for IoT and edge computing.
+The [**MQTT protocol**](https://mqtt.org/) is widely used in IoT applications because of its simplicity and ability to connect different data sources to applications using a publish/subscribe model. While many MQTT brokers support persistent sessions and can store message history as long as an MQTT client is not available, there may be cases where data needs to be stored for a longer period. In such cases, it is recommended to use a time series database. There are many options available, but if you need to store unstructured data such as images, sensor data, or [**Protobuf**](https://protobuf.dev/) messages, consider using [**ReductStore**](https://www.reduct.store). It is a time series database specifically designed for storing large amounts of blob data and optimized for IoT and edge computing.
 
-ReductStore provides many client SDKs to integrate it in your infrastructure. In this example we will use the client SDK for [JavaScript](https://github.com/reductstore/reduct-js). 
+ReductStore provides many client SDKs to integrate it in your infrastructure. In this example we will use the client SDK for [**JavaScript**](https://github.com/reductstore/reduct-js). 
 
 Let’s make a simple MQTT application to see how it works.
 
@@ -54,11 +54,11 @@ Then run the configuration:
 docker-compose up
 ```
 
-Docker Compose downloaded the images and ran the containers. Pay attention that we published ports 1883 for MQTT protocol and 8383 for [ReductStore HTTP API](/docs/http-api).
+Docker Compose downloaded the images and ran the containers. Pay attention that we published ports 1883 for MQTT protocol and 8383 for [**ReductStore HTTP API**](/docs/http-api).
 
 ## Write NodeJS Script
 
-Now it's time to dive into the code and start working. To begin, let's initialize the NPM package and install the necessary dependencies. We'll need the [MQTT Client](https://www.npmjs.com/package/async-mqtt) and the [JavaScript Client SDK](https://www.npmjs.com/package/reduct-js).
+Now it's time to dive into the code and start working. To begin, let's initialize the NPM package and install the necessary dependencies. We'll need the [**MQTT Client**](https://www.npmjs.com/package/async-mqtt) and the [**JavaScript Client SDK**](https://www.npmjs.com/package/reduct-js).
 
 ```
 $ npm init
@@ -116,11 +116,11 @@ The final step is to write the received message to the database. To accomplish t
   });
 ```
 
-When we call `bucket.beginWrite` we create an entry in the bucket if it doesn’t exist yet. Then we write data to the entry with the current timestamp. Now our MQTT data is safe and sound in the storage, and we can access them by using the same [SDK](https://js.reduct.store/).
+When we call `bucket.beginWrite` we create an entry in the bucket if it doesn’t exist yet. Then we write data to the entry with the current timestamp. Now our MQTT data is safe and sound in the storage, and we can access them by using the same [**SDK**](https://js.reduct.store/).
 
 ## Publish data to MQTT topic
 
-When you launch the script, it does nothing because there is no data from MQTT. You have to publish something. I prefer to use [mosquitto_pub](https://mosquitto.org/man/mosquitto_pub-1.html). For Ubuntu users, it is a part of the `mosquitto-clients` package:
+When you launch the script, it does nothing because there is no data from MQTT. You have to publish something. I prefer to use [**mosquitto_pub**](https://mosquitto.org/man/mosquitto_pub-1.html). For Ubuntu users, it is a part of the `mosquitto-clients` package:
 
 ```
 $ sudo apt-get install mosquitto-clients
@@ -170,25 +170,25 @@ To retrieve all the records or records within a given time interval, we can use 
 The provided usage example is quite simple and lacks many details that you may encounter in a real-world application. Here are a few pieces of advice to help you build a robust and powerful IoT application based on ReductStore and MQTT:
 
 - Create a ReductStore bucket with a FIFO quota to prevent disk overwriting in the future.
-- Use token authentication to protect your data. You can generate an access token using either the [Web Console](https://github.com/reductstore/web-console) or the [CLI client](https://cli.reduct.store/).
+- Use token authentication to protect your data. You can generate an access token using either the [**Web Console**](https://github.com/reductstore/web-console) or the [**CLI client**](https://cli.reduct.store/).
 - Map MQTT5 properties to ReductStore labels. This will facilitate data filtering during querying or replication.
-- Utilize [ReductCLI](http://cli.reduct.store/) for data replication or backup purposes.
+- Utilize [**ReductCLI**](http://cli.reduct.store/) for data replication or backup purposes.
 
 ## Conclusion
 
 As you can see, the MQTT protocol and ReductStore are both very simple and user-friendly technologies that can be seamlessly integrated with each other in NodeJS. This combination offers a powerful solution for various applications. Whether you are working on a small project or a large-scale system, the MQTT protocol and ReductStore provide a reliable and efficient way to handle data communication and storage.
 
-To further assist you in understanding the usage of these technologies, we have prepared an example that demonstrates their seamless integration. You can access the source code of the example by clicking [here](https://github.com/reductstore/reduct-mqtt-example). This example showcases the simplicity and effectiveness of using MQTT and ReductStore together.
+To further assist you in understanding the usage of these technologies, we have prepared an example that demonstrates their seamless integration. You can access the source code of the example by clicking [**here**](https://github.com/reductstore/reduct-mqtt-example). This example showcases the simplicity and effectiveness of using MQTT and ReductStore together.
 
-In case you encounter any difficulties while running the example or have any questions regarding the implementation, we encourage you to create [an issue](https://github.com/reductstore/reduct-js/issues/new). Our team is dedicated to providing prompt assistance and resolving any concerns you may have.
+In case you encounter any difficulties while running the example or have any questions regarding the implementation, we encourage you to create [**an issue**](https://github.com/reductstore/reduct-js/issues/new). Our team is dedicated to providing prompt assistance and resolving any concerns you may have.
 
 ---
 
-I hope this tutorial has been helpful. I hope you find this release useful. If you have any questions or feedback, don’t hesitate to reach out in **[Discord](https://discord.gg/8wPtPGJYsn)** or by opening a discussion on **[GitHub](https://github.com/reductstore/reductstore/discussions)**.
+I hope this tutorial has been helpful. I hope you find this release useful. If you have any questions or feedback, don’t hesitate to reach out in **[**Discord**](https://discord.gg/8wPtPGJYsn)** or by opening a discussion on **[**GitHub**](https://github.com/reductstore/reductstore/discussions)**.
 
 ### Links
 
-- [ReductStore](https://docs.reduct.store/)
-- [JavaScript Client SDK](https://js.reduct.store/)
-- [Mosquitto MQTT Broker](https://mosquitto.org/)
-- [Full example on GitHub](https://github.com/reductstore/reduct-mqtt-example)
+- [**ReductStore**](https://docs.reduct.store/)
+- [**JavaScript Client SDK**](https://js.reduct.store/)
+- [**Mosquitto MQTT Broker**](https://mosquitto.org/)
+- [**Full example on GitHub**](https://github.com/reductstore/reduct-mqtt-example)

@@ -1,7 +1,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-import {themes as prismThemes} from "prism-react-renderer";
+import { themes as prismThemes } from "prism-react-renderer";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -37,7 +37,7 @@ const config = {
     locales: ["en"],
   },
 
-  plugins: ["docusaurus-plugin-umami"],
+  plugins: ["docusaurus-plugin-umami", "docusaurus-plugin-matomo"],
 
   presets: [
     [
@@ -77,10 +77,16 @@ const config = {
         searchParameters: {},
       },
 
-      // Umami analytics
+      // Analytics
       umami: {
         websiteid: "bd5bb2a0-56a0-4f1c-aba3-c8cf9e517e74",
         src: "https://eu.umami.is/script.js",
+      },
+      matomo: {
+        matomoUrl: "https://reductstore.matomo.cloud/",
+        siteId: "1",
+        phpLoader: "matomo.php",
+        jsLoader: "matomo.js",
       },
 
       // Declare some <meta> tags
@@ -115,8 +121,8 @@ const config = {
           { to: "/reductai", label: "Reduct AI", position: "left" },
           { to: "/contact", label: "Contact Us", position: "left" },
           {
-            type: 'docsVersionDropdown',
-            position: 'right',
+            type: "docsVersionDropdown",
+            position: "right",
             dropdownActiveClassDisabled: true,
           },
         ],

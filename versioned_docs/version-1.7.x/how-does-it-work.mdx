@@ -8,10 +8,10 @@ description: ReductStore is a time series database designed specifically for sto
 
 ## What Is Time Series Storage?
 
-ReductStore is a time series database designed specifically for storing and managing large amounts of unstructured data. It uses an [HTTP API ](./http-api)and stores the data as blobs. This means:
+ReductStore is a time series database designed specifically for storing and managing large amounts of unstructured data. It uses an [**HTTP API **](./http-api)and stores the data as blobs. This means:
 
 * ReductStore has no information about the format of the stored data. So, you can write whatever you want, but the storage can't aggregate your data. You have to read the same data, what you have written.
-* The [HTTP API](./http-api) provides a simple and portable way to communicate with the storage engine, but the engine doesn't provide any query language to access the data. However, you can use labels for filtering data in requests.
+* The [**HTTP API**](./http-api) provides a simple and portable way to communicate with the storage engine, but the engine doesn't provide any query language to access the data. However, you can use labels for filtering data in requests.
 
 In comparison to other S3-like object storage, ReductStore works differently:
 
@@ -38,11 +38,11 @@ A container for entries which provides the following storage settings:
   * FIFO. The bucket removes the oldest block of some entry when it reaches the quota limit.
 * **Quota size.**
 
-A user can manage bucket with [Bucket API](./http-api/bucket-api).
+A user can manage bucket with [**Bucket API**](./http-api/bucket-api).
 
 #### Entry
 
-An entry represents a source of data. For example, It might be an image from a camera or the output of an AI model. The entry should have a unique name so that a user can address it with the [Entry API.](./http-api/entry-api)
+An entry represents a source of data. For example, It might be an image from a camera or the output of an AI model. The entry should have a unique name so that a user can address it with the [**Entry API.**](./http-api/entry-api)
 
 **Block**
 

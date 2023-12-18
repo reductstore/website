@@ -34,12 +34,12 @@ Let's get started !
 ## Navigating the Open-Source Landscape
 Navigating the open-source landscape for MLOps resources can be daunting, but fortunately, there are projects that significantly ease this task for us.
 
-One trove of treasures is the [awesome-production-machine-learning](<https://github.com/EthicalML/awesome-production-machine-learning>) repository on GitHub. This curated list provides a multitude of frameworks, libraries, and software designed to facilitate various stages of the ML lifecycle.
+One trove of treasures is the [**awesome-production-machine-learning**](<https://github.com/EthicalML/awesome-production-machine-learning>) repository on GitHub. This curated list provides a multitude of frameworks, libraries, and software designed to facilitate various stages of the ML lifecycle.
 
-For a visual exploration, I like [Map of Github](<https://anvaka.github.io/map-of-github/#5.67/30.956/28.441>) which offers an interactive experience to discover related projects through a network graph. For example, we can find all "Anomaly Detection" libraries and algorithms in Anomaland.
+For a visual exploration, I like [**Map of Github**](<https://anvaka.github.io/map-of-github/#5.67/30.956/28.441>) which offers an interactive experience to discover related projects through a network graph. For example, we can find all "Anomaly Detection" libraries and algorithms in Anomaland.
 
 ![Anomaland Github Map](./img/anomaland.webp)
-<small>Anomaland in the [Map of Github](<https://anvaka.github.io/map-of-github/#5.67/30.956/28.441>)</small>
+<small>Anomaland in the [**Map of Github**](<https://anvaka.github.io/map-of-github/#5.67/30.956/28.441>)</small>
 
 ### State-Of-The-Art Model Training
 When looking at the possible open-source projects to train AI models as performant as Landing AI, we need to find SOTA models for:
@@ -48,18 +48,18 @@ When looking at the possible open-source projects to train AI models as performa
 
 - semi-supervised learning for anomaly detection.
 
-When browsing the state-of-the-art in object detection on [Papers with Code](<https://paperswithcode.com/task/object-detection>), I found the YOLO model to be one of the most popular, accurate, and fastest. That being said, I would recommend having a look at [Ultralytics](<https://github.com/ultralytics/ultralytics>), which provides the tools to evaluate, predict, and export the latest versions of YOLO models with only a few lines of code.
+When browsing the state-of-the-art in object detection on [**Papers with Code**](<https://paperswithcode.com/task/object-detection>), I found the YOLO model to be one of the most popular, accurate, and fastest. That being said, I would recommend having a look at [**Ultralytics**](<https://github.com/ultralytics/ultralytics>), which provides the tools to evaluate, predict, and export the latest versions of YOLO models with only a few lines of code.
 
-Then, when it comes to semi-supervised learning for anomaly detection, I had positive experiences with [Anomalib](<https://github.com/openvinotoolkit/anomalib>) which offers a robust library dedicated to deep learning anomaly detection algorithms. They implemented the latest models with PyTorch and offer tools to benchmark their performance.
+Then, when it comes to semi-supervised learning for anomaly detection, I had positive experiences with [**Anomalib**](<https://github.com/openvinotoolkit/anomalib>) which offers a robust library dedicated to deep learning anomaly detection algorithms. They implemented the latest models with PyTorch and offer tools to benchmark their performance.
 
 ### Labeling Tools for Computer Vision
 As you can imagine, effective and accurate data annotation is a cornerstone for training computer vision models.
 
-For instance, the [COCO Annotator](<https://github.com/jsbroks/coco-annotator>) is a web-based image annotation tool tailored for the COCO dataset format, allowing collaborative labeling with features like attribute tagging and automatic segmentation. Similarly, [Label Studio](<https://github.com/HumanSignal/label-studio>) offers an easy-to-use interface for bounding box object labeling in images.
+For instance, the [**COCO Annotator**](<https://github.com/jsbroks/coco-annotator>) is a web-based image annotation tool tailored for the COCO dataset format, allowing collaborative labeling with features like attribute tagging and automatic segmentation. Similarly, [**Label Studio**](<https://github.com/HumanSignal/label-studio>) offers an easy-to-use interface for bounding box object labeling in images.
 
-Another powerful resource is [CVAT](<https://github.com/opencv/cvat>), the Computer Vision Annotation Tool which supports both image and video annotations with advanced capabilities such as interpolation of shapes between frames, making it highly suitable for computer vision.
+Another powerful resource is [**CVAT**](<https://github.com/opencv/cvat>), the Computer Vision Annotation Tool which supports both image and video annotations with advanced capabilities such as interpolation of shapes between frames, making it highly suitable for computer vision.
 
-These tools each come with their own set of pros and cons. Among the most prominent is Label Studio, with 15k stars on GitHub. This tool is worth considering as it includes all the essential features required for developing the labeling component as an alternative to [Landing AI](<https://landing.ai/>), including segmentation parts–for generating anomaly masks–and bounding boxes for object detection.
+These tools each come with their own set of pros and cons. Among the most prominent is Label Studio, with 15k stars on GitHub. This tool is worth considering as it includes all the essential features required for developing the labeling component as an alternative to [**Landing AI**](<https://landing.ai/>), including segmentation parts–for generating anomaly masks–and bounding boxes for object detection.
 
 ## Implementing an Open-Source MLOps Stack Effectively
 
@@ -67,15 +67,15 @@ These tools each come with their own set of pros and cons. Among the most promin
 ### Reproducibility 
 Achieving reproducibility usually comes down to breaking down processes into fundamental units—each taking in data, applying computational steps, and producing outputs.
 
-Platforms such as [MLflow](<https://mlflow.org/>) monitor the development stages of machine learning models. In parallel, [Data Version Control (DVC)](<https://dvc.org/>) brings version control system-like functions to the realm of data sets and models.
+Platforms such as [**MLflow**](<https://mlflow.org/>) monitor the development stages of machine learning models. In parallel, [**Data Version Control (DVC)**](<https://dvc.org/>) brings version control system-like functions to the realm of data sets and models.
 
-Keep an eye on [ModelDB](<https://modeldb.science/>) as well for its ability to meticulously log every input and output related to your experiments.
+Keep an eye on [**ModelDB**](<https://modeldb.science/>) as well for its ability to meticulously log every input and output related to your experiments.
 
-[Pachyderm](<https://github.com/pachyderm/pachyderm>) specializes in creating compliance-focused pipelines that integrate with enterprise-level storage solutions.
+[**Pachyderm**](<https://github.com/pachyderm/pachyderm>) specializes in creating compliance-focused pipelines that integrate with enterprise-level storage solutions.
 
-On another front, [ClearML](<https://clear.ml/>) excels at automating the monitoring and graphic representation of models while facilitating training tasks remotely.
+On another front, [**ClearML**](<https://clear.ml/>) excels at automating the monitoring and graphic representation of models while facilitating training tasks remotely.
 
-Figuring out the best tool for what we need isn't easy, but I'd suggest looking more into [MLflow](<https://mlflow.org/>) and [DVC](<https://dvc.org/>) – they're pretty popular options.
+Figuring out the best tool for what we need isn't easy, but I'd suggest looking more into [**MLflow**](<https://mlflow.org/>) and [**DVC**](<https://dvc.org/>) – they're pretty popular options.
 
 ### Explainability
 Explainability in MLOps is central to demystifying machine learning models, particularly those that operate as black boxes, i.e. all deep-learning models...
@@ -84,18 +84,18 @@ It usually encompasses three main approaches: data analysis, model analysis, and
 
 Each of these methods represents a distinct field with extensive details to discuss. However, if we were to distill them into some fundamental components:
 
-**Data analysis** involves scrutinizing datasets for class imbalances or protected features and understanding their correlations and representations. A classical tool like [pandas](<https://pandas.pydata.org/>) would be my obvious choice for most of the analysis, and I would use [OpenCV](<https://opencv.org/>) or [Scikit-Image](<https://scikit-image.org/>) for image-related tasks.
+**Data analysis** involves scrutinizing datasets for class imbalances or protected features and understanding their correlations and representations. A classical tool like [**pandas**](<https://pandas.pydata.org/>) would be my obvious choice for most of the analysis, and I would use [**OpenCV**](<https://opencv.org/>) or [**Scikit-Image**](<https://scikit-image.org/>) for image-related tasks.
 
 **Model analysis** includes evaluating feature importance or understanding "domain knowledge" to interpret results accurately, validate predictions, and customize metrics.
 
-In exploring open-source projects, I've come across several promising tools capable of managing deep-learning models for images. Significantly, tools such as [NETRON](<https://netron.app/>) provide visualization of neural networks, while [SHAP](<https://shap.readthedocs.io/en/latest/>) can be used for evaluating the significance of outputs.
+In exploring open-source projects, I've come across several promising tools capable of managing deep-learning models for images. Significantly, tools such as [**NETRON**](<https://netron.app/>) provide visualization of neural networks, while [**SHAP**](<https://shap.readthedocs.io/en/latest/>) can be used for evaluating the significance of outputs.
 
 ![SHAP Example](./img/example_classification_ResNet50_on_Image_shap.webp)
-<small>Multi-class ResNet50 on ImageNet example on [SHAP](<https://shap.readthedocs.io/en/latest/example_notebooks/image_examples/image_classification/Multi-class%20ResNet50%20on%20ImageNet%20%28TensorFlow%29.html>)</small>
+<small>Multi-class ResNet50 on ImageNet example on [**SHAP**](<https://shap.readthedocs.io/en/latest/example_notebooks/image_examples/image_classification/Multi-class%20ResNet50%20on%20ImageNet%20%28TensorFlow%29.html>)</small>
 
 **Production monitoring** means that we constantly evaluate the performance metrics of the inference outputs alongside human reviews to detect anomalies–like drift–and establish thresholds for acceptable divergence from expected outcomes.
 
-Numerous tools exist for detecting anomalies in time series data, but [Alibi Detect](<https://github.com/SeldonIO/alibi-detect>) stood out to me, particularly for its capabilities and its compatibility with both TensorFlow and PyTorch backends.
+Numerous tools exist for detecting anomalies in time series data, but [**Alibi Detect**](<https://github.com/SeldonIO/alibi-detect>) stood out to me, particularly for its capabilities and its compatibility with both TensorFlow and PyTorch backends.
 
 ### Orchestration
 In MLOps, **Orchestration** refers to the systematic coordination of machine learning workflows, particularly focusing on computational resource allocation.
@@ -104,15 +104,15 @@ It's about efficiently managing the tasks such as data preprocessing, training m
 
 Here are some projects that I would recommend to watch:
 
-- [Kubeflow](<https://www.kubeflow.org/>) for ML workflows on Kubernetes, making it easier to deploy and maintain ML systems on a complex infrastructure.
+- [**Kubeflow**](<https://www.kubeflow.org/>) for ML workflows on Kubernetes, making it easier to deploy and maintain ML systems on a complex infrastructure.
 
-- For those seeking a lightweight solution for setting up deep learning REST APIs across platforms without the complexity of Kubernetes, [Deepdetect](<https://www.deepdetect.com/>) is worth considering.
+- For those seeking a lightweight solution for setting up deep learning REST APIs across platforms without the complexity of Kubernetes, [**Deepdetect**](<https://www.deepdetect.com/>) is worth considering.
 
-- For the efficiency of "serverless" functions, I would consider [Nuclio](<https://nuclio.io/>) as a viable option to rely on.
+- For the efficiency of "serverless" functions, I would consider [**Nuclio**](<https://nuclio.io/>) as a viable option to rely on.
 
 
 ## On-Premise Alternative to LandingEdge
-When seeking an on-premise alternative to [LandingEdge](<https://landing.ai/videos/landingedge-intro/>) for sophisticated edge computing and computer vision tasks, [ReductStore](<https://reduct.store/>) emerges as a compelling solution. This Time-Series Database is tailored for Blob Data, emphasizing optimizations that cater to the unique demands of Edge Computing, IoT, and Computer Vision applications. 
+When seeking an on-premise alternative to [**LandingEdge**](<https://landing.ai/videos/landingedge-intro/>) for sophisticated edge computing and computer vision tasks, [**ReductStore**](<https://reduct.store/>) emerges as a compelling solution. This Time-Series Database is tailored for Blob Data, emphasizing optimizations that cater to the unique demands of Edge Computing, IoT, and Computer Vision applications. 
 
 Some of the key features of ReductStore include:
 
@@ -135,4 +135,4 @@ For edge computing needs similar to what LandingEdge provides, especially when d
 
 These tools all bring something to the table, showing why it's key to choose a set that fits our operational needs and tech limits. It's all about making sure that the stack aligns with operational requirements and technological constraints.
 
-Thanks for reading! If you're interested in learning more about how to use open-source AI models for real-time, unsupervised anomaly detection in images, don't miss our blog titled ["From Lab to Live: Implementing Open-Source AI Models for Real-Time Unsupervised Anomaly Detection in Images."](/blog/computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection)
+Thanks for reading! If you're interested in learning more about how to use open-source AI models for real-time, unsupervised anomaly detection in images, don't miss our blog titled [**"From Lab to Live: Implementing Open-Source AI Models for Real-Time Unsupervised Anomaly Detection in Images."**](/blog/computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection)

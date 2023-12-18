@@ -12,13 +12,13 @@ image: ./img/social-card.jpg
     <link rel="canonical" href="https://github.com/reductstore/datasets/blob/main/examples/cats.ipynb" />
 </head>
 
-The [ReductStore Project](https://www.reduct.store) hosts the free "cats" dataset, which contains about 10K photos of
+The [**ReductStore Project**](https://www.reduct.store) hosts the free "cats" dataset, which contains about 10K photos of
 cats in JPEG format with eye coordinates, a month, and ears as labels. In this example, we can learn how to download the
-dataset from the [ReductStore instance](https://play.reduct.store) and draw the features using the OpenCV library.
+dataset from the [**ReductStore instance**](https://play.reduct.store) and draw the features using the OpenCV library.
 
 ## Installing Dependencies
 
-First, we need to install the [ReductStore Client SDK for Python](https://github.com/reductstore/reduct-py) to download
+First, we need to install the [**ReductStore Client SDK for Python**](https://github.com/reductstore/reduct-py) to download
 the photos and labels. We also need the OpenCV Python library for drawing features and Pillow to display images in the
 Jupyter environment:
 
@@ -92,4 +92,4 @@ async for record in bucket.query(DATASET, start=0, stop=5):
 This is a trivial example, but you can use this dataset for more sophisticated AI algorithms or image processing. If the
 interaction over the Internet is too slow for your purposes, you can export the dataset to a file system. Alternatively,
 you can spin up your own ReductStore instance locally and copy the dataset to it. See
-the [Reduct CLI](https://cli.reduct.store/en/latest/docs/export/) for more information.
+the [**Reduct CLI**](https://cli.reduct.store/en/latest/docs/export/) for more information.

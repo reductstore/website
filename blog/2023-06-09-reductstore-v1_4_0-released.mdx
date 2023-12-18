@@ -7,7 +7,7 @@ slug: news/reductstore-v1_4_0-released
 date: 2023-06-09
 ---
 
-I am happy to announce that we have completed the migration from C++ to Rust, and have released a stable version ([v1.4.0](https://github.com/reductstore/reductstore/releases/tag/v1.4.0)) that is entirely written in Rust. 🤩
+I am happy to announce that we have completed the migration from C++ to Rust, and have released a stable version ([**v1.4.0**](https://github.com/reductstore/reductstore/releases/tag/v1.4.0)) that is entirely written in Rust. 🤩
 
 It was not an easy journey. After six weeks of coding, we encountered numerous regressions and changes in behavior. I needed to release two alpha and two beta versions with production testing to clean up the database. Now, it is finally ready!
 
@@ -59,18 +59,18 @@ async for record in bucket.subscribe(
 
 We updated our SDKs to v1.4.0 due to changes in the API. They are fully compatible with the latest ReductStore release. Check here:
 
-- [Python Client SDK](https://github.com/reductstore/reduct-py)
-- [JavaScript Client SDK](https://github.com/reductstore/reduct-js)
-- [C++ Client SDK](https://github.com/reductstore/reduct-cpp)
+- [**Python Client SDK**](https://github.com/reductstore/reduct-py)
+- [**JavaScript Client SDK**](https://github.com/reductstore/reduct-js)
+- [**C++ Client SDK**](https://github.com/reductstore/reduct-cpp)
 
 ## What is Next?
 
 We have already planned Release v1.5.0 and will be implementing the following features:
 
-- Batching small records into one request can make writing and reading small blobs more efficient. [#236](https://github.com/reductstore/reductstore/issues/236)
-- HEAD endpoint to read the metadata of a record without downloading its content., [#214](https://github.com/reductstore/reductstore/issues/214)
-- and Rust Client SDK!!!, [#289](https://github.com/reductstore/reductstore/issues/289)
+- Batching small records into one request can make writing and reading small blobs more efficient. [**#236**](https://github.com/reductstore/reductstore/issues/236)
+- HEAD endpoint to read the metadata of a record without downloading its content., [**#214**](https://github.com/reductstore/reductstore/issues/214)
+- and Rust Client SDK!!!, [**#289**](https://github.com/reductstore/reductstore/issues/289)
 
-I hope you find this release useful. If you have any questions or feedback, don’t hesitate to reach out in [Discord](https://discord.gg/8wPtPGJYsn) or by opening a discussion on [GitHub](https://github.com/reductstore/reductstore/discussions).
+I hope you find this release useful. If you have any questions or feedback, don’t hesitate to reach out in [**Discord**](https://discord.gg/8wPtPGJYsn) or by opening a discussion on [**GitHub**](https://github.com/reductstore/reductstore/discussions).
 
-Thanks for using [ReductStore](https://www.reduct.store/)!
+Thanks for using [**ReductStore**](https://www.reduct.store/)!
