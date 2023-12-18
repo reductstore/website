@@ -9,7 +9,7 @@ date: 2023-12-19
 
 The [**MQTT protocol**](https://mqtt.org/) is widely used in IoT applications because of its simplicity and ability to connect different data sources to applications using a publish/subscribe model. While many MQTT brokers support persistent sessions and can store message history as long as an MQTT client is not available, there may be cases where data needs to be stored for a longer period. In such cases, it is recommended to use a time series database. There are many options available, but if you need to store unstructured data such as images, sensor data, or [**Protobuf**](https://protobuf.dev/) messages, consider using [**ReductStore**](https://www.reduct.store). It is a time series database specifically designed for storing large amounts of blob data and optimized for IoT and edge computing.
 
-ReductStore provides many client SDKs to integrate it in your infrastructure. In this example we will use the client SDK for [**JavaScript**](https://github.com/reductstore/reduct-js). 
+ctStore provides client SDKs for many programming languages to integrate it into your infrastructure. In this example, we will use the client SDK for [**JavaScript**](https://github.com/reductstore/reduct-js).
 
 Let’s make a simple MQTT application to see how it works.
 
