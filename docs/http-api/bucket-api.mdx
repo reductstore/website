@@ -48,27 +48,27 @@ For more information about buckets, read [**here**](../how-does-it-work.mdx#inte
           Information about the bucket in JSON format
           <pre><code>{`{
   "settings": {
-        "max_block_size": "integer",
-        "quota_type": ["NONE", "FIFO"],
-        "max_block_records": "integer",
-        "quota_size": "integer"
+        "max_block_size": "integer",            // max block content_length in bytes
+        "max_block_records": "integer",         // max number of records in a block
+        "quota_type": Union["NONE", "FIFO"],    // quota type
+        "quota_size": "integer"                 // quota content_length in bytes
     },
     "info": {
-        "name": "string",
-        "entry_count": "integer",
-        "size": "integer",
-        "oldest_record": "integer",
-        "latest_record": "integer",
-        "is_provisioned": "bool"
+        "name": "string",                        // bucket name
+        "entry_count": "integer",                // number of entries
+        "size": "integer",                       // disk usage in bytes
+        "oldest_record": "integer",              // unix timestamp of oldest record in microseconds
+        "latest_record": "integer"               // unix timestamp of latest record in microseconds
+        "is_provisioned": "bool"                 // provisioned
     },
     "entries": [
         {
-            "name": "string",
-            "size": "integer",
-            "block_count": "integer",
-            "record_count": "integer",
-            "oldest_record": "integer",
-            "latest_record": "integer"
+            "name": "string",                    // entry name             
+            "size": "integer",                   // disk usage in bytes
+            "block_count": "integer",            // number of blocks with data
+            "record_count": "integer",           // number of records
+            "oldest_record": "integer",          // unix timestamp of oldest record in microseconds
+            "latest_record": "integer"           // unix timestamp of latest record in microseconds
         }
     ]
 }`}</code></pre>
