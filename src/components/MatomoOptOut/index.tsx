@@ -6,15 +6,20 @@ const MatomoOptOut = () => {
     script.src = "https://reductstore.matomo.cloud/index.php?module=CoreAdminHome&action=optOutJS&divId=matomo-opt-out&language=auto&showIntro=0";
     script.async = true;
 
-    document.getElementById('matomo-opt-out').appendChild(script);
+    const matomoElement = document.getElementById('matomo-opt-out');
+    if (matomoElement) {
+      matomoElement.appendChild(script);
+    }
 
     return () => {
       // Cleanup the script when the component is unmounted
-      document.getElementById('matomo-opt-out').removeChild(script);
+      if (matomoElement && matomoElement.contains(script)) {
+        matomoElement.removeChild(script);
+      }
     };
   }, []);
 
-  return <div id="matomo-opt-out" style={{ marginBottom: '20px' }} />
+  return <div id="matomo-opt-out" style={{ marginBottom: '20px' }} />;
 };
 
 export default MatomoOptOut;
