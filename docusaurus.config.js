@@ -37,7 +37,7 @@ const config = {
     locales: ["en"],
   },
 
-  plugins: ["docusaurus-plugin-umami", "docusaurus-plugin-matomo"],
+  plugins: ["docusaurus-plugin-matomo"],
 
   presets: [
     [
@@ -77,11 +77,7 @@ const config = {
         searchParameters: {},
       },
 
-      // Analytics
-      umami: {
-        websiteid: "bd5bb2a0-56a0-4f1c-aba3-c8cf9e517e74",
-        src: "https://eu.umami.is/script.js",
-      },
+      // Cookieless analytics
       matomo: {
         matomoUrl: "https://reductstore.matomo.cloud/",
         siteId: "1",
