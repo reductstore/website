@@ -14,7 +14,7 @@ const MatomoOptOut = () => {
     };
   }, []);
 
-  return <div id="matomo-opt-out"></div>;
+  return <div id="matomo-opt-out" style={{ marginBottom: '20px' }} />
 };
 
 export default MatomoOptOut;
