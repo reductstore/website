@@ -1,0 +1,226 @@
+---
+title: "How to Implement Async Storage Data Streaming in Your PyTorch Project"
+description: Discover how to implement async storage data streaming in PyTorch projects. This blog provides a practical approach to setting up a custom PyTorch's IterableDataset that reads data from a time series database.
+authors: anthony
+tags: [AI, DataStreaming, PyTorch]
+slug: ai/datastreaming/pytorch/implement-async-storage-data-streaming-pytorch
+date: 2024-01-12
+image: ./img/social-card.jpg
+---
+
+When training a model, we aim to process data in batches, shuffle it each epoch, and leverage Python's `multiprocessing` for data fetching through multiple workers.
+
+The reason being that GPUs are capable of handling large amounts of data concurrently; however, the bottleneck often lies in the time-consuming task of loading this data into the system.
+
+Moreover, the challenge is even trickier when there is simply too much data to store the whole dataset on disk and we need to stream data from an async storage solution such as [ReductStore](<https://www.reduct.store/>).
+
+Addressing this challenge requires a custom Python iterator to bridge asynchronous data fetching with synchronous [PyTorch's IterableDataset](<https://pytorch.org/docs/stable/data.html#torch.utils.data.IterableDataset>).
+
+In this blog post, we will go through a full example and setup a data stream to PyTorch from a playground dataset on a remote database.
+
+Let's dig in!
+
+<!--truncate-->
+
+## Setting Up the Python Client for ReductStore Database
+To integrate ReductStore with your Python projects, follow these steps to get started with [Python's client](<https://py.reduct.store/en/latest/>):
+
+- Install the `reduct` Python package using pip: `pip install reduct-py`.
+
+- Import the Client class from the `reduct` package at the beginning of your script: `from reduct import Client`.
+
+- Define your connection parameters:
+
+    - **HOST**: The URL of your ReductStore instance (e.g., `"https://play.reduct.store"`).
+
+    - **API\_TOKEN**: Your API token for authentication (e.g., `"dataset-read-eab13e4f5f2df1e64363806443eea7ba83406ce701d49378d2f54cfbf02850f5"`).
+
+    - **BUCKET**: Name of the bucket containing your data (e.g., `"datasets"`).
+
+    - **DATASET**: Specific dataset you want to access (e.g., `"cats"`).
+
+    <!-- -->
+
+- Initialize the client:
+
+
+<!-- -->
+
+```python
+client = Client(HOST, api_token=API_TOKEN)
+```
+
+### Getting data from playground server
+To use the 'Cats' dataset with the Python ReductStore SDK, you'll need to follow a few straightforward steps.
+
+First, ensure you have installed necessary libraries like Pillow (PIL), NumPy, and OpenCV.
+
+Then access your dataset by asynchronously querying records within a specified range using, e.g. `bucket.query(DATASET, start=0, stop=5)`.
+
+Each record fetched contains image annotations and binary image data that can be transformed into an array and then decoded into an image format suitable for display or processing in Python.
+
+For more detailed instructions, check out the blog post [How to Use 'Cats' dataset with Python ReductStore SDK](<https://www.reduct.store/blog/tutorials/computer-vision/sdks/cats-datasets>).
+
+## Bridging Async and Sync: Creating Custom Iterators for PyTorch
+When streaming data from a remote database to a PyTorch dataset using an asynchronous Python client, one approach is to develop a custom `AsyncIterator`.
+
+```python
+class AsyncIterator:
+    """Custom iterator to bridge asynchronous data fetching with synchronous iteration."""
+
+    def __init__(self, loop, async_generator):
+        self.loop = loop
+        self.async_generator = async_generator
+        self.next_element = None
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.next_element is None:
+            self.next_element = self.loop.create_task(self.async_generator.__anext__())
+
+        try:
+            return self.loop.run_until_complete(self.next_element)
+        except StopAsyncIteration:
+            raise StopIteration
+        finally:
+            self.next_element = None
+```
+
+By extending the class with a custom `__next__` method, we can get synchronous iteration over asynchronously fetched data.
+
+To use this iterator within a PyTorch workflow, you would typically incorporate it into an `IterableDataset`.
+
+```python
+from torch.utils.data import IterableDataset
+
+class MyIterableDataset(IterableDataset):
+    def __init__(self, async_iterator):
+        self.async_iterator = async_iterator
+
+    def __iter__(self):
+        return iter(self.async_iterator)
+```
+
+This ensures that our main training loop can remain synchronous and operate as usual, while in the background, data is being fetched without blocking the computation.
+
+## Case Study: RemoteCatsDataset as a PyTorch Dataset Example
+Let's build a PyTorch Dataset called `RemoteCatsDataset` to show how to handle asynchronous data fetching in a PyTorch dataset.
+
+```python
+class RemoteCatsDataset(IterableDataset):
+    """PyTorch IterableDataset for asynchronously fetching cat images from a remote source."""
+
+    def __init__(self, client, bucket_name, dataset_name, start, stop):
+        self.client = client
+        self.bucket_name = bucket_name
+        self.dataset_name = dataset_name
+        self.start = start
+        self.stop = stop
+
+    def __iter__(self):
+        loop = asyncio.get_event_loop()
+        async_gen = self.iterate_over_records()
+        return AsyncIterator(loop, async_gen)
+
+    async def iterate_over_records(self):
+        bucket = await self.client.get_bucket(self.bucket_name)
+        async for record in bucket.query(
+            self.dataset_name, start=self.start, stop=self.stop
+        ):
+            image_bytes = await record.read_all()
+            yield self.process_record(image_bytes, record.labels)
+
+    def process_record(self, image_bytes, annotation):
+        """Process and resize images."""
+        image_np = np.frombuffer(image_bytes, np.uint8)
+        img = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        return cv2.resize(img, (IMG_SIZE, IMG_SIZE))
+```
+
+The `process_record` method prepares the images. It decodes the byte stream of each image and optionally annotates it using metadata provided with each record, such as bounding box coordinates for features of interest like the eyes or mouth in the 'cats' dataset.
+
+With this configuration, the `RemoteCatsDataset` is ready for integration with PyTorch's DataLoader, which can operate multiple processes in parallel using several workers. For example
+
+```python
+from torch.utils.data import DataLoader
+
+client = Client(HOST, api_token=API_TOKEN)
+
+# Create an instance of your dataset
+remote_dataset = BufferedShuffleIterableDataset(
+    client, BUCKET, DATASET, start=1, stop=1000
+)
+
+# Create a DataLoader
+data_loader = DataLoader(remote_dataset, batch_size=100, num_workers=8)
+
+# Display each image
+for images in data_loader:
+    # You would oerform your training steps here
+    # Example: train_step(model, images)
+    for img in images:
+        plt.imshow(img)
+        plt.show()
+```
+
+Using the `DataLoader` with multiple workers allows for efficient data loading and preprocessing. This parallelism is especially beneficial when training deep-learning models on large datasets where I/O bound operations could become a bottleneck.
+
+## Implementing a Buffered Shuffle Iterable Dataset
+Normally, the entire training set is shuffled after each epoch. However, in our scenario, we don't have the full data available on disk.
+
+Implementing a Buffered Shuffle Iterable Dataset in PyTorch is a trade-off to be able to shuffle the data we fetch from the remote server. Then there is also the issue of using multiple process in parallel with several workers. One way to handle this, is to look at the worker information for each separate process and request different data ranges from the database.
+
+```python
+import random
+import torch
+
+class BufferedShuffleIterableDataset(RemoteCatsDataset):
+    def __init__(self, client, bucket_name, dataset_name, start, stop, buffer_size=100):
+        super().__init__(client, bucket_name, dataset_name, start, stop)
+        self.buffer_size = buffer_size
+
+    async def iterate_over_records(self):
+        worker_info = torch.utils.data.get_worker_info()
+        if worker_info is None:  # single-process data loading, return the full iterator
+            num_workers = 1
+            worker_id = 0
+        else:  # in a worker process
+            num_workers = worker_info.num_workers
+            worker_id = worker_info.id
+
+        # Calculate start and stop indices for this worker
+        total_size = self.stop - self.start
+        per_worker = int(total_size / num_workers)
+        worker_start = self.start + worker_id * per_worker
+        worker_stop = worker_start + per_worker if worker_id != num_workers - 1 else self.stop
+
+        bucket = await self.client.get_bucket(self.bucket_name)
+        buffer = []
+        async for record in bucket.query(self.dataset_name, start=worker_start, stop=worker_stop):
+            image_bytes = await record.read_all()
+            buffer.append(self.process_record(image_bytes, record.labels))
+            if len(buffer) >= self.buffer_size:
+                yield buffer.pop(random.randint(0, len(buffer) - 1))
+
+        # Yield remaining items in the buffer
+        while buffer:
+            yield buffer.pop(random.randint(0, len(buffer) - 1))
+```
+
+This implementation ensures that each epoch sees a different data order – although it's shuffled up to the buffer length so it's not perfect, but can be sufficient if the buffer is large enough. Most importantly, we have to find a good balance between the buffer size and the number of workers.
+
+In other words, we should maximize the number of workers to match the number of CPU cores, and get the largest possible buffer that doesn't saturate the memory and keep a good performance, i.e. the GPUs get batches of data fast enough for training and don't wait until the next one is available.
+
+## Conclusion
+In conclusion, implementing async storage data streaming in PyTorch projects requires careful planning around data loading and processing.
+
+By implementing the `BufferedShuffleIterableDataset`, we can manage remote datasets efficiently, ensuring that the shuffling of records mimics traditional in-memory operations as closely as possible.
+
+The balance between buffer size, batch size, and worker count is critical to maximize hardware utilization without overloading system resources.
+
+This blog shows a practical starting point to set up an `IterableDataset` that can be used with PyTorch's `DataLoader`. There are other points that should be taken into account, for example, we could not only shuffle the data in each buffer but also shuffle the order of each data range that was divided by the number of workers. We could also filter out some data based on its metadata, if we want to avoid some specific ones.
+
+Thank you for taking the time to read this. I hope it provided valuable insights. Cheers!
