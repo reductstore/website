@@ -5,16 +5,19 @@ authors: anthony
 tags: [AI, DataStreaming, PyTorch]
 slug: ai/datastreaming/pytorch/implement-async-storage-data-streaming-pytorch
 date: 2024-01-12
-image: ./img/social-card.jpg
+image: ./img/pytorch-iterabledataset.webp
 ---
 
-When training a model, we aim to process data in batches, shuffle it each epoch, and leverage Python's `multiprocessing` for data fetching through multiple workers.
+![PyTorch Training Diagram](./img/pytorch-iterabledataset.webp)
+<small>PyTorch training loop with data streaming from remote device</small>
 
-The reason being that GPUs are capable of handling large amounts of data concurrently; however, the bottleneck often lies in the time-consuming task of loading this data into the system.
+When training a model, we aim to process data in batches, shuffle data at each epoch to avoid over fitting, and leverage Python's `multiprocessing` for data fetching through multiple workers.
 
-Moreover, the challenge is even trickier when there is simply too much data to store the whole dataset on disk and we need to stream data from an async storage solution such as [ReductStore](<https://www.reduct.store/>).
+The reason that we want to use multiple workers is that GPUs are capable of handling large amounts of data concurrently; however, the bottleneck often lies in the time-consuming task of loading this data into the system.
 
-Addressing this challenge requires a custom Python iterator to bridge asynchronous data fetching with synchronous [PyTorch's IterableDataset](<https://pytorch.org/docs/stable/data.html#torch.utils.data.IterableDataset>).
+Moreover, the challenge is even trickier when there is simply too much data to store the whole dataset on disk and we need to stream data from an async storage database such as [**ReductStore**](<https://www.reduct.store/>).
+
+Addressing this challenge requires a custom Python iterator to bridge asynchronous data fetching with a synchronous PyTorch's [**IterableDataset**](<https://pytorch.org/docs/stable/data.html#torch.utils.data.IterableDataset>).
 
 In this blog post, we will go through a full example and setup a data stream to PyTorch from a playground dataset on a remote database.
 
@@ -23,7 +26,7 @@ Let's dig in!
 <!--truncate-->
 
 ## Setting Up the Python Client for ReductStore Database
-To integrate ReductStore with your Python projects, follow these steps to get started with [Python's client](<https://py.reduct.store/en/latest/>):
+To use ReductStore's playground dataset, follow these steps to get started with [Python's client](<https://py.reduct.store/en/latest/>):
 
 - Install the `reduct` Python package using pip: `pip install reduct-py`.
 
@@ -51,9 +54,9 @@ client = Client(HOST, api_token=API_TOKEN)
 ```
 
 ### Getting data from playground server
-To use the 'Cats' dataset with the Python ReductStore SDK, you'll need to follow a few straightforward steps.
+To use the 'Cats' dataset with Python, you'll need to follow a few other straightforward steps.
 
-First, ensure you have installed necessary libraries like Pillow (PIL), NumPy, and OpenCV.
+First, ensure you have installed necessary libraries like NumPy and OpenCV.
 
 Then access your dataset by asynchronously querying records within a specified range using, e.g. `bucket.query(DATASET, start=0, stop=5)`.
 
@@ -133,14 +136,31 @@ class RemoteCatsDataset(IterableDataset):
             yield self.process_record(image_bytes, record.labels)
 
     def process_record(self, image_bytes, annotation):
-        """Process and resize images."""
+        """Process and annotate the cat image."""
         image_np = np.frombuffer(image_bytes, np.uint8)
         img = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
+        # Annotate the image with provided labels
+        self.annotate_image(img, annotation)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        # Resize the image to the desired size
         return cv2.resize(img, (IMG_SIZE, IMG_SIZE))
+
+    def annotate_image(self, img, annotation):
+        """Draw features on the image based on annotations."""
+        # Drawing eyes and mouth
+        cv2.circle(img, (int(annotation['right-eye-x']), int(annotation['right-eye-y'])), 10, (0, 0, 100), 1)
+        cv2.circle(img, (int(annotation['left-eye-x']), int(annotation['left-eye-y'])), 10, (0, 0, 100), 1)
+        cv2.circle(img, (int(annotation['mouth-x']), int(annotation['mouth-y'])), 12, (100, 0, 0), 1)
+
+        # Drawing ears
+        for ear_side in ['right', 'left']:
+            pts = np.array([[annotation[f'{ear_side}-ear-{i}-x'], annotation[f'{ear_side}-ear-{i}-y']] for i in range(1, 4)], np.int32)
+            pts = pts.reshape((-1, 1, 2))
+            cv2.polylines(img, [pts], True, (0, 255, 255))
+
 ```
 
-The `process_record` method prepares the images. It decodes the byte stream of each image and optionally annotates it using metadata provided with each record, such as bounding box coordinates for features of interest like the eyes or mouth in the 'cats' dataset.
+The `process_record` method prepares the images. It decodes the byte stream of each image and annotates imagegs (for the sake of the example) using metadata provided with each record, such as bounding box coordinates for features of interest like the eyes or mouth in the 'cats' dataset.
 
 With this configuration, the `RemoteCatsDataset` is ready for integration with PyTorch's DataLoader, which can operate multiple processes in parallel using several workers. For example
 
@@ -166,12 +186,22 @@ for images in data_loader:
         plt.show()
 ```
 
+![Cat number 1](./img/cat-number-1.jpeg)
+
+![Cat number 2](./img/cat-number-2.jpeg)
+
+![Cat number 3](./img/cat-number-3.jpeg)
+
+![Cat number 4](./img/cat-number-4.jpeg)
+
 Using the `DataLoader` with multiple workers allows for efficient data loading and preprocessing. This parallelism is especially beneficial when training deep-learning models on large datasets where I/O bound operations could become a bottleneck.
 
 ## Implementing a Buffered Shuffle Iterable Dataset
-Normally, the entire training set is shuffled after each epoch. However, in our scenario, we don't have the full data available on disk.
+Normally, the entire training set is shuffled after each epoch to avoid over fitting. However, in our scenario, we don't have the full data available on disk, and we don't have all the indexes of the pictures in the database neither. We provide a start and stop index to the database, and it returns the data in that range. So, we can't shuffle the data in the database, and we can't shuffle the data in memory either.
 
-Implementing a Buffered Shuffle Iterable Dataset in PyTorch is a trade-off to be able to shuffle the data we fetch from the remote server. Then there is also the issue of using multiple process in parallel with several workers. One way to handle this, is to look at the worker information for each separate process and request different data ranges from the database.
+Implementing a Buffered Shuffle Iterable Dataset in PyTorch is a trade-off to be able to shuffle the data we fetch from the remote server. This works, but we have to be careful not to get duplicates when using several workers, and we need to define a different data stream for each seperate process. 
+
+One way to handle this, is to look at the worker information for each separate process and request different data ranges from the database.
 
 ```python
 import random
@@ -210,9 +240,9 @@ class BufferedShuffleIterableDataset(RemoteCatsDataset):
             yield buffer.pop(random.randint(0, len(buffer) - 1))
 ```
 
-This implementation ensures that each epoch sees a different data order – although it's shuffled up to the buffer length so it's not perfect, but can be sufficient if the buffer is large enough. Most importantly, we have to find a good balance between the buffer size and the number of workers.
+This implementation ensures that each epoch sees a different data order – the shuffle is limited to the buffer's length, so it's not perfect, but it can be sufficient if the buffer is large enough. Most importantly, we have to find a good balance between the buffer size, the batch size and the number of workers.
 
-In other words, we should maximize the number of workers to match the number of CPU cores, and get the largest possible buffer that doesn't saturate the memory and keep a good performance, i.e. the GPUs get batches of data fast enough for training and don't wait until the next one is available.
+In other words, we would maximize the number of workers to match the number of CPU cores, and get the largest possible buffer that doesn't saturate the memory or get performance down, i.e. the GPUs get batches of data fast enough for training and don't wait until the next one is available.
 
 ## Conclusion
 In conclusion, implementing async storage data streaming in PyTorch projects requires careful planning around data loading and processing.
