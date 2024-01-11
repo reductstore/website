@@ -17,16 +17,16 @@ The reason that we want to use multiple workers is that GPUs are capable of hand
 
 Moreover, the challenge is even trickier when there is simply too much data to store the whole dataset on disk and we need to stream data from an async storage database such as [**ReductStore**](<https://www.reduct.store/>).
 
-Addressing this challenge requires a custom Python iterator to bridge asynchronous data fetching with a synchronous PyTorch's [**IterableDataset**](<https://pytorch.org/docs/stable/data.html#torch.utils.data.IterableDataset>).
+Addressing this challenge requires a custom Python iterator to bridge asynchronous data fetching with a synchronous [**PyTorch's IterableDataset**](<https://pytorch.org/docs/stable/data.html#torch.utils.data.IterableDataset>).
 
-In this blog post, we will go through a full example and setup a data stream to PyTorch from a playground dataset on a remote database.
+In this blog post, we will go through a full example and setup a data stream to [**PyTorch**](<https://pytorch.org/>) from a playground dataset on a remote database.
 
 Let's dig in!
 
 <!--truncate-->
 
 ## Setting Up the Python Client for ReductStore Database
-To use ReductStore's playground dataset, follow these steps to get started with [Python's client](<https://py.reduct.store/en/latest/>):
+To use ReductStore's playground dataset, follow these steps to get started with [**Python's client**](<https://py.reduct.store/en/latest/>):
 
 - Install the `reduct` Python package using pip: `pip install reduct-py`.
 
@@ -62,7 +62,7 @@ Then access your dataset by asynchronously querying records within a specified r
 
 Each record fetched contains image annotations and binary image data that can be transformed into an array and then decoded into an image format suitable for display or processing in Python.
 
-For more detailed instructions, check out the blog post [How to Use 'Cats' dataset with Python ReductStore SDK](<https://www.reduct.store/blog/tutorials/computer-vision/sdks/cats-datasets>).
+For more detailed instructions, check out the blog post [**How to Use 'Cats' dataset with Python ReductStore SDK**](<https://www.reduct.store/blog/tutorials/computer-vision/sdks/cats-datasets>).
 
 ## Bridging Async and Sync: Creating Custom Iterators for PyTorch
 When streaming data from a remote database to a PyTorch dataset using an asynchronous Python client, one approach is to develop a custom `AsyncIterator`.
