@@ -77,7 +77,7 @@ Some more details about replication:
 * **Write-Ahead Log.** The storage engine uses a write-ahead log to replicate data. It means that the storage engine writes data to the log first and then replicates it to the destination bucket. If the destination bucket is unavailable, the storage engine stores data in the log until the destination bucket becomes available again.
 * **Filtering.** You can filter records by labels when you replicate a bucket. This is useful when you need to replicate only a portion of the data.
 
-Currently, the database doesn't provide an HTTP API to manage replication. You should use provisioning by environment variables to configure it. See [**Configuration**](./configuration#provisioning) for more details.
+You can manage replications by using the [**Replication API**](./http-api/replication-api) or provision them with environment variables. See [**Configuration**](./configuration) for more details.
 
 ## Security
 
