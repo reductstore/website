@@ -411,39 +411,3 @@ The replication is performed in the background and doesn't affect the performanc
     }
   ]}
 />
-
-<SwaggerComponent
-  method="GET"
-  path="/api/v1/me"
-  summary="Get full information about current API token"
-  description={
-    <>
-      This method takes a token from the Authentication header and returns its name, permissions, and additional information.
-    </>
-  }
-  responses={[
-    {
-      status: "200",
-      summary: "Returns JSON document",
-      message: "OK",
-      description: (
-        <pre><code>{`{
-  "name": "string",
-  "created_at": "string",
-  "permissions": {
-    "full_access": "bool",
-    "read": [],
-    "write": []
-  }
-}`}</code></pre>
-      )
-    },
-    {
-      status: "401",
-      message: "Unauthorsized",
-      summary: "API token is invalid"
-    }
-  ]}
-/>
-
-
