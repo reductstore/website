@@ -1,10 +1,10 @@
 ---
-title: "How to Implement Async Storage Data Streaming in Your PyTorch Project"
-description: Discover how to implement async storage data streaming in PyTorch projects. This blog provides a practical approach to setting up a custom PyTorch's IterableDataset that reads data from a time series database.
+title: "How To Implement Data Streaming In Pytorch From A Remote Database"
+description: Discover how to implement data streaming in your PyTorch project from a remote database. This blog provides a practical approach to setting up a custom PyTorch's IterableDataset that reads data from a time series database.
 authors: anthony
 tags: [AI, DataStreaming, PyTorch]
 slug: ai/datastreaming/pytorch/implement-async-storage-data-streaming-pytorch
-date: 2024-01-12
+date: 2024-01-13
 image: ./img/pytorch-iterabledataset.webp
 ---
 
@@ -15,9 +15,7 @@ When training a model, we aim to process data in batches, shuffle data at each e
 
 The reason that we want to use multiple workers is that GPUs are capable of handling large amounts of data concurrently; however, the bottleneck often lies in the time-consuming task of loading this data into the system.
 
-Moreover, the challenge is even trickier when there is simply too much data to store the whole dataset on disk and we need to stream data from an async storage database such as [**ReductStore**](<https://www.reduct.store/>).
-
-Addressing this challenge requires a custom Python iterator to bridge asynchronous data fetching with a synchronous [**PyTorch's IterableDataset**](<https://pytorch.org/docs/stable/data.html#torch.utils.data.IterableDataset>).
+Moreover, the challenge is even trickier when there is simply too much data to store the whole dataset on disk and we need to stream data from a remote database such as [**ReductStore**](<https://www.reduct.store/>).
 
 In this blog post, we will go through a full example and setup a data stream to [**PyTorch**](<https://pytorch.org/>) from a playground dataset on a remote database.
 
@@ -26,46 +24,52 @@ Let's dig in!
 <!--truncate-->
 
 ## Setting Up the Python Client for ReductStore Database
-To use ReductStore's playground dataset, follow these steps to get started with [**Python's client**](<https://py.reduct.store/en/latest/>):
 
-- Install the `reduct` Python package using pip: `pip install reduct-py`.
+To use ReductStore's playground dataset, you will need to use the [**Python's client**](<https://py.reduct.store/en/latest/>), that you can install with `pip install reduct-py`.
 
-- Import the Client class from the `reduct` package at the beginning of your script: `from reduct import Client`.
-
-- Define your connection parameters:
-
-    - **HOST**: The URL of your ReductStore instance (e.g., `"https://play.reduct.store"`).
-
-    - **API\_TOKEN**: Your API token for authentication (e.g., `"dataset-read-eab13e4f5f2df1e64363806443eea7ba83406ce701d49378d2f54cfbf02850f5"`).
-
-    - **BUCKET**: Name of the bucket containing your data (e.g., `"datasets"`).
-
-    - **DATASET**: Specific dataset you want to access (e.g., `"cats"`).
-
-    <!-- -->
-
-- Initialize the client:
-
-
-<!-- -->
+Then, you can instantiate a client with an API token and connect to the database with the following code:
 
 ```python
+from reduct import Client
+
+HOST = "https://play.reduct.store"
+API_TOKEN = "dataset-read-eab13e4f5f2df1e64363806443eea7ba83406ce701d49378d2f54cfbf02850f5"
+BUCKET = "datasets"
+DATASET = "cats"
+
 client = Client(HOST, api_token=API_TOKEN)
 ```
 
+In this example, we are using the 'Cats' dataset, which contains 10,000 images of cats with labels for the eyes, mouth, and ears. The dataset is available on the [**play.reduct.store**](<https://play.reduct.store/>) and can be accessed with the following parameters:
+
+    - **API\_TOKEN**: API token for authentication (`"dataset-read-eab13e4f5f2df1e64363806443eea7ba83406ce701d49378d2f54cfbf02850f5"`).
+
+    - **BUCKET**: Name of the bucket containing the data (`"datasets"`).
+
+    - **DATASET**: Specific dataset containing cats images and labels (`"cats"`).
+
 ### Getting data from playground server
-To use the 'Cats' dataset with Python, you'll need to follow a few other straightforward steps.
+To work with the 'Cats' dataset in Python using ReductStore, a time-series database for blob data, you'll need to consider a few specific aspects.
+Firstly, ensure that you have necessary libraries like NumPy and OpenCV installed.
 
-First, ensure you have installed necessary libraries like NumPy and OpenCV.
+In addition, when accessing the dataset, remember that ReductStore uses timestamps to define the range of data. 
+These timestamps are expressed as the number of microseconds since January 1, 1970. 
+For example, to query records, you can use a command like `bucket.query(DATASET, tart=TimestampID1, stop=TimestampID2)`, where TimestampID1 and TimestampID2 are the specific timestamps identifying your range of interest.
 
-Then access your dataset by asynchronously querying records within a specified range using, e.g. `bucket.query(DATASET, start=0, stop=5)`.
+In case of the 'Cats' dataset, the timestamps are the record IDs, which are integers ranging from 0 to 9999. 
+For instance, to query the first 5 records, you can use `bucket.query(DATASET, start=0, stop=5)`.
 
 Each record fetched contains image annotations and binary image data that can be transformed into an array and then decoded into an image format suitable for display or processing in Python.
 
 For more detailed instructions, check out the blog post [**How to Use 'Cats' dataset with Python ReductStore SDK**](<https://www.reduct.store/blog/tutorials/computer-vision/sdks/cats-datasets>).
 
 ## Bridging Async and Sync: Creating Custom Iterators for PyTorch
-When streaming data from a remote database to a PyTorch dataset using an asynchronous Python client, one approach is to develop a custom `AsyncIterator`.
+
+ReductStore's Python client is asynchronous, which means that it uses asynchronous programming to fetch data from the database.
+On the other hand, [**PyTorch's IterableDataset**](<https://pytorch.org/docs/stable/data.html#torch.utils.data.IterableDataset>) is synchronous, which means that it uses synchronous programming to iterate over the data. 
+
+This is a problem because we can't use the asynchronous data fetching directly in PyTorch's training loop.
+One way to bridge this gap is to create a custom iterator that can be used to iterate over the data fetched asynchronously.
 
 ```python
 class AsyncIterator:
@@ -162,7 +166,7 @@ class RemoteCatsDataset(IterableDataset):
 
 The `process_record` method prepares the images. It decodes the byte stream of each image and annotates imagegs (for the sake of the example) using metadata provided with each record, such as bounding box coordinates for features of interest like the eyes or mouth in the 'cats' dataset.
 
-With this configuration, the `RemoteCatsDataset` is ready for integration with PyTorch's DataLoader, which can operate multiple processes in parallel using several workers. For example
+With this configuration, the `RemoteCatsDataset` is ready for integration with PyTorch's DataLoader, which can operate multiple processes in parallel using several workers. For example:
 
 ```python
 from torch.utils.data import DataLoader
