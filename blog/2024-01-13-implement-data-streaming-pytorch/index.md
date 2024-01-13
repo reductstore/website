@@ -1,5 +1,5 @@
 ---
-title: "How To Implement Data Streaming In Pytorch From A Remote Database"
+title: "How To Implement Data Streaming In PyTorch From A Remote Database"
 description: Discover how to implement data streaming in your PyTorch project from a remote database. This blog provides a practical approach to setting up a custom PyTorch's IterableDataset that reads data from a time series database.
 authors: anthony
 tags: [AI, DataStreaming, PyTorch]
