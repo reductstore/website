@@ -18,19 +18,30 @@ If you are new to Kafka and ReductStore, here's a quick summary of the technolog
 - [**Apache Kafka**](<https://kafka.apache.org/>) is a distributed streaming platform to share data between applications and services in real-time. 
 - [**ReductStore**](<https://www.reduct.store/>) is a time-series database for blob data, optimized for edge computing and complements Kafka by providing a data storage solution for files larger than 1MB–Kafka's maximum message size.
 
-In our example, we will deploy a simple architecture with a single instance of Kafka and ReductStore running on a local machine. We will then demonstrate how to create Kafka topics in Python and use ReductStore's Python client to write data to a bucket and subscribe to new records.
+In our example, we will deploy a simple architecture with a single instance of Kafka and ReductStore running on a local machine. We will demonstrate how to create Kafka topics, write data to ReductStore, and forward metadata to Kafka.
 
-Finally, we will show how to subscribe to new records and publish metadata to a Kafka topic. We will also demonstrate how to consume messages from Kafka in Python.
-
-You can follow along by cloning the [**GitHub repository**](<https://github.com/reductstore/reduct-kafka-example>) containing all the code snippets and Docker Compose files used in this tutorial.
+You can also follow along by cloning the [**GitHub repository**](<https://github.com/reductstore/reduct-kafka-example>) containing all the code snippets and Docker Compose files used in this tutorial.
 
 <!--truncate-->
 
-## Setting Up Zookeeper and Kafka with Docker Compose
+**Table of Contents**
+
+- [Setup Apache Kafka](#setup-apache-kafka)
+    - [Setting Up Zookeeper and Kafka with Docker Compose](#setting-up-zookeeper-and-kafka-with-docker-compose)
+    - [Creating a Kafka Topic Using Python](#creating-a-kafka-topic-using-python)
+- [Setup ReductStore](#setup-reductstore)
+    - [Deploying ReductStore via Docker Compose](#deploying-reductstore-via-docker-compose)
+    - [Implementing a Data Writer with ReductStore's Python Client](#implementing-a-data-writer-with-reductstores-python-client)
+- [Forward Data from ReductStore to Kafka](#forward-data-from-reductstore-to-kafka)
+    - [Consuming Messages from Kafka in Python](#consuming-messages-from-kafka-in-python)
+- [Conclusion](#conclusion)
+
+## Setup Apache Kafka
 To use Kafka, we also need to deploy a service that keeps configuration informations such as [**Zookeeper**](<https://zookeeper.apache.org/>).
 
 Simply put, Zookeeper organizes and synchronizes configuration data for distributed systems, and Kafka efficiently processes and moves streams of data in real-time between different parts of an application.
 
+### Setting Up Zookeeper and Kafka with Docker Compose
 To set up Zookeeper and Kafka using Docker Compose, you will need to have [**Docker installed**](<https://docs.docker.com/engine/install/>) on your machine. Once that's ready, follow these steps:
 
 1. Create a new file named `docker-compose.yml` in a directory of your choice.
@@ -107,7 +118,7 @@ If you are just wondering about the environment variable we used for this tutori
 
 This setup is suitable for development purposes where you need to work with streaming data or message queues without complexity. For production environments, remember that while this simple Docker Compose setup gets you started quickly, Apache Kafka can be scaled horizontally by adding more brokers to support higher loads or redundancy requirements.
 
-## Creating a Kafka Topic Using Python
+### Creating a Kafka Topic Using Python
 To create a Kafka topic using Python, you can use the `confluent_kafka` library, which provides the necessary tools to interact with Kafka clusters. The following example shows how to programmatically create a new topic:
 
 ```python
@@ -147,14 +158,14 @@ Regarding the arguments, here's a quick explanation:
 
 <!-- -->
 
-## Introducing ReductStore: A Tailored Time-Series Database for Blob Data
+## Setup ReductStore
 [**ReductStore**](<https://reduct.store/>) is a specialized time-series database designed for blob data, optimized for edge computing, computer vision, and IoT applications.
 
 This database offers a robust solution for storing blobs with real-time FIFO (First-In-First-Out) quota management. This guarantees that edge devices always have sufficient space and maintain a continuous data flow.
 
 Furthermore, it provides functionalities for saving labels, like AI-generated outcomes, for each record.
 
-## Deploying ReductStore via Docker Compose
+### Deploying ReductStore via Docker Compose
 Deploying ReductStore via Docker Compose is straightforward:
 
 ```yaml
@@ -176,7 +187,7 @@ reduct-store:
 
 To deploy, navigate to your compose file's location in terminal and execute `docker-compose up -d`. This command starts ReductStore as a background service. You can then interact with it using its [**API**](<https://www.reduct.store/docs/http-api>) or through any [**client libraries available in the documentation**](<https://www.reduct.store/docs/getting-started>).
 
-## Implementing a Data Writer with ReductStore's Python Client
+### Implementing a Data Writer with ReductStore's Python Client
 In this example, we store binary data every second in a 'bucket' within ReductStore. Each piece of data is tagged alternately as 'good' or 'bad', and timestamped to log when it was added.
 
 Below is a code snippet demonstrating how to write data with toggling flags using [**ReductStore's Python Client**](<https://py.reduct.store/en/latest/>):
@@ -218,7 +229,7 @@ To implement this in your environment:
 
 <!-- -->
 
-## Integrating ReductStore and Apache Kafka: Subscribing and Metadata Forwarding
+## Forward Data from ReductStore to Kafka
 Integrating ReductStore with Apache Kafka for metadata forwarding involves subscribing to new records in ReductStore and publishing their metadata to a Kafka topic.
 
 The provided Python code demonstrates an asynchronous function `subscriber()` that connects to both systems: it subscribes to records labeled as "good" in a ReductStore bucket and forwards the associated metadata, including timestamps and labels, to a Kafka topic.
@@ -271,7 +282,7 @@ Here's how the integration works step-by-step:
 
 <!-- -->
 
-## Consuming Messages from Kafka in Python
+### Consuming Messages from Kafka in Python
 In Python, consuming messages from Kafka involves setting up a message consumer that connects to the Kafka cluster and listens for new data on specified topics.
 
 ```python
