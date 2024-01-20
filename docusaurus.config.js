@@ -121,6 +121,12 @@ const config = {
             position: "right",
             dropdownActiveClassDisabled: true,
           },
+          {
+            href: "https://github.com/reductstore/reductstore",
+            position: "right",
+            className: "header-github-link",
+            "aria-label": "GitHub repository",
+          },
         ],
       },
       footer: {
@@ -166,7 +172,7 @@ const config = {
             items: [
               {
                 label: "GitHub",
-                href: "https://github.com/reductstore",
+                href: "https://github.com/reductstore/reductstore",
               },
               {
                 label: "Discord",

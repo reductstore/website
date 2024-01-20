@@ -41,3 +41,11 @@
   align-items: center;
   justify-content: center;
 }
+
+.buttons :last-of-type {
+  margin-left: 1rem;
+}
+
+.indexCtasGitHubButtonWrapper {
+  display: flex;
+}
