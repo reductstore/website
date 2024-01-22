@@ -5,7 +5,7 @@ authors: anthony
 tags: [Tutorial, DataStreaming, Kafka]
 slug: tutorial/datastreaming/kafka/easy-kafka-reductstore-integration-guide
 date: 2024-01-19
-image: ./img/kafka-reductstore-mono.webp
+image: ./img/kafka-reductstore-mono-social.jpg
 ---
 
 ![Kafka ReductStore Example](./img/kafka-reductstore-mono.webp)
