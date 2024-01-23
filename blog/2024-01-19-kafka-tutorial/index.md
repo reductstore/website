@@ -122,6 +122,7 @@ This setup is suitable for development purposes where you need to work with stre
 To create a Kafka topic using Python, you can use the `confluent_kafka` library, which provides the necessary tools to interact with Kafka clusters. The following example shows how to programmatically create a new topic:
 
 ```python
+from confluent_kafka import KafkaError
 from confluent_kafka.admin import AdminClient, NewTopic
 
 def create_kafka_topic(
@@ -131,16 +132,21 @@ def create_kafka_topic(
     admin_client = AdminClient({"bootstrap.servers": kafka_broker})
 
     # Define the new topic along with its partitions and replication factors
-    topic_list = [
-        NewTopic(
-            topic_name,
-            num_partitions=num_partitions,
-            replication_factor=replication_factor,
-        )
-    ]
+    topic = NewTopic(
+        topic_name,
+        num_partitions=num_partitions,
+        replication_factor=replication_factor,
+    )
+    try:
+        # Request the creation of the new topics on the server
+        fs = admin_client.create_topics([topic])
 
-    # Request the creation of the new topics on the server
-    admin_client.create_topics(topic_list)
+        # Wait for each operation to finish.
+        for topic, f in fs.items():
+            f.result()
+
+    except KafkaError as e:
+        print(f"Failed to create Kafka topic: {e}")
 ```
 
 This function encapsulates all necessary steps: it requires you to provide a `topic_name`, `num_partitions`, and `replication_factor`. Optionally, you can specify a Kafka broker; if not provided, it defaults to localhost:9092.
