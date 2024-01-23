@@ -20,7 +20,7 @@ If you are new to Kafka and ReductStore, here's a quick summary of the technolog
 
 In our example, we will deploy a simple architecture with a single instance of Kafka and ReductStore running on a local machine. We will demonstrate how to create Kafka topics, write data to ReductStore, and forward metadata to Kafka.
 
-You can also follow along by cloning the [**GitHub repository**](<https://github.com/reductstore/reduct-kafka-example>) containing all the code snippets and Docker Compose files used in this tutorial.
+You can also follow along by cloning the [**GitHub repository**](<https://github.com/reductstore/reduct-kafka-example>) containing all the code snippets and Docker Compose files used in this tutorial within the `reduct_to_kafka` demo.
 
 <!--truncate-->
 
@@ -360,3 +360,7 @@ This example serves as a groundwork that can be adapted to various use cases req
 Remember that fine-tuning and customization will be necessary as per the specific requirements of your project to ensure optimal performance and reliability. As always, best practices include thorough testing, monitoring, and setting up proper error handling mechanisms to maintain a stable production environment.
 
 If you have questions about this post or want to learn more about ReductStore, please feel free to join our [**Discord**](<https://discord.com/channels/939475547065561088/1154679443407785984>) community and reach out for assistance.
+
+## Further Reading
+
+As a continuation of this tutorial, we recommend reading our next guide on [**How To Use Reductstore As A Data Sink For Kafka**](</blog/tutorial/datastreaming/kafka/data-sink-guide>).
