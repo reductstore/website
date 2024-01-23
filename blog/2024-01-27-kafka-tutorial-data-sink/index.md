@@ -9,7 +9,7 @@ image: ./img/kafka-reductstore-social.jpg
 ---
 
 ![Kafka Data Sink](./img/kafka-reductstore.webp)
-<small>Kafka broker with several partitions saved in ReductStore database</small>
+<small>Kafka stream saved in ReductStore database</small>
 
 In this guide, we will explore the process of storing Kafka messages that contain blob data into a time series database.
 
