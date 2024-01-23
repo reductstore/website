@@ -1,5 +1,5 @@
 ---
-title: "How To Use Reductstore As A Data Sink For Kafka"
+title: "How to Use Reductstore as a Data Sink for Kafka"
 description: Discover how to use ReductStore as a data sink for Kafka. This guide covers the basics of setting up ReductStore to store and manage data from Kafka streams, providing a straightforward approach for efficiently storing binary data and its metadata, including labels, in a time series database.
 authors: anthony
 tags: [Tutorial, DataStreaming, Kafka]
