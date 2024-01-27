@@ -11,41 +11,37 @@ image: ./img/kafka-reductstore-social.jpg
 ![Kafka Data Sink](./img/kafka-reductstore.webp)
 <small>Kafka stream saved in ReductStore database</small>
 
-In this guide, we will explore the process of storing Kafka messages that contain blob data into a time series database.
+In this guide, we will explore the process of storing Kafka messages that contain unstructured data into a time series database.
 
-[**Apache Kafka**](<https://kafka.apache.org/>) is a distributed streaming platform capable of handling high throughput of data, while time series databases are optimized for storing and querying data that changes over time.
+[**Apache Kafka**](<https://kafka.apache.org/>) is a distributed streaming platform capable of handling high throughput of data, while  [**ReductStore**](</>) is a databases for unstructured data optimized for storing and querying along time.
 
-In the context of blob data, which can include binary large objects like images, video streams, or sensor data, a time series database like [**ReductStore**](<https://reduct.store/>) becomes particularly valuable.
+ReductStore allows to easily setup a data sink to store blob data for applications that need precise time-based querying or a robust system optimized for edge computing that can handle quotas and retention policies.
 
-It allows to easily setup a data sink to store blob data for applications that need precise time-based querying or a robust system optimized of edge computing.
+This guide builds upon an existing tutorial which provides detailed steps for integrating a simple architecture with these systems. To get started, revisit "[**Easy Guide to Integrating Kafka: Practical Solutions for Managing Blob Data**](/blog/tutorial/datastreaming/kafka/easy-kafka-reductstore-integration-guide)" if you need help setting up the initial infrastructure.
 
-This guide builds upon an existing tutorial which provides detailed steps for integrating a simple architecture with these systems and getting started.
-
-Revisit "[**Easy Guide to Integrating Kafka: Practical Solutions for Managing Blob Data**](<https://www.reduct.store/blog/tutorial/datastreaming/kafka/easy-kafka-reductstore-integration-guide>)" if you need help setting up the initial infrastructure.
-
-There is also a [**GitHub repository**](<https://github.com/reductstore/reduct-kafka-example>) that contains the code for this tutorial within the `kafka_to_reduct` demo.
+You can also find the code for this tutorial in the [**kafka_to_reduct demo**](<https://github.com/reductstore/reduct-kafka-example/>) on GitHub.
 
 <!--truncate-->
 
 **Table of Contents**
 
-- [Initializing Clients in Python for Kafka and ReductStore](#initializing-clients-in-python-for-kafka-and-reductstore)
-    - [Configuring Kafka Producer and Admin Clients](#configuring-kafka-producer-and-admin-clients)
-    - [Configuring Kafka Consumer and ReductStore Clients](#configuring-kafka-consumer-and-reductstore-clients)
+- [Python Clients for Kafka and ReductStore](#python-clients-for-kafka-and-reductstore)
+    - [Kafka Producer and Admin Clients](#kafka-producer-and-admin-clients)
+    - [Kafka Consumer and ReductStore Clients](#kafka-consumer-and-reductstore-clients)
 - [Streaming Blob Data to Kafka and Storing in ReductStore](#streaming-blob-data-to-kafka-and-storing-in-reductstore)
+    - [Understanding the Data Flow](#understanding-the-data-flow)
     - [Publishing Binary Data with Kafka Producer Class](#publishing-binary-data-with-kafka-producer-class)
     - [Consuming Messages from Kafka and Persisting to ReductStore](#consuming-messages-from-kafka-and-persisting-to-reductstore)
 - [Conclusion](#conclusion)
 
 
-## Initializing Clients in Python for Kafka and ReductStore
+## Python Clients for Kafka and ReductStore
 
-### Configuring Kafka Producer and Admin Clients
-To establish the foundation for streaming blob data from Kafka to a time series database, we must first initialize and configure our Kafka producer and admin clients in Python.
+### Kafka Producer and Admin Clients
+To get started, we must first initialize and configure our Kafka producer and admin clients in Python.
+As in the [**previous tutorial**](/blog/tutorial/datastreaming/kafka/easy-kafka-reductstore-integration-guide), we will use the [**confluent_kafka**](<https://docs.confluent.io/platform/current/clients/confluent-kafka-python/html/index.html>) Python package to interact with Kafka.
 
-The `confluent_kafka` Python package provides us with the necessary classes to interact with Kafka.
-
-Below is an example of how to configure both the Producer and AdminClient objects:
+Below is an example of the simplest possible configuration to setup both: the Producer and AdminClient objects:
 
 ```python
 from confluent_kafka import Producer
@@ -59,14 +55,13 @@ kafka_producer = Producer(kafka_conf)
 kafka_admin_client = AdminClient(kafka_conf)
 ```
 
-These configurations instantiate a Producer and an AdminClient with the minimal required setting: the address of the Kafka bootstrap servers.
+These lines instantiate a Producer and an AdminClient with the minimal required setting: the address of the Kafka bootstrap servers.
+This setting is crucial as it allows the clients to connect to the Kafka cluster.
 
-This setting is crucial as it allows the clients to discover all nodes in the Kafka cluster.
+### Kafka Consumer and ReductStore Clients
+We can also use `confluent_kafka` Python package to setup Kafka Consumer client, but we need to install `reduct-py` Package to use [**ReductStore's Python Client**](<https://py.reduct.store/en/latest/>).
 
-### Configuring Kafka Consumer and ReductStore Clients
-We can also use `confluent_kafka` Python package to setup Kafka Consumer client, we need the `reduct` Package to use [ReductStore's Python Client](<https://py.reduct.store/en/latest/>).
-
-Here's how to configure both clients:
+Here's how to configure both clients on the consumer side:
 
 ```python
 from confluent_kafka import Consumer
@@ -82,15 +77,45 @@ reduct_client = Client("http://127.0.0.1:8383")
 kafka_consumer = Consumer(kafka_conf)
 ```
 
-This configuration prepares the Kafka Consumer to connect to the cluster and start consuming messages from the earliest offset. It specifies a group ID that identifies the consumer group for coordination.
+This configuration prepares the Kafka Consumer to connect to the cluster and start consuming messages from the earliest offset. 
+In other words, the consumer will start reading messages from the oldest available message in the partition. 
+The contrary would be to set "latest", which would indicate that the consumer should start from the most recent message.
 
-Regarding ReductStore, the Client connects using the provided URL and is now ready to write data into a bucket.
+The configuration also specifies a group ID that identifies the so called "consumer group" which is used for coordination. 
+The group ID is mandatory for consumers and allows to have multiple consumers working together to consume a topic.
+
+For ReductStore, the Client establishes a connection to the database through the specified URL, preparing it to start writing data into a bucket (more on this later).
 
 ## Streaming Blob Data to Kafka and Storing in ReductStore
 
+### Understanding the Data Flow
+
+Kafka topics are divided into partitions, which are the basic units of parallelism in Kafka. 
+Thanks to this, Kafka can handle an arbitrary number of consumers and scale horizontally.
+
+For instance, you could have multiple consumers reading from the same topic, and each of these consumers could read from a different partition.
+
+![Data Flow Diagram](./img/kafka-reductstore-dataflow.webp)
+<small>Data flow from Kafka to ReductStore</small>
+
+Moreover, partitions in a Kafka cluster can be spread across different brokers, and for fault tolerance, each partition can also be replicated on several brokers.
+But to understand how messages are distributed, let's narrow our scope to just one broker as shown in the diagram above. 
+
+It's important to understand that the specific partition a message is assigned to depends on the topic's partitioning strategy. 
+The default strategy is round-robin, which distributes messages evenly across all partitions as shown in the diagram.
+
+At the same time, if you define a specific key for a message, Kafka will use that key to determine the partition to which the message is appended.
+This is useful for ensuring that messages with the same key are always appended to the same partition.
+
+Transitioning from the topic of message distribution in Kafka, let's delve into the second part of the diagram: the sink.
+ReductStore is a time series database that stores data in buckets. A bucket is a collection of entries, and each entry contains records.
+
+A record consists of a binary payload and labels. The payload is the actual data, while the labels are metadata associated with the payload. Most importantly, each entry is identified by time and can be efficiently queried using a time range. 
+
+This goes hand in hand with Kafka's time series nature, as Kafka topics are also ordered by time.
 
 ### Publishing Binary Data with Kafka Producer Class
-To send binary data with Kafka in Python, use the Confluent Kafka Producer. Here's how:
+To send unstructured data with Kafka we can use the producer client that we configured earlier. Here's an example of how to do so:
 
 ```python
 import asyncio
@@ -122,18 +147,22 @@ async def produce_binary_data(topic_name, num_messages=10):
     kafka_producer.flush()
 ```
 
-The above Python code sets up an asynchronous function that generates and publishes binary data to a Kafka topic.
+The above code sets up an asynchronous function that generates and publishes binary data to a Kafka topic.
+In out case, the `generate_random_data` function creates a byte string with random bytes, simulating binary data such as files, images or sensor outputs.
 
-The `generate_random_data` function creates a byte string with random bytes, simulating binary data such as images or sensor outputs.
+Once the data is generated, it is published using the `kafka_producer.produce` method which takes the following arguments:
+- `topic_name`: The name of the topic to which the message is published
+- `value`: The binary data to be published
+- `headers`: A list of tuples containing the metadata to be published along with the binary data
+- `callback`: A callback function that is executed when the message is delivered to the Kafka broker
 
-The size of this data is variable, ranging from 1KB to 900KB. The reason of such size is that Kafka has a maximum message size of 1MB (headers included).
-
-The `kafka_producer.poll(0)`call is a non-blocking call (when used with 0 second timeout) and is used to trigger the callback execution which can be used to acknowledge the message delivery to a Kafka broker.
-
+The `kafka_producer.poll(0)` is a non-blocking call (when used with 0 second timeouts) and can trigger the callback execution which acknowledges a message delivery to a Kafka broker.
 From this callback, we can retrieve information, such as the specific partition to which a message has been sent.
 
 ### Consuming Messages from Kafka and Persisting to ReductStore
-When integrating Kafka and ReductStore for robust data handling, it's imperative to craft a reliable mechanism for real-time consumption and persistence of messages. A Python coroutine, `consume_and_store`, adeptly demonstrates this process.
+
+The process of consuming messages from Kafka and persisting them to ReductStore is straightforward.
+The following code snippet demonstrates how to do exactly that in an asynchronous manner:
 
 ```python
 async def consume_and_store(topic_name, bucket_name):
@@ -171,24 +200,26 @@ async def consume_and_store(topic_name, bucket_name):
         kafka_consumer.close()
 ```
 
-The consumer subscribes to the specified Kafka topic, entering an endless loop that awaits new messages. Utilizing the `poll` function without timeouts allows for non-blocking message retrieval from Kafka, which is essential for maintaining an efficient event-driven architecture.
+The consumer subscribes to the specified Kafka topic, entering an endless loop that awaits new messages. 
+As for the producer, using the `poll` function without timeout allows for non-blocking message retrieval from Kafka.
 
 When a message is fetched successfully without errors, its headers can be decoded and paired with its binary payload.
 
-Subsequently, this composite data structure is written asynchronously into ReductStore using the bucket's `write` method:
+Subsequently, this composite data structure is written into ReductStore using the bucket's `write` method:
 
-- The kafka headers information or any specific labels coming along with binary data can be stored in `labels`
+- The kafka headers information can be stored in `labels`
 
 - The binary data can be written in a bucket under a certain entry. In our case, we used the `topic_name` as the entry name for the bucket
 
 
 <!-- -->
 
-In summary, this code snippet provides a blueprint for connecting Kafka streams with a data sink that can accept labels and binary data with time-based querying capabilities.
-
 ## Conclusion
-In conclusion, the integration of Kafka with ReductStore streamlines the process of managing large volumes and varieties of binary data. This setup is beneficial for applications that necessitate real-time processing and storage, such as those in edge computing environments.
 
-ReductStore's capacity to handle blob data with time-series precision further enhances its utility for IoT and computer vision scenarios where temporal context and FIFO quota management are critical.
+This simple guide has demonstrated how to use ReductStore as a data sink for Kafka.
+We have covered the basics of establishing a sink for storing and managing data from Kafka streams. 
+This approach offers a simple method for efficiently saving unstructured data and its associated metadata, such as labels, in a time series database.
 
-If you have questions about this post or want to learn more about ReductStore, please feel free to join our [**Discord**](<https://discord.com/channels/939475547065561088/1154679443407785984>) community and reach out for assistance.
+This integration is beneficial for applications that necessitate real-time processing and storage, such as those in edge computing environments.
+
+If you have any questions or comments, please feel free to reach out to us on [**Discord**](<https://discord.com/invite/BWrCncF5EP>) or [**Linkedin**](<https://www.linkedin.com/company/reductstore>).
