@@ -3,8 +3,16 @@ import CodeBlock from '@theme/CodeBlock';
 import styles from "./styles.module.css";
 import clsx from 'clsx';
 
-export default function LinuxInstall() {
+export default function LinuxInstall(props) {
   const [activeTab, setActiveTab] = useState("binary");
+
+const bynaryInstall = `
+wget https://github.com/reductstore/reductstore/releases/download/${props.version}/reductstore.linux-amd64.tar.gz
+tar xfv reductstore.linux-amd64.tar.gz
+chmod +x reductstore
+RS_DATA_PATH=./data ./reductstore
+`.trim();
+
 
   return (
     <>
@@ -40,11 +48,3 @@ export default function LinuxInstall() {
     </>
   );
 }
-
-const bynaryInstall = `
-wget https://github.com/reductstore/reductstore/releases/download/v1.7.3/reductstore.linux-amd64.tar.gz
-tar xfv reductstore.linux-amd64.tar.gz
-chmod +x reductstore
-RS_DATA_PATH=./data ./reductstore
-`.trim();
-

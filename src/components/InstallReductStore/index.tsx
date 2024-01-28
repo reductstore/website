@@ -10,7 +10,7 @@ import MacOSInstall from './MacOSInstall';
 import WindowsInstall from './WindowsInstall';
 import AzureInstall from './AzureInstall';
 
-export default function InstallReductStore(): JSX.Element {
+export default function InstallReductStore(props): JSX.Element {
   const [activeTab, setActiveTab] = useState("docker");
 
   return (
@@ -32,9 +32,9 @@ export default function InstallReductStore(): JSX.Element {
       </ul>
       <div className={styles.tabContent}>
         {activeTab === "docker" && <DockerInstall />}
-        {activeTab === 'linux' && <LinuxInstall />}
-        {activeTab === 'macOs' && <MacOSInstall />}
-        {activeTab === 'windows' && <WindowsInstall />}
+        {activeTab === 'linux' && <LinuxInstall {...props} />}
+        {activeTab === 'macOs' && <MacOSInstall {...props} />}
+        {activeTab === 'windows' && <WindowsInstall {...props} />}
         {activeTab === 'azure' && <AzureInstall />}
       </div>
     </>
