@@ -11,7 +11,7 @@ date: 2024-01-28
 
 We are pleased to announce the release of the latest minor version of [ReductStore](https://www.reduct.store/), [1.8.0](https://github.com/reductstore/reductstore/releases/tag/v1.7.0). ReductStore is a time series database designed for storing and managing large amounts of blob data.
 
-To download the latest released version, please visit our [Download Page](https://www.reduct.store/download).
+To download the latest released version, please visit our [**Download Page**](https://www.reduct.store/download).
 
 ## What's New in ReductStore v1.8.0
 
@@ -59,12 +59,12 @@ What if our device doesn't have a public IP, or the connection quality is too lo
 
 ### Configuration
 
-You can establish replications using the [HTTP API](https://www.reduct.store/docs/next/http-api/replication-api) or provision it with [environment variables](https://www.reduct.store/docs/next/configuration#provisioning). Instead of using the HTTP request directly, we recommend using our [client SDKs](https://www.reduct.store/docs/next/getting-started#what-is-next).
+You can establish replications using the [**HTTP API**](https://www.reduct.store/docs/next/http-api/replication-api) or provision it with [**environment variables**](https://www.reduct.store/docs/next/configuration#provisioning). Instead of using the HTTP request directly, we recommend using our [**client SDKs**](https://www.reduct.store/docs/next/getting-started#what-is-next).
 
 We will soon update ReductCLI and Web Console to offer a convenient method for monitoring and managing replications.
 
 ---
 
-I hope you find this release useful. If you have any questions or feedback, don’t hesitate to reach out in [Discord](https://discord.gg/8wPtPGJYsn) or by opening a discussion on [GitHub](https://github.com/reductstore/reductstore/discussions).
+I hope you find this release useful. If you have any questions or feedback, don’t hesitate to reach out in [**Discord**](https://discord.gg/8wPtPGJYsn) or by opening a discussion on [**GitHub**](https://github.com/reductstore/reductstore/discussions).
 
 Thanks for using [ReductStore](https://www.reduct.store/)!
