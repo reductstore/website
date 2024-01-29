@@ -1,5 +1,5 @@
 ---
-title: "ReductStore v1.8.0 Has Been Released with Data Replication"
+title: "Reductstore V1.8.0 Released: Introducing Data Replication"
 description: ReductStore v1.8.0 introduces data replication between ReductStore instances.
 authors: alexey
 tags: [news]
@@ -24,7 +24,7 @@ In this release, we've introduced a crucial feature for any database - data repl
 
 #### Append-Only Approach
 
-Currently, replication is append-only, meaning we only synchronize new records when they are written. As ReductStore is typically used as a large ring-buffer for blob data, it automatically removes old data when the disk quota is exceeded. Therefore, it doesn't make sense to replicate the remove operation on a remote instance where the disk space might be different.
+Currently, replication is append-only, meaning we only synchronize new records when they are written but not deleted or update. As ReductStore is typically used as an efficient FIFO buffer for blob data, it automatically removes old data when the disk quota is exceeded. Therefore, it doesn't make sense to replicate the remove operation on a remote instance where the disk space might be different.
 
 #### Edge/IoT Optimization
 
@@ -36,15 +36,15 @@ Since an IoT device may not always have a public IP for various reasons, ReductS
 
 #### Conditional Replication
 
-ReductStore does more than just mirror data; it also provides conditions based on labels to filter data before sending it to another instance. This type of data reduction helps reduce traffic and extend storage time for important data.
+ReductStore does more than just mirror data; it also provides conditions based on labels to filter data before sending it to another instance. This type of data reduction helps reduce traffic and extend storage time for important data. For example, you can label records as "anomalous" and replicate only those records to a remote instance.
 
 ### Typical Use Cases
 
-We will soon provide detailed information about use cases for replication. For now, let's briefly discuss two scenarios where replication can help simplify your application.
+Replication is a powerful feature that can be used in many ways. However, let's briefly discuss two scenarios where replication can help simplify your application.
 
 #### Local Replication
 
-In this use case, we have a computer vision application that detects product anomalies using images from a CV camera. The detection algorithm labels images as good or anomalous and stores them in the data bucket. We receive a few images per second, and the disk space is only sufficient to store a few days' worth of data. This amounts to a lot of images, and we would like to improve or validate our model with anomalous images. Unfortunately, anomalies occur very rarely, and we don't have enough images within our storage capacity.
+In this use case, we have a computer vision application that detects product anomalies using images from a CV camera. The detection algorithm labels images as good or anomalous and stores them in the data bucket. We receive a few images per second, and the disk space is only sufficient to store a few days' worth of data. This amounts to a lot of images, and we would like to improve or validate our model with anomalous images. Unfortunately, anomalies occur very rarely, and we can't collect enough anomalous images in our storage time window.
 
 This is a perfect case for replication. We can create an additional bucket with a small quota and replicate only the anomalous images there. Depending on the quota chosen, it may store a few months' worth of data, which could be sufficient for our purposes.
 
@@ -53,9 +53,10 @@ This is a perfect case for replication. We can create an additional bucket with 
 
 #### Remote Replication
 
-What if our device doesn't have a public IP, or the connection quality is too low for direct device interaction? We could address this by setting up a server with a ReductStore in our infrastructure and replicating the anomalous images from the edge device there.
+We could address this by setting up a server with a ReductStore database in our infrastructure and replicating the anomalous images from the edge device to the server.
 
 ![Remote Replication Example](./img/remote-replication.webp)
+
 
 ### Configuration
 
