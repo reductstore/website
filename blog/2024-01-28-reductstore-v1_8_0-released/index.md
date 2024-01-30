@@ -7,7 +7,7 @@ slug: news/reductstore-8-released
 date: 2024-01-28
 ---
 
-We are pleased to announce the release of the latest minor version of [**ReductStore**](https://www.reduct.store/), [**1.8.0**](https://github.com/reductstore/reductstore/releases/tag/v1.7.0). ReductStore is a time series database designed for storing and managing large amounts of blob data.
+We are pleased to announce the release of the latest minor version of [**ReductStore**](https://www.reduct.store/), [**1.8.0**](https://github.com/reductstore/reductstore/releases/tag/v1.8.0). ReductStore is a time series database designed for storing and managing large amounts of blob data.
 
 To download the latest released version, please visit our [**Download Page**](https://www.reduct.store/download).
 
