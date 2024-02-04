@@ -4,7 +4,7 @@ description: Discover how to use ReductStore as a data sink for Kafka. This guid
 authors: anthony
 tags: [Tutorial, DataStreaming, Kafka]
 slug: tutorial/datastreaming/kafka/data-sink-guide
-date: 2024-01-27
+date: 2024-02-04
 image: ./img/kafka-reductstore-social.jpg
 ---
 
