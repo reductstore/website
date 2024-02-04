@@ -34,9 +34,9 @@ If you need to query data, you should request a list of objects in the `cv_came
 - FIFO quotas, which remove old data when a bucket size limit is reached, may not be effective for intensive write operations.
 - HTTP overhead, we continue to request each object individually, which is inefficient for small objects.
 
-[ReductStore](https://wwww.reduct.store/) is designed to address these issues. It features a robust FIFO quota, an HTTP API for data querying and batching over time intervals, and arranges objects (or records) into blocks for optimal disk usage and search efficiency.
+**[ReductStore](https://wwww.reduct.store/)** is designed to address these issues. It features a robust FIFO quota, an HTTP API for data querying and batching over time intervals, and arranges objects (or records) into blocks for optimal disk usage and search efficiency.
 
-Both [Minio](https://min.io/) and [ReductStore](https://wwww.reduct.store/) offer Python SDKs. These can be used to implement read and write operations and to compare performance. As both databases utilize the HTTP protocol, we will use blobs of varying sizes to estimate the impact of HTTP overhead and to see how ReductStore optimizes this aspect.
+Both **[Minio](https://min.io/)** and **[ReductStore](https://wwww.reduct.store/)** offer Python SDKs. These can be used to implement read and write operations and to compare performance. As both databases utilize the HTTP protocol, we will use blobs of varying sizes to estimate the impact of HTTP overhead and to see how ReductStore optimizes this aspect.
 
 ## Read/Write Data With Minio
 
