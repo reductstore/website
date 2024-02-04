@@ -1,0 +1,208 @@
+---
+title: "Performance comparison: ReductStore vs. Minio"
+description: Benchmarking ReductStore and Minio to compare their performance for writing and reading blob data with different sizes in time series manner.
+authors: alexey
+tags: [comparisons, computer-vision, iot]
+slug: comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio
+date: 2024-02-04
+---
+
+
+In this article, we will compare two data storage services: [ReductStore](https://reduct.store) and [Minio](https://min.io). Both offer on-premise blob storage, but they approach it differently. Minio provides traditional S3-like blob storage, while ReductStore is a time series database designed to store a history of blob data. We will focus on their application in scenarios that require storage and access to a history of unstructured data. This includes images from a computer vision camera, vibration sensor data, or binary packages common in industrial data.
+
+## Handling Historical Data
+
+S3-like blob storage is commonly used to store data of different formats and sizes in the cloud or internal storage. It can also accommodate historical data as a series of blobs. A simple approach is to create a folder for each data source and save objects with timestamps in their names:
+
+```
+bucket
+ |
+ |---cv_camera
+        |---1666225094312397.bin
+        |---1666225094412397.bin
+        |---1666225094512397.bin
+
+```
+
+If you need to query data, you should request a list of objects in the `cv_camera` folder and filter them by name according to the given time interval. This approach is simple to implement, but it has some disadvantages:
+
+- The more objects in a folder, the longer the query time.
+- There's significant overhead for small objects. Timestamps are stored as strings and the minimum file size is either 1Kb or 512 bytes due to the file system's block size.
+- FIFO quotas, which remove old data when a bucket size limit is reached, may not be effective for intensive write operations.
+- HTTP overhead, we continue to request each object individually, which is inefficient for small objects.
+
+[ReductStore](https://wwww.reduct.store/) is designed to address these issues. It features a robust FIFO quota, an HTTP API for data querying and batching over time intervals, and arranges objects (or records) into blocks for optimal disk usage and search efficiency.
+
+Both [Minio](https://min.io/) and [ReductStore](https://wwww.reduct.store/) offer Python SDKs. These can be used to implement read and write operations and to compare performance. As both databases utilize the HTTP protocol, we will use blobs of varying sizes to estimate the impact of HTTP overhead and to see how ReductStore optimizes this aspect.
+
+## Read/Write Data With Minio
+
+Let's begin with Minio and its Python SDK. For benchmarks, we'll create two functions: one to write and the other to read `BLOB_COUNT` blobs of `BLOB_SIZE`.
+
+```python
+from minio import Minio
+import time
+
+minio_client = Minio("127.0.0.1:9000", access_key="minioadmin", secret_key="minioadmin", secure=False)
+
+def write_to_minio():
+    count = 0
+    for i in range(BLOB_COUNT):
+        count += BLOB_SIZE
+        minio_client.put_object(
+            BUCKET_NAME,
+            f"data/{str(int(time.time_ns() / 1000))}.bin",
+            io.BytesIO(CHUNK),
+            BLOB_SIZE,
+        )
+    return count
+
+
+def read_from_minio(t1, t2):
+    count = 0
+
+    t1 = str(int(t1 * 1000_000))
+    t2 = str(int(t2 * 1000_000))
+
+    for obj in minio_client.list_objects("test", prefix="data/"):
+        if t1 <= obj.object_name[5:-4] <= t2:
+            resp = minio_client.get_object("test", obj.object_name)
+            count += len(resp.read())
+
+    return count
+
+```
+
+The `minio_client` does not offer an API for pattern-based data queries. Therefore, the client side has to browse the entire folder to locate the necessary object. This method is inefficient when handling billions of objects.
+
+As a solution, you could store object paths in a time-series database or establish a hierarchical folder structure, such as creating a new folder daily. However, this implies additional development on your part and may not necessarily resolve the issues stated above.
+
+## Read/Write Data With ReductStore
+
+With [ReductStore](https://wwww.reduct.store/), getting data by time intervals is much easier, as it provides a special API for this purpose:
+
+```python
+from reduct import Client as ReductClient
+
+reduct_client = ReductClient("http://127.0.0.1:8383")
+
+async def write_to_reduct():
+    async with ReductClient("http://127.0.0.1:8383") as reduct_client:
+        count = 0
+        bucket = await reduct_client.create_bucket("test", exist_ok=True)
+        for i in range(1, BLOB_COUNT):
+            await bucket.write("data", CHUNK)
+            count += BLOB_SIZE
+        return count
+
+
+async def read_from_reduct(t1, t2):
+    async with ReductClient("http://127.0.0.1:8383") as reduct_client:
+        count = 0
+        bucket = await reduct_client.get_bucket("test")
+        async for rec in bucket.query("data", int(t1 * 1000000), int(t2 * 1000000)):
+            count += len(await rec.read_all())
+        return count
+
+```
+
+## Benchmarks
+
+Once we have our read/write functions, we can proceed to write our benchmarks.
+
+```python
+import io
+import random
+import time
+import asyncio
+
+from minio import Minio
+from reduct import Client as ReductClient
+
+BLOB_SIZE = 10_000_000
+BLOB_COUNT = 1_000_000_000 // BLOB_SIZE
+BUCKET_NAME = "test"
+
+CHUNK = random.randbytes(BLOB_SIZE)
+
+minio_client = Minio("127.0.0.1:9000", access_key="minioadmin", secret_key="minioadmin", secure=False)
+reduct_client = ReductClient("http://127.0.0.1:8383")
+
+# Our function were here..
+
+
+if __name__ == "__main__":
+    print(f"Chunk size={BLOB_SIZE / 1000_000} Mb, count={BLOB_COUNT}")
+    ts = time.time()
+    size = write_to_minio()
+    print(f"Write {size / 1000_000} Mb to Minio: {time.time() - ts} s")
+
+    ts_read = time.time()
+    size = read_from_minio(ts, time.time())
+    print(f"Read {size / 1000_000} Mb from Minio: {time.time() - ts_read} s")
+
+    loop = asyncio.new_event_loop()
+    ts = time.time()
+    size = loop.run_until_complete(write_to_reduct())
+    print(f"Write {size / 1000_000} Mb to ReductStore: {time.time() - ts} s")
+
+    ts_read = time.time()
+    size = loop.run_until_complete(read_from_reduct(ts, time.time()))
+    print(f"Read {size / 1000_000} Mb from ReductStore: {time.time() - ts_read} s")
+
+```
+
+For testing purposes, we need to run the databases. This can easily be done using docker-compose:
+
+```
+services:
+  reductstore:
+    image: reduct/store:latest
+    volumes:
+      - ./reduct-data:/data
+    ports:
+      - 8383:8383
+
+  minio:
+    image: minio/minio
+    volumes:
+      - ./minio-data:/data
+    command: minio server /data --console-address :9002
+    ports:
+      - 9000:9000
+      - 9002:9002
+```
+
+Execute the Docker Compose configuration and the benchmarks:
+
+```
+docker-compose up -d
+python3 main.py
+
+```
+
+## Results
+
+The script displays the results for the given `BLOB_SIZE` and `SIZE_COUNT`. On my device with an NVMe drive, these were the numbers I received:
+
+| Chunk                  | Operation | Minio   | ReductStore |
+|------------------------|-----------|---------|-------------|
+| 10.0 Mb (100 requests) | Write     | 8.39 s  | 2.65 s      |
+|                        | Read      | 2.13 s  | 1.4s        |
+| 1.0 Mb (1000 requests) | Write     | 16.38 s | 3.78 s      |
+|                        | Read      | 3.13 s  | 1.16 s      |
+| .1 Mb (10000 requests) | Write     | 35.3 s  | 11.25 s     |
+|                        | Read      | 14.51 s | 2.24 s      |
+
+Based on the benchmark results, ReductStore consistently outperformed Minio in both writing and reading operations regardless of the size of the chunks. For writing operations, ReductStore was significantly faster than Minio, especially when dealing with smaller chunk sizes. For reading operations, ReductStore also held a clear advantage, being able to retrieve data faster than Minio across all chunk sizes. These performance results suggest that ReductStore is highly efficient and could be a more effective solution for applications that require frequent and intensive read/write operations.
+
+## Conclusions
+
+Despite the presence of numerous established S3-like storage solutions available in the market, [ReductStore](https://wwww.reduct.store/) stands out as an attractive choice for certain applications. Particularly for those applications that require storing blobs of data with historical timestamps and continuous data writing, ReductStore may be the ideal solution. One of the key features of ReductStore is its robust FIFO (First In, First Out) quota system. This system is designed to prevent problems related to disk space by automatically deleting the oldest data when the storage limit is reached, making it highly efficient for managing storage. Furthermore, ReductStore is optimized for intensive write operations, making it extremely fast and suitable for scenarios where data needs to be written to the storage system continuously and in large volumes. Therefore, if your application's requirements align with these features, ReductStore could be a good option to consider.
+
+## References:
+
+- [ReductStore](https://wwww.reduct.store/)
+- [Minio](https://min.io/)
+- **[ReductStore Client SDK for Python](https://github.com/reductstore/reduct-py)**
+- **[Full Example on GitHub](https://github.com/reductstore/reduct-vs-minio)**
