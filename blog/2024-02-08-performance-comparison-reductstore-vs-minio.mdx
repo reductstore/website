@@ -1,5 +1,5 @@
 ---
-title: "Performance comparison: ReductStore vs. Minio"
+title: "Performance comparison: ReductStore Vs. Minio"
 description: Benchmarking ReductStore and Minio to compare their performance for writing and reading blob data with different sizes in time series manner.
 authors: alexey
 tags: [comparisons, computer-vision, iot]
@@ -34,13 +34,13 @@ If you need to query data, you should request a list of objects in the `cv_came
 - FIFO quotas, which remove old data when a bucket size limit is reached, may not be effective for intensive write operations.
 - HTTP overhead, we continue to request each object individually, which is inefficient for small objects.
 
-**[ReductStore](https://wwww.reduct.store/)** is designed to address these issues. It features a robust FIFO quota, an HTTP API for data querying and batching over time intervals, and arranges objects (or records) into blocks for optimal disk usage and search efficiency.
+**[ReductStore](https://www.reduct.store/)** is designed to address these issues. It features a robust FIFO quota, an HTTP API for data querying and batching over time intervals, and arranges objects (or records) into blocks for optimal disk usage and search efficiency.
 
-Both **[Minio](https://min.io/)** and **[ReductStore](https://wwww.reduct.store/)** offer Python SDKs. These can be used to implement read and write operations and to compare performance. As both databases utilize the HTTP protocol, we will use blobs of varying sizes to estimate the impact of HTTP overhead and to see how ReductStore optimizes this aspect.
+Both **[Minio](https://min.io/)** and **[ReductStore](https://www.reduct.store/)** offer Python SDKs. These can be used to implement read and write operations and to compare performance. As both databases utilize the HTTP protocol, we will use blobs of varying sizes to estimate the impact of HTTP overhead and to see how ReductStore optimizes this aspect.
 
 ## Read/Write Data With Minio
 
-Let's begin with Minio and its Python SDK. For benchmarks, we'll create two functions: one to write and the other to read `BLOB_COUNT` blobs of `BLOB_SIZE`.
+Let's begin with Minio and its Python SDK. For benchmarking purposes, we'll create two functions: one to write and the other to read `BLOB_COUNT` blobs of `BLOB_SIZE`.
 
 ```python
 from minio import Minio
@@ -82,7 +82,7 @@ As a solution, you could store object paths in a time-series database or establi
 
 ## Read/Write Data With ReductStore
 
-With [ReductStore](https://wwww.reduct.store/), getting data by time intervals is much easier, as it provides a special API for this purpose:
+With **[ReductStore](https://www.reduct.store/)**, getting data by time intervals is much easier, as it provides a special API for this purpose:
 
 ```python
 from reduct import Client as ReductClient
@@ -201,10 +201,10 @@ Based on the benchmark results, ReductStore consistently outperformed Minio in b
 
 ## Conclusions
 
-Despite the presence of numerous established S3-like storage solutions available in the market, [ReductStore](https://wwww.reduct.store/) stands out as an attractive choice for certain applications. Particularly for those applications that require storing blobs of data with historical timestamps and continuous data writing, ReductStore may be the ideal solution. One of the key features of ReductStore is its robust FIFO (First In, First Out) quota system. This system is designed to prevent problems related to disk space by automatically deleting the oldest data when the storage limit is reached, making it highly efficient for managing storage. Furthermore, ReductStore is optimized for intensive write operations, making it extremely fast and suitable for scenarios where data needs to be written to the storage system continuously and in large volumes. Therefore, if your application's requirements align with these features, ReductStore could be a good option to consider.
+Despite the presence of numerous established S3-like storage solutions available in the market, **[ReductStore](https://www.reduct.store/)** stands out as an attractive choice for certain applications. Particularly for those applications that require storing blobs of data with historical timestamps and continuous data writing, ReductStore may be the ideal solution. One of the key features of ReductStore is its robust FIFO (First In, First Out) quota system. This system is designed to prevent problems related to disk space by automatically deleting the oldest data when the storage limit is reached, making it highly efficient for managing storage. Furthermore, ReductStore is optimized for intensive write operations, making it extremely fast and suitable for scenarios where data needs to be written to the storage system continuously and in large volumes. Therefore, if your application's requirements align with these features, ReductStore could be a good option to consider.
 
 ## References:
 
-- **[ReductStore](https://wwww.reduct.store/)**
+- **[ReductStore](https://www.reduct.store/)**
 - **[ReductStore Client SDK for Python](https://github.com/reductstore/reduct-py)**
 - **[Full Example on GitHub](https://github.com/reductstore/reduct-vs-minio)**
