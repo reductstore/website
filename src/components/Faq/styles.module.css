@@ -1,0 +1,33 @@
+.faqItem {
+  margin-bottom: 20px;
+}
+
+.faqQuestion {
+  cursor: pointer;
+  font-weight: bold;
+  background-color: var(--reduct-background-gray);
+  border-radius: 5px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease;  
+}
+
+.faqQuestion:hover {
+  background-color: var(--reduct-background-gray-hover);
+}
+
+.faqIcon {
+  margin-right: 10px;
+  transition: transform 0.3s ease;
+}
+
+.faqAnswer {
+  padding: 10px;
+  background-color: transparent;
+  border-radius: 5px;
+}
+
+.faqItemOpen .faqIcon {
+  transform: rotate(90deg);
+}

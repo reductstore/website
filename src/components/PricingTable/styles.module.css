@@ -4,14 +4,14 @@
 }
 
 .plan {
-  border: 2px solid #ccc; 
+  border: 3px solid #ccc;
   padding: 1em;
-  border-radius: 25px;
-  max-width: 400px;
+  border-radius: 20px;
+  max-width: 300px;
 }
 
-.enterprise {
-  border-color: var(--ifm-color-primary); 
+.highlight {
+  border-color: var(--ifm-color-primary);
 }
 
 .planCard {
@@ -19,4 +19,57 @@
   flex-direction: column;
   height: 100%;
   align-items: left;
+
+}
+
+.categorySeparator {
+  margin-top: 1em;
+  margin-bottom: 0;
+  border-top: 1px solid #ccc;
+}
+
+
+.planTitle {
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: var(--reduct-dimmed-color);
+}
+
+.priceUnit {
+  font-size: 0.8em;
+  color: var(--reduct-dimmed-color);
+  margin-left: 5px;
+}
+
+.underlinedText {
+  text-decoration: underline;
+  cursor: help;
+}
+
+.category {
+  margin-bottom: 15px;
+}
+
+.categoryTitle, .categoryDescription {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.categoryTitle {
+  color: var(--reduct-dimmed-color);
+}
+
+.infoIcon {
+  margin-left: 5px;
+  vertical-align: middle;
+  cursor: help;
+  color: var(--reduct-dimmed-color);
+}
+
+.tooltipContent {
+  max-width: 200px;
+  word-wrap: break-word;
 }
