@@ -29,7 +29,7 @@ export default function PricingTable() {
           title="Standard"
           subtitle="For small scale enterprises"
           price="$150"
-          priceUnit="/ TiB / year"
+          priceUnit="/ TB / year"
           description="For commercial production use in non-critical applications."
           categories={[
             { title: "Full Functionality", description: checkedIcon },
@@ -45,7 +45,7 @@ export default function PricingTable() {
           title="Premium"
           subtitle="For critical applications"
           price="$300"
-          priceUnit="/ TiB / year"
+          priceUnit="/ TB / year"
           description="For commercial production use in critical applications with minimum 5TiB storage capacity."
           categories={[
             { title: "Full Functionality", description: checkedIcon },
@@ -59,7 +59,7 @@ export default function PricingTable() {
         />
         <PricingPlan
           title="IoT"
-          subtitle="For vertical IoT solutions"
+          subtitle="For many small nodes"
           price="$100"
           priceUnit="/ device / year"
           description="For commercial production use with minimum 10 devices with less than 1TiB of storage capacity per unit."
