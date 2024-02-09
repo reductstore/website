@@ -20,6 +20,8 @@
   --reduct-section-space: 7rem;
   --reduct-bottom-page-margin: 3rem;
   --reduct-dimmed-color: #6c757d;
+  --reduct-background-gray: #f0f0f0;
+  --reduct-background-gray-hover: #e0e0e0;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -35,6 +37,8 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
   --reduct-button-color-primary: #e8837e;
   --reduct-dimmed-color: #6c757d;
+  --reduct-background-gray: #303030;
+  --reduct-background-gray-hover: #404040;
 }
 
 /* CSS to hide on mobile */
