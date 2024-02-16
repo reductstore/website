@@ -4,7 +4,7 @@ description: "Learn how to store data in computer vision applications by using R
 authors: alexey
 tags: [tutorials, computer-vision]
 slug: tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications
-date: 2024-02-15
+date: 2024-02-16
 image: ./img/reductStore-usage.jpeg
 ---
 
@@ -55,7 +55,7 @@ Unfortunately, this solution is also not perfect.
 - **Data Reduction**. We have more space for our data, but we still don’t have any solution to remove old data.
 - **Data Accessibility**. The data in the object storage mirrors the structure of a file system, which can lead to similar accessibility issues. Furthermore, it can be slower due to the use of an HTTP layer. Each read and write operation to S3-storage requires a dedicated HTTP request, which may be inefficient for small objects.
 
-An S3-like storage system may initially appear more promising than a simple file system. However, its tree-like data organization can lead to issues. Eventually, it may fail to meet your needs, necessitating the development of complex software to overcome these limitations. For example, you might need to integrate an additional time-series database to improve search capabilities. We have previously discussed this [alternative](https://www.reduct.store/blog/comparison/iot/reductstore-benchmark), and it's clear that it has its own drawbacks.
+An S3-like storage system may initially appear more promising than a simple file system. However, its tree-like data organization can lead to issues. Eventually, it may fail to meet your needs, necessitating the development of complex software to overcome these limitations. For example, you might need to integrate an additional time-series database to improve search capabilities. We have previously discussed this **[alternative](https://www.reduct.store/blog/comparison/iot/reductstore-benchmark)**, and it's clear that it has its own drawbacks.
 
 ## ReductStore
 
@@ -65,11 +65,11 @@ An S3-like storage system may initially appear more promising than a simple file
 
 As you can see, the structure of our application is similar to when using an S3-like storage system, but it works differently. Instead of storing blobs individually, it preallocates blocks of fixed size and writes multiple blobs to each block. This is a more efficient way to write and store data, especially when dealing with small blobs. This approach has the following advantages:
 
-- **Data Accessibility**:ReductStore utilizes record timestamps as unique identifiers and provides an HTTP API for convenient data access based on timestamp or time interval. It also batches smaller objects into a larger HTTP request, which is crucial for networks with high latency.
+- **Data Accessibility**. ReductStore utilizes record timestamps as unique identifiers and provides an HTTP API for convenient data access based on timestamp or time interval. It also batches smaller objects into a larger HTTP request, which is crucial for networks with high latency.
 - **Data Reduction**. We can specify a quota for each bucket, so that the storage engine starts deleting old data when the bucket size reaches the quota.
 - **Labeling.**  We can label data and use these labels as annotations and search criteria.
 - **Security**. Like with object storage, we can access data with different permissions.
-- **Date Replication**. it supports append-only replication, allowing you to automatically stream data from one instance to another. Furthermore, you can conditionally replicate data using labels.
+- **Data Replication**. Since **[version 1.8](https://www.reduct.store/blog/news/reductstore-8-released)**, it supports append-only data replication, allowing you to automatically stream data from one instance to another. Furthermore, you can conditionally replicate data using labels.
 
 ## Conclusions
 
