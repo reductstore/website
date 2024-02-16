@@ -37,7 +37,7 @@ const pricingFaqs = [
   {
     question: "How do you control disk usage?",
     answer:
-      "When you sign a license agreement, we will send you a license key as text that contains information about the licensee and the allowed disk usage. You should specify the path to the license when you run the database. The database will keep work even if the disk usage exceeds the limit, but the CLI client, WebConsole and SDKs will generate warnings about the license.",
+      "When you sign a license agreement, we will send you a license key as a text file that contains information about the licensee and the allowed disk usage. You should specify the path to the license when you run the database. The database will keep work even if the disk usage exceeds the limit, but the CLI client, WebConsole and SDKs will generate warnings about the license.",
   },
   {
     question: "Will my infrastructure crash when the license expires?",
