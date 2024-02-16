@@ -37,12 +37,12 @@ const pricingFaqs = [
   {
     question: "How do you control disk usage?",
     answer:
-      "When you sign a license agreement, we will send you a license key as a text file that contains information about licensee and allowed disk usage. You should specify the path to the license when you run the database. The database will refuse to write data when the quota is reached. You will also be asked for the key when you request support.",
+      "When you sign a license agreement, we will send you a license key as a text file that contains information about the licensee and the allowed disk usage. You should specify the path to the license when you run the database. The database will keep work even if the disk usage exceeds the limit, but the CLI client, WebConsole and SDKs will generate warnings about the license.",
   },
   {
     question: "Will my infrastructure crash when the license expires?",
     answer:
-      "No, the database will continue to work, but it will generate warnings about the license. It will stop working when you try to upgrade to a new version.",
+      "No, the database will continue to work, but the CLI client, WebConsole and SDKs will generate warnings about the license.",
   },
   {
     question:
