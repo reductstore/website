@@ -16,7 +16,7 @@ The server API provides HTTP methods for checking the status of the server, list
   summary="Get statistical information about the storage"
   description={
     <>
-      You can use this method to get stats of the storage and check its version. If authentication is enabled, the method needs a valid API token.
+      You can use this method to get stats of the storage, check its version and license. If authentication is enabled, the method needs a valid API token.
       <pre><code>
       {`curl --header "authorsization: Bearer \${API_TOKEN}" http://127.0.0.1:8383/api/v1/info`}
       </code></pre>
@@ -34,16 +34,25 @@ The server API provides HTTP methods for checking the status of the server, list
     "version": "string",
     "bucket_count": "integer",  // number of buckets in storage
     "usage": "integer",         // disk usage in bytes
-    "uptime": "integer",        // reductstore uptime in seconds
+    "uptime": "integer",        // uptime in seconds
     "oldest_record": "integer", // unix timestamp of oldest record in microseconds
     "latest_record": "integer"  // unix timestamp of latest record in microseconds
-    "defaults":{
-    "bucket":{                  // default settings for a new bucket
-        "max_block_size": "integer",            // max block content_length in bytes
-        "max_block_records": "integer",         // max number of records in a block
-        "quota_type": Union["NONE", "FIFO"],    // quota type
-        "quota_size": "integer"                 // quota content_length in bytes
+    "license" : {               // if a commercial license is used
+      "licensee": "string",     // Licensee usually is the company name
+      "invoice": "string"       // Invoice number
+      "expiry_date": "string"   // Expiry date of the license in ISO 8601 format (UTC)
+      "plan": "string"          // Plan name
+      "device_number": "integer"// Number of devices (0 for unlimited)
+      "disk_quota": "integer"   // Disk quota in TB (0 for unlimited)
+      "fingerprint": "string"   // License fingerprint
     }
+    "defaults":{
+      "bucket":{                  // default settings for a new bucket
+          "max_block_size": "integer",            // max block content_length in bytes
+          "max_block_records": "integer",         // max number of records in a block
+          "quota_type": Union["NONE", "FIFO"],    // quota type
+          "quota_size": "integer"                 // quota content_length in bytes
+      }
 }`}
           </code></pre>
         </>
