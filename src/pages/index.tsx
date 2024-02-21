@@ -20,14 +20,10 @@ function HomepageHeader() {
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
         <div className={styles.headerContent}>
-          <img src={LogoImg} alt="Logo" className={styles.headerLogo} />
           <h1 className={clsx("hero__title", styles.heroTitle)}>
             {siteConfig.title}
           </h1>
         </div>
-        <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
-          {siteConfig.tagline}
-        </p>
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"

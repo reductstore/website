@@ -5,9 +5,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "ReductStore",
-  tagline:
-    "A Time-Series Database for Blob Data, Optimized for Edge Computing, Computer Vision, and IoT.",
+  title: "The #1 Time-Series Database for Unstructured Data",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
