@@ -6,6 +6,9 @@ import {
   FaTags,
   FaCloudUploadAlt,
   FaLayerGroup,
+  FaSync,
+  FaSearch,
+  FaKey,
 } from "react-icons/fa";
 import styles from "./styles.module.css";
 
@@ -61,6 +64,23 @@ export default function HomepageFeatures() {
           IconComponent={FaLayerGroup}
           title="Efficient Data Batching"
           description="Minimize network overhead in areas with high latency by fetching records in batched HTTP responses."
+        />
+      </div>
+      <div className="row">
+        <Feature
+          IconComponent={FaSync}
+          title="Data Replication"
+          description="Synchronize data across buckets with replication for high availability and disaster recovery."
+        />
+        <Feature
+          IconComponent={FaSearch}
+          title="Iterative Data Querying"
+          description="Efficiently queries large datasets with minimal load for real-time and historical data processing."
+        />
+        <Feature
+          IconComponent={FaKey}
+          title="Token Authorization"
+          description="Secure data access with token-based authorization to protect your data from unauthorized access."
         />
       </div>
     </section>
