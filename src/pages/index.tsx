@@ -21,7 +21,7 @@ function HomepageHeader() {
       <div className="container">
         <div className={styles.headerContent}>
           <h1 className={clsx("hero__title", styles.heroTitle)}>
-            {siteConfig.title}
+            {siteConfig.tagline}
           </h1>
         </div>
         <div className={styles.buttons}>
