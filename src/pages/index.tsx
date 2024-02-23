@@ -20,14 +20,10 @@ function HomepageHeader() {
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
         <div className={styles.headerContent}>
-          <img src={LogoImg} alt="Logo" className={styles.headerLogo} />
           <h1 className={clsx("hero__title", styles.heroTitle)}>
-            {siteConfig.title}
+            {siteConfig.tagline}
           </h1>
         </div>
-        <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
-          {siteConfig.tagline}
-        </p>
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
@@ -53,10 +49,9 @@ function HomepageHeader() {
 export default function Home(): JSX.Element {
   return (
     <Layout
-      title="Efficient Time-Series Database for Blob Data, Optimized for Edge Computing, Computer Vision, and IoT"
-      description="ReductStore is a time series database designed specifically for storing and managing large amounts of blob data. 
-      It offers high performance for writing and real-time querying, making it suitable for edge computing, computer vision, and IoT applications.
-      ReductStore is licensed under the Business Source License 1.1."
+      title="Time-Series Database for Unstructured Data"
+      description="ReductStore is a time series database designed specifically for storing and managing large amounts of unstructured data. 
+      It offers high performance for writing and real-time querying, making it suitable for edge computing, computer vision, and IoT applications."
     >
       <HomepageHeader />
       <main>
