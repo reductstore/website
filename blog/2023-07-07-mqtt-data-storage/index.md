@@ -87,9 +87,9 @@ To guarantee the reliability and accessibility of the stored data without any lo
 
 One popular solution is to replicate data. Replication involves creating duplicate copies of the data and storing them in multiple locations or servers. This redundancy ensures that even if one server fails the data can still be accessed from another one, minimizing the risk of data loss or corruption.
 
-### Security: protection against unauthorsized access, attacks, and breaches
+### Security: protection against unauthorized access, attacks, and breaches
 
-MQTT data can contain sensitive information such as device telemetry, user behavior, or images, making it essential to protect against unauthorsized access, attacks, and breaches. 
+MQTT data can contain sensitive information such as device telemetry, user behavior, or images, making it essential to protect against unauthorized access, attacks, and breaches. 
 
 How can you know if a database is trustworthy?
 
