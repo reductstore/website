@@ -36,7 +36,9 @@ const config = {
     locales: ["en"],
   },
 
-  plugins: ["docusaurus-plugin-matomo"],
+  plugins: [
+    require.resolve("./src/plugins/docusaurus-plugin-matomo-tag-manager"),
+  ],
 
   presets: [
     [
@@ -78,10 +80,9 @@ const config = {
 
       // Cookieless analytics
       matomo: {
-        matomoUrl: "https://reductstore.matomo.cloud/",
-        siteId: "1",
-        phpLoader: "matomo.php",
-        jsLoader: "matomo.js",
+        matomoUrl:
+          "https://cdn.matomo.cloud/reductstore.matomo.cloud/container_lnt4UdBs.js",
+        injectInDev: false,
       },
 
       // Declare some <meta> tags
