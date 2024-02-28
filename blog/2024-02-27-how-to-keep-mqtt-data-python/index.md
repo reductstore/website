@@ -69,7 +69,7 @@ Docker Compose downloads the images if not available on your device and starts t
 
 ## Write Python Script
 
-Now, let's start coding and delve into the details. To begin, install the necessary dependencies. We'll need the [https://pypi.org/project/aiomqtt/](https://www.npmjs.com/package/async-mqtt) and the [Python Client SDK](https://pypi.org/project/reduct-py/).
+Now, let's start coding and delve into the details. To begin, install the necessary dependencies. We'll need the **[https://pypi.org/project/aiomqtt/](https://www.npmjs.com/package/async-mqtt)** and the **[Python Client SDK](https://pypi.org/project/reduct-py/)**.
 
 ```bash
 pip3 install reduct-py aiomqtt
