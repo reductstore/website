@@ -15,7 +15,7 @@ The **[MQTT protocol](https://mqtt.org/)** is a simple way to connect different 
 
 There are many time series databases available, but if you need to store things like images, sensor data, or Protobuf messages, you might want to use ReductStore. This database is designed to store a lot of blob data and works well with IoT and edge computing.
 
-**[ReductStore](https://www.reduct.store)** has client SDKs (Software Development Kits) for many programming languages. This means you can easily use it in your existing system. In this example, we'll be using the [**Python SDK](https://github.com/reductstore/reduct-py)** from ReductStore.
+**[ReductStore](https://www.reduct.store)** has client SDKs (Software Development Kits) for many programming languages. This means you can easily use it in your existing system. In this example, we'll be using the **[Python SDK](https://github.com/reductstore/reduct-py)** from ReductStore.
 
 Now, let's make a simple MQTT application to see how this all works.
 
@@ -36,6 +36,8 @@ If you're using Ubuntu, you can set up the required dependencies by executing th
 $ sudo apt-get update
 $ sudo apt-get install docker-compose python3-pip
 ```
+
+If you are using a different operating system, you can find the installation instructions for Docker Compose on **[the official website](https://docs.docker.com/compose/install/)**. 
 
 ## **Execute MQTT Broker and ReductStore using Docker Compose**
 
@@ -63,7 +65,7 @@ Then execute the configuration:
 docker-compose up
 ```
 
-Docker Compose downloaded the images and ran the containers. Pay attention that we published ports 1883 for MQTT protocol and 8383 for **[ReductStore HTTP API](https://www.reduct.store/docs/http-api)**.
+Docker Compose downloads the images if not available on your device and starts the containers. Pay attention that we published ports 1883 for MQTT protocol and 8383 for **[ReductStore HTTP API](https://www.reduct.store/docs/http-api)**.
 
 ## Write Python Script
 
@@ -101,7 +103,7 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-Let’s check the code in details. First of all we create a client to communicate with the ReductStore instance and create a bucket for the MQTT data:
+Let’s check the code in details. First of all, we create a client to communicate with the ReductStore instance and create a bucket for the MQTT data:
 
 ```python
 # Connect to ReductStore instance at 8383 port
@@ -126,7 +128,7 @@ async with MQTTClient("127.0.0.1") as mqtt:
     async for message in mqtt.messages:
 ```
 
-This section explains how to connect the MQTT broker by using an asynchronous context manager and how to subscribe to all topics with the "#" wildcard. MQTT topics are a method for organizing your data streams. A publisher must specify a topic name to send data, and a subscriber must specify either a specific name or a wildcard to receive the data. Later, you'll see that the ReductStore has entries in the bucket, which is also used for data organization.
+This code snipped connects the MQTT broker by using an asynchronous context manager and how to subscribe to all topics with the "#" wildcard. MQTT topics are a method for organizing your data streams. A publisher must specify a topic name to send data, and a subscriber must specify either a specific name or a wildcard to receive the data. Later, you'll see that the ReductStore has entries in the bucket, which is also used for data organization.
 
 Let’s see how we store the data in the database:
 
@@ -179,20 +181,20 @@ for entry in await bucket.get_entry_list():
 
 As you can see, it is also very easy. We browse all entries in the `mqtt` bucket, query all records from each entry, and then print their timestamp and content. That's it.
 
-## Best Practices[](https://www.reduct.store/blog/tutorials/iot/how-to-keep-mqtt-data-node#best-practices)
+## Best Practices
 
 The provided example is basic and might not cover all the complexities you may face in a real-world application. Here are some tips to help you construct a strong and efficient IoT application using ReductStore and MQTT:
 
-- Create a ReductStore bucket with a FIFO quota to prevent disk overwriting in the future.
+- Create a ReductStore bucket with a **[FIFO](https://www.reduct.store/docs/how-does-it-work#bucket)** quota to prevent disk overwriting in the future.
 - Use token authentication to protect your data. You can generate an access token using either the **[Web Console](https://github.com/reductstore/web-console)** or the **[CLI client](https://cli.reduct.store/)**.
-- Map MQTT5 properties to ReductStore labels. This will facilitate data filtering during querying or replication.
+- Map **[MQTT5]( ttps://mqtt.org/)** properties to ReductStore labels. This will facilitate data filtering during querying or **[replication](https://www.reduct.store/blog/news/reductstore-8-released)**.
 - Use **[ReductCLI](http://cli.reduct.store/)** for data replication or backup purposes.
 
-## Conclusion[](https://www.reduct.store/blog/tutorials/iot/how-to-keep-mqtt-data-node#conclusion)
+## Conclusion
 
 The MQTT protocol and ReductStore are easy-to-use tools that work well together in Python. They provide a strong solution for many applications. No matter the size of your project, these tools handle data communication and storage effectively.
 
-To help you understand how to use these tools, we've made an example that shows how they work together. You can see the source code of this example [here](https://github.com/reductstore/reduct-mqtt-example-py). This example shows how easy and useful it is to use MQTT and ReductStore together.
+To help you understand how to use these tools, we've made an example that shows how they work together. You can see the source code of this example **[here](https://github.com/reductstore/reduct-mqtt-example-py)**. This example shows how easy and useful it is to use MQTT and ReductStore together.
 
 ---
 
