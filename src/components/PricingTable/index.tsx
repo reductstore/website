@@ -17,7 +17,7 @@ export default function PricingTable() {
           description="For research, testing, development. Commercial use in production limited to companies with capital less than 2 million USD."
           categories={[
             { title: "Full Functionality", description: checkedIcon },
-            { title: "Support", description: "Community on GitHub or Discord", descriptionDetail: "Only latest stable version" },
+            { title: "Support", description: "Community on GitHub or Chat", descriptionDetail: "Only latest stable version" },
             { title: "Long Term Release Support", description: "-" },
             { title: "Architecture Review", description: "-" }
           ]}
@@ -33,7 +33,7 @@ export default function PricingTable() {
           description="For commercial production use in non-critical applications."
           categories={[
             { title: "Full Functionality", description: checkedIcon },
-            { title: "Support", description: "Up to 2 business days, Email or Discord" },
+            { title: "Support", description: "Up to 2 business days, Email or Chat" },
             { title: "Long Term Release Support", description: "1 year" },
             { title: "Architecture Review", description: "-" }
           ]}
@@ -49,7 +49,7 @@ export default function PricingTable() {
           description="For commercial production use in critical applications with minimum 5TB storage capacity."
           categories={[
             { title: "Full Functionality", description: checkedIcon },
-            { title: "Support", description: "Up to 4 hours, Email, Discord, Video call" },
+            { title: "Support", description: "Up to 4 hours, Email, Chat, Video call" },
             { title: "Long Term Release Support", description: "3 years" },
             { title: "Architecture Review", description: checkedIcon }
           ]}
@@ -65,7 +65,7 @@ export default function PricingTable() {
           description="For commercial production use with minimum 10 devices with less than 1TB of storage capacity per unit."
           categories={[
             { title: "Full Functionality", description: checkedIcon },
-            { title: "Support", description: "Up to 2 business days, Email or Discord" },
+            { title: "Support", description: "Up to 2 business days, Email or Chat" },
             { title: "Long Term Release Support", description: "1 year" },
             { title: "Architecture Review", description: checkedIcon }
           ]}
