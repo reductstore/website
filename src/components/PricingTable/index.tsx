@@ -46,7 +46,7 @@ export default function PricingTable() {
           subtitle="For critical applications"
           price="$300"
           priceUnit="/ TB / year"
-          description="For commercial production use in critical applications with minimum 5TiB storage capacity."
+          description="For commercial production use in critical applications with minimum 5TB storage capacity."
           categories={[
             { title: "Full Functionality", description: checkedIcon },
             { title: "Support", description: "Up to 4 hours, Email, Discord, Video call" },
@@ -62,7 +62,7 @@ export default function PricingTable() {
           subtitle="For many small nodes"
           price="$100"
           priceUnit="/ device / year"
-          description="For commercial production use with minimum 10 devices with less than 1TiB of storage capacity per unit."
+          description="For commercial production use with minimum 10 devices with less than 1TB of storage capacity per unit."
           categories={[
             { title: "Full Functionality", description: checkedIcon },
             { title: "Support", description: "Up to 2 business days, Email or Discord" },
