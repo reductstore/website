@@ -81,7 +81,7 @@ const config = {
         siteId: "1",
         url: "https://reductstore.matomo.cloud/",
         script: "https://cdn.matomo.cloud/reductstore.matomo.cloud/matomo.js",
-        exclude: ["*.azurestaticapps.net"],
+        exclude: [".azurestaticapps.net"],
       },
 
       // Declare some <meta> tags
