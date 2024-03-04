@@ -22,6 +22,8 @@ module.exports = function (context) {
             {
               tagName: "script",
               innerHTML: `
+                var _paq = window._paq = window._paq || [];
+                _paq.push(['requireCookieConsent']);
                 var _mtm = window._mtm = window._mtm || [];
                 _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
                 (function() {
