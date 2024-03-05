@@ -26,7 +26,12 @@ const cookieConsentConfig = {
       enabled: true,
       readOnly: true,
     },
-    analytics: {},
+    functional: {
+      enabled: false,
+    },
+    analytics: {
+      enabled: false,
+    },
   },
   language: {
     default: "en",
@@ -60,6 +65,12 @@ const cookieConsentConfig = {
               linkedCategory: "necessary",
             },
             {
+              title: "Functional cookies",
+              description:
+                "These cookies enable the website to remember choices you make on the website, such as cookie preferences.",
+              linkedCategory: "functional",
+            },
+            {
               title: "Performance and Analytics",
               description:
                 "These cookies collect information about how you use our website. All of the data is anonymized and cannot be used to identify you.",
@@ -78,22 +89,16 @@ const cookieConsentConfig = {
 };
 
 function handleConsent({ cookie }) {
+  window._paq = window._paq || [];
   if (cookie.categories.includes("analytics")) {
-    handleConsentGiven();
+    window._paq.push(["rememberCookieConsentGiven"]);
   } else {
-    handleConsentRevoked();
+    window._paq.push(["forgetCookieConsentGiven"]);
   }
-}
 
-function handleConsentGiven() {
-  window._paq = window._paq || [];
-  window._paq.push(["rememberCookieConsentGiven"]);
-}
-
-function handleConsentRevoked() {
-  window._paq = window._paq || [];
-  window._paq.push(["forgetCookieConsentGiven"]);
-  CookieConsent.eraseCookies("cc_reductstore");
+  if (!cookie.categories.includes("functional")) {
+    CookieConsent.eraseCookies("cc_reductstore");
+  }
 }
 
 export function initializeCookieConsent() {
