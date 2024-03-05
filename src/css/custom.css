@@ -73,3 +73,12 @@ img {
 .header-github-link:hover::before {
   background-color: var(--ifm-navbar-link-hover-color);
 }
+
+/* CSS for Cookie Consent */
+#cc-main {
+  --cc-modal-border-radius: 0.5rem;
+  --cc-btn-border-radius: .4rem;
+  --cc-modal-transition-duration: 0.25s;
+  --cc-modal-margin: 1rem;
+  --cc-z-index: 2147483647;
+}
