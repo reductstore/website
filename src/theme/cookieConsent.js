@@ -95,7 +95,6 @@ function handleConsent({ cookie }) {
   } else {
     window._paq.push(["forgetCookieConsentGiven"]);
   }
-
   if (!cookie.categories.includes("functional")) {
     CookieConsent.eraseCookies("cc_reductstore");
   }
