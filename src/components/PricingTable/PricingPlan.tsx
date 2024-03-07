@@ -116,7 +116,12 @@ const PricingPlan: React.FC<PricingPlanProps> = ({
             disabled={!isTermsAccepted && !isFree}
             onClick={handleButtonClick}
           />
-          {!isFree && (
+
+          {isFree ? (
+            <div className={styles.termsGroup} >
+              Distributed under the terms of the <Link to="https://github.com/reductstore/reductstore/blob/main/LICENSE" className={styles.boldLink}>BUSL</Link> license.
+            </div>
+          ) : (
             <div className={clsx(styles.termsGroup, { [styles.error]: buttonClicked && !isTermsAccepted })}>
               <input
                 type="checkbox"
