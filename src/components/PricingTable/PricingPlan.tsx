@@ -22,7 +22,8 @@ interface PricingPlanProps {
   categories: Category[];
   buttonUrl: string;
   buttonLabel: string;
-  isHighlight: boolean;
+  isHighlight?: boolean;
+  isFree?: boolean;
 }
 
 const PricingPlan: React.FC<PricingPlanProps> = ({
@@ -34,7 +35,8 @@ const PricingPlan: React.FC<PricingPlanProps> = ({
   categories,
   buttonUrl,
   buttonLabel,
-  isHighlight,
+  isHighlight = false,
+  isFree = false,
 }) => {
   const planId = title.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '');
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
@@ -111,22 +113,25 @@ const PricingPlan: React.FC<PricingPlanProps> = ({
             buttonUrl={buttonUrl}
             buttonLabel={buttonLabel}
             isHighlight={isHighlight}
-            disabled={!isTermsAccepted}
+            disabled={!isTermsAccepted && !isFree}
             onClick={handleButtonClick}
           />
-          <div className={clsx(styles.termsGroup, { [styles.error]: buttonClicked && !isTermsAccepted })}>
-            <input
-              type="checkbox"
-              id={`${planId}-checkbox`}
-              name="termsAndConditions"
-              checked={isTermsAccepted}
-              onChange={handleTermsChange}
-            />
-            <label htmlFor={`${planId}-checkbox`}>
-              I agree to the <Link to="/terms" className={styles.boldLink}>Terms and Conditions</Link>
-            </label>
-            <div className={styles.errorMessage}>Please accept the Terms and Conditions to proceed.</div>
-          </div>
+          {!isFree && (
+            <div className={clsx(styles.termsGroup, { [styles.error]: buttonClicked && !isTermsAccepted })}>
+              <input
+                type="checkbox"
+                id={`${planId}-checkbox`}
+                name="termsAndConditions"
+                checked={isTermsAccepted}
+                onChange={handleTermsChange}
+              />
+              <label htmlFor={`${planId}-checkbox`}>
+                I agree to the <Link to="/terms" className={styles.boldLink}>Terms and Conditions</Link>
+              </label>
+              <div className={styles.errorMessage}>Please accept the Terms and Conditions to proceed.</div>
+            </div>
+          )
+          }
         </div>
       </div>
     </div>

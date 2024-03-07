@@ -32,9 +32,9 @@ export default function PricingTable() {
             { title: "Long Term Release Support", description: "-" },
             { title: "Architecture Review", description: "-" }
           ]}
-          buttonUrl="/docs/next/getting-started"
-          buttonLabel="Choose Free"
-          isHighlight={false}
+          buttonUrl="/Download"
+          buttonLabel="Download"
+          isFree
         />
         <PricingPlan
           title="Standard"
@@ -50,7 +50,6 @@ export default function PricingTable() {
           ]}
           buttonUrl={paymentLinks.standard}
           buttonLabel="Choose Standard"
-          isHighlight={false}
         />
         <PricingPlan
           title="Premium"
@@ -66,7 +65,7 @@ export default function PricingTable() {
           ]}
           buttonUrl={paymentLinks.premium}
           buttonLabel="Choose Premium"
-          isHighlight={true}
+          isHighlight
         />
         <PricingPlan
           title="IoT"
@@ -82,7 +81,6 @@ export default function PricingTable() {
           ]}
           buttonUrl={paymentLinks.iot}
           buttonLabel="Choose IoT"
-          isHighlight={false}
         />
       </div>
     </section>

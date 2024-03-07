@@ -94,3 +94,9 @@
   display: block; 
   margin-bottom: -2em;
 }
+
+.freePlanDisclaimer {
+  margin-top: 1em;
+  font-size: 0.8em;
+  color: var(--reduct-dimmed-color);
+}
