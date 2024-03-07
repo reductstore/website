@@ -1,6 +1,9 @@
 .pricingTable {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 2em;
+  gap: 2em; 
+  align-items: flex-start;
 }
 
 .plan {
@@ -27,7 +30,6 @@
   margin-bottom: 0;
   border-top: 1px solid #ccc;
 }
-
 
 .planTitle {
   margin-bottom: 0.5rem;
@@ -72,4 +74,23 @@
 .tooltipContent {
   max-width: 200px;
   word-wrap: break-word;
+}
+
+.termsGroup {
+  margin-top: 16px;
+}
+
+.boldLink {
+  font-weight: bold;
+}
+
+.errorMessage {
+  display: none;
+  color: #cc0033;
+  font-size: 12px;
+}
+
+.error .errorMessage {
+  display: block; 
+  margin-bottom: -2em;
 }

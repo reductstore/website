@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
-import { Link } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
 import styles from './styles.module.css';
 import { FaQuestionCircle } from "react-icons/fa";
+import RenderButtonLink from '../RenderButtonLink';
+import Link from '@docusaurus/Link';
 
 interface Category {
   title: string;
@@ -36,6 +37,15 @@ const PricingPlan: React.FC<PricingPlanProps> = ({
   isHighlight,
 }) => {
   const planId = title.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '');
+  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(false);
+  const handleTermsChange = (e) => {
+    setIsTermsAccepted(e.target.checked);
+    setButtonClicked(false);
+  };
+  const handleButtonClick = () => {
+    setButtonClicked(true);
+  };
   return (
     <div className={clsx(styles.plan, { [styles.highlight]: isHighlight })}>
       <div className={styles.planCard}>
@@ -97,14 +107,26 @@ const PricingPlan: React.FC<PricingPlanProps> = ({
           ))}
         </div>
         <div className="card__footer">
-          <Link to={buttonUrl} className={clsx("button button--lg button--block",
-            {
-              "button--primary": isHighlight,
-              "button--secondary": !isHighlight,
-            }
-          )}>
-            {buttonLabel}
-          </Link>
+          <RenderButtonLink
+            buttonUrl={buttonUrl}
+            buttonLabel={buttonLabel}
+            isHighlight={isHighlight}
+            disabled={!isTermsAccepted}
+            onClick={handleButtonClick}
+          />
+          <div className={clsx(styles.termsGroup, { [styles.error]: buttonClicked && !isTermsAccepted })}>
+            <input
+              type="checkbox"
+              id={`${planId}-checkbox`}
+              name="termsAndConditions"
+              checked={isTermsAccepted}
+              onChange={handleTermsChange}
+            />
+            <label htmlFor={`${planId}-checkbox`}>
+              I agree to the <Link to="/terms" className={styles.boldLink}>Terms and Conditions</Link>
+            </label>
+            <div className={styles.errorMessage}>Please accept the Terms and Conditions to proceed.</div>
+          </div>
         </div>
       </div>
     </div>

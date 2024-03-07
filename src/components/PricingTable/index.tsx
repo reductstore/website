@@ -1,10 +1,21 @@
 import React from "react";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 import PricingPlan from "./PricingPlan";
 import { FaCheckCircle } from "react-icons/fa";
 
+interface PaymentLinks {
+  standard: string;
+  premium: string;
+  iot: string;
+}
+
 export default function PricingTable() {
+  const { siteConfig } = useDocusaurusContext();
+  const { themeConfig } = siteConfig;
+  const paymentLinks = themeConfig.paymentLinks as PaymentLinks;
+
   const checkedIcon = <FaCheckCircle color="green" size="1.2em" />;
   return (
     <section>
@@ -37,7 +48,7 @@ export default function PricingTable() {
             { title: "Long Term Release Support", description: "1 year" },
             { title: "Architecture Review", description: "-" }
           ]}
-          buttonUrl="/contact"
+          buttonUrl={paymentLinks.standard}
           buttonLabel="Choose Standard"
           isHighlight={false}
         />
@@ -53,7 +64,7 @@ export default function PricingTable() {
             { title: "Long Term Release Support", description: "3 years" },
             { title: "Architecture Review", description: checkedIcon }
           ]}
-          buttonUrl="/contact"
+          buttonUrl={paymentLinks.premium}
           buttonLabel="Choose Premium"
           isHighlight={true}
         />
@@ -69,7 +80,7 @@ export default function PricingTable() {
             { title: "Long Term Release Support", description: "1 year" },
             { title: "Architecture Review", description: checkedIcon }
           ]}
-          buttonUrl="/contact"
+          buttonUrl={paymentLinks.iot}
           buttonLabel="Choose IoT"
           isHighlight={false}
         />
