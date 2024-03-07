@@ -84,6 +84,13 @@ const config = {
         exclude: [".azurestaticapps.net"],
       },
 
+      // Stripe integration
+      paymentLinks: {
+        standard: "https://buy.stripe.com/4gwdTF9un87r1uo6oq",
+        premium: "https://buy.stripe.com/3csaHtgWP0EZ7SM003",
+        iot: "https://buy.stripe.com/4gw02P6ib2N71uo6os",
+      },
+
       // Declare some <meta> tags
       metadata: [
         {
