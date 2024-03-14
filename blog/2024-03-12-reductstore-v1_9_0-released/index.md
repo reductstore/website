@@ -20,7 +20,7 @@ This release, version 1.9.0, introduces several key improvements and features to
 
 ### Disk Space Management and Optimization in ReductStore
 
-ReductStore ensures that you don't exceed your disk space with the FIFO bucket quota. It removes old data when the quota is reached. If it's not possible to free up enough disk space for incoming data, the system rejects the write request. To perform efficiently, it calculates disk usage at startup. This calculation can be slow for large amounts of data, like hundreds of terabytes. However, it has now been significantly optimized and parallelized.
+ReductStore ensures that you don't exceed your disk space with the FIFO bucket quota. It removes old data when the quota is reached. If it's not possible to free up enough disk space for incoming data, the system rejects the write request. To keep the quota efficiently, it calculates disk usage at startup. This calculation can be slow for large amounts of data, like hundreds of terabytes. However, it has now been significantly optimized and parallelized.
 
 ### Web Console with Replication Support
 
@@ -32,7 +32,7 @@ Diagnostics will be particularly useful, as they can help identify hard-to-spot 
 
 ### HTTP API 1.9 with License Information
 
-ReductStore is available under the **[BUSL-1.1](https://github.com/reductstore/reductstore/blob/main/LICENSE)** license, and we freely distribute the source code. However, companies with capital exceeding 2M $ must purchase a **[commercial license](https://www.reduct.store/pricing)** for production use.
+ReductStore is available under the **[BUSL-1.1](https://github.com/reductstore/reductstore/blob/main/LICENSE)** license, and we freely distribute the source code. However, companies with capital exceeding 2M USD must purchase a **[commercial license](https://www.reduct.store/pricing)** for production use.
 
 Customers receive a license key in a text file to be specified in the database **[configuration](https://www.reduct.store/docs/next/configuration#settings)**. After this, the ReductStore instance provides license information in logs and via its HTTP API. This information can be used when requesting commercial support.
 
