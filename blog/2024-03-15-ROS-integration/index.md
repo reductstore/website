@@ -51,7 +51,7 @@ Integrating ReductStore with ROS provides many benefits for robotic applications
 ## Example to Capture and Store Raw Camera Images
 To capture and store raw camera images in a ROS-based system, you need to create a node that subscribes to the image topic, processes the image, and stores it in ReductStore.
 
-You can use the [**reduct-ros-example**](<https://github.com/reductstore/reduct-ros-example>) as a guideline. This example demonstrates how to subscribe to a ROS topic, such as "/image\_raw", serialize the message in binary format, and store it in a bucket called "ros-bucket" under the entry "image-raw".
+You can use the [**reduct-ros-example**](<https://github.com/reductstore/reduct-ros-example>) as a guideline. This example demonstrates how to subscribe to a ROS topic, such as "/image\_raw", serialize the message in binary format, and store it in a bucket called "ros-bucket" under the entry "image".
 
 ### Setting Up Your Node: Integrating ReductStore with a ROS Client Instance
 To set up your node for integrating ReductStore with a ROS client instance, you will need to create a custom ROS 2 Node that listens to image messages and uses ReductStore client for data storage.
@@ -121,10 +121,28 @@ Serialization converts the ROS message format into a simpler binary representati
 Here's an example code snippet demonstrating how to handle images in callbacks for storing them in ReductStore:
 
 ```python
-from rclpy.serialization import serialize_message
-
 class ImageListener(Node):
     # ... [previous parts of ImageListener class] ...
+
+    @staticmethod
+    def get_timestamp(msg: Image) -> int:
+        """
+        Extract the timestamp from a ROS message.
+
+        :param msg: The ROS message.
+        :return: The timestamp in microseconds.
+        """
+        return int(msg.header.stamp.sec * 1e6 + msg.header.stamp.nanosec / 1e3)
+    
+    @staticmethod
+    def serialize_message(msg: Image) -> bytes:
+        """
+        Serialize a ROS message to bytes.
+
+        :param msg: The ROS message.
+        :return: The serialized message.
+        """
+        return bytes(msg.data)
 
     def image_callback(self, msg: Image) -> None:
         """
@@ -133,12 +151,10 @@ class ImageListener(Node):
         This callback is triggered by ROS message processing. It schedules
         the image storage coroutine to be executed in the asyncio event loop.
         """
-        self.get_logger().info("Received an image")
+        self.get_logger().info(f'Received image, storing to database')
         timestamp = self.get_timestamp(msg)
-        image_data = serialize_message(msg)
-        asyncio.run_coroutine_threadsafe(
-            self.store_data(timestamp, image_data), self.loop
-        )
+        binary_data = self.serialize_message(msg)
+        asyncio.run_coroutine_threadsafe(self.store_data(timestamp, binary_data), self.loop)
 ```
 
 In this context, `serialize_message` is used to convert the `Image` message object into a byte stream that can subsequently be passed along for storage.
@@ -165,6 +181,16 @@ With these considerations in mind, here's how you can define the `store_data` me
 class ImageListener(Node):
     # ... [previous parts of ImageListener class] ...
 
+    @staticmethod
+    def display_timestamp(timestamp: int) -> str:
+        """
+        Format a timestamp for human-readable display.
+
+        :param timestamp: The timestamp in microseconds.
+        :return: The formatted timestamp string.
+        """
+        return datetime.fromtimestamp(timestamp / 1e6).isoformat()
+
     async def store_data(self, timestamp: int, data: bytes) -> None:
         """
         Store unstructured data in the Reduct bucket.
@@ -174,16 +200,84 @@ class ImageListener(Node):
         """
         if not self.bucket:
             await self.init_bucket()
-        readable_timestamp = self.format_timestamp(timestamp)
-        self.get_logger().info(f"Storing data at {readable_timestamp}")
-        await self.bucket.write("image-raw", data, timestamp)
+
+        self.get_logger().info(f"Storing data at {self.display_timestamp(timestamp)}")
+        await self.bucket.write("image", data, timestamp)
 ```
 
-When the `store_data` method is called, it first checks if the bucket has been initialized. If not, it calls the `init_bucket` method to create the bucket. Then, it writes the serialized data to the bucket entry "image-raw" with the provided timestamp. 
+When the `store_data` method is called, it first checks if the bucket has been initialized. If not, it calls the `init_bucket` method to create the bucket. Then, it writes the serialized data to the bucket entry "image" with the provided timestamp. 
 
 As you can see, the `store_data` method is designed to be non-blocking, ensuring that the main thread can continue processing other tasks without waiting for the data to be stored.
 
 <!-- -->
+
+## Testing the Image Storage System
+
+To test the image storage system, you can run the ROS 2 node and publish image messages to the `/image_raw` topic. You can use the `usb_cam` package to capture images from a USB camera and publish them to the `/image_raw` topic. 
+
+To install the `usb_cam` package, you can use the following command:
+
+```bash
+sudo apt-get install ros-<ros2-distro>-usb-cam
+```
+
+Replace `<ros2-distro>` with the ROS 2 distribution you are using, such as `humble` or `iron`. 
+
+Our custom ROS 2 node directly stores the binary data from the `Image` message to ReductStore. This means that we can control the format of the images we store by configuring the `usb_cam` package to publish images in the desired format.
+
+MotionJPEG (MJPEG) is a common format for video compression and is often used for video streaming. If your camera supports MJPEG, you can set the `pixel_format` parameter to `raw_mjpeg` to publish JPEG images.
+
+Here's an example of how to do this with a config file `usb_cam_params.yaml`:
+
+```yaml
+usb_cam:
+  ros__parameters:
+    video_device: "/dev/video0"
+    image_width: 640
+    image_height: 480
+    pixel_format: "raw_mjpeg"
+```
+
+After configuring the `usb_cam` package, you can run the `usb_cam` node to start capturing images and publishing them to the `/image_raw` topic.
+
+```bash
+ros2 run usb_cam usb_cam_node_exe --ros-args --params-file ./usb_cam_params.yaml
+```
+
+Once the `usb_cam` node is running, you can start the custom ROS 2 node that listens to the `/image_raw` topic and stores the images in ReductStore.
+
+```bash
+ros2 run reduct_camera capture_and_store
+```
+
+The `capture_and_store` node will start listening to the `/image_raw` topic and store the images in ReductStore as they are received.
+
+
+### Use ReductStore CLI to Inspect Stored Images
+
+First of all, you need to install the ReductStore CLI. You can find the installation instructions [**here**](<https://cli.reduct.store/en/latest/>) and create an alias for the URL of your ReductStore instance.
+
+Once you have the ReductStore CLI installed, you can create an alias for the URL of your ReductStore instance using the `rcli alias add` command. For example:
+
+```bash
+rcli alias add -L  https://play.reduct.store play
+```
+
+You can then use the `rcli` command to inspect the stored images. For instance, to export the image data from the `ros-bucket` bucket to a local directory, you can use the following command:
+
+```bash
+rcli export folder --ext jpeg play/ros-bucket ./exported-data
+```
+
+This command exports all the image data from the `ros-bucket` bucket to the `./exported-data` with the JPEG file extension.
+
+## Best Practices
+
+When integrating ReductStore with ROS-based computer vision applications, consider the following best practices:
+
+- Create a ReductStore bucket with a **[FIFO](https://www.reduct.store/docs/how-does-it-work#bucket)** quota to prevent disk overwriting in the future.
+- Use token authentication to protect your data. You can generate an access token using either the **[Web Console](https://github.com/reductstore/web-console)** or the **[CLI client](https://cli.reduct.store/)**.
+- Use **[ReductCLI](http://cli.reduct.store/)** for data replication or backup purposes.
 
 ## Conclusion
 In conclusion, this blog post has demonstrated how to capture and store raw camera images from a ROS topic in ReductStore. The provided code snippets serve as a practical guide for setting up such a system, highlighting the importance of non-blocking operations and proper serialization to maintain system performance.
