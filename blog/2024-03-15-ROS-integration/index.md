@@ -18,43 +18,43 @@ Addressing this challenge, this blog post will guide you through setting up ROS 
 
 <!--truncate-->
 
-## ROS 2 Distributions
+## ROS 2 distributions
 To install ROS 2, you'll need to select a distribution that aligns with your project requirements and system compatibility. As of now, multiple distributions are available for ROS 2 [**here**](<https://docs.ros.org/en/foxy/Releases.html>). 
 
 Among them, two distributions are currently actively maintained :
 
-- **Iron Irwini** (Release date: May 23rd, 2023; End of life: November 2024)
+- **Iron Irwini** (`iron`) (Release date: May 23rd, 2023; End of life: November 2024)
 
-- **Humble Hawksbill** (Release date: May 23rd, 2022; End of life: May 2027)
+- **Humble Hawksbill** (`humble`) (Release date: May 23rd, 2022; End of life: May 2027)
 
 
 <!-- -->
 
-We recommend the "Humble Hawksbill" distribution for its long-term support until May 2027. This is the eighth release of ROS 2 and caters to various platforms including Ubuntu Linux, Windows, RHEL (Red Hat Enterprise Linux), or macOS.
+We recommend the `humble` distribution for its long-term support until May 2027. This is the eighth release of ROS 2 and caters to various platforms including Ubuntu Linux, Windows, RHEL (Red Hat Enterprise Linux), or macOS.
 
 To install the Humble Hawksbill distribution on your preferred operating system, follow the instructions provided in their [**installation guide**](<https://docs.ros.org/en/humble/Installation.html>). The installation process involves a series of commands specific to each platform and may require certain prerequisites like Python or C++ dependencies depending on your OS.
 
-## Understanding the Advantages of Using ReductStore with ROS
-Integrating ReductStore with ROS provides many benefits for robotic applications.
+## Understanding the advantages of using ReductStore with ROS
+Integrating ReductStore with ROS provides many benefits for robotic applications:
 
 - **Best performance**: ReductStore's time-series design is tailored to the sequential nature of robotic applications and optimized for unstructured data, such as images, audio, and sensor readings.
 
 - **Real-time data management**: ReductStore provides real-time First In First Out (FIFO) quota management, which is critical for maintaining a balance between storage space and continuous data flow on edge devices.
 
-- **Metadata association**: It supports the association of labels or AI-generated analytics results directly with each stored image, enriching the dataset and facilitating subsequent processing or machine learning tasks.
+- **Metadata association**: It supports the association of labels or AI-generated analytics results directly with each stored record, enriching the dataset and facilitating subsequent processing or machine learning tasks.
 
-- **Replication**: ReductStore offers the ability to replicate data across a distributed network based on user-defined filters, to copy important data to a central server or cloud storage for further analysis.
+- **Replication**: ReductStore offers the ability to replicate data across a distributed network based on user-defined filters. For instance, to copy important data to a central server or cloud storage for further analysis.
 
 
 <!-- -->
 
-## Example to Capture and Store Raw Camera Images
-To capture and store raw camera images in a ROS-based system, you need to create a node that subscribes to the image topic, processes the image, and stores it in ReductStore.
+## Example to capture and store raw camera images
+To capture and store raw camera images with ROS 2, you need to create a node that subscribes to an image topic, processes the image, and stores it in ReductStore.
 
-You can use the [**reduct-ros-example**](<https://github.com/reductstore/reduct-ros-example>) as a guideline. This example demonstrates how to subscribe to a ROS topic, such as "/image\_raw", serialize the message in binary format, and store it in a bucket called "ros-bucket" under the entry "image".
+You can use the [**reduct-ros-example**](<https://github.com/reductstore/reduct-ros-example>) as a guideline. This example demonstrates how to subscribe to a ROS topic, such as `/image_raw`, serialize the message in binary format, and store it in a bucket called `ros-bucket` under the entry `image`.
 
-### Setting Up Your Node: Integrating ReductStore with a ROS Client Instance
-To set up your node for integrating ReductStore with a ROS client instance, you will need to create a custom ROS 2 Node that listens to image messages and uses ReductStore client for data storage.
+### Create a custom ROS 2 Node
+To set up your node for integrating ReductStore, you will need to create a custom ROS 2 Node that listens to image messages and uses ReductStore client for data storage.
 
 Below is an example demonstrating this integration within a Python class:
 
@@ -86,14 +86,14 @@ In this example `ImageListener` is a subclass of `Node`, which is part of ROS 2'
 
 In this callback function, each received frame is stored in the designated bucket in ReductStore using Python's built-in `asyncio` module, more on this later.
 
-### Initialize a New ReductStore Bucket
+### Initialize a new ReductStore bucket
 This process involves setting up configuration parameters such as the bucket name and its storage quota settings.
 
-In our example, we create a bucket named "ros-bucket" with a FIFO quota type, which is suitable for making sure that the disk doesn't run out of space.
+In our example, we create a bucket named `ros-bucket` with a FIFO quota type, which is suitable for making sure that the disk doesn't run out of space.
 
 The `exist_ok` parameter ensures that if the bucket already exists, it won't raise an exception but rather reuse the existing one.
 
-Here's how you can define this initialization within our Python class:
+Here's how we can define this initialization within our Python class:
 
 ```python
 from reduct_py import BucketSettings, QuotaType
@@ -111,12 +111,12 @@ class ImageListener(Node):
         )
 ```
 
-This code snippet should be called within your existing `ImageListener` class during the node's initialization or before storing the first image. This ensures that the storage bucket is ready.
+This code snippet should be called within our existing `ImageListener` class during the node's initialization or before storing the first image. This ensures that the storage bucket is ready.
 
-### Handling Images in Callbacks
+### Handling images in callbacks
 When an image message from a ROS topic is received, it triggers the `image_callback` method. This method's role is to serialize the image data and organize its storage without blocking the main thread.
 
-Serialization converts the ROS message format into a simpler binary representation that can be stored or transmitted more easily.
+Serialization converts the ROS message data into a binary format that can be stored in ReductStore. This step is necessary because ReductStore is designed to handle binary data, and the image message is a complex data structure that needs to be converted into a simple byte stream.
 
 Here's an example code snippet demonstrating how to handle images in callbacks for storing them in ReductStore:
 
@@ -163,10 +163,10 @@ Following serialization, an asynchronous coroutine (`store_data`) is scheduled o
 
 This function is particularly useful for integrating asynchronous operations within primarily synchronous ROS 2 callback handlers, ensuring that the processing doesn't block the executor.
 
-### Store Images in a ReductStore Bucket Entry
-The `store_data` method is designed to receive timestamped image data and write it into a specific Reduct bucket. 
+### Store images in a ReductStore bucket entry
+The `store_data` method is designed to receive timestamped image data and write it into a specific ReductStore bucket. 
 
-Here's an explanation of how this method works:
+To store data, we need at least two parameters:
 
 - **Timestamp Parameter**: The `timestamp` argument ensures that each piece of data can be associated with the exact time it was captured.
 
@@ -181,16 +181,6 @@ With these considerations in mind, here's how you can define the `store_data` me
 class ImageListener(Node):
     # ... [previous parts of ImageListener class] ...
 
-    @staticmethod
-    def display_timestamp(timestamp: int) -> str:
-        """
-        Format a timestamp for human-readable display.
-
-        :param timestamp: The timestamp in microseconds.
-        :return: The formatted timestamp string.
-        """
-        return datetime.fromtimestamp(timestamp / 1e6).isoformat()
-
     async def store_data(self, timestamp: int, data: bytes) -> None:
         """
         Store unstructured data in the Reduct bucket.
@@ -201,18 +191,19 @@ class ImageListener(Node):
         if not self.bucket:
             await self.init_bucket()
 
-        self.get_logger().info(f"Storing data at {self.display_timestamp(timestamp)}")
         await self.bucket.write("image", data, timestamp)
 ```
 
-When the `store_data` method is called, it first checks if the bucket has been initialized. If not, it calls the `init_bucket` method to create the bucket. Then, it writes the serialized data to the bucket entry "image" with the provided timestamp. 
+When the `store_data` method is called, it first checks if the bucket has been initialized. If not, it calls the `init_bucket` method to create the bucket. Then, it writes the serialized data to the bucket entry `image` with the provided timestamp. 
 
 As you can see, the `store_data` method is designed to be non-blocking, ensuring that the main thread can continue processing other tasks without waiting for the data to be stored.
 
 <!-- -->
 
-## Testing the Image Storage System
-To test the image storage system, you can run the ROS 2 node and publish image messages to the `/image_raw` topic. You can use the `usb_cam` package to capture images from a USB camera and publish them to the `/image_raw` topic. 
+## Testing the image storage system
+To test the image storage system, you can run the ROS 2 node and publish image messages to the `/image_raw` topic. 
+
+For example, we can use the `usb_cam` package to capture images from a USB camera (such as a web camera) and publish them to the `/image_raw` topic. 
 
 To install the `usb_cam` package, you can use the following command:
 
@@ -224,9 +215,9 @@ Replace `<ros2-distro>` with the ROS 2 distribution you are using, such as `humb
 
 Our custom ROS 2 node directly stores the binary data from the `Image` message to ReductStore. This means that we can control the format of the images we store by configuring the `usb_cam` package to publish images in the desired format.
 
-MotionJPEG (MJPEG) is a common format for video compression and is often used for video streaming. If your camera supports MJPEG, you can set the `pixel_format` parameter to `raw_mjpeg` to publish JPEG images.
+MotionJPEG (MJPEG) is a common format for video compression and is often used for video streaming. This format compresses each frame of video as a separate JPEG image, which can be useful for easily storing and processing images.
 
-Here's an example of how to do this with a config file `usb_cam_params.yaml`:
+If your camera supports MJPEG, you can set the `pixel_format` parameter to `raw_mjpeg` to publish JPEG images Here's an example of how to do this with a config file `usb_cam_params.yaml`:
 
 ```yaml
 usb_cam:
@@ -237,13 +228,13 @@ usb_cam:
     pixel_format: "raw_mjpeg"
 ```
 
-After configuring the `usb_cam` package, you can run the `usb_cam` node to start capturing images and publishing them to the `/image_raw` topic.
+We can run the `usb_cam` node to start capturing images and publishing them to the `/image_raw` topic using the following command:
 
 ```bash
 ros2 run usb_cam usb_cam_node_exe --ros-args --params-file ./usb_cam_params.yaml
 ```
 
-Once the `usb_cam` node is running, you can start the custom ROS 2 node that listens to the `/image_raw` topic and stores the images in ReductStore.
+Once the `usb_cam` node is running, we can start the custom ROS 2 node that listens to the `/image_raw` topic and stores the images in ReductStore.
 
 ```bash
 ros2 run reduct_camera capture_and_store
@@ -252,10 +243,10 @@ ros2 run reduct_camera capture_and_store
 The `capture_and_store` node will start listening to the `/image_raw` topic and store the images in ReductStore as they are received.
 
 
-### Use ReductStore CLI to Inspect Stored Images
-First of all, you need to install the ReductStore CLI. You can find the installation instructions [**here**](<https://cli.reduct.store/en/latest/>) and create an alias for the URL of your ReductStore instance.
+### Use ReductStore CLI to inspect stored images
+To get started, you need to install the ReductStore CLI by following the instructions [**here**](<https://cli.reduct.store/en/latest/>).
 
-Once you have the ReductStore CLI installed, you can create an alias for the URL of your ReductStore instance using the `rcli alias add` command. For example:
+Once installed, you can create an alias for the URL of your ReductStore instance using the `rcli alias add` command. For example:
 
 ```bash
 rcli alias add -L  https://play.reduct.store play
@@ -267,9 +258,9 @@ You can then use the `rcli` command to inspect the stored images. For instance, 
 rcli export folder --ext jpeg play/ros-bucket ./exported-data
 ```
 
-This command exports all the image data from the `ros-bucket` bucket to the `./exported-data` with the JPEG file extension.
+This command exports all images from the `ros-bucket` bucket to the `./exported-data` folder with the JPEG file extension.
 
-## Best Practices
+## Best practices
 
 There are several best practices to consider when integrating ReductStore. Here are a few to keep in mind:
 
@@ -277,10 +268,10 @@ There are several best practices to consider when integrating ReductStore. Here 
 - Serialize data before storing it in ReductStore in a cross-platform binary format to ensure compatibility with different systems and programming languages.
 - Create a ReductStore bucket with a [**FIFO**](<https://www.reduct.store/docs/how-does-it-work#bucket>) quota to prevent disk overwriting in the future.
 - Use token authentication to protect your data. You can generate an access token using either the [**Web Console**](<https://github.com/reductstore/web-console>) or the [**CLI client**](<https://cli.reduct.store/>).
-- Use [**ReductCLI**](<http://cli.reduct.store/>) for data replication or backup purposes.
+- Use the [**Web Console**](<https://github.com/reductstore/web-console>) or [**ReductCLI**](<http://cli.reduct.store/>) for data replication or backup purposes.
 
 ## Conclusion
-In conclusion, this blog post has demonstrated how to capture and store raw camera images from a ROS topic in ReductStore. The provided code snippets serve as a practical guide for setting up such a system, highlighting the importance of non-blocking operations and proper serialization to maintain system performance.
+In conclusion, this blog post has demonstrated how to capture and store raw camera images from a ROS topic in ReductStore. The provided code snippets serve as a practical guide for setting up such a system, highlighting the importance of non-blocking operations and proper serialization to maintain system performance and compatibility.
 
 Using [**ReductStore**](<https://reduct.store/>) is straightforward to deploy and provides a robust solution for managing large volumes of image data in real time. The FIFO quota management, metadata association, and replication features make it an ideal choice for managing unstructured data in ROS-based computer vision applications.
 
