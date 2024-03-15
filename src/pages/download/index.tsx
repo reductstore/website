@@ -16,7 +16,7 @@ export default function DownloadPage(): JSX.Element {
       <main>
         <SimpleHeader pageTitle="Download ReductStore" />
         <div className="container">
-          <InstallReductStore version="v1.9.1" />
+          <InstallReductStore version="v1.9.2" />
           <hr />
           <ClientSDKs />
           <hr />
