@@ -212,7 +212,6 @@ As you can see, the `store_data` method is designed to be non-blocking, ensuring
 <!-- -->
 
 ## Testing the Image Storage System
-
 To test the image storage system, you can run the ROS 2 node and publish image messages to the `/image_raw` topic. You can use the `usb_cam` package to capture images from a USB camera and publish them to the `/image_raw` topic. 
 
 To install the `usb_cam` package, you can use the following command:
@@ -254,7 +253,6 @@ The `capture_and_store` node will start listening to the `/image_raw` topic and 
 
 
 ### Use ReductStore CLI to Inspect Stored Images
-
 First of all, you need to install the ReductStore CLI. You can find the installation instructions [**here**](<https://cli.reduct.store/en/latest/>) and create an alias for the URL of your ReductStore instance.
 
 Once you have the ReductStore CLI installed, you can create an alias for the URL of your ReductStore instance using the `rcli alias add` command. For example:
@@ -273,11 +271,13 @@ This command exports all the image data from the `ros-bucket` bucket to the `./e
 
 ## Best Practices
 
-When integrating ReductStore with ROS-based computer vision applications, consider the following best practices:
+There are several best practices to consider when integrating ReductStore. Here are a few to keep in mind:
 
-- Create a ReductStore bucket with a **[FIFO](https://www.reduct.store/docs/how-does-it-work#bucket)** quota to prevent disk overwriting in the future.
-- Use token authentication to protect your data. You can generate an access token using either the **[Web Console](https://github.com/reductstore/web-console)** or the **[CLI client](https://cli.reduct.store/)**.
-- Use **[ReductCLI](http://cli.reduct.store/)** for data replication or backup purposes.
+- Use non-blocking operations to avoid blocking the main thread of the ROS 2 node. This ensures that the node can continue processing other tasks while waiting for data to be stored.
+- Serialize data before storing it in ReductStore in a cross-platform binary format to ensure compatibility with different systems and programming languages.
+- Create a ReductStore bucket with a [**FIFO**](<https://www.reduct.store/docs/how-does-it-work#bucket>) quota to prevent disk overwriting in the future.
+- Use token authentication to protect your data. You can generate an access token using either the [**Web Console**](<https://github.com/reductstore/web-console>) or the [**CLI client**](<https://cli.reduct.store/>).
+- Use [**ReductCLI**](<http://cli.reduct.store/>) for data replication or backup purposes.
 
 ## Conclusion
 In conclusion, this blog post has demonstrated how to capture and store raw camera images from a ROS topic in ReductStore. The provided code snippets serve as a practical guide for setting up such a system, highlighting the importance of non-blocking operations and proper serialization to maintain system performance.
