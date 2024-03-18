@@ -5,7 +5,7 @@ authors: anthony
 tags: [tutorials, ros, computer-vision]
 slug: tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision
 date: 2024-03-16
-image: ./img/ros-reductstore-example.webp
+image: ./img/social-card.jpg
 ---
 
 ![ROS with ReductStore](./img/ros-reductstore-example.webp)

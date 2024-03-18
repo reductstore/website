@@ -26,7 +26,7 @@ ReductStore ensures that you don't exceed your disk space with the FIFO bucket q
 
 We introduced data replication in **[the previous release](https://www.reduct.store/blog/news/reductstore-8-released)**. Now, you can manage this feature in the Web Console:
 
-![Web Console with Replications](img/web-console.png)
+![Web Console with Replications](img/web-console.webp)
 
 Diagnostics will be particularly useful, as they can help identify hard-to-spot errors in your settings.
 
