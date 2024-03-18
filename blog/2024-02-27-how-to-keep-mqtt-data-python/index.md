@@ -8,7 +8,7 @@ date: 2024-02-27
 image: ./img/snippet.png
 ---
 
-![MQTT+ReductStore in Python](./img/snippet.png)
+![MQTT+ReductStore in Python](./img/snippet.webp)
 
 
 The **[MQTT protocol](https://mqtt.org/)** is a simple way to connect different sources of data to applications, which makes it very popular for IoT (Internet of Things) applications. Some MQTT brokers can save messages for a while, even when the MQTT client is offline. However, sometimes, you need to keep this data for a longer time. In those cases, it's a good idea to use a time series database.
