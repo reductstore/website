@@ -9,11 +9,11 @@ const LogoImg = require("@site/static/img/whitepaper/whitepaper.webp").default;
 export default function ReductAI(): JSX.Element {
   return (
     <Layout
-      title="Reduct AI: Pioneering AI Model Deployment on IoT Edge"
-      description="Dive into our white paper on Reduct AI, detailing our approache for building and deploying AI models in IoT edge environments."
+      title="White Paper: Pioneering AI Model Deployment on IoT Edge"
+      description="Dive into our white paper, detailing our approache for building and deploying AI models in IoT edge environments."
     >
       <main>
-        <SimpleHeader pageTitle="Reduct AI" />
+        <SimpleHeader pageTitle="White Paper" />
         <div className="container">
           <div className="row">
             <div className="col col--6">

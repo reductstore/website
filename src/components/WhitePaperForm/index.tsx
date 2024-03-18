@@ -78,19 +78,23 @@ export default function WhitePaperForm() {
 
         <div className="col">
           <button
-            className={"row button button--primary"}
+            className={"row button button--primary button--lg"}
             type="submit"
             disabled={state.submitting}
           >
-            DOWNLOAD
+            Download
           </button>
-          <Link
-            className={clsx("row", styles.privacyPolicy)}
-            to="/privacy"
-            target="_blank"
-          >
-            Privacy Policy
-          </Link>
+          <div className={clsx("row", styles.privacyPolicy)} >
+            <p>
+              We'll never share your email with anyone else. See our&nbsp;
+            </p>
+            <Link
+              to="/privacy"
+              target="_blank"
+            >
+              Privacy Policy
+            </Link>.
+          </div>
         </div>
       </form>
     </>
