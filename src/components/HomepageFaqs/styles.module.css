@@ -1,0 +1,9 @@
+.section {
+  margin-top: var(--reduct-section-space);
+  margin-bottom: var(--reduct-section-space);
+}
+
+.sectionTitle {
+  margin-bottom: 2rem;
+  text-align: center;
+}
