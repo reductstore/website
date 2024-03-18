@@ -45,6 +45,11 @@
 
 .buttons :last-of-type {
   margin-left: 1rem;
+  color: white !important;
+}
+
+.buttons :last-of-type:hover {
+  background-color: var(--ifm-color-primary-lighter);
 }
 
 .indexCtasGitHubButtonWrapper {

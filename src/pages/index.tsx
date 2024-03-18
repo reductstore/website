@@ -11,6 +11,8 @@ import HomepageSDKs from "../components/HomepageSDKs";
 import HomepageWebConsole from "../components/HomepageWebConsole";
 import HomepageCLI from "../components/HomepageCLI";
 import HomepageCTA from "../components/HomepageCTA";
+import HomepageBenefits from "../components/HomepageBenefits";
+import HomepageFaqs from "../components/HomepageFaqs";
 
 const LogoImg = require("@site/static/img/logo.webp").default;
 
@@ -29,7 +31,13 @@ function HomepageHeader() {
             className="button button--secondary button--lg"
             to="/docs/getting-started"
           >
-            Install ReductStore in Seconds ⏱️
+            Get Started
+          </Link>
+          <Link
+            className="button  button--outline button--secondary button--lg"
+            to="/whitepaper"
+          >
+            White Paper
           </Link>
           <span className={styles.indexCtasGitHubButtonWrapper}>
             <iframe
@@ -56,15 +64,19 @@ export default function Home(): JSX.Element {
       <HomepageHeader />
       <main>
         <div className="container">
-          <HomepageFeatures />
+          <HomepageBenefits />
           <hr />
           <HomepageTestimonials />
           <hr />
+          <HomepageFeatures />
+          <hr />
+          <HomepageFaqs />
+          {/* <hr />
           <HomepageSDKs />
           <hr />
           <HomepageWebConsole />
           <hr />
-          <HomepageCLI />
+          <HomepageCLI /> */}
           <hr />
           <HomepageCTA />
         </div>
