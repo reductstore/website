@@ -1,4 +1,5 @@
-.ctaSection {
+.section {
   margin-top: var(--reduct-section-space);
   margin-bottom: var(--reduct-section-space);
+  text-align: center;
 }
