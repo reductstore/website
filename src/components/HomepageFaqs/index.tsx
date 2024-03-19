@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./styles.module.css";
 import Faq from "../Faq";
-import SimpleHeader from "../SimpleHeader";
 import HomepageSDKs from "../HomepageSDKs";
 import HomepageCLI from "../HomepageCLI";
 import HomepageWebConsole from "../HomepageWebConsole";
@@ -38,7 +37,7 @@ const landingFaqs = [
           Yes, ReductStore includes several customizable features for managing data, one of which is the First In, First Out (FIFO) approach.
           This method is specifically designed to handle data based on volume intervals, ensuring that as new entries are added, older ones are systematically removed to prevent disk space issues.
           Additionally, AI labels can be attached to blobs as metadata, helping in the identification and replication of key data, thus ensuring vital information is retained.
-          These functionalities are all accessible through the ReductStore CLI, making the management of data retention and replication straightforward and effective.
+          These functionalities are all accessible through the <strong><Link to="https://cli.reduct.store">ReductStore CLI</Link></strong>, making the management of data retention and replication straightforward and effective.
         </p>
         <HomepageCLI />
       </>,
@@ -49,7 +48,7 @@ const landingFaqs = [
       <>
         <p>
 
-          Yes, ReductStore ensures compatibility with a variety of programming languages and data formats via its advanced HTTP(S) API.
+          Yes, ReductStore ensures compatibility with a variety of programming languages via its HTTP(S) API.
           Being a blob storage system, it supports the storage of all types of unstructured data in byte form, making it straightforward to incorporate into your existing setups and manage a wide range of data.
         </p>
         <HomepageSDKs />
@@ -60,7 +59,7 @@ const landingFaqs = [
     answer:
       <>
         <p>
-          Yes, ReductStore is dedicated to ensuring data compliance, particularly for sensitive or regulated industries, and is well-suited for both edge computing and on-premise environments.
+          ReductStore is dedicated to ensuring data compliance, particularly for sensitive or regulated industries, and is well-suited for both edge computing and on-premise environments.
           It provides strict retention policy, token-based authorization for secure access, and data replication capabilities to facilitate disaster recovery.
           These features work together to align with industry standards and meet regulatory demands, ensuring the protection and integrity of your data.
         </p>
@@ -72,13 +71,11 @@ const landingFaqs = [
     answer:
       <>
         <p>
-
-          Yes, ReductStore's licensing is structured to cater to a diverse range of needs, with various tiers available to match your project's scale and requirements.
-          Detailed information on each plan can be found on our <strong><Link to="/pricing">Pricing</Link></strong> page, offering clarity on what each tier includes to help you make an informed decision.
-          Our licensing model includes options for startups, small to large enterprises, and IoT environments, ensuring flexibility and scalability.
-          Additionally, our software is distributed under the Business Source License (BUSL), a balance between open source and commercial software licenses.
-          This approach allows users to benefit from the collaborative and innovative nature of open source while providing a sustainable model for ongoing development and support.
-          For a deeper understanding of the BUSL and its implications, please refer to our license documentation on <strong><Link to="https://github.com/reductstore/reductstore/blob/main/LICENSE">GitHub</Link></strong>.
+          ReductStore offers a flexible licensing model designed to meet the needs of various users, from startups to large enterprises.
+          Our tiered pricing structure allows you to choose a plan that best suits your project's scale and complexity.
+          You can find detailed breakdowns of what each tier offers on our <strong><Link to="/pricing">Pricing</Link></strong> page, aiding in your decision-making process.
+          We employ the Business Source License (BUSL) to provide a middle ground between the collaborative spirit of open source and the practical needs of commercial ventures.
+          For more insights into our licensing, please visit our <strong><Link to="https://github.com/reductstore/reductstore/blob/main/LICENSE">GitHub License page</Link></strong>.
         </p>
       </>,
   },
@@ -87,7 +84,7 @@ const landingFaqs = [
     answer:
       <>
         <p>
-          Yes, ReductStore provides a variety of support options for developers and administrators, tailored to the plan selected on our <strong><Link to="/pricing">Pricing</Link></strong> page.
+          ReductStore provides a variety of support options for developers and administrators, tailored to the plan selected on our <strong><Link to="/pricing">Pricing</Link></strong> page.
           For community-driven assistance and sharing of insights, you can join us on <strong><Link to="https://discord.com/invite/BWrCncF5EP">Discord</Link></strong> or engage in discussions on <strong><Link to="https://github.com/reductstore/reductstore">GitHub</Link></strong>.
           Our direct support includes email, chat, and video calls, with response times based on the plan selected.
           We also provide long-term release support and offer architecture review services to ensure your infrastructure is perfectly aligned with your operational requirements.
