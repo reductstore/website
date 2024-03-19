@@ -1,8 +1,3 @@
-.homepageSDKs {
-  margin-top: var(--reduct-section-space);
-  margin-bottom: var(--reduct-section-space);
-}
-
 .sdkIcons {
   display: flex;
   justify-content: center;

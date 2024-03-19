@@ -2,30 +2,24 @@ import React from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 import CodeBlock from "@theme/CodeBlock";
-
+// "Are there any customization options for data retention and replication policies?",
 function HomepageCLI() {
   return (
-    <section className={styles.cliSection}>
-      <div className="row" style={{ display: 'flex', alignItems: 'center' }}>
-        <div className={clsx("col col--7 hideOnMobile", styles.cliImage)}>
-          <CodeBlock className="language-bash">{resonseCLI}</CodeBlock>
-        </div>
-        <div className={"col col--5 text--center"}>
-          <h3>CLI Client</h3>
-          <p>
-            You can manage your ReductStore instance and export data from it by
-            using{" "}
-            <strong>
-              <a href="https://github.com/reductstore/web-console">
-                ReducStore CLI client
-              </a>
-            </strong>
-            . The client is cross-platform, written in Python and available as a
-            PIP package.
-          </p>
-        </div>
+    <div className="row" style={{ display: 'flex', alignItems: 'center' }}>
+      <div className={clsx("col col--7", styles.cliImage)}>
+        <CodeBlock className="language-bash">{resonseCLI}</CodeBlock>
       </div>
-    </section>
+      <div className={"col col--5 text--center"}>
+        <p>
+          You can customiza data retention and replication policies using the{" "}
+          <strong>
+            <a href="https://github.com/reductstore/web-console">
+              ReducStore CLI client
+            </a>
+          </strong>.
+        </p>
+      </div>
+    </div>
   );
 }
 

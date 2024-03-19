@@ -1,8 +1,3 @@
-.WebConsoleSection {
-  margin-top: var(--reduct-section-space);
-  margin-bottom: var(--reduct-section-space);
-}
-
 .WebConsoleImage {
   max-width: 90%;
   height: auto;
