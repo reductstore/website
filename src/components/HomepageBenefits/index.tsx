@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  FaLayerGroup,
+  FaProjectDiagram,
   FaHdd,
   FaChartLine,
 } from "react-icons/fa";
@@ -28,19 +28,19 @@ export default function HomepageBenefits() {
     <section className={styles.benefits}>
       <div className="row">
         <Benefits
-          IconComponent={FaLayerGroup}
+          IconComponent={FaProjectDiagram}
           title="Simplify Your Infrastructure"
-          description="Merge blob and TSDB functionalities, reducing the need for multiple data solutions."
+          description="Merge blob and time series functionalities, reducing the need for multiple databases."
         />
         <Benefits
           IconComponent={FaHdd}
-          title="Never Worry About Running Out of Space"
-          description="Automatic data rotation manages space without manual intervention."
+          title="Stay In Control Of Your Data"
+          description="Customize real-time data retention policies and replication strategies."
         />
         <Benefits
           IconComponent={FaChartLine}
-          title="Optimize Time Series Data Management"
-          description="Tailored storage for time-stamped data, improving performance."
+          title="Handle Large Data Volumes"
+          description="Store billions of time-stamped blobs with AI labels and access them with low latency."
         />
       </div>
     </section>

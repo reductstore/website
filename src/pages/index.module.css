@@ -16,19 +16,6 @@
   }
 }
 
-.headerContent {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
-.headerLogo {
-  margin-right: 1rem;
-  width: 50px;
-  margin-bottom: 1rem;
-}
-
 .heroTitle {
   margin-bottom: 1rem;
 }

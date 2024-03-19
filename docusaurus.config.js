@@ -6,7 +6,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "ReducStore",
-  tagline: "The #1 Time-Series Database for Unstructured Data",
+  tagline: "The #1 Time-Series Object Store for AI Data Infrastructure",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here

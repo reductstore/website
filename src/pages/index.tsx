@@ -7,9 +7,6 @@ import HomepageFeatures from "../components/HomepageFeatures";
 
 import styles from "./index.module.css";
 import HomepageTestimonials from "../components/HomepageTestimonials";
-import HomepageSDKs from "../components/HomepageSDKs";
-import HomepageWebConsole from "../components/HomepageWebConsole";
-import HomepageCLI from "../components/HomepageCLI";
 import HomepageCTA from "../components/HomepageCTA";
 import HomepageBenefits from "../components/HomepageBenefits";
 import HomepageFaqs from "../components/HomepageFaqs";
@@ -21,11 +18,14 @@ function HomepageHeader() {
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
-        <div className={styles.headerContent}>
-          <h1 className={clsx("hero__title", styles.heroTitle)}>
-            {siteConfig.tagline}
-          </h1>
-        </div>
+
+        <h1 className={clsx("hero__title", styles.heroTitle)}>
+          {siteConfig.tagline}
+        </h1>
+        <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
+          ReductStore is a high-throughput, time-series object store optimized for edge computing and AI/ML workflows, delivering tailored solutions for managing sequential data efficiently at scale.
+        </p>
+
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
@@ -57,7 +57,7 @@ function HomepageHeader() {
 export default function Home(): JSX.Element {
   return (
     <Layout
-      title="Time-Series Database for Unstructured Data"
+      title="Time-Series Object Store for AI Data Infrastructure"
       description="ReductStore is a time series database designed specifically for storing and managing large amounts of unstructured data. 
       It offers high performance for writing and real-time querying, making it suitable for edge computing, computer vision, and IoT applications."
     >
@@ -71,15 +71,8 @@ export default function Home(): JSX.Element {
           <HomepageFeatures />
           <hr />
           <HomepageFaqs />
-          {/* <hr />
-          <HomepageSDKs />
-          <hr />
-          <HomepageWebConsole />
-          <hr />
-          <HomepageCLI /> */}
-          <hr />
-          <HomepageCTA />
         </div>
+        <HomepageCTA />
       </main>
     </Layout>
   );
