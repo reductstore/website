@@ -2,7 +2,8 @@ import React from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 import CodeBlock from "@theme/CodeBlock";
-// "Are there any customization options for data retention and replication policies?",
+import Link from "@docusaurus/Link";
+
 function HomepageCLI() {
   return (
     <div className="row" style={{ display: 'flex', alignItems: 'center' }}>
@@ -11,11 +12,11 @@ function HomepageCLI() {
       </div>
       <div className={"col col--5 text--center"}>
         <p>
-          You can customiza data retention and replication policies using the{" "}
+          You can customize data retention and replication policies using the{" "}
           <strong>
-            <a href="https://github.com/reductstore/web-console">
+            <Link to="https://cli.reduct.store">
               ReducStore CLI client
-            </a>
+            </Link>
           </strong>.
         </p>
       </div>
