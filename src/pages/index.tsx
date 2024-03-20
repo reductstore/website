@@ -44,7 +44,7 @@ function HomepageHeader() {
           </Link>
           <span className={styles.indexCtasGitHubButtonWrapper}>
             <iframe
-              className={clsx("hideOnMobile", styles.indexCtasGitHubButton)}
+              className={styles.indexCtasGitHubButton}
               src="https://ghbtns.com/github-btn.html?user=reductstore&amp;repo=reductstore&amp;type=star&amp;count=true&amp;size=large"
               width={160}
               height={30}

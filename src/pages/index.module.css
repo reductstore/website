@@ -10,12 +10,6 @@
   overflow: hidden;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
-}
-
 .heroTitle {
   margin-bottom: 1rem;
 }
@@ -41,4 +35,26 @@
 
 .indexCtasGitHubButtonWrapper {
   display: flex;
+}
+
+@media screen and (max-width: 600px) {
+  .heroBanner {
+    padding: 1.6rem;
+  }
+  .heroTitle {
+    font-size: 2rem;
+  }
+  .heroSubTitle {
+    font-size: 1rem;
+  }
+  .buttons {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  .buttons :last-of-type {
+    margin-left: 0;
+    margin-top: 1rem;
+  }
 }
