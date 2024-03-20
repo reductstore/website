@@ -1,5 +1,9 @@
-.cliImage {
+.cliSection {
+  margin-top: var(--reduct-section-space);
+  margin-bottom: var(--reduct-section-space);
+}
 
+.cliImage {
   height: auto;
   margin-bottom: 1rem;
   font-size: 0.9rem;

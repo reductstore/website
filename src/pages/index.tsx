@@ -10,6 +10,9 @@ import HomepageTestimonials from "../components/HomepageTestimonials";
 import HomepageCTA from "../components/HomepageCTA";
 import HomepageBenefits from "../components/HomepageBenefits";
 import HomepageFaqs from "../components/HomepageFaqs";
+import HomepageSDKs from "../components/HomepageSDKs";
+import HomepageWebConsole from "../components/HomepageWebConsole";
+import HomepageCLI from "../components/HomepageCLI";
 
 const LogoImg = require("@site/static/img/logo.webp").default;
 
@@ -69,6 +72,12 @@ export default function Home(): JSX.Element {
           <HomepageTestimonials />
           <hr />
           <HomepageFeatures />
+          <hr />
+          <HomepageSDKs />
+          <hr />
+          <HomepageWebConsole />
+          <hr />
+          <HomepageCLI />
           <hr />
           <HomepageFaqs />
         </div>
