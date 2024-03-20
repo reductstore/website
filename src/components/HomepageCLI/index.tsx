@@ -6,19 +6,22 @@ import Link from "@docusaurus/Link";
 
 function HomepageCLI() {
   return (
-    <div className="row" style={{ display: 'flex', alignItems: 'center' }}>
-      <div className={clsx("col col--7", styles.cliImage)}>
-        <CodeBlock className="language-bash">{resonseCLI}</CodeBlock>
-      </div>
-      <div className={"col col--5 text--center"}>
-        <p>
-          You can customize data retention and replication policies using the{" "}
-          <strong>
-            <Link to="https://cli.reduct.store">
-              ReducStore CLI client
-            </Link>
-          </strong>.
-        </p>
+    <div className={styles.cliSection}>
+      <div className="row" style={{ display: 'flex', alignItems: 'center' }}>
+        <div className={clsx("col col--7", styles.cliImage)}>
+          <CodeBlock className="language-bash">{resonseCLI}</CodeBlock>
+        </div>
+        <div className={"col col--5 text--center"}>
+          <h2 className="hideOnMobile">CLI Client</h2>
+          <p>
+            You can customize data retention and replication policies using the{" "}
+            <strong>
+              <Link to="https://cli.reduct.store">
+                ReducStore CLI client
+              </Link>
+            </strong>.
+          </p>
+        </div>
       </div>
     </div>
   );

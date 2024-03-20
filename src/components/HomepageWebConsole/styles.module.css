@@ -1,5 +1,21 @@
-.WebConsoleImage {
+.webConsoleSection {
+  margin-top: var(--reduct-section-space);
+  margin-bottom: var(--reduct-section-space);
+}
+
+.webConsoleImage {
   max-width: 90%;
   height: auto;
   margin-bottom: 1rem;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 997px) {
+  .row {
+    flex-direction: column-reverse;
+  }
 }
