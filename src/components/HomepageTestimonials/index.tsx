@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./styles.module.css";
+import Link from "@docusaurus/Link";
 
 const testimonials = [
   {
@@ -48,7 +49,7 @@ function HomepageTestimonials() {
             <div className={styles.authorInfo}>
               <div className={styles.authorName}>{testimonial.author}</div>
               {testimonial.position} at{" "}
-              <a href={testimonial.homepage}>{testimonial.company}</a>
+              <Link to={testimonial.homepage}>{testimonial.company}</Link>
             </div>
           </div>
         ))}

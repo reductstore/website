@@ -1,31 +1,22 @@
 import React from "react";
 import Link from "@docusaurus/Link";
 import styles from "./styles.module.css";
+import Heading from '@theme/Heading';
 
 function HomepageCTA() {
   return (
-    <section className={styles.ctaSection}>
-      <div className={"container"}>
-        <div className="row">
-          <div className="col col--8 col--offset-2 text--center">
-            <h3>Empower Your Edge AI Journey with ReductStore</h3>
-            <p>
-              Venturing into the new age of intelligent edge computing? Dive
-              deep with ReductStore, not just as a database, but as your guiding
-              light in this AI-centric revolution. Every millisecond, every
-              piece of data counts. Equip yourself with the right tools,
-              tailor-made MLOps functionalities, and the promise of tomorrow.
-            </p>
-            <Link
-              className="button button--primary button--lg"
-              to="/reductai"
-            >
-              Explore Reduct AI
-            </Link>
-          </div>
-        </div>
-      </div>
-    </section>
+    <section className={styles.section}>
+      <Heading as="h1">AI on the Edge? Download our White Paper</Heading>
+      <p >
+        Learn more about ReductStore and how it can help you simplify your data infrastructure and AI/ML workflows.
+      </p>
+      <Link
+        className="button button--primary button--lg"
+        to="/whitepaper"
+      >
+        White Paper
+      </Link>
+    </section >
   );
 }
 

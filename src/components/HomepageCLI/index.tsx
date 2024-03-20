@@ -2,30 +2,28 @@ import React from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 import CodeBlock from "@theme/CodeBlock";
+import Link from "@docusaurus/Link";
 
 function HomepageCLI() {
   return (
-    <section className={styles.cliSection}>
+    <div className={styles.cliSection}>
       <div className="row" style={{ display: 'flex', alignItems: 'center' }}>
-        <div className={clsx("col col--7 hideOnMobile", styles.cliImage)}>
+        <div className={clsx("col col--7", styles.cliImage)}>
           <CodeBlock className="language-bash">{resonseCLI}</CodeBlock>
         </div>
         <div className={"col col--5 text--center"}>
-          <h3>CLI Client</h3>
+          <h2 className="hideOnMobile">CLI Client</h2>
           <p>
-            You can manage your ReductStore instance and export data from it by
-            using{" "}
+            You can customize data retention and replication policies using the{" "}
             <strong>
-              <a href="https://github.com/reductstore/web-console">
+              <Link to="https://cli.reduct.store">
                 ReducStore CLI client
-              </a>
-            </strong>
-            . The client is cross-platform, written in Python and available as a
-            PIP package.
+              </Link>
+            </strong>.
           </p>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 

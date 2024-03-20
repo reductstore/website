@@ -1,4 +1,6 @@
-.ctaSection {
-  margin-top: var(--reduct-section-space);
-  margin-bottom: var(--reduct-section-space);
+.section {
+  padding-top: var(--reduct-section-space);
+  padding-bottom: var(--reduct-section-space);
+  text-align: center;
+  background-color: var(--reduct-background-gray);
 }
