@@ -12,7 +12,7 @@ function Benefits({ IconComponent, title, description }) {
       <div className={styles.benefit}>
         <div className={styles.benefitIcon}>
           <IconComponent
-            size="3em"
+            size="5em"
             style={{ color: "var(--ifm-color-primary)" }}
           />
         </div>
