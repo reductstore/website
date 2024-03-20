@@ -10,25 +10,6 @@
   overflow: hidden;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
-}
-
-.headerContent {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
-.headerLogo {
-  margin-right: 1rem;
-  width: 50px;
-  margin-bottom: 1rem;
-}
-
 .heroTitle {
   margin-bottom: 1rem;
 }
@@ -45,8 +26,35 @@
 
 .buttons :last-of-type {
   margin-left: 1rem;
+  color: white !important;
+}
+
+.buttons :last-of-type:hover {
+  background-color: var(--ifm-color-primary-lighter);
 }
 
 .indexCtasGitHubButtonWrapper {
   display: flex;
+}
+
+@media screen and (max-width: 600px) {
+  .heroBanner {
+    padding-top: 2rem;
+  }
+  .heroTitle {
+    font-size: 2.2rem;
+  }
+  .heroSubTitle {
+    font-size: 1.2rem;
+  }
+  .buttons {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  .buttons :last-of-type {
+    margin-left: 0;
+    margin-top: 1rem;
+  }
 }

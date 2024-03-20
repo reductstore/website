@@ -1,10 +1,11 @@
-.homepageSDKs {
+.sdkSection{
   margin-top: var(--reduct-section-space);
   margin-bottom: var(--reduct-section-space);
 }
 
 .sdkIcons {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 2rem;
 }

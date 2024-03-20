@@ -3,50 +3,51 @@ import CodeSnippetExample from "../CodeSnippetExample";
 import clsx from "clsx";
 import { SiPython, SiJavascript, SiRust, SiCplusplus } from "react-icons/si";
 import styles from "./styles.module.css";
+import Link from "@docusaurus/Link";
 
 export default function HomepageSDKs() {
   return (
-    <section className={styles.homepageSDKs}>
+    <div className={styles.sdkSection}>
       <div className="row" style={{ display: 'flex', alignItems: 'center' }}>
-        <div className={"col col--7 hideOnMobile"}>
+        <div className={"col col--7"}>
           <CodeSnippetExample />
         </div>
         <div className="col col--5">
           <div className="text--center">
-            <h3>ReductStore Client SDKs</h3>
+            <h2 className="hideOnMobile">Client SDKs</h2>
             <p>
               You can use the following client SDKs for quick and easy
               integration into your applications and infrastructure:
             </p>
             <div className={clsx("text--center", styles.sdkIcons)}>
-              <a
-                href="https://github.com/reductstore/reduct-py"
+              <Link
+                to="https://github.com/reductstore/reduct-py"
                 className={styles.sdkIcon}
               >
                 <SiPython size="3em" />
-              </a>
-              <a
-                href="https://github.com/reductstore/reduct-js"
+              </Link>
+              <Link
+                to="https://github.com/reductstore/reduct-js"
                 className={styles.sdkIcon}
               >
                 <SiJavascript size="3em" />
-              </a>
-              <a
-                href="https://github.com/reductstore/reduct-cpp"
+              </Link>
+              <Link
+                to="https://github.com/reductstore/reduct-cpp"
                 className={styles.sdkIcon}
               >
                 <SiCplusplus size="3em" />
-              </a>
-              <a
-                href="https://github.com/reductstore/reductstore/tree/main/reduct_rs"
+              </Link>
+              <Link
                 className={styles.sdkIcon}
+                to="https://github.com/reductstore/reduct-rs"
               >
                 <SiRust size="3em" />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

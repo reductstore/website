@@ -1,16 +1,16 @@
-.features {
+.benefits {
   margin-top: var(--reduct-section-space);
   margin-bottom: var(--reduct-section-space);
 }
 
-.feature {
+.benefit {
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.featureIcon {
+.benefitIcon {
   margin-bottom: 1rem;
   color: "white";
 }
