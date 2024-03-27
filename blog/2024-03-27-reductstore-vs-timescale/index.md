@@ -4,15 +4,21 @@ description: "A comparison of ReductStore and TimescaleDB for storing time serie
 authors: alexey
 tags: [comparisons, iot]
 slug: comparisons/iot/reductstore-vs-timescaledb
-date: 2024-02-27
+date: 2024-03-27
 image: ./img/snippet.png
 ---
+
+
+![Get history of blobs with TimescaleDB](./img/snippet.png)
 
 [**TimescaleDB**](https://www.timescale.com/) is an open-source time-series database optimized for fast ingest and complex queries. It is engineered up from [**PostgreSQL**](https://www.postgresql.org/) and offers the power, reliability, and ease-of-use of a relational database, combined with the scalability typically seen in NoSQL systems. It is particularly suited for storing and analyzing things that happen over time, such as metrics, events, and real-time analytics. 
 
 Since TimescaleDB is based on PostgreSQL, it supports blob data and can be used to store a history of unstructured data such as images, binary sensor data, or large text documents. In this article, we will use the database as a time-series blob storage and compare its performance with [**ReductStore**](https://www.reduct.store), which is designed specifically for this use case. 
 
 TimescaleDB and ReductStore both have Python Client SDKs. We'll create simple Python functions to read and write data, then compare performance with different blob sizes. To repeat these benchmarks on your own machine, use **[this repository](https://github.com/reductstore/reduct-vs-timescaledb)**.
+
+<!--truncate-->
+
 
 ## **Read/Write Blob Data With** TimescaleDB
 
@@ -201,7 +207,7 @@ Based on the benchmark results, ReductStore and TimescaleDB demonstrate similar 
 
 ## Conclusions
 
-TimescaleDB excels as a time series database and is adept at storing small blobs. It's an excellent choice if you need to store structured data and want to avoid additional storage for blob data. However, if you have blobs larger than 10KB, ReductStore might be a better option. It has way better performance and offers a retention policy based on disk usage, which is crucial when the amount of data stored over time is unpredictable.
+TimescaleDB excels as a time series database and can be used to store small blobs. It's a good choice if you need to store structured data and want to avoid additional storage for blob data. However, if you have blobs larger than 10KB, ReductStore might be a better option. It offers better performance and provides a retention policy based on disk usage, which is crucial when the amount of data stored over time is unpredictable.
 
 ## References:[](https://www.reduct.store/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio#references)
 
