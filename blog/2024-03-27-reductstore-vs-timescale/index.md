@@ -5,11 +5,11 @@ authors: alexey
 tags: [comparisons, iot]
 slug: comparisons/iot/reductstore-vs-timescaledb
 date: 2024-03-27
-image: ./img/snippet.png
+image: ./img/snippet.webp
 ---
 
 
-![Get history of blobs with TimescaleDB](./img/snippet.png)
+![Get history of blobs with TimescaleDB](./img/snippet.webp)
 
 [**TimescaleDB**](https://www.timescale.com/) is an open-source time-series database optimized for fast ingest and complex queries. It is engineered up from [**PostgreSQL**](https://www.postgresql.org/) and offers the power, reliability, and ease-of-use of a relational database, combined with the scalability typically seen in NoSQL systems. It is particularly suited for storing and analyzing things that happen over time, such as metrics, events, and real-time analytics. 
 
@@ -20,7 +20,7 @@ TimescaleDB and ReductStore both have Python Client SDKs. We'll create simple Py
 <!--truncate-->
 
 
-## **Read/Write Blob Data With** TimescaleDB
+## Read/Write Blob Data With TimescaleDB
 
 Since TimescaleDB is a part of PostgreSQL, you can use the **[psycopg](https://pypi.org/project/psycopg2/)** adapter for Python to manage the database and stream the data. In this section, we initialize the TimescaleDB extension, recreate the benchmark database, and create a table for our blob data. Once the table is prepared, we write a chunk of binary data with the current time `BLOB_COUNT` times.
 
@@ -92,11 +92,11 @@ def read_from_timescale(t1, t2):
     return count
 ```
 
-As you can see to work with Timescale is quite easy if you familiar to any SQL database. However, you may notice that we should put the whole blob into the `INSERT`  request. Of course, it won’t work well for big blobs.
+As you can see, working with Timescale is quite easy if you are familiar with any SQL database. However, you may notice that we should put the whole blob into the `INSERT`  request. This could cause a performance problem for large blobs because we have to allocate the memory for the request string instead of sending it in chunks.  
 
 Let’s see how you can write and read data with ReductStore. 
 
-## **Read/Write Blob Data With ReductStore**
+## Read/Write Blob Data With ReductStore
 
 With **[ReductStore](https://www.reduct.store/)**, you can write and read data without using SQL requests, simply by utilizing the asynchronous API. Additionally, if you need to handle large blobs, you can stream them in chunks without loading them into memory.
 
@@ -125,7 +125,7 @@ async def read_from_reduct(t1, t2):
         return count
 ```
 
-## Benchmarks[](https://www.reduct.store/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio#benchmarks)
+## Benchmarks
 
 After establishing our read/write functions, we can start writing our benchmarks.
 
@@ -193,23 +193,34 @@ python3 main.py
 The script displays results for the specified `BLOB_SIZE` and `SIZE_COUNT`. On my device, which has an NVMe drive, here are the results I obtained:
 
 | Chunk Size | Operation | TimescaleDB, blob/s | ReductStore, blob/s |
-| --- | --- | --- | --- |
-| 10 KB | Write | 1557 | 1500 |
-|  | Read | 1333 | 1280 |
-| 100 KB | Write | 447 | 1366 |
-|  | Read | 353 | 1120 |
-| 1 MB | Write | 53 | 571 |
-|  | Read | 40 | 382 |
-| 10 Mb | Write | 5 | 70 |
-|  | Read | 4 | 38 |
+|------------|-----------|---------------------|---------------------|-----
+| 1 KB       | Write     | 2475                | 1463                | -41%
+|            | Read      | 2361                | 1260                | -47%
+| 10 KB      | Write     | 1557                | 1500                | -4%
+|            | Read      | 1333                | 1280                | -4%
+| 100 KB     | Write     | 447                 | 1366                | +205%
+|            | Read      | 353                 | 1120                | +217%
+| 1 MB       | Write     | 53                  | 571                 | +1075%
+|            | Read      | 40                  | 382                 | +855%
+| 10 Mb      | Write     | 5                   | 70                  | +1300%
+|            | Read      | 4                   | 38                  | +850%
 
-Based on the benchmark results, ReductStore and TimescaleDB demonstrate similar performance with blobs 10KB and smaller. However, for larger blobs, ReductStore significantly outperforms TimescaleDB in both write and read operations.
+Based on the benchmark results, TimescaleDB demonstrates better performance for blobs less 10KB. However, for larger blobs, ReductStore significantly outperforms TimescaleDB in both write and read operations.
+
+## Other Considerations
+
+When we choose a database for storing blob data, we should consider not only performance but also the following factors:
+
+* **Retention Policy**: ReductStore provides a retention policy based on disk usage, which is crucial when the amount of data stored over time is unpredictable.
+* **Data Size**: ReductStore is more efficient for storing large blobs, while TimescaleDB is better for small blobs.
+* **Querying**: TimescaleDB is better for structured data and complex queries, while ReductStore is more suitable for storing and retrieving blobs with minimal overhead and latency.
+* **Replication**: TimescaleDB replicates data across multiple nodes as exact copies, while ReductStore provides append-only replication, with the ability to filter data based on labels. This could be a part of your data reduction strategy.
 
 ## Conclusions
 
-TimescaleDB excels as a time series database and can be used to store small blobs. It's a good choice if you need to store structured data and want to avoid additional storage for blob data. However, if you have blobs larger than 10KB, ReductStore might be a better option. It offers better performance and provides a retention policy based on disk usage, which is crucial when the amount of data stored over time is unpredictable.
+TimescaleDB excels as a time series database and can be used to store small blobs. It's a good choice if you need to store structured data and want to avoid additional storage for blob data. However, if you have blobs larger than 10KB, ReductStore might be a better option. It offers better performance and provides a retention policy based on disk usage and conditional append-only replication for your data reduction strategy.
 
-## References:[](https://www.reduct.store/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio#references)
+## References
 
 - **[ReductStore](https://www.reduct.store/)**
 - **[ReductStore Client SDK for Python](https://github.com/reductstore/reduct-py)**
