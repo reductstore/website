@@ -7,7 +7,7 @@ export default function LinuxInstall(props) {
   const [activeTab, setActiveTab] = useState("binary");
 
 const bynaryInstall = `
-wget https://github.com/reductstore/reductstore/releases/download/${props.version}/reductstore.linux-amd64.tar.gz
+wget https://github.com/reductstore/reductstore/releases/latest/download/reductstore.linux-amd64.tar.gz
 tar xfv reductstore.linux-amd64.tar.gz
 chmod +x reductstore
 RS_DATA_PATH=./data ./reductstore
