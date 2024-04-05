@@ -1,16 +1,20 @@
 import React from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
-import CodeBlock from "@theme/CodeBlock";
 import Link from "@docusaurus/Link";
-import TerminalAnimation from "../TerminalAnimation";
+import BrowserOnly from "@docusaurus/BrowserOnly";
 
 function HomepageCLI() {
   return (
     <div className={styles.cliSection}>
       <div className="row" style={{ display: 'flex', alignItems: 'center' }}>
         <div className={clsx("col col--7", styles.cliImage)}>
-          <TerminalAnimation />
+          <BrowserOnly>
+            {() => {
+              const TerminalAnimation = require('../TerminalAnimation').default;
+              return <TerminalAnimation />;
+            }}
+          </BrowserOnly>
         </div>
         <div className={"col col--5 text--center"}>
           <h2 className="hideOnMobile">CLI Client</h2>
