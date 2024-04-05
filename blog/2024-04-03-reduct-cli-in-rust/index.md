@@ -50,9 +50,9 @@ reduct-cli bucket ls --full play
 | test        | 1       | 196.0 KB | 1970-01-01T00:00:00.000Z | 1970-01-01T00:00:00.003Z |
 
 reduct-cli cp play/datasets .
-[00:00:02] #-------------------- 0.101 % Copying cats (6.0 MB, 0 B/s)
-[00:00:01] #-------------------- 0.039 % Copying imdb (5.3 MB, 0 B/s)
-[00:00:02] #-------------------- 0.082 % Copying mnist_training (12.4 KB, 0 B/s) 
+[00:00:02] #-------------------- 0.101 % Copying cats (6.0 MB, 3 MB/s)
+[00:00:01] #-------------------- 0.039 % Copying imdb (5.3 MB, 4 MB/s)
+[00:00:02] #-------------------- 0.082 % Copying mnist_training (12.4 KB, 8 KB/s) 
 ```
 
 ---
