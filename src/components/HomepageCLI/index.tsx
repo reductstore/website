@@ -8,7 +8,7 @@ function HomepageCLI() {
   return (
     <div className={styles.cliSection}>
       <div className="row" style={{ display: 'flex', alignItems: 'center' }}>
-        <div className={clsx("col col--7", styles.cliImage)}>
+        <div className={clsx("col col--7", styles.cliAnimation)}>
           <BrowserOnly>
             {() => {
               const TerminalAnimation = require('../TerminalAnimation').default;

@@ -1,0 +1,14 @@
+.cliSection {
+  margin-top: var(--reduct-section-space);
+  margin-bottom: var(--reduct-section-space);
+}
+
+.cliAnimation {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}

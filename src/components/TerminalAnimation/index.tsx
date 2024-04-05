@@ -13,6 +13,8 @@ const TerminalAnimation = () => {
       cursorBlink: true,
       fontSize: 13,
       fontFamily: 'Menlo, Monaco, "Courier New", monospace',
+      scrollback: 0,
+      scrollOnUserInput: false,
       theme: {
         background: '#282a36',
       },
