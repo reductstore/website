@@ -19,7 +19,7 @@ function HomepageCLI() {
         <div className={"col col--5 text--center"}>
           <h2 className="hideOnMobile">CLI Client</h2>
           <p>
-            You can replicate or export data with {" "}
+            You can customize data retention and replication policies using the{" "}
             <strong>
               <Link to="https://github.com/reductstore/reduct-cli">
                 ReducStore CLI client
