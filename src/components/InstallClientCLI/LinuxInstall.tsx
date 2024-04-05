@@ -6,7 +6,7 @@ export default function LinuxInstall(props) {
 wget https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.linux-amd64.tar.gz
 tar -xvf reduct-cli.linux-amd64.tar.gz
 chmod +x reduct-cli
-mv reduct-cli /usr/local/bin
+sudo mv reduct-cli /usr/local/bin
 `.trim();
 
     return (
