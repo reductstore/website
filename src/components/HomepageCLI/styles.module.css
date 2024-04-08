@@ -5,13 +5,18 @@
 
 .cliAnimation {
   display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
   justify-content: center;
+
+  margin-bottom: 1rem;
 }
 
 .mobileImage {
   max-width: 90%;
+}
+
+.mobileImage img {
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .row {
