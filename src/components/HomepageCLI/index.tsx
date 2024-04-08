@@ -7,13 +7,13 @@ import BrowserOnly from "@docusaurus/BrowserOnly";
 const CliDemoImg = require("@site/static/img/cli-demo.webp").default;
 
 function HomepageCLI() {
-  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1200); // Example breakpoint
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
       setIsLargeScreen(window.innerWidth >= 1120);
     };
-
+    handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
