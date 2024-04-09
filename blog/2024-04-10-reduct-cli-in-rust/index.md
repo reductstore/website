@@ -4,7 +4,7 @@ description: "Update on the ReductStore CLI client migration from Python to Rust
 authors: alexey
 tags: [news]
 slug: news/reduct-cli-in-rust
-date: 2024-04-03
+date: 2024-04-10
 image: ./img/reduct-cli.webp
 ---
 
