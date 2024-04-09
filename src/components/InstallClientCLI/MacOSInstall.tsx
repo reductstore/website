@@ -3,10 +3,10 @@ import CodeBlock from "@theme/CodeBlock";
 
 export default function MacOSInstall(props) {
     const binaryInstall = `
-wget https://github.com/reductstore/reductstore/releases/latest/download/reductstore.macos-amd64.tar.gz
-tar xfv reductstore.macos-amd64.tar.gz
-chmod +x reductstore
-RS_DATA_PATH=./data ./reductstore
+wget https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.macos-amd64.tar.gz
+tar -xvf reduct-cli.macos-amd64.tar.gz
+chmod +x reduct-cli
+sudo mv reduct-cli /usr/local/bin
 `.trim();
   return (
     <>

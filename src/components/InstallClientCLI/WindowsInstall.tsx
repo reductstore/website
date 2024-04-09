@@ -1,12 +1,11 @@
 import React from "react";
 import CodeBlock from "@theme/CodeBlock";
 
-export default function MacOSInstall(props) {
+export default function WindowsInstall(props) {
     const binaryInstall = `
-wget https://github.com/reductstore/reductstore/releases/latest/download/reductstore.macos-amd64.tar.gz
-tar xfv reductstore.macos-amd64.tar.gz
-chmod +x reductstore
-RS_DATA_PATH=./data ./reductstore
+Invoke-WebRequest -Uri  https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.win-amd64.zip -OutFile reductstore.zip
+Expand-Archive -LiteralPath reductstore.zip -DestinationPath .
+.\\reductstore.exe
 `.trim();
   return (
     <>
