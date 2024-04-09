@@ -1,0 +1,65 @@
+---
+sidebar_position: 3
+title: Bucket
+description: Bucket concept in ReductStore, managing buckets with SDks, CLI client and Web Console
+---
+
+# Bucket
+
+## Concepts
+
+Bucket is a container for storing data and a logical grouping of data. Each bucket stores time-series data separated into different entries each having a unique name. If you are familiar with the concept of a database, you can think of a bucket as a database and entries as tables.
+
+Due to the nature of time-series data, ReductStore partitions data into blocks. Each block contains a set of entries and is stored in a separate file.
+The block size is limited to a maximum size and number of records. When a block reaches its limit, a new block is created and the data is stored in the new block. This allows ReductStore to efficiently store and access data.
+
+In comparison to other blob storage of file system, ReductStore has a flat hierarchy. There is no concept of folders or directories. All data is stored in entries grouped by buckets.
+
+## Bucket Settings
+
+Each bucket has settings that define how data is stored and accessed. The settings include:
+
+- **Quota Type**: The type of quota for the bucket. The quota can be set to NONE and FIFO. Default is NONE.
+- **Quota Size**: The size of the quota in bytes. The default is 0 which means no quota.
+- **Max Block Size**: The maximum size of a block in bytes. The default is 64MB.
+- **Maximal Number of Records**: The maximum number of records in a block. The default is 1000.
+
+### Quota Type
+
+The quota type defines how the quota is enforced. The quota can be set to NONE or FIFO.
+
+NONE means that there is no quota and data can be stored without any restrictions.
+
+FIFO means that the quota is enforced using the first-in-first-out (FIFO) policy. When the quota is reached, the oldest block is deleted to make room for new data.
+ReductStore guarantees that the data does not exceed the quota size and refuses to store new data if it can't make room for it.
+
+### Quota Size
+
+The quota size defines the maximum size of the bucket in bytes. It is ignored if the quota type is set to NONE.
+
+### Max Block Size
+
+The max block size defines the maximum size of a block in bytes. When a block reaches this size, a new block is created to store new data.
+A record is not limited on the size of the block, if a record is larger than the block size, it will be stored in the current block and the next block will be created for the next record.
+
+The default value is 64MB, and you usually don't need to change it unless your records are bigger than the default value.
+ReductStore pre-allocates the block size when creating a new block, so it is better for performance if you can store several records in a block.
+
+
+### Maximal Number of Records
+
+The maximal number of records defines the maximum number of records in a block. When a block reaches this number of records, a new block is created to store new data.
+The default value is 256, and you usually don't need to change it unless you have a lot of small records and too much blocks that affect the search performance.
+To optimize the search performance, consider that searching a record contains of two steps:
+
+* Searching the block that contains the record. The search time is O(log(n)) where n is the number of blocks.
+* Searching the record in the block. The search time is O(m) where m is the number of records in the block.
+
+If you have a lot of blocks, the search time for a block could take longer than searching the record in the block.
+In this case, you can increase the maximal number of records to reduce the number of blocks.
+
+## Creating a Bucket
+
+## Changing Bucket Settings
+
+## Deleting a Bucket
