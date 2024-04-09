@@ -3,6 +3,9 @@ sidebar_position: 3
 title: Bucket
 description: Bucket concept in ReductStore, managing buckets with SDks, CLI client and Web Console
 ---
+import CodeBlock from "@theme/CodeBlock";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Bucket
 
@@ -59,6 +62,56 @@ If you have a lot of blocks, the search time for a block could take longer than 
 In this case, you can increase the maximal number of records to reduce the number of blocks.
 
 ## Creating a Bucket
+
+You can create a bucket using the SDKs, CLI client, Web Console or REST API.
+The bucket name must be unique within the store and a client must have full access permission to create a bucket.
+You can also provision a bucket with environment variables. See, the example below:
+
+import CreateBucketPy from "!!raw-loader!./examples/py/src/create_bucket.py";
+import CreateBucketJs from "!!raw-loader!./examples/js/src/create_bucket.js";
+import CreateBucketRs from "!!raw-loader!./examples/rs/examples/create_bucket.rs";
+import CreateBucketCpp from "!!raw-loader!./examples/cpp/src/create_bucket.cc";
+import CreateBucketCLI from "!!raw-loader!./examples/cli/create_bucket.sh";
+import CreateBucketProvision from "!!raw-loader!./examples/provisioning/create-bucket.yml";
+import CreateBucketCurl from "!!raw-loader!./examples/curl/create_bucket.sh";
+
+<Tabs>
+  <TabItem value="CLI">
+    <CodeBlock language="bash">
+      {CreateBucketCLI}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">
+      {CreateBucketPy}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="JavaScript">
+    <CodeBlock language="javascript">
+      {CreateBucketJs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="Rust">
+    <CodeBlock language="rust">
+      {CreateBucketRs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="C++">
+    <CodeBlock language="cpp">
+      {CreateBucketCpp}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="cURL">
+    <CodeBlock language="bash">
+      {CreateBucketCurl}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="Provision ">
+    <CodeBlock language="yaml">
+      {CreateBucketProvision}
+    </CodeBlock>
+  </TabItem>
+</Tabs>
 
 ## Changing Bucket Settings
 
