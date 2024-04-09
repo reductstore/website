@@ -45,9 +45,20 @@
 .hideOnMobile {
   display: none;
 }
+.showOnMobile {
+  display: none;
+}
 
 @media (min-width: 997px) {
   .hideOnMobile {
+    display: block;
+  }
+  .showOnMobile {
+    display: none;
+  }
+}
+@media (max-width: 996px) {
+  .showOnMobile {
     display: block;
   }
 }
