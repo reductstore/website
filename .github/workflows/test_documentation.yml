@@ -68,6 +68,11 @@ jobs:
       - name: Build C++ examples
         if: matrix.language == 'cpp'
         run: |
+          git clone https://github.com/reductstore/reduct-cpp.git
+          cd reduct-cpp
+          cmake -DCMAKE_BUILD_TYPE=Release .
+          make install
+          
           export EXAMPLE_DST_PATH=${{ matrix.example_root }}/${{ matrix.path_prefix }}
           mkdir -p "$EXAMPLE_DST_PATH"
           cd "$EXAMPLE_DST_PATH"
