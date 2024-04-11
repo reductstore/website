@@ -22,7 +22,6 @@ jobs:
             example_root: docs/guides/examples/
           - language: python
             extension: py
-
           - language: node
             extension: mjs
 
@@ -61,6 +60,6 @@ jobs:
           for example in $(ls ${{ matrix.example_root }}/${{ matrix.extension }}/src/*.${{ matrix.extension }});
           do
             echo "Run $example"
-            ${{ matrix.language }} "$example"
+            ${{ matrix.language }} "$example"/d
           done
 
