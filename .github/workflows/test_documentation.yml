@@ -37,4 +37,10 @@ jobs:
           pip install -r ${{ matrix.example_root }}/requirements.txt
 
       - name: Run examples
-        run: find ${{ matrix.example_root }}/src -name "*.py" -exec python {} \;
+        run: |
+          for example in $(ls ${{ matrix.example_root }}/src/*.py);
+          do
+            echo "Run $example"
+            python3 "$example"
+          done
+
