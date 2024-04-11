@@ -19,7 +19,7 @@ jobs:
         language: [ python, node, curl ]
         include:
           - reduct_version: main
-            example_root: docs/guides/examples/
+            example_root: docs/guides/examples
           - language: python
             extension: py
           - language: node
