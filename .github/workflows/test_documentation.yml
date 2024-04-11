@@ -6,19 +6,26 @@ on:
     branches:
       - main
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [ opened, synchronize, reopened, closed ]
     branches:
       - main
 
 jobs:
   test_python_examples:
     runs-on: ubuntu-latest
-    name: Test Python examples
+    name: Test examples
     strategy:
       matrix:
+        language: [ python, node ]
         include:
           - reduct_version: main
-            example_root:  docs/guides/examples/py
+            example_root: docs/guides/examples/
+          - language: python
+            extension: py
+
+          - language: node
+            extension: mjs
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -32,15 +39,28 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: 3.8
-      - name: Install dependencies
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Python dependencies
+        if: matrix.language == 'python'
         run: |
-          pip install -r ${{ matrix.example_root }}/requirements.txt
+          pip install -r ${{ matrix.example_root }}/${{ matrix.extension }}/requirements.txt
+
+      - name: Install Node.js dependencies
+        if: matrix.language == 'node'
+        run: |
+          cd ${{ matrix.example_root }}/${{ matrix.extension }}
+          npm install
 
       - name: Run examples
         run: |
-          for example in $(ls ${{ matrix.example_root }}/src/*.py);
+          for example in $(ls ${{ matrix.example_root }}/${{ matrix.extension }}/src/*.${{ matrix.extension }});
           do
             echo "Run $example"
-            python3 "$example"
+            ${{ matrix.language }} "$example"
           done
 
