@@ -18,7 +18,7 @@ jobs:
       matrix:
         include:
           - reduct_version: main
-            doc_version:  docs/guides/examples/python
+            example_root:  docs/guides/examples/python
     steps:
       - uses: actions/checkout@v3
         with:
