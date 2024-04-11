@@ -1,0 +1,45 @@
+name: Test examples from documentation
+
+
+env:
+  doc_stable_version: 1.9.x # Change this to the latest stable version, will be automated later
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
+
+jobs:
+  test_python_examples:
+    runs-on: ubuntu-latest
+    name: Test Python examples
+    strategy:
+      matrix:
+        include:
+          - reduct_version: latest
+            example_root: ./versioned_docs/version-${{ env.doc_stable_version }}/guides/examples/python
+          - reduct_version: main
+            doc_version:  docs/guides/examples/python
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          lfs: false
+      - name: Run ReductStore instance
+        run: |
+          docker run -d --name reductstore -p 8383:8383 reduct/store:${{ matrix.reduct_version }}
+
+      - name: Install Python
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          pip install -r ${{ matrix.example_root }}/requirements.txt
+
+      - name: Run examples
+        run: find ${{ matrix.example_root }}/src -name "*.py" -exec python {} \;
