@@ -23,10 +23,13 @@ jobs:
           - language: python
             cmd: python3
             path_prefix: py/src
+
           - language: node
             cmd: node
             path_prefix: js/src
+
           - language: curl
+            path_prefix: curl
             cmd: sh
           - language: cpp
             path_prefix: cpp/build
@@ -65,7 +68,7 @@ jobs:
       - name: Build C++ examples
         if: matrix.language == 'cpp'
         run: |
-          EXAMPLE_DST_PATH = ${{ matrix.example_root }}/${{ matrix.path_prefix }}
+          export EXAMPLE_DST_PATH=${{ matrix.example_root }}/${{ matrix.path_prefix }}
           cd $EXAMPLE_DST_PATH/..
           mkdir $EXAMPLE_DST_PATH
           cd $EXAMPLE_DST_PATH
@@ -74,7 +77,7 @@ jobs:
 
       - name: Run examples
         run: |
-          for example in $(ls ${{ matrix.example_root }}/${{ matrix.path_prefix }});
+          for example in $(ls ${{ matrix.example_root }}/${{ matrix.path_prefix }}/*);
           do
             echo "Run $example"
             ${{ matrix.cmd }} "$example"
