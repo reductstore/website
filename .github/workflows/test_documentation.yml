@@ -60,6 +60,6 @@ jobs:
           for example in $(ls ${{ matrix.example_root }}/${{ matrix.extension }}/src/*.${{ matrix.extension }});
           do
             echo "Run $example"
-            ${{ matrix.language }} "$example"/d
+            ${{ matrix.language }} "$example"
           done
 
