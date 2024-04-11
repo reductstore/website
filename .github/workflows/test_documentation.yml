@@ -20,7 +20,7 @@ jobs:
           - reduct_version: main
             example_root:  docs/guides/examples/py
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
           lfs: false
