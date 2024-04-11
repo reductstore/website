@@ -79,6 +79,8 @@ jobs:
           cd "$EXAMPLE_DST_PATH"
           cmake -DCMAKE_BUILD_TYPE=Release ..
           make -j
+          # remove non-executable files from build directory
+          find "$EXAMPLE_DST_PATH" -type f ! -perm /u=x,g=x,o=x -exec rm -f {} \;
 
       - name: Run examples
         run: |
