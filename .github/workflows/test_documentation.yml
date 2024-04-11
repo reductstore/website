@@ -1,9 +1,6 @@
 name: Test examples from documentation
 
 
-env:
-  doc_stable_version: 1.9.x # Change this to the latest stable version, will be automated later
-
 on:
   push:
     branches:
@@ -20,8 +17,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - reduct_version: latest
-            example_root: ./versioned_docs/version-${{ env.doc_stable_version }}/guides/examples/python
           - reduct_version: main
             doc_version:  docs/guides/examples/python
     steps:
