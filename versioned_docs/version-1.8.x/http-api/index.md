@@ -4,6 +4,10 @@ title: 🗂️ HTTP API Reference
 description: HTTP API documentation for interacting with the database.
 ---
 
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/http-api" />
+</head>
+
 # 🗂️ HTTP API Reference
 
 ReductStore provides an HTTP API for interacting with the database. In order to use the API, you must first authenticate using a token, which you can be provisioned one with the `RS_API_TOKEN` [**environment variable **](./configuration)or created with [**the Token API**](./http-api/token-authentication).

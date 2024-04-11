@@ -32,7 +32,7 @@ export default function PricingTable() {
             { title: "Long Term Release Support", description: "-" },
             { title: "Architecture Review", description: "-" }
           ]}
-          buttonUrl="/Download"
+          buttonUrl="/download"
           buttonLabel="Download"
           isFree
         />
