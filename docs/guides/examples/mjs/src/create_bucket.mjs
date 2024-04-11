@@ -10,4 +10,4 @@ let settings = {
   quotaSize: 1000_000_000n,
 }
 const bucket = await client.getOrCreateBucket("bucket", settings);
-assert(bucket.name === "bucket1");
+assert(bucket.name === "bucket");

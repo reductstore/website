@@ -16,7 +16,7 @@ jobs:
     name: Test examples
     strategy:
       matrix:
-        language: [ python, node ]
+        language: [ python, node, curl ]
         include:
           - reduct_version: main
             example_root: docs/guides/examples/
@@ -24,6 +24,8 @@ jobs:
             extension: py
           - language: node
             extension: mjs
+          - language: curl
+            extension: sh
 
     steps:
       - uses: actions/checkout@v4
