@@ -69,9 +69,8 @@ jobs:
         if: matrix.language == 'cpp'
         run: |
           export EXAMPLE_DST_PATH=${{ matrix.example_root }}/${{ matrix.path_prefix }}
-          mkdir $EXAMPLE_DST_PATH
-          cd $EXAMPLE_DST_PATH/..
-          cd $EXAMPLE_DST_PATH
+          mkdir -p "$EXAMPLE_DST_PATH"
+          cd "$EXAMPLE_DST_PATH"
           cmake -DCMAKE_BUILD_TYPE=Release ..
           make -j
 
