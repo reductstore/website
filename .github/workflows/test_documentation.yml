@@ -16,16 +16,21 @@ jobs:
     name: Test examples
     strategy:
       matrix:
-        language: [ python, node, sh ]
+        language: [ python, node, curl, cpp ]
         include:
           - reduct_version: main
             example_root: docs/guides/examples
           - language: python
-            extension: py
+            cmd: python3
+            path_prefix: py/src
           - language: node
-            extension: mjs
-          - language: sh
-            extension: sh
+            cmd: node
+            path_prefix: js/src
+          - language: curl
+            cmd: sh
+          - language: cpp
+            path_prefix: cpp/build
+            cmd: sh
 
     steps:
       - uses: actions/checkout@v4
@@ -49,19 +54,29 @@ jobs:
       - name: Install Python dependencies
         if: matrix.language == 'python'
         run: |
-          pip install -r ${{ matrix.example_root }}/${{ matrix.extension }}/requirements.txt
+          pip install -r ${{ matrix.example_root }}/${{ matrix.path_prefix }}/../requirements.txt
 
       - name: Install Node.js dependencies
         if: matrix.language == 'node'
         run: |
-          cd ${{ matrix.example_root }}/${{ matrix.extension }}
+          cd ${{ matrix.example_root }}/${{ matrix.path_prefix }}/..
           npm install
+
+      - name: Build C++ examples
+        if: matrix.language == 'cpp'
+        run: |
+          EXAMPLE_DST_PATH = ${{ matrix.example_root }}/${{ matrix.path_prefix }}
+          cd $EXAMPLE_DST_PATH/..
+          mkdir $EXAMPLE_DST_PATH
+          cd $EXAMPLE_DST_PATH
+          cmake -DCMAKE_BUILD_TYPE=Release ..
+          make -j
 
       - name: Run examples
         run: |
-          for example in $(ls ${{ matrix.example_root }}/${{ matrix.extension }}/src/*.${{ matrix.extension }});
+          for example in $(ls ${{ matrix.example_root }}/${{ matrix.path_prefix }});
           do
             echo "Run $example"
-            ${{ matrix.language }} "$example"
+            ${{ matrix.cmd }} "$example"
           done
 
