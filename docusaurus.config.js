@@ -52,8 +52,8 @@ const config = {
             "ReductStore Blog: Insights on edge computing, computer vision, and IoT",
           blogDescription:
             "Welcome to ReductStore's Blog – your source for expert articles, updates, and discussions on managing and leveraging time series databases for blob data in edge computing, computer vision, and IoT. Stay informed with our latest content.",
-          blogSidebarTitle: "All posts",
-          blogSidebarCount: "ALL",
+          blogSidebarTitle: "Recent posts",
+          blogSidebarCount: 5,
           showReadingTime: true,
           editUrl: "https://github.com/reductstore/docs/tree/main",
         },
