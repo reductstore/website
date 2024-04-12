@@ -110,18 +110,109 @@ const config = {
         hideOnScroll: true,
         items: [
           {
-            type: "docSidebar",
-            sidebarId: "docSidebar",
+            type: "dropdown",
+            label: "Product",
             position: "left",
-            label: "Docs",
-            to: "/docs/getting-started",
+            items: [
+              {
+                label: "White Paper",
+                to: "/whitepaper",
+              },
+              {
+                label: "vs MinIO",
+                to: "/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio",
+              },
+              {
+                label: "vs MinIO & InfluxDB",
+                to: "/blog/comparison/iot/reductstore-benchmark",
+              },
+              {
+                label: "vs TimescaleDB",
+                to: "/blog/comparisons/iot/reductstore-vs-timescaledb",
+              },
+              {
+                label: "vs MongoDB",
+                to: "/blog/comparisons/iot/reductstore-vs-mongodb",
+              },
+              {
+                label: "Schedule a Technical Review",
+                to: "/contact?subject=TechnicalReview",
+              },
+            ],
           },
-
-          { to: "/blog", label: "Blog", position: "left" },
-          { to: "/download", label: "Download", position: "left" },
-          { to: "/pricing", label: "Pricing", position: "left" },
-          { to: "/whitepaper", label: "White Paper", position: "left" },
-          { to: "/contact", label: "Contact Us", position: "left" },
+          {
+            type: "dropdown",
+            label: "Use Cases",
+            position: "left",
+            items: [
+              {
+                label: "Edge Computing",
+                to: "/blog/edge-computing/data-reduction-on-edge",
+              },
+              {
+                label: "Computer Vision",
+                to: "/blog/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications",
+              },
+              {
+                label: "IoT (MQTT)",
+                to: "/blog/advice/database/mqtt-data-storage",
+              },
+              {
+                label: "Robotics (ROS)",
+                to: "/blog/tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision",
+              },
+              {
+                label: "Kafka (Data Streaming)",
+                to: "/blog/tutorial/datastreaming/kafka/data-sink-guide",
+              },
+              {
+                label: "Anomaly Detection (AI)",
+                to: "/blog/computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection",
+              },
+              {
+                label: "Deep Learning (Pytorch)",
+                to: "/blog/ai/datastreaming/pytorch/implement-database-data-streaming-pytorch",
+              },
+            ],
+          },
+          {
+            label: "Blog",
+            to: "/blog",
+            position: "left",
+          },
+          {
+            type: "dropdown",
+            label: "Developers",
+            position: "left",
+            items: [
+              {
+                label: "Documentation",
+                to: "/docs/getting-started",
+              },
+              {
+                label: "API Reference",
+                to: "/docs/http-api",
+              },
+              {
+                label: "Download",
+                to: "/download",
+              },
+              {
+                label: "GitHub",
+                href: "https://github.com/reductstore/reductstore",
+              },
+            ],
+          },
+          {
+            label: "Pricing",
+            to: "/pricing",
+            position: "left",
+          },
+          {
+            to: "/contact",
+            label: "Contact us",
+            position: "right",
+          },
           {
             type: "docsVersionDropdown",
             position: "right",
