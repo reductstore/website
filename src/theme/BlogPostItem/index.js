@@ -8,7 +8,6 @@ export default function BlogPostItemWrapper(props) {
     <>
       <SocialShareBar frontMatter={frontMatter} />
       <BlogPostItem {...props} />
-      <SocialShareBar frontMatter={frontMatter} mt={2} />
     </>
   );
 }
