@@ -210,7 +210,7 @@ const config = {
           },
           {
             to: "/contact",
-            label: "Contact us",
+            label: "Contact Us",
             position: "right",
           },
           {
