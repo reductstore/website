@@ -162,7 +162,7 @@ const config = {
                 to: "/blog/tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision",
               },
               {
-                label: "Kafka (Data Streaming)",
+                label: "Data Streaming (Kafka)",
                 to: "/blog/tutorial/datastreaming/kafka/data-sink-guide",
               },
               {
