@@ -78,7 +78,7 @@ jobs:
           
           mkdir -p "$EXAMPLE_DST_PATH"
           cd "$EXAMPLE_DST_PATH"
-          cmake -DCMAKE_BUILD_TYPE=Release ..
+          cmake -DCMAKE_BUILD_TYPE=Debug ..
           make -j
           # remove non-executable files from build directory
            find "$EXAMPLE_DST_PATH" -type f !  -name *.cxx | xargs rm -rf
