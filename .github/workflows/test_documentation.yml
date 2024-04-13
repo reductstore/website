@@ -33,7 +33,7 @@ jobs:
             cmd: sh
           - language: cpp
             path_prefix: cpp/build
-            cmd: sh
+            cmd: sh -c
 
     steps:
       - uses: actions/checkout@v4

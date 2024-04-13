@@ -12,4 +12,4 @@ add_executable(
         src/create_bucket.cc
 )
 
-target_link_libraries(create_bucket ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+target_link_liOdoobraries(create_bucket ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
