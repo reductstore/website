@@ -16,61 +16,53 @@ import TabItem from '@theme/TabItem';
 
 ## Concepts
 
-Bucket is a container for storing data and a logical grouping of data. Each bucket stores time-series data separated into different entries each having a unique name. If you are familiar with the concept of a database, you can think of a bucket as a database and entries as tables.
+A bucket is a container used for data storage and serves as a logical grouping of data. It stores time-series data, with each entry having a unique name. If you're familiar with databases, think of a bucket as a database, and entries as tables.
 
-Due to the nature of time-series data, ReductStore partitions data into blocks. Each block contains a set of entries and is stored in a separate file.
-The block size is limited to a maximum size and number of records. When a block reaches its limit, a new block is created and the data is stored in the new block. This allows ReductStore to efficiently store and access data.
+Given the nature of time-series data, ReductStore partitions data into blocks. Each block, stored in a separate file, contains a set of entries. There are limits to the block size and the number of records it can hold. When a block reaches its limit, a new block is created to store additional data. This method allows ReductStore to store and access data efficiently.
 
-In comparison to other blob storage of file system, ReductStore has a flat hierarchy. There is no concept of folders or directories. All data is stored in entries grouped by buckets.
+Unlike other blob storage or file systems, ReductStore has a flat hierarchy. It doesn't use folders or directories. Instead, all data is stored in entries, which are grouped by buckets.
 
 ## Bucket Settings
 
-Each bucket has settings that define how data is stored and accessed. The settings include:
+Each bucket has settings that determine how data is stored and accessed. These settings include:
 
-- **Quota Type**: The type of quota for the bucket. The quota can be set to NONE and FIFO. Default is NONE.
-- **Quota Size**: The size of the quota in bytes. The default is 0 which means no quota.
-- **Max Block Size**: The maximum size of a block in bytes. The default is 64MB.
-- **Maximal Number of Records**: The maximum number of records in a block. The default is 1000.
+- **Quota Type**: This defines the quota type for the bucket. You can set the quota to either NONE or FIFO, with the default being NONE.
+- **Quota Size**: This represents the quota size in bytes. The default is 0, which indicates no quota.
+- **Max Block Size**: This is the maximum allowable size of a block, in bytes. The default size is 64MB.
+- **Maximal Number of Records**: This is the maximum number of records that can be contained in a block. The default number is 256.
 
 ### Quota Type
 
-The quota type defines how the quota is enforced. The quota can be set to NONE or FIFO.
+The quota type determines the method of quota enforcement and can be set to either NONE or FIFO.
 
-NONE means that there is no quota and data can be stored without any restrictions.
+NONE implies no quota, allowing data to be stored without any restrictions.
 
-FIFO means that the quota is enforced using the first-in-first-out (FIFO) policy. When the quota is reached, the oldest block is deleted to make room for new data.
-ReductStore guarantees that the data does not exceed the quota size and refuses to store new data if it can't make room for it.
+FIFO, short for first-in-first-out, enforces the quota by deleting the oldest block to accommodate new data once the quota is reached. ReductStore ensures that the data does not surpass the quota size, refusing to store new data if there's insufficient room.
 
 ### Quota Size
 
-The quota size defines the maximum size of the bucket in bytes. It is ignored if the quota type is set to NONE.
+The quota size defines the maximum size of the bucket in bytes. It's ignored if the quota type is set to NONE.
 
 ### Max Block Size
 
-The max block size defines the maximum size of a block in bytes. When a block reaches this size, a new block is created to store new data.
-A record is not limited on the size of the block, if a record is larger than the block size, it will be stored in the current block and the next block will be created for the next record.
+The max block size determines the maximum size of a block in bytes. Once a block reaches this limit, a new block is created for storing additional data. A record's size isn't restricted by the block size. If a record exceeds the block size, it will be stored in the current block, and a new block will be created for the next record.
 
-The default value is 64MB, and you usually don't need to change it unless your records are bigger than the default value.
-ReductStore pre-allocates the block size when creating a new block, so it is better for performance if you can store several records in a block.
-
+The default value is set at 64MB. Typically, there is no need to alter this unless your records exceed the default size. ReductStore pre-allocates the block size during the creation of a new block. As such, it improves performance when multiple records can be stored in a single block.
 
 ### Maximal Number of Records
 
-The maximal number of records defines the maximum number of records in a block. When a block reaches this number of records, a new block is created to store new data.
-The default value is 256, and you usually don't need to change it unless you have a lot of small records and too much blocks that affect the search performance.
-To optimize the search performance, consider that searching a record contains of two steps:
+The maximal number of records refers to the maximum number of records that can be stored in a block. When a block reaches this capacity, a new block is created for additional data. The default value is 256. Generally, you don't need to adjust this unless you have numerous small records and an excess of blocks, which could impact search performance.
 
-* Searching the block that contains the record. The search time is O(log(n)) where n is the number of blocks.
-* Searching the record in the block. The search time is O(m) where m is the number of records in the block.
+To optimize search performance, bear in mind that record searching consists of two steps:
 
-If you have a lot of blocks, the search time for a block could take longer than searching the record in the block.
-In this case, you can increase the maximal number of records to reduce the number of blocks.
+- Locating the block that contains the record. This search time is O(log(n)), where n represents the number of blocks.
+- Finding the record within the block. This search time is O(m), with m representing the number of records in the block.
+
+If there are too many blocks, the time spent searching for a block could exceed the time spent searching for the record within the block. In such cases, consider increasing the maximal number of records to reduce the total number of blocks.
 
 ## Creating a Bucket
 
-You can create a bucket using the SDKs, CLI client, Web Console or REST API.
-The bucket name must be unique within the store and a client must have full access permission to create a bucket.
-You can also provision a bucket with environment variables. See, the example below:
+A bucket can be created using the SDKs, CLI client, Web Console, or REST API. The bucket name must be unique within the store, and a client must have full access permission to create one. Provisioning a bucket with environment variables is also possible. Refer to the example below:
 
 import CreateBucketPy from "!!raw-loader!./examples/py/src/create_bucket.py";
 import CreateBucketJs from "!!raw-loader!./examples/js/src/buckets_create.mjs";
@@ -89,9 +81,12 @@ import CreateBucketCurl from "!!raw-loader!./examples/curl/buckets_create.sh";
   <TabItem value="Web Console">
     Steps to create a bucket using the Web Console:
     1. Open the Web Console.
-    2. Click on the "Buckets" tab.
-    3. Click on the "Create Bucket" button.
-    4. Enter the bucket name and settings.
+    2. Click on the **"Buckets"** tab in the left sidebar.
+    3. Click on the plus icon to create a new bucket in the top right corner.
+
+   ![Create a bucket with Web Console](./img/buckets_create.webp)
+
+    4. In the **"Add a new bucket"** dialog, enter the bucket name and settings.
     5. Click on the "Create" button.
 
   </TabItem>
