@@ -99,7 +99,6 @@ jobs:
           mkdir -p "$EXAMPLE_DST_PATH"
           
           cargo install --examples --root . --path "$EXAMPLE_DST_PATH"/..
-          find target/debug -type f -executable -maxdepth 1 -exec cp {} "$EXAMPLE_DST_PATH" \;
 
       - name: Run examples
         run: |
