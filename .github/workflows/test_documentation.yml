@@ -74,18 +74,18 @@ jobs:
           toolchain: 1.75
 
       - name: Install Python dependencies
-        if: matrix.language == 'python'
+        if: matrix.example == 'python'
         run: |
           pip install -r ${{ matrix.example_root }}/${{ matrix.path_prefix }}/../requirements.txt
 
       - name: Install Node.js dependencies
-        if: matrix.language == 'node'
+        if: matrix.example == 'node'
         run: |
           cd ${{ matrix.example_root }}/${{ matrix.path_prefix }}/..
           npm install
 
       - name: Build C++ examples
-        if: matrix.language == 'cpp'
+        if: matrix.example == 'cpp'
         run: |
           export EXAMPLE_DST_PATH="$PWD/${{ matrix.example_root }}/${{ matrix.path_prefix }}"
 
@@ -102,7 +102,7 @@ jobs:
           find "$EXAMPLE_DST_PATH" -type f !  -name *.cxx | xargs rm -rf
 
       - name: Build Rust examples
-        if: matrix.language == 'rust'
+        if: matrix.example == 'rust'
         run: |
           export EXAMPLE_DST_PATH="$PWD/${{ matrix.example_root }}/rs/build"
           mkdir -p "$EXAMPLE_DST_PATH"
