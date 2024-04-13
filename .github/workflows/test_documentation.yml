@@ -37,7 +37,7 @@ jobs:
             cmd: sh -c
 
           - language: rust
-            path_prefix: rs/build/bin
+            path_prefix: rs/bin
             cmd: sh -c
 
     steps:
