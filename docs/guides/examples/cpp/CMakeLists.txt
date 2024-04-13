@@ -8,8 +8,8 @@ find_package(OpenSSL)
 find_package(ReductCpp 1.8.0)
 
 add_executable(
-        create_bucket
+        create_bucket.cxx
         src/create_bucket.cc
 )
 
-target_link_libraries(create_bucket ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+target_link_libraries(create_bucket.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)

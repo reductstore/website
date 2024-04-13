@@ -80,11 +80,11 @@ jobs:
           cmake -DCMAKE_BUILD_TYPE=Release ..
           make -j
           # remove non-executable files from build directory
-          find "$EXAMPLE_DST_PATH" -type f ! -perm /u=x,g=x,o=x -exec rm -f {} \;
+           find docs/guides/examples/cpp/cmake-build-debug/ -type f !  -name *.cxx | xargs rm -rf
 
       - name: Run examples
         run: |
-          for example in $(ls ${{ matrix.example_root }}/${{ matrix.path_prefix }}/*);
+          for example in $(find -type f ${{ matrix.example_root }}/${{ matrix.path_prefix }});
           do
             echo "Run $example"
             ${{ matrix.cmd }} "$example"
