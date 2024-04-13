@@ -16,7 +16,7 @@ jobs:
     name: Test examples
     strategy:
       matrix:
-        language: [ python, node, curl, cpp, rust ]
+        example: [ python, node, curl, cpp, rust, cli ]
         include:
           - reduct_version: main
             example_root: docs/guides/examples
@@ -24,30 +24,39 @@ jobs:
             cmd: python3
             path_prefix: py/src
 
-          - language: node
+          - example: node
             cmd: node
             path_prefix: js/src
 
-          - language: curl
+          - example: curl
             path_prefix: curl
             cmd: sh
 
-          - language: cpp
+          - example: cpp
             path_prefix: cpp/build
             cmd: sh -c
 
-          - language: rust
+          - example: rust
             path_prefix: rs/build/bin
             cmd: sh -c
+
+          - example: cli
+            path_prefix: cli
+            cmd: sh
 
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
           lfs: false
-      - name: Run ReductStore instance
+      - name: Prepare ReductStore instance
         run: |
           docker run -d --name reductstore -p 8383:8383 --env RS_API_TOKEN="my-token" reduct/store:${{ matrix.reduct_version }}
+          wget https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.linux-amd64.tar.gz
+          tar -xvf reduct-cli.linux-amd64.tar.gz
+          chmod +x reduct-cli
+          sudo mv reduct-cli /usr/local/bin
+          reduct-cli bucket create  http://my-token@127.0.0.1:8383 example-bucket 
 
       - name: Install Python
         uses: actions/setup-python@v5
