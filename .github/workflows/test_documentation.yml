@@ -90,12 +90,12 @@ jobs:
           cmake -DCMAKE_BUILD_TYPE=Debug ..
           make -j
           # remove non-executable files from build directory
-           find "$EXAMPLE_DST_PATH" -type f !  -name *.cxx | xargs rm -rf
+          find "$EXAMPLE_DST_PATH" -type f !  -name *.cxx | xargs rm -rf
 
       - name: Build Rust examples
         if: matrix.language == 'rust'
         run: |
-          export EXAMPLE_DST_PATH="$PWD/${{ matrix.example_root }}/build"
+          export EXAMPLE_DST_PATH="$PWD/${{ matrix.example_root }}/rs/build"
           mkdir -p "$EXAMPLE_DST_PATH"
           
           cargo install --examples --root . --path "$EXAMPLE_DST_PATH"/..
