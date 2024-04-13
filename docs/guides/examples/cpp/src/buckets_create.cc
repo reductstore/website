@@ -9,7 +9,7 @@ using reduct::Error;
 int main() {
   // Create a client with the server URL
   auto client = IClient::Build("http://127.0.0.1:8383", {
-    .api_token = "my-api-token"
+    .api_token = "my-token"
   });
 
   // Create a bucket with the name "my-bucket" and a FIFO quota of 1GB

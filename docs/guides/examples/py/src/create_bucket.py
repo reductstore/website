@@ -1,7 +1,7 @@
 from reduct import Client, BucketSettings, QuotaType
 
 # Create a client with the base URL and API token
-client = Client("http://localhost:8383", api_token="my-api-token")
+client = Client("http://localhost:8383", api_token="my-token")
 
 
 async def create_bucket():
