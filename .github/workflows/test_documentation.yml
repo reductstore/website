@@ -100,7 +100,7 @@ jobs:
           cd "$EXAMPLE_DST_PATH"/..
           
           cargo build --all-targets
-          find target/debug -type f -executable -exec cp {} "$EXAMPLE_DST_PATH" \;
+          find target/debug -type f -executable -depth 1 -exec cp {} "$EXAMPLE_DST_PATH" \;
 
       - name: Run examples
         run: |
