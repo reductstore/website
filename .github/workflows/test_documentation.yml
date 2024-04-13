@@ -80,7 +80,7 @@ jobs:
           cmake -DCMAKE_BUILD_TYPE=Release ..
           make -j
           # remove non-executable files from build directory
-           find ${{ matrix.example_root }}/${{ matrix.path_prefix }} -type f !  -name *.cxx | xargs rm -rf
+           find "$EXAMPLE_DST_PATH" -type f !  -name *.cxx | xargs rm -rf
 
       - name: Run examples
         run: |
