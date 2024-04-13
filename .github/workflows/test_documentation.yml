@@ -37,7 +37,7 @@ jobs:
             cmd: sh -c
 
           - language: rust
-            path_prefix: rs/bin
+            path_prefix: rs/build/bin
             cmd: sh -c
 
     steps:
@@ -97,6 +97,7 @@ jobs:
         run: |
           export EXAMPLE_DST_PATH="$PWD/${{ matrix.example_root }}/rs/build"
           mkdir -p "$EXAMPLE_DST_PATH"
+          cd "$EXAMPLE_DST_PATH"
           
           cargo install --examples --root . --path "$EXAMPLE_DST_PATH"/..
 
