@@ -5,7 +5,7 @@ description: Bucket concept in ReductStore, managing buckets with SDks, CLI clie
 ---
 
 <head>
-  <link rel="canonical" href="https://www.reduct.store/docs/guides/buckets" />
+  <link rel="canonical" href="https://www.reduct.store/docs/guides/buckets"/>
 </head>
 
 import CodeBlock from "@theme/CodeBlock";
@@ -64,7 +64,7 @@ If there are too many blocks, the time spent searching for a block could exceed 
 
 A bucket can be created using the SDKs, CLI client, Web Console, or REST API. The bucket name must be unique within the store, and a client must have full access permission to create one. Provisioning a bucket with environment variables is also possible. Refer to the example below:
 
-import CreateBucketPy from "!!raw-loader!./examples/py/src/create_bucket.py";
+import CreateBucketPy from "!!raw-loader!./examples/py/src/buckets_create.py";
 import CreateBucketJs from "!!raw-loader!./examples/js/src/buckets_create.mjs";
 import CreateBucketRs from "!!raw-loader!./examples/rs/examples/buckets_create.rs";
 import CreateBucketCpp from "!!raw-loader!./examples/cpp/src/buckets_create.cc";
@@ -84,7 +84,7 @@ import CreateBucketCurl from "!!raw-loader!./examples/curl/buckets_create.sh";
     2. Click on the **"Buckets"** tab in the left sidebar.
     3. Click on the plus icon to create a new bucket in the top right corner.
 
-   ![Create a bucket with Web Console](./img/buckets_create.webp)
+    ![Create a bucket with Web Console](./img/buckets_create.webp)
 
     4. In the **"Add a new bucket"** dialog, enter the bucket name and settings.
     5. Click on the "Create" button.
@@ -126,7 +126,24 @@ import CreateBucketCurl from "!!raw-loader!./examples/curl/buckets_create.sh";
 
 You might want to view the list of buckets in your store or see the details of a specific bucket. This can be done using the SDKs, CLI client, Web Console, or REST API. The following example demonstrates how to list buckets using the CLI client:
 
+import ListBucketsCLI from "!!raw-loader!./examples/cli/buckets_browse.sh";
+import ListBucketsPy from "!!raw-loader!./examples/py/src/buckets_browse.py";
 
+<Tabs>
+  <TabItem value="CLI">
+    <CodeBlock language="shell">
+      {ListBucketsCLI}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="Web Console">
+    TODO
+  </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">
+      {ListBucketsPy}
+    </CodeBlock>
+  </TabItem>
+</Tabs>
 
 ## Changing Bucket Settings
 
