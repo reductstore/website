@@ -37,7 +37,7 @@ jobs:
             cmd: sh -c
 
           - language: rust
-            path_prefix: rs/build
+            path_prefix: rs/build/bin
             cmd: sh -c
 
     steps:
@@ -95,11 +95,10 @@ jobs:
       - name: Build Rust examples
         if: matrix.language == 'rust'
         run: |
-          export EXAMPLE_DST_PATH="$PWD/${{ matrix.example_root }}/${{ matrix.path_prefix }}"
+          export EXAMPLE_DST_PATH="$PWD/${{ matrix.example_root }}/build"
           mkdir -p "$EXAMPLE_DST_PATH"
-          cd "$EXAMPLE_DST_PATH"/..
           
-          cargo build --all-targets
+          cargo install --examples --root . --path "$EXAMPLE_DST_PATH"/..
           find target/debug -type f -executable -maxdepth 1 -exec cp {} "$EXAMPLE_DST_PATH" \;
 
       - name: Run examples
