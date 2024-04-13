@@ -90,4 +90,24 @@ jobs:
             echo "Run $example"
             ${{ matrix.cmd }} "$example"
           done
+          
+
+  test_provisioning:
+    runs-on: ubuntu-latest
+    name: Test provisioning
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          lfs: false
+      - name: Run ReductStore instance
+        run: |
+          docker run -d --name reductstore -p 8383:8383 reduct/store:latest
+      - name: Run provisioning examples
+        run: |
+          for example in $(find docs/guides/examples/provisioning -type f );
+          do
+            docker-compose -f $example up -d
+            docker-compose -f $example down
+          done
 
