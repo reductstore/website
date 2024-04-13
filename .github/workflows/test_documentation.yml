@@ -16,6 +16,7 @@ jobs:
     name: Test examples
     strategy:
       matrix:
+        language: [ python, node, curl, cpp ]
         include:
           - reduct_version: main
             example_root: docs/guides/examples
@@ -84,7 +85,7 @@ jobs:
 
       - name: Run examples
         run: |
-          for example in $(find ${{ matrix.example_root }}/${{ matrix.path_prefix }}  -type f );
+          for example in $(find ${{ matrix.example_root }}/${{ matrix.path_prefix }} -type f );
           do
             echo "Run $example"
             ${{ matrix.cmd }} "$example"
