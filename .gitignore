@@ -22,3 +22,5 @@ yarn-error.log*
 
 # Misc
 .DS_Store
+/docs/guides/examples/rs/target/
+/docs/guides/examples/rs/Cargo.lock

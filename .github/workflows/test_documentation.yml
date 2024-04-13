@@ -16,7 +16,7 @@ jobs:
     name: Test examples
     strategy:
       matrix:
-        language: [ python, node, curl, cpp ]
+        language: [ python, node, curl, cpp, rust ]
         include:
           - reduct_version: main
             example_root: docs/guides/examples
@@ -36,6 +36,10 @@ jobs:
             path_prefix: cpp/build
             cmd: sh -c
 
+          - language: rust
+            path_prefix: rs/build
+            cmd: sh -c
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -43,7 +47,7 @@ jobs:
           lfs: false
       - name: Run ReductStore instance
         run: |
-          docker run -d --name reductstore -p 8383:8383 reduct/store:${{ matrix.reduct_version }}
+          docker run -d --name reductstore -p 8383:8383 --env RS_API_TOKEN="my-token" reduct/store:${{ matrix.reduct_version }}
 
       - name: Install Python
         uses: actions/setup-python@v5
@@ -54,6 +58,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.75
 
       - name: Install Python dependencies
         if: matrix.language == 'python'
@@ -82,6 +91,16 @@ jobs:
           make -j
           # remove non-executable files from build directory
            find "$EXAMPLE_DST_PATH" -type f !  -name *.cxx | xargs rm -rf
+
+      - name: Build Rust examples
+        if: matrix.language == 'rust'
+        run: |
+          export EXAMPLE_DST_PATH="$PWD/${{ matrix.example_root }}/${{ matrix.path_prefix }}"
+          mkdir -p "$EXAMPLE_DST_PATH"
+          cd "$EXAMPLE_DST_PATH"/..
+          
+          cargo build --all-targets
+          find target/debug -type f -executable -exec cp {} "$EXAMPLE_DST_PATH" \;
 
       - name: Run examples
         run: |
