@@ -19,5 +19,5 @@ int main() {
   auto [bucket, create_err] = client->GetOrCreateBucket("my-bucket", settings);
 
   assert(create_err == Error::kOk);
-  assert(bucket->GetInfo().result.name == "my-bucket2");
+  assert(bucket->GetInfo().result.name == "my-bucket");
 }
