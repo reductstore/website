@@ -176,11 +176,6 @@ const config = {
             ],
           },
           {
-            label: "Blog",
-            to: "/blog",
-            position: "left",
-          },
-          {
             type: "dropdown",
             label: "Developers",
             position: "left",
@@ -198,10 +193,15 @@ const config = {
                 to: "/download",
               },
               {
-                label: "GitHub",
-                href: "https://github.com/reductstore/reductstore",
+                label: "Discord",
+                href: "https://discord.com/invite/BWrCncF5EP",
               },
             ],
+          },
+          {
+            label: "Blog",
+            to: "/blog",
+            position: "left",
           },
           {
             label: "Pricing",
