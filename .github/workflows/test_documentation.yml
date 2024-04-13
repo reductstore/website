@@ -11,12 +11,11 @@ on:
       - main
 
 jobs:
-  test_python_examples:
+  test_examples:
     runs-on: ubuntu-latest
     name: Test examples
     strategy:
       matrix:
-        language: [ python, node, curl, cpp ]
         include:
           - reduct_version: main
             example_root: docs/guides/examples
@@ -31,6 +30,7 @@ jobs:
           - language: curl
             path_prefix: curl
             cmd: sh
+
           - language: cpp
             path_prefix: cpp/build
             cmd: sh -c
@@ -84,7 +84,7 @@ jobs:
 
       - name: Run examples
         run: |
-          for example in $(find -type f ${{ matrix.example_root }}/${{ matrix.path_prefix }});
+          for example in $(find ${{ matrix.example_root }}/${{ matrix.path_prefix }}  -type f );
           do
             echo "Run $example"
             ${{ matrix.cmd }} "$example"
