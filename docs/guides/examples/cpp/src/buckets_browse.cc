@@ -22,10 +22,7 @@ int main() {
 
     //  Browse all buckets and print their information
     auto [list, list_err] = client->GetBucketList();
-    if (list_err) {
-        std::cerr << "Error: " << list_err << std::endl;
-        return 1;
-    }
+    assert(list_err == Error::kOk);
 
     for (const auto &bucket: list) {
         std::cout << "Bucket: " << bucket.name << std::endl;
@@ -37,10 +34,7 @@ int main() {
 
     // Get information about a specific bucket
     auto [bucket, get_err] = client->GetBucket("example-bucket");
-    if (get_err) {
-        std::cerr << "Error: " << get_err << std::endl;
-        return 1;
-    }
+    assert(get_err == Error::kOk);
 
     std::cout << "Bucket Settings: " << bucket->GetSettings().result << std::endl;
     for (const auto &entry: bucket->GetEntryList().result) {

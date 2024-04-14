@@ -62,7 +62,7 @@ If there are too many blocks, the time spent searching for a block could exceed 
 
 ## Creating a Bucket
 
-A bucket can be created using the SDKs, CLI client, Web Console, or REST API. The bucket name must be unique within the store, and a client must have full access permission to create one. Provisioning a bucket with environment variables is also possible. Refer to the example below:
+A bucket can be created using the SDKs, CLI client, Web Console, or REST API. The bucket name must be unique within the store, and a client must have full access permission if the authentication is enabled. Provisioning a bucket with environment variables is also possible. Refer to the example below:
 
 import CreateBucketPy from "!!raw-loader!./examples/py/src/buckets_create.py";
 import CreateBucketJs from "!!raw-loader!./examples/js/src/buckets_create.mjs";
@@ -115,7 +115,7 @@ import CreateBucketCurl from "!!raw-loader!./examples/curl/buckets_create.sh";
       {CreateBucketCurl}
     </CodeBlock>
   </TabItem>
-  <TabItem value="Provision ">
+  <TabItem value="Provisioning">
     <CodeBlock language="yml">
       {CreateBucketProvision}
     </CodeBlock>
@@ -124,7 +124,7 @@ import CreateBucketCurl from "!!raw-loader!./examples/curl/buckets_create.sh";
 
 ## Browse Buckets
 
-You might want to view the list of buckets in your store or see the details of a specific bucket. This can be done using the SDKs, CLI client, Web Console, or REST API. The following example demonstrates how to list buckets using the CLI client:
+You might want to view the list of buckets in your store or see the details of a specific bucket. This can be done by using the SDKs, CLI client, Web Console, or REST API. For listing all buckets, a client must have a valid access token if the authorization is enabled.
 
 import ListBucketsCLI from "!!raw-loader!./examples/cli/buckets_browse.sh";
 import ListBucketsPy from "!!raw-loader!./examples/py/src/buckets_browse.py";
@@ -170,5 +170,58 @@ import ListBucketsCurl from "!!raw-loader!./examples/curl/buckets_browse.sh";
 </Tabs>
 
 ## Changing Bucket Settings
+
+Bucket settings can be modified using the SDKs, CLI client, Web Console, or REST API.
+A client must have full access permission to change the settings if the authorization is enabled.
+The settings that can be modified include the quota type, quota size, max block size, and maximal number of records.
+You can not change the bucket name.
+
+import ChangeBucketCLI from "!!raw-loader!./examples/cli/buckets_change.sh";
+import ChangeBucketPy from "!!raw-loader!./examples/py/src/buckets_change.py";
+import ChangeBucketJs from "!!raw-loader!./examples/js/src/buckets_change.mjs";
+import ChangeBucketRs from "!!raw-loader!./examples/rs/examples/buckets_change.rs";
+import ChangeBucketCpp from "!!raw-loader!./examples/cpp/src/buckets_change.cc";
+import ChangeBucketCurl from "!!raw-loader!./examples/curl/buckets_change.sh";
+
+<Tabs>
+  <TabItem value="CLI">
+    <CodeBlock language="shell">
+      {ChangeBucketCLI}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="Web Console">
+    TODO
+  </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">
+      {ChangeBucketPy}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="JavaScript">
+    <CodeBlock language="javascript">
+      {ChangeBucketJs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="Rust">
+    <CodeBlock language="rust">
+      {ChangeBucketRs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="C++">
+    <CodeBlock language="cpp">
+      {ChangeBucketCpp}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="cURL">
+    <CodeBlock language="bash">
+      {ChangeBucketCurl}
+    </CodeBlock>
+  </TabItem>
+</Tabs>
+
+:::note
+You can't change settings for provisioned buckets. You should unprovision it first.
+:::
+
 
 ## Deleting a Bucket
