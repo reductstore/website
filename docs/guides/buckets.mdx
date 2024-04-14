@@ -116,7 +116,7 @@ import CreateBucketCurl from "!!raw-loader!./examples/curl/buckets_create.sh";
     </CodeBlock>
   </TabItem>
   <TabItem value="Provision ">
-    <CodeBlock language="yaml">
+    <CodeBlock language="yml">
       {CreateBucketProvision}
     </CodeBlock>
   </TabItem>
@@ -128,6 +128,10 @@ You might want to view the list of buckets in your store or see the details of a
 
 import ListBucketsCLI from "!!raw-loader!./examples/cli/buckets_browse.sh";
 import ListBucketsPy from "!!raw-loader!./examples/py/src/buckets_browse.py";
+import ListBucketsJs from "!!raw-loader!./examples/js/src/buckets_browse.mjs";
+import ListBucketsRs from "!!raw-loader!./examples/rs/examples/buckets_browse.rs";
+import ListBucketsCpp from "!!raw-loader!./examples/cpp/src/buckets_browse.cc";
+import ListBucketsCurl from "!!raw-loader!./examples/curl/buckets_browse.sh";
 
 <Tabs>
   <TabItem value="CLI">
@@ -141,6 +145,26 @@ import ListBucketsPy from "!!raw-loader!./examples/py/src/buckets_browse.py";
   <TabItem value="Python">
     <CodeBlock language="python">
       {ListBucketsPy}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="JavaScript">
+    <CodeBlock language="javascript">
+      {ListBucketsJs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="Rust">
+    <CodeBlock language="rust">
+      {ListBucketsRs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="C++">
+    <CodeBlock language="cpp">
+      {ListBucketsCpp}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="cURL">
+    <CodeBlock language="bash">
+      {ListBucketsCurl}
     </CodeBlock>
   </TabItem>
 </Tabs>

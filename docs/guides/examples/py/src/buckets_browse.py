@@ -1,21 +1,24 @@
-from reduct import Client, BucketSettings, QuotaType
+from typing import List
+
+from reduct import Client, BucketInfo
+from reduct.bucket import Bucket
 
 # Create a client with the base URL and API token
 client = Client("http://localhost:8383", api_token="my-token")
 
 
 async def browse_buckets():
-    # Get all buckets
-    buckets = await client.list()
-    for bucket in buckets:
-        print(f"Bucket: {bucket.name}")
-        print(f"Size: {bucket.size}")
-        print(f"Entry Count: {bucket.entry_count}")
-        print(f"Oldest Record: {bucket.oldest_record}")
-        print(f"Latest Record: {bucket.latest_record}")
+    # Browse all buckets and print their information
+    buckets: List[BucketInfo] = await client.list()
+    for info in buckets:
+        print(f"Bucket: {info.name}")
+        print(f"Size: {info.size}")
+        print(f"Entry Count: {info.entry_count}")
+        print(f"Oldest Record: {info.oldest_record}")
+        print(f"Latest Record: {info.latest_record}")
 
     # Get information about a specific bucket
-    bucket = await client.get_bucket("my-bucket")
+    bucket: Bucket = await client.get_bucket("my-bucket")
     info = await bucket.get_full_info()
     print(f"Bucket settings: {info.settings}")
 
