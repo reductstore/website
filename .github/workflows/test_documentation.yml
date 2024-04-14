@@ -57,7 +57,7 @@ jobs:
           tar -xvf reduct-cli.linux-amd64.tar.gz
           chmod +x reduct-cli
           sudo mv reduct-cli /usr/local/bin
-          reduct-cli bucket create  http://my-token@127.0.0.1:8383/example-bucket 
+          reduct-cli cp https://reductstore@play.reduct.store/datasets  http://my-token@127.0.0.1:8383/example-bucket --limit 100
 
       - name: Install Python
         uses: actions/setup-python@v5
