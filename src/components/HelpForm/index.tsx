@@ -1,21 +1,53 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css"; // Ensure this path matches the location of your CSS module
 import Link from "@docusaurus/Link";
 import clsx from "clsx";
 import { useForm, ValidationError } from "@formspree/react";
+import { useLocation } from '@docusaurus/router';
+
+
+const topics = [
+  {
+    key: "TechnicalReview",
+    label: "Schedule a Technical Review",
+  },
+  {
+    key: "GeneralInquiry",
+    label: "General Inquiry",
+  },
+  {
+    key: "LicenseQuestion",
+    label: "License Question",
+  },
+  {
+    key: "SupportRequest",
+    label: "Support Request",
+  },
+  {
+    key: "Feedback",
+    label: "Feedback",
+  },
+  {
+    key: "BillingIssue",
+    label: "Billing Issue",
+  },
+];
+
 
 
 export default function HelpForm() {
   const [state, handleSubmit] = useForm("xgejorqo");
-  const [topic, setTopic] = React.useState("");
+  const [topic, setTopic] = useState("")
+  const location = useLocation();
 
-  const topics = [
-    "General Inquiry",
-    "License Question",
-    "Support Request",
-    "Feedback",
-    "Billing Issue",
-  ];
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const subject = queryParams.get('subject');
+    const foundTopic = topics.find(t => t.key === subject);
+    if (foundTopic) {
+      setTopic(foundTopic.key);
+    }
+  }, [location.search]);
 
   if (state.succeeded) {
     return (
@@ -49,20 +81,20 @@ export default function HelpForm() {
       <div className={styles.topicButtons}>
         {topics.map((element) => (
           <button
-            key={element}
+            key={element.key}
             type="button"
             className={clsx(styles.topicButton, {
-              [styles.topicButtonSelected]: topic === element,
+              [styles.topicButtonSelected]: topic === element.key,
             })}
             onClick={() => {
-              if (topic === element) {
+              if (topic === element.key) {
                 setTopic("");
                 return;
               }
-              setTopic(element);
+              setTopic(element.key);
             }}
           >
-            {element}
+            {element.label}
           </button>
         ))}
         <input type="hidden" name="topic" value={topic} />
@@ -85,7 +117,7 @@ export default function HelpForm() {
           type="submit"
           disabled={state.submitting}
         >
-          GET HELP
+          Send
         </button>
         <Link
           className={clsx("row", styles.privacyPolicy)}
