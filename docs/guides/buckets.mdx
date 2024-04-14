@@ -88,14 +88,15 @@ import CreateBucketCurl from "!!raw-loader!./examples/curl/buckets_create.sh";
   </TabItem>
   <TabItem value="Web Console">
     Steps to create a bucket using the Web Console:
-    1. Open the Web Console by opening https://127.0.0.1:8383 in your browser.
-    2. Click on the **"Buckets"** tab in the left sidebar.
-    3. Click on the plus icon to create a new bucket in the top right corner.
+    1. Open the Web Console by opening [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
+    2. Enter the API token if the authorization is enabled.
+    3. Click on the **"Buckets"** tab in the left sidebar.
+    4. Click on the plus icon to create a new bucket in the top right corner.
 
     ![Create a bucket with Web Console](./img/buckets_create.webp)
 
-    4. In the **"Add a new bucket"** dialog, enter the bucket name and settings.
-    5. Click on the "Create" button.
+    5. In the **"Add a new bucket"** dialog, enter the bucket name and settings.
+    6. Click on the "Create" button.
 
   </TabItem>
   <TabItem value="Python">
@@ -148,7 +149,20 @@ import ListBucketsCurl from "!!raw-loader!./examples/curl/buckets_browse.sh";
     </CodeBlock>
   </TabItem>
   <TabItem value="Web Console">
-    TODO
+    Steps to browse buckets using the Web Console:
+    1. Open the Web Console by opening [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
+    2. Enter the API token if the authorization is enabled.
+    3. Click on the **"Buckets"** tab in the left sidebar.
+    4. You will see a list of all buckets in the store.
+
+    ![Browse buckets with Web Console](./img/buckets_browse_all.webp)
+
+    5. Click on a specific bucket to view its details.
+
+    ![Browse a bucket with Web Console](./img/buckets_browse_one.webp)
+
+    6. You can see the bucket settings by clicking on the **Cog** icon in the bucket panel.
+
   </TabItem>
   <TabItem value="Python">
     <CodeBlock language="python">
@@ -198,7 +212,21 @@ import ChangeBucketCurl from "!!raw-loader!./examples/curl/buckets_change.sh";
     </CodeBlock>
   </TabItem>
   <TabItem value="Web Console">
-    TODO
+    Steps to change bucket setting using the Web Console:
+    1. Open the Web Console by opening [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
+    2. Enter the API token if the authorization is enabled.
+    3. Click on the **"Buckets"** tab in the left sidebar.
+    4. You will see a list of all buckets in the store.
+
+    ![Browse buckets with Web Console](./img/buckets_browse_all.webp)
+
+    5. Click on a specific bucket in the list
+
+    ![Browse a bucket with Web Console](./img/buckets_browse_one.webp)
+
+    6. Open the bucket settings by clicking on the **Cog** icon in the bucket panel.
+    7. Modify the settings as needed and click on the **Update** button.
+
   </TabItem>
   <TabItem value="Python">
     <CodeBlock language="python">
@@ -278,6 +306,10 @@ import RemoveBucketCurl from "!!raw-loader!./examples/curl/buckets_remove.sh";
     </CodeBlock>
   </TabItem>
 </Tabs>
+
+:::warning
+Removing a bucket will also remove all the data stored in it. This action is irreversible.
+:::
 
 :::note
 You can't remove a provisioned bucket. You should unprovision it first.
