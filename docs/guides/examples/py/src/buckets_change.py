@@ -6,7 +6,7 @@ client = Client("http://localhost:8383", api_token="my-token")
 
 async def change_bucket():
     # Get an existing bucket
-    bucket = await client.get_bucket("existing-bucket")
+    bucket = await client.get_bucket("example-bucket")
 
     # Change the quota size of the bucket to 5GB
     new_settings = BucketSettings(
