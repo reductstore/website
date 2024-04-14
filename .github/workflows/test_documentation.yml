@@ -117,7 +117,7 @@ jobs:
           for example in $(find ${{ matrix.example_root }}/${{ matrix.path_prefix }} -type f );
           do
             echo "Run $example" 
-            ${{ matrix.cmd }} "$example" 2>&1
+            ${{ matrix.cmd }} "$example"
             # remove alias if it is cli example
             if [ "${{ matrix.example }}" == "cli" ]; then
               reduct-cli alias rm local
