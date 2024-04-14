@@ -18,3 +18,15 @@ add_executable(
         src/buckets_browse.cc
 )
 target_link_libraries(buckets_browse.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(
+        buckets_change.cxx
+        src/buckets_change.cc
+)
+target_link_libraries(buckets_change.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(
+        buckets_remove.cxx
+        src/buckets_remove.cc
+)
+target_link_libraries(buckets_remove.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)

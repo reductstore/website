@@ -1,4 +1,4 @@
-use reduct_rs::{ReductError, ReductClient, QuotaType, BucketSettings};
+use reduct_rs::{BucketSettings, ReductClient, ReductError};
 use tokio;
 
 #[tokio::main]
