@@ -18,7 +18,7 @@ async def browse_buckets():
         print(f"Latest Record: {info.latest_record}")
 
     # Get information about a specific bucket
-    bucket: Bucket = await client.get_bucket("my-bucket")
+    bucket: Bucket = await client.get_bucket("example-bucket")
     info = await bucket.get_full_info()
     print(f"Bucket settings: {info.settings}")
 

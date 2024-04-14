@@ -19,7 +19,7 @@ async fn main() -> Result<(), ReductError> {
     }
 
     // Get information about a specific bucket
-    let bucket: Bucket = client.get_bucket("my-bucket").await?;
+    let bucket: Bucket = client.get_bucket("example-bucket").await?;
     let settings = bucket.settings().await?;
     println!("Settings: {:?}", settings);
 

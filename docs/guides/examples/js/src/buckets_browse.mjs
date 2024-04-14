@@ -15,7 +15,7 @@ for (const info of await client.getBucketList()) {
 
 
 // Get information about a specific bucket
-const bucket = await client.getBucket("my-bucket");
+const bucket = await client.getBucket("example-bucket");
 const settings = await bucket.getSettings()
 console.log(`Settings: ${settings}`);
 for (const info of await bucket.getEntryList()) {

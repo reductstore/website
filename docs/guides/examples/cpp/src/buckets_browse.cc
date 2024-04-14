@@ -36,7 +36,7 @@ int main() {
     }
 
     // Get information about a specific bucket
-    auto [bucket, get_err] = client->GetBucket("my-bucket");
+    auto [bucket, get_err] = client->GetBucket("example-bucket");
     if (get_err) {
         std::cerr << "Error: " << get_err << std::endl;
         return 1;
