@@ -18,9 +18,11 @@ import TabItem from '@theme/TabItem';
 
 A bucket is a container used for data storage and serves as a logical grouping of data. It stores time-series data, with each entry having a unique name. If you're familiar with databases, think of a bucket as a database, and entries as tables.
 
-Given the nature of time-series data, ReductStore partitions data into blocks. Each block, stored in a separate file, contains a set of entries. There are limits to the block size and the number of records it can hold. When a block reaches its limit, a new block is created to store additional data. This method allows ReductStore to store and access data efficiently.
+Given the nature of time-series data, ReductStore partitions data into blocks. Each block, stored in a separate file, contains a set of records. There are limits to the block size and the number of records it can hold. When a block reaches its limit, a new block is created to store additional data. This method allows ReductStore to store and access data efficiently.
+You can read more about blocks and records in the [How Does It Work?](/docs/how-does-it-work) document.
 
 Unlike other blob storage or file systems, ReductStore has a flat hierarchy. It doesn't use folders or directories. Instead, all data is stored in entries, which are grouped by buckets.
+
 
 ## Bucket Settings
 
@@ -88,7 +90,7 @@ import CreateBucketCurl from "!!raw-loader!./examples/curl/buckets_create.sh";
   </TabItem>
   <TabItem value="Web Console">
     Steps to create a bucket using the Web Console:
-    1. Open the Web Console by opening [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
+    1. Open the Web Console at [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
     2. Enter the API token if the authorization is enabled.
     3. Click on the **"Buckets"** tab in the left sidebar.
     4. Click on the plus icon to create a new bucket in the top right corner:
@@ -152,7 +154,7 @@ import ListBucketsCurl from "!!raw-loader!./examples/curl/buckets_browse.sh";
   </TabItem>
   <TabItem value="Web Console">
     Steps to browse buckets using the Web Console:
-    1. Open the Web Console by opening [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
+    1. Open the Web Console at [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
     2. Enter the API token if the authorization is enabled.
     3. Click on the **"Buckets"** tab in the left sidebar.
     4. You will see a list of all buckets in the store.
@@ -215,7 +217,7 @@ import ChangeBucketCurl from "!!raw-loader!./examples/curl/buckets_change.sh";
   </TabItem>
   <TabItem value="Web Console">
     Steps to change bucket setting using the Web Console:
-    1. Open the Web Console by opening [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
+    1. Open the Web Console at [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
     2. Enter the API token if the authorization is enabled.
     3. Click on the **"Buckets"** tab in the left sidebar.
     4. You will see a list of all buckets in the store.
@@ -283,7 +285,7 @@ import RemoveBucketCurl from "!!raw-loader!./examples/curl/buckets_remove.sh";
   </TabItem>
   <TabItem value="Web Console">
     Steps to remove a bucket using the Web Console:
-    1. Open the Web Console by opening [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
+    1. Open the Web Console at [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
     2. Enter the API token if the authorization is enabled.
     3. Click on the **"Buckets"** tab in the left sidebar.
     4. You will see a list of all buckets in the store.
