@@ -23,15 +23,3 @@ $ yarn build
 ```
 
 This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-### Deployment
-
-We use GitHub Actions to automatically deploy the website to GitHub Pages on every push to the `main` branch.
-
-To deploy manually, run the following command:
-
-```
-$ USE_SSH=true yarn deploy
-```
-
-This command will build the website and push to the `gh-pages` branch.
