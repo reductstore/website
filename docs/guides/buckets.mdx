@@ -91,12 +91,14 @@ import CreateBucketCurl from "!!raw-loader!./examples/curl/buckets_create.sh";
     1. Open the Web Console by opening [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
     2. Enter the API token if the authorization is enabled.
     3. Click on the **"Buckets"** tab in the left sidebar.
-    4. Click on the plus icon to create a new bucket in the top right corner.
+    4. Click on the plus icon to create a new bucket in the top right corner:
 
     ![Create a bucket with Web Console](./img/buckets_create.webp)
 
     5. In the **"Add a new bucket"** dialog, enter the bucket name and settings.
-    6. Click on the "Create" button.
+    6. Click on the "Create" button:
+
+    ![Set bucket settings with Web Console](./img/buckets_create_settings.webp)
 
   </TabItem>
   <TabItem value="Python">
@@ -154,14 +156,14 @@ import ListBucketsCurl from "!!raw-loader!./examples/curl/buckets_browse.sh";
     2. Enter the API token if the authorization is enabled.
     3. Click on the **"Buckets"** tab in the left sidebar.
     4. You will see a list of all buckets in the store.
+    5. Click on a specific bucket to view its details:
 
     ![Browse buckets with Web Console](./img/buckets_browse_all.webp)
 
-    5. Click on a specific bucket to view its details.
+    6. You can see the bucket settings by clicking on the **Cog** icon in the bucket panel:
 
-    ![Browse a bucket with Web Console](./img/buckets_browse_one.webp)
+    ![Browse bucket settings with Web Console](./img/buckets_browse_cog.webp)
 
-    6. You can see the bucket settings by clicking on the **Cog** icon in the bucket panel.
 
   </TabItem>
   <TabItem value="Python">
@@ -217,15 +219,17 @@ import ChangeBucketCurl from "!!raw-loader!./examples/curl/buckets_change.sh";
     2. Enter the API token if the authorization is enabled.
     3. Click on the **"Buckets"** tab in the left sidebar.
     4. You will see a list of all buckets in the store.
+    5. Click on a specific bucket in the list:
 
     ![Browse buckets with Web Console](./img/buckets_browse_all.webp)
 
-    5. Click on a specific bucket in the list
+    6. Open the bucket settings by clicking on the **Cog** icon in the bucket panel:
 
-    ![Browse a bucket with Web Console](./img/buckets_browse_one.webp)
+    ![Browse a bucket with Web Console](./img/buckets_change_cog.webp)
 
-    6. Open the bucket settings by clicking on the **Cog** icon in the bucket panel.
-    7. Modify the settings as needed and click on the **Update** button.
+    7. Modify the settings as needed and click on the **Update** button:
+
+    ![Change bucket settings with Web Console](./img/buckets_change_settings.webp)
 
   </TabItem>
   <TabItem value="Python">
@@ -278,7 +282,23 @@ import RemoveBucketCurl from "!!raw-loader!./examples/curl/buckets_remove.sh";
     </CodeBlock>
   </TabItem>
   <TabItem value="Web Console">
-    TODO
+    Steps to remove a bucket using the Web Console:
+    1. Open the Web Console by opening [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
+    2. Enter the API token if the authorization is enabled.
+    3. Click on the **"Buckets"** tab in the left sidebar.
+    4. You will see a list of all buckets in the store.
+    5. Click on a specific bucket in the list:
+
+    ![Browse buckets with Web Console](./img/buckets_browse_all.webp)
+
+    6. Click on the **Trash** icon in the bucket panel:
+
+    ![Remove a bucket with Web Console](./img/buckets_remove.webp)
+
+    7. Confirm the deletion by typing the bucket name and clicking on the **Remove** button:
+
+    ![Confirm bucket removal with Web Console](./img/buckets_remove_confirm.webp)
+
   </TabItem>
   <TabItem value="Python">
     <CodeBlock language="python">
