@@ -16,10 +16,17 @@ jobs:
     name: Test examples
     strategy:
       matrix:
+        doc_version: [ next, 1.9.x ]
         example: [ python, node, curl, cpp, rust, cli ]
         include:
-          - reduct_version: main
+          - doc_version: next
+            reduct_version: main
             example_root: docs/guides/examples
+
+          - doc_version: 1.9.x
+            redcut_version: latest
+            example_root: versioned_docs/version-1.9.x/guides/examples/1.9.x
+
           - language: python
             cmd: python3
             path_prefix: py/src
