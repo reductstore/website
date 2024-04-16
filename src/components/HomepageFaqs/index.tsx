@@ -1,9 +1,6 @@
 import React from "react";
 import styles from "./styles.module.css";
 import Faq from "../Faq";
-import HomepageSDKs from "../HomepageSDKs";
-import HomepageCLI from "../HomepageCLI";
-import HomepageWebConsole from "../HomepageWebConsole";
 import Heading from '@theme/Heading';
 import Link from "@docusaurus/Link";
 
