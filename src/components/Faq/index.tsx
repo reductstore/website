@@ -1,15 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FaqItem from './FaqItem';
 import styles from "./styles.module.css";
 
-const Faq = ({ faqs }) => {
-  const [openIndex, setOpenIndex] = useState(null);
 
-  const toggleItem = (index) => {
-    if (openIndex === index) {
-      setOpenIndex(null);
+interface FaqItemType {
+  question: string;
+  answer: string | JSX.Element;
+}
+
+interface FaqProps {
+  faqs: FaqItemType[];
+  defaultOpenCount?: number;
+}
+
+const Faq: React.FC<FaqProps> = ({ faqs, defaultOpenCount = 0 }) => {
+  const openCount = faqs.length < defaultOpenCount ? faqs.length : defaultOpenCount;
+  const [openIndexes, setOpenIndexes] = useState<number[]>(
+    Array.from({ length: openCount }, (_, index) => index)
+  );
+
+  useEffect(() => {
+    setOpenIndexes(Array.from({ length: openCount }, (_, index) => index));
+  }, [openCount]);
+
+  const toggleItem = (index: number) => {
+    if (openIndexes.includes(index)) {
+      setOpenIndexes(openIndexes.filter(item => item !== index));
     } else {
-      setOpenIndex(index);
+      setOpenIndexes([...openIndexes, index]);
     }
   };
 
@@ -20,7 +38,7 @@ const Faq = ({ faqs }) => {
           key={index}
           question={faq.question}
           answer={faq.answer}
-          isOpen={openIndex === index}
+          isOpen={openIndexes.includes(index)}
           toggle={() => toggleItem(index)}
         />
       ))}

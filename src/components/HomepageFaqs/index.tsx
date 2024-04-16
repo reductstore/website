@@ -11,7 +11,7 @@ export default function HomepageFaqs() {
   return (
     <section className={styles.section}>
       <Heading as="h1" className={styles.sectionTitle}>Frequently Asked Questions</Heading>
-      <Faq faqs={landingFaqs} />
+      <Faq faqs={landingFaqs} defaultOpenCount={3} />
     </section>
   );
 }
