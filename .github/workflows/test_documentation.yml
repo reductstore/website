@@ -25,7 +25,7 @@ jobs:
 
           - doc_version: 1.9.x
             reduct_version: latest
-            example_root: versioned_docs/version-1.9.x/guides/examples/1.9.x
+            example_root: versioned_docs/version-1.9.x/guides/examples/
 
           - language: python
             cmd: python3
