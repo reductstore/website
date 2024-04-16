@@ -24,7 +24,7 @@ jobs:
             example_root: docs/guides/examples
 
           - doc_version: 1.9.x
-            redcut_version: latest
+            reduct_version: latest
             example_root: versioned_docs/version-1.9.x/guides/examples/1.9.x
 
           - language: python
