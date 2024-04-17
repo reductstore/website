@@ -1,0 +1,150 @@
+name: Test examples from documentation
+
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [ opened, synchronize, reopened, closed ]
+    branches:
+      - main
+
+jobs:
+  test_examples:
+    runs-on: ubuntu-latest
+    name: Test examples
+    strategy:
+      matrix:
+        doc_version: [ next, 1.9.x ]
+        example: [ python, node, curl, cpp, rust, cli ]
+        include:
+          - doc_version: next
+            reduct_version: main
+            example_root: docs/guides/examples
+
+          - doc_version: 1.9.x
+            reduct_version: latest
+            example_root: versioned_docs/version-1.9.x/guides/examples/
+
+          - language: python
+            cmd: python3
+            path_prefix: py/src
+
+          - example: node
+            cmd: node
+            path_prefix: js/src
+
+          - example: curl
+            path_prefix: curl
+            cmd: sh
+
+          - example: cpp
+            path_prefix: cpp/build
+            cmd: sh -c
+
+          - example: rust
+            path_prefix: rs/build/bin
+            cmd: sh -c
+
+          - example: cli
+            path_prefix: cli
+            cmd: sh
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          lfs: false
+      - name: Prepare ReductStore instance
+        run: |
+          docker run -d --name reductstore -p 8383:8383 --env RS_API_TOKEN="my-token" reduct/store:${{ matrix.reduct_version }}
+          sleep 3
+          wget https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.linux-amd64.tar.gz
+          tar -xvf reduct-cli.linux-amd64.tar.gz
+          chmod +x reduct-cli
+          sudo mv reduct-cli /usr/local/bin
+          reduct-cli cp https://reductstore@play.reduct.store/datasets  http://my-token@127.0.0.1:8383/example-bucket --limit 100
+          reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-remove
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.8
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.75
+
+      - name: Install Python dependencies
+        if: matrix.example == 'python'
+        run: |
+          pip install -r ${{ matrix.example_root }}/${{ matrix.path_prefix }}/../requirements.txt
+
+      - name: Install Node.js dependencies
+        if: matrix.example == 'node'
+        run: |
+          cd ${{ matrix.example_root }}/${{ matrix.path_prefix }}/..
+          npm install
+
+      - name: Build C++ examples
+        if: matrix.example == 'cpp'
+        run: |
+          export EXAMPLE_DST_PATH="$PWD/${{ matrix.example_root }}/${{ matrix.path_prefix }}"
+
+          git clone https://github.com/reductstore/reduct-cpp.git
+          cd reduct-cpp
+          cmake -DCMAKE_BUILD_TYPE=Release .
+          sudo make install
+          
+          mkdir -p "$EXAMPLE_DST_PATH"
+          cd "$EXAMPLE_DST_PATH"
+          cmake -DCMAKE_BUILD_TYPE=Debug ..
+          make -j
+          # remove non-executable files from build directory
+          find "$EXAMPLE_DST_PATH" -type f ! -name "*.cxx" | xargs rm -rf
+
+      - name: Build Rust examples
+        if: matrix.example == 'rust'
+        run: |
+          export EXAMPLE_DST_PATH="$PWD/${{ matrix.example_root }}/rs/build"
+          mkdir -p "$EXAMPLE_DST_PATH"
+          cd "$EXAMPLE_DST_PATH"
+          
+          cargo install --examples --root . --path "$EXAMPLE_DST_PATH"/..
+
+      - name: Run examples
+        run: |
+          for example in $(find ${{ matrix.example_root }}/${{ matrix.path_prefix }} -type f );
+          do
+            echo "Run $example" 
+            ${{ matrix.cmd }} "$example"
+            # remove alias if it is cli example
+            if [ "${{ matrix.example }}" == "cli" ]; then
+              reduct-cli alias rm local
+            fi
+          done
+          
+
+  test_provisioning:
+    runs-on: ubuntu-latest
+    name: Test provisioning
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          lfs: false
+      - name: Run provisioning examples
+        run: |
+          for example in $(find docs/guides/examples/provisioning -type f );
+          do
+            docker-compose -f $example up -d
+            docker-compose -f $example down
+          done
+
