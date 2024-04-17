@@ -23,22 +23,22 @@ const sidebars = {
         {
           type: "link",
           label: "Rust Client",
-          href: "https://docs.rs/crate/reduct-rs/latest",
+          href: "https://github.com/reductstore/reduct-rs",
         },
         {
           type: "link",
           label: "Python Client",
-          href: "https://py.reduct.store/en/latest/",
+          href: "https://github.com/reductstore/reduct-py",
         },
         {
           type: "link",
           label: "JavaScript Client",
-          href: "https://js.reduct.store/en/latest/",
+          href: "https://github.com/reductstore/reduct-js",
         },
         {
           type: "link",
           label: "C++ Client",
-          href: "https://cpp.reduct.store/en/latest/",
+          href: "https://github.com/reductstore/reduct-cpp",
         },
       ],
     },
@@ -49,7 +49,7 @@ const sidebars = {
         {
           type: "link",
           label: "CLI Client",
-          href: "https://cli.reduct.store/en/latest/",
+          href: "https://github.com/reductstore/reduct-cli",
         },
       ],
     },
