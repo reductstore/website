@@ -234,7 +234,7 @@ const config = {
             items: [
               {
                 label:
-                  "ReductStore LLC, 651 N BROAD ST STE 201, MIDDLETOWN, DE 19709",
+                  "ReductStore LLC, 1207 Delaware Ave #2535 Wilmington DE 19806",
                 to: "/contact",
               },
               {
