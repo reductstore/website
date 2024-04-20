@@ -1,0 +1,47 @@
+---
+sidebar_position: 2
+title: Data Ingestion
+description: Complete guide to data ingestion
+---
+<head>
+    <link rel="canonical" href="https://www.reduct.store/docs/guides/data-ingestion"/>
+</head>
+
+# Data Ingestion
+
+## Concepts
+
+Data ingestion in ReductStore is based on HTTP API. Each record is sent as a binary object in the body of the POST request
+and must have the following information:
+* Bucket name
+* Entry name
+* Timestamp as a Unix timestamp in microseconds
+
+Additionally, a writer can add the following information:
+
+* Labels as key-value pairs which can be used for annotating and querying data
+* Content type which can be used for data interpretation
+
+ReductStore uses a streaming approach to ingest data. The server receives the data in chunks and streams them in a file system. This allows for efficient processing of large data streams and reduces the latency of the ingestion process.
+
+
+
+### Limitations
+
+The following limitations are applied to the data ingestion process:
+
+* Currently, records and their metadata are immutable. Once a record is ingested successfully, it cannot be overwritten or changed.
+* ReductStore doesn't have any limitations on the size of the record, however, the metadata is sent in the headers of the request and the size of the headers can be limited by the server or client configuration.
+
+
+
+## Typycal Data Ingestion Cases
+
+
+### Simple Data Ingestion
+
+### Streaming Data
+
+### Annotating Data
+
+### Batch Data
