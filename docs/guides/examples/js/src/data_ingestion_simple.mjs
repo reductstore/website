@@ -1,4 +1,4 @@
-const {Client} = require("reduct-js")
+import { Client } from "reduct-js";
 
 // Create a client instance, then get or create a bucket
 const client = new Client("http://127.0.0.1:8383", { apiToken: "my-token"});
