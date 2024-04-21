@@ -63,13 +63,13 @@ int main() {
 
 export const rustCodeExample = `
 use bytes::Bytes;
-use reduct_rs::{HttpError, ReductClient};
+use reduct_rs::{ReductError, ReductClient};
 use std::str::from_utf8;
 use std::time::SystemTime;
 use tokio;
 
 #[tokio::main]
-async fn main() -> Result<(), HttpError> {
+async fn main() -> Result<(), ReductError> {
     let timestamp = SystemTime::now();
 
     let client = ReductClient::builder().url("http://127.0.0.1:8383").build();

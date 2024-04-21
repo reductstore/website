@@ -3,6 +3,11 @@ sidebar_position: 2
 title: Data Ingestion
 description: Complete guide to data ingestion
 ---
+
+import CodeBlock from "@theme/CodeBlock";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 <head>
     <link rel="canonical" href="https://www.reduct.store/docs/guides/data-ingestion"/>
 </head>
@@ -22,8 +27,9 @@ Additionally, a writer can add the following information:
 * Labels as key-value pairs which can be used for annotating and querying data
 * Content type which can be used for data interpretation
 
-ReductStore uses a streaming approach to ingest data. The server receives the data in chunks and streams them in a file system. This allows for efficient processing of large data streams and reduces the latency of the ingestion process.
+ReductStore uses a streaming approach to ingest data. The server receives the data in chunks and streams them in a file system. This allows for efficient data ingestion and reduces the memory footprint of the server.
 
+In case of little size records, ReductStore provides a batch ingestion mode. In this mode, the server receives a batch of records in a single request to reduce the overhead of the HTTP protocol.
 
 
 ### Limitations
@@ -34,11 +40,50 @@ The following limitations are applied to the data ingestion process:
 * ReductStore doesn't have any limitations on the size of the record, however, the metadata is sent in the headers of the request and the size of the headers can be limited by the server or client configuration.
 
 
-
 ## Typycal Data Ingestion Cases
+
+Here you can find how to implement typical data ingestion cases using the ReductStore SDKs or HTTP API. Pay attention that all the examples are written for a local ReductStore instance available at http://127.0.0.1:8383 with an API token my-token.
+
+For more information on how to set up a local ReductStore instance, refer to the Getting Started guide.
 
 
 ### Simple Data Ingestion
+
+The simplest way to write data in ReductStore is to send a single record with a single value. In this case, the record is sent as a binary object in the body of the POST request.
+
+import SimplePy from "!!raw-loader!./examples/py/src/data_ingestion_simple.py";
+import SimpleJs from "!!raw-loader!./examples/js/src/data_ingestion_simple.mjs";
+import SimpleRs from "!!raw-loader!./examples/rs/examples/data_ingestion_simple.rs";
+import SimpleCpp from "!!raw-loader!./examples/cpp/src/data_ingestion_simple.cc";
+import SimpleCurl from "!!raw-loader!./examples/curl/data_ingestion_simple.sh";
+
+<Tabs>
+    <TabItem value="Python">
+        <CodeBlock language="python">
+            {SimplePy}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">
+            {SimpleJs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {SimpleRs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">
+            {SimpleCpp}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="cURL">
+        <CodeBlock language="bash">
+            {SimpleCurl}
+        </CodeBlock>
+    </TabItem>
+</Tabs>
 
 ### Streaming Data
 

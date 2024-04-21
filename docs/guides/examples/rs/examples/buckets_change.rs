@@ -13,7 +13,7 @@ async fn main() -> Result<(), ReductError> {
     let bucket = client.get_bucket("example-bucket").await?;
 
     // Change the quota size of the bucket to 5GB
-    let new_settings = BucketSettings{
+    let new_settings = BucketSettings {
         quota_size: Some(5_000_000_000),
         ..BucketSettings::default()
     };
