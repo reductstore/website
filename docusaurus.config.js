@@ -181,19 +181,19 @@ const config = {
             position: "left",
             items: [
               {
-                label: "Documentation",
-                to: "/docs/getting-started",
-              },
-              {
-                label: "API Reference",
-                to: "/docs/http-api",
-              },
-              {
                 label: "Download",
                 to: "/download",
               },
               {
-                label: "Discord",
+                label: "Documentation",
+                to: "/docs/getting-started",
+              },
+              {
+                label: "Source Code",
+                href: "https://github.com/reductstore/reductstore",
+              },
+              {
+                label: "Community",
                 href: "https://discord.com/invite/BWrCncF5EP",
               },
             ],
