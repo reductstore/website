@@ -4,7 +4,7 @@ import Layout from "@theme/Layout";
 import WhitePaperForm from "@site/src/components/WhitePaperForm";
 import styles from './styles.module.css';
 
-const LogoImg = require("@site/static/img/whitepaper/whitepaper.webp").default;
+const WhitePaperImg = require("@site/static/img/whitepaper/whitepaper.webp").default;
 
 export default function ReductAI(): JSX.Element {
   return (
@@ -21,7 +21,7 @@ export default function ReductAI(): JSX.Element {
             </div>
             <div className="col col--4 col--offset-1 hideOnMobile">
               <img
-                src={LogoImg}
+                src={WhitePaperImg}
                 alt="White Paper Cover"
                 className={styles.whitePaperImage}
               />
