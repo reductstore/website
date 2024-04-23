@@ -34,5 +34,9 @@ target_link_libraries(buckets_remove.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIE
 add_executable(data_ingestion_simple.cxx
     src/data_ingestion_simple.cc
 )
-
 target_link_libraries(data_ingestion_simple.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(data_ingestion_streaming.cxx
+        src/data_ingestion_streaming.cc
+)
+target_link_libraries(data_ingestion_streaming.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)

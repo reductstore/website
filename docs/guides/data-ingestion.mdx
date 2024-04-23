@@ -38,7 +38,7 @@ The following limitations are applied to the data ingestion process:
 
 * Currently, records and their metadata are immutable. Once a record is ingested successfully, it cannot be overwritten or changed.
 * ReductStore doesn't have any limitations on the size of the record, however, the metadata is sent in the headers of the request and the size of the headers can be limited by the server or client configuration.
-
+* Since ReaductStore pre-allocate space for records and store them together in a block, the size must be known in advance even though the record is sent in chunks.
 
 ## Typycal Data Ingestion Cases
 
@@ -86,6 +86,37 @@ import SimpleCurl from "!!raw-loader!./examples/curl/data_ingestion_simple.sh";
 </Tabs>
 
 ### Streaming Data
+
+In case of large records, it is recommended to use the streaming approach. In this case, a client application sends a record in chunks and doesn't need to load the whole record into memory.
+This approach is also useful for real-time data ingestion when you receive data from a stream and need to send it to ReductStore without buffering.
+
+import StreamingPy from "!!raw-loader!./examples/py/src/data_ingestion_streaming.py";
+import StreamingJs from "!!raw-loader!./examples/js/src/data_ingestion_streaming.mjs";
+import StreamingRs from "!!raw-loader!./examples/rs/examples/data_ingestion_streaming.rs";
+import StreamingCpp from "!!raw-loader!./examples/cpp/src/data_ingestion_streaming.cc";
+
+<Tabs>
+    <TabItem value="Python">
+        <CodeBlock language="python">
+            {StreamingPy}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">
+            {StreamingJs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {StreamingRs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">
+            {StreamingCpp}
+        </CodeBlock>
+    </TabItem>
+</Tabs>
 
 ### Annotating Data
 
