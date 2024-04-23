@@ -1,0 +1,30 @@
+.useCaseRow {
+  margin-bottom: var(--reduct-section-space);
+}
+
+.textSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.imageSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imageSection img {
+  max-width: 100rem;
+  height: auto;
+}
+
+@media (max-width: 997px) {
+  .useCaseRowLeft {
+    flex-direction: column-reverse;
+  }
+  .imageSection img {
+    margin-top: 2rem;
+  }
+}

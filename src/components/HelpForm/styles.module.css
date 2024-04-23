@@ -1,6 +1,7 @@
 .helpForm {
   margin-bottom: var(--reduct-bottom-page-margin);
   max-width: 700px;
+  width: 100%;
   padding: 20px;
   border-radius: 8px;
   border: 1px solid #ddd;
