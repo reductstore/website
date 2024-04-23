@@ -12,9 +12,14 @@ int main() {
     auto [bucket, create_err] = client->GetOrCreateBucket("my-bucket");
     assert(create_err == Error::kOk);
 
-    // Send a record to the "entry-1" entry with the current timestamp
+    // Send a record  with labels and content type
     IBucket::Time ts = IBucket::Time::clock::now();
-    auto err = bucket->Write("entry-1", ts, [](auto rec) {
+    auto err = bucket->Write("entry-1", {
+            .timestamp = ts,
+            .labels = {{"name", "example"},
+                       {"type", "simple"}},
+            .content_type = "text/plain",
+    }, [](auto rec) {
         rec->WriteAll("Some binary data");
     });
     assert(err == Error::kOk);

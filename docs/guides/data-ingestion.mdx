@@ -120,4 +120,42 @@ import StreamingCpp from "!!raw-loader!./examples/cpp/src/data_ingestion_streami
 
 ### Annotating Data
 
+In ReductStore, you can add labels to the record to annotate it. Labels are key-value pairs that can be used for filtering and querying data.
+Moreover, you can add a content type to the record to specify the type of data. It maybe useful for data interpretation on the client side.
+
+
+import AnnotatingPy from "!!raw-loader!./examples/py/src/data_ingestion_annotating.py";
+import AnnotatingJs from "!!raw-loader!./examples/js/src/data_ingestion_annotating.mjs";
+import AnnotatingRs from "!!raw-loader!./examples/rs/examples/data_ingestion_annotating.rs";
+import AnnotatingCpp from "!!raw-loader!./examples/cpp/src/data_ingestion_annotating.cc";
+import AnnotatingCurl from "!!raw-loader!./examples/curl/data_ingestion_annotating.sh";
+
+<Tabs>
+    <TabItem value="Python">
+        <CodeBlock language="python">
+            {AnnotatingPy}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">
+            {AnnotatingJs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {AnnotatingRs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">
+            {AnnotatingCpp}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="cURL">
+        <CodeBlock language="bash">
+            {AnnotatingCurl}
+        </CodeBlock>
+    </TabItem>
+</Tabs>
+
 ### Batch Data

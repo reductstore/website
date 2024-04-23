@@ -8,7 +8,7 @@ IO_BUFFER = io.BytesIO(b"Some let's say huge binary data")
 
 async def main():
     # Create a client instance, then get or create a bucket
-    client = Client('http://127.0.0.1:8383', api_token="my-token")
+    client = Client("http://127.0.0.1:8383", api_token="my-token")
     bucket: Bucket = await client.create_bucket("my-bucket", exist_ok=True)
 
     # Async iterator that reads data from in chunks

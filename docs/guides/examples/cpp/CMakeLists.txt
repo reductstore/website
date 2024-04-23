@@ -40,3 +40,8 @@ add_executable(data_ingestion_streaming.cxx
         src/data_ingestion_streaming.cc
 )
 target_link_libraries(data_ingestion_streaming.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(data_ingestion_annotating.cxx
+        src/data_ingestion_annotating.cc
+)
+target_link_libraries(data_ingestion_annotating.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
