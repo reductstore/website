@@ -8,16 +8,14 @@ import HelpForm from "@site/src/components/HelpForm";
 import clsx from "clsx";
 import Link from "@docusaurus/Link";
 
-const imageUrl = require("./img/image.png").default;
-
 export default function UseCaseAI(): JSX.Element {
   return (
     <Layout
-      title="AI Use Case"
+      title="Run AI Workflows with ReductStore"
       description="Learn how Reduct can help you transform your AI workflows."
     >
       <main>
-        <SimpleHeader pageTitle="AI Use Case" />
+        <SimpleHeader pageTitle="Run AI Workflows with ReductStore" />
 
         <div className={clsx("container", styles.container)}>
 
@@ -50,10 +48,9 @@ export default function UseCaseAI(): JSX.Element {
   );
 }
 
-
 const useCases = [
   {
-    title: "Integrating Blob and Time Series Capabilities in AI Applications",
+    title: "Blob and Time Series Capabilities",
     description: (
       <p>
         Incorporating ReductStore's architecture, which combines Blob storage with Time Series capabilities,
@@ -63,11 +60,11 @@ const useCases = [
         Consequently, AI models benefit from streamlined access to historical and real-time data for analysis and prediction.
       </p>
     ),
-    imageUrl: "path/to/image1.jpg",
+    imageUrl: require("./img/image.png").default,
     imageLeft: true
   },
   {
-    title: "Achieving Peak Performance: The Fastest Blob Storage Solutions",
+    title: "The Fastest Blob Storage Solutions",
     description: (
       <p>
         Comparative performance analyses have underscored its superiority; consistently eclipsing MinIO in write and read operations across various chunk sizes as documented at <Link to="https://www.reduct.store/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio"><b>ReductStore vs. Minio Performance Comparison</b></Link>.
@@ -75,11 +72,11 @@ const useCases = [
         For blobs exceeding 100KB, it significantly outperformed TimescaleDB by a margin of 200 to 1300%. These metrics clearly establish ReductStore as a leading choice for high-velocity data environments where optimal performance is imperative.
       </p>
     ),
-    imageUrl: "path/to/image2.jpg",
+    imageUrl: require("./img/image.png").default,
     imageLeft: false
   },
   {
-    title: "Versatile Data Management: Storing Diverse Data Types From Records to AI Models",
+    title: "Store Records and AI Models",
     description: (
       <p>
         Versatile data management in the context of AI applications mandates a storage solution that is both flexible and robust, capable of accommodating a diverse array of data types. ReductStore offers such versatility, allowing for the creation of multiple buckets to address different storage requirements effectively.
@@ -88,11 +85,11 @@ const useCases = [
         The ability to store AI models in the same storage further empowers developers and data scientists to track model iterations systematically, ensuring integrity and reproducibility across AI workflows.
       </p>
     ),
-    imageUrl: "path/to/image3.jpg",
+    imageUrl: require("./img/image.png").default,
     imageLeft: true
   },
   {
-    title: "Enhancing Data Organization: AI Labels and Metadata for Every Record",
+    title: "AI Labels and Metadata for Every Record",
     description: (
       <p>
         The organization of data is crucial for AI-driven applications and workflows. ReductStore's approach to this entails the ability to assign metadata, including AI-generated labels, to each blob within its database.
@@ -101,11 +98,11 @@ const useCases = [
         Moreover, by embedding AI-generated metadata directly into the storage layer, ReductStore simplifies the data pipeline architecture and enhances overall operational efficiency.
       </p>
     ),
-    imageUrl: "path/to/image4.jpg",
+    imageUrl: require("./img/image.png").default,
     imageLeft: false
   },
   {
-    title: "Optimizing Data Replication With Label Filtering",
+    title: "Data Replication With Label Filtering",
     description: (
       <p>
         Implementing label filtering in data replication processes enhances efficiency by ensuring that only pertinent information is synchronized across storage buckets.
@@ -114,11 +111,11 @@ const useCases = [
         As a result, this selective approach minimizes latency, reduces unnecessary network traffic, and ensures that replicated environments maintain an up-to-date state with all relevant operational data while excluding extraneous information.
       </p>
     ),
-    imageUrl: "path/to/image5.jpg",
+    imageUrl: require("./img/image.png").default,
     imageLeft: true
   },
   {
-    title: "Implementing Real-Time FIFO Quotas in Data Processing",
+    title: "Real-Time FIFO Quota",
     description: (
       <p>
         The implementation of real-time FIFO (First-In, First-Out) quotas in data processing within the context of ReductStore is a significant advancement for managing data volume efficiently.
@@ -127,11 +124,11 @@ const useCases = [
         It also facilitates adherence to compliance requirements by maintaining an automated retention policy based on actual usage rather than arbitrary timeframes, optimizing both storage utility and system performance without compromising on data integrity.
       </p>
     ),
-    imageUrl: "path/to/image6.jpg",
+    imageUrl: require("./img/image.png").default,
     imageLeft: false
   },
   {
-    title: "Streamlining Operations with Efficient Data Batching and HTTP(S) APIs",
+    title: "Data Batching and HTTP(S) APIs",
     description: (
       <p>
         In the realm of IoT and edge computing, efficient data batching coupled with HTTP(S) APIs plays a pivotal role in enhancing operational efficiency.
@@ -140,7 +137,7 @@ const useCases = [
         Through the implementation of intelligent data batching strategies and robust HTTP(S) API endpoints, systems can achieve greater throughput while minimizing response times, thus bolstering overall performance in distributed computing landscapes.
       </p>
     ),
-    imageUrl: "path/to/image7.jpg",
+    imageUrl: require("./img/image.png").default,
     imageLeft: true
   }
 ];
