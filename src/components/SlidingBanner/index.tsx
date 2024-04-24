@@ -25,7 +25,7 @@ const SlidingBanner: React.FC = () => {
       const timeout = setTimeout(() => {
         setVisible(true);
         setBannerShown(true);
-      }, 1500);
+      }, 13_000);
       return () => clearTimeout(timeout);
     }
   }, [isModalOpen, wasBannerShown, setBannerShown, setVisible, isCorrectPath]);
