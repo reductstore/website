@@ -1,5 +1,6 @@
 import "vanilla-cookieconsent/dist/cookieconsent.css";
 import * as CookieConsent from "vanilla-cookieconsent";
+import useCookieConsentStore from "@site/src/store/useCookieConsentStore";
 
 const cookieConsentConfig = {
   cookie: {
@@ -7,6 +8,12 @@ const cookieConsentConfig = {
   },
   onFirstConsent: handleConsent,
   onChange: handleConsent,
+  onModalShow: () => {
+    useCookieConsentStore.getState().setModalOpen(true);
+  },
+  onModalHide: () => {
+    useCookieConsentStore.getState().setModalOpen(false);
+  },
   guiOptions: {
     consentModal: {
       layout: "box",
