@@ -1,6 +1,7 @@
 import React from "react";
 import BlogPostItem from "@theme-original/BlogPostItem";
 import SocialShareBar from "@site/src/components/SocialShareBar";
+import SlidingBanner from "@site/src/components/SlidingBanner";
 
 export default function BlogPostItemWrapper(props) {
   const { frontMatter } = props.children.type;
@@ -8,6 +9,7 @@ export default function BlogPostItemWrapper(props) {
     <>
       <SocialShareBar frontMatter={frontMatter} />
       <BlogPostItem {...props} />
+      <SlidingBanner />
     </>
   );
 }
