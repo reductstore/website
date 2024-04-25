@@ -1,7 +1,3 @@
-.container {
-  padding-top: 3rem;
-}
-
 .contactForm {
   display: flex;
   flex-direction: column;
@@ -13,4 +9,6 @@
 
 .contactForm p {
   margin-bottom: 3rem;
+  text-align: center;
+  max-width: 600px;
 }

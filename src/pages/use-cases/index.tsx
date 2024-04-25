@@ -5,24 +5,16 @@ import SimpleHeader from "@site/src/components/SimpleHeader";
 import clsx from 'clsx';
 import styles from './styles.module.css';
 
-const useCases = [
-  {
-    title: "AI",
-    description: "Explore how AI can transform your workflows.",
-    link: "/use-cases/ai"
-  }
-];
-
 export default function UseCases(): JSX.Element {
   return (
     <Layout
-      title="Use Cases"
+      title="Explore Use Cases"
       description="Learn how our solutions can help you transform your infrastructure."
     >
       <main>
-        <SimpleHeader pageTitle="Use Cases" />
+        <SimpleHeader pageTitle="Explore Use Cases" />
 
-        <div className="container">
+        <div className={clsx("container", styles.useCasesContainer)}>
 
           <div>
             {useCases.map((useCase, index) => (
@@ -38,7 +30,7 @@ export default function UseCases(): JSX.Element {
 
                 <div className="card__footer">
                   <Link to={useCase.link} className="button button--primary button--block">
-                    Learn More
+                    Learn More &rarr;
                   </Link>
                 </div>
 
@@ -51,3 +43,11 @@ export default function UseCases(): JSX.Element {
     </Layout >
   );
 }
+
+const useCases = [
+  {
+    title: "Optimize Your AI Workflows",
+    description: "Learn how ReductStore can improve the performance of your projects with an optimal infrastructure.",
+    link: "/use-cases/ai-workflows"
+  }
+];
