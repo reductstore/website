@@ -36,6 +36,7 @@ const SlidingBanner: React.FC = () => {
   };
 
   const handleDownloadClick = () => {
+    Cookies.set('reductstore_bannerDismissed', 'true', { expires: 30 });
     if (window._paq) {
       window._paq.push(['trackEvent', 'Slide-In Banner', 'White Paper Click', pagePath]);
     }
