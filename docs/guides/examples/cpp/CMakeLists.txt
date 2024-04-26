@@ -7,6 +7,8 @@ find_package(ZLIB)
 find_package(OpenSSL)
 find_package(ReductCpp 1.8.0)
 
+## Buckets
+
 add_executable(
         buckets_create.cxx
         src/buckets_create.cc
@@ -31,6 +33,7 @@ add_executable(
 )
 target_link_libraries(buckets_remove.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
 
+# Data Ingestion
 add_executable(data_ingestion_simple.cxx
     src/data_ingestion_simple.cc
 )
@@ -45,3 +48,8 @@ add_executable(data_ingestion_annotating.cxx
         src/data_ingestion_annotating.cc
 )
 target_link_libraries(data_ingestion_annotating.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(data_ingestion_batch.cxx
+        src/data_ingestion_batch.cc
+)
+target_link_libraries(data_ingestion_batch.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)

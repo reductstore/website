@@ -91,7 +91,7 @@ In case of large records, it is recommended to use the streaming approach. In th
 This approach is also useful for real-time data ingestion when you receive data from a stream and need to send it to ReductStore without buffering.
 
 :::info
- Due to the limitation described above, the size of the record must be known in advance even though the record is sent in chunks.
+Due to the limitation described above, the size of the record must be known in advance even though the record is sent in chunks.
 :::
 
 import StreamingPy from "!!raw-loader!./examples/py/src/data_ingestion_streaming.py";
@@ -162,7 +162,36 @@ import AnnotatingCurl from "!!raw-loader!./examples/curl/data_ingestion_annotati
     </TabItem>
 </Tabs>
 
-### Batch Data
+### Batching Data
 
 In case of little size records, it is recommended to use the batch ingestion mode. In this case, a client application sends a batch of records in a single request to reduce the overhead of the HTTP protocol.
+You can also check the status of the batch ingestion and get the list of failed records.
 
+import BatchPy from "!!raw-loader!./examples/py/src/data_ingestion_batch.py";
+import BatchJs from "!!raw-loader!./examples/js/src/data_ingestion_batch.mjs";
+import BatchRs from "!!raw-loader!./examples/rs/examples/data_ingestion_batch.rs";
+import BatchCpp from "!!raw-loader!./examples/cpp/src/data_ingestion_batch.cc";
+
+<Tabs>
+    <TabItem value="Python">
+        <CodeBlock language="python">
+            {BatchPy}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">
+            {BatchJs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {BatchRs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem
+        value="C++">
+        <CodeBlock language="cpp">
+            {BatchCpp}
+        </CodeBlock>
+    </TabItem>
+</Tabs>

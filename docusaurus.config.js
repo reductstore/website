@@ -185,6 +185,8 @@ const config = {
                 to: "/download",
               },
               {
+                type: "docSidebar",
+                sidebarId: "docSidebar",
                 label: "Documentation",
                 to: "/docs/getting-started",
               },
