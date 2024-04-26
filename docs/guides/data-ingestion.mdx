@@ -18,9 +18,9 @@ import TabItem from '@theme/TabItem';
 
 Data ingestion in ReductStore is based on HTTP API. Each record is sent as a binary object in the body of the POST request
 and must have the following information:
-* Bucket name
-* Entry name
-* Timestamp as a Unix timestamp in microseconds
+* Bucket name, which must exist in the instance.
+* Entry name, which is a unique identifier of the record in the bucket. If the entry doesn't exist, it will be created.
+* Timestamp as a Unix timestamp in microseconds.
 
 Additionally, a writer can add the following information:
 
@@ -90,6 +90,10 @@ import SimpleCurl from "!!raw-loader!./examples/curl/data_ingestion_simple.sh";
 In case of large records, it is recommended to use the streaming approach. In this case, a client application sends a record in chunks and doesn't need to load the whole record into memory.
 This approach is also useful for real-time data ingestion when you receive data from a stream and need to send it to ReductStore without buffering.
 
+:::info
+ Due to the limitation described above, the size of the record must be known in advance even though the record is sent in chunks.
+:::
+
 import StreamingPy from "!!raw-loader!./examples/py/src/data_ingestion_streaming.py";
 import StreamingJs from "!!raw-loader!./examples/js/src/data_ingestion_streaming.mjs";
 import StreamingRs from "!!raw-loader!./examples/rs/examples/data_ingestion_streaming.rs";
@@ -108,7 +112,7 @@ import StreamingCpp from "!!raw-loader!./examples/cpp/src/data_ingestion_streami
     </TabItem>
     <TabItem value="Rust">
         <CodeBlock language="rust">
-            {StreamingRs}
+            {StreamingRs}J
         </CodeBlock>
     </TabItem>
     <TabItem value="C++">
@@ -159,3 +163,6 @@ import AnnotatingCurl from "!!raw-loader!./examples/curl/data_ingestion_annotati
 </Tabs>
 
 ### Batch Data
+
+In case of little size records, it is recommended to use the batch ingestion mode. In this case, a client application sends a batch of records in a single request to reduce the overhead of the HTTP protocol.
+
