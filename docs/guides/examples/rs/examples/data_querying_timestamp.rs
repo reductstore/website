@@ -22,5 +22,20 @@ async fn main() -> Result<(), ReductError> {
         .send()
         .await?;
 
+    // Query records in the time range
+    let record = bucket
+        .read_record("entry-1")
+        .timestamp(timestamp).send().await?;
+
+    println!("Timestamp: {:?}", record.timestamp());
+    println!("Content Length: {}", record.content_length());
+    println!("Content Type: {}", record.content_type());
+    println!("Labels: {:?}", record.labels());
+
+    // Read the record data
+    let data = record.bytes().await?;
+    assert_eq!(data, Bytes::from("Some binary data"));
+
+
     Ok(())
 }

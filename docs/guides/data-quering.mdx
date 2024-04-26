@@ -1,0 +1,155 @@
+---
+sidebar_position: 3
+title: Data Querying
+description: Complete guide on how to query data from ReductStore using the CLI, HTTP API, and SDKs.
+---
+
+import CodeBlock from "@theme/CodeBlock";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<head>
+    <link rel="canonical" href="https://www.reduct.store/docs/guides/data-quering"/>
+</head>
+
+# Data Querying
+
+## Concepts
+
+ReductStore provides an efficient way to query data by batching multiple records for a given time interval in a single request.
+This approach is particularly useful when you need to query a large amount of data, as it reduces the number of requests and the overall latency.
+
+The query is implemented as an iterator that returns a batch of records for each iteration. This allows you to process the data in chunks, which is useful when working with large datasets.
+
+You can also retrieve a record by its timestamp, however, this method is less efficient than querying by time range because no batching is performed.
+
+## Query Parameters
+The data can be filtered by specifying:
+    * Start and end time range
+    * List of labels values to include
+    * List of labels to exclude.
+    * Limit of records to return
+    * TTL of the query
+
+
+### Time Range
+
+The time range is specified by the `start` and `end` parameters. The records with timestamps greater or equal to `start` and less than `end` are included in the result.
+If the `start` parameter is not specified, the query will start from the beginning of the dataset. If the `end` parameter is not specified, the query will continue until the end of the dataset.
+if both `start` and `end` are not specified, the query will return the whole dataset.
+
+### Include Labels
+
+The `include` parameter is used to filter the records by the specified labels values. Only the records that match the ALL specified labels values will be included in the result.
+
+### Exclude Labels
+
+The `exclude` parameter is used to filter the records by the specified labels. The records that match ANY of the specified labels will be excluded from the result.
+
+### Limit Records
+
+The `limit` parameter is used to limit the number of records returned by the query. If the number of records in the dataset is less than the specified limit, all records will be returned.
+
+### TTL (Time-to-Live)
+
+The `ttl` parameter is used to specify the time-to-live of the query. The query will be automatically closed after the specified time has passed since the query was created. This is needed to limit the number of open queries and prevent memory leaks. Default TTL is 60 seconds.
+
+## Typycal Data Querying Cases
+
+In this section, you can learn how to implement typical data querying cases using the ReductStore CLI, SDKs or HTTP API. Please note that all examples are tailored for a local ReductStore instance accessible at **http://127.0.0.1:8383** using the API token 'my-token'.
+
+For more information on how to set up a local ReductStore instance, refer to the [**Getting Started**](../getting-started) guide.
+
+
+### Querying Data by Time Range
+
+The most typical use case is querying data by a time range:
+
+import TimeRangeQueryPy from "!!raw-loader!./examples/py/src/data_querying_time_range.py"
+import TimeRangeQueryJs from "!!raw-loader!./examples/js/src/data_querying_time_range.mjs"
+import TimeRangeQueryRs from "!!raw-loader!./examples/rs/examples/data_querying_time_range.rs"
+import TimeRangeQueryCpp from "!!raw-loader!./examples/cpp/src/data_querying_time_range.cc"
+import TimeRangeQueryCLI from "!!raw-loader!./examples/cli/data_querying_time_range.sh"
+import TimeRangeQueryCurl from "!!raw-loader!./examples/curl/data_querying_time_range.sh"
+
+<Tabs>
+    <TabItem value="Python">
+        <CodeBlock language="python">
+            {TimeRangeQueryPy}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">
+            {TimeRangeQueryJs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {TimeRangeQueryRs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">
+            {TimeRangeQueryCpp}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="CLI">
+        <CodeBlock language="bash">
+            {TimeRangeQueryCLI}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Curl">
+        <CodeBlock language="bash">
+            {TimeRangeQueryCurl}
+        </CodeBlock>
+    </TabItem>
+</Tabs>
+
+### Querying Record by Timestamp
+
+Sometimes you need to retrieve a record by its timestamp. The most efficient way to do this is use the `read` method of the ReductStore SDKs or HTTP API.
+
+import ReadRecordPy from "!!raw-loader!./examples/py/src/data_querying_timestamp.py"
+import ReadRecordJs from "!!raw-loader!./examples/js/src/data_querying_timestamp.mjs"
+import ReadRecordRs from "!!raw-loader!./examples/rs/examples/data_querying_timestamp.rs"
+import ReadRecordCpp from "!!raw-loader!./examples/cpp/src/data_querying_timestamp.cc"
+import ReadRecordCurl from "!!raw-loader!./examples/curl/data_querying_timestamp.sh"
+
+<Tabs>
+    <TabItem value="Python">
+        <CodeBlock language="python">
+            {ReadRecordPy}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">
+            {ReadRecordJs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {ReadRecordRs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">
+            {ReadRecordCpp}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Curl">
+        <CodeBlock language="bash">
+            {ReadRecordCurl}
+        </CodeBlock>
+    </TabItem>
+</Tabs>
+
+### Using Labels to Filter Data
+
+Another common use case is filtering data by labels. You can use the `include` and `exclude` parameters to filter the records by the specified labels.
+As was mentioned before, the `include` parameter is used to filter the records by the specified labels values. Only the records that match the ALL specified labels values will be included in the result.
+The `exclude` parameter is used to filter the records by the specified labels. The records that match ANY of the specified labels will be excluded from the result.
+
+
+
+
+### Retrieving Only Metadata

@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
 title: Data Ingestion
-description: Complete guide to data ingestion
+description: Complete guide on how to ingest data into ReductStore using the  SDKs or HTTP API.
 ---
 
 import CodeBlock from "@theme/CodeBlock";
@@ -20,7 +20,7 @@ Data ingestion in ReductStore is based on HTTP API. Each record is sent as a bin
 and must have the following information:
 * Bucket name, which must exist in the instance.
 * Entry name, which is a unique identifier of the record in the bucket. If the entry doesn't exist, it will be created.
-* Timestamp as a Unix timestamp in microseconds.
+* Timestamp as a Unix timestamp in microseconds, which is used for sorting and querying data. Must be unique for each record.
 
 Additionally, a writer can add the following information:
 
@@ -42,7 +42,7 @@ The following limitations are applied to the data ingestion process:
 
 ## Typycal Data Ingestion Cases
 
-In this section, you can learn how to implement typical data ingestion cases using the ReductStore SDKs or HTTP API. Please note that all examples are tailored for a local ReductStore instance accessible at http://127.0.0.1:8383 using the API token 'my-token'.
+In this section, you can learn how to implement typical data ingestion cases using the ReductStore SDKs or HTTP API. Please note that all examples are tailored for a local ReductStore instance accessible at **http://127.0.0.1:8383** using the API token 'my-token'.
 
 For more information on how to set up a local ReductStore instance, refer to the [**Getting Started**](../getting-started) guide.
 

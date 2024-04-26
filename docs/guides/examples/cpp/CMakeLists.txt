@@ -53,3 +53,14 @@ add_executable(data_ingestion_batch.cxx
         src/data_ingestion_batch.cc
 )
 target_link_libraries(data_ingestion_batch.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+# Data Querying
+add_executable(data_querying_time_range.cxx
+        src/data_querying_time_range.cc
+)
+target_link_libraries(data_querying_time_range.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(data_querying_timestamp.cxx
+        src/data_querying_timestamp.cc
+)
+target_link_libraries(data_querying_timestamp.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
