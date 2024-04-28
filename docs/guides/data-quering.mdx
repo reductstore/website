@@ -16,59 +16,56 @@ import TabItem from '@theme/TabItem';
 
 ## Concepts
 
-ReductStore provides an efficient way to query data by batching multiple records for a given time interval in a single request.
-This approach is particularly useful when you need to query a large amount of data, as it reduces the number of requests and the overall latency.
+ReductStore offers an efficient solution for data querying by batching multiple records within a specific time interval into a single request.This approach is beneficial for managing high data volumes as it reduces the number of requests and overall delay.
 
-The query is implemented as an iterator that returns a batch of records for each iteration. This allows you to process the data in chunks, which is useful when working with large datasets.
+The query process is designed as an iterator that delivers a batch of records in each iteration. This method enables the processing of data in segments, an approach that is advantageous when managing substantial datasets.
 
-You can also retrieve a record by its timestamp, however, this method is less efficient than querying by time range because no batching is performed.
+While it is possible to fetch a record using its timestamp, this method is less optimal than querying by a time range due to the lack of batching. However, this approach can be used when timestamps serve as identifiers for non-time series records, such as models or configurations.
 
 ## Query Parameters
-The data can be filtered by specifying:
-    * Start and end time range
-    * List of labels values to include
-    * List of labels to exclude.
-    * Limit of records to return
-    * Head flag to retrieve only metadata
-    * TTL of the query
 
+Data can be filtered by specifying:
+
+- Start and end time range
+- List of label values to include
+- List of labels to exclude
+- Limit on the number of records to return
+- Head flag to retrieve only metadata
+- TTL (Time to Live) of the query
 
 ### Time Range
 
-The time range is specified by the `start` and `end` parameters. The records with timestamps greater or equal to `start` and less than `end` are included in the result.
-If the `start` parameter is not specified, the query will start from the beginning of the dataset. If the `end` parameter is not specified, the query will continue until the end of the dataset.
-if both `start` and `end` are not specified, the query will return the whole dataset.
+The time range is defined by the `start` and `end` parameters. Records with timestamps equal to or greater than `start` and less than `end` are included in the result. If the `start` parameter is not set, the query will begin from the start of the dataset. If the `end` parameter is not set, the query will continue to the end of the dataset. If both `start` and `end` are not set, the query will return the entire dataset.
 
 ### Include Labels
 
-The `include` parameter is used to filter the records by the specified labels values. Only the records that match the ALL specified labels values will be included in the result.
+The `include` parameter filters the records by the specified label values. Only the records that match ALL the specified label values will be included in the result.
 
 ### Exclude Labels
 
-The `exclude` parameter is used to filter the records by the specified labels. The records that match ALL of the specified labels will be excluded from the result.
+The `exclude` parameter filters records based on specified labels. Any records matching ALL of these labels will be omitted from the results.
 
 ### Limit Records
 
-The `limit` parameter is used to limit the number of records returned by the query. If the number of records in the dataset is less than the specified limit, all records will be returned.
+The `limit` parameter restricts the number of records returned by a query. If the dataset has fewer records than the specified limit, all records are returned.
 
 ### TTL (Time-to-Live)
 
-The `ttl` parameter is used to specify the time-to-live of the query. The query will be automatically closed after the specified time has passed since the query was created. This is needed to limit the number of open queries and prevent memory leaks. Default TTL is 60 seconds.
+The `ttl` parameter determines the time-to-live of a query. The query automatically closes after the specified time passes since its creation. This prevents memory leaks by limiting the number of open queries. The default TTL is 60 seconds.
 
 ### Head Flag
 
-The `head` flag is used to retrieve only metadata. If the `head` flag is set to `true`, the query will return only the metadata of the records, without the actual data.
+The `head` flag is used to retrieve only metadata. When set to `true`, the query returns the records' metadata, excluding the actual data. This parameter is useful when you want to work with labels without downloading the content of the records.
 
-## Typycal Data Querying Cases
+## Typical Data Querying Cases
 
-In this section, you can learn how to implement typical data querying cases using the ReductStore CLI, SDKs or HTTP API. Please note that all examples are tailored for a local ReductStore instance accessible at **http://127.0.0.1:8383** using the API token 'my-token'.
+This section provides guidance on implementing typical data querying cases using the ReductStore CLI, SDKs, or HTTP API. All examples are designed for a local ReductStore instance, accessible at **[http://127.0.0.1:8383](http://127.0.0.1:8383/)** using the API token 'my-token'.
 
-For more information on how to set up a local ReductStore instance, refer to the [**Getting Started**](../getting-started) guide.
-
+For more information on setting up a local ReductStore instance, see the **[Getting Started](../getting-started)** guide.
 
 ### Querying Data by Time Range
 
-The most typical use case is querying data by a time range:
+The most common use case involves querying data within a specific time range:
 
 import TimeRangeQueryPy from "!!raw-loader!./examples/py/src/data_querying_time_range.py"
 import TimeRangeQueryJs from "!!raw-loader!./examples/js/src/data_querying_time_range.mjs"
@@ -112,7 +109,7 @@ import TimeRangeQueryCurl from "!!raw-loader!./examples/curl/data_querying_time_
 
 ### Querying Record by Timestamp
 
-Sometimes you need to retrieve a record by its timestamp. The most efficient way to do this is use the `read` method of the ReductStore SDKs or HTTP API.
+There may be times when you need to retrieve a record by its timestamp. The most efficient approach is to use the read method provided by the ReductStore SDKs or HTTP API:
 
 import ReadRecordPy from "!!raw-loader!./examples/py/src/data_querying_timestamp.py"
 import ReadRecordJs from "!!raw-loader!./examples/js/src/data_querying_timestamp.mjs"
@@ -150,11 +147,9 @@ import ReadRecordCurl from "!!raw-loader!./examples/curl/data_querying_timestamp
 
 ### Using Labels to Filter Data
 
-Another common use case is filtering data by labels. You can use the `include` and `exclude` parameters to filter the records by the specified labels.
-As was mentioned before, the `include` parameter is used to filter the records by the specified labels values. Only the records that match the ALL specified labels values will be included in the result.
-The `exclude` parameter is used to filter the records by the specified labels. The records that match ALL the specified labels will be excluded from the result.
+Filtering data by labels is another common use case. You can use `include` and `exclude` parameters to filter records by specific labels. The `include` parameter is used to filter records by specified labels values. Only records that match all specified labels values will be included in the result. Conversely, the `exclude` parameter is used to exclude records that match all specified labels from the result.
 
-Here we have a data set with annotated photos of celebrities and we want to take first 10 photos of the celebrities that were taken in 2006 and do not include Rowan Atkinson.
+For example, consider a data set with annotated photos of celebrities. We want to retrieve the first 10 photos of celebrities taken in 2006, excluding those of Rowan Atkinson:
 
 import FilterQueryPy from "!!raw-loader!./examples/py/src/data_querying_filter.py"
 import FilterQueryJs from "!!raw-loader!./examples/js/src/data_querying_filter.mjs"
