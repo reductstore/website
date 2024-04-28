@@ -125,6 +125,7 @@ jobs:
           do
             echo "Run $example" 
             ${{ matrix.cmd }} "$example"
+            sleep 1
             # remove alias if it is cli example
             if [ "${{ matrix.example }}" == "cli" ]; then
               reduct-cli alias rm local
