@@ -31,10 +31,13 @@ int main() {
         for (auto& [key, value] : rec.labels) {
             std::cout << key << ": " << value << ", ";
         }
+        std::cout << std::endl;
 
         // Read the content
         auto [content, read_err] = rec.ReadAll();
         assert(read_err == Error::kOk);
+
+        std::cout << "Content: " << content << std::endl;
         assert(content == "Some binary data");
 
         return true;    // if false, the query will stop
