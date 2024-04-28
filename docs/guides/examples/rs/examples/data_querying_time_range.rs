@@ -14,10 +14,10 @@ async fn main() -> Result<(), ReductError> {
         .build();
     let bucket = client.create_bucket("test").exist_ok(true).send().await?;
 
-    // Send a record to the "entry-1" entry with the current timestamp
+    // Send a record to the "rs-example" entry with the current timestamp
     let timestamp = SystemTime::now();
     bucket
-        .write_record("entry-1")
+        .write_record("rs-example")
         .timestamp(timestamp)
         .data(Bytes::from("Some binary data"))
         .send()
@@ -25,7 +25,7 @@ async fn main() -> Result<(), ReductError> {
 
     // Query records in the time range
     let query = bucket
-        .query("entry-1")
+        .query("rs-example")
         .start(timestamp)
         .stop(timestamp + Duration::from_secs(1))
         .send()

@@ -16,7 +16,7 @@ async fn main() -> Result<(), ReductError> {
     // Send a record  with labels and content type
     let timestamp = SystemTime::now();
     bucket
-        .write_record("entry-1")
+        .write_record("rs-example")
         .timestamp(timestamp)
         .data(Bytes::from("Hello, World!"))
         .add_label("name", "example")

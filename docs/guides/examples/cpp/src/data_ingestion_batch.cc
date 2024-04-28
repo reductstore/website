@@ -15,8 +15,8 @@ int main() {
     assert(create_err == Error::kOk);
 
 
-    // Send a batch of records to the "entry-1" entry
-    auto [record_errors, http_err] = bucket->WriteBatch("entry-1", [](auto batch) {
+    // Send a batch of records to the "cpp-example" entry
+    auto [record_errors, http_err] = bucket->WriteBatch("cpp-example", [](auto batch) {
         IBucket::Time ts = IBucket::Time::clock::now();
         batch->AddRecord(ts, "Records #1");
         batch->AddRecord(ts + 1s, "Records #2");

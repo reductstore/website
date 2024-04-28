@@ -51,10 +51,10 @@ async fn main() -> Result<(), ReductError> {
         .build();
     let bucket = client.create_bucket("test").exist_ok(true).send().await?;
 
-    // Send a record to the "entry-1" entry with the current timestamp
+    // Send a record to the "rs-example" entry with the current timestamp
     let timestamp = SystemTime::now();
     bucket
-        .write_record("entry-1")
+        .write_record("rs-example")
         .timestamp(timestamp)
         .stream(stream)
         .content_length(data_len)

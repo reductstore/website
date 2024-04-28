@@ -14,9 +14,9 @@ int main() {
     auto [bucket, create_err] = client->GetOrCreateBucket("my-bucket");
     assert(create_err == Error::kOk);
 
-    // Stream the data to the "entry-1" entry with the current timestamp
+    // Stream the data to the "cpp-example" entry with the current timestamp
     IBucket::Time ts = IBucket::Time::clock::now();
-    auto err = bucket->Write("entry-1", ts, [data](auto rec) {
+    auto err = bucket->Write("cpp-example", ts, [data](auto rec) {
         rec->Write(data.size(),
                    [data](auto offset, auto size) {
                         // this lambda is called multiple times when a chunk of data is needed to be sent

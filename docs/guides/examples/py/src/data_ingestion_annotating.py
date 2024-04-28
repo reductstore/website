@@ -11,7 +11,7 @@ async def main():
     # Send a record  with labels and content type
     ts = time.time()
     await bucket.write(
-        "entry-1",
+        "py-example",
         b"Some binary data",
         ts,
         labels={"name": "example", "type": "simple"},

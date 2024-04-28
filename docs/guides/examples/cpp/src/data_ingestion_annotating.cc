@@ -14,7 +14,7 @@ int main() {
 
     // Send a record  with labels and content type
     IBucket::Time ts = IBucket::Time::clock::now();
-    auto err = bucket->Write("entry-1", {
+    auto err = bucket->Write("cpp-example", {
             .timestamp = ts,
             .labels = {{"name", "example"},
                        {"type", "simple"}},

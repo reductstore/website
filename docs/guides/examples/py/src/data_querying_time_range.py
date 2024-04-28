@@ -9,10 +9,10 @@ async def main():
     bucket: Bucket = await client.create_bucket("my-bucket", exist_ok=True)
 
     ts = time.time()
-    await bucket.write("entry-1", b"Some binary data", ts, )
+    await bucket.write("py-example", b"Some binary data", ts, )
 
-    # Query records in the "entry-1" entry of the bucket
-    async for record in bucket.query("entry-1", start=ts, end=ts + 1):
+    # Query records in the "py-example" entry of the bucket
+    async for record in bucket.query("py-example", start=ts, end=ts + 1):
         # Print  meta information
         print(f"Timestamp: {record.timestamp}")
         print(f"Content Length: {record.size}")

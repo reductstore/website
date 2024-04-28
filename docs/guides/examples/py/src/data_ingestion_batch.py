@@ -16,8 +16,8 @@ async def main():
     batch.add("2024-02-02T10:00:01", b"Records #2", )
     batch.add("2024-02-02T10:00:02", b"Records #3", )
 
-    # Write the batch to the "entry-1" entry of the bucket
-    errors: Dict[int, ReductError] = await bucket.write_batch("entry-1", batch)
+    # Write the batch to the "py-example" entry of the bucket
+    errors: Dict[int, ReductError] = await bucket.write_batch("py-example", batch)
 
     # Check statuses and raise first error
     for timestamp, err in errors.items():

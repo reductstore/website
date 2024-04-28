@@ -20,8 +20,8 @@ async fn main() -> Result<(), ReductError> {
         .timestamp_us(2_000_000)
         .data(Bytes::from("Records #2")).build();
 
-    // Send the batch of records to the "entry-1" entry
-    let errors = bucket.write_batch("entry-1")
+    // Send the batch of records to the "rs-example" entry
+    let errors = bucket.write_batch("rs-example")
         .add_records(vec![record_1, record_2])
         .send().await?;
 

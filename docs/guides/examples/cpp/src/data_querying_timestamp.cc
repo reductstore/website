@@ -16,13 +16,13 @@ int main() {
 
     // Send a record  with labels and content type
     IBucket::Time ts = IBucket::Time::clock::now();
-    auto err = bucket->Write("entry-1", ts,[](auto rec) {
+    auto err = bucket->Write("cpp-example", ts,[](auto rec) {
         rec->WriteAll("Some binary data");
     });
     assert(err == Error::kOk);
 
     // Query records in a time range
-    err = bucket->Read("entry-1", ts, [](auto rec) {
+    err = bucket->Read("cpp-example", ts, [](auto rec) {
         // Print metadata
         std::cout << "Timestamp: " <<  rec.timestamp.time_since_epoch().count() << std::endl;
         std::cout << "Content Length: " << rec.size << std::endl;

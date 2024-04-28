@@ -19,9 +19,9 @@ async def main():
                 break
             yield data
 
-    # Stream the buffer to the "entry-1" entry with the current timestamp
+    # Stream the buffer to the "py-example" entry with the current timestamp
     ts = time.time()
-    await bucket.write("entry-1", data_reader(), ts, content_length=IO_BUFFER.tell())
+    await bucket.write("py-example", data_reader(), ts, content_length=IO_BUFFER.tell())
 
 
 loop = asyncio.get_event_loop()
