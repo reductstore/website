@@ -64,3 +64,8 @@ add_executable(data_querying_timestamp.cxx
         src/data_querying_timestamp.cc
 )
 target_link_libraries(data_querying_timestamp.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(data_querying_filter.cxx
+        src/data_querying_filter.cc
+)
+target_link_libraries(data_querying_filter.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)

@@ -22,7 +22,7 @@ async fn main() -> Result<(), ReductError> {
         .send()
         .await?;
 
-    // Query records in the time range
+    // Query record by timestamp
     let record = bucket
         .read_record("entry-1")
         .timestamp(timestamp).send().await?;
