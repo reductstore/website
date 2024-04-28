@@ -11,7 +11,7 @@ using std::chrono_literals::operator ""s;
 int main() {
     // Create a client instance, then get or create a bucket
     auto client = IClient::Build("http://127.0.0.1:8383", {.api_token="my-token"});
-    auto [bucket, create_err] = client->GetOrCreateBucket("datasets");
+    auto [bucket, create_err] = client->GetOrCreateBucket("example-bucket");
     assert(create_err == Error::kOk);
 
     // Query 10 photos from "imdb" entry which taken in 2006 but don't contain "Rowan Atkinson"

@@ -3,7 +3,7 @@ import assert from "node:assert";
 
 // Create a client instance, then get or create a bucket
 const client = new Client("http://127.0.0.1:8383", {apiToken: "my-token"});
-const bucket = await client.getBucket("datasets")
+const bucket = await client.getBucket("example-bucket")
 
 // Query 10 photos from "imdb" entry which taken in 2006 but don't contain "Rowan Atkinson"
 for await (const record of bucket.query("imdb", undefined, undefined, {

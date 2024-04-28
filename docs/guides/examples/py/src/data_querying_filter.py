@@ -6,7 +6,7 @@ from reduct import Client, Bucket
 async def main():
     # Create a client instance, then get or create a bucket
     client = Client("http://127.0.0.1:8383", api_token="my-token")
-    bucket: Bucket = await client.get_bucket("datasets")
+    bucket: Bucket = await client.get_bucket("example-bucket")
 
     # Query 10 photos from "imdb" entry which taken in 2006 but don't contain "Rowan Atkinson"
     async for record in bucket.query("imdb", limit=10, include={"photo_taken": "2006"},
