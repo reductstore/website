@@ -16,30 +16,35 @@ import TabItem from '@theme/TabItem';
 
 ## Concepts
 
-ReductStore offers an efficient solution for data querying by batching multiple records within a specific time interval into a single request.This approach is beneficial for managing high data volumes as it reduces the number of requests and overall delay.
+ReducStore provides an efficient data retrieval solution by batching multiple records within a specified time interval into a single HTTP request, which is beneficial for managing large volumes of data as it reduces the number of requests and overall delay.
 
-The query process is designed as an iterator that delivers a batch of records in each iteration. This method enables the processing of data in segments, an approach that is advantageous when managing substantial datasets.
+The query process is designed as an iterator, returning a batch of records in each iteration. This method allows data to be processed in segments, an approach that is useful when managing large datasets.
 
-While it is possible to fetch a record using its timestamp, this method is less optimal than querying by a time range due to the lack of batching. However, this approach can be used when timestamps serve as identifiers for non-time series records, such as models or configurations.
+While it is possible to retrieve a record by its timestamp, this method is less optimal than querying by a time range due to the lack of batching. However, this approach can be used when timestamps serve as identifiers for non-time series records, such as models or configurations.
 
 ## Query Parameters
 
-Data can be filtered by specifying:
+Data can be queried using the ReductStore CLI, SDKs or HTTP API. The query parameters are the same for all interfaces and include
 
 - Start and end time range
 - List of label values to include
 - List of labels to exclude
 - Limit on the number of records to return
-- Head flag to retrieve only metadata
-- TTL (Time to Live) of the query
+- Head flag to retrieve metadata only
+
+There are also more advanced parameters available in the SDKs and HTTP API, such as
+
+- Query TTL (Time to Live)
+- Continuous flag to keep the query open for continuous data retrieval
+- Pool interval to specify the time interval for pooling data in continuous mode
 
 ### Time Range
 
-The time range is defined by the `start` and `end` parameters. Records with timestamps equal to or greater than `start` and less than `end` are included in the result. If the `start` parameter is not set, the query will begin from the start of the dataset. If the `end` parameter is not set, the query will continue to the end of the dataset. If both `start` and `end` are not set, the query will return the entire dataset.
+The time range is defined by the `start` and `end` parameters. Records with a timestamp equal to or greater than `start` and less than `end` are included in the result. If the `start` parameter is not set, the query starts from the begging of the entry. If the `end` parameter is not set, the query continues to the end of the entry. If both `start` and `end` are not set, the query returns the entire entry.
 
 ### Include Labels
 
-The `include` parameter filters the records by the specified label values. Only the records that match ALL the specified label values will be included in the result.
+The `include` parameter filters the records by the specified label values. Only those that match ALL the specified label values are included in the result.
 
 ### Exclude Labels
 
@@ -51,11 +56,14 @@ The `limit` parameter restricts the number of records returned by a query. If th
 
 ### TTL (Time-to-Live)
 
-The `ttl` parameter determines the time-to-live of a query. The query automatically closes after the specified time passes since its creation. This prevents memory leaks by limiting the number of open queries. The default TTL is 60 seconds.
-
+The `ttl` parameter determines the time-to-live of a query. The query is automatically closed when the specified time has elapsed since it was created. This prevents memory leaks by limiting the number of open queries. The default TTL is 60 seconds.
 ### Head Flag
 
 The `head` flag is used to retrieve only metadata. When set to `true`, the query returns the records' metadata, excluding the actual data. This parameter is useful when you want to work with labels without downloading the content of the records.
+
+### Continuous Mode
+
+The `continuous` flag is used to keep the query open for continuous data retrieval. This mode is useful when you need to monitor data in real-time. The SDKs provide `pool_interval` parameter to specify the time interval for pooling data in continuous mode. The default interval is 1 second.
 
 ## Typical Data Querying Cases
 
@@ -65,7 +73,7 @@ For more information on setting up a local ReductStore instance, see the **[Gett
 
 ### Querying Data by Time Range
 
-The most common use case involves querying data within a specific time range:
+The most common use case is to query data within a specific time range:
 
 import TimeRangeQueryPy from "!!raw-loader!./examples/py/src/data_querying_time_range.py"
 import TimeRangeQueryJs from "!!raw-loader!./examples/js/src/data_querying_time_range.mjs"
@@ -109,7 +117,7 @@ import TimeRangeQueryCurl from "!!raw-loader!./examples/curl/data_querying_time_
 
 ### Querying Record by Timestamp
 
-There may be times when you need to retrieve a record by its timestamp. The most efficient approach is to use the read method provided by the ReductStore SDKs or HTTP API:
+The simplest way to query a record by its timestamp is to use the `read` method provided by the ReductStore SDKs or HTTP API:
 
 import ReadRecordPy from "!!raw-loader!./examples/py/src/data_querying_timestamp.py"
 import ReadRecordJs from "!!raw-loader!./examples/js/src/data_querying_timestamp.mjs"
