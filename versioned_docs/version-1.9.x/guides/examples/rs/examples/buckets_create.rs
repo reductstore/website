@@ -1,4 +1,4 @@
-use reduct_rs::{ReductError, ReductClient, QuotaType};
+use reduct_rs::{QuotaType, ReductClient, ReductError};
 use tokio;
 
 #[tokio::main]
@@ -10,11 +10,13 @@ async fn main() -> Result<(), ReductError> {
         .build();
 
     // Create a bucket with the name "my-bucket" and a FIFO quota of 1GB
-    let bucket = client.create_bucket("my-bucket")
+    let bucket = client
+        .create_bucket("my-bucket")
         .quota_type(QuotaType::FIFO)
         .quota_size(1_000_000_000)
         .exist_ok(true)
-        .send().await?;
+        .send()
+        .await?;
 
     assert_eq!(bucket.name(), "my-bucket");
     Ok(())

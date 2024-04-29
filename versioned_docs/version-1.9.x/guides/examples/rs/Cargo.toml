@@ -9,3 +9,4 @@ edition = "2021"
 reduct-rs="1"
 tokio =  { version = "1", features = ["rt-multi-thread"]}
 bytes = "1.6.0"
+futures = "0.3.30"
