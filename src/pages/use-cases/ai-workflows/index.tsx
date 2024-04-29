@@ -68,7 +68,7 @@ const useCases = [
     title: "The Fastest Object Store",
     description: (
       <p>
-        Comparative performance analysis has underscored its superiority, consistently <Link to="/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio"><b>outperforming MinIO for write and read operations</b></Link> across a range of chunk sizes.
+        Comparative performance analysis has underscored its superiority, consistently <Link to="/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio"><b>outperforming MinIO for write and read operations</b></Link> across a range of record sizes.
         In addition, ReductStore demonstrated remarkable speed improvements when <Link to="/blog/comparisons/iot/reductstore-vs-mongodb"><b>compared to MongoDB, achieving 65 to 244% faster performance rates</b></Link> for blob storage use cases.
         For records larger than 100KB, it significantly <Link to="/blog/comparisons/iot/reductstore-vs-timescaledb"><b>outperformed TimescaleDB by a margin of 200 to 1300%</b></Link>.
         These metrics clearly establish ReductStore as the leading choice for high-speed data environments where optimal performance is essential.
