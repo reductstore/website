@@ -9,9 +9,7 @@ async def change_bucket():
     bucket = await client.get_bucket("example-bucket")
 
     # Change the quota size of the bucket to 5GB
-    new_settings = BucketSettings(
-        quota_size=5000_000_000
-    )
+    new_settings = BucketSettings(quota_size=5000_000_000)
     await bucket.set_settings(new_settings)
 
     assert (await bucket.get_settings()).quota_size == 5000_000_000

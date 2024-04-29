@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "reduct-js": "^1.9.2"
+    "reduct-js": "^1.9.3"
   }
 }

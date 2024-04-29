@@ -2,8 +2,8 @@ reduct-cli alias add local -L http://localhost:8383 -t "my-token"
 reduct-cli bucket ls local --full
 
 # Output:
-#| Name        | Entries | Size     | Oldest record (UTC)      | Latest record (UTC)      |
-#|-------------|---------|----------|--------------------------|--------------------------|
+#| Name              | Entries | Size     | Oldest record (UTC)      | Latest record (UTC)      |
+#|-------------------|---------|----------|--------------------------|--------------------------|
 #| example-bucket    | 3       | 30.7 GB  | 1970-01-01T00:00:00.000Z | 1970-01-01T00:00:00.060Z |
 
 
