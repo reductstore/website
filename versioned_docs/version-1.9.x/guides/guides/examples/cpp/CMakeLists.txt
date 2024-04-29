@@ -1,0 +1,71 @@
+cmake_minimum_required(VERSION 3.18)
+
+project(cpp_examples CXX)
+set(CMAKE_CXX_STANDARD 20)
+
+find_package(ZLIB)
+find_package(OpenSSL)
+find_package(ReductCpp 1.8.0)
+
+## Buckets
+
+add_executable(
+        buckets_create.cxx
+        src/buckets_create.cc
+)
+target_link_libraries(buckets_create.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(
+        buckets_browse.cxx
+        src/buckets_browse.cc
+)
+target_link_libraries(buckets_browse.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(
+        buckets_change.cxx
+        src/buckets_change.cc
+)
+target_link_libraries(buckets_change.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(
+        buckets_remove.cxx
+        src/buckets_remove.cc
+)
+target_link_libraries(buckets_remove.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+# Data Ingestion
+add_executable(data_ingestion_simple.cxx
+    src/data_ingestion_simple.cc
+)
+target_link_libraries(data_ingestion_simple.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(data_ingestion_streaming.cxx
+        src/data_ingestion_streaming.cc
+)
+target_link_libraries(data_ingestion_streaming.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(data_ingestion_annotating.cxx
+        src/data_ingestion_annotating.cc
+)
+target_link_libraries(data_ingestion_annotating.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(data_ingestion_batch.cxx
+        src/data_ingestion_batch.cc
+)
+target_link_libraries(data_ingestion_batch.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+# Data Querying
+add_executable(data_querying_time_range.cxx
+        src/data_querying_time_range.cc
+)
+target_link_libraries(data_querying_time_range.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(data_querying_timestamp.cxx
+        src/data_querying_timestamp.cc
+)
+target_link_libraries(data_querying_timestamp.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(data_querying_filter.cxx
+        src/data_querying_filter.cc
+)
+target_link_libraries(data_querying_filter.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
