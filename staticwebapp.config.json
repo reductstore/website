@@ -13,6 +13,18 @@
       }
     },
     {
+      "route": "/search",
+      "headers": {
+        "X-Robots-Tag": "noindex"
+      }
+    },
+    {
+      "route": "/search/*",
+      "headers": {
+        "X-Robots-Tag": "noindex"
+      }
+    },
+    {
       "route": "/docs",
       "redirect": "/docs/getting-started",
       "statusCode": 301
