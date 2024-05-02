@@ -23,7 +23,7 @@ Let me show you how it works in detail and how you can use it.
 
 ReductStore provides an HTTP API that has many benefits, but data querying may slow down due to latency and HTTP overhead, especially for small blobs. The goal of ReductStore is to be suitable for data of any size, and since version 1.5.0, the database can batch multiple records in one HTTP request. This can increase the speed of downloading data by **up to 80 times**, depending on the size of the records.
 
-If you're interested in details, you can read about the `GET /api/v1/b/:bucket/:entry/batch` endpoint [**here**](/docs/http-api/entry-api). However, if you use one of our client SDKs, you just need to update to the latest version without making any changes to your code.
+If you're interested in details, you can read about the [**`GET /api/v1/b/:bucket/:entry/batch` endpoint**](/docs/http-api/entry-api). However, if you use one of our client SDKs, you just need to update to the latest version without making any changes to your code.
 
 ## Reading Only Meta Information
 
