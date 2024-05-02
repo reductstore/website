@@ -1,8 +1,8 @@
 {
   "mimeTypes": {
     ".xml": "application/xml; charset=utf-8",
-    ".txt": "text/plain; charset=utf-8",
-    ".html": "text/html; charset=utf-8"
+    ".html": "text/html; charset=utf-8",
+    ".txt": "text/plain"
   },
   "routes": [
     {
