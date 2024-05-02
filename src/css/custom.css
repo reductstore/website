@@ -13,7 +13,7 @@
   --ifm-color-primary-light: #2f054f;
   --ifm-color-primary-lighter: #310653;
   --ifm-color-primary-lightest: #38065e;
-  --ifm-color-primary-hover: #7c0dcf;
+  --ifm-color-primary-hover: #3a0661; 
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
   --reduct-button-color-primary: #d8534e;
@@ -36,7 +36,7 @@
   --ifm-color-primary-hover: #b158f5;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
   --reduct-button-color-primary: #e8837e;
-  --reduct-dimmed-color: #6c757d;
+  --reduct-dimmed-color: #adb5bd;
   --reduct-background-gray: #303030;
   --reduct-background-gray-hover: #404040;
 }

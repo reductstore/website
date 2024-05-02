@@ -2,6 +2,7 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 
 import { themes as prismThemes } from "prism-react-renderer";
+import "dotenv/config";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -34,6 +35,11 @@ const config = {
   i18n: {
     defaultLocale: "en",
     locales: ["en"],
+  },
+
+  // Pass custom environment variables to the site
+  customFields: {
+    calendarLink: process.env.CALENDAR_LINK,
   },
 
   plugins: [require.resolve("./src/plugins/docusaurus-plugin-matomo")],

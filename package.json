@@ -26,6 +26,7 @@
     "@types/react": "^18.2.37",
     "clsx": "^1.2.1",
     "docusaurus-plugin-umami": "^2.0.0",
+    "dotenv": "^16.4.5",
     "prism-react-renderer": "^2.2.0",
     "raw-loader": "^4.0.2",
     "react": "^18.2.0",
