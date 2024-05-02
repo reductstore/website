@@ -1,5 +1,34 @@
 {
+  "mimeTypes": {
+    ".xml": "application/xml; charset=utf-8",
+    ".html": "text/html; charset=utf-8",
+    ".txt": "text/plain"
+  },
   "routes": [
+    {
+      "route": "/blog/page/*",
+      "headers": {
+        "X-Robots-Tag": "noindex"
+      }
+    },
+    {
+      "route": "/blog/tags/*",
+      "headers": {
+        "X-Robots-Tag": "noindex"
+      }
+    },
+    {
+      "route": "/search",
+      "headers": {
+        "X-Robots-Tag": "noindex"
+      }
+    },
+    {
+      "route": "/search/*",
+      "headers": {
+        "X-Robots-Tag": "noindex"
+      }
+    },
     {
       "route": "/docs",
       "redirect": "/docs/getting-started",

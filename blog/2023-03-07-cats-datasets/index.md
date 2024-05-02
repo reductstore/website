@@ -8,10 +8,6 @@ date: 2023-03-07
 image: ./img/social-card.jpg
 ---
 
-<head>
-    <link rel="canonical" href="https://github.com/reductstore/datasets/blob/main/examples/cats.ipynb" />
-</head>
-
 The [**ReductStore Project**](https://www.reduct.store) hosts the free "cats" dataset, which contains about 10K photos of
 cats in JPEG format with eye coordinates, a month, and ears as labels. In this example, we can learn how to download the
 dataset from the [**ReductStore instance**](https://play.reduct.store) and draw the features using the OpenCV library.
