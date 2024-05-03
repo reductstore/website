@@ -14,26 +14,56 @@ import TabItem from '@theme/TabItem';
 
 # Data Replication
 
-![Data Replication](./img/data_replication_diagram.svg)
+Data replication is the process of copying data from one database to another. ReductStore provides a simple and efficient append-only replication to stream data from one database to another.
 
 ## Concepts
 
-[IMG]
+There many way to implement data replication, and ReductStore implements it in a way most suitable for the use case of a real-time IoT or edge computing systems:
 
-description
+- **Append-only**: Data replication in ReductStore is append-only, meaning that data is only added to the destination database and never updated or deleted.
+- **Push-based**: Data replication in ReductStore is push-based, meaning that the source database pushes data to the destination database.
+- **Condition-based**: Data replication in ReductStore is condition-based, meaning that the source database can define conditions under which data is replicated to the destination database.
 
-### Limitations
+The data replication process in ReductStore is based on the concept of a `Replication Task`. A `Replication Task` is a configuration that defines the source and destination databases, the data to be replicated, and the replication conditions.
 
+![Data Replication Diagram](./img/data_replication_diagram.svg)
 
-## Managing Automatic Data Replication
+When a `Replication Task` is created, ReductStore starts a replication process that continuously streams data from the source database to the destination database.
+
+When a new record is arrived to the source database, the HTTP Frontend stores the record in a bucket and registers it in the Transaction Log. The Replication Task periodically checks the Transaction Log for new records and replicates them to the destination database.
+After the record is successfully replicated, the Replication Task discards the record from the Transaction Log.
+This approach ensures that data is replicated in real-time and that the replication process is fault-tolerant and can recover from failures.
+
+Replication Task can check a record against a condition before replicating it to the destination database by using labels. Labels are key-value pairs that are attached to records in the source database. The Replication Task can define a condition based on the labels of the record, and only replicate the record if the condition is met.
+
+## Managing Data Replication Tasks
+
+Here you will find examples of how to create, list, retrieve, update, and delete Replication Tasks using the ReductStore SDKs, REST API, CLI and Web Console.
+
+Pay attention that all the examples are written for a local ReductStore instance available at **`http://127.0.0.1:8383`** with an API token `my-token`.
+
+For more information on how to set up a local ReductStore instance, refer to the **[Getting Started](/docs/getting-started.mdx)** guide.
 
 ### Creating a Replication Task
 
+To spin up a new Replication Task, you need to provide the following information:
+
+- **Source Bucket**: The name of the bucket in the source database from which data will be replicated.
+- **Remote Bucket**: The name of the bucket in the destination database to which data will be replicated.
+- **Remote URL**: The URL of the destination database.
+- **Remote Token**: The API token of the destination database.
+- **Include Labels**: A list of label-values that the Replication Task will use to filter records. Only records with these labels will be replicated.
+- **Exclude Labels**: A list of label-values that the Replication Task will use to filter records. Records with these labels will not be replicated.
+- **Entries**: A list of entries that the Replication Task will use to filter records. Only records with these entries will be replicated. If the list is empty, all records will be replicated. You can use the `*` wildcard to match any entry.
+
+Let's create a Replication Task that replicates all records from the `source-bucket` to the `remote-bucket`:
+
+
 ### Listing Replication Tasks
 
-### Retrieving a Replication Task
+### Browse Replication Tasks
 
 ### Updating a Replication Task
 
 
-### Manual Data Replication
+## Manual Data Replication
