@@ -36,6 +36,7 @@ This approach ensures that data is replicated in real-time and that the replicat
 
 Replication Task can check a record against a condition before replicating it to the destination database by using labels. Labels are key-value pairs that are attached to records in the source database. The Replication Task can define a condition based on the labels of the record, and only replicate the record if the condition is met.
 
+You can use the replication to copy data from one bucket to another one in the same instance. It can be useful to filter and store data in a long-term bucket with bigger **[FIFO quota](/docs/guides/buckets.mdx)**.
 ## Managing Data Replication Tasks
 
 Here you will find examples of how to create, list, retrieve, update, and delete Replication Tasks using the ReductStore SDKs, REST API, CLI and Web Console.
@@ -56,14 +57,35 @@ To spin up a new Replication Task, you need to provide the following information
 - **Exclude Labels**: A list of label-values that the Replication Task will use to filter records. Records with these labels will not be replicated.
 - **Entries**: A list of entries that the Replication Task will use to filter records. Only records with these entries will be replicated. If the list is empty, all records will be replicated. You can use the `*` wildcard to match any entry.
 
-Let's create a Replication Task that replicates all records from the `source-bucket` to the `remote-bucket`:
+Let's create a Replication Task that replicates all records from the `source-bucket` to the `remote-bucket` by using
+the ReductStore SDKs, REST API, CLI and Web Console. You can also provision a Replication Task using by using environment variables.
 
 
-### Listing Replication Tasks
+import CreateReplicaPy from "!!raw-loader!./examples/py/src/data_replication_create.py"
+import CreateReplicaJs from "!!raw-loader!./examples/js/src/data_replication_create.mjs"
+
+<Tabs>
+    <TabItem value="Python">
+        <CodeBlock language="python">
+            {CreateReplicaPy}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">
+            {CreateReplicaJs}
+        </CodeBlock>
+    </TabItem>
+</Tabs>
 
 ### Browse Replication Tasks
 
+To list all Replication Tasks, you can use the same methods as for creating a Replication Task. Here is an example of how to list all Replication Tasks using the ReductStore SDKs, REST API, CLI and Web Console:
+
+
 ### Updating a Replication Task
+
+
+### Removing a Replication Task
 
 
 ## Manual Data Replication
