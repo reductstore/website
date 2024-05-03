@@ -6,18 +6,8 @@ import UseCaseRow from "@site/src/components/UseCaseRow";
 import Faq from "@site/src/components/Faq";
 import HelpForm from "@site/src/components/HelpForm";
 import Link from "@docusaurus/Link";
-import AILabelsMetadataEveryRecord from "./img/AILabelsMetadataEveryRecord.svg";
-import StoreRecordsAIModels from "./img/StoreRecordsAIModels.svg";
-import DataReplicationWithLabelFiltering from "./img/DataReplicationWithLabelFiltering.svg";
-import TheFastestObjectStore from "./img/TheFastestObjectStore.svg";
-import RealTimeFIFOQuota from "./img/RealTimeFIFOQuota.svg";
-import TimeSeriesDatabaseUnstructuredData from "./img/TimeSeriesDatabaseUnstructuredData.svg";
-import TestSVG from "./img/any.svg";
 
 export default function UseCaseAI(): JSX.Element {
-  const svgUrl = "/img/ai-workflows/AILabelsMetadataEveryRecord.svg";
-
-  console.log(svgUrl)
   return (
     <Layout
       title="Optimize Your AI Workflows"
@@ -60,18 +50,6 @@ export default function UseCaseAI(): JSX.Element {
 
 const useCases = [
   {
-    title: "Time Series Database for Unstructured Data",
-    description: (
-      <p>
-        The integration of ReductStore's architecture is ideal for AI applications that require the handling of unstructured data aligned with temporal contexts.
-        This integration facilitates efficient ingesting, querying, and managing large datasets where each blob can be associated with a timestamp.
-        As a result, AI models benefit from streamlined access to historical and real-time data for analysis and prediction.
-      </p>
-    ),
-    illustration: <TimeSeriesDatabaseUnstructuredData />,
-    isImageLeft: false
-  },
-  {
     title: "The Fastest Object Store",
     description: (
       <p>
@@ -82,7 +60,19 @@ const useCases = [
 
       </p>
     ),
-    illustration: <TheFastestObjectStore />,
+    illustration: require("@site/static/img/ai-workflows/the-fastest-object-store.webp").default,
+    isImageLeft: false
+  },
+  {
+    title: "Time Series Database for Unstructured Data",
+    description: (
+      <p>
+        The integration of ReductStore's architecture is ideal for AI applications that require the handling of unstructured data aligned with temporal contexts.
+        This integration facilitates efficient ingesting, querying, and managing large datasets where each blob can be associated with a timestamp.
+        As a result, AI models benefit from streamlined access to historical and real-time data for analysis and prediction.
+      </p>
+    ),
+    illustration: require("@site/static/img/ai-workflows/time-series-database-for-unstructured-data.webp").default,
     isImageLeft: true
   },
   {
@@ -95,7 +85,7 @@ const useCases = [
         What's more, AI models can be stored in the same storage, enabling developers and data scientists to systematically track model iterations, ensuring integrity and reproducibility across AI workflows.
       </p>
     ),
-    illustration: <StoreRecordsAIModels />,
+    illustration: require("@site/static/img/ai-workflows/store-records-and-ai-models.webp").default,
     isImageLeft: false
   },
   {
@@ -108,7 +98,7 @@ const useCases = [
         In addition, by embedding AI-generated metadata directly into the storage layer, ReductStore simplifies the data pipeline architecture and improves overall operational efficiency.
       </p>
     ),
-    illustration: <AILabelsMetadataEveryRecord />,
+    illustration: require("@site/static/img/ai-workflows/ai-labels-and-metadata-for-every-record.webp").default,
     isImageLeft: true
   },
   {
@@ -121,7 +111,7 @@ const useCases = [
         As a result, this selective approach reduces unnecessary costs associated with storage and network traffic, and ensures that replicated environments remain up to date with all relevant operational data while excluding irrelevant information.
       </p>
     ),
-    illustration: <DataReplicationWithLabelFiltering />,
+    illustration: require("@site/static/img/ai-workflows/data-replication-with-label-filtering.webp").default,
     isImageLeft: false
   },
   {
@@ -134,7 +124,7 @@ const useCases = [
         It also simplifies management requirements by maintaining an automated retention policy based on actual usage rather than arbitrary timeframes, optimizing both storage utilization and system robustness.
       </p>
     ),
-    illustration: <RealTimeFIFOQuota />,
+    illustration: require("@site/static/img/ai-workflows/real-time-fifo-quota.webp").default,
     isImageLeft: true
   },
 ];
