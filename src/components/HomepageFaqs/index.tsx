@@ -1,9 +1,6 @@
 import React from "react";
 import styles from "./styles.module.css";
 import Faq from "../Faq";
-import HomepageSDKs from "../HomepageSDKs";
-import HomepageCLI from "../HomepageCLI";
-import HomepageWebConsole from "../HomepageWebConsole";
 import Heading from '@theme/Heading';
 import Link from "@docusaurus/Link";
 
@@ -11,7 +8,7 @@ export default function HomepageFaqs() {
   return (
     <section className={styles.section}>
       <Heading as="h1" className={styles.sectionTitle}>Frequently Asked Questions</Heading>
-      <Faq faqs={landingFaqs} />
+      <Faq faqs={landingFaqs} defaultOpenCount={3} />
     </section>
   );
 }

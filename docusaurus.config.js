@@ -152,6 +152,10 @@ const config = {
             position: "left",
             items: [
               {
+                label: "AI Workflows",
+                to: "/use-cases/ai-workflows",
+              },
+              {
                 label: "Edge Computing",
                 to: "/blog/edge-computing/data-reduction-on-edge",
               },
