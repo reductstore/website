@@ -17,7 +17,8 @@
 }
 
 .imageSection img {
-  max-width: 600px;
+  max-height: 400px;
+  max-width: 100%;
 }
 
 @media (max-width: 997px) {
