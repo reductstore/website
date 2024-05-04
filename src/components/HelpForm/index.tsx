@@ -34,10 +34,15 @@ const topics = [
 ];
 
 
+interface HelpFormProps {
+  subject?: string;
+}
 
-export default function HelpForm() {
+
+
+export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
   const [state, handleSubmit] = useForm("xgejorqo");
-  const [topic, setTopic] = useState("")
+  const [topic, setTopic] = useState(subject || "")
   const location = useLocation();
 
   useEffect(() => {
@@ -77,28 +82,32 @@ export default function HelpForm() {
         />
       </div>
 
-      <p>Select a topic:</p>
-      <div className={styles.topicButtons}>
-        {topics.map((element) => (
-          <button
-            key={element.key}
-            type="button"
-            className={clsx(styles.topicButton, {
-              [styles.topicButtonSelected]: topic === element.key,
-            })}
-            onClick={() => {
-              if (topic === element.key) {
-                setTopic("");
-                return;
-              }
-              setTopic(element.key);
-            }}
-          >
-            {element.label}
-          </button>
-        ))}
-        <input type="hidden" name="topic" value={topic} />
-      </div>
+      {!subject && (
+        <>
+          <p>Select a topic:</p>
+          <div className={styles.topicButtons}>
+            {topics.map((element) => (
+              <button
+                key={element.key}
+                type="button"
+                className={clsx(styles.topicButton, {
+                  [styles.topicButtonSelected]: topic === element.key,
+                })}
+                onClick={() => {
+                  if (topic === element.key) {
+                    setTopic("");
+                    return;
+                  }
+                  setTopic(element.key);
+                }}
+              >
+                {element.label}
+              </button>
+            ))}
+            <input type="hidden" name="topic" value={topic} />
+          </div>
+        </>
+      )}
 
       <div className={styles.inputGroup}>
         <label htmlFor="helpText">Or tell us what you need help with:</label>
