@@ -1,0 +1,14 @@
+.contactForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 5rem;
+}
+
+.contactForm p {
+  margin-bottom: 3rem;
+  text-align: center;
+  max-width: 600px;
+}
