@@ -19,6 +19,7 @@ int main() {
     auto [bucket, create_err] = client->GetOrCreateBucket("my-bucket", settings);
     assert(create_err == Error::kOk);
 
+    // Set up a replication to a destination bucket for records from the "py-example" entry and with labels "anomaly=1"
     auto repl_err = client->CreateReplication("my-replication", IClient::ReplicationSettings{
         .src_bucket = "my-bucket",
         .dst_bucket = "demo",
