@@ -63,7 +63,7 @@ the ReductStore SDKs, REST API, CLI and Web Console. You can also provision a Re
 
 import CreateReplicaPy from "!!raw-loader!./examples/py/src/data_replication_create.py"
 import CreateReplicaJs from "!!raw-loader!./examples/js/src/data_replication_create.mjs"
-import CreateReplicaRs from "!!raw-loader!./examples/rs/src/data_replication_create.rs"
+import CreateReplicaRs from "!!raw-loader!./examples/rs/examples/data_replication_create.rs"
 import CreateReplicaCpp from "!!raw-loader!./examples/cpp/src/data_replication_create.cc"
 
 <Tabs>
@@ -91,10 +91,18 @@ import CreateReplicaCpp from "!!raw-loader!./examples/cpp/src/data_replication_c
 
 ### Browse Replication Tasks
 
-To list all Replication Tasks, you can use the same methods as for creating a Replication Task. Here is an example of how to list all Replication Tasks using the ReductStore SDKs, REST API, CLI and Web Console:
+To list all Replication Tasks, you can use the same methods as for creating a Replication Task.You also can retrieve diagnostics information about the Replication Task such as:
 
+* **Status**: The status of the Replication Task. It can be `running`, `stopped`, `failed`, or `completed`.
+* **Number of Pending Records**: The number of records that are waiting to be replicated.
+* **Number of Failed Records**: The number of records that failed to be replicated for in the last hour
+* **Number of Replicated Records**: The number of records that were successfully replicated for the last hour
+* **Error List**: A list of errors that occurred during the replication process for the last hour
 
-### Updating a Replication Task
+:::note
+For the first hour of the Replication Task, the `Number of Failed Records` and `Number of Replicated Records` are interpolated.
+:::
+
 
 
 ### Removing a Replication Task
