@@ -49,6 +49,20 @@ log-level      DEBUG
 port           8383
 ```
 
+By default, the database uses the `/var/snap/reductstore/common` folder to store data. Due to snap restrictions, you can't use root filesystem folders.
+We recommend that you connect the snap to the `removable-media` interface and store the data in a folder outside the snap in `/mnt/*` or `/media/*` folders:
+
+```
+snap connect reductstore:removable-media
+mkdir /mnt/data
+snap set reductstore data-path=/mnt/data
+```
+
+:::danger
+Removing the snap will remove all data stored in the default data path. If you want to keep the data, you need to move it to another location before removing the snap.
+Or use the `snap connect reductstore:removable-media` command to connect the snap to the `removable-media` interface and store the data in a folder outside the snap.
+:::
+
 ## Provisioning
 
 ReductStore provides an HTTP API to create and configure resources such as buckets or access tokens. However, if you are following an Infrastructure as Code (IaC) approach, you may want to provision resources at the deployment stage and ensure that they can't be modified or deleted using the HTTP API. You can use the following environment variables to do this:
