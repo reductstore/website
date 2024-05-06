@@ -69,3 +69,9 @@ add_executable(data_querying_filter.cxx
         src/data_querying_filter.cc
 )
 target_link_libraries(data_querying_filter.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+# Data Replication
+add_executable(data_replication_create.cxx
+        src/data_replication_create.cc
+)
+target_link_libraries(data_replication_create.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)

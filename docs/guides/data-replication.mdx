@@ -63,6 +63,8 @@ the ReductStore SDKs, REST API, CLI and Web Console. You can also provision a Re
 
 import CreateReplicaPy from "!!raw-loader!./examples/py/src/data_replication_create.py"
 import CreateReplicaJs from "!!raw-loader!./examples/js/src/data_replication_create.mjs"
+import CreateReplicaRs from "!!raw-loader!./examples/rs/src/data_replication_create.rs"
+import CreateReplicaCpp from "!!raw-loader!./examples/cpp/src/data_replication_create.cc"
 
 <Tabs>
     <TabItem value="Python">
@@ -73,6 +75,16 @@ import CreateReplicaJs from "!!raw-loader!./examples/js/src/data_replication_cre
     <TabItem value="JavaScript">
         <CodeBlock language="javascript">
             {CreateReplicaJs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {CreateReplicaRs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">
+            {CreateReplicaCpp}
         </CodeBlock>
     </TabItem>
 </Tabs>
