@@ -75,3 +75,13 @@ add_executable(data_replication_create.cxx
         src/data_replication_create.cc
 )
 target_link_libraries(data_replication_create.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(data_replication_browse.cxx
+        src/data_replication_browse.cc
+)
+target_link_libraries(data_replication_browse.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(data_replication_remove.cxx
+        src/data_replication_remove.cc
+)
+target_link_libraries(data_replication_remove.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)

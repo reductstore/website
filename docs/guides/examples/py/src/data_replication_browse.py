@@ -14,7 +14,7 @@ async def main():
         print("Pending records: ", replication.pending_records)
         print("Provisioned: ", replication.is_provisioned)
 
-    # Get full details of a replication
+    # Get all details of a replication
     replication = await client.get_replication_detail("example-replication")
     print("Replication: ", replication.info.name)
     print("Settings: ", replication.settings)
