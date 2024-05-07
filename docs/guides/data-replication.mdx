@@ -65,6 +65,8 @@ import CreateReplicaPy from "!!raw-loader!./examples/py/src/data_replication_cre
 import CreateReplicaJs from "!!raw-loader!./examples/js/src/data_replication_create.mjs"
 import CreateReplicaRs from "!!raw-loader!./examples/rs/examples/data_replication_create.rs"
 import CreateReplicaCpp from "!!raw-loader!./examples/cpp/src/data_replication_create.cc"
+import CreateReplicaCurl from "!!raw-loader!./examples/curl/data_replication_create.sh"
+import CreateReplicaProvision from "!!raw-loader!./examples/provisioning/data_replication_create.yml"
 
 <Tabs>
     <TabItem value="Python">
@@ -87,6 +89,16 @@ import CreateReplicaCpp from "!!raw-loader!./examples/cpp/src/data_replication_c
             {CreateReplicaCpp}
         </CodeBlock>
     </TabItem>
+    <TabItem value="Curl">
+        <CodeBlock language="bash">
+            {CreateReplicaCurl}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Provisioning">
+        <CodeBlock language="yaml">
+            {CreateReplicaProvision}
+        </CodeBlock>
+    </TabItem>
 </Tabs>
 
 ### Browse Replication Tasks
@@ -107,6 +119,8 @@ import BrowseReplicaPy from "!!raw-loader!./examples/py/src/data_replication_bro
 import BrowseReplicaJs from "!!raw-loader!./examples/js/src/data_replication_browse.mjs"
 import BrowseReplicaRs from "!!raw-loader!./examples/rs/examples/data_replication_browse.rs"
 import BrowseReplicaCpp from "!!raw-loader!./examples/cpp/src/data_replication_browse.cc"
+import BrowseReplicaCurl from "!!raw-loader!./examples/curl/data_replication_browse.sh"
+
 
 <Tabs>
     <TabItem value="Python">
@@ -129,6 +143,11 @@ import BrowseReplicaCpp from "!!raw-loader!./examples/cpp/src/data_replication_b
             {BrowseReplicaCpp}
         </CodeBlock>
     </TabItem>
+    <TabItem value="Curl">
+        <CodeBlock language="bash">
+            {BrowseReplicaCurl}
+        </CodeBlock>
+    </TabItem>
 </Tabs>
 
 ### Removing a Replication Task
@@ -139,6 +158,7 @@ import RemoveReplicaPy from "!!raw-loader!./examples/py/src/data_replication_rem
 import RemoveReplicaJs from "!!raw-loader!./examples/js/src/data_replication_remove.mjs"
 import RemoveReplicaRs from "!!raw-loader!./examples/rs/examples/data_replication_remove.rs"
 import RemoveReplicaCpp from "!!raw-loader!./examples/cpp/src/data_replication_remove.cc"
+import RemoveReplicaCurl from "!!raw-loader!./examples/curl/data_replication_remove.sh"
 
 <Tabs>
     <TabItem value="Python">
@@ -159,6 +179,11 @@ import RemoveReplicaCpp from "!!raw-loader!./examples/cpp/src/data_replication_r
     <TabItem value="C++">
         <CodeBlock language="cpp">
             {RemoveReplicaCpp}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Curl">
+        <CodeBlock language="bash">
+            {RemoveReplicaCurl}
         </CodeBlock>
     </TabItem>
 </Tabs>
