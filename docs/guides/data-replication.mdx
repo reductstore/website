@@ -61,6 +61,7 @@ Let's create a Replication Task that replicates all records from the `source-buc
 the ReductStore SDKs, REST API, CLI and Web Console. You can also provision a Replication Task using by using environment variables.
 
 
+import CreateReplicaCli from "!!raw-loader!./examples/cli/data_replication_create.sh"
 import CreateReplicaPy from "!!raw-loader!./examples/py/src/data_replication_create.py"
 import CreateReplicaJs from "!!raw-loader!./examples/js/src/data_replication_create.mjs"
 import CreateReplicaRs from "!!raw-loader!./examples/rs/examples/data_replication_create.rs"
@@ -69,6 +70,11 @@ import CreateReplicaCurl from "!!raw-loader!./examples/curl/data_replication_cre
 import CreateReplicaProvision from "!!raw-loader!./examples/provisioning/data_replication_create.yml"
 
 <Tabs>
+    <TabItem value="CLI">
+        <CodeBlock language="bash">
+            {CreateReplicaCli}
+        </CodeBlock>
+    </TabItem>
     <TabItem value="Python">
         <CodeBlock language="python">
             {CreateReplicaPy}
@@ -115,6 +121,7 @@ To list all Replication Tasks, you can use the same methods as for creating a Re
 For the first hour of the Replication Task, the `Number of Failed Records` and `Number of Replicated Records` are interpolated.
 :::
 
+import BrowseReplicaCLI from "!!raw-loader!./examples/cli/data_replication_browse.sh"
 import BrowseReplicaPy from "!!raw-loader!./examples/py/src/data_replication_browse.py"
 import BrowseReplicaJs from "!!raw-loader!./examples/js/src/data_replication_browse.mjs"
 import BrowseReplicaRs from "!!raw-loader!./examples/rs/examples/data_replication_browse.rs"
@@ -123,6 +130,11 @@ import BrowseReplicaCurl from "!!raw-loader!./examples/curl/data_replication_bro
 
 
 <Tabs>
+    <TabItem value="CLI">
+        <CodeBlock language="bash">
+            {BrowseReplicaCLI}
+        </CodeBlock>
+    </TabItem>
     <TabItem value="Python">
         <CodeBlock language="python">
             {BrowseReplicaPy}
@@ -154,6 +166,7 @@ import BrowseReplicaCurl from "!!raw-loader!./examples/curl/data_replication_bro
 
 You can remove a Replication Task by using the same methods as for creating a Replication Task.
 
+import RemoveReplicaCli from "!!raw-loader!./examples/cli/data_replication_remove.sh"
 import RemoveReplicaPy from "!!raw-loader!./examples/py/src/data_replication_remove.py"
 import RemoveReplicaJs from "!!raw-loader!./examples/js/src/data_replication_remove.mjs"
 import RemoveReplicaRs from "!!raw-loader!./examples/rs/examples/data_replication_remove.rs"
@@ -161,6 +174,11 @@ import RemoveReplicaCpp from "!!raw-loader!./examples/cpp/src/data_replication_r
 import RemoveReplicaCurl from "!!raw-loader!./examples/curl/data_replication_remove.sh"
 
 <Tabs>
+    <TabItem value="CLI">
+        <CodeBlock language="bash">
+            {RemoveReplicaCli}
+        </CodeBlock>
+    </TabItem>
     <TabItem value="Python">
         <CodeBlock language="python">
             {RemoveReplicaPy}
