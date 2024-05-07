@@ -75,6 +75,18 @@ import CreateReplicaProvision from "!!raw-loader!./examples/provisioning/data_re
             {CreateReplicaCli}
         </CodeBlock>
     </TabItem>
+    <TabItem value="Web Console">
+        Steps to create a replication task using the Web Console:
+        1. Open the Web Console at **[http://127.0.0.1:8383](http://127.0.0.1:8383)** in your browser.
+        2. Enter the API token if the authorization is enabled.
+        3. Click on the **"Replication"** tab in the left sidebar.
+        4. Click on the plus icon to create a new bucket in the top right corner:
+        ![Create Replication Task](./img/data_replication_create.webp)
+        5. In the **"Create a new replication"** dialog, entre the name of the replication name and settings:
+
+        ![Create Replication Task Dialog](./img/data_replication_settings.webp  =100x20)
+        6. Click on the **"Create Replication"** button to create the replication task.
+    </TabItem>
     <TabItem value="Python">
         <CodeBlock language="python">
             {CreateReplicaPy}
@@ -213,3 +225,12 @@ unset the corresponding environment variables and restart the ReductStore instan
 
 
 ## Manual Data Replication
+
+You can also replicate data manually when you need to copy specific time ranges or records from one bucket to another.
+For this purpose, you can use ReductCLI's `cp` command. Here we copy all records from the `src-instance/example-bucket` to the `dst-instance/demo` bucket that have the `anomaly=true` label and don't have the `status=ok` label
+
+import ManualReplica from "!!raw-loader!./examples/cli/data_replication_manual.sh"
+
+<CodeBlock language="bash">
+    {ManualReplica}
+</CodeBlock>
