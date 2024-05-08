@@ -65,7 +65,7 @@ jobs:
           chmod +x reduct-cli
           sudo mv reduct-cli /usr/local/bin
           reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-remove
-          reduct-cli repl creat http://my-token@127.0.0.1:8383/example-replication  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
+          reduct-cli replica create http://my-token@127.0.0.1:8383/example-replication  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
           reduct-cli cp https://reductstore@play.reduct.store/datasets  http://my-token@127.0.0.1:8383/example-bucket --limit 100
  
 
