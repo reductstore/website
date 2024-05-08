@@ -130,7 +130,7 @@ jobs:
             sleep 1
             # remove alias if it is cli example
             if [ "${{ matrix.example }}" == "cli" ]; then
-              reduct-cli alias rm local
+              reduct-cli alias rm local || true
             fi
           done
           
