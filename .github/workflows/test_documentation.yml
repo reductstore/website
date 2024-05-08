@@ -67,7 +67,7 @@ jobs:
           reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-remove
           reduct-cli cp https://reductstore@play.reduct.store/datasets  http://my-token@127.0.0.1:8383/example-bucket --limit 100
           reduct-cli replica create http://my-token@127.0.0.1:8383/example-replication  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
-          reduct-cli replica create http://my-token@127.0.0.1:8383/replica-to-remove  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
+          reduct-cli replica create http://my-token@127.0.0.1:8383/repl-to-remove  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
 
 
       - name: Install Python
