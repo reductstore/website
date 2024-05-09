@@ -23,7 +23,7 @@ The data replication in ReductStore is based on the concept of a **Replication T
 ![Data Replication Diagram](./img/data_replication_diagram.svg)
 
 Once a replication task is created, a ReductStore instance starts a new thread that waits for new records in the source bucket.
-When a new record arrives, the HTTP front-end stores the record in the source bucket and registers it in a transaction log. The replication task periodically checks the transaction log for new records and replicates them to the target bucket.
+When a new record arrives, the HTTP frontend stores the record in the source bucket and registers it in a transaction log. The replication task periodically checks the transaction log for new records and replicates them to the target bucket.
 After the record is successfully replicated, the replication task deletes the record from the transaction log.
 This approach ensures that data is replicated in real-time and that the replication process is fault-tolerant and can recover from failures.
 
@@ -54,7 +54,7 @@ To spin up a new replication task, you must provide the following information:
 - **Filter Settings**: See the **[Conditional Replication](#conditional-replication)** section for more information.
 
 Let's create a replication task that replicates all records from the `source-bucket` to the `remote-bucket` by using
-the ReductStore SDKs, REST API, CLI and Web Console. You can also provision a Replication Task using by using environment variables.
+the ReductStore SDKs, REST API, CLI and Web Console. You can also provision a Replication Task by using environment variables.
 
 
 import CreateReplicaCli from "!!raw-loader!./examples/cli/data_replication_create.sh"
@@ -78,8 +78,7 @@ import CreateReplicaProvision from "!!raw-loader!./examples/provisioning/data_re
         3. Click on the **"Replication"** tab in the left sidebar.
         4. Click on the plus icon in the top right corner to create a new replication task:
         ![Create Replication Task](./img/data_replication_create.webp)
-        5. In the **"Create a new replication"** dialog, entre the name of the replication name and settings:
-         <img src={require("@site/docs/guides/img/data_replication_settings.webp").default} alt="Create Replication Task Dialog" width="300"/>
+        5. In the **"Create a new replication"** dialog, entre the name of the replication name and settings: <img src={require("@site/docs/guides/img/data_replication_settings.webp").default} alt="Create Replication Task Dialog" width="300"/>
         6. Click on the **"Create Replication"** button to create the replication task.
     </TabItem>
     <TabItem value="Python">
@@ -120,6 +119,7 @@ You can list all replication tasks and get detailed information about a specific
 The detailed information includes status, current settings and statistics of the replication task:
 
 * **Status**: The status of the replication task. It can be `Active` or `Inactive`. Inactive replication tasks are paused and don't replicate data usually because the target database is unreachable.
+* **Provisioned**: Whether the replication task is provisioned or not. Provisioned replication tasks are created using environment variables.
 * **Number of Pending Records**: The number of records that are waiting to be replicated.
 * **Number of Failed Records**: The number of records that failed to be replicated for in the last hour
 * **Number of Replicated Records**: The number of records that were successfully replicated for the last hour

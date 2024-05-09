@@ -17,20 +17,20 @@ const sidebars = {
                 "guides/data-ingestion",
                 "guides/data-querying",
                 "guides/data-replication",
-                {
-                    type: "category",
-                    label: "Integration",
-                    items: [
-                        "guides/integration/azure",
-                    ],
-                }
             ]
+        },
+        {
+            type: "category",
+            label: "Integration",
+            items: [
+                "guides/integration/azure",
+            ],
         },
         {
             type: "category",
             label: "API Reference",
             items: [
-               "http-api/index",
+                "http-api/index",
                 "http-api/server-api",
                 "http-api/bucket-api",
                 "http-api/entry-api",
