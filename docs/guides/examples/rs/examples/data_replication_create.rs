@@ -14,14 +14,15 @@ async fn main() -> Result<(), ReductError> {
         .send()
         .await?;
 
-    // Set up a replication to a destination bucket for records from the "py-example" entry and with labels "anomaly=1"
+    // Set up a replication to a destination bucket for records
+    // from the "rs-example" entry and with labels "anomaly=1"
     let _ = client
         .create_replication("my-bucket")
         .src_bucket("my-bucket")
         .dst_bucket("demo")
         .dst_host("https://play.reduct.store")
         .dst_token("reductstore")
-        .entries(vec!["py-example".to_string()])
+        .entries(vec!["rs-example".to_string()])
         .include(Labels::from_iter(vec![("anomaly".to_string(), "1".to_string())]))
         .send()
         .await?;

@@ -8,7 +8,8 @@ async def main():
     client = Client("http://127.0.0.1:8383", api_token="my-token")
     await client.create_bucket("my-bucket", exist_ok=True)
 
-    # Set up a replication to a destination bucket for records from the "py-example" entry and with labels "anomaly=1"
+    # Set up a replication to a destination bucket for records
+    # from the "py-example" entry and with labels "anomaly=1"
     replication_settings = ReplicationSettings(
         src_bucket="my-bucket",
         dst_bucket="demo",
