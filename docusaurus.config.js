@@ -50,7 +50,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          sidebarPath: require.resolve("./sidebars.js"),
+          sidebarPath: require.resolve("./sidebars.json"),
           editUrl: "https://github.com/reductstore/docs/tree/main",
         },
         blog: {
