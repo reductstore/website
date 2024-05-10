@@ -11,15 +11,17 @@ export default function PerformanceComparison(): JSX.Element {
 
   return (
     <section className={styles.section}>
-      <div className={styles.benefit}>
-        <div className={styles.benefitIcon}>
-          <FaRocket
-            size="5em"
-            style={{ color: "var(--ifm-color-primary)" }}
-          />
+      <div className="col col--4 col--offset-4">
+        <div className={styles.benefit}>
+          <div className={styles.benefitIcon}>
+            <FaRocket
+              size="5em"
+              style={{ color: "var(--ifm-color-primary)" }}
+            />
+          </div>
+          <h3>Get the Best Performance</h3>
+          <p>Outperform any other solution with a tailored solution for edge computing.</p>
         </div>
-        <h3>Get the Best Performance</h3>
-        <p>Outperform any other solution with our tailored solution for edge computing.</p>
       </div>
       <ul className={clsx("tabs", styles.tabs)}>
         {["TimescaleDB", "MongoDB", "MinIO"].map((tab) => (
