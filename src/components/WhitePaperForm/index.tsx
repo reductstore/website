@@ -33,13 +33,10 @@ export default function WhitePaperForm() {
     );
   }
 
-  const titleText = "AI on the Edge: The Game-Changing Architecture for Every IoT Engineer."
-  const subtitleText = "Dive into challenges and solutions to effectively run AI models on edge devices with our white paper."
-
   return (
     <>
-      <h2>{titleText}</h2>
-      <p>{subtitleText}</p>
+      <h2>Download Our White Paper</h2>
+      <p>Dive into challenges and solutions to effectively run AI models on edge devices with our white paper.</p>
 
       <form className={styles.whitePaperForm} onSubmit={handleSubmit}>
         <div className={styles.inputGroup}>
@@ -78,7 +75,7 @@ export default function WhitePaperForm() {
 
         <div className="col">
           <button
-            className={"row button button--primary button--lg"}
+            className={"row button button--primary button--md"}
             type="submit"
             disabled={state.submitting}
           >
