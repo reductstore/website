@@ -27,9 +27,8 @@ function HomepageHeader() {
           {siteConfig.tagline}
         </h1>
         <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
-          Outperform TimescaleDB, MongoDB, and MinIO with a tailored solution for edge computing. Why not try it for free today?
+          Outperform TimescaleDB, MongoDB, MinIO, and InfluxDB with a tailored solution for edge computing. Why not try it for free today?
         </p>
-
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
