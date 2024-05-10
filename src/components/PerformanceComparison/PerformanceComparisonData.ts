@@ -1,20 +1,98 @@
 export const PerformanceComparisonData = {
   TimescaleDB: [
     {
-      chunkSize: "1 KB",
+      chunkSize: "100 KB",
       operation: "Write",
-      timescaleDB: 2475,
-      reductStore: 1463,
-      reductStorePercent: "-41%",
+      reductStorePercent: "+205%",
     },
     {
-      chunkSize: "1 KB",
+      chunkSize: "",
       operation: "Read",
-      timescaleDB: 2361,
-      reductStore: 1260,
-      reductStorePercent: "-47%",
+      reductStorePercent: "+217%",
+    },
+    {
+      chunkSize: "1 MB",
+      operation: "Write",
+      reductStorePercent: "+1075%",
+    },
+    {
+      chunkSize: "",
+      operation: "Read",
+      reductStorePercent: "+855%",
+    },
+    {
+      chunkSize: "10 MB",
+      operation: "Write",
+      reductStorePercent: "+1300%",
+    },
+    {
+      chunkSize: "",
+      operation: "Read",
+      reductStorePercent: "+850%",
     },
   ],
-  MongoDB: [],
-  MinIO: [],
+  MongoDB: [
+    {
+      chunkSize: "100 KB",
+      operation: "Write",
+      reductStorePercent: "+155%",
+    },
+    {
+      chunkSize: "",
+      operation: "Read",
+      reductStorePercent: "+198%",
+    },
+    {
+      chunkSize: "1 MB",
+      operation: "Write",
+      reductStorePercent: "+137%",
+    },
+    {
+      chunkSize: "",
+      operation: "Read",
+      reductStorePercent: "+112%",
+    },
+    {
+      chunkSize: "10 MB",
+      operation: "Write",
+      reductStorePercent: "+158%",
+    },
+    {
+      chunkSize: "",
+      operation: "Read",
+      reductStorePercent: "+65%",
+    },
+  ],
+  InfluxDBMinIO: [
+    {
+      chunkSize: "100 KB",
+      operation: "Write",
+      reductStorePercent: "+205%",
+    },
+    {
+      chunkSize: "",
+      operation: "Read",
+      reductStorePercent: "+217%",
+    },
+    {
+      chunkSize: "1 MB",
+      operation: "Write",
+      reductStorePercent: "+1075%",
+    },
+    {
+      chunkSize: "",
+      operation: "Read",
+      reductStorePercent: "+855%",
+    },
+    {
+      chunkSize: "10 MB",
+      operation: "Write",
+      reductStorePercent: "+1300%",
+    },
+    {
+      chunkSize: "",
+      operation: "Read",
+      reductStorePercent: "+850%",
+    },
+  ],
 };
