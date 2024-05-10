@@ -1,0 +1,27 @@
+.section {
+  margin-bottom: var(--reduct-section-space);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.benefit {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.benefitIcon {
+  margin-bottom: 1rem;
+  color: "white";
+}
+
+.tabs {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tabContent {
+  padding: 1rem;
+}
