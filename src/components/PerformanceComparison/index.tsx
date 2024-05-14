@@ -12,7 +12,7 @@ export default function PerformanceComparison(): JSX.Element {
   const tabNameMap = {
     TimescaleDB: "TimescaleDB",
     MongoDB: "MongoDB",
-    InfluxDBMinIO: "InfluxDB + MinIO",
+    MinIO: "MinIO",
   };
   return (
     <section className={styles.section}>
@@ -25,11 +25,11 @@ export default function PerformanceComparison(): JSX.Element {
             />
           </div>
           <h3>Get the Best Performance</h3>
-          <p>Outperform any other solution with a tailored solution for edge computing.</p>
+          <p>Outperform other databases with a customized solution for time-series object data.</p>
         </div>
       </div>
       <ul className={clsx("tabs", styles.tabs)}>
-        {["TimescaleDB", "MongoDB", "InfluxDBMinIO"].map((tab) => (
+        {["TimescaleDB", "MongoDB", "MinIO"].map((tab) => (
           <li
             key={tab}
             className={clsx(
@@ -44,7 +44,7 @@ export default function PerformanceComparison(): JSX.Element {
       </ul>
       <div className={styles.tabContent}>
         <>
-          Speed gap on NVMe drives:
+          Speed improvement on NVMe drives:
           {activeTab && (
             <PerformanceComparisonTable data={PerformanceComparisonData[activeTab]} />
           )}
