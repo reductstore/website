@@ -384,28 +384,38 @@ The Entry API allows users to write and read data from their buckets, as well as
 description={
   <>
     The method responds with a JSON document containing an ID which should be used to read records with the following endpoint:
-    <br />
-    <strong>GET /b/:bucket_name/:entry_name?q=ID.</strong>
-    <br /><br />
+      <p>
+        <strong>GET /b/:bucket_name/:entry_name?q=ID.</strong>
+      </p>
     The time interval is [start, stop).
-    <br /><br />
+    <br />
     If authentication is enabled, the method needs a valid API token with read access to the bucket of the entry.
     <br /><br />
-    Since version 1.3, the method also provides the <code>include-&lt;label&gt;</code> and <code>exclude-&lt;label&gt;</code> query parameters to filter records based on the values of certain labels. For example:
-    <br />
-    <strong>GET /api/v1/:bucket/:entry/q?include-&lt;label1&gt;=foo&amp;exclude-&lt;label2&gt;=bar</strong>
+    <strong> Changes: </strong>
+    <ul>
+        <li>
+            Version 1.3: the method also provides the <code>include-&lt;label&gt;</code> and <code>exclude-&lt;label&gt;</code> query parameters to filter records based on the values of certain labels. For example:
+            <p>
+                <strong>GET /api/v1/:bucket/:entry/q?include-&lt;label1&gt;=foo&amp;exclude-&lt;label2&gt;=bar</strong>
+            </p>
+            This would find all records that have <code>label1</code> equal to "foo" and excludes those that have <code>label2</code> equal to "bar".
+            <br />
+            A user can specify multiple <code>include</code> and <code>exclude</code> labels, which will be connected with an AND operator. For example:
+            <p>
+                <strong>GET /api/v1/:bucket/:entry/q?include-&lt;label1&gt;=foo&amp;include-&lt;label2&gt;=bar</strong>
+            </p>
+        </li>
+    <li>
+            Version 1.4: the method has the <code>continuous query</code> flag. If it is true, the current query will not be discarded if there are no records. A client can ask them later. The query will not be removed until its TTL has expired. The <code>stop</code> parameter is ignored for continuous queries.
+    </li>
+    <li>
+            Version 1.6: the method provides the <code>limit</code> query parameter. It limits the number of records in the query. If it is not set, the query is unlimited by default.
+    </li>
+    <li>
+            Version 1.10: the method has the <code>each_n</code> and <code>each_s</code> query parameters. If the <code>each_n</code> parameter is set, the method returns only every <code>each_n</code>-th record. If the <code>each_s</code> parameter is set, the method returns only one record per <code>each_s</code> seconds.
+    </li>
+    </ul>
     <br /><br />
-    This would find all records that have <code>label1</code> equal to "foo" and excludes those that have <code>label2</code> equal to "bar".
-    <br /><br />
-    A user can specify multiple <code>include</code> and <code>exclude</code> labels, which will be connected with an AND operator. For example:
-    <br />
-    <strong>GET /api/v1/:bucket/:entry/q?include-&lt;label1&gt;=foo&amp;include-&lt;label2&gt;=bar</strong>
-    <br /><br />
-    Since version 1.4, the method has the <code>continuous query</code> flag. If it is true, the current query will not be discarded if there are no records. A client can ask them later. The query will not be removed until its TTL has expired. The <code>stop</code> parameter is ignored for continuous queries.
-    <br /><br />
-    Since version 1.6, the method provides the <code>limit</code> query parameter. It limits the number of records in the query. If it is not set, the query is unlimited by default.
-    <br /><br />
-    Since version 1.10, the method has the `each_n` and `each_s` query parameters. If the `each_n` parameter is set, the method returns only every `each_n`-th record. If the `each_s` parameter is set, the method returns only one record per `each_s` seconds.
   </>
 }
   parameters={[
@@ -472,7 +482,7 @@ description={
       type: "query",
       details: {
         name: "conitnuous",
-        description: "Keep query if no records for the request", 
+        description: "Keep query if no records for the request",
         dataType: "Boolean",
         isRequired: false,
       }
@@ -499,7 +509,7 @@ description={
       type: "query",
       details: {
           name: "each_s",
-          description: "Return only one record per N seconds",
+          description: "Return only one record per S seconds",
           dataType: "Float",
           isRequired: false,
       }
