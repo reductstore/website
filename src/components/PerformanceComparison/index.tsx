@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
-import { PerformanceComparisonData } from "./PerformanceComparisonData";
+import { IPerformanceComparisonData, PerformanceComparisonData } from "./PerformanceComparisonData";
 import {
   FaRocket,
 } from "react-icons/fa";
 import Link from "@docusaurus/Link";
+import PerformanceComparisonTable from "../PerformanceComparisonTable";
 
 export default function PerformanceComparison(): JSX.Element {
   const [activeTab, setActiveTab] = useState("TimescaleDB");
@@ -44,47 +45,14 @@ export default function PerformanceComparison(): JSX.Element {
       </ul>
       <div className={styles.tabContent}>
         <>
-          Speed improvement on NVMe drives:
           {activeTab && (
             <PerformanceComparisonTable data={PerformanceComparisonData[activeTab]} />
           )}
           <p>
-            Test on your own hardware with the <Link to="https://github.com/reductstore/benchmark"><b>benchmark repository</b></Link>.
+            <Link to={PerformanceComparisonData[activeTab].url}>See the full {PerformanceComparisonData[activeTab].title} benchmark.</Link>
           </p>
         </>
       </div>
     </section>
   );
 }
-interface PerformanceComparisonTableProps {
-  data: {
-    chunkSize: string;
-    operation: string;
-    timescaleDB: number;
-    reductStore: number;
-    reductStorePercent: string;
-  }[];
-}
-
-const PerformanceComparisonTable: React.FC<PerformanceComparisonTableProps> = ({
-  data,
-}) => (
-  <table>
-    <thead>
-      <tr>
-        <th>Chunk Size</th>
-        <th>Operation</th>
-        <th>ReductStore, %</th>
-      </tr>
-    </thead>
-    <tbody>
-      {data.map((row, index) => (
-        <tr key={index}>
-          <td>{row.chunkSize}</td>
-          <td>{row.operation}</td>
-          <td>{row.reductStorePercent}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-);

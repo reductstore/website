@@ -1,0 +1,24 @@
+.tableResponsive {
+  overflow-x: auto;
+}
+
+.compactTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.compactTable th, .compactTable td {
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.compactTable th {
+  background-color: #f2f2f2;
+}
+
+.compactTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
