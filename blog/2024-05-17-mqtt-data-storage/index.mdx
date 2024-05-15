@@ -53,7 +53,7 @@ MQTT is easy to use and keeps subscription and publishing tasks separate. To get
 
 An important aspect to consider is the real-time aspect of IoT projects. Note that MQTT messages are not directly time-stamped, but you will often set the time information in the payload. This is done by the publisher, and you may decide to use the time you want. For example, one can transmit the time of the edge device when the message is created or the time of the sensor when the data is collected. 
 
-> A time-series database might seem an obvious choice to store data in chronological order as it allows for efficient storage and retrieval of messages indexed by time.
+> A time-series database is an obvious choice to store data in chronological order as it allows for efficient storage and retrieval of messages indexed by time.
 
 Another aspect to consider is the type of data that can be transmitted via MQTT (which is pretty much anything). The MQTT protocol is format-agnostic, meaning that it does not specify how data should be formatted. This allows for a wide variety of data types to be transmitted via MQTT, including text, images, or audio. The only requirements are that the data must be formatted either as a string (UTF-8 encoded) or as a byte stream, and that the payload size does not exceed 256MB–which is pretty large, like a 2K video for 35 seconds.
 
@@ -73,7 +73,7 @@ When selecting an MQTT data storage solution, there are several factors to consi
 ### Performance: speed and efficiency in processing and retrieving data
 
 Performance is an obvious one. The storage should be able to process and retrieve data efficiently and quickly with a low response time which implies that the database's read and write speeds, along with the network latency, are minimized. 
-If you are intested in learning more about how we benchmark databases, you can check out our article about [**ReductStore vs. MinIO & InfluxDB**](/blog/2024-05-17-reductstore-vs-minio-influxdb).
+If you are intested in learning more about how we benchmark databases in a real-world scenario, you can check out our article about [**ReductStore vs. MinIO & InfluxDB**](/blog/2024-05-17-reductstore-vs-minio-influxdb).
 
 When storing pictures from a camera, or high-frequency sensor data (e.g. accelerometers) performance becomes even more critical. Cameras often generate high-resolution images that can be pretty large, and an average accelerometer can easily produce around 4,000 measurements per second (4kHz).
 
@@ -87,7 +87,7 @@ While this might be expected for cloud databases, how does it apply to edge data
 
 > Since MQTT applications frequently produce a significant amount of data from various devices and sensors, the edge storage should be capable of managing this high throughput and having a solid reduction strategy (e.g. downsampling, retention policies, etc.), and replication methods.
 
-For additional context, you can check out our article about [**Data Reduction on Edge**](/blog/edge-computing/data-reduction-on-edge) to learn more about how to reduce data on the edge device and optimize storage space
+For additional context, you can check out our article about [**Data Reduction on Edge**](/blog/edge-computing/data-reduction-on-edge) to learn more about how to reduce data on the edge device and optimize storage space.
 
 A scalable system should also include considerations such as handling increasing workloads, accommodating additional devices or sensors, and supporting horizontal scaling by adding more edge devices or storage nodes when needed.
 
@@ -96,6 +96,8 @@ A scalable system should also include considerations such as handling increasing
 To guarantee the reliability and accessibility of the stored data without any loss or damage, it is crucial to select a storage solution that incorporates appropriate measures. These measures should be capable of addressing possible failures, such as power outages or network interruptions, and safeguarding against data loss or compromise. 
 
 One popular solution is to replicate data. Replication involves creating duplicate copies of the data and storing them in multiple locations or servers. This redundancy ensures that even if one server fails the data can still be accessed from another one, minimizing the risk of data loss or corruption.
+
+You can check out our guide about [**Data Replication**](/docs/guides/data-replication) to learn more about the technique used by ReductStore to replicate data across multiple nodes and ensure high availability and data integrity.
 
 ### Security: protection against unauthorized access, attacks, and breaches
 
@@ -160,7 +162,7 @@ NoSQL databases are often famous for storing MQTT data due to their flexibility 
 
 Some popular NoSQL databases commonly used for storing MQTT data include: 
 
-- [**MongoDB**](https://www.mongodb.com/): a document-oriented database with high scalability and flexibility for handling unstructured or semi-structured data. It offers rich querying capabilities, indexing options, and support for distributed data storage with a technique called “sharding”. Some of the differences between ReductStore and MongoDB are discussed in our article [**ReductStore vs. MongoDB**](/blog/comparisons/iot/reductstore-vs-mongodb). 
+- [**MongoDB**](https://www.mongodb.com/): a document-oriented database with high scalability and flexibility for handling unstructured or semi-structured data. It offers rich querying capabilities, indexing options, and support for distributed data storage with a technique called _sharding_. Some of the differences between ReductStore and MongoDB are discussed in our article [**ReductStore vs. MongoDB**](/blog/comparisons/iot/reductstore-vs-mongodb). 
 
 - [**Apache Cassandra**](https://cassandra.apache.org/): a highly scalable and fault-tolerant database that can handle large volumes of data across multiple nodes or clusters. It provides fast read and write operations, making it suitable for real-time analytics or applications with high throughput requirements. 
 
