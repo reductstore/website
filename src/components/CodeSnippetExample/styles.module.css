@@ -3,10 +3,6 @@
   justify-content: center;
 }
 
-.tabsItem {
-  padding: 0.5rem 1rem;
-}
-
 .tabsItemActive {
   border-bottom: 3px solid var(--ifm-color-primary);
 }

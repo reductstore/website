@@ -13,6 +13,7 @@ import HomepageFaqs from "../components/HomepageFaqs";
 import HomepageSDKs from "../components/HomepageSDKs";
 import HomepageWebConsole from "../components/HomepageWebConsole";
 import HomepageCLI from "../components/HomepageCLI";
+import PerformanceComparison from "../components/PerformanceComparison";
 
 const LogoImg = require("@site/static/img/logo.webp").default;
 
@@ -26,9 +27,8 @@ function HomepageHeader() {
           {siteConfig.tagline}
         </h1>
         <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
-          ReductStore is a high-throughput, time-series object store optimized for edge computing and AI/ML workflows, delivering tailored solutions for managing sequential data efficiently at scale.
+          Outperform TimescaleDB, MongoDB, and MinIO with a tailored solution for time-series object data. Why not try it for free today?
         </p>
-
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
@@ -60,7 +60,7 @@ function HomepageHeader() {
 export default function Home(): JSX.Element {
   return (
     <Layout
-      title="Time-Series Object Store for AI Data Infrastructure"
+      title="Time-Series Object Store for Edge Computing and AI/ML Workflows"
       description="ReductStore is a time series database designed specifically for storing and managing large amounts of unstructured data. 
       It offers high performance for writing and real-time querying, making it suitable for edge computing, computer vision, and IoT applications."
     >
@@ -68,6 +68,7 @@ export default function Home(): JSX.Element {
       <main>
         <div className="container">
           <HomepageBenefits />
+          <PerformanceComparison />
           <hr />
           <HomepageTestimonials />
           <hr />
