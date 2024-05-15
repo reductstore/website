@@ -26,44 +26,67 @@ While it is possible to retrieve a record by its timestamp, this method is less 
 
 ## Query Parameters
 
-Data can be queried using the ReductStore CLI, SDKs or HTTP API. The query parameters are the same for all interfaces and include:
+Data can be queried using the ReductStore CLI, SDKs or HTTP API. The query parameters are the same for all interfaces and
+divided into two categories: filter and control parameters.
 
-- Start and end time range
-- List of label values to include
-- List of labels to exclude
-- Limit on the number of records to return
-- Head flag to retrieve metadata only
+### Filter Parameters
 
-There are also more advanced parameters available in the SDKs and HTTP API, such as
+Filter parameters are used to select records based on specific criteria. You can combine multiple filter parameters to create complex queries. This is the list of filter parameters, sorted by priority:
+| Parameter | Description                     | Type            | Default                                        |
+|-----------|---------------------------------|-----------------|------------------------------------------------|
+| `start`   | Start time of the query         | Timestamp       | The timestamp of the first record in the entry |
+| `end`     | End time of the query           | Timestamp       | The timestamp of the last record in the entry  |
+| `include` | List of label values to include | List of strings | Disabled                                       |
+| `exclude` | List of labels to exclude       | List of strings | Disabled                                       |
+| `each_s`  | Return a record every S seconds | Float           | Disabled                                       |
+| `each_n`  | Return only every N record      | Integer         | Disabled                                       |
+| `limit`   | Limit on the number of records  | Integer         | All records are returned                       |
 
-- Query TTL (Time to Live)
-- Continuous flag to keep the query open for continuous data retrieval
-- Pool interval to specify the time interval for pooling data in continuous mode
-
-### Time Range
+**Time Range**
 
 The time range is defined by the `start` and `end` parameters. Records with a timestamp equal to or greater than `start` and less than `end` are included in the result. If the `start` parameter is not set, the query starts from the begging of the entry. If the `end` parameter is not set, the query continues to the end of the entry. If both `start` and `end` are not set, the query returns the entire entry.
 
-### Include Labels
+**Include Labels**
 
 The `include` parameter filters the records by the specified label values. Only those that match ALL the specified label values are included in the result.
 
-### Exclude Labels
+**Exclude Labels**
 
 The `exclude` parameter filters records based on specified labels. Any records matching ALL of these labels will be omitted from the results.
 
-### Limit Records
+**One Record Every S Seconds**
+
+The `each_s` parameter returns a record every S seconds. This parameter is useful when you need to resample data at a specific interval. You can use floating-point numbers for better precision. The default value is 0, which means all records are returned.
+
+**Every Nth Record**
+
+The `each_n` parameter returns only every Nth record. This parameter is useful when you need to downsample data by skipping records. The default value is 1, which means all records are returned.
+
+**Limit Records**
 
 The `limit` parameter restricts the number of records returned by a query. If the dataset has fewer records than the specified limit, all records are returned.
 
-### TTL (Time-to-Live)
+### Control Parameters
+
+There are also more advanced parameters available in the SDKs and HTTP API to control the query behavior:
+
+| Parameter       | Description                                                            | Type    | Default |
+|-----------------|------------------------------------------------------------------------|---------|---------|
+| `ttl`           | Time-to-live of the query. The query is automatically closed after TTL | Integer | 60      |
+| `head`          | Retrieve only metadata                                                 | Boolean | False   |
+| `continuous`    | Keep the query open for continuous data retrieval                      | Boolean | False   |
+| `pool_interval` | Time interval for pooling data in continuous mode                      | Integer | 1       |
+
+
+**TTL (Time-to-Live)**
 
 The `ttl` parameter determines the time-to-live of a query. The query is automatically closed when the specified time has elapsed since it was created. This prevents memory leaks by limiting the number of open queries. The default TTL is 60 seconds.
-### Head Flag
+
+**Head Flag**
 
 The `head` flag is used to retrieve only metadata. When set to `true`, the query returns the records' metadata, excluding the actual data. This parameter is useful when you want to work with labels without downloading the content of the records.
 
-### Continuous Mode
+**Continuous Mode**
 
 The `continuous` flag is used to keep the query open for continuous data retrieval. This mode is useful when you need to monitor data in real-time. The SDKs provide `pool_interval` parameter to specify the time interval for pooling data in continuous mode. The default interval is 1 second.
 

@@ -404,6 +404,8 @@ description={
     Since version 1.4, the method has the <code>continuous query</code> flag. If it is true, the current query will not be discarded if there are no records. A client can ask them later. The query will not be removed until its TTL has expired. The <code>stop</code> parameter is ignored for continuous queries.
     <br /><br />
     Since version 1.6, the method provides the <code>limit</code> query parameter. It limits the number of records in the query. If it is not set, the query is unlimited by default.
+    <br /><br />
+    Since version 1.10, the method has the `each_n` and `each_s` query parameters. If the `each_n` parameter is set, the method returns only every `each_n`-th record. If the `each_s` parameter is set, the method returns only one record per `each_s` seconds.
   </>
 }
   parameters={[
@@ -478,12 +480,31 @@ description={
     {
       type: "query",
       details: {
-        name: "limit",
-        description: "Maximum number of records in the query. Default: unlimited.",
-        dataType: "Integer",
-        isRequired: false,
+          name: "limit",
+          description: "Maximum number of records in the query. Default: unlimited.",
+          dataType: "Integer",
+          isRequired: false,
+      }
+    },
+    {
+      type: "query",
+      details: {
+          name: "each_n",
+          description: "Return only every N-th record",
+          dataType: "Integer",
+          isRequired: false,
+      }
+    },
+      {
+      type: "query",
+      details: {
+          name: "each_s",
+          description: "Return only one record per N seconds",
+          dataType: "Float",
+          isRequired: false,
       }
     }
+
   ]}
   responses={[
     {
