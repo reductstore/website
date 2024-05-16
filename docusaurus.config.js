@@ -113,7 +113,7 @@ const config = {
           alt: "ReductStore Logo",
           src: "img/logo.webp",
         },
-        hideOnScroll: true,
+        hideOnScroll: false,
         items: [
           {
             type: "dropdown",
