@@ -1,5 +1,5 @@
 ---
-title: How to Choose the Right MQTT Data Storage
+title: How to Choose the Right MQTT Database
 description: Discover a range of database options for your IoT projects. This article provides a look at the importance of choosing the right data store, the factors that influence that choice, and the various solutions available.
 authors: anthony
 tags: [Advice, Database, MQTT]
@@ -39,9 +39,9 @@ Let's get started!
 | Project Requirement                                 | Recommended Database Types                       | Examples                                                                                     |
 |-----------------------------------------------------|--------------------------------------------------|----------------------------------------------------------------------------------------------|
 | Real-time sensor data with limited record size     | Time-series                                      | InfluxDB, TimescaleDB, Prometheus                                                            |
-| High frequency sensor, images, or blob data | Time-series object store  | [**ReductStore**](/)                                                                                  |
+| High frequency sensor, MQTT payload, or camera data | Time-series object store  | [**ReductStore**](/)                                                                                  |
 | Large volumes of unstructured or semi-structured data | NoSQL                                             | MongoDB, Amazon DynamoDB, Apache Cassandra                                                   |
-| Large amounts of blob data (multimedia files)       | Blob Storage                                      | MinIO, Azure Blob Storage, Google Cloud Storage, Amazon S3                                   |
+| Large amounts of blob data (multimedia files)       | Blob Storage                                      | Azure Blob Storage, Google Cloud Storage, Amazon, MinIO S3                                   |
 | Strong data consistency and complex relationships   | Relational                                        | MySQL, PostgreSQL, Oracle Database                                                           |
 
 
