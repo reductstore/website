@@ -31,9 +31,18 @@ Let's get started!
 2. [**Factors to consider when choosing a MQTT data store**](#factors-to-consider-when-choosing-a-mqtt-data-store)
 3. [**Types of database options available for MQTT data storage**](#types-of-database-options-available-for-mqtt-data-storage)
 
-
 <ConsultationBanner />
 
+
+
+## TL;DR
+| Project Requirement                                 | Recommended Database Types                       | Examples                                                                                     |
+|-----------------------------------------------------|--------------------------------------------------|----------------------------------------------------------------------------------------------|
+| Real-time sensor data with limited record size     | Time-series                                      | InfluxDB, TimescaleDB, Prometheus                                                            |
+| High frequency sensor, images, or blob data | Time-series object store  | [**ReductStore**](/)                                                                                  |
+| Large volumes of unstructured or semi-structured data | NoSQL                                             | MongoDB, Amazon DynamoDB, Apache Cassandra                                                   |
+| Large amounts of blob data (multimedia files)       | Blob Storage                                      | MinIO, Azure Blob Storage, Google Cloud Storage, Amazon S3                                   |
+| Strong data consistency and complex relationships   | Relational                                        | MySQL, PostgreSQL, Oracle Database                                                           |
 
 
 ## Brief explanation of MQTT and its use in IoT projects
