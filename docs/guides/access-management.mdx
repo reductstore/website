@@ -1,0 +1,59 @@
+---
+sidebar_position: 5
+title: Access Management
+description: Complete guide to authentication, access control and token management in ReductStore
+---
+
+## Concepts
+
+ReductStore provides a strait-forward access management based on token authentication and permissions.
+
+### Token Authentication
+
+ReductStore uses token-based authentication to secure the API. A client must send a valid token in the `Authorization` header to access the API.
+A ReductStore instance must have an initial token to access the API. This token is used to create other tokens and manage the instance. The token is configured with the `RS_API_TOKEN` environment variable.
+
+Tokens are immutable and can't be updated. If you need to change the token, you must create a new one and update the clients with the new token. The value of the token is a random string which is generated when the token is created and available only at that time.
+
+:::info
+In case, when you don't need the access control, you can disable the token authentication by leaving the `RS_API_TOKEN` unset.
+:::
+
+### Permissions and Access Control
+
+Each token has a set of permissions that define what actions can be performed with the token:
+
+- `full_access`: Allows the token to perform any action on the API.
+- `read`: List of buckets permitted to read.
+- `write`: List of buckets permitted to write.
+
+| Operation                | Unauthorized       | Authorized         | Read               | Write              | Full Access        |
+|--------------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
+| Alive check              | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Server Status            | :x:                | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| List Buckets             | :x:                | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Create Bucket            | :x:                | :x:                | :x:                | :x:                | :white_check_mark: |
+| Update Bucket Settings   | :x:                | :x:                | :x:                | :x:                | :white_check_mark: |
+| Remove Bucket            | :x:                | :x:                | :x:                | :x:                | :white_check_mark: |
+| Read Entry               | :x:                | :x:                | :white_check_mark: | :x:                | :white_check_mark: |
+| Write Entry              | :x:                | :x:                | :x:                | :white_check_mark: | :white_check_mark: |
+| Remove Entry             | :x:                | :x:                | :x:                | :white_check_mark: | :white_check_mark: |
+| Manage Tokens            | :x:                | :x:                | :x:                | :x:                | :white_check_mark: |
+| Manage Replication Tasks | :x:                | :x:                | :x:                | :x:                | :white_check_mark: |
+
+## Managing Tokens
+
+Here you will find examples of how to create, list, retrieve, and delete access tokens using the ReductStore SDKs, REST API, CLI and Web Console.
+
+Pay attention that all the examples are written for a local ReductStore instance available at **`http://127.0.0.1:8383`** with API token `my-token`.
+
+For more information on setting up a local ReductStore instance, see the **[Getting Started](/docs/getting-started.mdx)** guide.
+
+
+### Creating a Token
+
+### Listing Tokens
+
+### Retrieving a Token
+
+### Deleting a Token

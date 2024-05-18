@@ -12,7 +12,8 @@
                 "guides/buckets",
                 "guides/data-ingestion",
                 "guides/data-querying",
-                "guides/data-replication"
+                "guides/data-replication",
+                "guides/access-management"
             ]
         },
         {
