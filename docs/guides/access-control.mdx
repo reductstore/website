@@ -1,0 +1,159 @@
+---
+sidebar_position: 5
+title: Access Control
+description: Complete guide to authentication, access control and token management in ReductStore
+---
+
+import CodeBlock from "@theme/CodeBlock";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<head>
+    <link rel="canonical" href="https://www.reduct.store/docs/guides/access-management"/>
+</head>
+
+# Access Control
+
+## Concepts
+
+ReductStore provides a strait-forward access management based on token authentication and permissions.
+
+### Token Authentication
+
+ReductStore uses token-based authentication to secure the API. A client must send a valid token in the `Authorization` header to access the API.
+A ReductStore instance must have an initial token to access the API. This token is used to create other tokens and manage the instance. The token is configured with the `RS_API_TOKEN` environment variable.
+
+Tokens are immutable and can't be updated. If you need to change the token, you must create a new one and update the clients with the new token. The value of the token is a random string which is generated when the token is created and available only at that time.
+
+:::info
+In case, when you don't need the access control, you can disable the token authentication by leaving the `RS_API_TOKEN` unset.
+:::
+
+### Permissions and Access Control
+
+Each token has a set of permissions that define what actions can be performed with the token:
+
+- `full_access`: Allows the token to perform any action on the API.
+- `read`: List of buckets permitted to read data from entries.
+- `write`: List of buckets permitted to write data to entries or delete them.
+
+In the table below, you can see the list of operations that can be performed with each permission:
+
+| Operation                | Unauthorized       | Authorized         | Read               | Write              | Full Access        |
+|--------------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
+| Alive check              | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Server Status            | :x:                | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| List Buckets             | :x:                | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Create Bucket            | :x:                | :x:                | :x:                | :x:                | :white_check_mark: |
+| Update Bucket Settings   | :x:                | :x:                | :x:                | :x:                | :white_check_mark: |
+| Remove Bucket            | :x:                | :x:                | :x:                | :x:                | :white_check_mark: |
+| Read Entry               | :x:                | :x:                | :white_check_mark: | :x:                | :white_check_mark: |
+| Write Entry              | :x:                | :x:                | :x:                | :white_check_mark: | :white_check_mark: |
+| Remove Entry             | :x:                | :x:                | :x:                | :white_check_mark: | :white_check_mark: |
+| Manage Tokens            | :x:                | :x:                | :x:                | :x:                | :white_check_mark: |
+| Manage Replication Tasks | :x:                | :x:                | :x:                | :x:                | :white_check_mark: |
+
+## Managing Tokens
+
+Here you will find examples of how to create, list, retrieve, and delete access tokens using the ReductStore SDKs, REST API, CLI and Web Console.
+
+Pay attention that all the examples are written for a local ReductStore instance available at **`http://127.0.0.1:8383`** with API token `my-token`.
+
+For more information on setting up a local ReductStore instance, see the **[Getting Started](/docs/getting-started.mdx)** guide.
+
+
+### Creating a Token
+
+An access token can be created using the SDKs, CLI client, Web Console, or REST API. The token name must be unique within the store, and a client must have full access permission. You can also provision a token with environment variables. Refer to the examples below:
+
+
+import CreatTokenCLI from "!!raw-loader!./examples/cli/access_control_create_token.sh";
+
+<Tabs>
+    <TabItem value="CLI">
+        <CodeBlock className="bash">
+            {CreatTokenCLI}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Web Console">
+        Steps to create a new access token using the Web Console:
+        1. Open the Web Console at **[http://127.0.0.1:8383](http://127.0.0.1:8383)** in your browser.
+        2. Click on the **"Security"** tab in the left sidebar.
+        3. Click on the plus icon in the top right corner to create a new token:
+
+        ![Create Access Token](./img/access_control_create_token.webp)
+
+        4. Fill in the token name and select the permissions for the token:
+
+        ![Create Access Token Form](./img/access_control_create_token_settings.webp)
+
+        5. Click on the **"Create"** button to create the token.
+
+        6. Copy the token value and save it in a secure place.
+
+        ![Access Token Created](./img/access_control_create_token_result.webp)
+    </TabItem>
+</Tabs>
+
+
+:::info
+The token value is generated when the token is created and is available only at that time.
+:::
+
+
+### Browsing Tokens
+
+You can list all the access tokens available in the store using the SDKs, CLI client, Web Console, or REST API. The client must have full access permission. See the examples below:
+
+import BrowseTokensCLI from "!!raw-loader!./examples/cli/access_control_browse_tokens.sh";
+
+<Tabs>
+    <TabItem value="CLI">
+        <CodeBlock className="bash">
+            {BrowseTokensCLI}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Web Console">
+        Steps to browse access tokens using the Web Console:
+        1. Open the Web Console at **[http://127.0.0.1:8383](http://127.0.0.1:8383)** in your browser.
+        2. Click on the **"Security"** tab in the left sidebar.
+        3. You will see the list of access tokens:
+
+        ![Browse Access Tokens](./img/access_control_browse_tokens.webp)
+
+        4. Click on the token name to view the token details
+    </TabItem>
+</Tabs>
+
+### Removing a Token
+
+You can remove an access token using the SDKs, CLI client, Web Console, or REST API. The token name must exist in the store, and a client must have full access permission. Refer to the following examples:
+
+import RemoveTokenCLI from "!!raw-loader!./examples/cli/access_control_remove_token.sh";
+
+<Tabs>
+    <TabItem value="CLI">
+        <CodeBlock className="bash">
+            {RemoveTokenCLI}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Web Console">
+        Steps to remove an access token using the Web Console:
+        1. Open the Web Console at **[http://127.0.0.1:8383](http://127.0.0.1:8383)** in your browser.
+        2. Click on the **"Security"** tab in the left sidebar.
+        3. You will see the list of access tokens:
+
+        ![Browse Access Tokens](./img/access_control_browse_tokens.webp)
+
+        4. Click on the token name to view the token details:
+
+        ![Access Token Details](./img/access_control_remove_token.webp)
+
+        5. Click on the **"Remove"** button to delete the token.
+
+        6. Confirm the action by typing the token name and clicking on the **"Remove"** button.
+
+        ![Remove Access Token](./img/access_control_remove_token_confirm.webp)
+
+    </TabItem>
+</Tabs>

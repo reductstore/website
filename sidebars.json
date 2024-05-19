@@ -13,7 +13,7 @@
                 "guides/data-ingestion",
                 "guides/data-querying",
                 "guides/data-replication",
-                "guides/access-management"
+                "guides/access-control"
             ]
         },
         {
