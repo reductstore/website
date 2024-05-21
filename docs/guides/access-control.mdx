@@ -70,6 +70,8 @@ An access token can be created using the SDKs, CLI client, Web Console, or REST 
 import CreatTokenCLI from "!!raw-loader!./examples/cli/access_control_create_token.sh";
 import CreateTokenPy from "!!raw-loader!./examples/py/src/access_control_create_token.py";
 import CreateTokenJs from "!!raw-loader!./examples/js/src/access_control_create_token.mjs";
+import CreateTokenRust from "!!raw-loader!./examples/rs/examples/access_control_create_token.rs";
+import CreateTokenCpp from "!!raw-loader!./examples/cpp/src/access_control_create_token.cc";
 
 <Tabs>
     <TabItem value="CLI">
@@ -105,6 +107,16 @@ import CreateTokenJs from "!!raw-loader!./examples/js/src/access_control_create_
             {CreateTokenJs}
         </CodeBlock>
     </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {CreateTokenRust}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">
+            {CreateTokenCpp}
+        </CodeBlock>
+    </TabItem>
 </Tabs>
 
 
@@ -120,6 +132,8 @@ You can list all the access tokens available in the store using the SDKs, CLI cl
 import BrowseTokensCLI from "!!raw-loader!./examples/cli/access_control_browse_tokens.sh";
 import BrowseTokensPy from "!!raw-loader!./examples/py/src/access_control_browse_tokens.py";
 import BrowseTokensJs from "!!raw-loader!./examples/js/src/access_control_browse_tokens.mjs";
+import BrowseTokensRust from "!!raw-loader!./examples/rs/examples/access_control_browse_tokens.rs";
+import BrowseTokensCpp from "!!raw-loader!./examples/cpp/src/access_control_browse_tokens.cc";
 
 
 <Tabs>
@@ -148,6 +162,16 @@ import BrowseTokensJs from "!!raw-loader!./examples/js/src/access_control_browse
             {BrowseTokensJs}
         </CodeBlock>
     </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {BrowseTokensRust}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">
+            {BrowseTokensCpp}
+        </CodeBlock>
+    </TabItem>
 </Tabs>
 
 ### Removing a Token
@@ -157,6 +181,8 @@ You can remove an access token using the SDKs, CLI client, Web Console, or REST 
 import RemoveTokenCLI from "!!raw-loader!./examples/cli/access_control_remove_token.sh";
 import RemoveTokenPy from "!!raw-loader!./examples/py/src/access_control_remove_token.py";
 import RemoveTokenJs from "!!raw-loader!./examples/js/src/access_control_remove_token.mjs";
+import RemoveTokenRust from "!!raw-loader!./examples/rs/examples/access_control_remove_token.rs";
+import RemoveTokenCpp from "!!raw-loader!./examples/cpp/src/access_control_remove_token.cc";
 
 <Tabs>
     <TabItem value="CLI">
@@ -191,6 +217,16 @@ import RemoveTokenJs from "!!raw-loader!./examples/js/src/access_control_remove_
     <TabItem value="JavaScript">
         <CodeBlock language="javascript">
             {RemoveTokenJs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {RemoveTokenRust}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">
+            {RemoveTokenCpp}
         </CodeBlock>
     </TabItem>
 </Tabs>

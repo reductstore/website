@@ -11,7 +11,7 @@ async def create_token():
         read=["example-bucket"],
         write=["example-bucket"],
     )
-    token = await client.create_token("example-bucket", permissions)
+    token = await client.create_token("new-token", permissions)
     print(f"generated token: {token}")
 
 
