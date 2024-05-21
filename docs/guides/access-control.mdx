@@ -72,6 +72,8 @@ import CreateTokenPy from "!!raw-loader!./examples/py/src/access_control_create_
 import CreateTokenJs from "!!raw-loader!./examples/js/src/access_control_create_token.mjs";
 import CreateTokenRust from "!!raw-loader!./examples/rs/examples/access_control_create_token.rs";
 import CreateTokenCpp from "!!raw-loader!./examples/cpp/src/access_control_create_token.cc";
+import CreateTokenCurl from "!!raw-loader!./examples/curl/access_control_create_token.sh";
+import CreateTokenProvisioned from "!!raw-loader!./examples/provisioning/access_control_create.yml";
 
 <Tabs>
     <TabItem value="CLI">
@@ -117,6 +119,16 @@ import CreateTokenCpp from "!!raw-loader!./examples/cpp/src/access_control_creat
             {CreateTokenCpp}
         </CodeBlock>
     </TabItem>
+    <TabItem value="cURL">
+        <CodeBlock language="bash">
+            {CreateTokenCurl}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Provisioning">
+        <CodeBlock language="yaml">
+            {CreateTokenProvisioned}
+        </CodeBlock>
+    </TabItem>
 </Tabs>
 
 
@@ -134,6 +146,7 @@ import BrowseTokensPy from "!!raw-loader!./examples/py/src/access_control_browse
 import BrowseTokensJs from "!!raw-loader!./examples/js/src/access_control_browse_tokens.mjs";
 import BrowseTokensRust from "!!raw-loader!./examples/rs/examples/access_control_browse_tokens.rs";
 import BrowseTokensCpp from "!!raw-loader!./examples/cpp/src/access_control_browse_tokens.cc";
+import BrowseTokensCurl from "!!raw-loader!./examples/curl/access_control_browse_tokens.sh";
 
 
 <Tabs>
@@ -172,6 +185,11 @@ import BrowseTokensCpp from "!!raw-loader!./examples/cpp/src/access_control_brow
             {BrowseTokensCpp}
         </CodeBlock>
     </TabItem>
+    <TabItem value="cURL">
+        <CodeBlock language="bash">
+            {BrowseTokensCurl}
+        </CodeBlock>
+    </TabItem>
 </Tabs>
 
 ### Removing a Token
@@ -183,6 +201,7 @@ import RemoveTokenPy from "!!raw-loader!./examples/py/src/access_control_remove_
 import RemoveTokenJs from "!!raw-loader!./examples/js/src/access_control_remove_token.mjs";
 import RemoveTokenRust from "!!raw-loader!./examples/rs/examples/access_control_remove_token.rs";
 import RemoveTokenCpp from "!!raw-loader!./examples/cpp/src/access_control_remove_token.cc";
+import RemoveTokenCurl from "!!raw-loader!./examples/curl/access_control_remove_token.sh";
 
 <Tabs>
     <TabItem value="CLI">
@@ -227,6 +246,11 @@ import RemoveTokenCpp from "!!raw-loader!./examples/cpp/src/access_control_remov
     <TabItem value="C++">
         <CodeBlock language="cpp">
             {RemoveTokenCpp}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="cURL">
+        <CodeBlock language="bash">
+            {RemoveTokenCurl}
         </CodeBlock>
     </TabItem>
 </Tabs>
