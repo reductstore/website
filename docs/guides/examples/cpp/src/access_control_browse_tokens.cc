@@ -14,6 +14,18 @@ std::string PrintTime(std::chrono::system_clock::time_point time) {
     return buf;
 }
 
+ostream &operator<<(ostream &os, const std::vector<std::string> &v) {
+    os << "[";
+    for (size_t i = 0; i < v.size(); ++i) {
+        os << v[i];
+        if (i != v.size() - 1) {
+            os << ", ";
+        }
+    }
+    os << "]";
+    return os;
+}
+
 int main() {
     // Create a client with the server URL
     auto client = IClient::Build("http://127.0.0.1:8383", {
@@ -33,8 +45,8 @@ int main() {
         assert(get_err == Error::kOk);
 
         std::cout << "Full Access: " << token_info.permissions.full_access << std::endl;
-        std::cout << "Read Access: " << token_info.permissions.read.at(0) << std::endl;
-        std::cout << "Write Access: " << token_info.permissions.write.at(0) << std::endl;
+        std::cout << "Read Access: " << token_info.permissions.read << std::endl;
+        std::cout << "Write Access: " << token_info.permissions.write << std::endl;
     }
     return 0;
 }
