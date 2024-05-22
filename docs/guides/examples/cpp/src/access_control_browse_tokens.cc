@@ -14,7 +14,7 @@ std::string PrintTime(std::chrono::system_clock::time_point time) {
     return buf;
 }
 
-ostream &operator<<(ostream &os, const std::vector<std::string> &v) {
+std::ostream &operator<<(std::ostream &os, const std::vector<std::string> &v) {
     os << "[";
     for (size_t i = 0; i < v.size(); ++i) {
         os << v[i];
