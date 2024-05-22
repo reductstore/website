@@ -21,5 +21,5 @@ async fn main() -> Result<(), ReductError> {
         println!("Permissions: {:?}", token.permissions);
     }
 
-    Ok(()
+    Ok(())
 }
