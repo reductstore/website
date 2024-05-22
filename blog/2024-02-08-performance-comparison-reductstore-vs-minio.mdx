@@ -188,16 +188,20 @@ python3 main.py
 
 The script displays the results for the given `BLOB_SIZE` and `SIZE_COUNT`. On my device with an NVMe drive, these were the numbers I received:
 
-| Chunk                  | Operation | Minio   | ReductStore |
-|------------------------|-----------|---------|-------------|
-| 10.0 Mb (100 requests) | Write     | 8.39 s  | 2.65 s      |
-|                        | Read      | 2.13 s  | 1.4s        |
-| 1.0 Mb (1000 requests) | Write     | 16.38 s | 3.78 s      |
-|                        | Read      | 3.13 s  | 1.16 s      |
-| .1 Mb (10000 requests) | Write     | 35.3 s  | 11.25 s     |
-|                        | Read      | 14.51 s | 2.24 s      |
+| Blob Size | Operation | Minio, blob/s | ReductStore, blob/s | ReducStore, % |
+|-----------|-----------|---------------|---------------------|---------------|
+| 1 KB      | Write     | 548           | 1518                | 176 %         |
+|           | Read      | 1028          | 6868                | 568 %         |
+| 10 KB     | Write     | 533           | 1480                | 177 %         |
+|           | Read      | 1030          | 8386                | 714 %         |
+| 100 KB    | Write     | 360           | 1289                | 258 %         |
+|           | Read      | 844           | 6561                | 677 %         |
+| 1 MB      | Write     | 97            | 568                 | 486 %         |
+|           | Read      | 528           | 944                 | 79 %          |
+| 10 MB     | Write     | 21            | 97                  | 361 %         |
+|           | Read      | 94            | 103                 | 10 %          |
 
-Based on the benchmark results, ReductStore consistently outperformed Minio in both writing and reading operations regardless of the size of the chunks. For writing operations, ReductStore was significantly faster than Minio, especially when dealing with smaller chunk sizes. For reading operations, ReductStore also held a clear advantage, being able to retrieve data faster than Minio across all chunk sizes. These performance results suggest that ReductStore is highly efficient and could be a more effective solution for applications that require frequent and intensive read/write operations.
+Based on the benchmark results, ReductStore consistently outperformed Minio in both writing and reading operations regardless of the size of the blobs. For writing operations, ReductStore was significantly faster than Minio, especially when dealing with smaller chunk sizes. For reading operations, ReductStore also held a clear advantage, being able to retrieve data faster than Minio especially for blobs smaller than 10MB. These performance results suggest that ReductStore is highly efficient and could be a more effective solution for applications that require frequent and intensive read/write operations.
 
 ## Conclusions
 
