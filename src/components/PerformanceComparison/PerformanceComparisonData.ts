@@ -60,18 +60,18 @@ export const PerformanceComparisonData: Record<
     table: [
       {
         recordSize: "10 MB",
-        readSpeed: "+52%",
-        writeSpeed: "+217%",
+        readSpeed: "+10%",
+        writeSpeed: "+361%",
       },
       {
         recordSize: "1 MB",
-        readSpeed: "+170%",
-        writeSpeed: "+333%",
+        readSpeed: "+677%",
+        writeSpeed: "+486%",
       },
       {
         recordSize: "100 KB",
-        readSpeed: "+548%",
-        writeSpeed: "+214%",
+        readSpeed: "+677%",
+        writeSpeed: "+258%",
       },
     ],
   },
