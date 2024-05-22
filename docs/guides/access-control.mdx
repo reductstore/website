@@ -16,15 +16,14 @@ import TabItem from '@theme/TabItem';
 
 ## Concepts
 
-ReductStore provides a strait-forward access management based on token authentication and permissions.
+ReductStore provides straightforward access management based on token authentication and permissions.
 
 ### Token Authentication
 
-ReductStore uses token-based authentication to secure the API. A client must send a valid token in the `Authorization` header to access the API.
-A ReductStore instance must have an initial token to access the API. This token is used to create other tokens and manage the instance. The token is configured with the `RS_API_TOKEN` environment variable.
+ReductStore uses token-based authentication to secure the API. A client must send a valid token in the `Authorization' header in order to access the API.
+A ReductStore instance must have an initial token to enable authentication and access management. The initial token is configured using the `RS_API_TOKEN` environment variable and has full access permissions.
 
-Tokens are immutable and can't be updated. If you need to change the token, you must create a new one and update the clients with the new token. The value of the token is a random string which is generated when the token is created and available only at that time.
-
+Access tokens are immutable and can't be updated. If you need to change the token, you must create a new token and update the clients with the new token. The value of the token is a random string that is generated when the token is created and is only available at that time.
 :::info
 In case, when you don't need the access control, you can disable the token authentication by leaving the `RS_API_TOKEN` unset.
 :::
