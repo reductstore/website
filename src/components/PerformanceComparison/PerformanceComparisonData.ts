@@ -65,7 +65,7 @@ export const PerformanceComparisonData: Record<
       },
       {
         recordSize: "1 MB",
-        readSpeed: "+677%",
+        readSpeed: "+79%",
         writeSpeed: "+486%",
       },
       {
