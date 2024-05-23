@@ -13,31 +13,22 @@ export default function UseCases(): JSX.Element {
     >
       <main>
         <SimpleHeader pageTitle="Explore Use Cases" />
-
         <div className={clsx("container", styles.useCasesContainer)}>
-
-          <div>
-            {useCases.map((useCase, index) => (
-              <div key={index} className={clsx("card", styles.useCaseCard)}>
-
-                <div className="card__header">
-                  <h3>{useCase.title}</h3>
-                </div>
-
-                <div className="card__body">
-                  <p>{useCase.description}</p>
-                </div>
-
-                <div className="card__footer">
-                  <Link to={useCase.link} className="button button--primary button--block">
-                    Learn More &rarr;
-                  </Link>
-                </div>
-
+          {useCases.map((useCase, index) => (
+            <div key={index} className={clsx("card", styles.useCaseCard)}>
+              <div className="card__header">
+                <h3>{useCase.title}</h3>
               </div>
-            ))}
-          </div>
-
+              <div className="card__body">
+                <p>{useCase.description}</p>
+              </div>
+              <div className="card__footer">
+                <Link to={useCase.link} className="button button--primary button--block">
+                  Learn More &rarr;
+                </Link>
+              </div>
+            </div>
+          ))}
         </div>
       </main>
     </Layout >
@@ -45,6 +36,11 @@ export default function UseCases(): JSX.Element {
 }
 
 const useCases = [
+  {
+    title: "Vibration Sensor Database",
+    description: "Learn how ReductStore stands out for high-throughput applications such as vibration sensor data storage and management.",
+    link: "/use-cases/vibration-sensors"
+  },
   {
     title: "Optimize Your AI Workflows",
     description: "Learn how ReductStore can improve the performance of your projects with an optimal infrastructure.",
