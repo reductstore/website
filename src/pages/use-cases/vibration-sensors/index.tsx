@@ -11,12 +11,12 @@ export default function UseCaseVibrationSensors(): JSX.Element {
   return (
     <Layout
       title="Vibration Sensor Database"
-      description="Learn how ReductStore stands out for high-throughput applications such as vibration sensor data storage and management"
+      description="Learn how ReductStore stands out with vibration sensor data storage and management."
     >
       <main>
         <SimpleHeader
           pageTitle="Vibration Sensor Database"
-          subtitle="Learn how ReductStore stands out for high-throughput applications such as vibration sensor data storage and management"
+          subtitle="Learn how ReductStore stands out with vibration sensor data storage and management"
         />
         <div className="container">
           <>
@@ -79,7 +79,7 @@ const useCases = [
     title: "Eliminate Data Loss with Volume-Based Retention Policies",
     description: (
       <p>
-        A real-time FIFO quota prevents disk space shortages in real time.
+        A real-time First-In-First-Out (FIFO) quota prevents disk space shortages in real time.
         Typically, databases implement retention policies based on time periods; in the case of ReductStore, retention can be set based on data volume.
         This is particularly useful to avoid losing critical data when a sensor is offline for a period of time or during off-hours.
         By configuring a volume-based retention policy, you can ensure that all hours of operation are captured without interruption due to downtime or storage limitations.
@@ -93,11 +93,9 @@ const useCases = [
     title: "Decide on the Right Data Reduction Strategy",
     description: (
       <p>
-        In a distributed architecture, data replication provides redundancy and fault tolerance by synchronising data across multiple nodes.
-        For vibration sensor databases, implementing replication between edge devices and the cloud increases reliability.
         Raw sensor data is stored locally on the device to minimise latency, while selectively important or pre-processed data is replicated to the cloud for further analysis.
         This approach not only reduces storage overhead, but also optimises bandwidth usage.
-        By employing reduction strategies such as metadata label filtering, only essential metrics are transmitted, enabling efficient resource utilisation without compromising analytical capabilities.
+        By employing reduction strategies based on metadata label filtering, only essential data are transmitted, enabling efficient resource utilisation without compromising analytical capabilities.
       </p>
     ),
     illustration: require("@site/static/img/logo.webp").default,
@@ -108,10 +106,9 @@ const useCases = [
     description: (
       <p>
         Condition monitoring applications can use ReductStore to efficiently manage and analyse vibration sensor data.
-        Raw data is stored on the device as BLOBs, each tagged with pre-processed metrics such as algorithm labels, peaks, RMS or crest factors.
-        These BLOBs can be automatically replicated to the cloud for further analysis or algorithm development.
+        Raw data is stored on the device as blobs, each tagged with pre-processed metrics such as algorithm labels, peaks, RMS or crest factors.
+        These blobs can be automatically replicated to the cloud for further analysis or algorithm development.
         This dual storage approach and reduction strategy ensures real-time processing locally, while allowing extensive historical data analysis in the cloud.
-        Metadata labeling facilitates rapid filtering and retrieval of specific records, improving the ability to perform predictive maintenance and anomaly detection with high accuracy.
       </p>
     ),
     illustration: require("@site/static/img/logo.webp").default,
@@ -139,15 +136,11 @@ const useCasesFaqs = [
   },
   {
     question: "How can I retrieve specific metrics from the stored vibration sensor data?",
-    answer: "ReductStore allows you to tag each blob of sensor data with metadata such as labels, making it easy to retrieve specific metrics. By using metadata tags, you can filter and query the stored data to extract the desired information. This feature enables you to efficiently retrieve raw data or pre-processed metrics based on the labels associated with each blob."
-  },
-  {
-    question: "Can ReductStore be used to store vibration sensor data from edge devices?",
-    answer: "Yes, ReductStore is designed to support edge computing environments and can store vibration sensor data from edge devices. By implementing data replication between edge devices and the cloud, ReductStore ensures that data is synchronised across multiple nodes for redundancy and fault tolerance. This distributed architecture enables efficient storage and retrieval of sensor data, making it ideal for edge computing applications."
+    answer: "ReductStore allows you to label each record with metadata, making it easy to retrieve specific records. By using labels, you can filter and query the raw sensor data along with any pre-processed metrics."
   },
   {
     question: "How does ReductStore handle data retention for vibration sensor data?",
-    answer: "ReductStore offers flexible data retention policies based on data volume, allowing you to capture all operating hours of vibration sensor data. By setting retention policies based on data volume, you can ensure that critical data is not lost during periods of downtime or storage limitations. This feature enables continuous monitoring and historical analysis of vibration sensor data, supporting applications such as predictive maintenance and anomaly detection."
+    answer: "ReductStore offers flexible data retention policies based on data volume, allowing you to capture all operating hours of vibration sensor data. By setting retention policies based on data volume, you can ensure that critical data is not lost during periods of downtime or storage limitations. "
   },
   {
     question: "What are the performance benefits of using ReductStore for vibration sensor data storage?",
@@ -155,6 +148,6 @@ const useCasesFaqs = [
   },
   {
     question: "Is ReductStore a data historian for vibration sensor data?",
-    answer: "Yes, ReductStore can function as a data historian for vibration sensor data, capturing and storing historical sensor data for analysis and monitoring. By storing raw sensor data as blobs and tagging each blob with metadata, ReductStore enables efficient retrieval of specific metrics and historical trends. This functionality supports complete data analysis workflows, making ReductStore an ideal solution for vibration sensor data storage and management."
+    answer: "Yes, ReductStore can function as a data historian for vibration sensor data, capturing and storing historical sensor data for analysis and monitoring. By storing raw sensor data as blobs and labeling each blob with metadata, ReductStore enables efficient data retrieval and analysis for condition monitoring, predictive maintenance, and fault detection applications."
   }
 ]
