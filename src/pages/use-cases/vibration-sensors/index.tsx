@@ -50,35 +50,33 @@ export default function UseCaseVibrationSensors(): JSX.Element {
 
 const useCases = [
   {
-    title: "The Fastest Time Series Object Store on the Market",
+    title: "Get the Fastest Time Series Object Store on the Market",
     description: (
       <p>
         ReductStore consistently <Link to="/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio"><b>outperforms Minio</b></Link> in both writing and reading operations, regardless of chunk size.
         It is significantly <Link to="/blog/comparisons/iot/reductstore-vs-mongodb"><b>faster than MongoDB for blobs</b></Link>, with performance gains ranging from 65% to 244%.
-        Additionally, <Link to="/blog/comparisons/iot/reductstore-vs-timescaledb"><b>ReductStore surpasses TimescaleDB for blobs sized 100KB and higher</b></Link>, achieving improvements between 200% and 1300%. This makes ReductStore the optimal choice for high-throughput applications such as vibration sensor data storage and management.
+        Additionally, <Link to="/blog/comparisons/iot/reductstore-vs-timescaledb"><b>ReductStore surpasses TimescaleDB for blobs sized 100KB and higher</b></Link>, achieving improvements between 205% and 1300%. This makes ReductStore the optimal choice for high-throughput applications such as vibration sensor data storage and management.
       </p>
     ),
     illustration: require("@site/static/img/logo.webp").default,
-
     isImageLeft: false
   },
   {
-    title: "Compatible with All Vibration Sensors to Store Both Raw and Pre-Processed Data",
+    title: "Store Both Raw and Pre-Processed Sensor Data",
     description: (
       <p>
         ReductStore supports all vibration sensors by accepting both raw and pre-processed data.
-        The raw sensor output is stored as a blob, and each blob can be tagged with metadata such as labels.
-        This allows storage of metrics such as peak, RMS, crest factor, or AI labels.
+        The raw sensor output is stored as a blob, and each blob can be labeled with metadata.
+        This allows storage of metrics such as peak, RMS, crest factor, or any other pre-processed data.
         Advanced filtering options allow efficient retrieval of either raw data or specific pre-processed metrics based on these labels.
         This functionality ensures that ReductStore can meet diverse vibration monitoring requirements while providing robust query capabilities to support complete data analysis workflows.
       </p>
     ),
     illustration: require("@site/static/img/logo.webp").default,
-
     isImageLeft: true
   },
   {
-    title: "Retention Policy Based on Volume to Capture All Operating Hours",
+    title: "Eliminate Data Loss with Volume-Based Retention Policies",
     description: (
       <p>
         A real-time FIFO quota prevents disk space shortages in real time.
@@ -89,24 +87,49 @@ const useCases = [
       </p>
     ),
     illustration: require("@site/static/img/logo.webp").default,
-
     isImageLeft: false
   },
   {
-    title: "Distributed Architecture with Replication and Reduction Strategies",
+    title: "Decide on the Right Data Reduction Strategy",
     description: (
       <p>
         In a distributed architecture, data replication provides redundancy and fault tolerance by synchronising data across multiple nodes.
         For vibration sensor databases, implementing replication between edge devices and the cloud increases reliability.
         Raw sensor data is stored locally on the device to minimise latency, while selectively important or pre-processed data is replicated to the cloud for further analysis.
         This approach not only reduces storage overhead, but also optimises bandwidth usage.
-        By employing reduction strategies such as metadata tag filtering, only essential metrics are transmitted, enabling efficient resource utilisation without compromising analytical capabilities.
+        By employing reduction strategies such as metadata label filtering, only essential metrics are transmitted, enabling efficient resource utilisation without compromising analytical capabilities.
       </p>
     ),
     illustration: require("@site/static/img/logo.webp").default,
-
     isImageLeft: true
   },
+  {
+    title: "Optimise Condition Monitoring Applications",
+    description: (
+      <p>
+        Condition monitoring applications can use ReductStore to efficiently manage and analyse vibration sensor data.
+        Raw data is stored on the device as BLOBs, each tagged with pre-processed metrics such as algorithm labels, peaks, RMS or crest factors.
+        These BLOBs can be automatically replicated to the cloud for further analysis or algorithm development.
+        This dual storage approach and reduction strategy ensures real-time processing locally, while allowing extensive historical data analysis in the cloud.
+        Metadata labeling facilitates rapid filtering and retrieval of specific records, improving the ability to perform predictive maintenance and anomaly detection with high accuracy.
+      </p>
+    ),
+    illustration: require("@site/static/img/logo.webp").default,
+    isImageLeft: false
+  },
+  {
+    title: "Accelerate Diagnostic Processes",
+    description: (
+      <p>
+        Volume-based FIFO quotas ensure that critical diagnostic data is retained even during off-peak hours, providing continuous data availability.
+        Metadata-based replication enables full blob storage and retrieval, improving the integrity and completeness of diagnostic data sets.
+        ReductStore's unmatched write and read speed accelerates the diagnostic process by providing fast access to critical vibration sensor data.
+        This rapid access is critical for timely fault detection and resolution, making ReductStore an optimal solution for high performance diagnostics in vibration monitoring systems.
+      </p>
+    ),
+    illustration: require("@site/static/img/logo.webp").default,
+    isImageLeft: true
+  }
 ];
 
 const useCasesFaqs = [
