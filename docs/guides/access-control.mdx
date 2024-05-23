@@ -20,7 +20,7 @@ ReductStore provides straightforward access management based on token authentica
 
 ### Token Authentication
 
-ReductStore uses token-based authentication to secure the API. A client must send a valid token in the `Authorization' header in order to access the API.
+ReductStore uses token-based authentication to secure the API. A client must send a valid token in the `Authorization` header in order to access the API.
 A ReductStore instance must have an initial token to enable authentication and access management. The initial token is configured using the `RS_API_TOKEN` environment variable and has full access permissions.
 
 Access tokens are immutable and can't be updated. If you need to change the token, you must create a new token and update the clients with the new token. The value of the token is a random string that is generated when the token is created and is only available at that time.
