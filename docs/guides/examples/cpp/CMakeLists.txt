@@ -85,3 +85,19 @@ add_executable(data_replication_remove.cxx
         src/data_replication_remove.cc
 )
 target_link_libraries(data_replication_remove.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+# Access Control
+add_executable(access_control_create_token.cxx
+        src/access_control_create_token.cc
+)
+target_link_libraries(access_control_create_token.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(access_control_browser_tokens.cxx
+        src/access_control_browse_tokens.cc
+)
+target_link_libraries(access_control_browser_tokens.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(access_control_remove_token.cxx
+        src/access_control_remove_token.cc
+)
+target_link_libraries(access_control_remove_token.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
