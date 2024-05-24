@@ -16,7 +16,7 @@ export default function UseCaseVibrationSensors(): JSX.Element {
       <main>
         <SimpleHeader
           pageTitle="Vibration Sensor Database"
-          subtitle="Learn how ReductStore stands out with vibration sensor data storage and management"
+          subtitle="You don't have to waste valuable raw sensor data like other solutions"
         />
         <div className="container">
           <>
@@ -62,7 +62,7 @@ const useCases = [
     isImageLeft: false
   },
   {
-    title: "Store Both Raw and Pre-Processed Sensor Data",
+    title: "Store Both Raw and Pre-Processed Metrics",
     description: (
       <p>
         ReductStore supports all vibration sensors by accepting both raw and pre-processed data.
@@ -81,7 +81,7 @@ const useCases = [
       <p>
         A real-time First-In-First-Out (FIFO) quota prevents disk space shortages in real time.
         Typically, databases implement retention policies based on time periods; in the case of ReductStore, retention can be set based on data volume.
-        This is particularly useful to avoid losing critical data when a sensor is offline for a period of time or during off-hours.
+        This is particularly useful when storing vibration sensor data on edge devices with limited storage capacity.
         By configuring a volume-based retention policy, you can ensure that all hours of operation are captured without interruption due to downtime or storage limitations.
         This enables continuous monitoring and historical analysis, which is critical for applications such as predictive maintenance and anomaly detection.
       </p>
