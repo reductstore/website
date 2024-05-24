@@ -20,7 +20,7 @@ ReductStore provides straightforward access management based on token authentica
 
 ### Token Authentication
 
-ReductStore uses token-based authentication to secure the API. A client must send a valid token in the `Authorization` header in order to access the API.
+ReductStore uses token-based authentication to secure the HTTP API. A client must send a valid token in the `Authorization` header in order to access it.
 A ReductStore instance must have an initial token to enable authentication and access management. The initial token is configured using the `RS_API_TOKEN` environment variable and has full access permissions.
 
 Access tokens are immutable and can't be updated. If you need to change the token, you must create a new token and update the clients with the new token. The value of the token is a random string that is generated when the token is created and is only available at that time.
@@ -33,13 +33,15 @@ If you don't need access control, you can disable token authentication by leavin
 
 Each token has a set of permissions that define what actions can be performed with the token:
 
-- `full_access`: Allows the token to perform any action on the API.
-- `read`: List of buckets allowed to read data from entries.
-- `write`: List of buckets allowed to write data to entries or delete them.
+* `full_access`: Allows a client to perform any action on the API without any restrictions.
+
+* `read`: Allows a client to read data from specific buckets. The list of buckets that can be accessed for reading is defined when the token is created.
+
+* `write`: Allows a client to write data to specific buckets, which includes adding new entries or deleting existing ones. The list of buckets that can be accessed for writing is defined when the token is created.
 
 The table below shows the list of operations that can be performed with each permission:
 
-| Operation                | Unauthorized       | Authorized         | Read               | Write              | Full Access        |
+| Operation                | Anonymous          | No permissions     | Read               | Write              | Full Access        |
 |--------------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
 | Alive check              | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Server Status            | :x:                | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
