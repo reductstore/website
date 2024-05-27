@@ -1,10 +1,10 @@
 .banner {
   position: fixed;
   bottom: 20px;
-  right: 20px;
+  margin-right: 80px;
+  padding: 10px;
   background-color: white;
   color: #000;
-  padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
