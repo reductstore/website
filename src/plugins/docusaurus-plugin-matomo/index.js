@@ -19,7 +19,7 @@ module.exports = function (context) {
   const injectScript = matomo.injectInDev || isProd;
 
   return {
-    name: "docusaurus-plugin-matomo",
+    name: "docusaurus-plugin-crisp",
 
     injectHtmlTags() {
       if (injectScript) {
