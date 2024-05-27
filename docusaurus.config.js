@@ -42,7 +42,10 @@ const config = {
     calendarLink: process.env.CALENDAR_LINK,
   },
 
-  plugins: [require.resolve("./src/plugins/docusaurus-plugin-matomo")],
+  plugins: [
+    require.resolve("./src/plugins/docusaurus-plugin-matomo"),
+    require.resolve("./src/plugins/docusaurus-plugin-crisp"),
+  ],
 
   presets: [
     [
@@ -88,6 +91,11 @@ const config = {
         url: "https://reductstore.matomo.cloud/",
         script: "https://cdn.matomo.cloud/reductstore.matomo.cloud/matomo.js",
         exclude: [".azurestaticapps.net"],
+      },
+
+      // Crisp chat integration
+      crisp: {
+        siteId: "735614ef-d4bd-4d27-8700-aac9e08f8bc9",
       },
 
       // Stripe integration
