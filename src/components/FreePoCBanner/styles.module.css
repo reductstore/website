@@ -1,0 +1,35 @@
+/* styles.module.css */
+
+.banner {
+  width: 100%;
+  background-color: var(--reduct-background-gray-light);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.bannerText {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  align-items: center;
+  font-size: 18px;
+}
+
+.bannerText a {
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .bannerText {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
