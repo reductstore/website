@@ -33,12 +33,9 @@ const topics = [
   },
 ];
 
-
 interface HelpFormProps {
   subject?: string;
 }
-
-
 
 export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
   const [state, handleSubmit] = useForm("xgejorqo");
@@ -56,16 +53,32 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
 
   if (state.succeeded) {
     return (
-      <>
+      <div className="alert alert--success">
+
         <h2>Thank You!</h2>
         <p>We've received your submission. A member of our team will get back to you as soon as possible.</p>
-      </>
+      </div>
     );
   }
 
   return (
     <form className={styles.helpForm} onSubmit={handleSubmit}>
 
+      <div className={styles.inputGroup}>
+        <label htmlFor="name">Your Name</label>
+        <input
+          id="name"
+          type="text"
+          name="name"
+          placeholder="Your Name"
+          required
+        />
+        <ValidationError
+          prefix="Name"
+          field="name"
+          errors={state.errors}
+        />
+      </div>
       <div className={styles.inputGroup}>
         <label htmlFor="email">Your Email Address</label>
         <input
@@ -81,34 +94,30 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
           errors={state.errors}
         />
       </div>
-
-      {!subject && (
-        <>
-          <p>Select a topic:</p>
-          <div className={styles.topicButtons}>
-            {topics.map((element) => (
-              <button
-                key={element.key}
-                type="button"
-                className={clsx(styles.topicButton, {
-                  [styles.topicButtonSelected]: topic === element.key,
-                })}
-                onClick={() => {
-                  if (topic === element.key) {
-                    setTopic("");
-                    return;
-                  }
-                  setTopic(element.key);
-                }}
-              >
-                {element.label}
-              </button>
-            ))}
-            <input type="hidden" name="topic" value={topic} />
-          </div>
-        </>
-      )}
-
+      <div className={styles.inputGroup}>
+        <p>Select a topic:</p>
+        <div className={styles.topicButtons}>
+          {topics.map((element) => (
+            <button
+              key={element.key}
+              type="button"
+              className={clsx(styles.topicButton, {
+                [styles.topicButtonSelected]: topic === element.key,
+              })}
+              onClick={() => {
+                if (topic === element.key) {
+                  setTopic("");
+                  return;
+                }
+                setTopic(element.key);
+              }}
+            >
+              {element.label}
+            </button>
+          ))}
+          <input type="hidden" name="topic" value={topic} />
+        </div>
+      </div>
       <div className={styles.inputGroup}>
         <label htmlFor="helpText">Or tell us what you need help with:</label>
         <textarea
