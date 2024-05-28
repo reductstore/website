@@ -5,10 +5,10 @@ import Link from '@docusaurus/Link';
 
 interface FreePoCBannerProps {
   targetDate: Date;
+  startDate: Date;
   elementId: string;
 }
-
-const FreePoCBanner = ({ targetDate, elementId }: FreePoCBannerProps) => {
+const FreePoCBanner = ({ targetDate, startDate, elementId }: FreePoCBannerProps) => {
   const [isFormPresent, setIsFormPresent] = useState(false);
 
   useEffect(() => {
@@ -32,7 +32,8 @@ const FreePoCBanner = ({ targetDate, elementId }: FreePoCBannerProps) => {
   return (
     <div className={styles.banner} >
       <span className={styles.bannerText}>
-        <Link onClick={handleClick}>Get a Free PoC Integration for your Project</Link>. Offer ends in <CountdownTimer targetDate={targetDate} />
+        <Link onClick={handleClick}>Get a Free PoC Integration for your Project</Link>
+        <CountdownTimer targetDate={targetDate} startDate={startDate} size={50} />
       </span>
     </div>
 

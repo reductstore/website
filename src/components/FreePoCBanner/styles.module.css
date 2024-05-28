@@ -13,6 +13,8 @@
 
 .bannerText {
   display: flex;
+  flex-direction: row;
+  gap: 50px;
   align-items: center;
   font-size: 18px;
 }

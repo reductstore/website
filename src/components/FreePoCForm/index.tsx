@@ -5,9 +5,13 @@ import Link from "@docusaurus/Link";
 import clsx from "clsx";
 import CountdownTimer from '../CountdownTimer';
 
-const FreePoCForm = () => {
-  const targetDate = new Date('2024-06-30T23:59:59');
+interface FreePoCFormProps {
+  targetDate: Date;
+  startDate: Date;
+  elementId: string;
+}
 
+const FreePoCForm = ({ targetDate, startDate, elementId }: FreePoCFormProps) => {
   const [state, handleSubmit] = useForm('myyraooa');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -22,10 +26,10 @@ const FreePoCForm = () => {
   }
 
   return (
-    <form id="free-poc-form" className={styles.form} onSubmit={handleSubmit}>
+    <form id={elementId} className={styles.form} onSubmit={handleSubmit}>
       <h2>Free PoC Integration for your Project</h2>
       <div className={styles.countdown}>
-        Offer ends in <CountdownTimer targetDate={targetDate} />
+        <CountdownTimer targetDate={targetDate} startDate={startDate} size={50} />
       </div>
       <p>
         Our team will reach out to you and we will create a custom software integration for your project.

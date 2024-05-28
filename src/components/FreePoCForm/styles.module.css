@@ -14,18 +14,14 @@
   justify-content: center;
 }
 
+.countdown {
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
 .form p {
   width: 100%;
   text-align: left;
-}
-
-.countdown {
-  width: 100%;
-  text-align: left;
-  margin: 10px 10px;
-  font-size: 1.1em;
-  color: red;
-  font-weight: bold;
 }
 
 .inputGroup {
