@@ -14,7 +14,7 @@
 }
 
 .inputGroup {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .textarea {
@@ -39,6 +39,10 @@
 .inputGroup textarea:focus {
   outline: none;
   border: 2px solid var(--ifm-color-primary);
+}
+
+.inputGroup p {
+  margin-bottom: 10px;
 }
 
 .topicButtons {
