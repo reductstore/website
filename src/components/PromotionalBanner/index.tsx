@@ -9,9 +9,9 @@ const PromotionalBanner = ({ targetDate, startDate }) => {
       <div className="container">
         <div className="row">
           <div className="col col--4">
-            <h3>Save 80% for a Limited Time Only!</h3>
+            <h3>Lifetime Deal: Save 80%!</h3>
             <p>
-              This offer is only available until the end of June 2024 and is limited to the next 5 customers.
+              <strong>Exclusive Limited-Time Offer:</strong> We are opening up just a few more seats for the next 5 early adopters who need our solution.
             </p>
           </div>
           <div className={clsx("col col--4", styles.countdownContainer)}>
