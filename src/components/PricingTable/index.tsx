@@ -11,24 +11,12 @@ interface PaymentLinks {
   iot: string;
 }
 
-const checkedIcon = <FaCheckCircle color="green" size="1.2em" />;
-
-const promotion = {
-  discount: 0.2,
-  originalPrices: {
-    standard: 150,
-    premium: 300,
-    iot: 100,
-  }
-};
-
-const getPromotionalPrice = (price: number) => (price * promotion.discount).toFixed(0);
-
 export default function PricingTable() {
   const { siteConfig } = useDocusaurusContext();
   const { themeConfig } = siteConfig;
   const paymentLinks = themeConfig.paymentLinks as PaymentLinks;
 
+  const checkedIcon = <FaCheckCircle color="green" size="1.2em" />;
   return (
     <section>
       <div className={clsx("row", styles.pricingTable)}>
@@ -51,8 +39,7 @@ export default function PricingTable() {
         <PricingPlan
           title="Standard"
           subtitle="For small scale enterprises"
-          price={`$${getPromotionalPrice(promotion.originalPrices.standard)}`}
-          originalPrice={`$${promotion.originalPrices.standard}`}
+          price="$150"
           priceUnit="/ TB / year"
           description="For commercial production use in non-critical applications."
           categories={[
@@ -67,8 +54,7 @@ export default function PricingTable() {
         <PricingPlan
           title="Premium"
           subtitle="For critical applications"
-          price={`$${getPromotionalPrice(promotion.originalPrices.premium)}`}
-          originalPrice={`$${promotion.originalPrices.premium}`}
+          price="$300"
           priceUnit="/ TB / year"
           description="For commercial production use in critical applications with minimum 5TB storage capacity."
           categories={[
@@ -84,8 +70,7 @@ export default function PricingTable() {
         <PricingPlan
           title="IoT"
           subtitle="For many small nodes"
-          price={`$${getPromotionalPrice(promotion.originalPrices.iot)}`}
-          originalPrice={`$${promotion.originalPrices.iot}`}
+          price="$100"
           priceUnit="/ device / year"
           description="For commercial production use with minimum 10 devices with less than 1TB of storage capacity per unit."
           categories={[
