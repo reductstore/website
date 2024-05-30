@@ -6,7 +6,7 @@ import "dotenv/config";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "ReducStore",
+  title: "ReductStore",
   tagline: "The #1 Time-Series Object Store for Edge Computing",
   favicon: "img/favicon.ico",
 
