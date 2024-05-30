@@ -1,13 +1,25 @@
-.whitePaperImage {
+.whitePaperContainer {
   margin-bottom: var(--reduct-bottom-page-margin);
-  width: 370px;
+}
+
+.introText {
+  margin-bottom: 3rem;
+}
+
+.formTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.imageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image {
+  width: 400px;
   height: auto;
   border: 3px solid #dddddd;
   border-radius: 15px;
-}
-
-.consultationSection {
-  padding: 20px;
-  border-radius: 15px;
-  margin-bottom: var(--reduct-bottom-page-margin);
 }
