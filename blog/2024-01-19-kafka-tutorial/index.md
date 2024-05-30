@@ -1,6 +1,6 @@
 ---
 title: "Easy Guide to Integrating Kafka: Practical Solutions for Managing Blob Data"
-description: This tutorial offers a straightforward approach to combining Apache Kafka with ReductStore for handling data streams from edge devices. We'll cover the basics of setting up Kafka and ReductStore using Docker, creating Kafka topics in Python, and managing blob data and metadata.
+description: This tutorial offers a simple approach to combining Apache Kafka with ReductStore for handling data streams from edge devices. We'll cover the basics of setting up Kafka and ReductStore using Docker, creating Kafka topics in Python, and managing blob data and metadata.
 authors: anthony
 tags: [tutorials, datastreaming, kafka]
 slug: tutorial/datastreaming/kafka/easy-kafka-reductstore-integration-guide
@@ -11,7 +11,7 @@ image: ./img/kafka-reductstore-mono-social.jpg
 ![Kafka ReductStore Example](./img/kafka-reductstore-mono.webp)
 <small>Sensor data processed and labeled by AI, stored in ReductStore, with metadata relayed to Kafka</small>
 
-In this tutorial, we will walk through a straightforward setup for integrating Kafka with ReductStore for handling unstructured data streams from edge devices. We'll cover the basics of setting up Kafka and ReductStore using Docker, creating Kafka topics in Python, and managing blob data and metadata.
+In this tutorial, we will walk through a simple and practical setup for integrating Kafka with ReductStore to handle unstructured data streams from edge devices. We'll cover the basics of setting up Kafka and ReductStore using Docker, creating Kafka topics in Python, and managing blob data and metadata.
 
 If you are new to Kafka and ReductStore, here's a quick summary of the technology:
 
@@ -20,7 +20,7 @@ If you are new to Kafka and ReductStore, here's a quick summary of the technolog
 
 In our example, we will deploy a simple architecture with a single instance of Kafka and ReductStore running on a local machine. We will demonstrate how to create Kafka topics, write data to ReductStore, and forward metadata to Kafka.
 
-You can also follow along by cloning the [**GitHub repository**](<https://github.com/reductstore/reduct-kafka-example>) containing all the code snippets and Docker Compose files used in this tutorial within the `reduct_to_kafka` demo.
+For an easy start, you can follow along by cloning the [**reduct-kafka-example**](<https://github.com/reductstore/reduct-kafka-example>) repository containing all the code snippets and Docker Compose files used in this tutorial.
 
 <!--truncate-->
 
