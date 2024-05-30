@@ -22,7 +22,6 @@ interface PricingPlanProps {
   categories: Category[];
   buttonUrl: string;
   buttonLabel: string;
-  originalPrice?: string;
   isHighlight?: boolean;
   isFree?: boolean;
 }
@@ -36,7 +35,6 @@ const PricingPlan: React.FC<PricingPlanProps> = ({
   categories,
   buttonUrl,
   buttonLabel,
-  originalPrice,
   isHighlight = false,
   isFree = false,
 }) => {
@@ -56,11 +54,10 @@ const PricingPlan: React.FC<PricingPlanProps> = ({
         <div className="card__header">
           <h2 className={styles.planTitle}>{title}</h2>
           <p className={styles.subtitle}>{subtitle}</p>
-          <div className={styles.priceContainer}>
-            {originalPrice && <span className={styles.originalPrice}>{originalPrice}</span>}
-            <span className={styles.price}>{price}</span>
+          <h3>
+            {price}
             <span className={styles.priceUnit}>{priceUnit}</span>
-          </div>
+          </h3>
           <div className={styles.learnMore}>
             <span data-tooltip-id={`${planId}-planDescriptionTooltip`} className={styles.underlinedText}>
               Learn more
