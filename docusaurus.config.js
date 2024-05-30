@@ -70,6 +70,9 @@ const config = {
           customCss: require.resolve("./src/css/custom.css"),
         },
         sitemap: {
+          lastmod: "date",
+          priority: null,
+          changefreq: null,
           createSitemapItems: async ({
             defaultCreateSitemapItems,
             ...params
