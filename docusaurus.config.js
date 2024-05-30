@@ -69,6 +69,20 @@ const config = {
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
         },
+        sitemap: {
+          createSitemapItems: async ({
+            defaultCreateSitemapItems,
+            ...params
+          }) => {
+            const items = await defaultCreateSitemapItems(params);
+            return items.filter(
+              (item) =>
+                !item.url.includes("/blog/page/") &&
+                !item.url.includes("/blog/tags/") &&
+                !item.url.includes("/search")
+            );
+          },
+        },
       }),
     ],
   ],
