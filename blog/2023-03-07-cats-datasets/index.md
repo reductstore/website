@@ -2,7 +2,7 @@
 title: "How to Use 'Cats' dataset with Python ReductStore SDK"
 description: A tutorial on how to download and use the "Cats" dataset with Python ReductStore SDK
 authors: alexey
-tags: [tutorials, computer-vision, sdks]
+tags: [tutorials, computer vision, sdks]
 slug: tutorials/computer-vision/sdks/cats-datasets
 date: 2023-03-07
 image: ./img/social-card.jpg
