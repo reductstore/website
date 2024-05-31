@@ -1,5 +1,5 @@
 ---
-title: "New Release of ReductStore JavaScript SDK v1.3.0"
+title: "Release of JavaScript SDK v1.3.0"
 description: "Introducing v1.3.0 of the ReductStore Client SDK for JavaScript: Enhancements to Labels and Content-Type"
 authors: alexey
 tags: [news, sdks, tutorials]
@@ -25,7 +25,7 @@ const record = await bucket.beginWrite("entry-1", {
 await record.write("Some text");
 ```
 
-<!--truncate-->
+{/* truncate */}
 
 You can use labels to store meta information about records. For example, if it's an image with detected objects, you can store bounding boxes and confidence levels for each object. You can also use labels to filter data in queries:
 

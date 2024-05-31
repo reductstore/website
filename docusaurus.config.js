@@ -57,8 +57,7 @@ const config = {
           editUrl: "https://github.com/reductstore/docs/tree/main",
         },
         blog: {
-          blogTitle:
-            "ReductStore Blog: Insights on edge computing, computer vision, and IoT",
+          blogTitle: "Blog | Time-Series Object Store for Edge Computing",
           blogDescription:
             "Welcome to ReductStore's Blog – your source for expert articles, updates, and discussions on managing and leveraging time series databases for blob data in edge computing, computer vision, and IoT. Stay informed with our latest content.",
           blogSidebarTitle: "Recent posts",

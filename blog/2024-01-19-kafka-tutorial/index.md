@@ -1,5 +1,5 @@
 ---
-title: "Easy Guide to Integrating Kafka: Practical Solutions for Managing Blob Data"
+title: "Kafka Integration Tutorial for Blob Data"
 description: This tutorial offers a simple approach to combining Apache Kafka with ReductStore for handling data streams from edge devices. We'll cover the basics of setting up Kafka and ReductStore using Docker, creating Kafka topics in Python, and managing blob data and metadata.
 authors: anthony
 tags: [tutorials, datastreaming, kafka]

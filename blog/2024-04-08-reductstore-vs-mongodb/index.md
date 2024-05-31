@@ -1,5 +1,5 @@
 ---
-title: "Time Series Blob Data: ReductStore vs. MongoDB"
+title: "Alternative to MongoDB for Blob Data"
 description: "A comparison of ReductStore and MongoDB for storing time series blob data."
 authors: anthony
 tags: [comparisons, iot]
