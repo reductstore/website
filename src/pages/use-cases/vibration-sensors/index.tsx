@@ -16,7 +16,7 @@ export default function UseCaseVibrationSensors(): JSX.Element {
       <main>
         <SimpleHeader
           pageTitle="Vibration Sensor Database"
-          subtitle="You don't have to waste valuable raw sensor data like other solutions"
+          subtitle="Keep valuable raw sensor data and pre-processed metrics secure and accessible with ReductStore"
         />
         <div className="container">
           <>
@@ -58,7 +58,7 @@ const useCases = [
         Additionally, <Link to="/blog/comparisons/iot/reductstore-vs-timescaledb"><b>ReductStore surpasses TimescaleDB for blobs sized 100KB and higher</b></Link>, achieving improvements between 205% and 1300%. This makes ReductStore the optimal choice for high-throughput applications such as vibration sensor data storage and management.
       </p>
     ),
-    illustration: require("@site/static/img/logo.webp").default,
+    illustration: require("@site/static/img/vibration-sensors/Illustration_1.png").default,
     isImageLeft: false
   },
   {
@@ -72,7 +72,7 @@ const useCases = [
         This functionality ensures that ReductStore can meet diverse vibration monitoring requirements while providing robust query capabilities to support complete data analysis workflows.
       </p>
     ),
-    illustration: require("@site/static/img/logo.webp").default,
+    illustration: require("@site/static/img/vibration-sensors/Illustration_2.png").default,
     isImageLeft: true
   },
   {
@@ -86,7 +86,7 @@ const useCases = [
         This enables continuous monitoring and historical analysis, which is critical for applications such as predictive maintenance and anomaly detection.
       </p>
     ),
-    illustration: require("@site/static/img/logo.webp").default,
+    illustration: require("@site/static/img/vibration-sensors/Illustration_3.png").default,
     isImageLeft: false
   },
   {
@@ -98,7 +98,7 @@ const useCases = [
         By employing reduction strategies based on metadata label filtering, only essential data are transmitted, enabling efficient resource utilisation without compromising analytical capabilities.
       </p>
     ),
-    illustration: require("@site/static/img/logo.webp").default,
+    illustration: require("@site/static/img/vibration-sensors/Illustration_4.png").default,
     isImageLeft: true
   },
   {
@@ -111,7 +111,7 @@ const useCases = [
         This dual storage approach and reduction strategy ensures real-time processing locally, while allowing extensive historical data analysis in the cloud.
       </p>
     ),
-    illustration: require("@site/static/img/logo.webp").default,
+    illustration: require("@site/static/img/vibration-sensors/Illustration_5.png").default,
     isImageLeft: false
   },
   {
@@ -124,7 +124,7 @@ const useCases = [
         This rapid access is critical for timely fault detection and resolution, making ReductStore an optimal solution for high performance diagnostics in vibration monitoring systems.
       </p>
     ),
-    illustration: require("@site/static/img/logo.webp").default,
+    illustration: require("@site/static/img/vibration-sensors/Illustration_6.png").default,
     isImageLeft: true
   }
 ];
