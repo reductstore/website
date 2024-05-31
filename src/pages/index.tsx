@@ -60,7 +60,7 @@ function HomepageHeader() {
 export default function Home(): JSX.Element {
   return (
     <Layout
-      title="Time-Series Object Store for Edge Computing and AI/ML Workflows"
+      title="Time-Series Object Store for Edge Computing"
       description="ReductStore is a time series database designed specifically for storing and managing large amounts of unstructured data. 
       It offers high performance for writing and real-time querying, making it suitable for edge computing, computer vision, and IoT applications."
     >

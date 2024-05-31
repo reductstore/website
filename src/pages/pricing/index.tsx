@@ -27,7 +27,7 @@ export default function Pricing(): JSX.Element {
           <PricingTable />
         </div>
         <br />
-        <SimpleHeader pageTitle="Frequently Asked Questions" />
+        <SimpleHeader pageTitle="Frequently Asked Questions" pageTitleAs="h2" />
         <div className="container">
           <Faq faqs={pricingFaqs} defaultOpenCount={3} />
         </div>

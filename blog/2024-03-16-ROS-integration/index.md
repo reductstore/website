@@ -1,5 +1,5 @@
 ---
-title: "Optimal Image Storage Solutions for ROS-Based Computer Vision"
+title: "How to Store Images in ROS 2"
 description: "This blog post will guide you through setting up ROS 2 with ReductStore—a time-series database optimized for unstructured data. More specifically, we'll go through a practical example to show how to capture and store raw camera images from a ROS topic in ReductStore."
 authors: anthony
 tags: [tutorials, ros, computer vision]
