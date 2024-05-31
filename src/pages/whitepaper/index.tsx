@@ -14,7 +14,7 @@ export default function ReductAI(): JSX.Element {
   } = useDocusaurusContext();
   return (
     <Layout
-      title="White Paper: AI Infrastructure for Edge Computing"
+      title="AI Infrastructure for Edge Computing"
       description="Dive into our white paper to learn more about our approach to building and deploying AI models on the edge."
     >
       <main>

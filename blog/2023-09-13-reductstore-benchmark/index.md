@@ -1,5 +1,5 @@
 ---
-title: "ReductStore vs. MinIO & InfluxDB on LTE Network: Who Really Wins the Speed Race?"
+title: "Benchmark against MinIO and InfluxDB"
 description: The article presents the result of benchmrking ReductStore vs. MinIO and InfluxDB on an edge device.
 authors: anthony
 tags: [comparison, iot]

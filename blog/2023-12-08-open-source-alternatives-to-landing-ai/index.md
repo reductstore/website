@@ -1,5 +1,5 @@
 ---
-title: "Exploring Open-Source Alternatives to Landing AI for Robust MLOps"
+title: "Open-Source Alternatives to Landing AI"
 description: Discover top open-source alternatives to Landing AI in this insightful blog. We delve into essential MLOps tools for data labeling, model training, and more. Enhance your AI projects with platforms like COCO Annotator, Ultralytics, and MLflow.
 authors: anthony
 tags: [computer vision, ai, mlops, open source]
@@ -135,4 +135,4 @@ For edge computing needs similar to what LandingEdge provides, especially when d
 
 These tools all bring something to the table, showing why it's key to choose a set that fits our operational needs and tech limits. It's all about making sure that the stack aligns with operational requirements and technological constraints.
 
-Thanks for reading! If you're interested in learning more about how to use open-source AI models for real-time, unsupervised anomaly detection in images, don't miss our blog titled [**"From Lab to Live: Implementing Open-Source AI Models for Real-Time Unsupervised Anomaly Detection in Images."**](/blog/computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection)
+Thanks for reading! If you're interested in learning more about how to use open-source AI models for real-time, unsupervised anomaly detection in images, don't miss our blog titled [**"Implementing AI for Real-Time Anomaly Detection in Images."**](/blog/computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection)
