@@ -126,6 +126,6 @@ Because ReductStore has HTTP API to access its data, you can easily use it with 
 K8S etc., and integrate it into your infrastructure. I hope this tutorial was helpful.
 
 
-[1]:https://www.nginx.com/
+[1]:https://www.f5.com/go/product/welcome-to-nginx
 
 [2]:https://www.reduct.store/
