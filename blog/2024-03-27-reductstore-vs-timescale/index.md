@@ -1,5 +1,5 @@
 ---
-title: "Time Series Blob Data: ReductStore vs. TimescaleDB"
+title: "Alternative to TimescaleDB for Blob Data"
 description: "A comparison of ReductStore and TimescaleDB for storing time series blob data."
 authors: alexey
 tags: [comparisons, iot]

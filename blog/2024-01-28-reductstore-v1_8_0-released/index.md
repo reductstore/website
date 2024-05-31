@@ -1,5 +1,5 @@
 ---
-title: "Reductstore 1.8.0 Released: Introducing Data Replication"
+title: "Release v1.8.0: Introducing Data Replication"
 description: ReductStore v1.8.0 introduces data replication between ReductStore instances.
 authors: alexey
 tags: [news]

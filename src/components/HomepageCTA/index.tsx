@@ -6,7 +6,7 @@ import Heading from '@theme/Heading';
 function HomepageCTA() {
   return (
     <section className={styles.section}>
-      <Heading as="h1">AI on the Edge? Download our White Paper</Heading>
+      <Heading as="h2">AI on the Edge? Download our White Paper</Heading>
       <p >
         Learn more about ReductStore and how it can help you simplify your data infrastructure and AI/ML workflows.
       </p>
