@@ -33,9 +33,9 @@ export default function PricingTable() {
     <section>
       <div className={clsx("row", styles.pricingTable)}>
         <PricingPlan
-          title="Free"
+          title="Community"
           subtitle="For startups and small capital"
-          price="$0"
+          price="FREE"
           priceUnit=""
           description="For research, testing, development. Commercial use in production limited to companies with capital less than 2 million USD."
           categories={[

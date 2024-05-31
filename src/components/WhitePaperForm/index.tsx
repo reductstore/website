@@ -35,9 +35,6 @@ export default function WhitePaperForm() {
 
   return (
     <>
-      <h2>Download Our White Paper</h2>
-      <p>Dive into challenges and solutions to effectively run AI models on edge devices with our white paper.</p>
-
       <form className={styles.whitePaperForm} onSubmit={handleSubmit}>
         <div className={styles.inputGroup}>
           <label htmlFor="InputNameWhitePaper">Your Name</label>

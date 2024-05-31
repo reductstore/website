@@ -2,7 +2,7 @@
 title: "Exploring Open-Source Alternatives to Landing AI for Robust MLOps"
 description: Discover top open-source alternatives to Landing AI in this insightful blog. We delve into essential MLOps tools for data labeling, model training, and more. Enhance your AI projects with platforms like COCO Annotator, Ultralytics, and MLflow.
 authors: anthony
-tags: [Computer Vision, AI, MLOps, OpenSource]
+tags: [computer vision, ai, mlops, open source]
 slug: computer-vision/ai/mlops/opensource/open-source-alternatives-to-landing-ai
 date: 2023-12-08
 image: ./img/social-card.jpg

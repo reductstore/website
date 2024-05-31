@@ -10,14 +10,19 @@ export default function Pricing(): JSX.Element {
   const startDate = new Date('2024-05-01T00:00:00Z');
   return (
     <Layout
-      title="Pricing: Tailored Solutions for Every Scale"
+      title="Pricing: Tailored for Every Scale"
       description="Explore ReductStore's clear and flexible pricing. 
       Our Community Edition is free for small entities, offering complete feature access and public source code. 
       For larger businesses, the Enterprise Edition provides custom solutions with storage-based pricing and dedicated support."
     >
       <main>
-        <SimpleHeader pageTitle="Tailored Solutions for Every Scale" />
+        <SimpleHeader pageTitle="Tailored for Every Scale" />
         <div className="container">
+          <p>
+            Our Community Edition is free for small organizations and provides full feature access and public source code.
+            For larger organizations, our licensed editions offer dedicated support and long-term release support, with storage- or device-based pricing.
+            This customized approach ensures that you only pay for what you need, with the ability to contribute to the code base and scale as your business grows.
+          </p>
           <PromotionalBanner targetDate={targetDate} startDate={startDate} />
           <PricingTable />
         </div>
