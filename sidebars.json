@@ -8,6 +8,10 @@
             "label": "Guides",
             "collapsed": false,
             "collapsible": false,
+            "link": {
+              "type": "doc",
+              "id": "guides/index"
+            },
             "items": [
                 "guides/buckets",
                 "guides/data-ingestion",
@@ -26,8 +30,11 @@
         {
             "type": "category",
             "label": "API Reference",
+            "link":  {
+              "type": "doc",
+              "id": "http-api/index"
+            },
             "items": [
-                "http-api/index",
                 "http-api/server-api",
                 "http-api/bucket-api",
                 "http-api/entry-api",
