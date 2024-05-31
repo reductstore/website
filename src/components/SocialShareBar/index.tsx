@@ -47,6 +47,7 @@ const SocialShareBar: React.FC<SocialShareBarProps> = ({ frontMatter, mt, mb }) 
         <Link href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fullUrl)}`}
           className={styles.shareButton}
           title="Share on Facebook"
+          rel="nofollow"
           onClick={e => {
             e.preventDefault();
             window.open(e.currentTarget.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0');
@@ -56,33 +57,37 @@ const SocialShareBar: React.FC<SocialShareBarProps> = ({ frontMatter, mt, mb }) 
         <Link href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(pageTitle)}&url=${encodeURIComponent(fullUrl)}`}
           className={styles.shareButton}
           title="Share on Twitter"
+          rel="nofollow"
           onClick={e => {
             e.preventDefault();
             window.open(e.currentTarget.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0');
           }}>
           <FaTwitter />
         </Link>
-        <Link href={`http://pinterest.com/pin/create/button/?url=${encodeURIComponent(fullUrl)}`}
+        <Link href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(fullUrl)}`}
           className={styles.shareButton}
           title="Share on Pinterest"
+          rel="nofollow"
           onClick={e => {
             e.preventDefault();
             window.open(e.currentTarget.href, 'pop-up', 'left=20,top=20,width=900,height=500,toolbar=1,resizable=0');
           }}>
           <FaPinterestP />
         </Link>
-        <Link href={`http://www.tumblr.com/share/link?url=${encodeURIComponent(fullUrl)}`}
+        <Link href={`https://www.tumblr.com/share/link?url=${encodeURIComponent(fullUrl)}`}
           className={styles.shareButton}
           title="Share on Tumblr"
+          rel="nofollow"
           onClick={e => {
             e.preventDefault();
             window.open(e.currentTarget.href, 'pop-up', 'left=20,top=20,width=900,height=500,toolbar=1,resizable=0');
           }}>
           <FaTumblr />
         </Link>
-        <Link href={`http://www.reddit.com/submit?url=${encodeURIComponent(fullUrl)}`}
+        <Link href={`https://www.reddit.com/submit?url=${encodeURIComponent(fullUrl)}`}
           className={styles.shareButton}
           title="Share on Reddit"
+          rel="nofollow"
           onClick={e => {
             e.preventDefault();
             window.open(e.currentTarget.href, 'pop-up', 'left=20,top=20,width=900,height=500,toolbar=1,resizable=0');
@@ -92,13 +97,14 @@ const SocialShareBar: React.FC<SocialShareBarProps> = ({ frontMatter, mt, mb }) 
         <Link href={`https://www.linkedin.com/sharing/share-offsite?url=${encodeURIComponent(fullUrl)}`}
           className={styles.shareButton}
           title="Share on LinkedIn"
+          rel="nofollow"
           onClick={e => {
             e.preventDefault();
             window.open(e.currentTarget.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0');
           }}>
           <FaLinkedinIn />
         </Link>
-        <Link href={`mailto:?subject=${encodeURIComponent(pageTitle)}&body=Check out this site ${encodeURIComponent(fullUrl)}`}
+        <Link rel="nofollow" href={`mailto:?subject=${encodeURIComponent(pageTitle)}&body=Check out this site ${encodeURIComponent(fullUrl)}`}
           className={styles.shareButton}
           title="Share via Email">
           <FaEnvelope />
