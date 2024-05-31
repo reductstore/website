@@ -22,7 +22,7 @@ wildcards:
 rcli export folder instance/bucket ./export_path  --entries=sensor-*
 ```
 
-<!--truncate-->
+{/* truncate */}
 
 More over, the `rcli export` command used the query API with default TTL 5 seconds for a query. When the internet
 connection was slow, it may have taken more than 5 seconds to request the next record in the query. The query could
