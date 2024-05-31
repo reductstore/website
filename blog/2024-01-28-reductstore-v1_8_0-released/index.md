@@ -13,7 +13,7 @@ To download the latest released version, please visit our [**Download Page**](ht
 
 ## What's New in ReductStore v1.8.0
 
-In this release, we've introduced a crucial feature for any database - data replication. Now, you can create a server-side task that "subscribes" to new records written to a bucket and forwards them to another bucket. This bucket can be located on the same instance or a remote one. Since all databases implement replication differently based on their specializations, let's examine how ReductStore tackles this.
+In this release, we're introducing a crucial feature for any database - data replication. Now, you can create a server-side task that "subscribes" to new records written to a bucket and forwards them to another bucket. This bucket can be located on the same instance or a remote one. Since all databases implement replication differently based on their specializations, let's examine how ReductStore tackles this.
 
 <!--more-->
 {/* truncate */}

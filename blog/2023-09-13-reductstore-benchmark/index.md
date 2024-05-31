@@ -18,7 +18,7 @@ Enter our contest: First, we have [**ReductStore**](https://www.reduct.store)—
 
 Its counterpart? The duo of [**MinIO**](https://min.io) and [**InfluxDB**](https://www.influxdata.com), each optimized for their niche in blob storage and time-series data respectively. 
 
-When directly compared, which system takes the lead in performance?
+In a head-to-head comparison, which system really leads in performance and wins the speed race?
 
 Let's roll up our sleeves and deep-dive into this benchmarking analysis to separate fact from fiction.
 

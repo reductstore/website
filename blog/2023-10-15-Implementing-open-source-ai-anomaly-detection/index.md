@@ -2,7 +2,7 @@
 title: "From Lab to Live: Implementing Open-Source AI Models for Real-Time Unsupervised Anomaly Detection in Images"
 description: Explore the process of deploying open-source AI models for real-time image anomaly detection, bridging the gap between research and practical applications.
 authors: anthony
-tags: [Computer Vision, Edge Computing, AI]
+tags: [computer vision, edge computing, ai]
 slug: computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection
 date: 2023-10-15
 image: ./img/social-card.jpg

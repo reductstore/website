@@ -40,7 +40,7 @@ function HomepageCLI() {
             You can customize data retention and replication policies using the{" "}
             <strong>
               <Link to="https://github.com/reductstore/reduct-cli">
-                ReducStore CLI client
+                ReductStore CLI client
               </Link>
             </strong>.
           </p>
