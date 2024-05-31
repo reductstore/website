@@ -8,11 +8,11 @@ import styles from './styles.module.css';
 export default function UseCases(): JSX.Element {
   return (
     <Layout
-      title="Explore Use Cases"
+      title="Explore Use Case Scenarios"
       description="Learn how our solutions can help you transform your infrastructure."
     >
       <main>
-        <SimpleHeader pageTitle="Explore Use Cases" />
+        <SimpleHeader pageTitle="Explore Use Case Scenarios for ReductStore" />
 
         <div className={clsx("container", styles.useCasesContainer)}>
 
