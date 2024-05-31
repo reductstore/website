@@ -1,9 +1,11 @@
 alexey:
   name: Alexey Timin
+  title: Software Engineer - Database, Rust, C++
   url: https://github.com/atimin
   image_url: https://github.com/atimin.png
 
 anthony:
   name: Anthony Cavin
+  title: Data Scientist - ML/AI, Python, TypeScript
   url: https://github.com/AnthonyCvn
   image_url: https://github.com/AnthonyCvn.png

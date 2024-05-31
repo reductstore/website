@@ -6,7 +6,7 @@ import "dotenv/config";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "ReducStore",
+  title: "ReductStore",
   tagline: "The #1 Time-Series Object Store for Edge Computing",
   favicon: "img/favicon.ico",
 
@@ -68,6 +68,23 @@ const config = {
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
+        },
+        sitemap: {
+          lastmod: "date",
+          priority: null,
+          changefreq: null,
+          createSitemapItems: async ({
+            defaultCreateSitemapItems,
+            ...params
+          }) => {
+            const items = await defaultCreateSitemapItems(params);
+            return items.filter(
+              (item) =>
+                !item.url.includes("/blog/page/") &&
+                !item.url.includes("/blog/tags/") &&
+                !item.url.includes("/search")
+            );
+          },
         },
       }),
     ],
