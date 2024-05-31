@@ -19,7 +19,6 @@ const PromotionalBanner = ({ targetDate, startDate }) => {
           </div>
         </div>
       </div>
-
     </div>
   );
 };
