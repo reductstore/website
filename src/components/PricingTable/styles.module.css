@@ -39,12 +39,6 @@
   color: var(--reduct-dimmed-color);
 }
 
-.priceUnit {
-  font-size: 0.8em;
-  color: var(--reduct-dimmed-color);
-  margin-left: 5px;
-}
-
 .underlinedText {
   text-decoration: underline;
   cursor: help;
@@ -99,4 +93,45 @@
   margin-top: 1em;
   font-size: 0.8em;
   color: var(--reduct-dimmed-color);
+}
+
+/* price tag */
+.priceContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.originalPrice {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: var(--ifm-color-danger);
+  position: relative;
+  top: -10px;
+  right: 5px;
+}
+
+.originalPrice::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px; 
+  background-color: var(--ifm-color-danger);
+  top: 50%;
+  left: 0;
+  transform: rotate(-20deg);
+  transform-origin: center;
+}
+
+.price {
+  font-size: 1.3em;
+  font-weight: bold;
+  justify-content: center;
+}
+
+.priceUnit {
+  font-size: 1em;
+  color: var(--reduct-dimmed-color);
+  margin-left: 5px;
 }
