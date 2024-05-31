@@ -53,7 +53,7 @@ good to start with Rust.
 Here, I learned the basics of Rust memory management, borrowing, and references. All these concepts I already knew from
 C++, so it was easy to understand. However, *rustc* did not want to compile my code in the beginning.
 
-The biggest problem was that [**cxx.**](http://cxx.es/)rs throws an exception when a Rust function returns an `Err`. It did
+The biggest problem was that [**cxx.rs**](http://cxx.rs/) throws an exception when a Rust function returns an `Err`. It did
 not work for me because I did not use exceptions and my C++ functions returned a structure with a result or an error. I
 had to write additional wrappers to work around it. This was a very buggy layer and a source of frustration for me.
 
