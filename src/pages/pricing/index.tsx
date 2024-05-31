@@ -3,8 +3,11 @@ import Layout from "@theme/Layout";
 import PricingTable from "@site/src/components/PricingTable";
 import SimpleHeader from "@site/src/components/SimpleHeader";
 import Faq from "@site/src/components/Faq";
+import PromotionalBanner from "@site/src/components/PromotionalBanner";
 
 export default function Pricing(): JSX.Element {
+  const targetDate = new Date('2024-06-30T23:59:59Z');
+  const startDate = new Date('2024-05-01T00:00:00Z');
   return (
     <Layout
       title="Pricing: Tailored for Every Scale"
