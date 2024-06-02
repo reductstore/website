@@ -32,9 +32,16 @@ This approach ensures that data is replicated in real time and that the replicat
 
 A replication task can filter records before replicating them to the target bucket. You can specify the following filters:
 
-* **Include Labels**: A list of key-value pairs that the replication task will use to filter records. Only records with these labels will be replicated.
-* **Exclude Labels**: A list of key-value pairs that the replication task will use to filter records. Records with these labels will not be replicated.
-* **Entries**: A list of entries that the Replication Task will use to filter records. Only records with these entries will be replicated. If the list is empty, all records will be replicated. You can use the `*` wildcard to match any entry.
+
+| Parameter | Description                                                                                                                                                                                                                        | Type                    |
+|-----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|
+| `entries` | A list of entries that the replication task will use to filter records. Only records with these entries will be replicated. If the list is empty, all records will be replicated. You can use the `*` wildcard to match any entry. | List of strings         |
+| `include` | A list of key-value pairs that the replication task will use to filter records. Only records with these labels will be replicated.                                                                                                 | List of key-value pairs |
+| `exclude` | A list of key-value pairs that the replication task will use to filter records. Records with these labels will not be replicated.                                                                                                  | List of key-value pairs |
+| `each_s`  | Replicate a record every S seconds                                                                                                                                                                                                 | Float                   |
+| `each_n`  | Replicate only every N record                                                                                                                                                                                                      | Integer                 |
+
+
 
 ## Managing Data Replication Tasks
 

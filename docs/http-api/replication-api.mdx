@@ -111,6 +111,8 @@ The replication is performed in the background and doesn't affect the performanc
             "exclude": {
                 "string": "string"        // key-value pairs to exclude records that should not be replicated. If empty, all records will be replicated
             },
+            "each_s": "float",            // replicate a record every S seconds
+            "each_n": "int",              // replicate every Nth record
         },
 }`}</code></pre>
       )
@@ -213,7 +215,25 @@ The replication is performed in the background and doesn't affect the performanc
         isRequired: false,
         description: "Key-value pairs to exclude records that should not be replicated. If empty, all records will be replicated"
       }
-    }
+    },
+    {
+      type: "body",
+      details: {
+        name: "each_s",
+        dataType: "Float",
+        isRequired: false,
+        description: "Replicate a record every S seconds"
+      }
+    },
+    {
+      type: "body",
+      details: {
+        name: "each_n",
+        dataType: "Integer",
+        isRequired: false,
+        description: "Replicate every Nth record"
+      }
+    },
   ]}
   responses={[
     {
@@ -325,7 +345,25 @@ The replication is performed in the background and doesn't affect the performanc
         isRequired: false,
         description: "Key-value pairs to exclude records that should not be replicated. If empty, all records will be replicated"
       }
-    }
+    },
+    {
+      type: "body",
+      details: {
+        name: "each_s",
+        dataType: "Float",
+        isRequired: false,
+        description: "Replicate a record every S seconds"
+      }
+    },
+    {
+      type: "body",
+      details: {
+        name: "each_n",
+        dataType: "Integer",
+        isRequired: false,
+        description: "Replicate every Nth record"
+      }
+    },
   ]}
   responses={[
     {

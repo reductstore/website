@@ -90,6 +90,8 @@ ReductStore provides an HTTP API to create and configure resources such as bucke
 | `RS_REPLICATION_<ID>_ENTRIES`       |         | List of entries to replicate. Separate entries with a comma. If the list is empty, all entries will be replicated. |
 | `RS_REPLICATION_<ID>_INCLUDE_<KEY>` |         | Replicate only records with KEY equal to the value of the environment variable. Can be used multiple times.        |
 | `RS_REPLICATION_<ID>_EXCLUDE_<KEY>` |         | Do not replicate records with KEY equal to the value of the environment variable. Can be used multiple times.      |
+| `RS_REPLICATION_<ID>_EACH_S`        |         | Replicate a record every S seconds. Can have a floating-point value.                                               |
+| `RS_REPLICATION_<ID>_EACH_N`        |         | Replicate every N-th record.                                                                                       |
 
 :::tip
 You can use any string value for `<ID>`. It is only used to group resources of the same type.
