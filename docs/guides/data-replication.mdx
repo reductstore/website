@@ -41,7 +41,25 @@ A replication task can filter records before replicating them to the target buck
 | `each_s`  | Replicate a record every S seconds                                                                                                                                                                                                 | Float                   |
 | `each_n`  | Replicate only every N record                                                                                                                                                                                                      | Integer                 |
 
+### Usage Example
 
+Data replication may seem complex, but it is actually quite simple. Let's take a simple example:
+
+Imagine we collect high frequency vibration sensor data from an engine in the `sensor-data` bucket.
+The data from each sensor is stored in a separate record.
+We want to replicate only the data from the `sensor-1` entry to the `remote-data` bucket in another ReductStore instance.
+However, we only want to replicate the records if the engine is working and the sensor data is not corrupted.
+In this case, the conditional replication settings will be:
+
+```yaml
+entries: ["sensor-1"]
+include:
+  engine_status: "working"
+exclude:
+  sensor_status: "corrupted"
+```
+
+See the next section for more information on how to create a replication task with conditional replication settings.
 
 ## Managing Data Replication Tasks
 
