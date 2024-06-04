@@ -176,7 +176,7 @@ const config = {
             position: "left",
             items: [
               {
-                label: "Vibration Sensors",
+                label: "Vibration Data",
                 to: "/use-cases/vibration-sensors",
               },
               {

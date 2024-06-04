@@ -14,13 +14,13 @@ export default function UseCaseVibrationSensors(): JSX.Element {
 
   return (
     <Layout
-      title="Vibration Sensor Database"
-      description="Learn how ReductStore stands out with vibration sensor data storage and management."
+      title="High Frequency Vibration Data Storage"
+      description="Optimize your vibration sensor data storage and management with ReductStore."
     >
       <FreePoCBanner targetDate={targetDate} startDate={startDate} elementId="free-poc-form" />
       <main>
         <SimpleHeader
-          pageTitle="Vibration Sensor Database"
+          pageTitle="High Frequency Vibration Data Storage"
           subtitle="Keep valuable raw sensor data and pre-processed metrics secure and accessible with ReductStore"
         />
         <div className="container">
@@ -138,6 +138,10 @@ const useCasesFaqs = [
     answer: "ReductStore allows you to label each record with metadata, making it easy to retrieve specific records. By using labels, you can filter and query the raw sensor data along with any pre-processed metrics."
   },
   {
+    question: "Is ReductStore a data historian for vibration sensor data?",
+    answer: "Yes, ReductStore can function as a data historian for vibration sensor data, capturing and storing historical sensor data for analysis and monitoring. By storing raw sensor data as blobs and labeling each blob with metadata, ReductStore enables efficient data retrieval and analysis for condition monitoring, predictive maintenance, and fault detection applications."
+  },
+  {
     question: "How does ReductStore handle data retention for vibration sensor data?",
     answer: "ReductStore offers flexible data retention policies based on data volume, allowing you to capture all operating hours of vibration sensor data. By setting retention policies based on data volume, you can ensure that critical data is not lost during periods of downtime or storage limitations. "
   },
@@ -145,8 +149,4 @@ const useCasesFaqs = [
     question: "What are the performance benefits of using ReductStore for vibration sensor data storage?",
     answer: "ReductStore offers superior performance compared to other object stores and databases for storing vibration sensor data. It outperforms Minio in both writing and reading operations, surpasses MongoDB for blobs, and exceeds TimescaleDB for blobs sized 100KB and higher. These performance gains make ReductStore the optimal choice for high-throughput applications such as vibration sensor data storage and management."
   },
-  {
-    question: "Is ReductStore a data historian for vibration sensor data?",
-    answer: "Yes, ReductStore can function as a data historian for vibration sensor data, capturing and storing historical sensor data for analysis and monitoring. By storing raw sensor data as blobs and labeling each blob with metadata, ReductStore enables efficient data retrieval and analysis for condition monitoring, predictive maintenance, and fault detection applications."
-  }
 ]

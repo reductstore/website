@@ -38,7 +38,7 @@ export default function UseCases(): JSX.Element {
 
 const useCases = [
   {
-    title: "Vibration Sensor Database",
+    title: "High Frequency Vibration Data Storage",
     description: "Learn how ReductStore stands out with vibration sensor data storage and management.",
     link: "/use-cases/vibration-sensors"
   },
