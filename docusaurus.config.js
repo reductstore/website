@@ -176,6 +176,10 @@ const config = {
             position: "left",
             items: [
               {
+                label: "Vibration Data",
+                to: "/use-cases/vibration-sensors",
+              },
+              {
                 label: "AI Workflows",
                 to: "/use-cases/ai-workflows",
               },

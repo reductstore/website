@@ -34,7 +34,6 @@ const FreePoCBanner = ({ targetDate, startDate, elementId }: FreePoCBannerProps)
     <div className={styles.banner}>
       <span className={styles.bannerText}>
         <Link onClick={handleClick}>Get a Free PoC Integration for your Project</Link>
-        <CountdownTimer targetDate={targetDate} startDate={startDate} size={50} />
       </span>
     </div>
   );
