@@ -29,7 +29,7 @@ const FreePoCForm = ({ targetDate, startDate, elementId }: FreePoCFormProps) => 
     <form id={elementId} className={styles.form} onSubmit={handleSubmit}>
       <h2>Free PoC Integration for your Project</h2>
       <div className={styles.countdown}>
-        <CountdownTimer targetDate={targetDate} startDate={startDate} size={50} />
+        <CountdownTimer targetDate={targetDate} startDate={startDate} size={45} />
       </div>
       <p>
         Our team will reach out to you and we will create a custom software integration for your project.
