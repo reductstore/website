@@ -32,9 +32,34 @@ This approach ensures that data is replicated in real time and that the replicat
 
 A replication task can filter records before replicating them to the target bucket. You can specify the following filters:
 
-* **Include Labels**: A list of key-value pairs that the replication task will use to filter records. Only records with these labels will be replicated.
-* **Exclude Labels**: A list of key-value pairs that the replication task will use to filter records. Records with these labels will not be replicated.
-* **Entries**: A list of entries that the Replication Task will use to filter records. Only records with these entries will be replicated. If the list is empty, all records will be replicated. You can use the `*` wildcard to match any entry.
+
+| Parameter | Description                                                                                                                                                                                                                        | Type                    |
+|-----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|
+| `entries` | A list of entries that the replication task will use to filter records. Only records with these entries will be replicated. If the list is empty, all records will be replicated. You can use the `*` wildcard to match any entry. | List of strings         |
+| `include` | A list of key-value pairs that the replication task will use to filter records. Only records with these labels will be replicated.                                                                                                 | List of key-value pairs |
+| `exclude` | A list of key-value pairs that the replication task will use to filter records. Records with these labels will not be replicated.                                                                                                  | List of key-value pairs |
+| `each_s`  | Replicate a record every S seconds                                                                                                                                                                                                 | Float                   |
+| `each_n`  | Replicate only every N record                                                                                                                                                                                                      | Integer                 |
+
+### Usage Example
+
+Data replication may seem complex, but it is actually quite simple. Let's take a simple example:
+
+Imagine we collect high frequency vibration sensor data from an engine in the `sensor-data` bucket.
+The data from each sensor is stored in a separate record.
+We want to replicate only the data from the `sensor-1` entry to the `remote-data` bucket in another ReductStore instance.
+However, we only want to replicate the records if the engine is working and the sensor data is not corrupted.
+In this case, the conditional replication settings will be:
+
+```yaml
+entries: ["sensor-1"]
+include:
+  engine_status: "working"
+exclude:
+  sensor_status: "corrupted"
+```
+
+See the next section for more information on how to create a replication task with conditional replication settings.
 
 ## Managing Data Replication Tasks
 

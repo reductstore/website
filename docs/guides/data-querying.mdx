@@ -32,15 +32,16 @@ are divided into two categories: filter and control parameters.
 ### Filter Parameters
 
 Filter parameters are used to select records based on specific criteria. You can combine multiple filter parameters to create complex queries. This is the list of filter parameters, sorted by priority:
-| Parameter | Description                     | Type            | Default                                        |
-|-----------|---------------------------------|-----------------|------------------------------------------------|
-| `start`   | Start time of the query         | Timestamp       | The timestamp of the first record in the entry |
-| `end`     | End time of the query           | Timestamp       | The timestamp of the last record in the entry  |
-| `include` | List of label values to include | List of strings | Disabled                                       |
-| `exclude` | List of labels to exclude       | List of strings | Disabled                                       |
-| `each_s`  | Return a record every S seconds | Float           | Disabled                                       |
-| `each_n`  | Return only every N record      | Integer         | Disabled                                       |
-| `limit`   | Limit on the number of records  | Integer         | All records are returned                       |
+
+| Parameter | Description                     | Type                    | Default                                        |
+|-----------|---------------------------------|-------------------------|------------------------------------------------|
+| `start`   | Start time of the query         | Timestamp               | The timestamp of the first record in the entry |
+| `end`     | End time of the query           | Timestamp               | The timestamp of the last record in the entry  |
+| `include` | List of label values to include | List of key-value pairs | Disabled                                       |
+| `exclude` | List of labels to exclude       | List of key-value pairs | Disabled                                       |
+| `each_s`  | Return a record every S seconds | Float                   | Disabled                                       |
+| `each_n`  | Return only every N record      | Integer                 | Disabled                                       |
+| `limit`   | Limit on the number of records  | Integer                 | All records are returned                       |
 
 **Time Range**
 
