@@ -76,13 +76,13 @@ For more information on how to set up a local ReductStore instance, refer to the
 
 A bucket can be created using the SDKs, CLI client, Web Console, or REST API. The bucket name must be unique within the store, and a client must have full access permission if the authentication is enabled. Provisioning a bucket with environment variables is also possible. Refer to the example below:
 
-import CreateBucketPy from "!!raw-loader!./examples/py/src/buckets_create.py";
-import CreateBucketJs from "!!raw-loader!./examples/js/src/buckets_create.mjs";
-import CreateBucketRs from "!!raw-loader!./examples/rs/examples/buckets_create.rs";
-import CreateBucketCpp from "!!raw-loader!./examples/cpp/src/buckets_create.cc";
-import CreateBucketCLI from "!!raw-loader!./examples/cli/buckets_create.sh";
-import CreateBucketProvision from "!!raw-loader!./examples/provisioning/buckets_create.yml";
-import CreateBucketCurl from "!!raw-loader!./examples/curl/buckets_create.sh";
+import CreateBucketPy from "!!raw-loader!../examples/py/src/buckets_create.py";
+import CreateBucketJs from "!!raw-loader!../examples/js/src/buckets_create.mjs";
+import CreateBucketRs from "!!raw-loader!../examples/rs/examples/buckets_create.rs";
+import CreateBucketCpp from "!!raw-loader!../examples/cpp/src/buckets_create.cc";
+import CreateBucketCLI from "!!raw-loader!../examples/cli/buckets_create.sh";
+import CreateBucketProvision from "!!raw-loader!../examples/provisioning/buckets_create.yml";
+import CreateBucketCurl from "!!raw-loader!../examples/curl/buckets_create.sh";
 
 <Tabs>
   <TabItem value="CLI">
@@ -141,12 +141,12 @@ import CreateBucketCurl from "!!raw-loader!./examples/curl/buckets_create.sh";
 
 You might want to view the list of buckets in your store or see the details of a specific bucket. This can be done by using the SDKs, CLI client, Web Console, or REST API. For listing all buckets, a client must have a valid access token if the authorization is enabled.
 
-import ListBucketsCLI from "!!raw-loader!./examples/cli/buckets_browse.sh";
-import ListBucketsPy from "!!raw-loader!./examples/py/src/buckets_browse.py";
-import ListBucketsJs from "!!raw-loader!./examples/js/src/buckets_browse.mjs";
-import ListBucketsRs from "!!raw-loader!./examples/rs/examples/buckets_browse.rs";
-import ListBucketsCpp from "!!raw-loader!./examples/cpp/src/buckets_browse.cc";
-import ListBucketsCurl from "!!raw-loader!./examples/curl/buckets_browse.sh";
+import ListBucketsCLI from "!!raw-loader!../examples/cli/buckets_browse.sh";
+import ListBucketsPy from "!!raw-loader!../examples/py/src/buckets_browse.py";
+import ListBucketsJs from "!!raw-loader!../examples/js/src/buckets_browse.mjs";
+import ListBucketsRs from "!!raw-loader!../examples/rs/examples/buckets_browse.rs";
+import ListBucketsCpp from "!!raw-loader!../examples/cpp/src/buckets_browse.cc";
+import ListBucketsCurl from "!!raw-loader!../examples/curl/buckets_browse.sh";
 
 <Tabs>
   <TabItem value="CLI">
@@ -204,12 +204,12 @@ A client must have full access permission to change the settings if the authoriz
 The settings that can be modified include the quota type, quota size, max block size, and maximal number of records.
 You cannot change the bucket name.
 
-import ChangeBucketCLI from "!!raw-loader!./examples/cli/buckets_change.sh";
-import ChangeBucketPy from "!!raw-loader!./examples/py/src/buckets_change.py";
-import ChangeBucketJs from "!!raw-loader!./examples/js/src/buckets_change.mjs";
-import ChangeBucketRs from "!!raw-loader!./examples/rs/examples/buckets_change.rs";
-import ChangeBucketCpp from "!!raw-loader!./examples/cpp/src/buckets_change.cc";
-import ChangeBucketCurl from "!!raw-loader!./examples/curl/buckets_change.sh";
+import ChangeBucketCLI from "!!raw-loader!../examples/cli/buckets_change.sh";
+import ChangeBucketPy from "!!raw-loader!../examples/py/src/buckets_change.py";
+import ChangeBucketJs from "!!raw-loader!../examples/js/src/buckets_change.mjs";
+import ChangeBucketRs from "!!raw-loader!../examples/rs/examples/buckets_change.rs";
+import ChangeBucketCpp from "!!raw-loader!../examples/cpp/src/buckets_change.cc";
+import ChangeBucketCurl from "!!raw-loader!../examples/curl/buckets_change.sh";
 
 <Tabs>
   <TabItem value="CLI">
@@ -272,12 +272,12 @@ You can't change settings for provisioned buckets. You should unprovision it fir
 
 A bucket can be deleted using the SDKs, CLI client, Web Console, or REST API. A client must have full access permission to delete a bucket if the authorization is enabled.
 
-import RemoveBucketCLI from "!!raw-loader!./examples/cli/buckets_remove.sh";
-import RemoveBucketPy from "!!raw-loader!./examples/py/src/buckets_remove.py";
-import RemoveBucketJs from "!!raw-loader!./examples/js/src/buckets_remove.mjs";
-import RemoveBucketRs from "!!raw-loader!./examples/rs/examples/buckets_remove.rs";
-import RemoveBucketCpp from "!!raw-loader!./examples/cpp/src/buckets_remove.cc";
-import RemoveBucketCurl from "!!raw-loader!./examples/curl/buckets_remove.sh";
+import RemoveBucketCLI from "!!raw-loader!../examples/cli/buckets_remove.sh";
+import RemoveBucketPy from "!!raw-loader!../examples/py/src/buckets_remove.py";
+import RemoveBucketJs from "!!raw-loader!../examples/js/src/buckets_remove.mjs";
+import RemoveBucketRs from "!!raw-loader!../examples/rs/examples/buckets_remove.rs";
+import RemoveBucketCpp from "!!raw-loader!../examples/cpp/src/buckets_remove.cc";
+import RemoveBucketCurl from "!!raw-loader!../examples/curl/buckets_remove.sh";
 
 <Tabs>
   <TabItem value="CLI">

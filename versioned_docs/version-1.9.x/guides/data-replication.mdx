@@ -57,13 +57,13 @@ Let's create a replication task that replicates all records from the `source-buc
 the ReductStore SDKs, REST API, CLI and Web Console. You can also provision a Replication Task by using environment variables.
 
 
-import CreateReplicaCli from "!!raw-loader!./examples/cli/data_replication_create.sh"
-import CreateReplicaPy from "!!raw-loader!./examples/py/src/data_replication_create.py"
-import CreateReplicaJs from "!!raw-loader!./examples/js/src/data_replication_create.mjs"
-import CreateReplicaRs from "!!raw-loader!./examples/rs/examples/data_replication_create.rs"
-import CreateReplicaCpp from "!!raw-loader!./examples/cpp/src/data_replication_create.cc"
-import CreateReplicaCurl from "!!raw-loader!./examples/curl/data_replication_create.sh"
-import CreateReplicaProvision from "!!raw-loader!./examples/provisioning/data_replication_create.yml"
+import CreateReplicaCli from "!!raw-loader!../examples/cli/data_replication_create.sh"
+import CreateReplicaPy from "!!raw-loader!../examples/py/src/data_replication_create.py"
+import CreateReplicaJs from "!!raw-loader!../examples/js/src/data_replication_create.mjs"
+import CreateReplicaRs from "!!raw-loader!../examples/rs/examples/data_replication_create.rs"
+import CreateReplicaCpp from "!!raw-loader!../examples/cpp/src/data_replication_create.cc"
+import CreateReplicaCurl from "!!raw-loader!../examples/curl/data_replication_create.sh"
+import CreateReplicaProvision from "!!raw-loader!../examples/provisioning/data_replication_create.yml"
 
 <Tabs>
     <TabItem value="CLI">
@@ -129,12 +129,12 @@ The detailed information includes status, current settings and statistics of the
 For the first hour, the `Number of Failed Records` and `Number of Replicated Records` are interpolated.
 :::
 
-import BrowseReplicaCLI from "!!raw-loader!./examples/cli/data_replication_browse.sh"
-import BrowseReplicaPy from "!!raw-loader!./examples/py/src/data_replication_browse.py"
-import BrowseReplicaJs from "!!raw-loader!./examples/js/src/data_replication_browse.mjs"
-import BrowseReplicaRs from "!!raw-loader!./examples/rs/examples/data_replication_browse.rs"
-import BrowseReplicaCpp from "!!raw-loader!./examples/cpp/src/data_replication_browse.cc"
-import BrowseReplicaCurl from "!!raw-loader!./examples/curl/data_replication_browse.sh"
+import BrowseReplicaCLI from "!!raw-loader!../examples/cli/data_replication_browse.sh"
+import BrowseReplicaPy from "!!raw-loader!../examples/py/src/data_replication_browse.py"
+import BrowseReplicaJs from "!!raw-loader!../examples/js/src/data_replication_browse.mjs"
+import BrowseReplicaRs from "!!raw-loader!../examples/rs/examples/data_replication_browse.rs"
+import BrowseReplicaCpp from "!!raw-loader!../examples/cpp/src/data_replication_browse.cc"
+import BrowseReplicaCurl from "!!raw-loader!../examples/curl/data_replication_browse.sh"
 
 
 <Tabs>
@@ -186,12 +186,12 @@ import BrowseReplicaCurl from "!!raw-loader!./examples/curl/data_replication_bro
 
 You can remove a replication task by using the ReductStore SDKs, REST API, CLI and Web Console. Once you remove a replication task, the replication process stops immediately, and the transaction log is deleted from the database.
 
-import RemoveReplicaCli from "!!raw-loader!./examples/cli/data_replication_remove.sh"
-import RemoveReplicaPy from "!!raw-loader!./examples/py/src/data_replication_remove.py"
-import RemoveReplicaJs from "!!raw-loader!./examples/js/src/data_replication_remove.mjs"
-import RemoveReplicaRs from "!!raw-loader!./examples/rs/examples/data_replication_remove.rs"
-import RemoveReplicaCpp from "!!raw-loader!./examples/cpp/src/data_replication_remove.cc"
-import RemoveReplicaCurl from "!!raw-loader!./examples/curl/data_replication_remove.sh"
+import RemoveReplicaCli from "!!raw-loader!../examples/cli/data_replication_remove.sh"
+import RemoveReplicaPy from "!!raw-loader!../examples/py/src/data_replication_remove.py"
+import RemoveReplicaJs from "!!raw-loader!../examples/js/src/data_replication_remove.mjs"
+import RemoveReplicaRs from "!!raw-loader!../examples/rs/examples/data_replication_remove.rs"
+import RemoveReplicaCpp from "!!raw-loader!../examples/cpp/src/data_replication_remove.cc"
+import RemoveReplicaCurl from "!!raw-loader!../examples/curl/data_replication_remove.sh"
 
 <Tabs>
     <TabItem value="CLI">
@@ -250,7 +250,7 @@ unset the corresponding environment variables and restart the ReductStore instan
 You can also manually replicate data if you need to copy specific time periods or records from one bucket to another.
 To do this, you can use ReducerCLI's `cp` command. Here we'll copy all records from the `src-instance/example-bucket` to the `dst-instance/demo` bucket that have the `anomaly=true` label and do not have the `status=ok` label.
 
-import ManualReplica from "!!raw-loader!./examples/cli/data_replication_manual.sh"
+import ManualReplica from "!!raw-loader!../examples/cli/data_replication_manual.sh"
 
 <Tabs>
     <TabItem value="CLI">
