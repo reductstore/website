@@ -1,6 +1,18 @@
 {
     "docSidebar": [
-        "getting-started",
+        {
+            "type": "category",
+            "label": "\uD83D\uDE80 Getting Started",
+            "collapsed": false,
+            "collapsible": false,
+            "link": {
+              "type": "doc",
+              "id": "getting-started/index"
+            },
+            "items": [
+                "getting-started/with-python"
+            ]
+        },
         "configuration",
         "how-does-it-work",
         {
