@@ -8,7 +8,7 @@ CURRENT_FILE = Path(__file__)
 
 async def main():
     # 1. Create a ReductStore client
-    async with Client("http://localhost:8383") as client:
+    async with Client("http://localhost:8383", api_token="my-token") as client:
         # 2. Get or create a bucket with 1Gb quota
         bucket = await client.create_bucket(
             "my-bucket",
