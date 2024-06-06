@@ -10,7 +10,11 @@
               "id": "getting-started/index"
             },
             "items": [
-                "getting-started/with-python"
+                {
+                    "type": "doc",
+                    "label": "With Python",
+                    "id": "getting-started/with-python"
+                }
             ]
         },
         "configuration",

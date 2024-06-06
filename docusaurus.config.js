@@ -2,6 +2,7 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 
 import { themes as prismThemes } from "prism-react-renderer";
+import codeImport from "remark-code-snippets";
 import "dotenv/config";
 
 /** @type {import('@docusaurus/types').Config} */
@@ -55,6 +56,8 @@ const config = {
         docs: {
           sidebarPath: require.resolve("./sidebars.json"),
           editUrl: "https://github.com/reductstore/docs/tree/main",
+          remarkPlugins: [codeImport],
+
         },
         blog: {
           blogTitle: "Blog | Time-Series Object Store for Edge Computing",
