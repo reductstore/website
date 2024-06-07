@@ -1,9 +1,4 @@
-from pathlib import Path
-from time import time_ns
-
 from reduct import Client, BucketSettings, QuotaType
-
-CURRENT_FILE = Path(__file__)
 
 
 async def main():
@@ -27,6 +22,7 @@ async def main():
             print(f"Record timestamp: {record.timestamp}")
             print(f"Record size: {record.size}")
             print(await record.read_all())
+
 
 # 5. Run the main function
 if __name__ == "__main__":
