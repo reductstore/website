@@ -11,8 +11,7 @@ int main() {
     auto client = IClient::Build("http://127.0.0.1:8383");
 
     // 2. Get or create a bucket with 1Gb quota
-    auto [bucket, create_err] = client->GetOrCreateBucket("my-bucket",
-    {
+    auto [bucket, create_err] = client->GetOrCreateBucket("my-bucket", {
         .quota_type = IBucket::QuotaType::kFifo,
         .quota_size = 1'000'000'000
     });
@@ -45,4 +44,7 @@ int main() {
         std::cerr << "Error: " << err;
         return -1;
     }
+
+    // 5. End
+    return 0;
 }

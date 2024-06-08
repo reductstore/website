@@ -1,12 +1,12 @@
 ---
-title: Quick Start With ReductStore Python SDK
-description: Getting started with the ReductStore Python client SDK.
+title: Quick Start With ReductStore C++ SDK
+description: Getting started with the ReductStore C++ client SDK.
 ---
 
 import Intro from "./common/intro.tsx";
 import InstallSdk from "./common/install_sdk";
 import RunReductStore from "./common/run_reductstore.mdx";
-import QuickStart from "!!raw-loader!../examples/py/src/quick_start.py";
+import QuickStart from "!!raw-loader!../examples/cpp/src/quick_start.cc";
 import UsingSdkSection from "./common/using_sdk";
 import CreateClientSection from "./common/create_client";
 import CreateBucketSection from "./common/create_bucket";
@@ -15,15 +15,15 @@ import DataQueryingSection from "./common/data_querying";
 import NextStep from "./common/next_steps.mdx";
 
 <head>
-    <link rel="canonical" href="https://www.reduct.store/docs/getting-started/with-python"/>
+    <link rel="canonical" href="https://www.reduct.store/docs/getting-started/with-C++"/>
 </head>
 
-<Intro language="Python" repository="reduct-py"/>
+<Intro language="C++" repository="reduct-py"/>
 
-## Installing the Python SDK
+## Installing the C++ SDK
 
 <InstallSdk>
-    To install the ReductStore SDK, you will need to have Python 3.8 or higher installed on your machine. Once Python is
+    To install the ReductStore SDK, you will need to have C++ 3.8 or higher installed on your machine. Once C++ is
     installed, you can use the `pip` package manager to install the `reduct-py` package:
 
     ```
@@ -37,7 +37,7 @@ import NextStep from "./common/next_steps.mdx";
 
 ## Hello World Example
 
-<UsingSdkSection example={QuickStart} language="Python"/>
+<UsingSdkSection example={QuickStart} language="cpp"/>
 
 ## Creating a Client
 
@@ -46,7 +46,7 @@ import NextStep from "./common/next_steps.mdx";
     ReductStore instance you wish to connect to as an argument to the `Client` constructor. To reuse the same HTTP
     session and improve performance, you can use the context manager:
 
-    ```python file=../examples/py/src/quick_start.py start=1. end=2.
+    ```cpp file=../examples/cpp/src/quick_start.cc start=1. end=2.
     ```
 </CreateClientSection>
 
@@ -58,7 +58,7 @@ import NextStep from "./common/next_steps.mdx";
     you want to create as an argument, along with settings. You can set the `exist_ok` argument to True to get the
     bucket if it already exists:
 
-    ```python file=../examples/py/src/quick_start.py start=2. end=3.
+    ```cpp file=../examples/cpp/src/quick_start.cc start=2. end=3.
     ```
 </CreateBucketSection>
 
@@ -69,7 +69,7 @@ import NextStep from "./common/next_steps.mdx";
     Pass the name of the entry you want to write to as an argument, along with the data and timestamp you want to write.
     The `write` method will create the `sensor-1` entry if it doesn't exist and write the record to it:
 
-    ```python file=../examples/py/src/quick_start.py start=3. end=4.
+    ```cpp file=../examples/cpp/src/quick_start.cc start=3. end=4.
     ```
 </DataIngestionSection>
 
@@ -81,7 +81,7 @@ import NextStep from "./common/next_steps.mdx";
     method
     returns an async iterator over the records in the entry:
 
-    ```python file=../examples/py/src/quick_start.py start=4. end=5.
+    ```cpp file=../examples/cpp/src/quick_start.cc start=4. end=5.
     ```
 </DataQueryingSection>
 

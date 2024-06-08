@@ -10,7 +10,7 @@ export default function UsingSdkSection(props: Readonly<Props>): JSX.Element {
     return (
         <div>
             <p>
-                Now when you have the {props.language} SDK installed and a ReductStore instance running, you can start using the SDK to
+                Now when you have the SDK installed and a ReductStore instance running, you can start using the SDK to
                 interact with the ReductStore database.
                 Here is an example of using the SDK to perform basic operations on a ReductStore instance:
             </p>

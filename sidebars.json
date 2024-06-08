@@ -19,6 +19,11 @@
                     "type": "doc",
                     "label": "With JavaScript",
                     "id": "getting-started/with-javascript"
+                },
+                {
+                    "type": "doc",
+                    "label": "With C++",
+                    "id": "getting-started/with-cpp"
                 }
             ]
         },
