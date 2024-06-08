@@ -9,7 +9,6 @@ async fn main() -> Result<(), ReductError> {
         .api_token("my-token")
         .build();
 
-
     // List all replications
     for replication in client.list_replications().await? {
         println!("Replication: {}", replication.name);
@@ -22,9 +21,18 @@ async fn main() -> Result<(), ReductError> {
     let replication = client.get_replication("example-replication").await?;
     println!("Replication: {}", replication.info.name);
     println!("Settings: {:?}", replication.settings);
-    println!("Failed records (last hour): {}", replication.diagnostics.hourly.errored);
-    println!("Successful records (last hour): {}", replication.diagnostics.hourly.ok);
-    println!("Errors (last hour): {:?}", replication.diagnostics.hourly.errors);
+    println!(
+        "Failed records (last hour): {}",
+        replication.diagnostics.hourly.errored
+    );
+    println!(
+        "Successful records (last hour): {}",
+        replication.diagnostics.hourly.ok
+    );
+    println!(
+        "Errors (last hour): {:?}",
+        replication.diagnostics.hourly.errors
+    );
 
     Ok(())
 }

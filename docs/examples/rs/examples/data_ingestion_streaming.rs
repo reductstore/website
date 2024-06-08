@@ -13,7 +13,6 @@ struct CustomStream {
 }
 
 impl Stream for CustomStream {
-
     // Pay attention to a result with the ReductError type
     type Item = Result<Bytes, ReductError>;
 

@@ -9,7 +9,11 @@ async fn main() -> Result<(), ReductError> {
         .url("http://127.0.0.1:8383")
         .api_token("my-token")
         .build();
-    let bucket = client.create_bucket("example-bucket").exist_ok(true).send().await?;
+    let bucket = client
+        .create_bucket("example-bucket")
+        .exist_ok(true)
+        .send()
+        .await?;
 
     // Query 10 photos from "imdb" entry which taken in 2006 but don't contain "Rowan Atkinson"
     let query = bucket
@@ -17,7 +21,8 @@ async fn main() -> Result<(), ReductError> {
         .add_include("photo_taken", "2006")
         .add_exclude("name", "b'Rowan Atkinson'")
         .limit(10)
-        .send().await?;
+        .send()
+        .await?;
 
     tokio::pin!(query);
     while let Some(record) = query.next().await {

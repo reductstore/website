@@ -1,12 +1,12 @@
 ---
-title: Quick Start With C++ Client SDK
-description: Getting started with the ReductStore C++ Client SDK.
+title: Quick Start With Rust Client SDK
+description: Getting started with the ReductStore Rust Client SDK.
 ---
 
 import Intro from "./common/intro.tsx";
 import InstallSdk from "./common/install_sdk";
 import RunReductStore from "./common/run_reductstore.mdx";
-import QuickStart from "!!raw-loader!../examples/cpp/src/quick_start.cc";
+import QuickStart from "!!raw-loader!../examples/rs/examples/quick_start.rs";
 import UsingSdkSection from "./common/using_sdk";
 import CreateClientSection from "./common/create_client";
 import CreateBucketSection from "./common/create_bucket";
@@ -15,44 +15,22 @@ import DataQueryingSection from "./common/data_querying";
 import NextStep from "./common/next_steps.mdx";
 
 <head>
-    <link rel="canonical" href="https://www.reduct.store/docs/getting-started/with-cpp"/>
+    <link rel="canonical" href="https://www.reduct.store/docs/getting-started/with-rust"/>
 </head>
 
-<Intro language="C++" repository="reduct-cpp"/>
+<Intro language="Rust" repository="reduct-rs"/>
 
-## Installing the C++ SDK
+## Installing the Rust SDK
 
 <InstallSdk>
-    To install the ReductStore C++ SDK, follow these steps:
+    To start using the ReductStore Rust SDK, add the following dependency to your `Cargo.toml` file:
 
-    ```shell
-    git clone https://github.com/reductstore/reduct-cpp.git
-    cd reduct-cpp
-    mkdir build && cd build
-    cmake -DCMAKE_BUILD_TYPE=Release ..
-    cmake --build .
-    sudo cmake --build . --target install
+    ```toml
+    [dependencies]
+    reduct-rs = "1"
     ```
 
-    This will clone the ReductStore C++ SDK repository, build the SDK, and install it on your system.
-    After installing the SDK, you need to link the `ReductCpp` library to your project. The following example shows how
-    to do this using CMake:
-
-    ```cmake
-    cmake_minimum_required(VERSION 3.18)
-
-    project(ReductCppExample)
-    set(CMAKE_CXX_STANDARD 20)
-
-    find_package(ZLIB)
-    find_package(OpenSSL)
-
-
-    find_package(ReductCpp)
-
-    add_executable(quick_start quick_start.cc)
-    target_link_libraries(quick_start ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
-    ```
+    Then, import the `reduct-rs` crate in your Rust code:
 </InstallSdk>
 
 ## Running ReductStore
@@ -61,13 +39,14 @@ import NextStep from "./common/next_steps.mdx";
 
 ## Hello World Example
 
-<UsingSdkSection example={QuickStart} language="cpp"/>
+<UsingSdkSection example={QuickStart} language="rust"/>
 
 ## Creating a Client
 
 <CreateClientSection>
-    To create a ReductStore client, you can use the `IClient::Build` fabric method from the `reduct` namespace. Pass the URL of the
-    ReductStore instance you wish to connect to as an argument to the method.
+    To create a ReductStore client, you can use the `Client::builder()` method from the `reduct_rs` crate to create a builder
+    instance. You must pass the URL of the ReductStore server as an argument to the `ClientBuilder::new()` method.
+    Then, call the `build()` method on the builder instance to create a `Client` instance:
 
     ```cpp file=../examples/cpp/src/quick_start.cc start=1. end=2.
     ```
