@@ -1,6 +1,6 @@
 ---
-title: Quick Start With ReductStore C++ SDK
-description: Getting started with the ReductStore C++ client SDK.
+title: Quick Start With C++ Client SDK
+description: Getting started with the ReductStore C++ Client SDK.
 ---
 
 import Intro from "./common/intro.tsx";
@@ -18,16 +18,40 @@ import NextStep from "./common/next_steps.mdx";
     <link rel="canonical" href="https://www.reduct.store/docs/getting-started/with-C++"/>
 </head>
 
-<Intro language="C++" repository="reduct-py"/>
+<Intro language="C++" repository="reduct-cpp"/>
 
 ## Installing the C++ SDK
 
 <InstallSdk>
-    To install the ReductStore SDK, you will need to have C++ 3.8 or higher installed on your machine. Once C++ is
-    installed, you can use the `pip` package manager to install the `reduct-py` package:
+    To install the ReductStore C++ SDK, follow these steps:
 
+    ```shell
+    git clone https://github.com/reductstore/reduct-cpp.git
+    cd reduct-cpp
+    mkdir build && cd build
+    cmake -DCMAKE_BUILD_TYPE=Release ..
+    cmake --build .
+    sudo cmake --build . --target install
     ```
-    pip install reduct-py
+
+    This will clone the ReductStore C++ SDK repository, build the SDK, and install it on your system.
+    After installing the SDK, you need to link the `ReductCpp` library to your project. The following example shows how
+    to do this using CMake:
+
+    ```cmake
+    cmake_minimum_required(VERSION 3.18)
+
+    project(ReductCppExample)
+    set(CMAKE_CXX_STANDARD 20)
+
+    find_package(ZLIB)
+    find_package(OpenSSL)
+
+
+    find_package(ReductCpp)
+
+    add_executable(quick_start quick_start.cc)
+    target_link_libraries(quick_start ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
     ```
 </InstallSdk>
 
@@ -42,9 +66,8 @@ import NextStep from "./common/next_steps.mdx";
 ## Creating a Client
 
 <CreateClientSection>
-    To create a ReductStore client, you can use the `Client` class from the `reduct` module. Pass the URL of the
-    ReductStore instance you wish to connect to as an argument to the `Client` constructor. To reuse the same HTTP
-    session and improve performance, you can use the context manager:
+    To create a ReductStore client, you can use the `IClient::Build` fabric method from the `reduct` namespace. Pass the URL of the
+    ReductStore instance you wish to connect to as an argument to the method.
 
     ```cpp file=../examples/cpp/src/quick_start.cc start=1. end=2.
     ```
@@ -54,9 +77,9 @@ import NextStep from "./common/next_steps.mdx";
 
 <CreateBucketSection>
 
-    To create a bucket, you should use the `create_bucket` method on a `Client` instance. Pass the name of the bucket
-    you want to create as an argument, along with settings. You can set the `exist_ok` argument to True to get the
-    bucket if it already exists:
+    To create a bucket, you should use the `GetOrCreateBucket` method on a `Client` instance. Pass the name of the bucket
+    you want to create as an argument, along with settings.  If the bucket already exists, the `GetOrCreateBucket`
+    method will return it:
 
     ```cpp file=../examples/cpp/src/quick_start.cc start=2. end=3.
     ```
@@ -65,9 +88,9 @@ import NextStep from "./common/next_steps.mdx";
 ## Data Ingestion
 
 <DataIngestionSection>
-    To write a timestamped record to an entry in a bucket, you should use the `write` method on a `Bucket` instance.
-    Pass the name of the entry you want to write to as an argument, along with the data and timestamp you want to write.
-    The `write` method will create the `sensor-1` entry if it doesn't exist and write the record to it:
+    To write a timestamped record to an entry in a bucket, you should use the `Write` method on a `Bucket` instance.
+    Pass the name of the entry you want to write to as an argument, along with the timestamp you want to write.
+    The `Write` method will call a callback function with the `WritableRecord` instance to write to the entry:
 
     ```cpp file=../examples/cpp/src/quick_start.cc start=3. end=4.
     ```
@@ -76,10 +99,9 @@ import NextStep from "./common/next_steps.mdx";
 ## Data Querying
 
 <DataQueryingSection>
-    To iterate over all records in a given time range, you should use the `query` method on a bucket instance. Pass the
-    name of the record to iterate over, and `start` and `stop` arguments to specify the time interval. The `query'
-    method
-    returns an async iterator over the records in the entry:
+    To iterate over all records in a given time range, you should use the `Query` method on a bucket instance. Pass the
+    name of the entry to iterate over, and `start` and `stop` arguments to specify the time interval. The method will
+    a callback function with the `ReadableRecord` instance for each record in the time range:
 
     ```cpp file=../examples/cpp/src/quick_start.cc start=4. end=5.
     ```

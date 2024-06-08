@@ -8,7 +8,9 @@ using sec = std::chrono::seconds;
 
 int main() {
     // 1. Create a ReductStore client
-    auto client = IClient::Build("http://127.0.0.1:8383");
+    auto client = IClient::Build("http://127.0.0.1:8383",{
+        .api_token = "my-token"
+    });
 
     // 2. Get or create a bucket with 1Gb quota
     auto [bucket, create_err] = client->GetOrCreateBucket("my-bucket", {

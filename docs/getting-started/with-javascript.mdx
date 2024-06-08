@@ -1,6 +1,6 @@
 ---
-title: Quick Start With ReductStore JavaScript SDK
-description: Getting started with the ReductStore JavaScript SDK
+title: Quick Start With JavaScript Client SDK
+description: Getting started with the ReductStore JavaScript Client SDK
 ---
 
 import Intro from "./common/intro.tsx";
@@ -79,7 +79,7 @@ import NextStep from "./common/next_steps.mdx";
 
 <DataQueryingSection>
     To iterate over all records in a given time range, you should use the `query` method on a bucket instance. Pass the
-    name of the record to iterate over, and `start` and `stop` arguments to specify the time interval. The `query`
+    name of the entry to iterate over, and `start` and `stop` arguments to specify the time interval. The `query`
     method returns an async iterator over the records in the entry:
 
     ```javascript file=../examples/js/src/quick_start.mjs start=4.
