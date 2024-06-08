@@ -96,11 +96,11 @@ const cookieConsentConfig = {
 };
 
 function handleConsent({ cookie }) {
-  window._paq = window._paq || [];
+  window._mtm = window._mtm || [];
   if (cookie.categories.includes("analytics")) {
-    window._paq.push(["rememberCookieConsentGiven"]);
+    _mtm.push({ event: "giveConsent" });
   } else {
-    window._paq.push(["forgetCookieConsentGiven"]);
+    _mtm.push({ event: "forgetConsent" });
   }
   if (!cookie.categories.includes("functional")) {
     CookieConsent.eraseCookies("cc_reductstore");

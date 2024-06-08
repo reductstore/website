@@ -37,9 +37,6 @@ const SlidingBanner: React.FC = () => {
 
   const handleDownloadClick = () => {
     Cookies.set('reductstore_bannerDismissed', 'true', { expires: 30 });
-    if (window._paq) {
-      window._paq.push(['trackEvent', 'Slide-In Banner', 'White Paper Click', pagePath]);
-    }
   };
 
   if (!visible) return null;
@@ -51,7 +48,7 @@ const SlidingBanner: React.FC = () => {
         <div className={styles.textBlock}>
           <div className={styles.title}>Free White Paper</div>
           <div className={styles.subtitle}>Get Your White Paper: AI on the Edge!</div>
-          <Link to="/whitepaper" className="button button--primary button--lg" onClick={handleDownloadClick}>
+          <Link id="whitepaper-banner-button" to="/whitepaper" className="button button--primary button--lg" onClick={handleDownloadClick}>
             Download Now →
           </Link>
         </div>
