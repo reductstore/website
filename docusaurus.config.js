@@ -103,10 +103,10 @@ const config = {
 
       // Matomo analytics
       matomo: {
-        siteId: "1",
-        url: "https://reductstore.matomo.cloud/",
-        script: "https://cdn.matomo.cloud/reductstore.matomo.cloud/matomo.js",
-        exclude: [".azurestaticapps.net"],
+        url: "https://cdn.matomo.cloud/reductstore.matomo.cloud",
+        container: "lnt4UdBs",
+        previewSuffix: "_staging_24832eb3877816bd5f3a40a3",
+        devSuffix: "_dev_f19bac1b68c75bffed400ddd",
       },
 
       // Crisp chat integration
