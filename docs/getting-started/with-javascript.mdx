@@ -24,8 +24,7 @@ import NextStep from "./common/next_steps.mdx";
 ## Installing the JavaScript SDK
 
 <InstallSdk>
-
-    To install the ReductStore SDK, you will need only `npm` or `yarn`. You can install the SDK by running the following
+    To install the SDK, you will need only `npm` or `yarn`. You can install the SDK by running the following
     command:
 
     ```
@@ -37,14 +36,14 @@ import NextStep from "./common/next_steps.mdx";
 
 <RunReductStore/>
 
-## Using the JavaScript SDK
+## Using the SDK
 
 <UsingSdkSection example={QuickStart} language="JavaScript"/>
 
 ## Creating a Client
 
 <CreateClientSection>
-    To create a ReductStore client, you can use the `Client` class from the `reduct-js` package. Pass the URL of the
+    To create the client, you can use the `Client` class from the `reduct-js` package. Pass the URL of the
     ReductStore instance you wish to connect to as an argument to the `Client` constructor.
 
     ```javascript file=../examples/js/src/quick_start.mjs start=1. end=2.
@@ -65,19 +64,22 @@ import NextStep from "./common/next_steps.mdx";
 ## Data Ingestion
 
 <DataIngestionSection>
-    To write a timestamped record to an entry in a bucket, you should use the `write` method on a `Bucket` instance.
+    To write a timestamped record to an entry in a bucket, you should use the `beginWrite` method on a `Bucket` object.
     Pass the name of the entry you want to write to as an argument, along with the data and timestamp you want to write.
-    The `write` method will create the `sensor-1` entry if it doesn't exist and write the record to it:
+    The `beginWrite` method will create the `sensor-1` entry if it doesn't exist and return a `WritableRecord` object.
+    The `WritableRecord` object can be used to send the data to the database.
 
     ```javascript file=../examples/js/src/quick_start.mjs start=3. end=4.
     ```
+
+    Pay attention that the time is a UNIX time in microseconds. This the reason why we use BigInt to represent it.
 </DataIngestionSection>
 
 ## Data Querying
 
 <DataQueryingSection>
     To iterate over all records in a given time range, you should use the `query` method on a bucket instance. Pass the
-    name of the record to iterate over, and `start` and `stop` arguments to specify the time interval. The `query'
+    name of the record to iterate over, and `start` and `stop` arguments to specify the time interval. The `query`
     method returns an async iterator over the records in the entry:
 
     ```javascript file=../examples/js/src/quick_start.mjs start=4.

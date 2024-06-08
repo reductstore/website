@@ -101,3 +101,9 @@ add_executable(access_control_remove_token.cxx
         src/access_control_remove_token.cc
 )
 target_link_libraries(access_control_remove_token.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+# Quick Start
+add_executable(quick_start.cxx
+        src/quick_start.cc
+)
+target_link_libraries(quick_start.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)

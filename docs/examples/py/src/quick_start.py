@@ -11,7 +11,7 @@ async def main():
             exist_ok=True,
         )
 
-        # 3. Write some data with timestamps in the 'entry-1' entry
+        # 3. Write some data with timestamps in the 'sensor-1' entry
         await bucket.write("sensor-1", b"Record #1", timestamp="2024-01-01T10:00:00Z")
         await bucket.write("sensor-1", b"Record #2", timestamp="2024-01-01T10:00:01Z")
 
