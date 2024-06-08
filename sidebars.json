@@ -14,6 +14,11 @@
                     "type": "doc",
                     "label": "With Python",
                     "id": "getting-started/with-python"
+                },
+                {
+                    "type": "doc",
+                    "label": "With JavaScript",
+                    "id": "getting-started/with-javascript"
                 }
             ]
         },

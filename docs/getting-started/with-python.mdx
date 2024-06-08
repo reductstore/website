@@ -1,97 +1,90 @@
 ---
-title: Quick Start With Python
+title: Quick Start With ReductStore Python SDK
 description: Getting started with the ReductStore Python client SDK.
 ---
 
+import Intro from "./common/intro.tsx";
+import InstallSdk from "./common/install_sdk";
+import RunReductStore from "./common/run_reductstore.mdx";
+import QuickStart from "!!raw-loader!../examples/py/src/quick_start.py";
+import UsingSdkSection from "./common/using_sdk";
+import CreateClientSection from "./common/create_client";
+import CreateBucketSection from "./common/create_bucket";
+import DataIngestionSection from "./common/data_ingestion";
+import DataQueryingSection from "./common/data_querying";
+import NextStep from "./common/next_steps.mdx";
 
 <head>
-  <link rel="canonical" href="https://www.reduct.store/docs/getting-started/with-python" />
+    <link rel="canonical" href="https://www.reduct.store/docs/getting-started/with-python"/>
 </head>
 
-# Quick Start With ReductStore Python SDK
+<Intro language="Python" repository="reduct-py"/>
 
-This quick start guide will walk you through the process of installing and using the **[ReductStore Python Client SDK](https://github.com/reductstore/reduct-py)** to read and write data to a **[ReductStore](https://wwww.reduct.store)** instance.
+## Installing the Python SDK
 
-## Installing the SDK
+<InstallSdk>
+    To install the ReductStore SDK, you will need to have Python 3.8 or higher installed on your machine. Once Python is
+    installed, you can use the `pip` package manager to install the `reduct-py` package:
 
-To install the ReductStore SDK, you will need to have Python 3.8 or higher installed on your machine. Once Python is
-installed, you can use the `pip` package manager to install the `reduct-py` package:
+    ```
+    pip install reduct-py
+    ```
+</InstallSdk>
 
-```
-pip install reduct-py
-```
+## Running ReductStore
 
-## Running ReductStore as a Docker Container
+<RunReductStore/>
 
-If you don't already have a ReductStore instance running, you can easily spin up one as a Docker container. To do this,
-run the following command:
+## Using the Python SDK
 
-```
-docker run -p 8383:8383 -e RS_API_TOKEN=my-token reduct/store:latest
-```
+<UsingSdkSection example={QuickStart} language="Python"/>
 
-This will start a ReductStore instance listening on port 8383 on your local machine. The `RS_API_TOKEN` environment variable is used to authenticate requests to the ReductStore instance. You can set it to any value you like, but you will need to use the same value when creating a `Client` object in your Python code.
+## Creating a Client
 
-If Docker is not an option, you can also download the ReductStore binaries. Check the **[Download Page](/download)**.
+<CreateClientSection>
+    To create a ReductStore client, you can use the `Client` class from the `reduct` module. Pass the URL of the
+    ReductStore instance you wish to connect to as an argument to the `Client` constructor. To reuse the same HTTP
+    session and improve performance, you can use the context manager:
 
-## Using the SDK
+    ```python file=../examples/py/src/quick_start.py start=1. end=2.
+    ```
+</CreateClientSection>
 
-Now that you have the `reduct-py` SDK installed and a ReductStore instance running, you can start using the SDK to interact with the ReductStore service.
+## Create a Bucket
 
-Here is an example of using the Python SDK to perform basic operations on a ReductStore instance:
+<CreateBucketSection>
 
-import CodeBlock from "@theme/CodeBlock";
-import QuickStart from "!!raw-loader!../examples/py/src/quick_start.py";
+    To create a bucket, you should use the `create_bucket` method on a `Client` instance. Pass the name of the bucket
+    you want to create as an argument, along with settings. You can set the `exist_ok` argument to True to get the
+    bucket if it already exists:
 
-<CodeBlock language="python">
-    { QuickStart }
-</CodeBlock>
+    ```python file=../examples/py/src/quick_start.py start=2. end=3.
+    ```
+</CreateBucketSection>
 
+## Data Ingestion
 
-Let's break down what this example is doing.
+<DataIngestionSection>
+    To write a timestamped record to an entry in a bucket, you should use the `write` method on a `Bucket` instance.
+    Pass the name of the entry you want to write to as an argument, along with the data and timestamp you want to write.
+    The `write` method will create the `sensor-1` entry if it doesn't exist and write the record to it:
 
-### Creating a Client
+    ```python file=../examples/py/src/quick_start.py start=3. end=4.
+    ```
+</DataIngestionSection>
 
-Before you can interact with a ReductStore instance, you must create a `Client` object that represents a connection to the ReductStore instance.
+## Data Querying
 
-To create a ReductStore client, you can use the `Client' class from the `reduct' module. Pass the URL of the ReductStore instance you wish to connect to as an argument to the `Client` constructor. To reuse the same HTTP session and improve performance, you can use the context manager:
+<DataQueryingSection>
+    To iterate over all records in a given time range, you should use the `query` method on a bucket instance. Pass the
+    name of the record to iterate over, and `start` and `stop` arguments to specify the time interval. The `query'
+    method
+    returns an async iterator over the records in the entry:
 
-```python  file=../examples/py/src/quick_start.py start=1. end=2.
-```
-
-### Creating a Bucket
-
-ReductStore organizes data into buckets, each of which has its own quota and settings. It's a necessary step to create a bucket before writing data to it. You can read more about buckets in the **[Buckets Guide](/docs/guides/buckets.mdx)**, but for now, let's just create one.
-
-To create a bucket, you should use the `create_bucket` method on a `Client` instance. Pass the name of the bucket you want to create as an argument, along with settings. You can set the `exist_ok` argument to True to get the bucket if it already exists:
-
-```python  file=../examples/py/src/quick_start.py start=2. end=3.
-```
-
-In this example we create a bucket with a FIFO quota of 1GB. This means that the oldest data will be deleted when the bucket reaches 1GB.
-
-### Data Ingestion
-
-Time series data is stored in entries within a bucket. An entry is a collection of records with unique timestamps. It must have a unique name within the bucket and usually represents a data source, such as a vibration sensor, a camera etc.
-
-To write a timestamped record to an entry in a bucket, you should use the `write` method on a `Bucket` instance. Pass the name of the entry you want to write to as an argument, along with the data and timestamp you want to write. The `write` method will create the `sensor-1` entry if it doesn't exist and write the record to it:
-
-```python  file=../examples/py/src/quick_start.py start=3. end=4.
-```
-
-This is the simplest case of writing data using the Python SDK. You can also write data in chunks and annotate records with labels. You can find more information and examples in the **[Data Ingestion Guide](/docs/guides/data-ingestion.mdx)**.
-
-### Data Querying
-
-Usually, we don't read a particular record by its timestamp, but query records in a time range.
-
-To iterate over all records in a given time range, you should use the `query` method on a bucket instance. Pass the name of the record to iterate over, and `start` and `stop` arguments to specify the time interval. The `query' method returns an async iterator over the records in the entry:
-
-```python  file=../examples/py/src/quick_start.py start=4. end=5.
-```
-
-The `query' method has many parameters for filtering and returning sample records. For more information and examples, see the **[Data Querying Guide](/docs/guides/data-querying.mdx)**.
+    ```python file=../examples/py/src/quick_start.py start=4. end=5.
+    ```
+</DataQueryingSection>
 
 ## Next Steps
 
-As you can see to get started with the ReductStore Python SDK is very easy. However,it doesn't cover all the features of the SDK and the database. Check our **[Guides](/docs/guides/index.mdx)** to learn more about the ReductStore features and how to use them.
+<NextStep/>

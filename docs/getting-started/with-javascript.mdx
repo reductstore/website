@@ -1,0 +1,89 @@
+---
+title: Quick Start With ReductStore JavaScript SDK
+description: Getting started with the ReductStore JavaScript SDK
+---
+
+import Intro from "./common/intro.tsx";
+import InstallSdk from "./common/install_sdk";
+import RunReductStore from "./common/run_reductstore.mdx";
+import QuickStart from "!!raw-loader!../examples/js/src/quick_start.mjs";
+import UsingSdkSection from "./common/using_sdk";
+import CreateClientSection from "./common/create_client";
+import CreateBucketSection from "./common/create_bucket";
+import DataIngestionSection from "./common/data_ingestion";
+import DataQueryingSection from "./common/data_querying";
+import NextStep from "./common/next_steps.mdx";
+
+
+<head>
+    <link rel="canonical" href="https://www.reduct.store/docs/getting-started/with-js"/>
+</head>
+
+<Intro language="JavaScript" repository="reduct-js"/>
+
+## Installing the JavaScript SDK
+
+<InstallSdk>
+
+    To install the ReductStore SDK, you will need only `npm` or `yarn`. You can install the SDK by running the following
+    command:
+
+    ```
+    npm install reduct-js
+    ```
+</InstallSdk>
+
+## Running ReductStore
+
+<RunReductStore/>
+
+## Using the JavaScript SDK
+
+<UsingSdkSection example={QuickStart} language="JavaScript"/>
+
+## Creating a Client
+
+<CreateClientSection>
+    To create a ReductStore client, you can use the `Client` class from the `reduct-js` package. Pass the URL of the
+    ReductStore instance you wish to connect to as an argument to the `Client` constructor.
+
+    ```javascript file=../examples/js/src/quick_start.mjs start=1. end=2.
+    ```
+</CreateClientSection>
+
+## Create a Bucket
+
+<CreateBucketSection>
+    To create a bucket, you should use the `getOrCreateBucket` method on a `Client` instance. Pass the name of the
+    bucket you want to create as an argument, along with settings. If the bucket already exists, the `getOrCreateBucket`
+    method will return it.
+
+    ```javascript file=../examples/js/src/quick_start.mjs start=2. end=3.
+    ```
+</CreateBucketSection>
+
+## Data Ingestion
+
+<DataIngestionSection>
+    To write a timestamped record to an entry in a bucket, you should use the `write` method on a `Bucket` instance.
+    Pass the name of the entry you want to write to as an argument, along with the data and timestamp you want to write.
+    The `write` method will create the `sensor-1` entry if it doesn't exist and write the record to it:
+
+    ```javascript file=../examples/js/src/quick_start.mjs start=3. end=4.
+    ```
+</DataIngestionSection>
+
+## Data Querying
+
+<DataQueryingSection>
+    To iterate over all records in a given time range, you should use the `query` method on a bucket instance. Pass the
+    name of the record to iterate over, and `start` and `stop` arguments to specify the time interval. The `query'
+    method returns an async iterator over the records in the entry:
+
+    ```javascript file=../examples/js/src/quick_start.mjs start=4.
+    ```
+</DataQueryingSection>
+
+## Next Steps
+
+<NextStep/>
