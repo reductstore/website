@@ -67,7 +67,7 @@ import NextStep from "./common/next_steps.mdx";
 
 <CreateClientSection>
     To create a ReductStore client, you can use the `IClient::Build` fabric method from the `reduct` namespace. Pass the URL of the
-    ReductStore instance you wish to connect to as an argument to the method.
+    ReductStore instance you want to connect to as an argument to the method.
 
     ```cpp file=../examples/cpp/src/quick_start.cc start=1. end=2.
     ```
@@ -76,7 +76,6 @@ import NextStep from "./common/next_steps.mdx";
 ## Creating a Bucket
 
 <CreateBucketSection>
-
     To create a bucket, you should use the `GetOrCreateBucket` method on a `Client` instance. Pass the name of the bucket
     you want to create as an argument, along with settings.  If the bucket already exists, the `GetOrCreateBucket`
     method will return it:
@@ -100,7 +99,7 @@ import NextStep from "./common/next_steps.mdx";
 
 <DataQueryingSection>
     To iterate over all records in a given time range, you should use the `Query` method on a bucket instance. Pass the
-    name of the entry to iterate over, and `start` and `stop` arguments to specify the time interval. The method will
+    name of the entry to iterate over, and `start` and `stop` arguments to specify the time interval. The method will return
     a callback function with the `ReadableRecord` instance for each record in the time range:
 
     ```cpp file=../examples/cpp/src/quick_start.cc start=4. end=5.

@@ -43,7 +43,7 @@ import NextStep from "./common/next_steps.mdx";
 
 <CreateClientSection>
     To create a ReductStore client, you can use the `Client` class from the `reduct` module. Pass the URL of the
-    ReductStore instance you wish to connect to as an argument to the `Client` constructor. To reuse the same HTTP
+    ReductStore instance you want to connect to as an argument to the `Client` constructor. To reuse the same HTTP
     session and improve performance, you can use the context manager:
 
     ```python file=../examples/py/src/quick_start.py start=1. end=2.
@@ -53,7 +53,6 @@ import NextStep from "./common/next_steps.mdx";
 ## Creating a Bucket
 
 <CreateBucketSection>
-
     To create a bucket, you should use the `create_bucket` method on a `Client` instance. Pass the name of the bucket
     you want to create as an argument, along with settings. You can set the `exist_ok` argument to True to get the
     bucket if it already exists:
@@ -78,8 +77,7 @@ import NextStep from "./common/next_steps.mdx";
 <DataQueryingSection>
     To iterate over all records in a given time range, you should use the `query` method on a bucket instance. Pass the
     name of the record to iterate over, and `start` and `stop` arguments to specify the time interval. The `query'
-    method
-    returns an async iterator over the records in the entry:
+    method returns an async iterator over the records in the entry:
 
     ```python file=../examples/py/src/quick_start.py start=4. end=5.
     ```
