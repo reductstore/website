@@ -44,45 +44,46 @@ import NextStep from "./common/next_steps.mdx";
 ## Creating a Client
 
 <CreateClientSection>
-    To create a ReductStore client, you can use the `Client::builder()` method from the `reduct_rs` crate to create a builder
+    To create a ReductStore client, you can use the `ReductClient::builder()` method from the `reduct_rs` crate to create a builder
     instance. You must pass the URL of the ReductStore server as an argument to the `ClientBuilder::new()` method.
     Then, call the `build()` method on the builder instance to create a `Client` instance:
 
-    ```cpp file=../examples/cpp/src/quick_start.cc start=1. end=2.
+    ```rust file=../examples/rs/examples/quick_start.rs start=1. end=2.
     ```
 </CreateClientSection>
 
-## Create a Bucket
+## Creating a Bucket
 
 <CreateBucketSection>
+    To create a bucket, you should use the `create_bucket` method on a `Client` instance. The method takes the name of
+    the bucket you want to create as an argument and returns a `BucketBuilder` instance to configure the bucket settings.
+    Call the `send` method on the `BucketBuilder` to send the request to the ReductStore server and create the bucket:
 
-    To create a bucket, you should use the `GetOrCreateBucket` method on a `Client` instance. Pass the name of the bucket
-    you want to create as an argument, along with settings.  If the bucket already exists, the `GetOrCreateBucket`
-    method will return it:
-
-    ```cpp file=../examples/cpp/src/quick_start.cc start=2. end=3.
+    ```rust file=../examples/rs/examples/quick_start.rs start=2. end=3.
     ```
 </CreateBucketSection>
 
 ## Data Ingestion
 
 <DataIngestionSection>
-    To write a timestamped record to an entry in a bucket, you should use the `Write` method on a `Bucket` instance.
-    Pass the name of the entry you want to write to as an argument, along with the timestamp you want to write.
-    The `Write` method will call a callback function with the `WritableRecord` instance to write to the entry:
+    To write a timestamped record to an entry in a bucket, you should use the `write_record` method on a `Bucket` instance.
+    Pass the name of the entry you want to write to as an argument. The method will return a `RecordBuilder` instance to
+    pass the data and timestamp you want to write. Call the `send` method on the `RecordBuilder` to send the request to
+    the ReductStore server and write the record:
 
-    ```cpp file=../examples/cpp/src/quick_start.cc start=3. end=4.
+    ```rust file=../examples/rs/examples/quick_start.rs start=3. end=4.
     ```
 </DataIngestionSection>
 
 ## Data Querying
 
 <DataQueryingSection>
-    To iterate over all records in a given time range, you should use the `Query` method on a bucket instance. Pass the
-    name of the entry to iterate over, and `start` and `stop` arguments to specify the time interval. The method will
-    a callback function with the `ReadableRecord` instance for each record in the time range:
+    To iterate over all records in a given time range, you should use the `query` method on a bucket instance. Pass the
+    name of the entry to iterate over. The method will return a `QueryBuilder` instance to specify the time interval.
+    Call the `send` method on the `QueryBuilder` to send the request to the ReductStore server and return a stream of
+    records:
 
-    ```cpp file=../examples/cpp/src/quick_start.cc start=4. end=5.
+    ```rust file=../examples/rs/examples/quick_start.rs start=4. end=5.
     ```
 </DataQueryingSection>
 

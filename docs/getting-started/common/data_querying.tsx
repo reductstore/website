@@ -15,7 +15,7 @@ export default function DataQueryingSection(props: Readonly<Props>): JSX.Element
             <p> {children} </p>
 
             <p>
-                The <code>query</code> method has many parameters for filtering and returning sample records. For more information
+                The query method has many parameters for filtering and returning sample records. For more information
                 and examples, see the <b><a href="/docs/guides/data-querying.mdx">Data Querying Guide</a></b>.
             </p>
         </div>
