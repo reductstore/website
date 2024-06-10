@@ -14,20 +14,24 @@ async fn main() -> Result<(), ReductError> {
     // Prepare a batch of records
     let record_1 = RecordBuilder::new()
         .timestamp_us(1_000_000)
-        .data(Bytes::from("Records #1")).build();
+        .data(Bytes::from("Records #1"))
+        .build();
 
     let record_2 = RecordBuilder::new()
         .timestamp_us(2_000_000)
-        .data(Bytes::from("Records #2")).build();
+        .data(Bytes::from("Records #2"))
+        .build();
 
     // Send the batch of records to the "rs-example" entry
-    let errors = bucket.write_batch("rs-example")
+    let errors = bucket
+        .write_batch("rs-example")
         .add_records(vec![record_1, record_2])
-        .send().await?;
+        .send()
+        .await?;
 
     // Check if there are any errors and return first one
     for (_timestamp, error) in errors {
-        return Err(error)
+        return Err(error);
     }
 
     Ok(())

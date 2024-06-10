@@ -10,13 +10,12 @@ async fn main() -> Result<(), ReductError> {
         .build();
 
     // Create a token with read/write access to the bucket "example-bucket"
-    let permissions = Permissions{
+    let permissions = Permissions {
         full_access: false,
         read: vec![String::from("example-bucket")],
         write: vec![String::from("example-bucket")],
     };
-    let token = client
-        .create_token("new-token", permissions).await;
+    let token = client.create_token("new-token", permissions).await;
 
     println!("Generated token: {:?}", token);
     Ok(())
