@@ -1,4 +1,6 @@
 import React, {ReactNode} from 'react';
+import Link from '@docusaurus/Link';
+import {useActiveVersion} from "@docusaurus/plugin-content-docs/client";
 
 interface Props {
     children: ReactNode;
@@ -6,12 +8,14 @@ interface Props {
 
 export default function CreateBucketSection(props: Readonly<Props>): JSX.Element[] {
     const children = props.children;
+    const activeVersion = useActiveVersion('default');
     return (
         [
             <p>
                 ReductStore organizes data into buckets, each of which has its own quota and settings. It's a necessary
-                step to create a bucket before writing data to it. You can read more about buckets in the <b><a
-                href="/docs/guides/buckets.mdx">Buckets Guide</a></b>, but for now, let's just create one.
+                step to create a bucket before writing data to it. You can read more about buckets in the <b><Link
+                to={`${activeVersion.path}/guides/buckets`}>Buckets Guide</Link></b>, but for now, let's just create
+                one.
             </p>,
 
             <p> {children} </p>,

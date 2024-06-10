@@ -1,4 +1,6 @@
 import React, {ReactNode} from 'react';
+import Link from '@docusaurus/Link';
+import {useActiveVersion} from "@docusaurus/plugin-content-docs/client";
 
 interface Props {
     children: ReactNode;
@@ -6,6 +8,8 @@ interface Props {
 
 export default function DataQueryingSection(props: Readonly<Props>): JSX.Element {
     const children = props.children;
+    const activeVersion = useActiveVersion('default');
+
     return (
         <div>
             <p>
@@ -16,7 +20,7 @@ export default function DataQueryingSection(props: Readonly<Props>): JSX.Element
 
             <p>
                 The query method has many parameters for filtering and returning sample records. For more information
-                and examples, see the <b><a href="/docs/guides/data-querying.mdx">Data Querying Guide</a></b>.
+                and examples, see the <b><Link to={`${activeVersion.path}/guides/data-querying`}>Data Querying Guide</Link></b>.
             </p>
         </div>
     );

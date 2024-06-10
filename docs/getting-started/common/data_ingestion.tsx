@@ -1,4 +1,6 @@
 import React, {ReactNode} from 'react';
+import Link from '@docusaurus/Link';
+import {useActiveVersion} from "@docusaurus/plugin-content-docs/client";
 
 interface Props {
     children: ReactNode;
@@ -6,16 +8,17 @@ interface Props {
 
 export default function DataIngestionSection(props: Readonly<Props>): JSX.Element {
     const children = props.children;
+    const activeVersion = useActiveVersion('default');
     return (
         <div>
             <p>
                 Time series data is stored in entries within a bucket. An entry is a collection of records with unique
                 timestamps. It must have a unique name within the bucket and usually represents a data source,
                 such as <b>
-                <a href="src/pages/use-cases/vibration-sensors/index.tsx">a vibration sensor</a>
+                <Link to="/use-cases/vibration-sensors">a vibration sensor</Link>
             </b> or <b>
-                <a href="/blog/2024-02-16-3-ways-stora-data-for-computer-vision-applications/index.mdx">a CV
-                    camera</a>
+                <Link to="/blog/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications">a CV
+                    camera</Link>
             </b>.
             </p>
 
@@ -23,8 +26,8 @@ export default function DataIngestionSection(props: Readonly<Props>): JSX.Elemen
 
             <p>
                 This is the simplest case of writing data using the Python SDK. You can also write data in chunks and
-                annotate records with labels. You can find more information and examples in the <b><a
-                href="/docs/guides/data-ingestion.mdx">Data Ingestion Guide</a></b>.
+                annotate records with labels. You can find more information and examples in the <b><Link
+                to={`${activeVersion.path}/guides/data-ingestion`}>Data Ingestion Guide</Link></b>.
             </p>
         </div>
     );
