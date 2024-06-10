@@ -1,6 +1,37 @@
 {
     "docSidebar": [
-        "getting-started",
+        {
+            "type": "category",
+            "label": "\uD83D\uDE80 Getting Started",
+            "collapsed": false,
+            "collapsible": false,
+            "link": {
+              "type": "doc",
+              "id": "getting-started/index"
+            },
+            "items": [
+                {
+                    "type": "doc",
+                    "label": "With Python",
+                    "id": "getting-started/with-python"
+                },
+                {
+                    "type": "doc",
+                    "label": "With JavaScript",
+                    "id": "getting-started/with-javascript"
+                },
+                {
+                    "type": "doc",
+                    "label": "With Rust",
+                    "id": "getting-started/with-rust"
+                },
+                {
+                    "type": "doc",
+                    "label": "With C++",
+                    "id": "getting-started/with-cpp"
+                }
+            ]
+        },
         "configuration",
         "how-does-it-work",
         {

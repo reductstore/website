@@ -67,7 +67,7 @@ Here you will find examples of how to create, list, retrieve, update, and delete
 
 Pay attention that all the examples are written for a local ReductStore instance available at **`http://127.0.0.1:8383`** with API token `my-token`.
 
-For more information on setting up a local ReductStore instance, see the **[Getting Started](/docs/getting-started.mdx)** guide.
+For more information on setting up a local ReductStore instance, see the **[Getting Started](/docs/getting-started/index.mdx)** guide.
 
 ### Creating a Replication Task
 
@@ -88,13 +88,13 @@ However, you can manually replicate existing records using the **[Manual Data Re
 :::
 
 
-import CreateReplicaCli from "!!raw-loader!./examples/cli/data_replication_create.sh"
-import CreateReplicaPy from "!!raw-loader!./examples/py/src/data_replication_create.py"
-import CreateReplicaJs from "!!raw-loader!./examples/js/src/data_replication_create.mjs"
-import CreateReplicaRs from "!!raw-loader!./examples/rs/examples/data_replication_create.rs"
-import CreateReplicaCpp from "!!raw-loader!./examples/cpp/src/data_replication_create.cc"
-import CreateReplicaCurl from "!!raw-loader!./examples/curl/data_replication_create.sh"
-import CreateReplicaProvision from "!!raw-loader!./examples/provisioning/data_replication_create.yml"
+import CreateReplicaCli from "!!raw-loader!../examples/cli/data_replication_create.sh"
+import CreateReplicaPy from "!!raw-loader!../examples/py/src/data_replication_create.py"
+import CreateReplicaJs from "!!raw-loader!../examples/js/src/data_replication_create.mjs"
+import CreateReplicaRs from "!!raw-loader!../examples/rs/examples/data_replication_create.rs"
+import CreateReplicaCpp from "!!raw-loader!../examples/cpp/src/data_replication_create.cc"
+import CreateReplicaCurl from "!!raw-loader!../examples/curl/data_replication_create.sh"
+import CreateReplicaProvision from "!!raw-loader!../examples/provisioning/data_replication_create.yml"
 
 <Tabs>
     <TabItem value="CLI">
@@ -162,12 +162,12 @@ The detailed information includes status, current settings and statistics of the
 For the first hour, the `Number of Failed Records` and `Number of Replicated Records` are interpolated.
 :::
 
-import BrowseReplicaCLI from "!!raw-loader!./examples/cli/data_replication_browse.sh"
-import BrowseReplicaPy from "!!raw-loader!./examples/py/src/data_replication_browse.py"
-import BrowseReplicaJs from "!!raw-loader!./examples/js/src/data_replication_browse.mjs"
-import BrowseReplicaRs from "!!raw-loader!./examples/rs/examples/data_replication_browse.rs"
-import BrowseReplicaCpp from "!!raw-loader!./examples/cpp/src/data_replication_browse.cc"
-import BrowseReplicaCurl from "!!raw-loader!./examples/curl/data_replication_browse.sh"
+import BrowseReplicaCLI from "!!raw-loader!../examples/cli/data_replication_browse.sh"
+import BrowseReplicaPy from "!!raw-loader!../examples/py/src/data_replication_browse.py"
+import BrowseReplicaJs from "!!raw-loader!../examples/js/src/data_replication_browse.mjs"
+import BrowseReplicaRs from "!!raw-loader!../examples/rs/examples/data_replication_browse.rs"
+import BrowseReplicaCpp from "!!raw-loader!../examples/cpp/src/data_replication_browse.cc"
+import BrowseReplicaCurl from "!!raw-loader!../examples/curl/data_replication_browse.sh"
 
 
 <Tabs>
@@ -226,12 +226,12 @@ You can't remove a provisioned replication task. Before removing a provisioned r
 unset the corresponding environment variables and restart the ReductStore instance.
 :::
 
-import RemoveReplicaCli from "!!raw-loader!./examples/cli/data_replication_remove.sh"
-import RemoveReplicaPy from "!!raw-loader!./examples/py/src/data_replication_remove.py"
-import RemoveReplicaJs from "!!raw-loader!./examples/js/src/data_replication_remove.mjs"
-import RemoveReplicaRs from "!!raw-loader!./examples/rs/examples/data_replication_remove.rs"
-import RemoveReplicaCpp from "!!raw-loader!./examples/cpp/src/data_replication_remove.cc"
-import RemoveReplicaCurl from "!!raw-loader!./examples/curl/data_replication_remove.sh"
+import RemoveReplicaCli from "!!raw-loader!../examples/cli/data_replication_remove.sh"
+import RemoveReplicaPy from "!!raw-loader!../examples/py/src/data_replication_remove.py"
+import RemoveReplicaJs from "!!raw-loader!../examples/js/src/data_replication_remove.mjs"
+import RemoveReplicaRs from "!!raw-loader!../examples/rs/examples/data_replication_remove.rs"
+import RemoveReplicaCpp from "!!raw-loader!../examples/cpp/src/data_replication_remove.cc"
+import RemoveReplicaCurl from "!!raw-loader!../examples/curl/data_replication_remove.sh"
 
 <Tabs>
     <TabItem value="CLI">
@@ -285,7 +285,7 @@ import RemoveReplicaCurl from "!!raw-loader!./examples/curl/data_replication_rem
 You can also manually replicate data if you need to copy specific time periods or records from one bucket to another.
 To do this, you can use ReducerCLI's `cp` command. Here we'll copy all records from the `src-instance/example-bucket` to the `dst-instance/demo` bucket that have the `anomaly=true` label and do not have the `status=ok` label.
 
-import ManualReplica from "!!raw-loader!./examples/cli/data_replication_manual.sh"
+import ManualReplica from "!!raw-loader!../examples/cli/data_replication_manual.sh"
 
 <Tabs>
     <TabItem value="CLI">

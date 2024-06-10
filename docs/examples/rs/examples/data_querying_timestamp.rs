@@ -25,7 +25,9 @@ async fn main() -> Result<(), ReductError> {
     // Query record by timestamp
     let record = bucket
         .read_record("rs-example")
-        .timestamp(timestamp).send().await?;
+        .timestamp(timestamp)
+        .send()
+        .await?;
 
     println!("Timestamp: {:?}", record.timestamp());
     println!("Content Length: {}", record.content_length());
@@ -35,7 +37,6 @@ async fn main() -> Result<(), ReductError> {
     // Read the record data
     let data = record.bytes().await?;
     assert_eq!(data, Bytes::from("Some binary data"));
-
 
     Ok(())
 }
