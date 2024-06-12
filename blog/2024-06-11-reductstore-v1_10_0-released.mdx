@@ -26,6 +26,31 @@ The `each_n` parameter allows you to downsample data by taking every `n`-th reco
 
 The `each_s` parameter works similarly to `each_n`, but instead of taking every `n`-th record, it takes a record every `s` seconds. For example, if you set `each_s=10`, you will get a record every 10 seconds from the original data.
 
+Let's see a Python example of how you can use downsampling in a query:
+
+```python
+import time
+import asyncio
+from reduct import Client, Bucket
+
+
+async def main():
+    # Create a client instance, then get or create a bucket
+    client = Client("http://127.0.0.1:8383", api_token="my-token")
+    bucket: Bucket = await client.get_bucket("my-bucket")
+
+    # Query every 10-th record in the "vibration-sensor-1" entry of the bucket
+    async for record in bucket.query("vibration-sensor-1", start="2024-06-11T00:00:00Z", end="2024-06-11T01:00:00Z", each_n=10):
+        # Read the record content
+        content = await record.read_all()
+        print(content)
+
+
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
+```
+
 Why is it useful? You can use it when you need to download or replicate a large amount of data, but you don't need all the data points. Downsampling can help you reduce the amount of data you need to transfer and save disk space.
 You can also use it to save downsampled data for long-term storage while keeping the original data for short-term analysis. For example, if you have data from **[vibration sensors](/use-cases/vibration-sensors)**, you can replicate one record per hour to a long-term bucket to see drifts in the data over years.
 
