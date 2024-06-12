@@ -1,0 +1,76 @@
+---
+title: "Release v1.10.0: downsampling and optimization"
+description: ReductStore v1.10.0 introduces downsampling and optimization features that can help you improve query and replication performance.
+authors: alexey
+tags: [news]
+slug: news/reductstore-v1_10_0-released
+date: 2024-06-11
+---
+
+We are pleased to announce the release of the latest minor version of [**ReductStore**](https://www.reduct.store/), [**1.10.0**](https://github.com/reductstore/reductstore/releases/tag/v1.10.0). ReductStore is a time series database designed for storing and managing large amounts of blob data.
+
+To download the latest released version, please visit our [**Download Page**](https://www.reduct.store/download).
+
+## What's new in 1.10.0?
+
+ReductStore v1.10.0 introduces new query and replication parameters that can downsample data when querying or replicating to another database. In addition, we have optimized the operation of the storage and replication engines, which should improve the overall performance of the database.
+
+
+{/* truncate */}
+
+### Downsampling
+
+In this release, we have added new parameters `each_n` and `each_s` that can be used to downsample data when querying or replicating to another database.
+
+The `each_n` parameter allows you to downsample data by taking every `n`-th record. For example, if you set `each_n=2` in your query, you will get every second record from the original data.
+
+The `each_s` parameter works similarly to `each_n`, but instead of taking every `n`-th record, it takes a record every `s` seconds. For example, if you set `each_s=10`, you will get a record every 10 seconds from the original data.
+
+Let's see a Python example of how you can use downsampling in a query:
+
+```python
+import time
+import asyncio
+from reduct import Client, Bucket
+
+
+async def main():
+    # Create a client instance, then get or create a bucket
+    client = Client("http://127.0.0.1:8383", api_token="my-token")
+    bucket: Bucket = await client.get_bucket("my-bucket")
+
+    # Query every 10-th record in the "vibration-sensor-1" entry of the bucket
+    async for record in bucket.query("vibration-sensor-1", start="2024-06-11T00:00:00Z", end="2024-06-11T01:00:00Z", each_n=10):
+        # Read the record content
+        content = await record.read_all()
+        print(content)
+
+
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
+```
+
+Why is it useful? You can use it when you need to download or replicate a large amount of data, but you don't need all the data points. Downsampling can help you reduce the amount of data you need to transfer and save disk space.
+You can also use it to save downsampled data for long-term storage while keeping the original data for short-term analysis. For example, if you have data from **[vibration sensors](/use-cases/vibration-sensors)**, you can replicate one record per hour to a long-term bucket to see drifts in the data over years.
+
+### Ready for FUSE-based file systems
+
+We have optimized the storage engine so that you can use ReductStore very efficiently with FUSE-based file systems like [**Azure BlobFuse**](https://learn.microsoft.com/de-de/azure/storage/blobs/blobfuse2-what-is) or [**AWS S3FS**](https://github.com/s3fs-fuse/s3fs-fuse). It allows you to mount your cloud storage as a local file system and use it as a storage backend for ReductStore. Such an approach can be useful if you need to store a large amount of data in the cloud, but don't want to pay for expensive cloud storage solutions.
+
+### Optimized Replication
+
+Starting with this release, the replication engine will batch records before sending them to a remote bucket. This approach can significantly reduce the number of HTTP requests when replicating a large amount of data. This can be useful when you need to replicate data from one ReductStore instance to another over a slow network connection.
+
+----------------
+
+All the official client SDKs have been updated to support the new downsampling and batch replication features. You can find the updated SDKs on our [**GitHub page**](https://github.com/reductstore).
+
+:::warning
+Please update your client SDKs to the latest version when upgrading your ReductStore instance to version 1.10.0, the old SDKs versions check the server API version incorrectly and may cause errors.
+:::
+
+
+I hope you find this release useful. If you have any questions or feedback, don’t hesitate to reach out in [**Discord**](https://discord.com/invite/8wPtPGJYsn) or by opening a discussion on [**GitHub**](https://github.com/reductstore/reductstore/discussions).
+
+Thanks for using [**ReductStore**](https://www.reduct.store/)!
