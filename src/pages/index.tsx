@@ -15,8 +15,6 @@ import HomepageWebConsole from "../components/HomepageWebConsole";
 import HomepageCLI from "../components/HomepageCLI";
 import PerformanceComparison from "../components/PerformanceComparison";
 
-const LogoImg = require("@site/static/img/logo.webp").default;
-
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
