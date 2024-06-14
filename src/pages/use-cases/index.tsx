@@ -25,41 +25,49 @@ const useCases = [
   {
     title: "High Frequency Vibration Data Storage",
     description: "Learn how to store and manage high-frequency vibration data.",
-    link: "/use-cases/vibration-sensors"
+    link: "/use-cases/vibration-sensors",
+    image: require("@site/static/img/vibration-sensors/reduction-strategy.webp").default,
   },
   {
     title: "AI Infrastructure",
     description: "Learn how to store and manage data for AI workflows.",
-    link: "/use-cases/ai-workflows"
+    link: "/use-cases/ai-workflows",
+    image: require("@site/static/img/ai-workflows/data-replication-with-label-filtering.webp").default,
   },
   {
     title: "Computer Vision Applications",
     description: "Learn how to store data for computer vision applications.",
-    link: "/blog/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications"
+    link: "/blog/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications",
+    image: require("@site/static/img/ai-workflows/ai-labels-and-metadata-for-every-record.webp").default,
   },
   {
     title: "MQTT Data Storage",
     description: "Learn how to store and manage MQTT data.",
-    link: "/blog/advice/database/mqtt-data-storage"
+    link: "/blog/advice/database/mqtt-data-storage",
+    image: require("@site/static/img/ai-workflows/ai-labels-and-metadata-for-every-record.webp").default,
   },
   {
     title: "Robot Operating System (ROS)",
     description: "Learn how to store and manage image data for ROS-based computer vision applications.",
-    link: "/blog/tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision"
+    link: "/blog/tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision",
+    image: require("@site/static/img/ai-workflows/ai-labels-and-metadata-for-every-record.webp").default,
   },
   {
     title: "Kafka Data Sink",
     description: "Learn how to implement a Kafka data sink.",
-    link: "/blog/tutorial/datastreaming/kafka/data-sink-guide"
+    link: "/blog/tutorial/datastreaming/kafka/data-sink-guide",
+    image: require("@site/static/img/ai-workflows/ai-labels-and-metadata-for-every-record.webp").default,
   },
   {
     title: "Anomaly Detection",
     description: "Learn how to implement an open-source AI anomaly detection system.",
-    link: "/blog/computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection"
+    link: "/blog/computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection",
+    image: require("@site/static/img/ai-workflows/ai-labels-and-metadata-for-every-record.webp").default,
   },
   {
     title: "Pytorch Data Streaming",
     description: "Learn how to implement database data streaming with Pytorch.",
-    link: "/blog/ai/datastreaming/pytorch/implement-database-data-streaming-pytorch"
+    link: "/blog/ai/datastreaming/pytorch/implement-database-data-streaming-pytorch",
+    image: require("@site/static/img/ai-workflows/ai-labels-and-metadata-for-every-record.webp").default,
   }
 ];

@@ -15,3 +15,12 @@
   gap: 60px;
   margin-bottom: 50px;
 }
+
+.buttonContainer{
+  display: flex;
+  justify-content: center;
+}
+
+.buttonContainer a{
+  width: 300px;
+}
