@@ -26,7 +26,7 @@ function HomepageHeader() {
           {siteConfig.tagline}
         </h1>
         <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
-          Outperform TimescaleDB, MongoDB, and MinIO with a tailored solution for time-series object data. Why not try it for free today?
+          Keep history of images, vibration data, text, everything in one place
         </p>
         <div className={styles.buttons}>
           <Link
