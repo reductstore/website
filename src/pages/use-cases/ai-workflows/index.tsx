@@ -9,15 +9,13 @@ import FreePoCBanner from "@site/src/components/FreePoCBanner";
 import FreePoCForm from "@site/src/components/FreePoCForm";
 
 export default function UseCaseAI(): JSX.Element {
-  const targetDate = new Date('2024-06-30T23:59:59Z')
-  const startDate = new Date('2024-05-01T00:00:00Z')
 
   return (
     <Layout
       title="Optimize Your AI Workflows"
       description="Learn how ReductStore can improve the performance of your projects with an optimal infrastructure."
     >
-      <FreePoCBanner targetDate={targetDate} startDate={startDate} elementId="free-poc-form" />
+      <FreePoCBanner elementId="free-poc-form" />
       <main>
         <SimpleHeader
           pageTitle="Optimize Your AI Workflows"
@@ -36,7 +34,7 @@ export default function UseCaseAI(): JSX.Element {
             ))}
           </>
           <div className={styles.form}>
-            <FreePoCForm targetDate={targetDate} startDate={startDate} elementId="free-poc-form" />
+            <FreePoCForm elementId="free-poc-form" />
           </div>
           <div className={styles.faqs}>
             <Faq faqs={useCasesFaqs} defaultOpenCount={3} />
