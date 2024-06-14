@@ -6,19 +6,20 @@ import clsx from "clsx";
 import CountdownTimer from '../CountdownTimer';
 
 interface FreePoCFormProps {
-  targetDate: Date;
-  startDate: Date;
   elementId: string;
+  targetDate?: Date;
+  startDate?: Date;
 }
 
-const FreePoCForm = ({ targetDate, startDate, elementId }: FreePoCFormProps) => {
+const FreePoCForm = ({ elementId, targetDate, startDate }: FreePoCFormProps) => {
   const [state, handleSubmit] = useForm('myyraooa');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
 
   if (state.succeeded) {
     return (
-      <div className="alert alert--success">
+
+      <div className={clsx(styles.form, "alert alert--success")}>
         <h2>Thank You!</h2>
         <p>We've received your request for a free PoC integration for your project. A member of our team will get back to you soon.</p>
       </div>
@@ -28,9 +29,11 @@ const FreePoCForm = ({ targetDate, startDate, elementId }: FreePoCFormProps) => 
   return (
     <form id={elementId} className={styles.form} onSubmit={handleSubmit}>
       <h2>Free PoC Integration for your Project</h2>
-      <div className={styles.countdown}>
-        <CountdownTimer targetDate={targetDate} startDate={startDate} size={45} />
-      </div>
+      {targetDate && startDate &&
+        <div className={styles.countdown}>
+          <CountdownTimer targetDate={targetDate} startDate={startDate} size={45} />
+        </div>
+      }
       <p>
         Our team will reach out to you and we will create a custom software integration for your project.
       </p>

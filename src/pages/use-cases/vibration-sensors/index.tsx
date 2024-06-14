@@ -9,15 +9,12 @@ import FreePoCBanner from "@site/src/components/FreePoCBanner";
 import FreePoCForm from "@site/src/components/FreePoCForm";
 
 export default function UseCaseVibrationSensors(): JSX.Element {
-  const targetDate = new Date('2024-06-30T23:59:59Z')
-  const startDate = new Date('2024-05-01T00:00:00Z')
-
   return (
     <Layout
       title="High Frequency Vibration Data Storage"
       description="Optimize your vibration sensor data storage and management with ReductStore."
     >
-      <FreePoCBanner targetDate={targetDate} startDate={startDate} elementId="free-poc-form" />
+      <FreePoCBanner elementId="free-poc-form" />
       <main>
         <SimpleHeader
           pageTitle="High Frequency Vibration Data Storage"
@@ -36,7 +33,7 @@ export default function UseCaseVibrationSensors(): JSX.Element {
             ))}
           </>
           <div className={styles.form}>
-            <FreePoCForm targetDate={targetDate} startDate={startDate} elementId="free-poc-form" />
+            <FreePoCForm elementId="free-poc-form" />
           </div>
           <div className={styles.faqs}>
             <Faq faqs={useCasesFaqs} defaultOpenCount={3} />

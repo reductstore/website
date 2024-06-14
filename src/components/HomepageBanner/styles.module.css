@@ -1,0 +1,30 @@
+.banner {
+  background-color: var(--reduct-background-gray-light);
+  width: 100%;
+  padding: 25px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bannerText {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  align-items: center;
+  font-size: 18px;
+}
+
+.bannerText a {
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .bannerText {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
