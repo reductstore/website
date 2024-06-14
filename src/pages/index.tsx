@@ -14,6 +14,7 @@ import HomepageSDKs from "../components/HomepageSDKs";
 import HomepageWebConsole from "../components/HomepageWebConsole";
 import HomepageCLI from "../components/HomepageCLI";
 import PerformanceComparison from "../components/PerformanceComparison";
+import HomepageUseCase from "../components/HomepageUseCase";
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -77,6 +78,8 @@ export default function Home(): JSX.Element {
           <HomepageWebConsole />
           <hr />
           <HomepageCLI />
+          <hr />
+          <HomepageUseCase />
           <hr />
           <HomepageFaqs />
         </div>
