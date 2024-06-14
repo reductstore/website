@@ -4,12 +4,10 @@ import styles from './styles.module.css';
 import Link from '@docusaurus/Link';
 
 interface FreePoCBannerProps {
-  targetDate: Date;
-  startDate: Date;
   elementId: string;
 }
 
-const FreePoCBanner = ({ targetDate, startDate, elementId }: FreePoCBannerProps) => {
+const FreePoCBanner = ({ elementId }: FreePoCBannerProps) => {
   const [isFormPresent, setIsFormPresent] = useState(false);
 
   useEffect(() => {
