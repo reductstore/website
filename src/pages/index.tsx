@@ -14,7 +14,7 @@ import HomepageSDKs from "../components/HomepageSDKs";
 import HomepageWebConsole from "../components/HomepageWebConsole";
 import HomepageCLI from "../components/HomepageCLI";
 import PerformanceComparison from "../components/PerformanceComparison";
-import HomepageUseCase from "../components/HomepageUseCase";
+import HomepageUseCase from "../components/HomepageBenefits copy";
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();

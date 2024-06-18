@@ -85,7 +85,7 @@ const useCases = [
         This enables continuous monitoring and historical analysis, which is critical for applications such as predictive maintenance and anomaly detection.
       </p>
     ),
-    illustration: require("@site/static/img/vibration-sensors/fifo-quota.webp").default,
+    illustration: require("@site/static/img/vibration-sensors/real-time-fifo-quota.webp").default,
     isImageLeft: false
   },
   {
