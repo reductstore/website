@@ -9,7 +9,7 @@ const PromotionalBanner = () => {
     <div className="alert alert--warning margin-bottom--lg">
       <div className="container">
         <div >
-          <h3>Limited-Time Offer: 80% Off + Free PoC!</h3>
+          <h3>Limited Offer for Early Adopters: Get 80% Off + Free PoC!</h3>
           <p>
             We are opening up just a few more seats for the <b>next 5 early adopters</b> who need our solution with the code <code>EARLYADOPTER80</code>.
           </p>
