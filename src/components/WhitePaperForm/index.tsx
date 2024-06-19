@@ -35,7 +35,7 @@ export default function WhitePaperForm() {
 
   return (
     <>
-      <form className={styles.whitePaperForm} onSubmit={handleSubmit}>
+      <form id="whitepaper-form" className={styles.whitePaperForm} onSubmit={handleSubmit}>
         <div className={styles.inputGroup}>
           <label htmlFor="InputNameWhitePaper">Your Name</label>
           <input
