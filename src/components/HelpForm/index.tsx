@@ -62,7 +62,7 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
   }
 
   return (
-    <form className={styles.helpForm} onSubmit={handleSubmit}>
+    <form id="contact-us-form" className={styles.helpForm} onSubmit={handleSubmit}>
 
       <div className={styles.inputGroup}>
         <label htmlFor="name">Your Name</label>
