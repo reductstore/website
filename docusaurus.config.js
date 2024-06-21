@@ -273,29 +273,11 @@ const config = {
         style: "dark",
         links: [
           {
-            title: "Contact Us",
+            title: `Copyright © ${new Date().getFullYear()} ReductSoftware UG`,
             items: [
               {
-                label:
-                  "ReductStore LLC, 1207 Delaware Ave #2535 Wilmington DE 19806",
-                to: "/contact",
-              },
-              {
-                label: "info@reduct.store",
-                to: "mailto:info@reduct.store",
-              },
-            ],
-          },
-          {
-            title: "Links",
-            items: [
-              {
-                label: "Getting Started",
-                to: "/docs/getting-started",
-              },
-              {
-                label: "Blog",
-                to: "/blog",
+                label: "Imprint",
+                to: "/imprint",
               },
               {
                 label: "Privacy Policy",
@@ -304,7 +286,24 @@ const config = {
               {
                 label: "Terms And Conditions",
                 to: "/terms",
+              }
+            ],
+          },
+          {
+            title: "Links",
+            items: [
+              {
+                label: "Docs",
+                to: "/docs/getting-started",
               },
+              {
+                label: "Blog",
+                to: "/blog",
+              },
+              {
+                label: "Pricing",
+                to: "/pricing",
+              }
             ],
           },
           {
@@ -329,7 +328,6 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} ReductStore LLC`,
       },
       prism: {
         theme: prismThemes.github,
