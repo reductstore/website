@@ -32,7 +32,7 @@ const useCases = [
     title: "AI Infrastructure",
     description: "Learn how to store and manage data for AI workflows.",
     link: "/use-cases/ai-workflows",
-    image: require("@site/static/img/use-cases/ai-workflows/data-replication-with-label-filtering.webp").default,
+    image: require("@site/static/img/use-cases/ai-workflows/ai-labels-and-metadata-for-every-record.webp").default,
   },
   {
     title: "Computer Vision Applications",
