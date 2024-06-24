@@ -59,7 +59,7 @@ const useCases = [
 
       </p>
     ),
-    illustration: require("@site/static/img/ai-workflows/the-fastest-object-store.webp").default,
+    illustration: require("@site/static/img/use-cases/ai-workflows/the-fastest-object-store.webp").default,
     isImageLeft: false
   },
   {
@@ -71,7 +71,7 @@ const useCases = [
         As a result, AI models benefit from streamlined access to historical and real-time data for analysis and prediction.
       </p>
     ),
-    illustration: require("@site/static/img/ai-workflows/time-series-database-for-unstructured-data.webp").default,
+    illustration: require("@site/static/img/use-cases/ai-workflows/time-series-database-for-unstructured-data.webp").default,
     isImageLeft: true
   },
   {
@@ -84,7 +84,7 @@ const useCases = [
         What's more, AI models can be stored in the same storage, enabling developers and data scientists to systematically track model iterations, ensuring integrity and reproducibility across AI workflows.
       </p>
     ),
-    illustration: require("@site/static/img/ai-workflows/store-records-and-ai-models.webp").default,
+    illustration: require("@site/static/img/use-cases/ai-workflows/store-records-and-ai-models.webp").default,
     isImageLeft: false
   },
   {
@@ -97,7 +97,7 @@ const useCases = [
         In addition, by embedding AI-generated metadata directly into the storage layer, ReductStore simplifies the data pipeline architecture and improves overall operational efficiency.
       </p>
     ),
-    illustration: require("@site/static/img/ai-workflows/ai-labels-and-metadata-for-every-record.webp").default,
+    illustration: require("@site/static/img/use-cases/ai-workflows/ai-labels-and-metadata-for-every-record.webp").default,
     isImageLeft: true
   },
   {
@@ -110,7 +110,7 @@ const useCases = [
         As a result, this selective approach reduces unnecessary costs associated with storage and network traffic, and ensures that replicated environments remain up to date with all relevant operational data while excluding irrelevant information.
       </p>
     ),
-    illustration: require("@site/static/img/ai-workflows/data-replication-with-label-filtering.webp").default,
+    illustration: require("@site/static/img/use-cases/ai-workflows/data-replication-with-label-filtering.webp").default,
     isImageLeft: false
   },
   {
@@ -123,7 +123,7 @@ const useCases = [
         It also simplifies management requirements by maintaining an automated retention policy based on actual usage rather than arbitrary timeframes, optimizing both storage utilization and system robustness.
       </p>
     ),
-    illustration: require("@site/static/img/ai-workflows/real-time-fifo-quota.webp").default,
+    illustration: require("@site/static/img/use-cases/ai-workflows/real-time-fifo-quota.webp").default,
     isImageLeft: true
   },
 ];
