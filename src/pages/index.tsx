@@ -8,13 +8,13 @@ import HomepageFeatures from "../components/HomepageFeatures";
 import styles from "./index.module.css";
 import HomepageTestimonials from "../components/HomepageTestimonials";
 import HomepageCTA from "../components/HomepageCTA";
-import HomepageBenefits from "../components/HomepageBenefits";
 import HomepageFaqs from "../components/HomepageFaqs";
 import HomepageSDKs from "../components/HomepageSDKs";
 import HomepageWebConsole from "../components/HomepageWebConsole";
 import HomepageCLI from "../components/HomepageCLI";
 import PerformanceComparison from "../components/PerformanceComparison";
-import HomepageUseCase from "../components/HomepageBenefits copy";
+import HomepageBenefits from "../components/HomepageBenefits";
+import HomepageUseCase from "../components/HomepageUseCase";
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
