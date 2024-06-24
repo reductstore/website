@@ -37,18 +37,6 @@ const useCases = [
     title: "Computer Vision Applications",
     description: "Learn how to store data for computer vision applications.",
     link: "/blog/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications",
-    image: require("@site/static/img/use-cases/ai-workflows/ai-labels-and-metadata-for-every-record.webp").default,
-  },
-  {
-    title: "MQTT Data Storage",
-    description: "Learn how to store and manage MQTT data.",
-    link: "/blog/advice/database/mqtt-data-storage",
-    image: require("@site/static/img/use-cases/ai-workflows/ai-labels-and-metadata-for-every-record.webp").default,
-  },
-  {
-    title: "Robot Operating System (ROS)",
-    description: "Learn how to store and manage image data for ROS-based computer vision applications.",
-    link: "/blog/tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision",
-    image: require("@site/static/img/use-cases/ai-workflows/ai-labels-and-metadata-for-every-record.webp").default,
+    image: require("@site/static/img/use-cases/computer-vision.webp").default,
   },
 ];
