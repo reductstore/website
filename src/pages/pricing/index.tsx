@@ -4,10 +4,10 @@ import PricingTable from "@site/src/components/PricingTable";
 import SimpleHeader from "@site/src/components/SimpleHeader";
 import Faq from "@site/src/components/Faq";
 import PromotionalBanner from "@site/src/components/PromotionalBanner";
+import FreePoCForm from "@site/src/components/FreePoCForm";
+import styles from './styles.module.css';
 
 export default function Pricing(): JSX.Element {
-  const targetDate = new Date('2024-06-30T23:59:59Z');
-  const startDate = new Date('2024-05-01T00:00:00Z');
   return (
     <Layout
       title="Pricing: Tailored for Every Scale"
@@ -23,10 +23,13 @@ export default function Pricing(): JSX.Element {
             For larger organizations, our licensed editions offer dedicated support and long-term release support, with storage- or device-based pricing.
             This customized approach ensures that you only pay for what you need, with the ability to contribute to the code base and scale as your business grows.
           </p>
-          <PromotionalBanner targetDate={targetDate} startDate={startDate} />
+          <PromotionalBanner />
           <PricingTable />
         </div>
         <br />
+        <div className={styles.form}>
+          <FreePoCForm elementId="free-poc-form" />
+        </div>
         <SimpleHeader pageTitle="Frequently Asked Questions" pageTitleAs="h2" />
         <div className="container">
           <Faq faqs={pricingFaqs} defaultOpenCount={3} />

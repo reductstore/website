@@ -63,6 +63,7 @@ export default function Home(): JSX.Element {
       description="ReductStore is a time series database designed specifically for storing and managing large amounts of unstructured data. 
       It offers high performance for writing and real-time querying, making it suitable for edge computing, computer vision, and IoT applications."
     >
+      <HomepageBanner to="/pricing" text="Limited-Time Offer: 80% Off + Free PoC!" />
       <HomepageHeader />
       <main>
         <div className="container">

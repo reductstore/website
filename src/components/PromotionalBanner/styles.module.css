@@ -3,3 +3,18 @@
   justify-content: flex-start;
   margin-top: 20px;
 }
+
+.benefitsList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.benefitsList li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+.benefitsList li svg {
+  margin-right: 0.5em;
+}
