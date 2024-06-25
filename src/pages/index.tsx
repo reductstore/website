@@ -3,18 +3,18 @@ import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
+import PerformanceComparison from "../components/PerformanceComparison";
 import HomepageFeatures from "../components/HomepageFeatures";
-
-import styles from "./index.module.css";
 import HomepageTestimonials from "../components/HomepageTestimonials";
 import HomepageCTA from "../components/HomepageCTA";
 import HomepageFaqs from "../components/HomepageFaqs";
 import HomepageSDKs from "../components/HomepageSDKs";
 import HomepageWebConsole from "../components/HomepageWebConsole";
 import HomepageCLI from "../components/HomepageCLI";
-import PerformanceComparison from "../components/PerformanceComparison";
 import HomepageBenefits from "../components/HomepageBenefits";
 import HomepageUseCase from "../components/HomepageUseCase";
+import HomepageBanner from "../components/HomepageBanner";
+import styles from "./index.module.css";
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
