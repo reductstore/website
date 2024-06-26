@@ -57,7 +57,6 @@ const config = {
           sidebarPath: require.resolve("./sidebars.json"),
           editUrl: "https://github.com/reductstore/docs/tree/main",
           remarkPlugins: [codeImport],
-
         },
         blog: {
           blogTitle: "Blog | Time-Series Object Store for Edge Computing",
@@ -187,10 +186,6 @@ const config = {
                 to: "/use-cases/ai-workflows",
               },
               {
-                label: "Edge Computing",
-                to: "/blog/edge-computing/data-reduction-on-edge",
-              },
-              {
                 label: "Computer Vision",
                 to: "/blog/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications",
               },
@@ -203,16 +198,8 @@ const config = {
                 to: "/blog/tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision",
               },
               {
-                label: "Data Streaming (Kafka)",
-                to: "/blog/tutorial/datastreaming/kafka/data-sink-guide",
-              },
-              {
-                label: "Anomaly Detection (AI)",
-                to: "/blog/computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection",
-              },
-              {
-                label: "Deep Learning (Pytorch)",
-                to: "/blog/ai/datastreaming/pytorch/implement-database-data-streaming-pytorch",
+                label: "Explore More",
+                to: "/use-cases",
               },
             ],
           },
