@@ -3,20 +3,18 @@ import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
+import PerformanceComparison from "../components/PerformanceComparison";
 import HomepageFeatures from "../components/HomepageFeatures";
-
-import styles from "./index.module.css";
 import HomepageTestimonials from "../components/HomepageTestimonials";
 import HomepageCTA from "../components/HomepageCTA";
-import HomepageBenefits from "../components/HomepageBenefits";
 import HomepageFaqs from "../components/HomepageFaqs";
 import HomepageSDKs from "../components/HomepageSDKs";
 import HomepageWebConsole from "../components/HomepageWebConsole";
 import HomepageCLI from "../components/HomepageCLI";
-import PerformanceComparison from "../components/PerformanceComparison";
+import HomepageBenefits from "../components/HomepageBenefits";
+import HomepageUseCase from "../components/HomepageUseCase";
 import HomepageBanner from "../components/HomepageBanner";
-
-const LogoImg = require("@site/static/img/logo.webp").default;
+import styles from "./index.module.css";
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -28,7 +26,7 @@ function HomepageHeader() {
           {siteConfig.tagline}
         </h1>
         <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
-          Outperform TimescaleDB, MongoDB, and MinIO with a tailored solution for time-series object data. Why not try it for free today?
+          Keep history of images, vibration data, text, everything in one place
         </p>
         <div className={styles.buttons}>
           <Link
@@ -81,6 +79,8 @@ export default function Home(): JSX.Element {
           <HomepageWebConsole />
           <hr />
           <HomepageCLI />
+          <hr />
+          <HomepageUseCase />
           <hr />
           <HomepageFaqs />
         </div>
