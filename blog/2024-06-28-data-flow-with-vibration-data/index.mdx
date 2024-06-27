@@ -5,13 +5,10 @@ authors: anthony
 tags: [database, vibration sensor]
 slug: how-to-store-vibration-sensor-data
 date: 2024-06-28
-image: ./img/social-card.jpg
+image: ./img/vibration_data_flow_intro.jpg
 ---
 
-**TODO**: blog image
-
-{/* ![Photo by Jan Antonin Kolar](./img/jan-antonin-kolar.webp)
-<small>Photo by <a href="https://unsplash.com/ja/@jankolar?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noopener noreferrer">Jan Antonin Kolar</a> on <a href="https://unsplash.com/photos/lRoX0shwjUQ?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noopener noreferrer">Unsplash</a></small> */}
+![Vibration Data Flow Intro](./img/vibration_data_flow_intro.webp)
 
 Efficient and effective storage of vibration data is important to a wide range of industries, particularly where accurate and complex predictive maintenance or optimization is required.
 
@@ -45,7 +42,7 @@ The main advantage of pre-processing metrics is that it significantly reduces st
 
 For example, a signal can be divided into 1 second chunks and the result would be a new signal value at 1Hz that summarizes the content of each chunk.
 
-**TODO**: picture showing signal in chunks
+![Signal in Chunks](./img/signal_chunks.webp)
 
 The typical metrics include:
 
@@ -60,9 +57,9 @@ This approach also saves time during data analysis... Pre-processing data into t
 ### Advantages of Storing Raw Data
 Storing raw data in the context of vibration monitoring offers significant advantages. Raw sensor output stored as a blob captures the full fidelity of the original signal, allowing extensive post-processing and re-analysis using different algorithms or filters.
 
-This flexibility is essential for developing new diagnostic tools or improving existing ones without the need for repeated data acquisition. For example, raw data can be used to perform detailed frequency analysis using FFT, detect spikes using time domain analysis, identify signal variations using wavelet transform, find faults in rotating equipment using envelope analysis, and understand structural vibrations using modal analysis.
+This flexibility is essential for developing new diagnostic tools or improving existing ones without the need for repeated data acquisition. For example, raw data can be used to perform detailed frequency analysis using FFT (see example below), detect spikes using time domain analysis, identify signal variations using wavelet transform, find faults in rotating equipment using envelope analysis, and understand structural vibrations using modal analysis.
 
-**TODO**: Example of an FFT image
+![FFT Image Example](./img/fft_example.webp)
 
 Raw data retention also ensures compliance with industry standards that require traceable and verifiable records for audit purposes.
 
@@ -75,7 +72,7 @@ A time series object store and a traditional time series database can serve simi
 ### Data Flow With a Time Series Object Store
 With a time series object store, each chunk of vibration data is stored as a binary object with a timestamp along with metadata such as preprocess metrics that can be useful for filtering and replication (more on that later).
 
-**TODO**: schema of data flow
+![Data Flow Schema](./img/vibration_data_flow.webp)
 
 This method allows efficient management of large vibration datasets by providing fast access to specific time periods. In fact, [**ReductStore outperforms TimescaleDB for blobs 100KB and larger**](<https://www.reduct.store/blog/comparisons/iot/reductstore-vs-timescaledb>) using this method, with improvements ranging from 205% to 1300%.
 
@@ -91,14 +88,14 @@ A real-time FIFO (first-in, first-out) quota prevents disk space shortages in re
 
 Time-based retention can lead to data loss during downtime. For example, if a system retains data for seven days and goes offline over the weekend, it might only capture five days of data before starting to overwrite. Additionally, if the device is offline for a long time, it could delete all existing data once restarted, losing important information.
 
-**TODO**: image of a typical weekend problem
+![Typical Weekend Problem](./img/typical_weekend_problem.webp)
 
 By configuring a volume-based retention policy, you can ensure that all hours of operation are captured without interruption due to downtime or storage limitations.
 
 ### Data Replication Based on Pre-processed Metrics
 By preprocessing vibration data to extract key metrics such as peak amplitude, frequency content, and RMS values, the system can prioritize these summarized metrics for replication.
 
-**TODO**: replication image
+![Data Replication Schema](./img/data_replication.webp)
 
 This approach ensures that critical diagnostic information is preserved even if the raw data must be dropped due to storage constraints.
 
