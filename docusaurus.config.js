@@ -4,6 +4,8 @@
 import { themes as prismThemes } from "prism-react-renderer";
 import codeImport from "remark-code-snippets";
 import "dotenv/config";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -48,6 +50,17 @@ const config = {
     require.resolve("./src/plugins/docusaurus-plugin-crisp"),
   ],
 
+  // LaTex support
+  stylesheets: [
+    {
+      href: "https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css",
+      type: "text/css",
+      integrity:
+        "sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM",
+      crossorigin: "anonymous",
+    },
+  ],
+
   presets: [
     [
       "classic",
@@ -57,7 +70,6 @@ const config = {
           sidebarPath: require.resolve("./sidebars.json"),
           editUrl: "https://github.com/reductstore/docs/tree/main",
           remarkPlugins: [codeImport],
-
         },
         blog: {
           blogTitle: "Blog | Time-Series Object Store for Edge Computing",
@@ -67,6 +79,8 @@ const config = {
           blogSidebarCount: 5,
           showReadingTime: true,
           editUrl: "https://github.com/reductstore/docs/tree/main",
+          remarkPlugins: [remarkMath],
+          rehypePlugins: [rehypeKatex],
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
