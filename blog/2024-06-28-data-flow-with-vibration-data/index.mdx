@@ -21,10 +21,10 @@ We'll also cover strategies for eliminating data loss through volume-based reten
 - [**Store Both Raw and Pre-Processed Metrics**](#store-both-raw-and-pre-processed-metrics)
   - [**Benefits of Pre-Processing Before Storage**](#benefits-of-pre-processing-before-storage)
   - [**Advantages of Storing Raw Data**](#advantages-of-storing-raw-data)
-- [**Time Series Databases**](#time-series-databases)
+- [**Use Time Series Databases**](#use-time-series-databases)
   - [**Time Series Object Store vs. Traditional Time Series Database**](#time-series-object-store-vs-traditional-time-series-database)
-  - [**Data Flow With a Time Series Object Store**](#data-flow-with-a-time-series-object-store)
-- [**Eliminate Data Loss**](#eliminate-data-loss)
+  - [**Vibration Data in Time Series Object Store**](#vibration-data-in-time-series-object-store)
+- [**Adopt Efficient Data Retention and Replication Strategies**](#adopt-efficient-data-retention-and-replication-strategies)
   - [**Volume-Based Retention Policy**](#volume-based-retention-policy)
   - [**Data Replication Based on Pre-processed Metrics**](#data-replication-based-on-pre-processed-metrics)
 - [**Conclusion**](#conclusion)
@@ -74,20 +74,20 @@ This flexibility is essential for developing new diagnostic tools or improving e
 In this example, the Fast Fourier Transform (FFT) is calculated to identify the frequency content of the signal. 
 This information can be used to identify the dominant frequencies in the signal, which in turn can be an indication of rotating equipment faults such as unbalance, misalignment or bearing failure.
 
-## Time Series Databases
+## Use Time Series Databases
 Time Series Databases (TSDBs) are specialised data storage systems optimised for handling time-indexed data. They excel at managing large volumes of sequentially generated data points, such as vibration measurements, by providing efficient write and read operations.
 
 ### Time Series Object Store vs. Traditional Time Series Database
 A time series object store and a traditional time series database can serve similar purposes, but have distinct architectural differences. While a traditional TSDB is optimised for high-speed ingestion and retrieval of scalar data points, an object store is designed to handle complex, high-dimensional data objects and their metadata. This makes the object store more versatile for applications that require rich contextual information, such as vibration analysis that includes waveform data and diagnostic logs.
 
-### Data Flow With a Time Series Object Store
+### Vibration Data in Time Series Object Store
 With a time series object store, each chunk of vibration data is stored as a binary object with a timestamp along with metadata such as preprocess metrics that can be useful for filtering and replication (more on that later).
 
 ![Data Flow Schema](./img/vibration_data_flow.webp)
 
 This method allows efficient management of large vibration datasets by providing fast access to specific time periods. In fact, [**ReductStore outperforms TimescaleDB for blobs ranging from 100KB and larger**](<https://www.reduct.store/blog/comparisons/iot/reductstore-vs-timescaledb>) using this method, with improvements ranging from 205% to 1300%.
 
-## Eliminate Data Loss
+## Adopt Efficient Data Retention and Replication Strategies
 By storing raw sensor data locally, we minimize latency and retain critical information for immediate diagnosis.
 
 However, local storage can quickly fill up at the edge, leading to potential disk bottlenecks. To prevent this, we need to periodically eliminate data. However, this data may be critical for further analysis or diagnosis.
