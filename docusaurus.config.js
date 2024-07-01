@@ -133,9 +133,9 @@ const config = {
 
       // Stripe integration
       paymentLinks: {
-        standard: "https://buy.stripe.com/4gwdTF9un87r1uo6oq",
-        premium: "https://buy.stripe.com/3csaHtgWP0EZ7SM003",
-        iot: "https://buy.stripe.com/4gw02P6ib2N71uo6os",
+        standard: "https://buy.stripe.com/14k7teamx1fogykeUW",
+        premium: "https://buy.stripe.com/bIYcNyfGR1foci48wx",
+        iot: "https://buy.stripe.com/cN2cNy3Y93nwci4bII"
       },
 
       // Declare some <meta> tags
