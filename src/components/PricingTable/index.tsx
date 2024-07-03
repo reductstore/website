@@ -51,8 +51,8 @@ export default function PricingTable() {
         <PricingPlan
           title="Standard"
           subtitle="For small scale enterprises"
-          price={`$${getPromotionalPrice(promotion.originalPrices.standard)}`}
-          originalPrice={`$${promotion.originalPrices.standard}`}
+          price={`€${getPromotionalPrice(promotion.originalPrices.standard)}`}
+          originalPrice={`€${promotion.originalPrices.standard}`}
           priceUnit="/ TB / year"
           description="For commercial production use in non-critical applications."
           categories={[
@@ -67,8 +67,8 @@ export default function PricingTable() {
         <PricingPlan
           title="Premium"
           subtitle="For critical applications"
-          price={`$${getPromotionalPrice(promotion.originalPrices.premium)}`}
-          originalPrice={`$${promotion.originalPrices.premium}`}
+          price={`€${getPromotionalPrice(promotion.originalPrices.premium)}`}
+          originalPrice={`€${promotion.originalPrices.premium}`}
           priceUnit="/ TB / year"
           description="For commercial production use in critical applications with minimum 5TB storage capacity."
           categories={[
@@ -84,8 +84,8 @@ export default function PricingTable() {
         <PricingPlan
           title="IoT"
           subtitle="For many small nodes"
-          price={`$${getPromotionalPrice(promotion.originalPrices.iot)}`}
-          originalPrice={`$${promotion.originalPrices.iot}`}
+          price={`€${getPromotionalPrice(promotion.originalPrices.iot)}`}
+          originalPrice={`€${promotion.originalPrices.iot}`}
           priceUnit="/ device / year"
           description="For commercial production use with minimum 10 devices with less than 1TB of storage capacity per unit."
           categories={[
