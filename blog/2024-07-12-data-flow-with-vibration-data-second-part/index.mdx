@@ -1,0 +1,249 @@
+---
+title: How to Store Vibration Sensor Data | Part 2
+description: Efficient and effective storage of vibration data is important to a wide range of industries, particularly where accurate and complex predictive maintenance or optimization is required. This blog post looks at best practices for managing vibration data, starting with storing both raw and pre-processed metrics to take advantage of their unique benefits. We'll explore the differences between time series object stores and traditional time series databases, and highlight optimal data flow processes. We'll also cover strategies for eliminating data loss through volume-based retention policies, guide you through setting up an effective data retention frameworks.
+authors: anthony
+tags: [database, vibration sensor]
+slug: how-to-store-vibration-sensor-data-part-2
+date: 2024-07-12
+image: ./img/vibration_data_flow.jpg
+---
+
+import FilterExampleImg from './img/filter-example.webp';
+import SettingsExampleImg from './img/settings-example.webp';
+import DashboardExampleImg from './img/dashboard-example.webp';
+
+![Vibration Data Flow](./img/vibration_data_flow.jpg)
+
+ReductStore is designed to efficiently handle time series object data, making it an excellent choice for storing high frequency vibration sensor measurements.
+This article is the second part of **[How to Store Vibration Sensor Data | Part 1](/blog/how-to-store-vibration-sensor-data)**, 
+where we discussed the benefits of storing both raw measures and pre-processed metrics, the advantages of time series databases, and efficient storage and replication strategies.
+
+In this post, we'll dive into a practical example of storing and querying vibration sensor readings using ReductStore and Python.
+To follow along, you can find the full source code for this example at **[GitHub's reduct-vibration-example repository](https://github.com/reductstore/reduct-vibration-example)**.
+
+Our example will show you how to:
+
+1. Store simulated sensor values in 1-second chunks
+2. Compute and store associated labels for each chunk
+3. Query and retrieve stored measurements within a specified time range
+4. Set up replication using the ReductStore web console
+
+{/* truncate */}
+
+## Setting Up the Environment
+
+Before we dive into the code, let's set up our environment. 
+We'll be using Docker to run ReductStore and Python for our client application.
+
+### ReductStore Setup
+
+Create a `docker-compose.yml` file with the following content:
+
+```yaml
+version: '3.8'
+
+services:
+  reductstore:
+    image: reduct/store:latest
+    ports:
+      - "8383:8383"
+    volumes:
+      - data:/data
+    environment:
+      - RS_API_TOKEN=my-token
+
+volumes:
+  data:
+    driver: local
+```
+
+Run ReductStore with:
+
+```bash
+docker compose up -d
+```
+
+This will start ReductStore on port 8383 with a simple API token for authentication.
+
+### Python Environment
+
+Ensure you have Python 3.7+ installed. Install the required libraries:
+
+```bash
+pip install reduct-py numpy
+```
+
+## Code Structure and Functionality
+
+Let's break down the main components of our Python script:
+
+### Connecting to ReductStore
+
+```python
+async def setup_reductstore():
+    client = Client("http://localhost:8383", api_token="my-token")
+    return await client.create_bucket("sensor_data", exist_ok=True)
+```
+
+This function establishes a connection to ReductStore and creates (or gets) a bucket named "sensor_data".
+
+### Generating Simulated Sensor Data
+
+```python
+def generate_sensor_data(frequency=1000, duration=1):
+    t = np.linspace(0, duration, frequency * duration)
+    signal = np.sin(2 * np.pi * 10 * t) + 0.5 * np.random.randn(len(t))
+    return signal.astype(np.float32)
+```
+
+This function generates a simulated sensor signal: a sine wave with added noise.
+
+### Calculating Metrics
+
+```python
+def calculate_metrics(signal):
+    rms = np.sqrt(np.mean(signal**2))
+    peak_to_peak = np.max(signal) - np.min(signal)
+    crest_factor = np.max(np.abs(signal)) / rms
+    return rms, peak_to_peak, crest_factor
+```
+
+We calculate three common metrics for our signal: RMS (Root Mean Square), Peak-to-Peak, and Crest Factor.
+
+### Packing Data Efficiently
+
+```python
+def pack_data(signal):
+    fmt = f">{len(signal)}f"
+    return struct.pack(fmt, *signal)
+```
+
+This function packs our numpy array into a binary format, ensuring consistent byte order across different systems.
+
+### Storing Data in ReductStore
+
+```python
+HIGH_RMS = 1.0
+HIGH_CREST_FACTOR = 3.0
+HIGH_PEAK_TO_PEAK = 5.0
+
+async def store_data(
+    bucket: Bucket, timestamp, packed_data, rms, peak_to_peak, crest_factor
+):
+    labels = {
+        "rms": "high" if rms > HIGH_RMS else "low",
+        "peak_to_peak": "high" if peak_to_peak > HIGH_PEAK_TO_PEAK else "low",
+        "crest_factor": "high" if crest_factor > HIGH_CREST_FACTOR else "low",
+    }
+    await bucket.write("sensor_readings", packed_data, timestamp, labels=labels)
+```
+
+Here we store our packed data along with labels indicating whether each metric is high or low. 
+This allows us to replicate and filter data based on these metrics later.
+
+### Querying and Retrieving Data
+
+```python
+async def query_data(bucket, start_time, end_time):
+    async for record in bucket.query(
+        "sensor_readings", start=start_time, stop=end_time
+    ):
+        print(f"Timestamp: {record.timestamp}")
+        print(f"Labels: {record.labels}")
+
+        data = await record.read_all()
+        num_points = len(data) // 4  # 4 bytes per float
+        fmt = f">{num_points}f"
+        signal = struct.unpack(fmt, data)
+
+        print(f"Number of data points: {num_points}")
+        print(f"First few values: {signal[:5]}")
+        print("---")
+```
+
+This function demonstrates how to query data within a specified time range and unpack the binary data back into usable form.
+
+### Main Execution
+
+```python
+async def main():
+    bucket = await setup_reductstore()
+
+    # Store 5 seconds of data
+    for _ in range(5):
+        timestamp = int(time.time() * 1_000_000)
+        signal = generate_sensor_data()
+        rms, peak_to_peak, crest_factor = calculate_metrics(signal)
+        packed_data = pack_data(signal)
+        await store_data(
+            bucket, timestamp, packed_data, rms, peak_to_peak, crest_factor
+        )
+        await asyncio.sleep(1)
+
+    # Query the stored data for the last 5 seconds
+    end_time = int(time.time() * 1_000_000)
+    start_time = end_time - 5_000_000
+    await query_data(bucket, start_time, end_time)
+```
+
+This main function ties everything together by storing 5 seconds of data and then retrieving it.
+
+## Replication with ReductStore Web Console
+
+ReductStore also provides replication capabilities that can be easily set up using the web console. 
+
+    <img 
+    src={DashboardExampleImg} 
+    alt="Dashboard Example" 
+    style={{
+        border: '2px solid #2c0548',
+        borderRadius: '10px',
+    }}/>
+
+Here's how you can set up replication:
+
+1. Access the ReductStore web console (typically at http://localhost:8383 if running locally).
+2. Navigate to the "Replications" section to create a new replication.
+    <img 
+    src={SettingsExampleImg} 
+    alt="Settings Example" 
+    width="400" 
+    style={{
+        border: '2px solid #2c0548',
+        borderRadius: '10px',
+    }}/>
+3. Choose your source bucket (in this case, "sensor_data").
+4. Enter the details for your destination ReductStore instance.
+5. Select which entries to replicate (in this case, "sensor_readings").
+6. Optionally, set up filters based on labels (e.g., to replicate only data with "high" RMS).
+    <img 
+    src={FilterExampleImg} 
+    alt="Filter Example" 
+    width="400" 
+    style={{
+        border: '2px solid #2c0548',
+        borderRadius: '10px',
+    }}/>
+7. Click "Create" to start the replication process.
+
+Replication is useful for various scenarios, such as:
+- Creating backups of your sensor data
+- Distributing data across multiple locations for faster access
+- Implementing disaster recovery solutions
+
+## Conclusion
+
+In this post, we've explored how to use ReductStore for efficient storage and retrieval of high-frequency sensor data. We've seen how to:
+
+- Set up ReductStore using Docker
+- Connect to ReductStore from a Python application
+- Generate, process, and store simulated sensor data
+- Query and retrieve stored data
+- Use labels for efficient metadata storage and querying
+- Set up replication using the web console
+
+ReductStore's ability to handle high-frequency data, coupled with its labeling and replication features, makes it an excellent choice for sensor data management. Whether you're working on industrial IoT, scientific research, or any application dealing with time-series blob data, ReductStore provides the tools you need for efficient data handling.
+
+---
+
+We encourage you to explore further possibilities with ReductStore, such as integrating with real sensors, implementing more complex querying strategies, or building analytics pipelines on top of your stored data.
