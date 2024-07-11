@@ -107,7 +107,7 @@ In this example, we generate 1 second of data at a time (1,000 samples at 1 kHz)
 ### Calculating Metrics
 
 ```python
-def calculate_metrics(signal: np.ndarray) -> tuple[float, float, float]:
+def calculate_metrics(signal: np.ndarray) -> tuple:
     rms = np.sqrt(np.mean(signal**2))
     peak_to_peak = np.max(signal) - np.min(signal)
     crest_factor = np.max(np.abs(signal)) / rms
