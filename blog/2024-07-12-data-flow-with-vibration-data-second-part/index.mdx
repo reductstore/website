@@ -104,7 +104,7 @@ def generate_sensor_data(frequency: int = 1000, duration: int = 1) -> np.ndarray
 This function generates a simulated sensor signal: a simple sine wave with added noise.
 In a real-world scenario, you would replace this with actual sensor readings.
 
-As we saw in **[Part 1](/blog/how-to-store-vibration-sensor-data)**, it's beneficial to divide the data into chunks for more efficient storage and querying.
+As we saw in **[How to Store Vibration Sensor Data | Part 1](/blog/how-to-store-vibration-sensor-data)**, it's beneficial to divide the data into chunks for more efficient storage and querying.
 In this example, we generate 1 second of data at a time (1,000 samples at 1 kHz), that we'll store as a single entry in ReductStore.
 
 ### Calculating Metrics
