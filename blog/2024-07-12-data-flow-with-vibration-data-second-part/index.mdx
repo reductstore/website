@@ -14,7 +14,7 @@ import DashboardExampleImg from './img/dashboard-example.webp';
 
 ![Vibration Data Flow](./img/vibration_data_flow.jpg)
 
-ReductStore is designed to efficiently handle time series object data, making it an excellent choice for storing high frequency vibration sensor measurements.
+**[ReductStore](/)** is designed to efficiently handle time series object data, making it an excellent choice for storing high frequency vibration sensor measurements.
 This article is the second part of **[How to Store Vibration Sensor Data | Part 1](/blog/how-to-store-vibration-sensor-data)**, 
 where we discussed the benefits of storing both raw measures and pre-processed metrics, the advantages of time series databases, and efficient storage and replication strategies.
 
@@ -230,17 +230,22 @@ Now that we are able to store and query vibration sensor data, let's explore how
 
 In addition to storing and querying data, we can also set up replication to duplicate our sensor data across multiple ReductStore instances.
 
-Replication tasks can be configured in multiple ways, such as:
-- Replicating all data from a source bucket to a destination bucket (e.g., `sensor_data` to `backup_data`)
-- Replicating only specific entries, e.g., `sensor_readings`
-- Filtering data based on labels, e.g., replicating only data with `high` RMS values
+Replication tasks can be configured in a variety of ways, such as
+- Replicate all data from a source bucket to a target bucket (e.g. `sensor_data` to `backup_data`)
+- Replicate only specific entries, e.g. `sensor_readings`.
+- Replicate data based on labels, e.g. replicate only data with `high` RMS values to `high_peak_to_peak` bucket (as we'll do in this example).
 
-Replication task can be set using client libraries, HTTP API, provisioning, or the ReductStore web console.
-In this example, we'll use the web console to set up replication but you can also look at the **[Replication Guide](/docs/next/guides/data-replication)** for more details.
+The replication task can be set using client libraries, HTTP API, provisioning, or the ReductStore web console.
+In this example, we'll use the web console for simplicity, but you can also refer to the **[Replication Guide](/docs/next/guides/data-replication)** for more details.
 
-Here's how you can set up replication:
+So the bucket structure that we'll set up is as follows:
+- `sensor_data` bucket contains all sensor readings under the entry `sensor_readings`.
+- `high_peak_to_peak` bucket will contain only the sensor readings with high peak-to-peak values under the same entry name `sensor_readings`.
+
+Here's how to set it up:
 
 1. Access the ReductStore web console (typically at `http://localhost:8383` if running locally).
+    
     <img 
     src={DashboardExampleImg} 
     alt="Dashboard Example" 
@@ -248,13 +253,13 @@ Here's how you can set up replication:
         border: '2px solid #2c0548',
         borderRadius: '10px',
     }}/>
+
 2. Navigate to the "Replications" section to create a new replication with the "+" button.
 3. Enter a name for your replication task and add the following details:
     - Choose your source bucket (in this case, `sensor_data`).
-    - Enter the details for your destination ReductStore instance (in this case, the same instance for demonstration purposes `http://localhost:8383`)
     - Enter the destination bucket name (e.g., `high_peak_to_peak`)
+    - Enter the details for your destination ReductStore instance (in this case, the same instance for demonstration purposes `http://localhost:8383`)
     - Enter the destination token (in this case, the same token `my-token` for demonstration purposes)
-    - Optionally, set up a filter on the entries to replicate (e.g., `sensor_readings`). When not set, all entries will be replicated.
 
         <img 
         src={SettingsExampleImg} 
@@ -264,7 +269,9 @@ Here's how you can set up replication:
             border: '2px solid #2c0548',
             borderRadius: '10px',
         }}/>
-    - Then, set up filters based on labels (e.g., to replicate only data with "high" RMS).
+    
+    - Then, set up filters based on labels to replicate only data with `high` RMS.
+
         <img 
         src={FilterExampleImg} 
         alt="Filter Example" 
@@ -273,9 +280,10 @@ Here's how you can set up replication:
             border: '2px solid #2c0548',
             borderRadius: '10px',
         }}/>
+
 4. Click "Create" to start the replication process.
 
-With this new replication task, all new data from the `sensor_data` bucket with the label "high" for peak-to-peak values will be replicated to the `high_peak_to_peak` bucket.
+With this new replication task, all new data from the `sensor_data` bucket with the label `peak_to_peak = high` will be replicated to the `high_peak_to_peak` bucket.
 
 :::info
 Only new data will be replicated, so you can set up replication tasks at any time without worrying about duplicating existing data.
@@ -289,7 +297,7 @@ We explored a practical implementation of storing and querying vibration sensor 
 2. We simulated vibration sensor data, calculated key metrics (RMS, peak-to-peak, and crest factor), and packaged the data into a binary format that we can configure to ensure the data can be read by other devices.
 3. We stored the data in ReductStore, along with labels indicating whether each metric was high or low.
 4. We demonstrated how to query the stored data and unpack it back into a usable format.
-5. Finally, we explored how to set up replication using the ReductStore web console so that we could copy high peak-to-peak metrics into a separate bucket.
+5. Finally, we explored how to set up replication using the web console so that we could copy high peak-to-peak metrics into a separate bucket.
 
 
 While we used simulated data here, the same approach works for real sensor readings. 
