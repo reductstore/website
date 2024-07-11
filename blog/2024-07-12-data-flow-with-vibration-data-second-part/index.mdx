@@ -116,7 +116,7 @@ def calculate_metrics(signal: np.ndarray) -> tuple:
 
 We calculate three common metrics for our signal: RMS (Root Mean Square), Peak-to-Peak, and Crest Factor.
 
-### Packing Data Efficiently
+### Packing Binary Data
 
 ```python
 def pack_data(signal: np.ndarray) -> bytes:
@@ -228,8 +228,19 @@ Now that we are able to store and query vibration sensor data, let's explore how
 
 ## Replication with ReductStore Web Console
 
-ReductStore also provides replication capabilities that can be easily set up using the web console. 
+In addition to storing and querying data, we can also set up replication to duplicate our sensor data across multiple ReductStore instances.
 
+Replication tasks can be configured in multiple ways, such as:
+- Replicating all data from a source bucket to a destination bucket (e.g., `sensor_data` to `backup_data`)
+- Replicating only specific entries, e.g., `sensor_readings`
+- Filtering data based on labels, e.g., replicating only data with `high` RMS values
+
+Replication task can be set using client libraries, HTTP API, provisioning, or the ReductStore web console.
+In this example, we'll use the web console to set up replication but you can also look at the **[Replication Guide](/docs/next/guides/data-replication)** for more details.
+
+Here's how you can set up replication:
+
+1. Access the ReductStore web console (typically at `http://localhost:8383` if running locally).
     <img 
     src={DashboardExampleImg} 
     alt="Dashboard Example" 
@@ -237,52 +248,54 @@ ReductStore also provides replication capabilities that can be easily set up usi
         border: '2px solid #2c0548',
         borderRadius: '10px',
     }}/>
+2. Navigate to the "Replications" section to create a new replication with the "+" button.
+3. Enter a name for your replication task and add the following details:
+    - Choose your source bucket (in this case, `sensor_data`).
+    - Enter the details for your destination ReductStore instance (in this case, the same instance for demonstration purposes `http://localhost:8383`)
+    - Enter the destination bucket name (e.g., `high_peak_to_peak`)
+    - Enter the destination token (in this case, the same token `my-token` for demonstration purposes)
+    - Optionally, set up a filter on the entries to replicate (e.g., `sensor_readings`). When not set, all entries will be replicated.
 
-Here's how you can set up replication:
+        <img 
+        src={SettingsExampleImg} 
+        alt="Settings Example" 
+        width="400" 
+        style={{
+            border: '2px solid #2c0548',
+            borderRadius: '10px',
+        }}/>
+    - Then, set up filters based on labels (e.g., to replicate only data with "high" RMS).
+        <img 
+        src={FilterExampleImg} 
+        alt="Filter Example" 
+        width="400" 
+        style={{
+            border: '2px solid #2c0548',
+            borderRadius: '10px',
+        }}/>
+4. Click "Create" to start the replication process.
 
-1. Access the ReductStore web console (typically at localhost:8383 if running locally).
-2. Navigate to the "Replications" section to create a new replication.
-    <img 
-    src={SettingsExampleImg} 
-    alt="Settings Example" 
-    width="400" 
-    style={{
-        border: '2px solid #2c0548',
-        borderRadius: '10px',
-    }}/>
-3. Choose your source bucket (in this case, "sensor_data").
-4. Enter the details for your destination ReductStore instance.
-5. Select which entries to replicate (in this case, "sensor_readings").
-6. Optionally, set up filters based on labels (e.g., to replicate only data with "high" RMS).
-    <img 
-    src={FilterExampleImg} 
-    alt="Filter Example" 
-    width="400" 
-    style={{
-        border: '2px solid #2c0548',
-        borderRadius: '10px',
-    }}/>
-7. Click "Create" to start the replication process.
+With this new replication task, all new data from the `sensor_data` bucket with the label "high" for peak-to-peak values will be replicated to the `high_peak_to_peak` bucket.
 
-Replication is useful for various scenarios, such as:
-- Creating backups of your sensor data
-- Distributing data across multiple locations for faster access
-- Implementing disaster recovery solutions
+:::info
+Only new data will be replicated, so you can set up replication tasks at any time without worrying about duplicating existing data.
+:::
 
 ## Conclusion
 
-In this post, we've explored how to use ReductStore for efficient storage and retrieval of high-frequency sensor data. We've seen how to:
+We explored a practical implementation of storing and querying vibration sensor data using ReductStore and Python. Here's a summary of what we covered:
 
-- Set up ReductStore using Docker
-- Connect to ReductStore from a Python application
-- Generate, process, and store simulated sensor data
-- Query and retrieve stored data
-- Use labels for efficient metadata storage and querying
-- Set up replication using the web console
+1. We set up a ReductStore instance using Docker and installed the necessary Python libraries.
+2. We simulated vibration sensor data, calculated key metrics (RMS, peak-to-peak, and crest factor), and packaged the data into a binary format that we can configure to ensure the data can be read by other devices.
+3. We stored the data in ReductStore, along with labels indicating whether each metric was high or low.
+4. We demonstrated how to query the stored data and unpack it back into a usable format.
+5. Finally, we explored how to set up replication using the ReductStore web console so that we could copy high peak-to-peak metrics into a separate bucket.
 
-ReductStore's ability to handle high-frequency data, coupled with its labeling and replication features, makes it an excellent choice for sensor data management. Whether you're working on industrial IoT, scientific research, or any application dealing with time-series blob data, ReductStore provides the tools you need for efficient data handling.
+
+While we used simulated data here, the same approach works for real sensor readings. 
+This setup can serve as a starting point for building your own vibration data management system, which you'll likely need to tailor to your specific needs and hardware.
 
 ---
 
-We encourage you to explore other possibilities with ReductStore, such as integrating with real sensors, implementing more complex query strategies, or building analytics pipelines on top of your stored data.
-If you have any questions, feel free to join us on [**Discord**](https://discord.com/invite/8wPtPGJYsn) for a quick chat, or start a discussion on [**GitHub**](https://github.com/reductstore/reductstore/discussions).
+Thanks for reading! We'd be happy to hear your feedback or answer any questions you may have.
+Feel free to join us on [**Discord**](https://discord.com/invite/8wPtPGJYsn) for a quick chat, or start a discussion on [**GitHub**](https://github.com/reductstore/reductstore/discussions).
