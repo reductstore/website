@@ -221,7 +221,7 @@ async def main():
 
 This is the main execution flow of our script, which demonstrates the complete data flow:
 1. We connect to ReductStore and create a bucket.
-2. We store 5 seconds of data, with 1 second of data stored every second.
+2. We store 5 seconds of data, with 1 second of data stored every second. Each timestamp is generated using the current time in microseconds.
 3. We query the stored data for the last 5 seconds and print the results.
 
 Now that we are able to store and query vibration sensor data, let's explore how to duplicate important data using ReductStore's replication feature.
