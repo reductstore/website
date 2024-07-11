@@ -57,7 +57,7 @@ volumes:
     driver: local
 ```
 
-Run ReductStore with:
+Then we ca run ReductStore with:
 
 ```bash
 docker compose up -d
@@ -80,28 +80,34 @@ Let's break down the main components of our Python script:
 ### Connecting to ReductStore
 
 ```python
-async def setup_reductstore():
+async def setup_reductstore() -> Bucket:
     client = Client("http://localhost:8383", api_token="my-token")
     return await client.create_bucket("sensor_data", exist_ok=True)
 ```
 
 This function establishes a connection to ReductStore and creates (or gets) a bucket named "sensor_data".
+A bucket is a logical container for storing time series data, and each bucket can contain multiple entries (e.g., "vibration_sensor_1", "vibration_sensor_2").
 
 ### Generating Simulated Sensor Data
 
 ```python
-def generate_sensor_data(frequency=1000, duration=1):
+def generate_sensor_data(frequency: int = 1000, duration: int = 1) -> np.ndarray:
     t = np.linspace(0, duration, frequency * duration)
     signal = np.sin(2 * np.pi * 10 * t) + 0.5 * np.random.randn(len(t))
     return signal.astype(np.float32)
+
 ```
 
-This function generates a simulated sensor signal: a sine wave with added noise.
+This function generates a simulated sensor signal: a simple sine wave with added noise.
+In a real-world scenario, you would replace this with actual sensor readings.
+
+As we saw in **[Part 1](/blog/how-to-store-vibration-sensor-data)**, it's beneficial to divide the data into chunks for more efficient storage and querying.
+In this example, we generate 1 second of data at a time (1,000 samples at 1 kHz), that we'll store as a single entry in ReductStore.
 
 ### Calculating Metrics
 
 ```python
-def calculate_metrics(signal):
+def calculate_metrics(signal: np.ndarray) -> tuple[float, float, float]:
     rms = np.sqrt(np.mean(signal**2))
     peak_to_peak = np.max(signal) - np.min(signal)
     crest_factor = np.max(np.abs(signal)) / rms
@@ -113,12 +119,25 @@ We calculate three common metrics for our signal: RMS (Root Mean Square), Peak-t
 ### Packing Data Efficiently
 
 ```python
-def pack_data(signal):
+def pack_data(signal: np.ndarray) -> bytes:
     fmt = f">{len(signal)}f"
     return struct.pack(fmt, *signal)
 ```
 
-This function packs our numpy array into a binary format, ensuring consistent byte order across different systems.
+This function uses the `struct` module to pack our numpy array into a binary format, specifically with the format string `">1000f"` (more details on this below).
+You may be wondering why we don't use numpy's `tobytes()` method. While `tobytes()` is convenient, it offers limited control over the byte format, 
+which can lead to compatibility problems when reading the data on different devices.
+
+The `struct` module, on the other hand, allows us to specify byte order and data type, preserving consistent data representation and avoiding compatibility problems.
+The format string `">1000f"` is explained as follows, based on the **[struct module documentation](https://docs.python.org/3/library/struct.html#struct-format-strings)**:
+
+- `>` indicates big-endian byte order, with the most significant byte (leftmost byte) stored first, which is common in network communications.
+- `1000` is the number of elements in the array (1000 samples).
+- `f` is the data type (float) for each element, with a default size of 4 bytes.
+
+The choice of binary data depends on your specific requirements, if you are using specific hardware or software that requires a different format, you can adjust the format string accordingly.
+
+Some restricted embedded systems may require a specific byte order or data type, so it's important to understand the format requirements of your architecture.
 
 ### Storing Data in ReductStore
 
@@ -128,7 +147,12 @@ HIGH_CREST_FACTOR = 3.0
 HIGH_PEAK_TO_PEAK = 5.0
 
 async def store_data(
-    bucket: Bucket, timestamp, packed_data, rms, peak_to_peak, crest_factor
+    bucket: Bucket,
+    timestamp: int,
+    packed_data: bytes,
+    rms: float,
+    peak_to_peak: float,
+    crest_factor: float,
 ):
     labels = {
         "rms": "high" if rms > HIGH_RMS else "low",
@@ -138,13 +162,16 @@ async def store_data(
     await bucket.write("sensor_readings", packed_data, timestamp, labels=labels)
 ```
 
-Here we store our packed data along with labels indicating whether each metric is high or low. 
-This allows us to replicate and filter data based on these metrics later.
+This is where we store our packed data, along with labels that indicate whether each metric is high or low. 
+This allows us to later replicate and filter data based on these metrics.
+
+The hard-coded thresholds for high RMS, peak-to-peak, and crest factor values are for demonstration purposes.
+These values should be determined based on your specific sensor and application requirements and can be adjusted using environmental variables or configuration files.
 
 ### Querying and Retrieving Data
 
 ```python
-async def query_data(bucket, start_time, end_time):
+async def query_data(bucket: Bucket, start_time: int, end_time: int):
     async for record in bucket.query(
         "sensor_readings", start=start_time, stop=end_time
     ):
@@ -152,16 +179,22 @@ async def query_data(bucket, start_time, end_time):
         print(f"Labels: {record.labels}")
 
         data = await record.read_all()
-        num_points = len(data) // 4  # 4 bytes per float
+        num_points = len(data) // 4
         fmt = f">{num_points}f"
         signal = struct.unpack(fmt, data)
+        signal = np.array(signal, dtype=np.float32)
 
         print(f"Number of data points: {num_points}")
         print(f"First few values: {signal[:5]}")
         print("---")
 ```
 
-This function demonstrates how to query data within a specified time range and unpack the binary data back into usable form.
+This function shows how to query data within a given time range and unpack the binary data back into the original Numpy array.
+1. The `read_all()` method reads all binary data at a given timestamp.
+2. The length of the data is divided by 4 to get the number of float values, since each float is 4 bytes long.
+3. The same format string used to pack the data is used to unpack the data to ensure that the data is interpreted correctly.
+4. The unpacked data is then converted back to a Numpy array, which is more convenient for further processing.
+
 
 ### Main Execution
 
@@ -186,7 +219,12 @@ async def main():
     await query_data(bucket, start_time, end_time)
 ```
 
-This main function ties everything together by storing 5 seconds of data and then retrieving it.
+This is the main execution flow of our script, which demonstrates the complete data flow:
+1. We connect to ReductStore and create a bucket.
+2. We store 5 seconds of data, with 1 second of data stored every second.
+3. We query the stored data for the last 5 seconds and print the results.
+
+Now that we are able to store and query vibration sensor data, let's explore how to duplicate important data using ReductStore's replication feature.
 
 ## Replication with ReductStore Web Console
 
