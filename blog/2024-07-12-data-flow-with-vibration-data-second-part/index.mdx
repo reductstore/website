@@ -65,13 +65,16 @@ docker compose up -d
 
 This will start ReductStore on port 8383 with a simple API token for authentication.
 
-### Python Environment
+### Python Setup
 
-Ensure you have Python 3.7+ installed. Install the required libraries:
+Ensure you have Python 3.7+ installed in your environment.
+Than, simply install the required libraries for our example using pip:
 
 ```bash
 pip install reduct-py numpy
 ```
+
+Now that we have our environment set up, let's dive into the code.
 
 ## Code Structure and Functionality
 
@@ -85,8 +88,8 @@ async def setup_reductstore() -> Bucket:
     return await client.create_bucket("sensor_data", exist_ok=True)
 ```
 
-This function establishes a connection to ReductStore and creates (or gets) a bucket named "sensor_data".
-A bucket is a logical container for storing time series data, and each bucket can contain multiple entries (e.g., "vibration_sensor_1", "vibration_sensor_2").
+This function establishes a connection to ReductStore and creates (or gets) a bucket named `sensor_data`.
+A bucket is a logical container for storing time series data, and each bucket can contain multiple entries (e.g., `vibration_sensor_1`, `vibration_sensor_2`).
 
 ### Generating Simulated Sensor Data
 
