@@ -14,7 +14,7 @@ import DashboardExampleImg from './img/dashboard-example.webp';
 
 ![Vibration Data Flow](./img/vibration_data_flow.jpg)
 
-**[ReductStore](/)** is designed to efficiently handle time series object data, making it an excellent choice for storing high frequency vibration sensor measurements.
+**[ReductStore](/)** is designed to efficiently handle time series unstructured data, making it an excellent choice for storing high frequency vibration sensor measurements.
 This article is the second part of **[How to Store Vibration Sensor Data | Part 1](/blog/how-to-store-vibration-sensor-data)**, 
 where we discussed the benefits of storing both raw measures and pre-processed metrics, the advantages of time series databases, and efficient storage and replication strategies.
 
@@ -165,7 +165,7 @@ async def store_data(
     await bucket.write("sensor_readings", packed_data, timestamp, labels=labels)
 ```
 
-This is where we store our packed data, along with labels that indicate whether each metric is high or low. 
+This is where we store our packed chunk of data, along with labels that indicate whether each metric is high or low. 
 This allows us to later replicate and filter data based on these metrics.
 
 The hard-coded thresholds for high RMS, peak-to-peak, and crest factor values are for demonstration purposes.
@@ -193,7 +193,7 @@ async def query_data(bucket: Bucket, start_time: int, end_time: int):
 ```
 
 This function shows how to query data within a given time range and unpack the binary data back into the original Numpy array.
-1. The `read_all()` method reads all binary data at a given timestamp.
+1. The `read_all()` method reads the whole chunk of data at a given timestamp.
 2. The length of the data is divided by 4 to get the number of float values, since each float is 4 bytes long.
 3. The same format string used to pack the data is used to unpack the data to ensure that the data is interpreted correctly.
 4. The unpacked data is then converted back to a Numpy array, which is more convenient for further processing.
@@ -224,7 +224,7 @@ async def main():
 
 This is the main execution flow of our script, which demonstrates the complete data flow:
 1. We connect to ReductStore and create a bucket.
-2. We store 5 seconds of data, with 1 second of data stored every second. Each timestamp is generated using the current time in microseconds.
+2. We store 5 seconds in chunks of 1 second data. Each timestamp is generated using the current time in microseconds.
 3. We query the stored data for the last 5 seconds and print the results.
 
 Now that we are able to store and query vibration sensor data, let's explore how to duplicate important data using ReductStore's replication feature.
@@ -238,7 +238,7 @@ Replication tasks can be configured in a variety of ways, such as
 - Replicate only specific entries, e.g. `sensor_readings`.
 - Replicate data based on labels, e.g. replicate only data with `high` RMS values to `high_peak_to_peak` bucket (as we'll do in this example).
 
-The replication task can be set using client libraries, HTTP API, provisioning, or the ReductStore web console.
+The replication task can be set using client libraries, HTTP API, CLI, provisioning, or the ReductStore web console.
 In this example, we'll use the web console for simplicity, but you can also refer to the **[Replication Guide](/docs/next/guides/data-replication)** for more details.
 
 So the bucket structure that we'll set up is as follows:
