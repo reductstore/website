@@ -16,8 +16,8 @@ export default function PerformanceComparison(): JSX.Element {
     MinIO: "MinIO",
   };
   return (
-    <section className={styles.section}>
-      <div className="col col--4">
+    <div className="row">
+      <div className="col col--4 col--offset-2">
         <div className={styles.benefit}>
           <div className={styles.benefitIcon}>
             <FaRocket
@@ -29,30 +29,32 @@ export default function PerformanceComparison(): JSX.Element {
           <p>Outperform other databases with a customized solution for time-series object data.</p>
         </div>
       </div>
-      <ul className={clsx("tabs", styles.tabs)}>
-        {["TimescaleDB", "MongoDB", "MinIO"].map((tab) => (
-          <li
-            key={tab}
-            className={clsx(
-              "tabs__item",
-              activeTab === tab && "tabs__item--active"
+      <div className="col col--4">
+        <ul className={clsx("tabs", styles.tabs)}>
+          {["TimescaleDB", "MongoDB", "MinIO"].map((tab) => (
+            <li
+              key={tab}
+              className={clsx(
+                "tabs__item",
+                activeTab === tab && "tabs__item--active"
+              )}
+              onClick={() => setActiveTab(tab)}
+            >
+              vs {tabNameMap[tab]}
+            </li>
+          ))}
+        </ul>
+        <div className={styles.tabContent}>
+          <>
+            {activeTab && (
+              <PerformanceComparisonTable data={PerformanceComparisonData[activeTab]} />
             )}
-            onClick={() => setActiveTab(tab)}
-          >
-            vs {tabNameMap[tab]}
-          </li>
-        ))}
-      </ul>
-      <div className={styles.tabContent}>
-        <>
-          {activeTab && (
-            <PerformanceComparisonTable data={PerformanceComparisonData[activeTab]} />
-          )}
-          <p>
-            <Link to={PerformanceComparisonData[activeTab].url}>See the full {PerformanceComparisonData[activeTab].title} benchmark.</Link>
-          </p>
-        </>
+            <p>
+              <Link to={PerformanceComparisonData[activeTab].url}>See the full {PerformanceComparisonData[activeTab].title} benchmark.</Link>
+            </p>
+          </>
+        </div>
       </div>
-    </section>
+    </div>
   );
 }
