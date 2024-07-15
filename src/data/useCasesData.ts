@@ -7,20 +7,20 @@ export interface UseCase {
 
 const useCases: UseCase[] = [
   {
-    title: "High Frequency Vibration Data Storage",
-    description: "Learn how to store and manage high-frequency vibration data.",
-    link: "/use-cases/vibration-sensors",
-    image:
-      require("@site/static/img/use-cases/vibration-sensors/reduction-strategy.webp")
-        .default,
-  },
-  {
     title: "The Fastest Time Series Object Store for Edge AI",
     description:
       "Learn how to store and manage data for edge computing and AI applications.",
     link: "/use-cases/ai-workflows",
     image:
       require("@site/static/img/use-cases/ai-workflows/ai-labels-and-metadata-for-every-record.webp")
+        .default,
+  },
+  {
+    title: "High Frequency Vibration Data Storage",
+    description: "Learn how to store and manage high-frequency vibration data.",
+    link: "/use-cases/vibration-sensors",
+    image:
+      require("@site/static/img/use-cases/vibration-sensors/reduction-strategy.webp")
         .default,
   },
   {
