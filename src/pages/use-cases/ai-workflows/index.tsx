@@ -12,14 +12,14 @@ export default function UseCaseAI(): JSX.Element {
 
   return (
     <Layout
-      title="Optimize Your AI Workflows"
-      description="Learn how ReductStore can improve the performance of your projects with an optimal infrastructure."
+      title="The Fastest Time Series Object Store for Edge AI"
+      description="High performance and optimized data management for edge computing and AI applications"
     >
       <FreePoCBanner elementId="free-poc-form" />
       <main>
         <SimpleHeader
-          pageTitle="Optimize Your AI Workflows"
-          subtitle="Learn how ReductStore can improve the performance of your projects with an optimal infrastructure"
+          pageTitle="The Fastest Time Series Object Store for Edge AI"
+          subtitle="High performance and optimized data management for edge computing and AI applications"
         />
         <div className="container">
           <>
@@ -47,7 +47,7 @@ export default function UseCaseAI(): JSX.Element {
 
 const useCases = [
   {
-    title: "The Fastest Object Store",
+    title: "The Fastest Time Series Object Store",
     description: (
       <p>
         Comparative performance analysis has underscored its superiority, consistently <Link to="/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio"><b>outperforming MinIO for write and read operations</b></Link> across a range of record sizes.
