@@ -26,7 +26,7 @@ function HomepageHeader() {
           {siteConfig.tagline}
         </h1>
         <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
-          Keep history of images, vibration data, text, everything in one place
+          History storage and management of images, vibration data, text, labels, and more - all in one place with the highest performance.
         </p>
         <div className={styles.buttons}>
           <Link
@@ -41,15 +41,6 @@ function HomepageHeader() {
           >
             White Paper
           </Link>
-          <span className={styles.indexCtasGitHubButtonWrapper}>
-            <iframe
-              className={styles.indexCtasGitHubButton}
-              src="https://ghbtns.com/github-btn.html?user=reductstore&amp;repo=reductstore&amp;type=star&amp;count=true&amp;size=large"
-              width={160}
-              height={30}
-              title="GitHub Stars"
-            />
-          </span>
         </div>
       </div>
     </header>
