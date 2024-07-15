@@ -1,15 +1,21 @@
 .section {
   margin-bottom: var(--reduct-section-space);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
 }
 
 .benefit {
+  margin-top: 3rem;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+@media (max-width: 996px) {
+  .benefit {
+    margin-top: 0;
+  }
 }
 
 .benefitIcon {
@@ -24,10 +30,13 @@
 
 .tabContent {
   padding: 1rem;
+  margin-bottom: var(--reduct-section-space);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .tabContent p {
   color: var(--reduct-dimmed-color);
   font-size: 0.8rem;
 }
-
