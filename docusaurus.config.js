@@ -135,7 +135,7 @@ const config = {
       paymentLinks: {
         standard: "https://buy.stripe.com/14k7teamx1fogykeUW",
         premium: "https://buy.stripe.com/bIYcNyfGR1foci48wx",
-        iot: "https://buy.stripe.com/cN2cNy3Y93nwci4bII"
+        iot: "https://buy.stripe.com/cN2cNy3Y93nwci4bII",
       },
 
       // Declare some <meta> tags
@@ -193,12 +193,12 @@ const config = {
             position: "left",
             items: [
               {
-                label: "Vibration Data",
-                to: "/use-cases/vibration-sensors",
+                label: "Edge AI",
+                to: "/use-cases/ai-workflows",
               },
               {
-                label: "AI Workflows",
-                to: "/use-cases/ai-workflows",
+                label: "Vibration Data",
+                to: "/use-cases/vibration-sensors",
               },
               {
                 label: "Computer Vision",
@@ -288,7 +288,7 @@ const config = {
               {
                 label: "Terms And Conditions",
                 to: "/terms",
-              }
+              },
             ],
           },
           {
@@ -305,7 +305,7 @@ const config = {
               {
                 label: "Pricing",
                 to: "/pricing",
-              }
+              },
             ],
           },
           {
