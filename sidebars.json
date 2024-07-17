@@ -55,7 +55,8 @@
             "type": "category",
             "label": "Integration",
             "items": [
-                "guides/integration/azure"
+                "guides/integration/azure",
+                "guides/integration/azure-vm"
             ]
         },
         {
