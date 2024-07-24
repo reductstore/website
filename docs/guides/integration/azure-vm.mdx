@@ -1,12 +1,12 @@
 ---
-title: Deployment as Azure Virtual Machine
+title: Deploy as Azure Virtual Machine
 description: Deploy ReductStore as a virtual machine on Azure using the Azure Marketplace.
 ---
 
 import TabItem from "@theme/TabItem";
 import Tabs from "@theme/Tabs";
 
-# Deployment as Azure Virtual Machine
+# Deploy as Azure Virtual Machine
 
 <head>
     <link rel="canonical" href="https://www.reduct.store/docs/integration/azure-vm"/>
@@ -25,14 +25,15 @@ This provides a low cost storage solution that is easy to provision and scale as
 ![Azure Virtual Machine](./img/azure_vm_diagram.svg)
 
 ReductStore doesn't have native support for Azure Storage Accounts, but the virtual machine is preconfigured with [Azure BlobFuse](https://learn.microsoft.com/en-us/azure/storage/blobs/blobfuse2-what-is) to mount the Azure Storage Account as a local file system.
-It uses memory caching to optimise read and write operations by reducing the number of requests to the Azure Storage Account.
+It uses a local disk cache to optimise read and write operations by reducing the number of requests to the Azure Storage Account.
 
 ## Virtual Machine Requirements
 
-Before creating the virtual machine, you should choose the size of the virtual machine according to your requirements:
+Before creating the virtual machine, you should choose the size of the virtual machine according to your requirements.
+The minimum requirements for the virtual machine are:
 
-* RAM: 2 GB
-* CPU: 2 vCPUs
+* RAM: 1 GB
+* CPU: 1 vCPUs
 * Disk: 32 GB HDD
 
 You will also need an Azure storage account to store the data. If you don't have one, you can create one in the Azure portal.
@@ -50,7 +51,7 @@ AZURE_STORAGE_ACCESS_KEY=<STORAGE_ACCOUNT_ACCESS_KEY>
 
 Read more about environment variables in the [Azure BlobFuse documentation](https://github.com/Azure/azure-storage-fuse?tab=readme-ov-file#environment-variables).
 
-Additionally, you can configure and provision ReductStore's resources, read [Configuration](./docs/configuration.mdx) for more information.
+Additionally, you can configure and provision ReductStore's resources in the same way. Read the [Configuration](/docs/configuration.mdx) page for more information.
 
 ## Deployment Steps
 
@@ -69,13 +70,15 @@ The following steps describe how to deploy ReductStore as a virtual machine on A
 
         2. Select the plan you want to use (Sku column):
         ```bash
-        az vm image list --publisher reductstorellc1689939980623 -o table --all
+        az vm image list --publisher reductsoftware -o table --all
         ```
 
         3. You must accept the [Terms and Conditions](https://www.reduct.store/terms) of the Azure Marketplace offering before creating the virtual machine.
         ```bash
-        az vm image terms accept --publisher reductstorellc1689939980623 -f reductstore-server --plan [PLAN_NAME]
+        az vm image terms accept --publisher reductsoftware -f reductstore-server --plan [PLAN_NAME]
         ```
+
+        The `[PLAN_NAME]` is the name of the plan you want to use. You can find it in the image Urn, for example, `reductstore-01tb-std`.
 
         4. Create the `custom_data.env` file with the custom data
 
@@ -84,7 +87,7 @@ The following steps describe how to deploy ReductStore as a virtual machine on A
         az vm create \
         --resource-group myResourceGroup \
         --name myVM \
-        --image reductstorellc1689939980623:reductstore-server:[PLAN_NAME]:[VERSION] \
+        --image reductsoftware:reductstore-server:[PLAN_NAME]:[VERSION] \
         --size Standard_A2_v2 \
         --admin-username azureuser \
         --generate-ssh-keys \
