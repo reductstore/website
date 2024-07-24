@@ -377,6 +377,165 @@ The Entry API allows users to write and read data from their buckets, as well as
   }
 />
 
+
+<SwaggerComponent
+  method="PATCH"
+  path="/api/v1/b/:bucket_name/:entry_name"
+  summary="Update labels of a record"
+  description={
+    <>
+      The method allows to update labels of a existing record.
+      It receives labels in headers that start with <code>x-reduct-label-</code> and updates the labels or adds new ones.
+      If a header with a label is empty, the label is removed.
+      Due to the content of the record is immutable, the method doesn't expect a body and the content-length header is required but must be 0.
+      <br /><br />
+      All existing labels not mentioned in the request stay unchanged.
+      <br /><br />
+      The method needs a valid API token with write access to the entry's bucket if authentication is enabled.
+    </>
+  }
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        description: "Name of bucket",
+        isRequired: true,
+      }
+    },
+    {
+      type: "path",
+      details: {
+        name: ":entry_name",
+        description: "Name of entry",
+        isRequired: true,
+      }
+    },
+    {
+      type: "query",
+      details: {
+        name: "ts",
+        dataType: "Integer",
+        description: "A UNIX timestamp in microseconds",
+        isRequired: true,
+      }
+    },
+    {
+      type: "header",
+      details: {
+        name: "Content-Length",
+        description: "Content-length is required but must be 0",
+        isRequired: true,
+      }
+    },
+    {
+      type: "header",
+      details: {
+        name: "x-reduct-label-<name>",
+        description: "A value of a label assigned to the record",
+        isRequired: false,
+      }
+    }
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "The record is written",
+      description: (
+        <pre><code>{`{
+    // Response
+}`}</code></pre>
+      )
+    },
+    {
+      status: "400",
+      message: "Bad Request",
+      summary: "Posted content bigger or smaller than content-length"
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty"
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token does not have write permissions"
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket, entry or record is not found"
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "Bad timestamp"
+    }
+  ]}
+/>
+
+
+<SwaggerComponent
+  method="PATCH"
+  path="/api/v1/b/:bucket_name/:entry_name/batch"
+  summary="Update labels of multiple records"
+  description={
+    <>
+      This method allows to update labels of multiple records in a single request. A client should describe the records in headers in the following format:
+      <br />
+      <code>x-reduct-time-: &lt;CONTENT_LENGTH&gt;,&lt;CONTENT_TYPE&gt;, [LABEL=VALUE]</code>
+      <br /><br />
+      Due to the content of the records is immutable, the method doesn't expect a body and the content-length header is required but must be 0. You also don't need to set the content-type.
+      The method updates labels of existing records or adds new ones. If a header with a label is empty, the label is removed.
+
+      <br /><br />
+      Existing labels not mentioned in the request stay unchanged.
+
+      <br /><br />
+      This is an example of a header with labels to update and remove: <code>x-reduct-time-192312381273: 0,label-to-update=new_value,label-to-remove=</code>
+      <br /><br />
+      The method returns an HTTP error if the header format or data length is incorrect. It also returns an individual status and error message for each record if the write operation fails:
+      <br />
+      <code>x-reduct-error-: &lt;STATUS_CODE&gt;,&lt;ERROR_MESSAGE&gt;.</code>
+    </>
+  }
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "The request was valid. However, some records may not be written. Check headers."
+    },
+    {
+      status: "400",
+      message: "Bad Request",
+      summary: "Posted content bigger or smaller than content-length"
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty"
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token does not have write permissions"
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket or entry is not found"
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "Bad header format"
+    }
+  ]}
+/>
+
+
 <SwaggerComponent
   method="GET"
   path="/api/v1/b/:bucket_name/:entry_name/q"
