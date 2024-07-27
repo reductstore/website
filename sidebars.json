@@ -47,6 +47,7 @@
                 "guides/buckets",
                 "guides/data-ingestion",
                 "guides/data-querying",
+                "guides/data-management",
                 "guides/data-replication",
                 "guides/access-control"
             ]

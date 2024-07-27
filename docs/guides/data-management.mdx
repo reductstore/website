@@ -1,0 +1,32 @@
+---
+title: Data Management
+description: Complete guide on typical data management operations in ReductStore.
+---
+
+import CodeBlock from "@theme/CodeBlock";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<head>
+    <link rel="canonical" href="https://www.reduct.store/docs/guides/data-managment"/>
+</head>
+
+# Data Management With ReductStore
+
+ReductStore provides a set of methods to manage data in the database. This guide provides an overview of typical data management operations in ReductStore and explains how to perform them using the ReductStore SDKs or the HTTP API.
+
+## Changing Labels
+
+ReductStore doesn't allow to change the content of records, however, it allows to change their labels.
+That can be done for a single record or for a batch of records. Pay attention that you should send a label as an empty string to remove it.
+
+import ChangeLabelsPy from "!!raw-loader!../examples/py/src/data_management_update_labels.py";
+
+<Tabs>
+    <TabItem value="Python">
+        <CodeBlock language="python">
+            {ChangeLabelsPy}
+        </CodeBlock>
+    </TabItem>
+</Tabs>
+

@@ -1,1 +1,1 @@
-reduct-py
+reduct-py @ https://github.com/reductstore/reduct-py/archive/refs/heads/main.zip
