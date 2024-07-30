@@ -19,7 +19,6 @@ interface DatasetInfo {
 const ImageCarousel = () => {
   const [datasets, setDatasets] = useState<DatasetInfo[]>([]);
   const [images, setImages] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [dataset, setDataset] = useState(DATASETS[0]);
   const [start, setStart] = useState(0);
   const [error, setError] = useState(null);
@@ -42,7 +41,6 @@ const ImageCarousel = () => {
   }, [fetchBucketInfo]);
 
   const fetchImages = useCallback(async () => {
-    setLoading(true);
     setError(null);
 
     let timeoutId;
@@ -79,7 +77,6 @@ const ImageCarousel = () => {
       setError(errorMessage);
     } finally {
       clearTimeout(timeoutId);
-      setLoading(false);
     }
   }, [dataset, start]);
 
