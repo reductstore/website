@@ -234,6 +234,10 @@ const config = {
                 to: "/docs/getting-started",
               },
               {
+                label: "Remote Datasets",
+                to: "/remote-datasets",
+              },
+              {
                 label: "Source Code",
                 href: "https://github.com/reductstore/reductstore",
               },
