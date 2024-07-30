@@ -1,0 +1,132 @@
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 3rem;
+}
+
+.datasetSelect {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.formLabel {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+/* slider */
+.sliderContainer {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.sliderWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--ifm-color-primary);
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--ifm-color-primary);
+  cursor: pointer;
+}
+
+.sliderValue {
+  margin-left: 1rem;
+  font-weight: bold;
+  min-width: 2.5rem;
+  text-align: right;
+}
+
+/* image */
+.imageCarousel {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.imageWrapper {
+  flex: 0 0 calc(33.333% - 1rem);
+  max-width: calc(33.333% - 1rem);
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* MNIST specific styles */
+.mnistCarousel {
+  justify-content: center;
+}
+
+.mnistImageWrapper {
+  flex: 0 0 calc(12.5% - 1rem);
+  max-width: calc(12.5% - 1rem);
+}
+
+.mnistImage {
+  min-width: 100px;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .imageWrapper {
+    flex: 0 0 calc(50% - 1rem);
+    max-width: calc(50% - 1rem);
+  }
+
+  .mnistImageWrapper {
+    flex: 0 0 calc(25% - 1rem);
+    max-width: calc(25% - 1rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .imageWrapper,
+  .mnistImageWrapper {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
