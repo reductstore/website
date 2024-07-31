@@ -15,7 +15,7 @@ const PromotionalBanner = () => {
           <div>
             <h3>Free Evaluation and Proof of Concept (PoC)</h3>
             <p>
-              Secure your spot today, and our team will reach out to you to understand your requirements and provide a custom evaluation tailored to your project.
+              Secure your spot today, and our team will contact you to understand your requirements and provide you with a customized evaluation tailored to your project.
             </p>
             <ul className={styles.benefitsList}>
               <li>{checkedIcon} Consultation call to understand your requirements</li>
