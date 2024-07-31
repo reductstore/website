@@ -5,7 +5,7 @@ from reduct import Client, ReplicationSettings
 
 async def main():
     # Create a client instance, then create a bucket as source bucket
-    with Client("http://127.0.0.1:8383", api_token="my-token") as client:
+    async with Client("http://127.0.0.1:8383", api_token="my-token") as client:
         await client.create_bucket("my-bucket", exist_ok=True)
 
         # Set up a replication to a destination bucket for records

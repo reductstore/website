@@ -1,11 +1,9 @@
 from reduct import Client, BucketSettings, QuotaType
 
 
-
-
 async def change_bucket():
     # Create a client with the base URL and API token
-    with Client("http://localhost:8383", api_token="my-token") as client:
+    async with Client("http://localhost:8383", api_token="my-token") as client:
         # Get an existing bucket
         bucket = await client.get_bucket("example-bucket")
 

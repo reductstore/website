@@ -1,11 +1,9 @@
 from reduct import Client, BucketSettings, QuotaType
 
 
-
-
 async def create_bucket():
     # Create a client with the base URL and API token
-    with Client("http://localhost:8383", api_token="my-token") as client:
+    async with Client("http://localhost:8383", api_token="my-token") as client:
         # Create a bucket with the name "my-bucket" and a FIFO quota of 1GB
         settings = BucketSettings(
             quota_type=QuotaType.FIFO,

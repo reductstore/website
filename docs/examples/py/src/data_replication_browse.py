@@ -5,7 +5,7 @@ from reduct import Client, ReplicationSettings
 
 async def main():
     # Create a client instance
-    with Client("http://127.0.0.1:8383", api_token="my-token") as client:
+    async with Client("http://127.0.0.1:8383", api_token="my-token") as client:
         # List all replications
         for replication in await client.get_replications():
             print("Replication: ", replication.name)

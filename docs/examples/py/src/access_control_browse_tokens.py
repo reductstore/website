@@ -5,7 +5,7 @@ from reduct import Client, Permissions, Token, FullTokenInfo
 
 async def browse_tokens():
     # Create a client with the base URL and API token
-    with Client("http://localhost:8383", api_token="my-token") as client:
+    async with Client("http://localhost:8383", api_token="my-token") as client:
         #  Browse all tokens and print their information
         tokens: List[Token] = await client.get_token_list()
         for token in tokens:

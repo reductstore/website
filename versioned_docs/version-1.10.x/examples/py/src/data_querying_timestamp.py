@@ -9,7 +9,11 @@ async def main():
     bucket: Bucket = await client.create_bucket("my-bucket", exist_ok=True)
 
     ts = time.time()
-    await bucket.write("py-example", b"Some binary data", ts, )
+    await bucket.write(
+        "py-example",
+        b"Some binary data",
+        ts,
+    )
 
     # Query records in the "py-example" entry of the bucket
     async with bucket.read("py-example", ts) as record:

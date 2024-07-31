@@ -12,9 +12,18 @@ async def main():
 
     # Prepare a batch of records
     batch = Batch()
-    batch.add("2024-02-02T10:00:00", b"Records #1", )
-    batch.add("2024-02-02T10:00:01", b"Records #2", )
-    batch.add("2024-02-02T10:00:02", b"Records #3", )
+    batch.add(
+        "2024-02-02T10:00:00",
+        b"Records #1",
+    )
+    batch.add(
+        "2024-02-02T10:00:01",
+        b"Records #2",
+    )
+    batch.add(
+        "2024-02-02T10:00:02",
+        b"Records #3",
+    )
 
     # Write the batch to the "py-example" entry of the bucket
     errors: Dict[int, ReductError] = await bucket.write_batch("py-example", batch)

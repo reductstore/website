@@ -3,8 +3,7 @@ from reduct import Client, ReductError
 
 async def remove_bucket():
     # Create a client with the base URL and API token
-
-    with Client("http://127.0.0.1:8383", api_token="my-token") as client:
+    async with Client("http://127.0.0.1:8383", api_token="my-token") as client:
         # Remove the bucket with the name "bucket-to-remove"
 
         bucket = await client.get_bucket("bucket-to-remove")

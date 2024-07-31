@@ -5,13 +5,23 @@ from reduct import Client, Bucket, Batch
 
 async def main():
     # Create a client instance, then get or create a bucket
-    with Client("http://127.0.0.1:8383", api_token="my-token") as client:
+    async with Client("http://127.0.0.1:8383", api_token="my-token") as client:
         bucket: Bucket = await client.create_bucket("my-bucket", exist_ok=True)
 
         # Send some records to the "py-example" entry with labels
         ts = time.time()
-        await bucket.write("py-example", b"Some binary data", ts, labels={"key1": "value1", "key2": "value2"})
-        await bucket.write("py-example", b"Some binary data", ts + 1, labels={"key1": "value1", "key2": "value2"})
+        await bucket.write(
+            "py-example",
+            b"Some binary data",
+            ts,
+            labels={"key1": "value1", "key2": "value2"},
+        )
+        await bucket.write(
+            "py-example",
+            b"Some binary data",
+            ts + 1,
+            labels={"key1": "value1", "key2": "value2"},
+        )
 
         # Update labels of a record: remove "key2" and update "key1"
         await bucket.update("py-example", ts, labels={"key1": "new-value", "key2": ""})

@@ -4,11 +4,9 @@ from reduct import Client, BucketInfo
 from reduct.bucket import Bucket
 
 
-
-
 async def browse_buckets():
     # Create a client with the base URL and API token
-    with Client("http://localhost:8383", api_token="my-token") as client:
+    async with Client("http://localhost:8383", api_token="my-token") as client:
         # Browse all buckets and print their information
         buckets: List[BucketInfo] = await client.list()
         for info in buckets:
