@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import styles from './Modal.module.css';
+import styles from './styles.module.css';
 
 type ModalProps = {
   isOpen: boolean;

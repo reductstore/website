@@ -27,9 +27,6 @@ export default function Pricing(): JSX.Element {
           <PricingTable />
         </div>
         <br />
-        <div className={styles.form}>
-          <FreePoCForm elementId="free-poc-form" />
-        </div>
         <SimpleHeader pageTitle="Frequently Asked Questions" pageTitleAs="h2" />
         <div className="container">
           <Faq faqs={pricingFaqs} defaultOpenCount={3} />
