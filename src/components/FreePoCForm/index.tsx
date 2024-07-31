@@ -21,14 +21,14 @@ const FreePoCForm = ({ elementId, targetDate, startDate }: FreePoCFormProps) => 
 
       <div className={clsx(styles.form, "alert alert--success")}>
         <h2>Thank You!</h2>
-        <p>We've received your request for a free PoC integration for your project. A member of our team will get back to you soon.</p>
+        <p>We've received your request for a free evaluation and Proof of Concept (PoC). A member of our team will get back to you soon.</p>
       </div>
     );
   }
 
   return (
     <form id={elementId} className={styles.form} onSubmit={handleSubmit}>
-      <h2>Free PoC Integration for your Project</h2>
+      <h2>Free evaluation and Proof of Concept (PoC)</h2>
       {targetDate && startDate &&
         <div className={styles.countdown}>
           <CountdownTimer targetDate={targetDate} startDate={startDate} size={45} />
@@ -69,7 +69,7 @@ const FreePoCForm = ({ elementId, targetDate, startDate }: FreePoCFormProps) => 
           type="submit"
           disabled={state.submitting}
         >
-          Request Free PoC
+          Send Request
         </button>
       </div>
       <Link
