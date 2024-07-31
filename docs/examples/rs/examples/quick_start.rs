@@ -33,7 +33,7 @@ async fn main() -> Result<(), ReductError> {
 
     bucket
         .write_record("sensor-1")
-        .data(b"Record #2")
+        .data("Record #2")
         .timestamp(start + Duration::from_secs(1))
         .send()
         .await?;
