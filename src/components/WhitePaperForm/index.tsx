@@ -4,7 +4,7 @@ import { useForm, ValidationError } from '@formspree/react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 
-const whitePaperUrl = require("@site/static/pdf/whitepaper/ReductStore_EdgeAI_WhitePaper.pdf").default;
+const whitePaperUrl = require("@site/static/pdf/whitepaper/ReductStore_WhitePaper.pdf").default;
 
 export default function WhitePaperForm() {
   const [state, handleSubmit] = useForm("xleylpzp");
@@ -15,7 +15,7 @@ export default function WhitePaperForm() {
       setDownloadInitiated(true);
       const link = document.createElement('a');
       link.href = whitePaperUrl;
-      link.download = 'ReductStore_EdgeAI_WhitePaper.pdf';
+      link.download = 'ReductStore_WhitePaper.pdf';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -34,68 +34,66 @@ export default function WhitePaperForm() {
   }
 
   return (
-    <>
-      <form id="whitepaper-form" className={styles.whitePaperForm} onSubmit={handleSubmit}>
-        <div className={styles.inputGroup}>
-          <label htmlFor="InputNameWhitePaper">Your Name</label>
-          <input
-            type="text"
-            id="InputNameWhitePaper"
-            name="name"
-            placeholder="Your Name"
-            className={styles.inputField}
-            required
-          />
-          <ValidationError prefix="Name" field="name" errors={state.errors} />
-        </div>
+    <form id="whitepaper-form" className={styles.whitePaperForm} onSubmit={handleSubmit}>
+      <div className={styles.inputGroup}>
+        <label htmlFor="InputNameWhitePaper">Your Name</label>
+        <input
+          type="text"
+          id="InputNameWhitePaper"
+          name="name"
+          placeholder="Your Name"
+          className={styles.inputField}
+          required
+        />
+        <ValidationError prefix="Name" field="name" errors={state.errors} />
+      </div>
 
-        <div className={styles.inputGroup}>
-          <label htmlFor="InputCompanyWhitePaper">Your Company</label>
-          <input
-            type="text"
-            id="InputCompanyWhitePaper"
-            name="company"
-            placeholder="Your Company"
-            required
-            className={styles.inputField}
-          />
-          <ValidationError prefix="Company" field="company" errors={state.errors} />
-        </div>
+      <div className={styles.inputGroup}>
+        <label htmlFor="InputCompanyWhitePaper">Your Company</label>
+        <input
+          type="text"
+          id="InputCompanyWhitePaper"
+          name="company"
+          placeholder="Your Company"
+          required
+          className={styles.inputField}
+        />
+        <ValidationError prefix="Company" field="company" errors={state.errors} />
+      </div>
 
-        <div className={styles.inputGroup}>
-          <label htmlFor="InputEmailWhitePaper">Your Email</label>
-          <input
-            type="email"
-            id="InputEmailWhitePaper"
-            name="email"
-            placeholder="Your Email"
-            required
-            className={styles.inputField}
-          />
-          <ValidationError prefix="Email" field="email" errors={state.errors} />
-        </div>
+      <div className={styles.inputGroup}>
+        <label htmlFor="InputEmailWhitePaper">Your Email</label>
+        <input
+          type="email"
+          id="InputEmailWhitePaper"
+          name="email"
+          placeholder="Your Email"
+          required
+          className={styles.inputField}
+        />
+        <ValidationError prefix="Email" field="email" errors={state.errors} />
+      </div>
 
-        <div className="col">
-          <button
-            className={"row button button--primary button--md"}
-            type="submit"
-            disabled={state.submitting}
-          >
-            Download
-          </button>
-          <div className={clsx("row", styles.privacyPolicy)} >
-            <p>
-              We'll never share your email with anyone else. See our&nbsp;
-            </p>
+      <div className="col">
+        <button
+          className={"row button button--primary button--md"}
+          type="submit"
+          disabled={state.submitting}
+        >
+          Download
+        </button>
+        <div className={clsx("row", styles.privacyPolicy)} >
+          <p>
+            We'll never share your email with anyone else. See our&nbsp;
             <Link
               to="/privacy"
               target="_blank"
             >
               Privacy Policy
             </Link>
-          </div>
+          </p>
         </div>
-      </form>
-    </>
+      </div>
+    </form>
   );
 }
