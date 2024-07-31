@@ -24,7 +24,7 @@ const PromotionalBanner = () => {
             </ul>
             <div className={styles.buttonContainer}>
               <button className="button button--primary button--lg" onClick={() => setOpenModal(true)}>
-                Request Free Evaluation and Proof of Concept
+                Request Free Evaluation and PoC
               </button>
             </div>
           </div>
