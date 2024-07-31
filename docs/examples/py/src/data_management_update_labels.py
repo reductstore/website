@@ -8,7 +8,7 @@ async def main():
     client = Client("http://127.0.0.1:8383", api_token="my-token")
     bucket: Bucket = await client.create_bucket("my-bucket", exist_ok=True)
 
-    # Send a record to the "py-example" entry with labels
+    # Send some records to the "py-example" entry with labels
     ts = time.time()
     await bucket.write("py-example", b"Some binary data", ts, labels={"key1": "value1", "key2": "value2"})
     await bucket.write("py-example", b"Some binary data", ts + 1, labels={"key1": "value1", "key2": "value2"})

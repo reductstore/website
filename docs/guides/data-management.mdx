@@ -21,11 +21,17 @@ ReductStore doesn't allow to change the content of records, however, it allows t
 That can be done for a single record or for a batch of records. Pay attention that you should send a label as an empty string to remove it.
 
 import ChangeLabelsPy from "!!raw-loader!../examples/py/src/data_management_update_labels.py";
+import ChangeLabelsRs from "!!raw-loader!../examples/rs/examples/data_management_update_labels.rs";
 
 <Tabs>
     <TabItem value="Python">
         <CodeBlock language="python">
             {ChangeLabelsPy}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {ChangeLabelsRs}
         </CodeBlock>
     </TabItem>
 </Tabs>
