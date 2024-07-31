@@ -31,8 +31,8 @@ async def main():
 
         # Update labels in a batch
         batch = Batch()
-        batch.add("py-example", ts, labels={"key1": "new-value", "key2": ""})
-        batch.add("py-example", ts + 1, labels={"key3": "value3"})
+        batch.add(ts, labels={"key1": "new-value", "key2": ""})
+        batch.add(ts + 1, labels={"key3": "value3"})
         errors = await bucket.update_batch("py-example", batch)
         assert not errors
 
