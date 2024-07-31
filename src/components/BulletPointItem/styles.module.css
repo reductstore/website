@@ -1,0 +1,10 @@
+.bulletPointItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.bulletIcon {
+  color: var(--ifm-color-primary);
+  margin-right: 0.5rem;
+}
