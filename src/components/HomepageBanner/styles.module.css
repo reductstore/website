@@ -19,7 +19,6 @@
 .bannerText a {
   cursor: pointer;
   font-weight: bold;
-  text-decoration: underline;
 }
 
 @media (max-width: 600px) {
