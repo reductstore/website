@@ -10,7 +10,7 @@
 /* Header Styles */
 .swaggerHeader {
   padding: 10px 15px;
-  background-color: #f6f8fa;
+  background-color: var(--reduct-background-gray-light);
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -52,7 +52,7 @@
 /* Details Section Styles */
 .swaggerDetails {
   padding: 15px;
-  background-color: #ffffff;
+  background-color: var(--reduct-background-gray-light);
   border-top: 1px solid #e1e4e8;
 }
 
@@ -98,7 +98,7 @@
 
 /* State Styles */
 .open {
-  background-color: #e9ecef;
+  background-color: var(--reduct-background-gray);
 }
 
 .clickable {
@@ -128,6 +128,11 @@
 
 .head {
   background-color: #6c757d;
+  color: #ffffff;
+}
+
+.patch {
+  background-color: #6f42c1;
   color: #ffffff;
 }
 
