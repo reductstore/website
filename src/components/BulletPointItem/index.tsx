@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import styles from './styles.module.css';
@@ -10,13 +10,21 @@ type BulletPointItemProps = {
 };
 
 export default function BulletPointItem({ children, icon, size = "1x" }: BulletPointItemProps) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
   return (
     <li className={styles.bulletPointItem}>
-      <FontAwesomeIcon
-        icon={icon || faCheckCircle}
-        className={styles.bulletIcon}
-        size={size}
-      />
+      {isLoaded && (
+        <FontAwesomeIcon
+          icon={icon || faCheckCircle}
+          className={styles.bulletIcon}
+          size={size}
+        />
+      )}
       {children}
     </li>
   );
