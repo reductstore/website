@@ -30,7 +30,7 @@ export default function ReductAI(): JSX.Element {
             <p>
               Explore ReductStore: A new solution for managing unstructured time series data.
             </p>
-            <button onClick={openModal} className={clsx('button button--primary')}>
+            <button onClick={openModal} className={"button button--lg button--primary"}>
               Download White Paper
             </button>
           </div>
