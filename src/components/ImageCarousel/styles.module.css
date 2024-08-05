@@ -78,7 +78,6 @@
   cursor: pointer;
 }
 
-/* image */
 .imageCarousel {
   display: flex;
   flex-direction: row;

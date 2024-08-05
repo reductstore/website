@@ -1,33 +1,14 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Client } from "reduct-js";
 import debounce from "lodash/debounce";
-import { LabelMap } from "reduct-js/lib/cjs/Record";
+import { DatasetInfo, ImageWithLabelsItem, PlayServerContextType } from "./ImageCarousel.types";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
-export interface ImageWithLabelsItem {
-  url: string;
-  labels: LabelMap;
-}
+export const useImageFetcher = (dataset: string, start: number, num_images: number, allowed_datasets: string[]) => {
+  const { siteConfig } = useDocusaurusContext();
+  const { themeConfig } = siteConfig;
+  const playServer = themeConfig.playServer as PlayServerContextType;
 
-interface DatasetInfo {
-  name: string;
-  recordCount: number;
-}
-
-const BUCKET_NAME = "datasets";
-const DATASETS = ["imdb", "cats", "mnist_training"];
-const BASE_URL = "http://localhost:8384";
-const API_TOKEN = "reductstore";
-const NUM_IMAGES = {
-  imdb: 10,
-  cats: 10,
-  mnist_training: 20,
-};
-
-const client = new Client(BASE_URL, {
-  apiToken: API_TOKEN,
-});
-
-export const useImageFetcher = (dataset: string, start: number) => {
   const [datasets, setDatasets] = useState<DatasetInfo[]>([]);
   const [imagesWithLabels, setImagesWithLabels] = useState<ImageWithLabelsItem[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -35,12 +16,16 @@ export const useImageFetcher = (dataset: string, start: number) => {
   const abortControllerRef = useRef<AbortController | null>(null);
   const imageUrlsRef = useRef<string[]>([]);
 
+  const client = new Client(playServer.url, {
+    apiToken: playServer.token,
+  });
+
   const fetchBucketInfo = useCallback(async () => {
     try {
-      const bucket = await client.getBucket(BUCKET_NAME);
+      const bucket = await client.getBucket(playServer.bucket);
       const entries = await bucket.getEntryList();
       const availableDatasets = entries.filter(
-        (entry) => entry.recordCount > 0 && DATASETS.includes(entry.name)
+        (entry) => entry.recordCount > 0 && allowed_datasets.includes(entry.name)
       );
 
       setDatasets(
@@ -80,8 +65,8 @@ export const useImageFetcher = (dataset: string, start: number) => {
     revokeImageUrls();
 
     try {
-      const bucket = await client.getBucket(BUCKET_NAME);
-      const stop = start + NUM_IMAGES[dataset] + 1;
+      const bucket = await client.getBucket(playServer.bucket);
+      const stop = start + num_images + 1;
       const newImagesWithLabels: ImageWithLabelsItem[] = [];
 
       for await (const record of bucket.query(

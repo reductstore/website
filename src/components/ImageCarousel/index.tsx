@@ -8,29 +8,41 @@ import {
   FaEyeSlash as EyeSlashIcon,
 } from 'react-icons/fa';
 
-const DATASETS = ['imdb', 'cats', 'mnist_training'];
-const DATASET_NAMES = {
-  imdb: 'IMDB',
-  cats: 'Cat',
-  mnist_training: 'MNIST',
-};
-const NUM_IMAGES = {
-  imdb: 10,
-  cats: 10,
-  mnist_training: 20,
+const DATASETS = {
+  imdb: {
+    id: 'imdb',
+    name: 'IMDB',
+    numImages: 10
+  },
+  cats: {
+    id: 'cats',
+    name: 'Cat',
+    numImages: 10
+  },
+  mnist_training: {
+    id: 'mnist_training',
+    name: 'MNIST',
+    numImages: 20
+  }
 };
 
 const ImageCarousel = () => {
-  const [dataset, setDataset] = useState(DATASETS[0]);
+  const [dataset, setDataset] = useState("imdb");
   const [start, setStart] = useState(0);
   const [showLabels, setShowLabels] = useState(true);
-  const { datasets, imagesWithLabels, error } = useImageFetcher(dataset, start);
+
+  const numImages = DATASETS[dataset].numImages;
+  const datasetName = DATASETS[dataset].name;
+  const datasetIds = Object.keys(DATASETS);
+
+  const { datasets, imagesWithLabels, error } = useImageFetcher(dataset, start, numImages, datasetIds);
 
   const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newStart = Number(event.target.value);
     setStart(newStart);
   };
-  const maxImages = Number(datasets.find((ds) => ds.name === dataset)?.recordCount) - NUM_IMAGES[dataset] || 0;
+
+  const maxImages = Number(datasets.find((ds) => ds.name === dataset)?.recordCount) - numImages || 0;
 
   if (error) {
     return (
@@ -50,7 +62,7 @@ const ImageCarousel = () => {
           <label className={styles.inputLabel}>Dataset</label>
           <div className="dropdown dropdown--left dropdown--hoverable">
             <button className="button button--primary" >
-              {DATASET_NAMES[dataset]}
+              {datasetName}
             </button>
             <ul className="dropdown__menu">
               {datasets.map((ds) => (
@@ -63,7 +75,7 @@ const ImageCarousel = () => {
                       setStart(0);
                     }}
                   >
-                    {DATASET_NAMES[ds.name]}
+                    {DATASETS[ds.name].name}
                   </a>
                 </li>
               ))}
@@ -87,7 +99,7 @@ const ImageCarousel = () => {
           <label className={styles.inputLabel} htmlFor="start-slider">Timeline</label>
           <div className={styles.sliderWrapper}>
             <span className={styles.sliderValue}>
-              {start + 1} - {start + NUM_IMAGES[dataset]}
+              {start + 1} - {start + numImages}
             </span>
             <input
               type="range"
@@ -95,7 +107,7 @@ const ImageCarousel = () => {
               className={styles.slider}
               min="0"
               max={maxImages}
-              step={NUM_IMAGES[dataset]}
+              step={numImages}
               value={start}
               onChange={handleSliderChange}
             />

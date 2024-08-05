@@ -139,6 +139,13 @@ const config = {
         iot: "https://buy.stripe.com/cN2cNy3Y93nwci4bII",
       },
 
+      // Remote playground dataset
+      playServer: {
+        url: "https://play.reduct.store",
+        token: "reductstore",
+        bucket: "datasets",
+      },
+
       // Declare some <meta> tags
       metadata: [
         {
@@ -147,6 +154,7 @@ const config = {
             "ReductStore, Time-Series Database, Blob Data Management, Edge Computing Database, IoT Data Solutions, Computer Vision Data Storage",
         },
       ],
+
       // Replace with your project's social card
       image: "img/reductstore-social-card.jpg",
       navbar: {

@@ -1,12 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { ImageWithLabelsItem } from './useImageFetcher';
 import styles from './styles.module.css';
-
-interface ImageWithLabelsProps {
-  image: ImageWithLabelsItem;
-  showLabels: boolean;
-  dataset: string;
-}
+import { ImageWithLabelsProps } from './ImageCarousel.types';
 
 const ImageWithLabels: React.FC<ImageWithLabelsProps> = ({ image, showLabels, dataset }) => {
   const imgRef = useRef<HTMLImageElement>(null);
