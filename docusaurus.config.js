@@ -48,6 +48,7 @@ const config = {
   plugins: [
     require.resolve("./src/plugins/docusaurus-plugin-matomo"),
     require.resolve("./src/plugins/docusaurus-plugin-crisp"),
+    require.resolve("./src/plugins/docusaurus-plugin-stream"),
   ],
 
   // LaTex support
