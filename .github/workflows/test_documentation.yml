@@ -76,16 +76,19 @@ jobs:
 
       - name: Install Python
         uses: actions/setup-python@v5
+        if : matrix.example == 'python'
         with:
           python-version: 3.8
 
       - name: Install Node.js
         uses: actions/setup-node@v4
+        if: matrix.example == 'node'
         with:
           node-version: 20
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
+        if: matrix.example == 'rust'
         with:
           toolchain: 1.75
 
@@ -98,7 +101,8 @@ jobs:
         if: matrix.example == 'node'
         run: |
           cd ${{ matrix.example_root }}/${{ matrix.path_prefix }}/..
-          npm install
+          git clone https://github.com/reductstore/reduct-js.git
+          npm install reduct-js
 
       - name: Build C++ examples
         if: matrix.example == 'cpp'

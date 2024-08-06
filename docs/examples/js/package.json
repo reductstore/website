@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "reduct-js": "git+https://github.com/reductstore/reduct-js.git"
+    "reduct-js": "reductstore/reduct-js"
   }
 }
