@@ -7,13 +7,13 @@ const bucket = await client.getOrCreateBucket("bucket");
 
 // Send some records to the "entry" entry with labels
 const timestamp = BigInt(Date.now()) * 1000n;
-let record = await bucket.beginWrite("entry", {
+let record = await bucket.beginWrite("entry-1", {
     timestamp: timestamp,
     labels: {"key1": "value1", "key2": "value2"},
 });
 await record.write("Some binary data");
 
-record = await bucket.beginWrite("entry", {
+record = await bucket.beginWrite("entry-1", {
     timestamp: timestamp + 1000_000n,
     labels: {"key1": "value1", "key2": "value2"},
 });
