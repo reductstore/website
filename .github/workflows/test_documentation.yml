@@ -100,12 +100,12 @@ jobs:
       - name: Install Node.js dependencies
         if: matrix.example == 'node'
         run: |
-          cd ${{ matrix.example_root }}
           git clone https://github.com/reductstore/reduct-js.git
           cd reduct-js
-          npm install
-          npm run tsc
-          npm install . # install reduct-js as a package
+          yarn install
+          yarn run tsc
+          cd ..
+          yarn install ./reduct-js # install reduct-js as a package
 
       - name: Build C++ examples
         if: matrix.example == 'cpp'
