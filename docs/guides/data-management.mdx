@@ -22,6 +22,8 @@ That can be done for a single record or for a batch of records. Pay attention th
 
 import ChangeLabelsPy from "!!raw-loader!../examples/py/src/data_management_update_labels.py";
 import ChangeLabelsRs from "!!raw-loader!../examples/rs/examples/data_management_update_labels.rs";
+import ChangeLabelsJs from "!!raw-loader!../examples/js/src/data_management_update_labels.mjs";
+import ChangeLabelsCpp from "!!raw-loader!../examples/cpp/src/data_management_update_labels.cc";
 
 <Tabs>
     <TabItem value="Python">
@@ -32,6 +34,16 @@ import ChangeLabelsRs from "!!raw-loader!../examples/rs/examples/data_management
     <TabItem value="Rust">
         <CodeBlock language="rust">
             {ChangeLabelsRs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">
+            {ChangeLabelsJs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">
+            {ChangeLabelsCpp}
         </CodeBlock>
     </TabItem>
 </Tabs>
