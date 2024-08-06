@@ -133,7 +133,7 @@ jobs:
       - name: Run examples
         run: |
           cd ${{ matrix.example_root }}
-          for example in $(find .${{ matrix.path_prefix }} -type f );
+          for example in $(find ./${{ matrix.path_prefix }} -type f );
           do
             echo "Run $example" 
             ${{ matrix.cmd }} "$example"
