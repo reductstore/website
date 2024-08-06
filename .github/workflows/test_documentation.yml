@@ -103,8 +103,9 @@ jobs:
           cd ${{ matrix.example_root }}
           git clone https://github.com/reductstore/reduct-js.git
           cd reduct-js
+          npm install
           npm run tsc
-          npm install .
+          npm install . # install reduct-js as a package
 
       - name: Build C++ examples
         if: matrix.example == 'cpp'
