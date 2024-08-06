@@ -100,7 +100,7 @@ jobs:
       - name: Install Node.js dependencies
         if: matrix.example == 'node'
         run: |
-          cd ${{ matrix.example_root }}/${{ matrix.path_prefix }}/..
+          cd ${{ matrix.example_root }}
           git clone https://github.com/reductstore/reduct-js.git
           npm install ./reduct-js
 
@@ -132,8 +132,8 @@ jobs:
 
       - name: Run examples
         run: |
-          cd ${{ matrix.example_root }}/${{ matrix.path_prefix }}
-          for example in $(find . -type f );
+          cd ${{ matrix.example_root }}
+          for example in $(find .${{ matrix.path_prefix }} -type f );
           do
             echo "Run $example" 
             ${{ matrix.cmd }} "$example"
