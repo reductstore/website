@@ -105,7 +105,7 @@ jobs:
           yarn install
           yarn run tsc
           cd ..
-          yarn install ./reduct-js # install reduct-js as a package
+          yarn add ./reduct-js # install reduct-js as a package
 
       - name: Build C++ examples
         if: matrix.example == 'cpp'
