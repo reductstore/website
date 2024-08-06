@@ -27,7 +27,7 @@ assert(record.labels["key2"] === undefined);
 
 // Update labels in a batch
 const batch = bucket.beginUpdateBatch("entry-1");
-batch.addOnlyLabels(timestamp, { label1: "value1", label2: "" });
-batch.addOnlyLabels(timestamp + 1000_000n, { label3: "value3" });
+batch.addOnlyLabels(timestamp, {label1: "value1", label2: ""});
+batch.addOnlyLabels(timestamp + 1000_000n, {label3: "value3"});
 const errors = await batch.write();
 assert(errors.length === 0);
