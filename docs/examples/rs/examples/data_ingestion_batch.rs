@@ -14,12 +14,12 @@ async fn main() -> Result<(), ReductError> {
     // Prepare a batch of records
     let record_1 = RecordBuilder::new()
         .timestamp_us(1_000_000)
-        .data(Bytes::from("Records #1"))
+        .data("Records #1")
         .build();
 
     let record_2 = RecordBuilder::new()
         .timestamp_us(2_000_000)
-        .data(Bytes::from("Records #2"))
+        .data("Records #2")
         .build();
 
     // Send the batch of records to the "rs-example" entry

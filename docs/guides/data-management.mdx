@@ -1,0 +1,61 @@
+---
+title: Data Management
+description: Complete guide on typical data management operations in ReductStore.
+---
+
+import CodeBlock from "@theme/CodeBlock";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<head>
+    <link rel="canonical" href="https://www.reduct.store/docs/guides/data-managment"/>
+</head>
+
+# Data Management With ReductStore
+
+ReductStore provides a set of methods to manage data in the database. This guide provides an overview of typical data management operations in ReductStore and explains how to perform them using the ReductStore SDKs or the HTTP API.
+
+## Changing Labels
+
+ReductStore doesn't allow you to change the contents of records, but it does allow you to change the labels of existing records.
+You can add, remove or update labels for a single record or for a batch of records to avoid HTTP requests overhead.
+
+:::note
+You should send a label as an empty string to remove it.
+:::
+
+import ChangeLabelsPy from "!!raw-loader!../examples/py/src/data_management_update_labels.py";
+import ChangeLabelsJs from "!!raw-loader!../examples/js/src/data_management_update_labels.mjs";
+import ChangeLabelsRs from "!!raw-loader!../examples/rs/examples/data_management_update_labels.rs";
+import ChangeLabelsCpp from "!!raw-loader!../examples/cpp/src/data_management_update_labels.cc";
+import ChangeLabelsCurl from "!!raw-loader!../examples/curl/data_management_update_labels.sh";
+
+
+<Tabs>
+    <TabItem value="Python">
+        <CodeBlock language="python">
+            {ChangeLabelsPy}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">
+            {ChangeLabelsJs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {ChangeLabelsRs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">
+            {ChangeLabelsCpp}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="cURL">
+        <CodeBlock language="bash">
+            {ChangeLabelsCurl}
+        </CodeBlock>
+    </TabItem>
+</Tabs>
+
