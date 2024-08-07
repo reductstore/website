@@ -13,7 +13,7 @@ image: ./img/diagram.png
 
 The MQTT protocol is an easy way to connect different data sources to applications. This makes it very popular for IoT (Internet of Things) applications. Some MQTT brokers can store messages for a while, even when the MQTT client is offline. However, sometimes you need to keep this data for a longer period of time. In these cases it's a good idea to use a time series database.
 
-There are many time series databases available, but if you need to store a history of images, **[vibration sensor data](/use-cases/vibration-sensors.mdx)** or protobuf messages, you might want to use ReductStore. This database is designed to store a lot of blob data and works well with IoT and edge computing.
+There are many time series databases available, but if you need to store a history of images, **[vibration sensor data](/use-cases/vibration-sensors)** or protobuf messages, you might want to use ReductStore. This database is designed to store a lot of blob data and works well with IoT and edge computing.
 
 **[ReductStore](https://www.reduct.store)** has client SDKs (software development kits) for many programming languages. This means you can easily use it in your existing system. For this example, we'll use the **[Rust SDK](https://github.com/reductstore/reduct-rs)** from ReductStore.
 
@@ -264,9 +264,9 @@ As you can see, this is also very simple. We browse all the entries in the `mqtt
 
 The example is a simple one and may not cover all of the complexities that you may be faced with in a real-world application. Here are some tips to help you build a strong and efficient IoT application using ReductStore and MQTT:
 
-- Create a ReductStore bucket with a **[FIFO quota](docs/guides/buckets.mdx#quota-type)** to prevent disk overwrites.
+- Create a ReductStore bucket with a **[FIFO quota](/docs/guides/buckets#quota-type)** to prevent disk overwrites.
 - Use token authentication to protect your data. You can generate an access token using either the **[Web Console](https://github.com/reductstore/web-console)** or the **[CLI Client](https://github.com/reductstore/reduct-cli)**.
-- Map **MQTT5** properties to ReductStore labels. This will make it easier to filter data when **[querying](/docs/guides/data-querying.mdx#using-labels-to-filter-data)** or **[replicating](/docs/guides/data-replication.mdx)**.
+- Map **MQTT5** properties to ReductStore labels. This will make it easier to filter data when **[querying](/docs/guides/data-querying#using-labels-to-filter-data)** or **[replicating](/docs/guides/data-replication)**.
 - Use **[Reduct CLI](https://github.com/reductstore/reduct-cli)** for data replication or backup purposes.
 
 ## Conclusion
