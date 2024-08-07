@@ -45,7 +45,6 @@ If you are using a different operating system, you can find the installation ins
 The easiest way to set up the broker and database is to use Docker Compose with the following `docker-compose.yml' file:
 
 ```yaml
-version: "3"
 services:
   reduct-storage:
     image: reduct/store:latest
@@ -273,7 +272,7 @@ The example is a simple one and may not cover all of the complexities that you m
 
 The MQTT protocol and ReductStore are easy to use tools that work well together in Rust. They provide a powerful solution for many applications. Regardless of the size of your project, these tools handle data communication and storage effectively.
 
-To help you understand how to use these tools, we've created an example that shows how they work together. You can see the source code of this example **[here](https://github.com/reductstore/reduct-mqtt-example-rs)**. This example shows how easy and useful it is to use MQTT and ReductStore together.
+To help you understand how to use these tools, we've created an example that shows how they work together. You can see **[the source code of this example](https://github.com/reductstore/reduct-mqtt-example-rs)** on GitHub. This example shows how easy and useful it is to use MQTT and ReductStore together.
 
 ---
 
