@@ -18,7 +18,7 @@ async fn main() -> Result<(), ReductError> {
     bucket
         .write_record("rs-example")
         .timestamp(timestamp)
-        .data(Bytes::from("Some binary data"))
+        .data("Some binary data")
         .send()
         .await?;
 

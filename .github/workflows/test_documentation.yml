@@ -16,15 +16,19 @@ jobs:
     name: Test examples
     strategy:
       matrix:
-        doc_version: [ next, 1.9.x ]
+        doc_version: [ next, 1.10.x, 1.9.x ]
         example: [ python, node, curl, cpp, rust, cli ]
         include:
           - doc_version: next
             reduct_version: main
             example_root: docs/examples
 
-          - doc_version: 1.9.x
+          - doc_version: 1.10.x
             reduct_version: latest
+            example_root: versioned_docs/version-1.10.x/examples/
+
+          - doc_version: 1.9.x
+            reduct_version: v1.9.5
             example_root: versioned_docs/version-1.9.x/examples/
 
           - language: python
@@ -72,16 +76,19 @@ jobs:
 
       - name: Install Python
         uses: actions/setup-python@v5
+        if : matrix.example == 'python'
         with:
           python-version: 3.8
 
       - name: Install Node.js
         uses: actions/setup-node@v4
+        if: matrix.example == 'node'
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
+        if: matrix.example == 'rust'
         with:
           toolchain: 1.75
 
@@ -93,8 +100,12 @@ jobs:
       - name: Install Node.js dependencies
         if: matrix.example == 'node'
         run: |
-          cd ${{ matrix.example_root }}/${{ matrix.path_prefix }}/..
-          npm install
+          git clone https://github.com/reductstore/reduct-js.git
+          cd reduct-js
+          yarn install
+          yarn run tsc
+          cd ..
+          yarn add ./reduct-js # install reduct-js as a package
 
       - name: Build C++ examples
         if: matrix.example == 'cpp'
@@ -124,7 +135,8 @@ jobs:
 
       - name: Run examples
         run: |
-          for example in $(find ${{ matrix.example_root }}/${{ matrix.path_prefix }} -type f );
+          cd ${{ matrix.example_root }}
+          for example in $(find ./${{ matrix.path_prefix }} -type f );
           do
             echo "Run $example" 
             ${{ matrix.cmd }} "$example"

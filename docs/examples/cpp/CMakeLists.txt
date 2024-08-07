@@ -107,3 +107,9 @@ add_executable(quick_start.cxx
         src/quick_start.cc
 )
 target_link_libraries(quick_start.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+# Data Management
+add_executable(data_management_update_labels.cxx
+        src/data_management_update_labels.cc
+)
+target_link_libraries(data_management_update_labels.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)

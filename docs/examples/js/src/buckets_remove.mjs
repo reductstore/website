@@ -1,4 +1,4 @@
-import {Client, QuotaType} from "reduct-js";
+import {Client} from "reduct-js";
 import assert from "node:assert";
 
 // Create a new client with the server URL and an API token

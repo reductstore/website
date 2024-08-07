@@ -26,14 +26,14 @@ async fn main() -> Result<(), ReductError> {
     let start = SystemTime::now();
     bucket
         .write_record("sensor-1")
-        .data(Bytes::from_static(b"Record #1"))
+        .data("Record #1")
         .timestamp(start)
         .send()
         .await?;
 
     bucket
         .write_record("sensor-1")
-        .data(Bytes::from_static(b"Record #2"))
+        .data("Record #2")
         .timestamp(start + Duration::from_secs(1))
         .send()
         .await?;

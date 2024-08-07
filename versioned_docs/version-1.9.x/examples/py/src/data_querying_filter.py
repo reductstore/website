@@ -9,8 +9,12 @@ async def main():
     bucket: Bucket = await client.get_bucket("example-bucket")
 
     # Query 10 photos from "imdb" entry which taken in 2006 but don't contain "Rowan Atkinson"
-    async for record in bucket.query("imdb", limit=10, include={"photo_taken": "2006"},
-                                     exclude={"name": "b'Rowan Atkinson'"}):
+    async for record in bucket.query(
+        "imdb",
+        limit=10,
+        include={"photo_taken": "2006"},
+        exclude={"name": "b'Rowan Atkinson'"},
+    ):
         print("Name", record.labels["name"])
         print("Phot taken", record.labels["photo_taken"])
         print("Gender", record.labels["gender"])
