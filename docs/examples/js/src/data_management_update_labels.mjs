@@ -21,9 +21,10 @@ await record.write("Some more binary data");
 
 // Update labels of a record: remove "key2" and update "key1"
 await bucket.update("entry-1", timestamp, {"key1": "new-value", "key2": ""});
-record = await bucket.beginRead("entry-1", timestamp);
+record = await bucket.beginRead("entry-1", timestamp, true);    // only labels
 assert(record.labels["key1"] === "new-value");
 assert(record.labels["key2"] === undefined);
+
 
 // Update labels in a batch
 const batch = await bucket.beginUpdateBatch("entry-1");
