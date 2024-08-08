@@ -12,7 +12,7 @@ import Tabs from "@theme/Tabs";
     <link rel="canonical" href="https://www.reduct.store/docs/integration/azure-vm"/>
 </head>
 
-[ReductStore](https://www.reduct.store) is available as a virtual machine on the **[**Azure Marketplace**](https://azuremarketplace.microsoft.com/de-de/marketplace/apps/reductstorellc1689939980623.reductstore-server?tab=overview)**,
+**[ReductStore](https://www.reduct.store)** is available as a virtual machine on the **[Azure Marketplace](https://azuremarketplace.microsoft.com/en/marketplace/apps/reductsoftware.reductstore-server)**,
 providing Azure customers with an easy way to deploy out-of-the-box ReductStore instances on Azure VMs.
 
 The following guide provides instructions on how to deploy ReductStore as a virtual machine on Azure using the Azure CLI or Azure Portal.
@@ -24,7 +24,7 @@ This provides a low cost storage solution that is easy to provision and scale as
 
 ![Azure Virtual Machine](./img/azure_vm_diagram.svg)
 
-ReductStore doesn't have native support for Azure Storage Accounts, but the virtual machine is preconfigured with [Azure BlobFuse](https://learn.microsoft.com/en-us/azure/storage/blobs/blobfuse2-what-is) to mount the Azure Storage Account as a local file system.
+ReductStore doesn't have native support for Azure Storage Accounts, but the virtual machine is preconfigured with **[Azure BlobFuse](https://learn.microsoft.com/en-us/azure/storage/blobs/blobfuse2-what-is)** to mount the Azure Storage Account as a local file system.
 It uses a local disk cache to optimise read and write operations by reducing the number of requests to the Azure Storage Account.
 
 ## Virtual Machine Requirements
@@ -49,9 +49,9 @@ AZURE_STORAGE_ACCOUNT_CONTAINER=<STORAGE_ACCOUNT_CONTAINER>
 AZURE_STORAGE_ACCESS_KEY=<STORAGE_ACCOUNT_ACCESS_KEY>
 ```
 
-Read more about environment variables in the [Azure BlobFuse documentation](https://github.com/Azure/azure-storage-fuse?tab=readme-ov-file#environment-variables).
+Read more about environment variables in the **[Azure BlobFuse documentation](https://github.com/Azure/azure-storage-fuse?tab=readme-ov-file#environment-variables)**.
 
-Additionally, you can configure and provision ReductStore's resources in the same way. Read the [Configuration](/docs/configuration.mdx) page for more information.
+Additionally, you can configure and provision ReductStore's resources in the same way. Read the **[Configuration](/docs/configuration.mdx)** page for more information.
 
 ## Deployment Steps
 

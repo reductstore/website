@@ -239,7 +239,7 @@ const config = {
               },
               {
                 label: "Community",
-                href: "https://discord.com/invite/BWrCncF5EP",
+                href: "https://community.reduct.store",
               },
             ],
           },
@@ -316,8 +316,8 @@ const config = {
                 href: "https://github.com/reductstore/reductstore",
               },
               {
-                label: "Discord",
-                href: "https://discord.com/invite/BWrCncF5EP",
+                label: "Discourse",
+                href: "https://community.reduct.store",
               },
               {
                 label: "LinkedIn",
