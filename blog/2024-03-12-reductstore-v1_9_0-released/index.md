@@ -38,5 +38,5 @@ Customers receive a license key in a text file to be specified in the database *
 
 ---
 
-I hope you find this release useful. If you have any questions or feedback, don’t hesitate to use the [ReductStore Community](https://community.reduct.store) forum.
+I hope you find this release useful. If you have any questions or feedback, don’t hesitate to use the [**ReductStore Community**](https://community.reduct.store) forum.
 Thanks for using **[ReductStore](https://www.reduct.store/)**!

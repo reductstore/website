@@ -278,4 +278,4 @@ Using [**ReductStore**](<https://reduct.store/>) is straightforward to deploy an
 
 ---
 
-I hope this tutorial has been helpful. If you have any questions or feedback, don’t hesitate to use the [ReductStore Community](https://community.reduct.store) forum.
+I hope this tutorial has been helpful. If you have any questions or feedback, don’t hesitate to use the [**ReductStore Community**](https://community.reduct.store) forum.

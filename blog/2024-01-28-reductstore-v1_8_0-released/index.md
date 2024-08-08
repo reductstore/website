@@ -64,5 +64,5 @@ We will soon update ReductCLI and Web Console to offer a convenient method for m
 
 ---
 
-I hope you find this release useful. If you have any questions or feedback, don’t hesitate to use the [ReductStore Community](https://community.reduct.store) forum.
+I hope you find this release useful. If you have any questions or feedback, don’t hesitate to use the [**ReductStore Community**](https://community.reduct.store) forum.
 Thanks for using [**ReductStore**](https://www.reduct.store/)!
