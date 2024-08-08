@@ -12,18 +12,3 @@
 .benefitsList li svg {
   margin-right: 0.5em;
 }
-
-.form {
-  margin: 2em 1em;
-}
-
-.buttonContainer {
-  display: flex;
-  justify-content: center;
-  margin-top: 2.5rem;
-  margin-bottom: 2rem;
-}
-
-.buttonContainer button {
-  white-space: normal;
-}
