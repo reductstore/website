@@ -276,4 +276,4 @@ To help you understand how to use these tools, we've created an example that sho
 
 ---
 
-I hope this tutorial was helpful. If you have any questions or feedback, don't hesitate to contact me on **[Discord](https://discord.com/invite/8wPtPGJYsn)** or by starting a discussion on **[GitHub](https://github.com/reductstore/reductstore/discussions)**.
+I hope this tutorial was helpful. If you have any questions or feedback, don't hesitate to use the [**ReductStore Community**](https://community.reduct.store) forum.
