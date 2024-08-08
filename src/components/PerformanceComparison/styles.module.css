@@ -6,21 +6,15 @@
 }
 
 .benefit {
-  margin-top: 3rem;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-@media (max-width: 996px) {
-  .benefit {
-    margin-top: 0;
-  }
-}
 
 .benefitIcon {
   margin-bottom: 1rem;
-  color: "white";
+  width: 15em;
 }
 
 .tabs {

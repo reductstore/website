@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
-import { IPerformanceComparisonData, PerformanceComparisonData } from "./PerformanceComparisonData";
-import {
-  FaRocket,
-} from "react-icons/fa";
+import { PerformanceComparisonData } from "./PerformanceComparisonData";
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import ThemedImage from '@theme/ThemedImage';
 import Link from "@docusaurus/Link";
 import PerformanceComparisonTable from "../PerformanceComparisonTable";
 
@@ -19,12 +18,14 @@ export default function PerformanceComparison(): JSX.Element {
     <div className="row">
       <div className="col col--4 col--offset-2">
         <div className={styles.benefit}>
-          <div className={styles.benefitIcon}>
-            <FaRocket
-              size="5em"
-              style={{ color: "var(--ifm-color-primary)" }}
-            />
-          </div>
+          <ThemedImage
+            className={styles.benefitIcon}
+            alt="Get the Best Performance"
+            sources={{
+              light: useBaseUrl("/img/benefits/get_the_best_performance.png"),
+              dark: useBaseUrl("/img/benefits/get_the_best_performance.png"),
+            }}
+          />
           <h3>Get the Best Performance</h3>
           <p>Outperform other databases with a customized solution for time-series object data.</p>
         </div>
