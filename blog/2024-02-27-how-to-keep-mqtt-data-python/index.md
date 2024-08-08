@@ -198,4 +198,4 @@ To help you understand how to use these tools, we've made an example that shows 
 
 ---
 
-I hope this tutorial has been helpful. If you have any questions or feedback, don’t hesitate to reach out in **[Discord](https://discord.com/invite/8wPtPGJYsn)** or by opening a discussion on **[GitHub](https://github.com/reductstore/reductstore/discussions)**.
+I hope this tutorial has been helpful. If you have any questions or feedback, don’t hesitate to use the [ReductStore Community](https://community.reduct.store) forum.

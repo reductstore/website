@@ -253,4 +253,4 @@ In choosing a database for time series blob data, it's important to weigh your a
 
 ---
 
-For further guidance or queries on the matter, feel free to join our community on [**Discord**](<https://discord.com/invite/8wPtPGJYsn>) or initiate a discussion on [**GitHub**](<https://github.com/reductstore/reductstore/discussions>).
+For further guidance or queries on the matter, feel free to join our community on the [ReductStore Community](https://community.reduct.store) forum.
