@@ -2,26 +2,28 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 
-const RenderButtonLink = ({ buttonUrl, buttonLabel, isHighlight, disabled, onClick }) => {
-  const isExternalLink = buttonUrl.startsWith('http://') || buttonUrl.startsWith('https://');
+interface RenderButtonLinkProps {
+  buttonLabel: string;
+  isHighlight: boolean;
+  buttonUrl?: string;
+  onClick?: () => void;
+}
+
+const RenderButtonLink = ({ buttonLabel, isHighlight, buttonUrl, onClick }: RenderButtonLinkProps) => {
+  if (!buttonUrl && !onClick) return null;
+
+  const isExternalLink = buttonUrl && (buttonUrl.startsWith('http://') || buttonUrl.startsWith('https://'));
 
   const buttonClass = clsx("button button--lg button--block", {
     "button--primary": isHighlight,
     "button--secondary": !isHighlight,
   });
 
-  const handleClick = (event) => {
-    onClick();
-    if (disabled) {
-      event.preventDefault();
-    }
-  };
-
   if (isExternalLink) {
     return (
       <a
         href={buttonUrl}
-        onClick={handleClick}
+        onClick={onClick}
         className={buttonClass}
         target="_blank"
         rel="noopener noreferrer"
@@ -33,8 +35,8 @@ const RenderButtonLink = ({ buttonUrl, buttonLabel, isHighlight, disabled, onCli
 
   return (
     <Link
-      to={buttonUrl}
-      onClick={handleClick}
+      to={buttonUrl || "#"}
+      onClick={onClick}
       className={buttonClass}
     >
       {buttonLabel}
