@@ -14,9 +14,9 @@ const RenderButtonLink = ({ buttonLabel, isHighlight, buttonUrl, onClick }: Rend
 
   const isExternalLink = buttonUrl && (buttonUrl.startsWith('http://') || buttonUrl.startsWith('https://'));
 
-  const buttonClass = clsx("button button--lg button--block", {
-    "button--primary": isHighlight,
-    "button--secondary": !isHighlight,
+  const buttonClass = clsx("button button--lg button--block button--primary", {
+    "button--primary": !isHighlight,
+    "button--secondary": isHighlight,
   });
 
   if (isExternalLink) {
