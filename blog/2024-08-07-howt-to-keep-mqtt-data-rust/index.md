@@ -1,6 +1,6 @@
 ---
 title: "How to Keep a History of MQTT Data With Rust"
-description: "A tutorial to keep a history of MQTT messages by using the ReductStore Client SDK for Rust."
+description: "A tutorial on how to keep a history of MQTT messages by using the ReductStore Client SDK for Rust."
 authors: alexey
 tags: [tutorials, iot, mqtt]
 slug: tutorials/iot/how-to-keep-mqtt-data-rust

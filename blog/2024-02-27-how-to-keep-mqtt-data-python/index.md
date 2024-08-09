@@ -1,6 +1,6 @@
 ---
 title: "How to Keep a History of MQTT Data With Python"
-description: "A tutorial to keep a history of MQTT messages with Python by using the ReductStore Client SDK for Python."
+description: "A tutorial on how to keep a history of MQTT messages with Python by using the ReductStore Client SDK for Python."
 authors: alexey
 tags: [tutorials, iot, mqtt]
 slug: tutorials/iot/how-to-keep-mqtt-data-python
