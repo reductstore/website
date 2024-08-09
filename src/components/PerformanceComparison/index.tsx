@@ -22,8 +22,8 @@ export default function PerformanceComparison(): JSX.Element {
             className={styles.benefitIcon}
             alt="Get the Best Performance"
             sources={{
-              light: useBaseUrl("/img/benefits/get_the_best_performance.png"),
-              dark: useBaseUrl("/img/benefits/get_the_best_performance.png"),
+              light: useBaseUrl("/img/benefits/get_the_best_performance.webp"),
+              dark: useBaseUrl("/img/benefits/get_the_best_performance_black.webp"),
             }}
           />
           <h3>Get the Best Performance</h3>
