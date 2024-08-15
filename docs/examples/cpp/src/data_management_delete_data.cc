@@ -13,7 +13,7 @@ int main() {
     });
 
     // Get bucket to remove
-    auto [bucket, get_err] = client->GetBucket("example-bucket");
+    auto [bucket, get_err] = client->GetBucket("bucket-to-remove");
     assert(get_err == Error::kOk);
 
     // Delete only entry with name "example-entry"

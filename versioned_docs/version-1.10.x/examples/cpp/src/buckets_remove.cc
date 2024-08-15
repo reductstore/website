@@ -12,13 +12,13 @@ int main() {
             .api_token = "my-token"
     });
 
-    // Remove the bucket with the name "example-bucket"
-    auto [bucket, get_err] = client->GetBucket("example-bucket");
+    // Remove the bucket with the name "bucket-to-remove"
+    auto [bucket, get_err] = client->GetBucket("bucket-to-remove");
     assert(get_err == Error::kOk);
     auto remove_err = bucket->Remove();
     assert(remove_err == Error::kOk);
 
     // Check that the bucket no longer exists
-    auto [_, get_err2] = client->GetBucket("example-bucket");
+    auto [_, get_err2] = client->GetBucket("bucket-to-remove");
     assert(get_err2.code == 404);
 }

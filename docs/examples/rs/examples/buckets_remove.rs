@@ -9,12 +9,12 @@ async fn main() -> Result<(), ReductError> {
         .api_token("my-token")
         .build();
 
-    // Remove the bucket "example-bucket"
-    let bucket = client.get_bucket("example-bucket").await?;
+    // Remove the bucket "bucket-to-remove"
+    let bucket = client.get_bucket("bucket-to-remove").await?;
     bucket.remove().await?;
 
     // Check that the bucket no longer exists
-    let bucket = client.get_bucket("example-bucket").await;
+    let bucket = client.get_bucket("bucket-to-remove").await;
     assert_eq!(bucket.err().unwrap().status, ErrorCode::NotFound);
     Ok(())
 }

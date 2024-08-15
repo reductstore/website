@@ -10,7 +10,7 @@ async fn main() -> Result<(), ReductError> {
         .build();
 
     // Get bucket to remove
-    let bucket = client.get_bucket("example-bucket").await?;
+    let bucket = client.get_bucket("bucket-to-remove").await?;
 
     // Delete only entry with name "example-entry"
     bucket.remove_entry("example-entry").await?;

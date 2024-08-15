@@ -9,7 +9,7 @@ async fn main() -> Result<(), ReductError> {
         .api_token("my-token")
         .build();
 
-    // Remove the `example-replication` replication
-    client.delete_replication("example-replication").await?;
+    // Remove the `repl-to-remove` replication
+    client.delete_replication("repl-to-remove").await?;
     Ok(())
 }

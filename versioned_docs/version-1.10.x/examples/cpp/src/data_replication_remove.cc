@@ -12,7 +12,7 @@ int main() {
             .api_token = "my-token"
     });
 
-    // Remove the `example-replication` replication
-    auto err = client->RemoveReplication("example-replication");
+    // Remove the `repl-to-remove` replication
+    auto err = client->RemoveReplication("repl-to-remove");
     assert(err == Error::kOk);
 }

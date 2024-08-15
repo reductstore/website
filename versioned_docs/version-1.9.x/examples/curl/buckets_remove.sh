@@ -6,4 +6,4 @@ AUTH_HEADER="Authorization: Bearer my-token"
 
 curl -X DELETE \
   -H "${AUTH_HEADER}" \
-  -a "${API_PATH}"/b/example-bucket
+  -a "${API_PATH}"/b/bucket-to-remove
