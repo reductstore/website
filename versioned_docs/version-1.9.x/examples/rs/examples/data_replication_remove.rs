@@ -10,7 +10,7 @@ async fn main() -> Result<(), ReductError> {
         .build();
 
 
-    // Remove the `repl-to-remove` replication
-    client.delete_replication("repl-to-remove").await?;
+    // Remove the `example-replication` replication
+    client.delete_replication("example-replication").await?;
     Ok(())
 }

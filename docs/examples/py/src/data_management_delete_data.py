@@ -5,7 +5,7 @@ async def browse_buckets():
     # Create a client with the base URL and API token
     async with Client("http://localhost:8383", api_token="my-token") as client:
         # Get bucket to remove
-        bucket: Bucket = await client.get_bucket("bucket-to-remove")
+        bucket: Bucket = await client.get_bucket("example-bucket")
 
         # Delete only entry with name "example-entry"
         await bucket.remove_entry("example-entry")

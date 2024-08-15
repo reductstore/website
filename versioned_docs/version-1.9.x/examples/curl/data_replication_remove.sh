@@ -6,4 +6,4 @@ AUTH_HEADER="Authorization: Bearer my-token"
 
 curl -X DELETE \
   -H "${AUTH_HEADER}" \
-  -a "${API_PATH}"/replications/repl-to-remove
+  -a "${API_PATH}"/replications/example-replication

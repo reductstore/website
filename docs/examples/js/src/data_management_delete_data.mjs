@@ -5,7 +5,7 @@ import assert from "node:assert";
 const client = new Client("http://127.0.0.1:8383", {apiToken: "my-token"});
 
 // Get bucket to remove
-const bucket = await client.getBucket("bucket-to-remove");
+const bucket = await client.getBucket("example-bucket");
 
 // Delete only entry with name "example-entry"
 await bucket.removeEntry("example-entry");

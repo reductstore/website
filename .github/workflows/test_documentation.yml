@@ -68,11 +68,7 @@ jobs:
           tar -xvf reduct-cli.linux-amd64.tar.gz
           chmod +x reduct-cli
           sudo mv reduct-cli /usr/local/bin
-          reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-remove
-          reduct-cli cp https://reductstore@play.reduct.store/datasets  http://my-token@127.0.0.1:8383/example-bucket --limit 100
-          reduct-cli replica create http://my-token@127.0.0.1:8383/example-replication  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
-          reduct-cli replica create http://my-token@127.0.0.1:8383/repl-to-remove  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
-          reduct-cli token create http://my-token@127.0.0.1:8383/token-to-remove
+
 
       - name: Install Python
         uses: actions/setup-python@v5
@@ -138,13 +134,18 @@ jobs:
           cd ${{ matrix.example_root }}
           for example in $(find ./${{ matrix.path_prefix }} -type f );
           do
+            echo "Prepare $example"
+            reduct-cli cp https://reductstore@play.reduct.store/datasets  http://my-token@127.0.0.1:8383/example-bucket --limit 100
+            reduct-cli replica create http://my-token@127.0.0.1:8383/example-replication  example-bucket http://my-token@127.0.0.1:8383/example-bucket
+            reduct-cli token create http://my-token@127.0.0.1:8383/token-to-remove
             echo "Run $example" 
             ${{ matrix.cmd }} "$example"
             sleep 1
-            # remove alias if it is cli example
-            if [ "${{ matrix.example }}" == "cli" ]; then
-              reduct-cli alias rm local || true
-            fi
+            # cleanup
+            reduct-cli alias rm local || true
+            reduct-cli token rm token-to-remove || true
+            reduct-cli bucket rm example-bucket || true
+            reduct-cli replica rm example-replication || true
           done
           
 
