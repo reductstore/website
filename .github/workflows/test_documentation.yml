@@ -73,6 +73,7 @@ jobs:
           reduct-cli replica create http://my-token@127.0.0.1:8383/example-replication  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
           reduct-cli replica create http://my-token@127.0.0.1:8383/repl-to-remove  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
           reduct-cli token create http://my-token@127.0.0.1:8383/token-to-remove
+          curl -X POST -h "Authorization: Bearer my-token" -d "" http://127.0.0.1:8383/api/v1/b/bucket-to-remove/example-entry
 
       - name: Install Python
         uses: actions/setup-python@v5
@@ -146,7 +147,7 @@ jobs:
               reduct-cli alias rm local || true
             fi
             reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-remove || true
-
+            curl -X POST -h "Authorization: Bearer my-token" -d "" http://127.0.0.1:8383/api/v1/b/bucket-to-remove/example-entry || true
           done
       - name: Print Docker logs
         if: always()

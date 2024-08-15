@@ -1,7 +1,8 @@
+
 from reduct import Client, Bucket
 
 
-async def browse_buckets():
+async def main():
     # Create a client with the base URL and API token
     async with Client("http://localhost:8383", api_token="my-token") as client:
         # Get bucket to remove
@@ -12,3 +13,9 @@ async def browse_buckets():
 
         # Remove entire bucket
         await bucket.remove()
+
+
+if __name__ == "__main__":
+    import asyncio
+
+    asyncio.run(main())
