@@ -145,6 +145,8 @@ jobs:
             if [ "${{ matrix.example }}" == "cli" ]; then
               reduct-cli alias rm local || true
             fi
+            reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-remove || true
+
           done
       - name: Print Docker logs
         if: always()
