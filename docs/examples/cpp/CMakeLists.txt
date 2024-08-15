@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 find_package(ZLIB)
 find_package(OpenSSL)
-find_package(ReductCpp 1.8.0)
+find_package(ReductCpp 1.10.0)
 
 ## Buckets
 
@@ -113,3 +113,8 @@ add_executable(data_management_update_labels.cxx
         src/data_management_update_labels.cc
 )
 target_link_libraries(data_management_update_labels.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(data_management_delete_data.cxx
+        src/data_management_delete_data.cc
+)
+target_link_libraries(data_management_delete_data.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
