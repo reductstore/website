@@ -62,7 +62,7 @@ jobs:
           lfs: false
       - name: Prepare ReductStore instance
         run: |
-          docker run -d --name reductstore -p 8383:8383 --env RS_API_TOKEN="my-token" reduct/store:${{ matrix.reduct_version }}
+          docker run -d --name reductstore -p 8383:8383 --env RS_API_TOKEN="my-token" --name reductstore reduct/store:${{ matrix.reduct_version }}
           sleep 3
           wget https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.linux-amd64.tar.gz
           tar -xvf reduct-cli.linux-amd64.tar.gz
@@ -146,7 +146,11 @@ jobs:
               reduct-cli alias rm local || true
             fi
           done
-          
+      - name: Print Docker logs
+        if: always()
+        run: |
+            docker logs reductstore
+
 
   test_provisioning:
     runs-on: ubuntu-latest
