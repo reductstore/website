@@ -1,7 +1,6 @@
 from typing import List
 
-from reduct import Client, BucketInfo
-from reduct.bucket import Bucket
+from reduct import Client, Bucket, BucketInfo
 
 
 async def browse_buckets():
