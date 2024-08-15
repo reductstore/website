@@ -136,16 +136,13 @@ jobs:
           do
             echo "Prepare $example"
             reduct-cli cp https://reductstore@play.reduct.store/datasets  http://my-token@127.0.0.1:8383/example-bucket --limit 100
-            reduct-cli replica create http://my-token@127.0.0.1:8383/example-replication  example-bucket http://my-token@127.0.0.1:8383/example-bucket
-            reduct-cli token create http://my-token@127.0.0.1:8383/token-to-remove
+            reduct-cli replica create http://my-token@127.0.0.1:8383/example-replication  example-bucket http://my-token@127.0.0.1:8383/example-bucket || true
+            reduct-cli token create http://my-token@127.0.0.1:8383/token-to-remove || true
             echo "Run $example" 
             ${{ matrix.cmd }} "$example"
             sleep 1
             # cleanup
             reduct-cli alias rm local || true
-            reduct-cli token rm http://my-token@127.0.0.1:8383/token-to-remove || true
-            reduct-cli bucket rm http://my-token@127.0.0.1:8383/example-bucket || true
-            reduct-cli replica rm http://my-token@127.0.0.1:8383/example-replication || true
           done
           
 
