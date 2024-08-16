@@ -202,15 +202,15 @@ const config = {
               },
               {
                 label: "Computer Vision",
-                to: "/blog/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications",
+                to: "/blog/tags/computer-vision",
               },
               {
                 label: "IoT (MQTT)",
-                to: "/blog/advice/database/mqtt-data-storage",
+                to: "/blog/tags/mqtt",
               },
               {
                 label: "Robotics (ROS)",
-                to: "/blog/tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision",
+                to: "/blog/tags/ros",
               },
               {
                 label: "Explore More",
@@ -275,11 +275,101 @@ const config = {
         style: "dark",
         links: [
           {
-            title: `Copyright © ${new Date().getFullYear()} ReductSoftware UG`,
+            title: "Product & Solutions",
+            items: [
+              {
+                label: "White Paper",
+                to: "/whitepaper",
+              },
+              {
+                label: "vs MinIO",
+                to: "/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio",
+              },
+              {
+                label: "vs MinIO & InfluxDB",
+                to: "/blog/comparison/iot/reductstore-benchmark",
+              },
+              {
+                label: "vs TimescaleDB",
+                to: "/blog/comparisons/iot/reductstore-vs-timescaledb",
+              },
+              {
+                label: "vs MongoDB",
+                to: "/blog/comparisons/iot/reductstore-vs-mongodb",
+              },
+              {
+                label: "Edge AI",
+                to: "/use-cases/ai-workflows",
+              },
+              {
+                label: "Vibration Data",
+                to: "/use-cases/vibration-sensors",
+              },
+              {
+                label: "Computer Vision",
+                to: "/blog/tags/computer-vision",
+              },
+              {
+                label: "IoT (MQTT)",
+                to: "/blog/tags/mqtt",
+              },
+              {
+                label: "Robotics (ROS)",
+                to: "/blog/tags/ros",
+              },
+              {
+                label: "Schedule a Technical Review",
+                to: "/contact?subject=TechnicalReview",
+              },
+            ],
+          },
+          {
+            title: "Developers",
+            items: [
+              {
+                label: "Getting Started",
+                to: "/docs/getting-started",
+              },
+              {
+                label: "How Does It Work",
+                to: "/docs/how-does-it-work",
+              },
+              {
+                label: "Data Ingestion",
+                href: "/docs/guides/data-ingestion",
+              },
+              {
+                label: "Data Querying",
+                href: "/docs/guides/data-querying",
+              },
+              {
+                label: "Data Replication",
+                href: "/docs/guides/data-replication",
+              },
+              {
+                label: "Integration with Azure VM",
+                href: "/docs/guides/integration/azure-vm",
+              },
+              {
+                label: "HTTP API Reference",
+                href: "/docs/http-api",
+              },
+              {
+                label: "Download",
+                to: "/download",
+              },
+            ],
+          },
+          {
+            title: "Company",
             items: [
               {
                 label: "Imprint",
                 to: "/imprint",
+              },
+              {
+                label: "Contact Us",
+                to: "/contact",
               },
               {
                 label: "Privacy Policy",
@@ -292,29 +382,8 @@ const config = {
             ],
           },
           {
-            title: "Links",
+            title: "Follow Us",
             items: [
-              {
-                label: "Docs",
-                to: "/docs/getting-started",
-              },
-              {
-                label: "Blog",
-                to: "/blog",
-              },
-              {
-                label: "Pricing",
-                to: "/pricing",
-              },
-            ],
-          },
-          {
-            title: "Social",
-            items: [
-              {
-                label: "GitHub",
-                href: "https://github.com/reductstore/reductstore",
-              },
               {
                 label: "Discourse",
                 href: "https://community.reduct.store",
@@ -324,12 +393,13 @@ const config = {
                 href: "https://www.linkedin.com/company/reductstore",
               },
               {
-                label: "X",
-                href: "https://twitter.com/reductstore",
+                label: "GitHub",
+                href: "https://github.com/reductstore/reductstore",
               },
             ],
           },
         ],
+        copyright: `Copyright © ${new Date().getFullYear()} ReductSoftware UG`,
       },
       prism: {
         theme: prismThemes.github,
