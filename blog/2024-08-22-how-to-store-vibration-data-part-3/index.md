@@ -15,7 +15,9 @@ In [**How to Store Vibration Sensor Data | Part 1**](/blog/how-to-store-vibratio
 
 In [**How to Store Vibration Sensor Data | Part 2**](/blog/how-to-store-vibration-sensor-data/part-2), we provided a practical example of how to use ReductStore to store and query vibration sensor readings. Specifically, we showed how to store simulated vibration sensor values in **1-second chunks**, each packaged as **binary data**. This approach greatly optimizes the storage process, especially when dealing with high-frequency data such as vibration measurements.
 
-In this final post, we will compare [**ReductStore**](/) and [**InfluxDB**](https://www.influxdata.com/) in a real-world benchmark scenario, focusing on their **write** and **read** performance for high-frequency sensor data. We will show how ReductStore's chunk-based binary storage provides superior efficiency and scalability compared to InfluxDB, especially when handling high-frequency data such as vibration sensor measurements.
+In this final post, we will compare [**ReductStore**](/) and [**InfluxDB**](https://www.influxdata.com/) in a real-world benchmark scenario, focusing on their **write** and **read** performance for high-frequency sensor data. We will show how ReductStore's chunk-based binary storage provides superior efficiency and scalability compared to InfluxDB, especially when handling high-frequency data such as vibration sensor measurements. 
+
+The benchmark was run on an **SSD drive**, but results may vary depending on hardware configuration and database settings; to explore how it performs on your setup, you can run the benchmark yourself using the **[Reduct Vibration Example repository](https://github.com/reductstore/reduct-vibration-example)** on GitHub.
 
 {/* truncate */}
 
