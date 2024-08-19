@@ -97,3 +97,8 @@ img {
   --cc-modal-margin: 1rem;
   --cc-z-index: 2147483647;
 }
+
+/* Footer CSS */
+.footer__link-item:hover {
+  color: #c481f7;
+}
