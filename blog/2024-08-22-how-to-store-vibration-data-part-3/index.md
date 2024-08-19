@@ -19,23 +19,11 @@ In this final post, we compare **ReductStore** and **InfluxDB** in a real-world 
 
 {/* truncate */}
 
-## Visualizing the Results: Benchmark Graphs
-
-The benchmark results for **write** and **read performance** provide a clear comparison between **InfluxDB** and **ReductStore** as the frequency of sensor data increases.
-
-![Benchmark Results](img/benchmark_results.webp)
-
-In the graph, **InfluxDB** shows an exponential increase in write time as the frequency rises. This means that, at higher frequencies (e.g., **30,000 Hz**), InfluxDB's write performance becomes significantly slower. This degradation is mainly due to the large volume of data that needs to be processed and stored at such high frequencies.
-
-On the other hand, **ReductStore** maintains a flat and stable performance curve across all frequencies, even at the highest frequency tested. ReductStore's write time remains consistent, demonstrating its **scalability** and **efficiency** when handling high-frequency unstructured data like vibration sensor readings.
-
-For read performance, **InfluxDB** shows a linear increase in read time as the frequency increases, reflecting the challenges it faces with larger datasets. As the frequency grows, querying more data results in slower response times.
-
-In contrast, **ReductStore** exhibits consistent performance for reading, with minimal variation in read times regardless of the data frequency. This ensures quick retrieval even with large amounts of high-frequency sensor data.
-
 ## Write Performance: ReductStore vs InfluxDB
 
 When comparing **write performance** between ReductStore and InfluxDB, significant differences arise as the data frequency increases.
+
+![Benchmark Write Performance](img/write_benchmark_results.webp)
 
 ### InfluxDB Write Performance
 
@@ -48,6 +36,8 @@ On the other hand, ReductStore demonstrates **minimal impact** on its write perf
 ## Read Performance: ReductStore vs InfluxDB
 
 The **read performance** benchmark results reveal another key distinction between ReductStore and InfluxDB when handling high-frequency vibration sensor data.
+
+![Benchmark Read Performance](img/read_benchmark_results.webp)
 
 ### InfluxDB Read Performance
 
@@ -115,27 +105,23 @@ The benchmark results show a clear distinction between **ReductStore** and **Inf
 
 On the other hand, while **InfluxDB** remains a solid choice for many time-series use cases, its performance suffers as data frequency increases. For applications involving high-frequency sensor data, **InfluxDB** may introduce bottlenecks that could limit its effectiveness in such demanding environments.
 
-### Recommendation
-
-For developers working with **high-frequency vibration sensor data**, **ReductStore** is the preferred solution due to its **scalability**, **efficiency**, and **consistency**. It offers strong performance even as data loads grow, making it well-suited for real-time applications requiring rapid write and query capabilities. **InfluxDB**, while versatile in handling broader time-series data, may require significant optimization and additional resources to achieve similar results in high-frequency scenarios.
 
 ## Frequently Asked Questions (FAQs)
 
-**Q1: Can ReductStore handle other types of sensor data beyond vibration data?**  
-A1: Yes, ReductStore is designed to efficiently manage any high-frequency, unstructured time-series data, making it suitable for a wide range of sensors, including temperature, pressure, and environmental sensors.
+### Can ReductStore handle other types of sensor data beyond vibration data?
+Yes, ReductStore is designed to efficiently manage any high-frequency, unstructured time-series data, making it suitable for a wide range of sensors, including temperature, pressure, and environmental sensors.
 
-**Q2: How does ReductStore achieve low read times even with large datasets?**  
-A2: ReductStore uses **chunked binary storage** and **efficient indexing**, which minimize the amount of time spent retrieving and processing data. This allows for consistently low read times, even as the data volume increases.
+### How does ReductStore achieve low read times even with large datasets?
+ReductStore uses **chunked binary storage** and **efficient indexing**, which minimize the amount of time spent retrieving and processing data. This allows for consistently low read times, even as the data volume increases.
 
-**Q3: Can InfluxDB be optimized for better performance with high-frequency data?**  
-A3: While InfluxDB can be optimized through configuration changes and additional hardware resources, its performance may still lag behind ReductStore when handling extremely high-frequency data like vibration measurements.
+### Can InfluxDB be optimized for better performance with high-frequency data?  
+While InfluxDB can be optimized through configuration changes and additional hardware resources, its performance may still lag behind ReductStore when handling extremely high-frequency data like vibration measurements.
 
-**Q4: How does ReductStore handle data replication?**  
-A4: ReductStore offers built-in replication features that allow you to **replicate data across multiple instances** or set up automated backups. You can configure replication tasks using the ReductStore CLI or Web Console, ensuring that critical data is securely duplicated.
+### How does ReductStore handle data replication?  
+ReductStore offers built-in replication features that allow you to **replicate data across multiple instances** or set up automated backups. You can configure replication tasks using the ReductStore CLI or Web Console, ensuring that critical data is securely duplicated.
 
-**Q5: What are the system requirements for running ReductStore in high-frequency environments?**  
-A5: ReductStore is lightweight and can run on standard hardware configurations. However, for extremely high-frequency applications, you may need to allocate sufficient storage and processing power to handle the large volumes of data efficiently.
-
+### What are the system requirements for running ReductStore in high-frequency environments?  
+ReductStore is lightweight and can run on standard hardware configurations. However, for extremely high-frequency applications, you may need to allocate sufficient storage and processing power to handle the large volumes of data efficiently.
 
 ---
 
