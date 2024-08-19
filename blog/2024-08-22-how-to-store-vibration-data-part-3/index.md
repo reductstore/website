@@ -11,11 +11,11 @@ image: ./img/benchmark_results.png
 ![Benchmark Results](img/benchmark_results.webp)
 
 
-In **Part 1** of this series, we discussed the importance of efficiently storing both **raw vibration data** and **pre-processed metrics**, as well as the advantages of using time-series databases like ReductStore. We explored best practices for setting up data retention policies to manage high-frequency sensor data effectively.
+In [**How to Store Vibration Sensor Data | Part 1**](/blog/how-to-store-vibration-sensor-data), we discussed the importance of efficiently storing both **raw vibration data** and **pre-processed metrics**, as well as the advantages of using time-series databases like ReductStore. We explored best practices for setting up data retention policies to manage high-frequency sensor data effectively.
 
-In **Part 2**, we provided a practical example of how to use ReductStore for storing and querying vibration sensor readings. Specifically, we demonstrated how to store simulated vibration sensor values in **1-second chunks**, each packaged as **binary data**. This approach significantly optimizes the storage process, especially when dealing with high-frequency data like vibration measurements.
+In [**How to Store Vibration Sensor Data | Part 2**](/blog/how-to-store-vibration-sensor-data/part-2), we provided a practical example of how to use ReductStore for storing and querying vibration sensor readings. Specifically, we demonstrated how to store simulated vibration sensor values in **1-second chunks**, each packaged as **binary data**. This approach significantly optimizes the storage process, especially when dealing with high-frequency data like vibration measurements.
 
-In this final post, we compare **ReductStore** and **InfluxDB** in a real-world benchmark scenario, focusing on their **write** and **read performance** for high-frequency sensor data. We will showcase how ReductStore’s chunk-based binary storage delivers superior efficiency and scalability compared to InfluxDB, particularly in handling high-frequency data like vibration sensor measurements.
+In this final post, we compare [**ReductStore**](/) and [**InfluxDB**](https://www.influxdata.com/) in a real-world benchmark scenario, focusing on their **write** and **read performance** for high-frequency sensor data. We will showcase how ReductStore’s chunk-based binary storage delivers superior efficiency and scalability compared to InfluxDB, particularly in handling high-frequency data like vibration sensor measurements.
 
 {/* truncate */}
 
@@ -89,13 +89,13 @@ In contrast, **InfluxDB**, while scalable for lower-frequency use cases, may req
 
 To optimize the performance of your IoT applications using ReductStore, here are some best practices to consider:
 
-- **Set Quotas to Prevent Disk Overwrites**: Create a ReductStore bucket with a **FIFO quota** (First In, First Out) to prevent disk overwrites. This ensures older, less important data is automatically deleted as new data arrives, making disk space management more efficient.
+- **Set Quotas to Prevent Disk Overwrites**: Create a ReductStore bucket with a **[FIFO quota](/docs/guides/buckets#quota-type)** (First In, First Out) to prevent disk overwrites. This ensures older, less important data is automatically deleted as new data arrives, making disk space management more efficient.
   
-- **Enable Token Authentication for Data Security**: Protect your data using **token-based authentication**. You can generate access tokens via the ReductStore Web Console or CLI Client. This feature ensures secure access to your stored sensor data and prevents unauthorized users from accessing sensitive information.
+- **Enable Token Authentication for Data Security**: Protect your data using **token-based authentication**. You can generate access tokens via the ReductStore **[Web Console](https://github.com/reductstore/web-console)** or **[CLI Client](https://github.com/reductstore/reduct-cli)**. This feature ensures secure access to your stored sensor data and prevents unauthorized users from accessing sensitive information.
 
 - **Use Metadata Labels for Data Filtering**: Leverage ReductStore’s **labeling system** to map sensor properties to metadata. This helps you filter data based on key metrics (e.g., high RMS or peak-to-peak values) during queries or replication processes, allowing for more targeted data retrieval.
 
-- **Leverage Reduct CLI for Replication and Backup**: Use the **Reduct CLI** to automate data replication across different ReductStore instances or to back up critical sensor data. This ensures that high-priority data is safely duplicated or stored for future analysis, reducing the risk of data loss.
+- **Leverage Reduct CLI for Replication and Backup**: Use the **[CLI Client](https://github.com/reductstore/reduct-cli)** to automate data replication across different ReductStore instances or to back up critical sensor data. This ensures that high-priority data is safely duplicated or stored for future analysis, reducing the risk of data loss.
 
 ## Conclusion
 
