@@ -1,0 +1,15 @@
+version: "3"
+services:
+  reductstore:
+    image: reduct/store:latest
+    ports:
+      - "8383:8383"
+    volumes:
+      - ./data:/data
+    environment:
+      - RS_API_TOKEN=my-api-token
+      - RS_TOKEN_1_NAME=new-token
+      - RS_TOKEN_1_VALUE=keep-it-secret
+      - RS_TOKEN_1_FULL_ACCESS=false
+      - RS_TOKEN_1_READ=example-bucket
+      - RS_TOKEN_1_WRITE=example-bucket
