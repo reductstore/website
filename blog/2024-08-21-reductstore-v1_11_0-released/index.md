@@ -4,7 +4,7 @@ description: ReductStore v1.11.0 introduces new features for managing labels and
 authors: alexey
 tags: [news]
 slug: news/reductstore-v1_11_0-released
-date: 2024-08-20
+date: 2024-08-21
 ---
 
 We are pleased to announce the release of the latest minor version of [**ReductStore**](https://www.reduct.store/), [**1.11.0**](https://github.com/reductstore/reductstore/releases/tag/v1.11.0). ReductStore is a time series database designed for storing and managing large amounts of blob data.
