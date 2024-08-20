@@ -50,7 +50,7 @@ The quota size defines the maximum size of the bucket in bytes. It's ignored if 
 
 The max block size determines the maximum size of a block in bytes. Once a block reaches this limit, a new block is created for storing additional data. A record's size isn't restricted by the block size. If a record exceeds the block size, it will be stored in the current block, and a new block will be created for the next record.
 
-The default value is set at 64MB. Typically, there is no need to alter this unless your records exceed the default size. ReductStore pre-allocates the block size during the creation of a new block. As such, it improves performance when multiple records can be stored in a single block. We recommend to keep the block size enough to store at least 1024 records.
+The default value is set at 64MB. Typically, there is no need to alter this unless your records exceed the default size. ReductStore pre-allocates the block size during the creation of a new block. As such, it improves performance when multiple records can be stored in a single block. We recommend to keep the block size large enough to store at least 1024 records.
 
 ### Maximal Number of Records
 

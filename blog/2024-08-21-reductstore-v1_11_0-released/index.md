@@ -1,6 +1,6 @@
 ---
-title: "Release v1.11.0: Changing labels and storage engine optimisation"
-description: ReductStore v1.11.0 introduces new features for managing labels and optimising storage engine performance.
+title: "Release v1.11.0: Changing labels and storage engine optimization"
+description: ReductStore v1.11.0 introduces new features for managing labels and optimizing storage engine performance.
 authors: alexey
 tags: [news]
 slug: news/reductstore-v1_11_0-released
@@ -13,7 +13,7 @@ To download the latest released version, please visit our [**Download Page**](ht
 
 ## What's New in ReductStore v1.11.0
 
-In this release, we have introduced a new API for changing the labels of existing records and optimised the storage engine to improve database startup and write performance.
+In this release, we have introduced a new API for changing the labels of existing records and optimized the storage engine to improve database startup and write performance.
 
 <!--more-->
 {/* truncate */}
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-### Storage Engine Optimisation
+### Storage Engine Optimization
 
 Previously, ReductStore used a straightforward approach to writing data to disk. When a new record arrives from the HTTP front-end, the storage engine writes its metadata, such as timestamp, size, labels, etc., into a block descriptor and streams the record content into a data block. When the database is started, it reads all the data descriptors to build a block index and count the disk usage, which is important for [**the FIFO quota**](/docs/next/guides/buckets#quota-type).  It worked quite quickly on NVMe disks with terabytes of data, but users on slower disks found that starting the database could take minutes.
 
