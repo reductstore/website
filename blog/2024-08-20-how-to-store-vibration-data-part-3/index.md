@@ -4,7 +4,7 @@ description: This article is the second part of How to Store Vibration Sensor Da
 authors: anthony
 tags: [database, vibration sensor, comparison]
 slug: how-to-store-vibration-sensor-data/reductstore-vs-influxdb
-date: 2024-08-22
+date: 2024-08-20
 image: ./img/benchmark_results.png
 ---
 
