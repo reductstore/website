@@ -32,7 +32,7 @@ Each bucket has settings that determine how data is stored and accessed. These s
 - **Quota Type**: You can choose between NONE, which means there is no quota, and FIFO (First In, First Out), where the oldest data is removed to make space for new data. The default setting is NONE.
 - **Quota Size**: This represents the quota size in bytes. Only enforced with FIFO Quota.
 - **Max Block Size**: This is the maximum allowable size of a block, in bytes. The default size is 64MB.
-- **Maximal Number of Records**: This is the maximum number of records that can be contained in a block. The default number is 256.
+- **Maximal Number of Records**: This is the maximum number of records that can be contained in a block. The default number is 1024.
 
 ### Quota Type
 
@@ -50,11 +50,11 @@ The quota size defines the maximum size of the bucket in bytes. It's ignored if 
 
 The max block size determines the maximum size of a block in bytes. Once a block reaches this limit, a new block is created for storing additional data. A record's size isn't restricted by the block size. If a record exceeds the block size, it will be stored in the current block, and a new block will be created for the next record.
 
-The default value is set at 64MB. Typically, there is no need to alter this unless your records exceed the default size. ReductStore pre-allocates the block size during the creation of a new block. As such, it improves performance when multiple records can be stored in a single block. We recommend to keep the block size enough to store at least 256 records.
+The default value is set at 64MB. Typically, there is no need to alter this unless your records exceed the default size. ReductStore pre-allocates the block size during the creation of a new block. As such, it improves performance when multiple records can be stored in a single block. We recommend to keep the block size enough to store at least 1024 records.
 
 ### Maximal Number of Records
 
-The maximal number of records refers to the maximum number of records that can be stored in a block. When a block reaches this capacity, a new block is created for additional data. The default value is 256. Generally, you don't need to adjust this unless you have numerous small records and an excess of blocks, which could impact search performance.
+The maximal number of records refers to the maximum number of records that can be stored in a block. When a block reaches this capacity, a new block is created for additional data. The default value is 1024. Generally, you don't need to adjust this unless you have numerous small records and an excess of blocks, which could impact search performance.
 
 To optimize search performance, bear in mind that record searching consists of two steps:
 
