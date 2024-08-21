@@ -61,7 +61,7 @@ jobs:
 
           - example: java
             path_prefix: java/src/main/java/store/reduct/
-            cmd: ./gradlew
+            cmd: ./java/gradlew
 
     steps:
       - uses: actions/checkout@v4
