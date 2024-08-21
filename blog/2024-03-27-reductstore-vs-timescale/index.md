@@ -2,7 +2,7 @@
 title: "Alternative to TimescaleDB for Blob Data"
 description: "A comparison of ReductStore and TimescaleDB for storing time series blob data."
 authors: alexey
-tags: [comparisons, iot]
+tags: [comparison, iot]
 slug: comparisons/iot/reductstore-vs-timescaledb
 date: 2024-03-27
 image: ./img/snippet.webp
@@ -228,4 +228,4 @@ TimescaleDB excels as a time series database and can be used to store small blob
 
 ---
 
-I hope this article has been helpful. If you have any questions or feedback, don’t hesitate to reach out in **[Discord](https://discord.com/invite/8wPtPGJYsn)** or by opening a discussion on **[GitHub](https://github.com/reductstore/reductstore/discussions)**.
+I hope this article has been helpful. If you have any questions or feedback, don’t hesitate to use the [**ReductStore Community**](https://community.reduct.store) forum.

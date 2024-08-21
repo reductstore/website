@@ -2,15 +2,61 @@
   margin-bottom: var(--reduct-bottom-page-margin);
 }
 
-.introText {
-  margin-bottom: 3rem;
+.downloadBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 2rem 1rem;
+  border: 2px solid #dddddd;
+  background-color: var(--reduct-background-gray-light);
+  border-radius: 15px;
 }
 
-.formTitle {
+.downloadBlock button {
+  white-space: normal;
+}
+
+/* Bullet Points */
+.bulletTitle {
   font-size: 1.5rem;
   font-weight: bold;
+  margin-bottom: 1rem;
 }
 
+.bulletPoints {
+  list-style: none;
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+  padding: 0;
+}
+
+.subBulletPoints {
+  list-style: none;
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+  padding: 0;
+}
+
+.subBulletPoints .bulletPointItem {
+  display: flex;
+  align-items: center;
+}
+
+.subBulletPoints .bulletIcon {
+  margin-right: 0.5rem;
+}
+
+/* form */
+.formWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* Image */
 .imageWrapper {
   display: flex;
   justify-content: center;
@@ -18,7 +64,7 @@
 }
 
 .image {
-  width: 400px;
+  width: 100%;
   height: auto;
   border: 3px solid #dddddd;
   border-radius: 15px;

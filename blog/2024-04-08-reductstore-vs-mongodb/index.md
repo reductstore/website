@@ -2,7 +2,7 @@
 title: "Alternative to MongoDB for Blob Data"
 description: "A comparison of ReductStore and MongoDB for storing time series blob data."
 authors: anthony
-tags: [comparisons, iot]
+tags: [comparison, iot]
 slug: comparisons/iot/reductstore-vs-mongodb
 date: 2024-04-08
 image: ./img/reduct_vs_mongodb.webp
@@ -253,4 +253,4 @@ In choosing a database for time series blob data, it's important to weigh your a
 
 ---
 
-For further guidance or queries on the matter, feel free to join our community on [**Discord**](<https://discord.com/invite/8wPtPGJYsn>) or initiate a discussion on [**GitHub**](<https://github.com/reductstore/reductstore/discussions>).
+For further guidance or queries on the matter, feel free to join our community on the [**ReductStore Community**](https://community.reduct.store) forum.

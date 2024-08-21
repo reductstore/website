@@ -1,6 +1,6 @@
 ---
 title: "How to Keep a History of MQTT Data With Python"
-description: "A tutorial to keep a history of MQTT messages with Python by using the ReductStore Client SDK for Python."
+description: "A tutorial on how to keep a history of MQTT messages with Python by using the ReductStore Client SDK for Python."
 authors: alexey
 tags: [tutorials, iot, mqtt]
 slug: tutorials/iot/how-to-keep-mqtt-data-python
@@ -39,7 +39,7 @@ $ sudo apt-get install docker-compose python3-pip
 
 If you are using a different operating system, you can find the installation instructions for Docker Compose on **[the official website](https://docs.docker.com/compose/install/)**. 
 
-## **Execute MQTT Broker and ReductStore using Docker Compose**
+## Execute MQTT Broker and ReductStore using Docker Compose
 
 The easiest way to set up the broker and database is to use Docker Compose with the following `docker-compose.yml` file:
 
@@ -67,7 +67,7 @@ docker-compose up
 
 Docker Compose downloads the images if not available on your device and starts the containers. Pay attention that we published ports 1883 for MQTT protocol and 8383 for **[ReductStore HTTP API](https://www.reduct.store/docs/http-api)**.
 
-## Write Python Script
+## Writing Python Script
 
 Now, let's start coding and delve into the details. To begin, install the necessary dependencies. We'll need the **[https://pypi.org/project/aiomqtt/](https://www.npmjs.com/package/async-mqtt)** and the **[Python Client SDK](https://pypi.org/project/reduct-py/)**.
 
@@ -140,7 +140,7 @@ await bucket.write(message.topic, message.payload)
 
 This was quite straightforward. We used the topic name as the entry name and wrote the MQTT payload there.
 
-## **Publishing Data to MQTT Topic**
+## Publishing Data to MQTT Topic
 
 Upon launching the script, it remains idle since there's no data incoming from MQTT. To get it running, you need to publish some data. My preferred tool for this is **mosquitto_pub**. For those using Ubuntu, this tool comes with the `mosquitto-clients` package.
 
@@ -150,7 +150,7 @@ $ mosuitto_pub -t topic-1 -m "Hello, topic-1!"
 $ mosuitto_pub -t topic-2 -m "Hello, topic-2!"
 ```
 
-## **Getting Data From ReductStore**
+## Getting Data From ReductStore
 
 You've learned to pull data from MQTT and save it to ReductStore. Now, we need a basic Python script to read this data from storage:
 
@@ -198,4 +198,4 @@ To help you understand how to use these tools, we've made an example that shows 
 
 ---
 
-I hope this tutorial has been helpful. If you have any questions or feedback, don’t hesitate to reach out in **[Discord](https://discord.com/invite/8wPtPGJYsn)** or by opening a discussion on **[GitHub](https://github.com/reductstore/reductstore/discussions)**.
+I hope this tutorial has been helpful. If you have any questions or feedback, don’t hesitate to use the [**ReductStore Community**](https://community.reduct.store) forum.

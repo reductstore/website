@@ -1,11 +1,8 @@
-import React from "react";
 import Layout from "@theme/Layout";
 import PricingTable from "@site/src/components/PricingTable";
 import SimpleHeader from "@site/src/components/SimpleHeader";
 import Faq from "@site/src/components/Faq";
 import PromotionalBanner from "@site/src/components/PromotionalBanner";
-import FreePoCForm from "@site/src/components/FreePoCForm";
-import styles from './styles.module.css';
 
 export default function Pricing(): JSX.Element {
   return (
@@ -27,9 +24,6 @@ export default function Pricing(): JSX.Element {
           <PricingTable />
         </div>
         <br />
-        <div className={styles.form}>
-          <FreePoCForm elementId="free-poc-form" />
-        </div>
         <SimpleHeader pageTitle="Frequently Asked Questions" pageTitleAs="h2" />
         <div className="container">
           <Faq faqs={pricingFaqs} defaultOpenCount={3} />

@@ -1,0 +1,105 @@
+---
+title: Data Management
+description: Complete guide on typical data management operations in ReductStore.
+---
+
+import CodeBlock from "@theme/CodeBlock";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<head>
+    <link rel="canonical" href="https://www.reduct.store/docs/guides/data-managment"/>
+</head>
+
+# Data Management With ReductStore
+
+ReductStore provides a set of methods to manage data in the database. This guide provides an overview of typical data management operations in ReductStore and explains how to perform them using the ReductStore SDKs or the HTTP API.
+
+## Changing Labels
+
+ReductStore doesn't allow you to change the contents of records, but it does allow you to change the labels of existing records.
+You can add, remove or update labels for a single record or for a batch of records to avoid HTTP requests overhead.
+
+:::note
+You should send a label as an empty string to remove it.
+:::
+
+import ChangeLabelsPy from "!!raw-loader!../examples/py/src/data_management_update_labels.py";
+import ChangeLabelsJs from "!!raw-loader!../examples/js/src/data_management_update_labels.mjs";
+import ChangeLabelsRs from "!!raw-loader!../examples/rs/examples/data_management_update_labels.rs";
+import ChangeLabelsCpp from "!!raw-loader!../examples/cpp/src/data_management_update_labels.cc";
+import ChangeLabelsCurl from "!!raw-loader!../examples/curl/data_management_update_labels.sh";
+
+
+<Tabs>
+    <TabItem value="Python">
+        <CodeBlock language="python">
+            {ChangeLabelsPy}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">
+            {ChangeLabelsJs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {ChangeLabelsRs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">
+            {ChangeLabelsCpp}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="cURL">
+        <CodeBlock language="bash">
+            {ChangeLabelsCurl}
+        </CodeBlock>
+    </TabItem>
+</Tabs>
+
+
+## Deleting Data
+
+Currently, you can delete data per bucket or per entry by using the Client SDKs, Reduct CLI or HTTP API:
+
+import DeleteDataPy from "!!raw-loader!../examples/py/src/data_management_delete_data.py";
+import DeleteDataJs from "!!raw-loader!../examples/js/src/data_management_delete_data.mjs";
+import DeleteDataRs from "!!raw-loader!../examples/rs/examples/data_management_delete_data.rs";
+import DeleteDataCpp from "!!raw-loader!../examples/cpp/src/data_management_delete_data.cc";
+import DeleteDataCli from "!!raw-loader!../examples/cli/data_management_delete_data.sh";
+import DeleteDataCurl from "!!raw-loader!../examples/curl/data_management_delete_data.sh";
+
+<Tabs>
+    <TabItem value="Python">
+        <CodeBlock language="python">
+            {DeleteDataPy}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">
+            {DeleteDataJs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {DeleteDataRs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">
+            {DeleteDataCpp}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="CLI">
+        <CodeBlock language="bash">
+            {DeleteDataCli}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="cURL">
+        <CodeBlock language="bash">
+            {DeleteDataCurl}
+        </CodeBlock>
+    </TabItem>
+</Tabs>
