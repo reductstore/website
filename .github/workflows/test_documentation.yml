@@ -102,15 +102,15 @@ jobs:
           toolchain: 1.75
 
       - name: Install Java
+        uses: actions/setup-java@v4
         if: matrix.example == 'java'
-      - uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
       - name: Setup Gradle
-        if: matrix.example == 'java'
         uses: gradle/actions/setup-gradle@v4
+        if: matrix.example == 'java'
 
       - name: Install Python dependencies
         if: matrix.example == 'python'
