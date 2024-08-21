@@ -61,7 +61,7 @@ jobs:
 
           - example: java
             path_prefix: java/src/main/java/store/reduct/
-            cmd: ./example-runner
+            cmd: ./example-runner.sh
 
     steps:
       - uses: actions/checkout@v4
