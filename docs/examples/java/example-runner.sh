@@ -5,4 +5,4 @@ cd java
 filename=$(basename "$1" .java)
 
 # run gradle task
-./gradlew filename
+./gradlew ${filename}
