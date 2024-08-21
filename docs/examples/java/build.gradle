@@ -20,7 +20,7 @@ dependencies {
 
 apply plugin: 'java'
 
-task(QuckStart, dependsOn: 'classes', type: JavaExec) {
+task(QuickStart, dependsOn: 'classes', type: JavaExec) {
     main = "store.reduct.QuickStart"
     classpath = sourceSets.main.runtimeClasspath
 }
