@@ -17,11 +17,15 @@ jobs:
     strategy:
       matrix:
         doc_version: [ next, 1.10.x, 1.9.x ]
-        example: [ python, node, curl, cpp, rust, cli ]
+        example: [ python, node, curl, cpp, rust, java, cli ]
         include:
           - doc_version: next
             reduct_version: main
             example_root: docs/examples
+
+          - doc_version: 1.11.x
+            reduct_version: latest
+            example_root: versioned_docs/version-1.11.x/examples/
 
           - doc_version: 1.10.x
             reduct_version: latest
@@ -54,6 +58,10 @@ jobs:
           - example: cli
             path_prefix: cli
             cmd: sh
+
+          - example: java
+            path_prefix: java
+            cmd: ./gradlew
 
     steps:
       - uses: actions/checkout@v4
@@ -92,6 +100,17 @@ jobs:
         if: matrix.example == 'rust'
         with:
           toolchain: 1.75
+
+      - name: Install Java
+        if: matrix.example == 'java'
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        if: matrix.example == 'java'
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Install Python dependencies
         if: matrix.example == 'python'
