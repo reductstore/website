@@ -97,6 +97,11 @@
                     "type": "link",
                     "label": "C++ Client",
                     "href": "https://github.com/reductstore/reduct-cpp"
+                },
+                {
+                    "type": "link",
+                    "label": "Java Client (in progress)",
+                    "href": "https://github.com/reductstore/reduct-java"
                 }
             ]
         },
