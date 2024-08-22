@@ -5,7 +5,10 @@ description: The API for managing access tokens and permissions for the database
 ---
 
 <head>
-  <link rel="canonical" href="https://www.reduct.store/docs/http-api/token-authentication" />
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/token-authentication"
+  />
 </head>
 
 import SwaggerComponent from "@site/src/components/SwaggerComponent";
@@ -22,7 +25,8 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
   summary="Get a list of tokens"
   description={
     <>
-      The method returns a list of tokens with names and creation dates. To use this method, you need an access token with full access.
+      The method returns a list of tokens with names and creation dates. To use
+      this method, you need an access token with full access.
     </>
   }
   responses={[
@@ -30,26 +34,28 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
       status: "200",
       message: "OK",
       description: (
-        <pre><code>{`{
+        <pre>
+          <code>{`{
   "tokens": [
     {
       "name": "string",
       "created_at": "string"
     }
   ]
-}`}</code></pre>
-      )
+}`}</code>
+        </pre>
+      ),
     },
     {
       status: "401",
       message: "Unauthorized",
-      summary: "Access token is empty or invalid"
+      summary: "Access token is empty or invalid",
     },
     {
       status: "403",
       message: "Forbidden",
-      summary: "Access token doesn't have enough permissions"
-    }
+      summary: "Access token doesn't have enough permissions",
+    },
   ]}
 />
 
@@ -59,7 +65,8 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
   summary="Show information about a token"
   description={
     <>
-      This method provides full information about a token except its values. The method requires an access token with full access.
+      This method provides full information about a token except its values. The
+      method requires an access token with full access.
     </>
   }
   parameters={[
@@ -68,9 +75,9 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
       details: {
         name: "token_name",
         isRequired: true,
-        description: "Name of the token to show"
-      }
-    }
+        description: "Name of the token to show",
+      },
+    },
   ]}
   responses={[
     {
@@ -78,7 +85,8 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
       message: "OK",
       summary: "Information about token",
       description: (
-        <pre><code>{`{
+        <pre>
+          <code>{`{
   "name": "string",
   "created_at": "string",
   "permissions": {
@@ -86,24 +94,25 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
     "read": [],
     "write": []
   }
-}`}</code></pre>
-      )
+}`}</code>
+        </pre>
+      ),
     },
     {
       status: "401",
       message: "Unauthorized",
-      summary: "Current access token is empty or invalid"
+      summary: "Current access token is empty or invalid",
     },
     {
       status: "403",
       message: "Forbidden",
-      summary: "Current access token doesn't have enough permissions"
+      summary: "Current access token doesn't have enough permissions",
     },
     {
       status: "404",
       message: "Not Found",
-      summary: "Token with the given name does not exist"
-    }
+      summary: "Token with the given name does not exist",
+    },
   ]}
 />
 
@@ -113,7 +122,9 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
   summary="Create a new access token"
   description={
     <>
-      The method creates a new access token with given permissions as a JSON document in the request body. To use this method, you need an access token with full access.
+      The method creates a new access token with given permissions as a JSON
+      document in the request body. To use this method, you need an access token
+      with full access.
     </>
   }
   parameters={[
@@ -122,8 +133,8 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
       details: {
         name: "token_name",
         isRequired: true,
-        description: "Name of new token"
-      }
+        description: "Name of new token",
+      },
     },
     {
       type: "body",
@@ -131,8 +142,8 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
         name: "full_access",
         dataType: "Boolean",
         isRequired: false,
-        description: "Create a token with full access. Default: false"
-      }
+        description: "Create a token with full access. Default: false",
+      },
     },
     {
       type: "body",
@@ -140,8 +151,8 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
         name: "read",
         dataType: "String[]",
         isRequired: false,
-        description: "A list of bucket names for read access. Default: []"
-      }
+        description: "A list of bucket names for read access. Default: []",
+      },
     },
     {
       type: "body",
@@ -149,9 +160,9 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
         name: "write",
         dataType: "String[]",
         isRequired: false,
-        description: "A list of bucket names for write access. Default: []"
-      }
-    }
+        description: "A list of bucket names for write access. Default: []",
+      },
+    },
   ]}
   responses={[
     {
@@ -159,32 +170,35 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
       message: "OK",
       summary: "Returns value and timestamp of token",
       description: (
-        <pre><code>{`{
+        <pre>
+          <code>{`{
   "value": "string",
   "created_at": "string"
-}`}</code></pre>
-      )
+}`}</code>
+        </pre>
+      ),
     },
     {
       status: "401",
       message: "Unauthorized",
-      summary: "Access token is empty or invalid"
+      summary: "Access token is empty or invalid",
     },
     {
       status: "403",
       message: "Forbidden",
-      summary: "Access token doesn't have enough permissions"
+      summary: "Access token doesn't have enough permissions",
     },
     {
       status: "409",
       message: "Conflict",
-      summary: "Token with the same name already exists"
+      summary: "Token with the same name already exists",
     },
     {
       status: "422",
       message: "Unprocessable Entity",
-      summary: "Specified bucket does not exist or another validation error occurred"
-    }
+      summary:
+        "Specified bucket does not exist or another validation error occurred",
+    },
   ]}
 />
 
@@ -194,7 +208,9 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
   summary="Update an access token"
   description={
     <>
-      The method updates an access token with given permissions as a JSON document in the request body. To use this method, you need an access token with full access.
+      The method updates an access token with given permissions as a JSON
+      document in the request body. To use this method, you need an access token
+      with full access.
     </>
   }
   parameters={[
@@ -203,8 +219,8 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
       details: {
         name: "token_name",
         isRequired: true,
-        description: "Name of new token"
-      }
+        description: "Name of new token",
+      },
     },
     {
       type: "body",
@@ -212,8 +228,8 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
         name: "full_access",
         dataType: "Boolean",
         isRequired: false,
-        description: "Create a token with full access. Default: false"
-      }
+        description: "Create a token with full access. Default: false",
+      },
     },
     {
       type: "body",
@@ -221,8 +237,8 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
         name: "read",
         dataType: "String[]",
         isRequired: false,
-        description: "A list of bucket names for read access. Default: []"
-      }
+        description: "A list of bucket names for read access. Default: []",
+      },
     },
     {
       type: "body",
@@ -230,9 +246,9 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
         name: "write",
         dataType: "String[]",
         isRequired: false,
-        description: "A list of bucket names for write access. Default: []"
-      }
-    }
+        description: "A list of bucket names for write access. Default: []",
+      },
+    },
   ]}
   responses={[
     {
@@ -240,32 +256,35 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
       message: "OK",
       summary: "Returns value and timestamp of token",
       description: (
-        <pre><code>{`{
+        <pre>
+          <code>{`{
   "value": "string",
   "created_at": "string"
-}`}</code></pre>
-      )
+}`}</code>
+        </pre>
+      ),
     },
     {
       status: "401",
       message: "Unauthorized",
-      summary: "Access token is empty or invalid"
+      summary: "Access token is empty or invalid",
     },
     {
       status: "403",
       message: "Forbidden",
-      summary: "Access token doesn't have enough permissions"
+      summary: "Access token doesn't have enough permissions",
     },
     {
       status: "409",
       message: "Conflict",
-      summary: "Token with the same name already exists"
+      summary: "Token with the same name already exists",
     },
     {
       status: "422",
       message: "Unprocessable Entity",
-      summary: "Specified bucket does not exist or another validation error occurred"
-    }
+      summary:
+        "Specified bucket does not exist or another validation error occurred",
+    },
   ]}
 />
 
@@ -275,7 +294,8 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
   summary="Remove a token"
   description={
     <>
-      This method removes or revokes a token. To use it, a client should have an access token with full access.
+      This method removes or revokes a token. To use it, a client should have an
+      access token with full access.
     </>
   }
   parameters={[
@@ -284,36 +304,36 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
       details: {
         name: "token_name",
         isRequired: true,
-        description: "Name of the token to remove"
-      }
-    }
+        description: "Name of the token to remove",
+      },
+    },
   ]}
   responses={[
     {
       status: "200",
       message: "OK",
-      summary: "Token was removed"
+      summary: "Token was removed",
     },
     {
       status: "401",
       message: "Unauthorized",
-      summary: "Access token is empty or invalid"
+      summary: "Access token is empty or invalid",
     },
     {
       status: "403",
       message: "Forbidden",
-      summary: "Access token doesn't have enough permissions"
+      summary: "Access token doesn't have enough permissions",
     },
     {
       status: "404",
       message: "Not Found",
-      summary: "Token with the given name doesn't exist"
+      summary: "Token with the given name doesn't exist",
     },
     {
       status: "409",
       message: "Conflict",
-      summary: "Token is provisioned"
-    }
+      summary: "Token is provisioned",
+    },
   ]}
 />
 
@@ -323,7 +343,8 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
   summary="Get full information about current API token"
   description={
     <>
-      This method takes a token from the Authentication header and returns its name, permissions, and additional information.
+      This method takes a token from the Authentication header and returns its
+      name, permissions, and additional information.
     </>
   }
   responses={[
@@ -332,7 +353,8 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
       summary: "Returns JSON document",
       message: "OK",
       description: (
-        <pre><code>{`{
+        <pre>
+          <code>{`{
   "name": "string",
   "created_at": "string",
   "permissions": {
@@ -340,15 +362,14 @@ The database uses the token authentication when the RS_API_TOKEN environment is 
     "read": [],
     "write": []
   }
-}`}</code></pre>
-      )
+}`}</code>
+        </pre>
+      ),
     },
     {
       status: "401",
       message: "Unauthorized",
-      summary: "API token is invalid"
-    }
+      summary: "API token is invalid",
+    },
   ]}
 />
-
-

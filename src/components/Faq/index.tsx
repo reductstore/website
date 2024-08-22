@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import FaqItem from './FaqItem';
+import React, { useState, useEffect } from "react";
+import FaqItem from "./FaqItem";
 import styles from "./styles.module.css";
-
 
 interface FaqItemType {
   question: string;
@@ -14,9 +13,10 @@ interface FaqProps {
 }
 
 const Faq: React.FC<FaqProps> = ({ faqs, defaultOpenCount = 0 }) => {
-  const openCount = faqs.length < defaultOpenCount ? faqs.length : defaultOpenCount;
+  const openCount =
+    faqs.length < defaultOpenCount ? faqs.length : defaultOpenCount;
   const [openIndexes, setOpenIndexes] = useState<number[]>(
-    Array.from({ length: openCount }, (_, index) => index)
+    Array.from({ length: openCount }, (_, index) => index),
   );
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const Faq: React.FC<FaqProps> = ({ faqs, defaultOpenCount = 0 }) => {
 
   const toggleItem = (index: number) => {
     if (openIndexes.includes(index)) {
-      setOpenIndexes(openIndexes.filter(item => item !== index));
+      setOpenIndexes(openIndexes.filter((item) => item !== index));
     } else {
       setOpenIndexes([...openIndexes, index]);
     }

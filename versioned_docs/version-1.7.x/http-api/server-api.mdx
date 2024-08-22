@@ -5,7 +5,10 @@ description: The server API provides HTTP methods for checking the status of the
 ---
 
 <head>
-  <link rel="canonical" href="https://www.reduct.store/docs/http-api/server-api" />
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/server-api"
+  />
 </head>
 
 import SwaggerComponent from "@site/src/components/SwaggerComponent";
@@ -20,10 +23,13 @@ The server API provides HTTP methods for checking the status of the server, list
   summary="Get statistical information about the storage"
   description={
     <>
-      You can use this method to get stats of the storage and check its version. If authentication is enabled, the method needs a valid API token.
-      <pre><code>
-      {`curl --header "authorsization: Bearer \${API_TOKEN}" http://127.0.0.1:8383/api/v1/info`}
-      </code></pre>
+      You can use this method to get stats of the storage and check its version.
+      If authentication is enabled, the method needs a valid API token.
+      <pre>
+        <code>
+          {`curl --header "authorsization: Bearer \${API_TOKEN}" http://127.0.0.1:8383/api/v1/info`}
+        </code>
+      </pre>
     </>
   }
   responses={[
@@ -33,8 +39,9 @@ The server API provides HTTP methods for checking the status of the server, list
       summary: "Returns information in JSON format",
       description: (
         <>
-          <pre><code>
-          {`{
+          <pre>
+            <code>
+              {`{
     "version": "string",
     "bucket_count": "integer",  // number of buckets in storage
     "usage": "integer",         // disk usage in bytes
@@ -49,15 +56,17 @@ The server API provides HTTP methods for checking the status of the server, list
         "quota_size": "integer"                 // quota content_length in bytes
     }
 }`}
-          </code></pre>
+            </code>
+          </pre>
         </>
-      )
+      ),
     },
     {
       status: "401",
       message: "Unauthorized",
-      summary: "If authentication is enabled and access token is invalid or empty"
-    }
+      summary:
+        "If authentication is enabled and access token is invalid or empty",
+    },
   ]}
 />
 
@@ -67,10 +76,13 @@ The server API provides HTTP methods for checking the status of the server, list
   summary="Get a list of the buckets with their stats"
   description={
     <>
-      You can use this method to browse the buckets of the storage. If authentication is enabled, the method needs a valid API token.
-      <pre><code>
-      {`curl --header "authorsization: Bearer \${API_TOKEN}" http://127.0.0.1:8383/api/v1/list`}
-      </code></pre>
+      You can use this method to browse the buckets of the storage. If
+      authentication is enabled, the method needs a valid API token.
+      <pre>
+        <code>
+          {`curl --header "authorsization: Bearer \${API_TOKEN}" http://127.0.0.1:8383/api/v1/list`}
+        </code>
+      </pre>
     </>
   }
   responses={[
@@ -79,8 +91,9 @@ The server API provides HTTP methods for checking the status of the server, list
       message: "OK",
       description: (
         <>
-          <pre><code>
-          {`{
+          <pre>
+            <code>
+              {`{
     "buckets": [
       {
         "name": "string",         // name of the bucket
@@ -91,15 +104,17 @@ The server API provides HTTP methods for checking the status of the server, list
       }
     ]
 }`}
-          </code></pre>
+            </code>
+          </pre>
         </>
-      )
+      ),
     },
     {
       status: "401",
       message: "Unauthorized",
-      summary: "If authentication is enabled and access token is invalid or empty"
-    }
+      summary:
+        "If authentication is enabled and access token is invalid or empty",
+    },
   ]}
 />
 
@@ -109,16 +124,17 @@ The server API provides HTTP methods for checking the status of the server, list
   summary="Check if the storage engine is working"
   description={
     <>
-      You can use this method for health checks in Docker or Kubernetes environment. The method has anonymous access.
-      <pre><code>
-      {`curl --head http://127.0.0.1:8383/api/v1/alive`}
-      </code></pre>
+      You can use this method for health checks in Docker or Kubernetes
+      environment. The method has anonymous access.
+      <pre>
+        <code>{`curl --head http://127.0.0.1:8383/api/v1/alive`}</code>
+      </pre>
     </>
   }
   responses={[
     {
       status: "200",
-      message: "OK"
-    }
+      message: "OK",
+    },
   ]}
 />

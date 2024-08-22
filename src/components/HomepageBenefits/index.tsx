@@ -1,6 +1,6 @@
 import React from "react";
-import useBaseUrl from '@docusaurus/useBaseUrl';
-import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from "@docusaurus/useBaseUrl";
+import ThemedImage from "@theme/ThemedImage";
 
 import styles from "./styles.module.css";
 
@@ -11,7 +11,12 @@ interface BenefitsValue {
   description: string;
 }
 
-function Benefits({ path_light, path_dark, title, description }: BenefitsValue) {
+function Benefits({
+  path_light,
+  path_dark,
+  title,
+  description,
+}: BenefitsValue) {
   return (
     <div className="col col--4">
       <div className={styles.benefit}>
@@ -56,4 +61,3 @@ export default function HomepageBenefits() {
     </section>
   );
 }
-

@@ -5,13 +5,15 @@ description: The Entry API allows users to write and read data from their bucket
 ---
 
 <head>
-  <link rel="canonical" href="https://www.reduct.store/docs/http-api/entry-api" />
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/entry-api"
+  />
 </head>
 
 import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
 # Entry API Specification Reference
-
 
 The Entry API allows users to write and read data from their buckets, as well as search for specific entries using query operations.
 
@@ -21,13 +23,23 @@ The Entry API allows users to write and read data from their buckets, as well as
   summary="Write a record to an entry"
   description={
     <>
-      ReductStore creates an entry on the first write operation. The record should be placed in the body of the HTTP request. The body can also be empty.
-      <br /><br />
-      The method needs a valid API token with write access to the entry's bucket if authentication is enabled.
-      <br /><br />
-      The endpoint can be used with the "Expect: 100-continue" header. If the header is not set and an error occurs on the database side, the database drains the sent body and returns an HTTP status.
-      <br /><br />
-      Since version 1.3, the database supports labels. You can assign any number of labels to a record by using headers that start with <code>x-reduct-label-</code>.
+      ReductStore creates an entry on the first write operation. The record
+      should be placed in the body of the HTTP request. The body can also be
+      empty.
+      <br />
+      <br />
+      The method needs a valid API token with write access to the entry's bucket
+      if authentication is enabled.
+      <br />
+      <br />
+      The endpoint can be used with the "Expect: 100-continue" header. If the
+      header is not set and an error occurs on the database side, the database
+      drains the sent body and returns an HTTP status.
+      <br />
+      <br />
+      Since version 1.3, the database supports labels. You can assign any number
+      of labels to a record by using headers that start with{" "}
+      <code>x-reduct-label-</code>.
     </>
   }
   parameters={[
@@ -37,7 +49,7 @@ The Entry API allows users to write and read data from their buckets, as well as
         name: ":bucket_name",
         description: "Name of bucket",
         isRequired: true,
-      }
+      },
     },
     {
       type: "path",
@@ -45,7 +57,7 @@ The Entry API allows users to write and read data from their buckets, as well as
         name: ":entry_name",
         description: "Name of entry",
         isRequired: true,
-      }
+      },
     },
     {
       type: "query",
@@ -54,15 +66,16 @@ The Entry API allows users to write and read data from their buckets, as well as
         dataType: "Integer",
         description: "A UNIX timestamp in microseconds",
         isRequired: true,
-      }
+      },
     },
     {
       type: "header",
       details: {
         name: "Content-Length",
-        description: "Content-length is required to start an asynchronous write operation",
+        description:
+          "Content-length is required to start an asynchronous write operation",
         isRequired: true,
-      }
+      },
     },
     {
       type: "header",
@@ -70,8 +83,8 @@ The Entry API allows users to write and read data from their buckets, as well as
         name: "x-reduct-label-<name>",
         description: "A value of a label assigned to the record",
         isRequired: false,
-      }
-    }
+      },
+    },
   ]}
   responses={[
     {
@@ -79,41 +92,43 @@ The Entry API allows users to write and read data from their buckets, as well as
       message: "OK",
       summary: "The record is written",
       description: (
-        <pre><code>{`{
+        <pre>
+          <code>{`{
     // Response
-}`}</code></pre>
-      )
+}`}</code>
+        </pre>
+      ),
     },
     {
       status: "400",
       message: "Bad Request",
-      summary: "Posted content bigger or smaller than content-length"
+      summary: "Posted content bigger or smaller than content-length",
     },
     {
       status: "401",
       message: "Unauthorized",
-      summary: "Access token is invalid or empty"
+      summary: "Access token is invalid or empty",
     },
     {
       status: "403",
       message: "Forbidden",
-      summary: "Access token does not have write permissions"
+      summary: "Access token does not have write permissions",
     },
     {
       status: "404",
       message: "Not Found",
-      summary: "Bucket is not found"
+      summary: "Bucket is not found",
     },
     {
       status: "409",
       message: "Conflict",
-      summary: "A record with the same timestamp already exists"
+      summary: "A record with the same timestamp already exists",
     },
     {
       status: "422",
       message: "Unprocessable Entity",
-      summary: "Bad timestamp"
-    }
+      summary: "Bad timestamp",
+    },
   ]}
 />
 
@@ -123,13 +138,23 @@ The Entry API allows users to write and read data from their buckets, as well as
   summary="Write batch of records"
   description={
     <>
-      This method allows multiple records to be written in a single request. A client should describe the records in headers in the following format:
+      This method allows multiple records to be written in a single request. A
+      client should describe the records in headers in the following format:
       <br />
-      <code>x-reduct-time-: &lt;CONTENT_LENGTH&gt;,&lt;CONTENT_TYPE&gt;, [LABEL=VALUE]</code>
-      <br /><br />
-      For example: <code>x-reduct-time-192312381273: 100,text/plain,x=y,a="[a,b]"</code>
-      <br /><br />
-      The body must contain the concatenated records sorted by timestamp. The method returns an HTTP error if the header format or data length is incorrect. It also returns an individual status and error message for each record if the write operation fails:
+      <code>
+        x-reduct-time-: &lt;CONTENT_LENGTH&gt;,&lt;CONTENT_TYPE&gt;,
+        [LABEL=VALUE]
+      </code>
+      <br />
+      <br />
+      For example:{" "}
+      <code>x-reduct-time-192312381273: 100,text/plain,x=y,a="[a,b]"</code>
+      <br />
+      <br />
+      The body must contain the concatenated records sorted by timestamp. The
+      method returns an HTTP error if the header format or data length is
+      incorrect. It also returns an individual status and error message for each
+      record if the write operation fails:
       <br />
       <code>x-reduct-error-: &lt;STATUS_CODE&gt;,&lt;ERROR_MESSAGE&gt;.</code>
     </>
@@ -138,36 +163,36 @@ The Entry API allows users to write and read data from their buckets, as well as
     {
       status: "200",
       message: "OK",
-      summary: "The request was valid. However, some records may not be written. Check headers."
+      summary:
+        "The request was valid. However, some records may not be written. Check headers.",
     },
     {
       status: "400",
       message: "Bad Request",
-      summary: "Posted content bigger or smaller than content-length"
+      summary: "Posted content bigger or smaller than content-length",
     },
     {
       status: "401",
       message: "Unauthorized",
-      summary: "Access token is invalid or empty"
+      summary: "Access token is invalid or empty",
     },
     {
       status: "403",
       message: "Forbidden",
-      summary: "Access token does not have write permissions"
+      summary: "Access token does not have write permissions",
     },
     {
       status: "404",
       message: "Not Found",
-      summary: "Bucket is not found"
+      summary: "Bucket is not found",
     },
     {
       status: "422",
       message: "Unprocessable Entity",
-      summary: "Bad timestamp or header format"
-    }
+      summary: "Bad timestamp or header format",
+    },
   ]}
 />
-
 
 <SwaggerComponent
   method="GET"
@@ -176,14 +201,24 @@ The Entry API allows users to write and read data from their buckets, as well as
   fullWidth={false}
   description={
     <>
-      The method finds a record for the given timestamp and sends its content in the HTTP response body. It also sends additional information in headers:
-      <br /><strong>x-reduct-time</strong> - UNIX timestamp of the record in microseconds
-      <br /><strong>x-reduct-last</strong> - 1 - if a record is the last record in the query (deprecated since version 1.4, use NoContent response)
-      <br /><strong>x-reduct-label-&lt;name&gt;</strong> - a value of the &lt;name&gt; label
+      The method finds a record for the given timestamp and sends its content in
+      the HTTP response body. It also sends additional information in headers:
       <br />
-      If authentication is enabled, the method needs a valid API token with read access to the entry's bucket.
+      <strong>x-reduct-time</strong> - UNIX timestamp of the record in
+      microseconds
       <br />
-      Since version 1.3, the database supports labels. If a record has some labels, the method sends them as headers that start with <code>x-reduct-label</code>.
+      <strong>x-reduct-last</strong> - 1 - if a record is the last record in the
+      query (deprecated since version 1.4, use NoContent response)
+      <br />
+      <strong>x-reduct-label-&lt;name&gt;</strong> - a value of the &lt;name&gt;
+      label
+      <br />
+      If authentication is enabled, the method needs a valid API token with read
+      access to the entry's bucket.
+      <br />
+      Since version 1.3, the database supports labels. If a record has some
+      labels, the method sends them as headers that start with{" "}
+      <code>x-reduct-label</code>.
     </>
   }
   parameters={[
@@ -192,8 +227,8 @@ The Entry API allows users to write and read data from their buckets, as well as
       details: {
         name: ":bucket_name",
         isRequired: true,
-        description: "Name of bucket"
-      }
+        description: "Name of bucket",
+      },
     },
     {
       type: "query",
@@ -202,31 +237,33 @@ The Entry API allows users to write and read data from their buckets, as well as
         isRequired: false,
         description: (
           <>
-            A query ID to read the next record in the query. If it is set, the parameter
+            A query ID to read the next record in the query. If it is set, the
+            parameter
             <br />
             <code>ts</code>
             <br />
             is ignored.
           </>
-        )
-      }
+        ),
+      },
     },
     {
       type: "path",
       details: {
         name: ":entry_name",
         isRequired: true,
-        description: "Name of entry"
-      }
+        description: "Name of entry",
+      },
     },
     {
       type: "query",
       details: {
         name: "ts",
         isRequired: false,
-        description: "A UNIX timestamp in microseconds. If it is empty, the latest record is returned."
-      }
-    }
+        description:
+          "A UNIX timestamp in microseconds. If it is empty, the latest record is returned.",
+      },
+    },
   ]}
   responses={[
     {
@@ -237,33 +274,33 @@ The Entry API allows users to write and read data from their buckets, as well as
         <>
           <code>"string"</code>
         </>
-      )
+      ),
     },
     {
       status: "204",
       message: "No Content",
-      summary: "If there is no record available for the given query"
+      summary: "If there is no record available for the given query",
     },
     {
       status: "401",
       message: "Unauthorized",
-      summary: "Access token is invalid or empty"
+      summary: "Access token is invalid or empty",
     },
     {
       status: "403",
       message: "Forbidden",
-      summary: "Access token doesn"
+      summary: "Access token doesn",
     },
     {
       status: "404",
       message: "Not Found",
-      summary: "The bucket or record with the timestamp doesn"
+      summary: "The bucket or record with the timestamp doesn",
     },
     {
       status: "422",
       message: "Unprocessable Entity",
-      summary: "Bad timestamp"
-    }
+      summary: "Bad timestamp",
+    },
   ]}
 />
 
@@ -288,11 +325,19 @@ The Entry API allows users to write and read data from their buckets, as well as
   summary="Get a bulk of records from an entry"
   description={
     <>
-      Since version 1.5, ReductStore provides a way to read multiple records in a request. This can improve latency when you have many small records to read. The endpoint sorts all the records by time and concatenates them into a blob and sends it in the body. The meta information is sent for each record as a separate header <code>x-reduct-time-&lt;timestamp&gt;</code> which has a value as a CSV row. An example:
+      Since version 1.5, ReductStore provides a way to read multiple records in
+      a request. This can improve latency when you have many small records to
+      read. The endpoint sorts all the records by time and concatenates them
+      into a blob and sends it in the body. The meta information is sent for
+      each record as a separate header{" "}
+      <code>x-reduct-time-&lt;timestamp&gt;</code> which has a value as a CSV
+      row. An example:
       <br />
       <code>x-reduct-time-192312381273: 100,text/plain,x=y,a="[a,b]"</code>
       <br />
-      The first value is content-length, the second one is content-type, then labels as key=value pairs. If there is a comma in the value, it is escaped with double quotes.
+      The first value is content-length, the second one is content-type, then
+      labels as key=value pairs. If there is a comma in the value, it is escaped
+      with double quotes.
     </>
   }
   parameters={[
@@ -301,8 +346,8 @@ The Entry API allows users to write and read data from their buckets, as well as
       details: {
         name: ":bucket_name",
         description: "Name of bucket",
-        isRequired: true
-      }
+        isRequired: true,
+      },
     },
     {
       type: "query",
@@ -310,17 +355,17 @@ The Entry API allows users to write and read data from their buckets, as well as
         name: "q",
         dataType: "Integer",
         description: "A query ID to read the next record in the query",
-        isRequired: true
-      }
+        isRequired: true,
+      },
     },
     {
       type: "path",
       details: {
         name: ":entry_name",
         isRequired: true,
-        description: "Name of entry"
-      }
-    }
+        description: "Name of entry",
+      },
+    },
   ]}
   responses={[
     {
@@ -331,36 +376,35 @@ The Entry API allows users to write and read data from their buckets, as well as
         <>
           <code>"string"</code>
         </>
-      )
+      ),
     },
     {
       status: "204",
       message: "No Content",
-      summary: "If there is no record available for the given query"
+      summary: "If there is no record available for the given query",
     },
     {
       status: "401",
       message: "Unauthorized",
-      summary: "Access token is invalid or empty"
+      summary: "Access token is invalid or empty",
     },
     {
       status: "403",
       message: "Forbidden",
-      summary: "Access token doesn"
+      summary: "Access token doesn",
     },
     {
       status: "404",
       message: "Not Found",
-      summary: "The bucket or record with the timestamp doesn"
+      summary: "The bucket or record with the timestamp doesn",
     },
     {
       status: "422",
       message: "Unprocessable Entity",
-      summary: "Bad timestamp"
-    }
+      summary: "Bad timestamp",
+    },
   ]}
 />
-
 
 <SwaggerComponent
   method="HEAD"
@@ -377,21 +421,25 @@ The Entry API allows users to write and read data from their buckets, as well as
   }
 />
 
-
 <SwaggerComponent
   method="PATCH"
   path="/api/v1/b/:bucket_name/:entry_name"
   summary="Update labels of a record"
   description={
     <>
-      The method allows to update labels of a existing record.
-      It receives labels in headers that start with <code>x-reduct-label-</code> and updates the labels or adds new ones.
-      If a header with a label is empty, the label is removed.
-      Due to the content of the record is immutable, the method doesn't expect a body and the content-length header is required but must be 0.
-      <br /><br />
+      The method allows to update labels of a existing record. It receives
+      labels in headers that start with <code>x-reduct-label-</code> and updates
+      the labels or adds new ones. If a header with a label is empty, the label
+      is removed. Due to the content of the record is immutable, the method
+      doesn't expect a body and the content-length header is required but must
+      be 0.
+      <br />
+      <br />
       All existing labels not mentioned in the request stay unchanged.
-      <br /><br />
-      The method needs a valid API token with write access to the entry's bucket if authentication is enabled.
+      <br />
+      <br />
+      The method needs a valid API token with write access to the entry's bucket
+      if authentication is enabled.
     </>
   }
   parameters={[
@@ -401,7 +449,7 @@ The Entry API allows users to write and read data from their buckets, as well as
         name: ":bucket_name",
         description: "Name of bucket",
         isRequired: true,
-      }
+      },
     },
     {
       type: "path",
@@ -409,7 +457,7 @@ The Entry API allows users to write and read data from their buckets, as well as
         name: ":entry_name",
         description: "Name of entry",
         isRequired: true,
-      }
+      },
     },
     {
       type: "query",
@@ -418,7 +466,7 @@ The Entry API allows users to write and read data from their buckets, as well as
         dataType: "Integer",
         description: "A UNIX timestamp in microseconds",
         isRequired: true,
-      }
+      },
     },
     {
       type: "header",
@@ -426,7 +474,7 @@ The Entry API allows users to write and read data from their buckets, as well as
         name: "Content-Length",
         description: "Content-length is required but must be 0",
         isRequired: true,
-      }
+      },
     },
     {
       type: "header",
@@ -434,8 +482,8 @@ The Entry API allows users to write and read data from their buckets, as well as
         name: "x-reduct-label-<name>",
         description: "A value of a label assigned to the record",
         isRequired: false,
-      }
-    }
+      },
+    },
   ]}
   responses={[
     {
@@ -443,39 +491,40 @@ The Entry API allows users to write and read data from their buckets, as well as
       message: "OK",
       summary: "The record is written",
       description: (
-        <pre><code>{`{
+        <pre>
+          <code>{`{
     // Response
-}`}</code></pre>
-      )
+}`}</code>
+        </pre>
+      ),
     },
     {
       status: "400",
       message: "Bad Request",
-      summary: "Posted content bigger or smaller than content-length"
+      summary: "Posted content bigger or smaller than content-length",
     },
     {
       status: "401",
       message: "Unauthorized",
-      summary: "Access token is invalid or empty"
+      summary: "Access token is invalid or empty",
     },
     {
       status: "403",
       message: "Forbidden",
-      summary: "Access token does not have write permissions"
+      summary: "Access token does not have write permissions",
     },
     {
       status: "404",
       message: "Not Found",
-      summary: "Bucket, entry or record is not found"
+      summary: "Bucket, entry or record is not found",
     },
     {
       status: "422",
       message: "Unprocessable Entity",
-      summary: "Bad timestamp"
-    }
+      summary: "Bad timestamp",
+    },
   ]}
 />
-
 
 <SwaggerComponent
   method="PATCH"
@@ -500,41 +549,41 @@ The Entry API allows users to write and read data from their buckets, as well as
       <br />
       <code>x-reduct-error-: &lt;STATUS_CODE&gt;,&lt;ERROR_MESSAGE&gt;.</code>
     </>
-  }
-  responses={[
-    {
-      status: "200",
-      message: "OK",
-      summary: "The request was valid. However, some records may not be written. Check headers."
-    },
-    {
-      status: "400",
-      message: "Bad Request",
-      summary: "Posted content bigger or smaller than content-length"
-    },
-    {
-      status: "401",
-      message: "Unauthorized",
-      summary: "Access token is invalid or empty"
-    },
-    {
-      status: "403",
-      message: "Forbidden",
-      summary: "Access token does not have write permissions"
-    },
-    {
-      status: "404",
-      message: "Not Found",
-      summary: "Bucket or entry is not found"
-    },
-    {
-      status: "422",
-      message: "Unprocessable Entity",
-      summary: "Bad header format"
-    }
-  ]}
-/>
 
+}
+responses={[
+{
+status: "200",
+message: "OK",
+summary: "The request was valid. However, some records may not be written. Check headers."
+},
+{
+status: "400",
+message: "Bad Request",
+summary: "Posted content bigger or smaller than content-length"
+},
+{
+status: "401",
+message: "Unauthorized",
+summary: "Access token is invalid or empty"
+},
+{
+status: "403",
+message: "Forbidden",
+summary: "Access token does not have write permissions"
+},
+{
+status: "404",
+message: "Not Found",
+summary: "Bucket or entry is not found"
+},
+{
+status: "422",
+message: "Unprocessable Entity",
+summary: "Bad header format"
+}
+]}
+/>
 
 <SwaggerComponent
   method="GET"
@@ -674,45 +723,48 @@ description={
       }
     }
 
-  ]}
-  responses={[
-    {
-      status: "200",
-      message: "OK",
-      description: (
-        <pre><code>{`{
-   "id": "integer" // ID of query which can be used in GET /b/:bucket/:entry request
-}`}</code></pre>
-      )
-    },
-    {
-      status: "204",
-      message: "No Content",
-      summary: "No records for the time interval"
-    },
-    {
-      status: "401",
-      message: "Unauthorized",
-      summary: "Access token is invalid or empty"
-    },
-    {
-      status: "403",
-      message: "Forbidden",
-      summary: "Access token doesn't have the required permissions"
-    },
-    {
-      status: "404",
-      message: "Not Found",
-      summary: "The bucket or entry doesn't exist"
-    },
-    {
-      status: "422",
-      message: "Unprocessable Entity",
-      summary: "One or both timestamps are bad, or TTL is not a number"
-    }
-  ]}
-/>
+]}
+responses={[
+{
+status: "200",
+message: "OK",
+description: (
 
+<pre>
+  <code>{`{
+"id": "integer" // ID of query which can be used in GET /b/:bucket/:entry request
+}`}</code>
+</pre>
+
+)
+},
+{
+status: "204",
+message: "No Content",
+summary: "No records for the time interval"
+},
+{
+status: "401",
+message: "Unauthorized",
+summary: "Access token is invalid or empty"
+},
+{
+status: "403",
+message: "Forbidden",
+summary: "Access token doesn't have the required permissions"
+},
+{
+status: "404",
+message: "Not Found",
+summary: "The bucket or entry doesn't exist"
+},
+{
+status: "422",
+message: "Unprocessable Entity",
+summary: "One or both timestamps are bad, or TTL is not a number"
+}
+]}
+/>
 
 <SwaggerComponent
   method="DELETE"
@@ -720,37 +772,30 @@ description={
   summary="Remove entry"
   description={
     <>
-      Since v1.6, you can remove a specific entry from a bucket with the entire history of its records.
+      Since v1.6, you can remove a specific entry from a bucket with the entire
+      history of its records.
     </>
   }
   responses={[
     {
       status: "200",
       message: "OK",
-      summary: "The entry has been removed"
+      summary: "The entry has been removed",
     },
     {
       status: "401",
       message: "Unauthorized",
-      summary: "Access token is invalid or empty"
+      summary: "Access token is invalid or empty",
     },
     {
       status: "403",
       message: "Forbidden",
-      summary: "Access token doesn't have the necessary permissions"
+      summary: "Access token doesn't have the necessary permissions",
     },
     {
       status: "404",
       message: "Not Found",
-      summary: "The bucket or entry doesn't exist"
-    }
+      summary: "The bucket or entry doesn't exist",
+    },
   ]}
 />
-
-
-
-
-
-
-
-

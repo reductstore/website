@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import clsx from 'clsx';
-import { Tooltip } from 'react-tooltip';
-import styles from './styles.module.css';
+import React, { useState } from "react";
+import clsx from "clsx";
+import { Tooltip } from "react-tooltip";
+import styles from "./styles.module.css";
 import { FaQuestionCircle } from "react-icons/fa";
-import RenderButtonLink from '../RenderButtonLink';
+import RenderButtonLink from "../RenderButtonLink";
 
 interface Category {
   title: string;
@@ -33,7 +33,7 @@ const PricingPlan: React.FC<PricingPlanProps> = ({
   onClick,
   isHighlight = false,
 }) => {
-  const planId = title.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '');
+  const planId = title.replace(/\s+/g, "").replace(/[^a-zA-Z0-9]/g, "");
   return (
     <div className={clsx(styles.plan, { [styles.highlight]: isHighlight })}>
       <div className={styles.planCard}>
@@ -49,10 +49,17 @@ const PricingPlan: React.FC<PricingPlanProps> = ({
             />
           </div>
           <div className={styles.learnMore}>
-            <span data-tooltip-id={`${planId}-planDescriptionTooltip`} className={styles.underlinedText}>
+            <span
+              data-tooltip-id={`${planId}-planDescriptionTooltip`}
+              className={styles.underlinedText}
+            >
               Learn more
             </span>
-            <Tooltip id={`${planId}-planDescriptionTooltip`} className={styles.tooltipContent} place="bottom">
+            <Tooltip
+              id={`${planId}-planDescriptionTooltip`}
+              className={styles.tooltipContent}
+              place="bottom"
+            >
               {description}
             </Tooltip>
           </div>
@@ -72,7 +79,11 @@ const PricingPlan: React.FC<PricingPlanProps> = ({
                         data-tooltip-id={`${planId}-titleTip-${idx}`}
                         className={styles.infoIcon}
                       />
-                      <Tooltip id={`${planId}-titleTip-${idx}`} className={styles.tooltipContent} place="bottom">
+                      <Tooltip
+                        id={`${planId}-titleTip-${idx}`}
+                        className={styles.tooltipContent}
+                        place="bottom"
+                      >
                         {category.titleDetail}
                       </Tooltip>
                     </>
@@ -88,7 +99,11 @@ const PricingPlan: React.FC<PricingPlanProps> = ({
                         data-tooltip-id={`${planId}-descriptionTip-${idx}`}
                         className={styles.infoIcon}
                       />
-                      <Tooltip id={`${planId}-descriptionTip-${idx}`} className={styles.tooltipContent} place="bottom">
+                      <Tooltip
+                        id={`${planId}-descriptionTip-${idx}`}
+                        className={styles.tooltipContent}
+                        place="bottom"
+                      >
                         {category.descriptionDetail}
                       </Tooltip>
                     </>
@@ -101,6 +116,6 @@ const PricingPlan: React.FC<PricingPlanProps> = ({
       </div>
     </div>
   );
-}
+};
 
 export default PricingPlan;

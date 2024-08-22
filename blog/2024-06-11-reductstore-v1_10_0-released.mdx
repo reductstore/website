@@ -15,7 +15,6 @@ To download the latest released version, please visit our [**Download Page**](ht
 
 ReductStore v1.10.0 introduces new query and replication parameters that can downsample data when querying or replicating to another database. In addition, we have optimized the operation of the storage and replication engines, which should improve the overall performance of the database.
 
-
 {/* truncate */}
 
 ### Downsampling
@@ -62,14 +61,13 @@ We have optimized the storage engine so that you can use ReductStore very effici
 
 Starting with this release, the replication engine will batch records before sending them to a remote bucket. This approach can significantly reduce the number of HTTP requests when replicating a large amount of data. This can be useful when you need to replicate data from one ReductStore instance to another over a slow network connection.
 
-----------------
+---
 
 All the official client SDKs have been updated to support the new downsampling and batch replication features. You can find the updated SDKs on our [**GitHub page**](https://github.com/reductstore).
 
 :::warning
 Please update your client SDKs to the latest version when upgrading your ReductStore instance to version 1.10.0, the old SDKs versions check the server API version incorrectly and may cause errors.
 :::
-
 
 I hope you find this release useful. If you have any questions or feedback, don’t hesitate to use the [**ReductStore Community**](https://community.reduct.store) forum.
 

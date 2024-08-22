@@ -1,6 +1,6 @@
-import React from 'react';
-import styles from './styles.module.css';
-import Link from '@docusaurus/Link';
+import React from "react";
+import styles from "./styles.module.css";
+import Link from "@docusaurus/Link";
 
 interface FreePoCBannerProps {
   text: string;

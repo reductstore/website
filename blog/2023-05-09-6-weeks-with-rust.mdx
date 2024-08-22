@@ -15,11 +15,11 @@ It was a very interesting 6 weeks for me, and I would like to share my experienc
 
 I wrote [**ReductStore**](https://reduct.store) in C++20, utilizing coroutines and ranges.
 
-For the HTTP frontend, I used *uWebSockets* as an HTTP server and its event loop for coroutines.
+For the HTTP frontend, I used _uWebSockets_ as an HTTP server and its event loop for coroutines.
 
 The storage engine was implemented from scratch.
 
-I used *Protobuf* as a JSON and binary serializer in both the HTTP frontend and the storage engine. Many of the
+I used _Protobuf_ as a JSON and binary serializer in both the HTTP frontend and the storage engine. Many of the
 structures were shared between the two.
 
 I managed dependencies with Conan and used CMake as a build system.
@@ -51,7 +51,7 @@ ReductStore has its own simple logger and uses environment variables for configu
 good to start with Rust.
 
 Here, I learned the basics of Rust memory management, borrowing, and references. All these concepts I already knew from
-C++, so it was easy to understand. However, *rustc* did not want to compile my code in the beginning.
+C++, so it was easy to understand. However, _rustc_ did not want to compile my code in the beginning.
 
 The biggest problem was that [**cxx.rs**](http://cxx.rs/) throws an exception when a Rust function returns an `Err`. It did
 not work for me because I did not use exceptions and my C++ functions returned a structure with a result or an error. I
@@ -79,19 +79,19 @@ Next, it was time to learn about Rust's smart pointers. My background in C++ hel
 surprised that I had to use nested pointers for mutable access (<code>Rc&lt;RefCell&lt;T&gt;&gt;</code>) instead of <code>MutRc&lt;T&gt;</code>.
 
 Although the storage engine was the biggest part of the project, it didn't take too long to rewrite because it only uses
-a file system and *Protobuf*. Thus, I didn't have to learn many new things.
+a file system and _Protobuf_. Thus, I didn't have to learn many new things.
 
 ### Step 4. HTTP fronted
 
 Well... here, I broke my neck. The C++ implementation of the HTTP layer was asynchronous, so I wanted the same in Rust.
-I first tried to use *hyper*, but unfortunately, I couldn't make it work with JSON and streaming bodies in the same
+I first tried to use _hyper_, but unfortunately, I couldn't make it work with JSON and streaming bodies in the same
 service. I realized that I had to learn a lot about hyper, which doesn't have rich documentation, before starting to use
 it.
 
-Then I tried *axum* and it worked. The framework is really awesome, and I felt as if I was using Python Flask or Fast
+Then I tried _axum_ and it worked. The framework is really awesome, and I felt as if I was using Python Flask or Fast
 API.
 
-However, I later discovered that my <code>*Rc&lt;RefCell&gt;*</code> wasn't thread-safe and had to refactor the storage engine. 😕
+However, I later discovered that my <code>_Rc&lt;RefCell&gt;_</code> wasn't thread-safe and had to refactor the storage engine. 😕
 
 ### Step 5. Remove main.cc and CMake lists
 
@@ -109,5 +109,5 @@ The project is open under the [**Business Source License (BUSL-1.1)**](https://g
 ## TL;DR
 
 If you're a C++ developer you shouldn't have any problems to learn Rust. However, if you decided to rewrite you C++
-codebase, it isn't so easy.  [**Cxx.rs**](http://Cxx.rs) library is useful, but the glue code is ugly and buggy. For me it
+codebase, it isn't so easy. [**Cxx.rs**](http://Cxx.rs) library is useful, but the glue code is ugly and buggy. For me it
 would make sense to rewrite my code in one step

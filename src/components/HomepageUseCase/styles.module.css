@@ -7,7 +7,7 @@
   margin-bottom: 2rem;
   text-align: center;
 }
-.useCasesContainer{
+.useCasesContainer {
   max-width: 1200px;
   display: flex;
   justify-content: center;
@@ -16,11 +16,11 @@
   margin-bottom: 50px;
 }
 
-.buttonContainer{
+.buttonContainer {
   display: flex;
   justify-content: center;
 }
 
-.buttonContainer a{
+.buttonContainer a {
   width: 300px;
 }

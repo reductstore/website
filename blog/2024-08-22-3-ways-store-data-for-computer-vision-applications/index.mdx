@@ -30,13 +30,13 @@ If an application needs to save an image from a CV camera, it can simply save it
 
 One advantage of this method is that it is very simple. You don’t need any additional components for your system. However, it also has a few drawbacks.
 
-- **Data reduction**. Sooner or later, we run out of disk space. We have to delete old data manually, by using the *chron* command, or by including this function in the application.
+- **Data reduction**. Sooner or later, we run out of disk space. We have to delete old data manually, by using the _chron_ command, or by including this function in the application.
 - **Data accessibility**. We have a naming convention to search for data, but we still need to walk through the file tree. The more files we have, the slower it works. We could create an index file, but it looks like we are starting to create our own database.
 - **Labeling and Searching.** You may need to label your data and use it as a criteria for searching or replicating your data. This is not something that comes out of the box with a file system.
-- **Replication**. It is possible to copy data to another node with *scp* or *rsync* utilities, however, this is still a manual approach, and you need direct access to your machine via SSH.
+- **Replication**. It is possible to copy data to another node with _scp_ or _rsync_ utilities, however, this is still a manual approach, and you need direct access to your machine via SSH.
 - **Security**. If someone wants to use the stored data, we have to provide either access to a device that in many cases is insecure, or provide a copy of the data which can be huge.
 
-As evident, the file system is a straightforward solution. However, with new requirements, you might find yourself needing to develop your own storage solution. This could be a lengthy and challenging process that might seem daunting. 
+As evident, the file system is a straightforward solution. However, with new requirements, you might find yourself needing to develop your own storage solution. This could be a lengthy and challenging process that might seem daunting.
 
 ## S3-like Object Storage
 
@@ -71,7 +71,7 @@ Let's summarize the benefits of using ReductStore:
 
 - **Data Accessibility**. ReductStore utilizes record timestamps as unique identifiers and provides an HTTP API for convenient data access based on timestamp or time interval. It also [**batches smaller objects**](/docs/guides/data-querying#concepts) into a larger HTTP request, which is crucial for networks with high latency.
 - **Data Reduction**. We can specify a quota for each bucket, so that the storage engine starts deleting old data when the bucket size reaches the quota.
-- **Labeling.**  We can label data and use these labels as [**annotations**](/docs/guides/data-ingestion#annotating-data) and [**search criteria**](/docs/guides/data-querying#using-labels-to-filter-data).
+- **Labeling.** We can label data and use these labels as [**annotations**](/docs/guides/data-ingestion#annotating-data) and [**search criteria**](/docs/guides/data-querying#using-labels-to-filter-data).
 - **Security**. Like with object storage, we can access data with different permissions.
 - **Data Replication**. Since **[version 1.8](https://www.reduct.store/blog/news/reductstore-8-released)**, it supports append-only [**data replication**](/docs/guides/data-replication), allowing you to automatically stream data from one instance to another. Furthermore, you can conditionally replicate data using labels.
 
@@ -82,7 +82,6 @@ All the approaches to storing historical data for images that we have discussed 
 Using an S3-like object storage system can be a good option if you already have this type of infrastructure in place and you need to store large amounts of data or access data from multiple locations. It offers many benefits and advantages, such as scalability, durability, and security, which can make it a good choice for many different applications. However, you may encounter performance issues when writing and reading small objects because each read/write operation is a separate HTTP request.
 
 ReductStore is a specialized time series database for blobs of data in AI/ML applications and edge computing. It is designed to address the challenges of data reduction and availability. It is a good option if you need to store data on an edge device, and if you want to use advanced features such as a real-time disk quota and high performance.
-
 
 ---
 

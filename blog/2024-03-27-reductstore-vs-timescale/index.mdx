@@ -8,17 +8,15 @@ date: 2024-03-27
 image: ./img/snippet.webp
 ---
 
-
 ![Get history of blobs with TimescaleDB](./img/snippet.webp)
 
-[**TimescaleDB**](https://www.timescale.com/) is an open-source time-series database optimized for fast ingest and complex queries. It is engineered up from [**PostgreSQL**](https://www.postgresql.org/) and offers the power, reliability, and ease-of-use of a relational database, combined with the scalability typically seen in NoSQL systems. It is particularly suited for storing and analyzing things that happen over time, such as metrics, events, and real-time analytics. 
+[**TimescaleDB**](https://www.timescale.com/) is an open-source time-series database optimized for fast ingest and complex queries. It is engineered up from [**PostgreSQL**](https://www.postgresql.org/) and offers the power, reliability, and ease-of-use of a relational database, combined with the scalability typically seen in NoSQL systems. It is particularly suited for storing and analyzing things that happen over time, such as metrics, events, and real-time analytics.
 
-Since TimescaleDB is based on PostgreSQL, it supports blob data and can be used to store a history of unstructured data such as images, binary sensor data, or large text documents. In this article, we will use the database as a time-series blob storage and compare its performance with [**ReductStore**](https://www.reduct.store), which is designed specifically for this use case. 
+Since TimescaleDB is based on PostgreSQL, it supports blob data and can be used to store a history of unstructured data such as images, binary sensor data, or large text documents. In this article, we will use the database as a time-series blob storage and compare its performance with [**ReductStore**](https://www.reduct.store), which is designed specifically for this use case.
 
 TimescaleDB and ReductStore both have Python Client SDKs. We'll create simple Python functions to read and write data, then compare performance with different blob sizes. To repeat these benchmarks on your own machine, use **[this repository](https://github.com/reductstore/reduct-vs-timescaledb)**.
 
 <!--truncate-->
-
 
 ## Read/Write Blob Data With TimescaleDB
 
@@ -92,9 +90,9 @@ def read_from_timescale(t1, t2):
     return count
 ```
 
-As you can see, working with Timescale is quite easy if you are familiar with any SQL database. However, you may notice that we should put the whole blob into the `INSERT`  request. This could cause a performance problem for large blobs because we have to allocate the memory for the request string instead of sending it in chunks.  
+As you can see, working with Timescale is quite easy if you are familiar with any SQL database. However, you may notice that we should put the whole blob into the `INSERT` request. This could cause a performance problem for large blobs because we have to allocate the memory for the request string instead of sending it in chunks.
 
-Let’s see how you can write and read data with ReductStore. 
+Let’s see how you can write and read data with ReductStore.
 
 ## Read/Write Blob Data With ReductStore
 
@@ -193,7 +191,7 @@ python3 main.py
 The script displays results for the specified `BLOB_SIZE` and `SIZE_COUNT`. On my device, which has an NVMe drive, here are the results I obtained:
 
 | Chunk Size | Operation | TimescaleDB, blob/s | ReductStore, blob/s | ReductStore, % |
-|------------|-----------|---------------------|---------------------|----------------|
+| ---------- | --------- | ------------------- | ------------------- | -------------- |
 | 1 KB       | Write     | 2475                | 1463                | -41%           |
 |            | Read      | 2361                | 1260                | -47%           |
 | 10 KB      | Write     | 1557                | 1500                | -4%            |
@@ -211,10 +209,10 @@ Based on the benchmark results, TimescaleDB demonstrates better performance for 
 
 When we choose a database for storing blob data, we should consider not only performance but also the following factors:
 
-* **Retention Policy**: ReductStore provides a retention policy based on disk usage, which is crucial when the amount of data stored over time is unpredictable.
-* **Data Size**: ReductStore is more efficient for storing large blobs, while TimescaleDB is better for small blobs.
-* **Querying**: TimescaleDB is better for structured data and complex queries, while ReductStore is more suitable for storing and retrieving blobs with minimal overhead and latency.
-* **Replication**: TimescaleDB replicates data across multiple nodes as exact copies, while ReductStore provides append-only replication, with the ability to filter data based on labels. This could be a part of your data reduction strategy.
+- **Retention Policy**: ReductStore provides a retention policy based on disk usage, which is crucial when the amount of data stored over time is unpredictable.
+- **Data Size**: ReductStore is more efficient for storing large blobs, while TimescaleDB is better for small blobs.
+- **Querying**: TimescaleDB is better for structured data and complex queries, while ReductStore is more suitable for storing and retrieving blobs with minimal overhead and latency.
+- **Replication**: TimescaleDB replicates data across multiple nodes as exact copies, while ReductStore provides append-only replication, with the ability to filter data based on labels. This could be a part of your data reduction strategy.
 
 ## Conclusions
 

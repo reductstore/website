@@ -10,8 +10,7 @@ image: ./img/social-card.jpg
 
 ![Photo by Randy Fath](./img/randy-fath-chess.webp)<small>Photo by <a href="https://unsplash.com/@randyfath?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" target="_blank" rel="noopener noreferrer">Randy Fath</a> on <a href="https://unsplash.com/photos/G1yhU1Ej-9A?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" target="_blank" rel="noopener noreferrer">Unsplash</a></small>
 
-
-The journey of taking an open-source artificial intelligence (AI) model from a laboratory setting to real-world implementation can seem daunting. However, with the right understanding and approach, this transition becomes a manageable task. 
+The journey of taking an open-source artificial intelligence (AI) model from a laboratory setting to real-world implementation can seem daunting. However, with the right understanding and approach, this transition becomes a manageable task.
 
 This blog post aims to serve as a compass on this technical adventure. We'll demystify key concepts, and delve into practical steps for implementing anomaly detection models effectively in real-time scenarios.
 
@@ -21,17 +20,17 @@ Let's dive in and see how open-source models can be implemented in production, b
 
 ## Understanding Unsupervised Anomaly Detection
 
-Unsupervised anomaly detection is a machine learning technique that uncovers unusual patterns or outliers in data, without any prior training on what these anomalies might look like. In the context of images, this means identifying areas within the image that deviate significantly from what's considered 'normal'. 
+Unsupervised anomaly detection is a machine learning technique that uncovers unusual patterns or outliers in data, without any prior training on what these anomalies might look like. In the context of images, this means identifying areas within the image that deviate significantly from what's considered 'normal'.
 
-Implementing that in real-time involves using deep-learning models which can rapidly process incoming visual data, detect irregularities in a matter of milliseconds, and respond accordingly. It's like having a vigilant digital watchdog capable of recognizing anything out-of-the-ordinary at high speed. 
+Implementing that in real-time involves using deep-learning models which can rapidly process incoming visual data, detect irregularities in a matter of milliseconds, and respond accordingly. It's like having a vigilant digital watchdog capable of recognizing anything out-of-the-ordinary at high speed.
 
 With open-source models, you have access to this technology as well as the collective wisdom of researchers and developers worldwide who continually refine these tools for better performance.
 
 ### Role and Importance of Anomaly Detection in Images
 
-Anomaly detection in images plays a crucial role in numerous fields, ranging from healthcare to security. In healthcare, it can aid in identifying abnormal structures or changes in medical imagery like X-Rays or MRI scans, potentially flagging early signs of diseases. In security applications such as surveillance systems, it can help detect unusual activities or objects within the monitored area. 
+Anomaly detection in images plays a crucial role in numerous fields, ranging from healthcare to security. In healthcare, it can aid in identifying abnormal structures or changes in medical imagery like X-Rays or MRI scans, potentially flagging early signs of diseases. In security applications such as surveillance systems, it can help detect unusual activities or objects within the monitored area.
 
-The importance of anomaly detection also extends to quality control in manufacturing, where it can spot defects on assembly lines avoiding costly recalls and, hopefully, ensuring customer satisfaction. 
+The importance of anomaly detection also extends to quality control in manufacturing, where it can spot defects on assembly lines avoiding costly recalls and, hopefully, ensuring customer satisfaction.
 
 Real-time implementation of open-source models for this purpose allows these sectors to react quickly to anomalies and make informed decisions instantly.
 
@@ -40,11 +39,16 @@ Real-time implementation of open-source models for this purpose allows these sec
 [**Anomalib**](https://github.com/openvinotoolkit/anomalib) is an open-source library for unsupervised anomaly detection in images. It offers a collection of state-of-the-art models that can be trained on your specific images.
 
 ![Anomalib](./img/anomalib_image_example.webp)
-<small>Example of an anomaly detected with [**Anomalib**](https://github.com/openvinotoolkit/anomalib)</small>
+
+<small>
+  Example of an anomaly detected with
+  [**Anomalib**](https://github.com/openvinotoolkit/anomalib)
+</small>
 
 For achieving the best training results, it is advised to obtain a suitable quantity of images that are free from any abnormalities. It is preferable to have a few hundred images for this purpose. Furthermore, in order to perform testing and validation, it is recommended to acquire a few images that do include anomalies as well.
 
 If your images have anomalies, you'll need to make a mask highlighting these areas. You don't need a sophisticated tool for that. For example with [**GIMP**](https://www.gimp.org/), it's as simple as:
+
 - Drag and drop your original image (e.g., "001.png”) into GIMP.
 - Go to the Layer menu and select New Layer.
 - With the new layer selected, use the Pencil tool set to white to mark the anomalies.
@@ -74,7 +78,7 @@ This will generate a visualization that highlights the areas of the image that t
 
 ## From Lab to Live: Implementing Your Models With ONNX or OpenVINO
 
-Once your model has been trained and validated using Anomalib, the next step is to prepare it for real-time implementation. This is where [**ONNX**](https://onnx.ai/) (Open Neural Network Exchange) or [**OpenVINO**](https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/overview.html) (Open Visual Inference and Neural network Optimization) comes into play.
+Once your model has been trained and validated using Anomalib, the next step is to prepare it for real-time implementation. This is where [**ONNX**](https://onnx.ai/) (Open Neural Network Exchange) or OpenVINO (Open Visual Inference and Neural network Optimization) comes into play.
 
 ONNX offers a standardized platform that allows you to export your trained model into a format that can be easily implemented and run in various environments.
 
@@ -91,11 +95,11 @@ Once converted, the model can be embedded in your application with ONNX Runtime 
 
 ### Deploying New Models in Shadow Mode
 
-Deploying in shadow mode is a crucial step when introducing a new model to production. This deployment strategy involves running the new model alongside your existing system without directly influencing the output, essentially running in the "shadow". 
+Deploying in shadow mode is a crucial step when introducing a new model to production. This deployment strategy involves running the new model alongside your existing system without directly influencing the output, essentially running in the "shadow".
 
-It's like having a student trying to outperform the master. During this phase, both models process each image concurrently but only results from your current system are utilized, while outputs of the new model are monitored and compared for any discrepancies. 
+It's like having a student trying to outperform the master. During this phase, both models process each image concurrently but only results from your current system are utilized, while outputs of the new model are monitored and compared for any discrepancies.
 
-This allows you to assess how well the new model performs under real-world conditions without risking any impact on your operations if it doesn't perform as expected. It also provides an opportunity to fine-tune parameters or retrain the model with more specific data based on its performance during shadow operation. 
+This allows you to assess how well the new model performs under real-world conditions without risking any impact on your operations if it doesn't perform as expected. It also provides an opportunity to fine-tune parameters or retrain the model with more specific data based on its performance during shadow operation.
 
 Once satisfied with its performance and reliability, you can then switch over from your old system to this newly deployed model.
 
@@ -106,20 +110,24 @@ Once satisfied with its performance and reliability, you can then switch over fr
 To better visualize how ReductStore can integrate with your machine learning workflow, from data capture to inference, consider the following diagram. It provides an overview of how we can make the most out of AI labels and models stationed at the edge.
 
 ![ML Data Flow Diagram](./img/reductai.webp)
-<small>Diagram illustrating the flow of data capture, storage, inference, and training with ReductStore.</small>
+
+<small>
+  Diagram illustrating the flow of data capture, storage, inference, and
+  training with ReductStore.
+</small>
 
 AI labels indicate the outcomes of your model's evaluation on each picture, like the presence or absence of an anomaly in our case. By storing these labels alongside your images in ReductStore, you streamline your system's workflow and make the whole process simpler.
 
 Furthermore, annotated images are manually labeled or validated by a human operator, and then stored in ReductStore. This annotation can be the actual label inferred by the model which is then validated by a human operator, or it can be more complex, like a mask highlighting the areas of the image that the model should identify as anomalies. This allows for continuous improvement of your model's performance over time.
 
-Meanwhile, keeping models at the edge means deploying your trained models directly onto end-user devices or closer to where data is generated. This method cuts down on latency issues since you don't need to transmit large volumes of image data over networks; instead, you analyze it right where it’s collected. 
+Meanwhile, keeping models at the edge means deploying your trained models directly onto end-user devices or closer to where data is generated. This method cuts down on latency issues since you don't need to transmit large volumes of image data over networks; instead, you analyze it right where it’s collected.
 
 ## Conclusion
 
-In conclusion, implementing open-source models for real-time unsupervised anomaly detection in images is a multi-step process that involves transitioning from lab to live. 
+In conclusion, implementing open-source models for real-time unsupervised anomaly detection in images is a multi-step process that involves transitioning from lab to live.
 
-By selecting the right model, testing under simulated conditions, integrating it into your existing system and regularly monitoring its performance, you can effectively detect anomalies in image data. 
+By selecting the right model, testing under simulated conditions, integrating it into your existing system and regularly monitoring its performance, you can effectively detect anomalies in image data.
 
-Utilizing tools like Anomalib and ReductStore help to facilitate this process by providing robust models and storage solutions respectively. Deploying new models in shadow mode further minimizes risk during the transition phase ensuring that your operations remain unaffected while introducing new models into your system. 
+Utilizing tools like Anomalib and ReductStore help to facilitate this process by providing robust models and storage solutions respectively. Deploying new models in shadow mode further minimizes risk during the transition phase ensuring that your operations remain unaffected while introducing new models into your system.
 
 Stay tuned for more advancements in the field of unsupervised anomaly detection and the continuous evolution of tools and techniques that will make the process even more streamlined and efficient in the future!

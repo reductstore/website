@@ -7,7 +7,6 @@ slug: news/cli/reduct-cli-v0_7-released
 date: 2023-02-19
 ---
 
-
 Hey everyone,
 
 I'm happy to announce that we have
@@ -27,7 +26,7 @@ rcli export folder instance/bucket ./export_path  --entries=sensor-*
 More over, the `rcli export` command used the query API with default TTL 5 seconds for a query. When the internet
 connection was slow, it may have taken more than 5 seconds to request the next record in the query. The query could
 expire and the CLI would receive the 404 HTTP error. Now the CLI client uses the TTL equal to the number of parallel
-tasks multiplied by the timeout. By default, the TTL is 50 seconds (10 parallel tasks * 5 second timeout). This makes
+tasks multiplied by the timeout. By default, the TTL is 50 seconds (10 parallel tasks \* 5 second timeout). This makes
 the data export more robust and allows a user to change the TTL by using the `parallel` and `timeout` options.
 
 ```

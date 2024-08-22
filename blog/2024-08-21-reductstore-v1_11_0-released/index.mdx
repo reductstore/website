@@ -16,6 +16,7 @@ To download the latest released version, please visit our [**Download Page**](ht
 In this release, we have introduced a new API for changing the labels of existing records and optimized the storage engine to improve database startup and write performance.
 
 <!--more-->
+
 {/* truncate */}
 
 ---
@@ -58,17 +59,17 @@ if __name__ == "__main__":
 
 ### Storage Engine Optimization
 
-Previously, ReductStore used a straightforward approach to writing data to disk. When a new record arrives from the HTTP front-end, the storage engine writes its metadata, such as timestamp, size, labels, etc., into a block descriptor and streams the record content into a data block. When the database is started, it reads all the data descriptors to build a block index and count the disk usage, which is important for [**the FIFO quota**](/docs/next/guides/buckets#quota-type).  It worked quite quickly on NVMe disks with terabytes of data, but users on slower disks found that starting the database could take minutes.
+Previously, ReductStore used a straightforward approach to writing data to disk. When a new record arrives from the HTTP front-end, the storage engine writes its metadata, such as timestamp, size, labels, etc., into a block descriptor and streams the record content into a data block. When the database is started, it reads all the data descriptors to build a block index and count the disk usage, which is important for [**the FIFO quota**](/docs/next/guides/buckets#quota-type). It worked quite quickly on NVMe disks with terabytes of data, but users on slower disks found that starting the database could take minutes.
 
 ![Storage Engine before v1.11](./img/old-data-flow.png)
 
-To speed up the start of the storage engine, we now store the block index for each entry on the disk. This means that the engine doesn't have to read and parse thousands of block descriptors when it starts, instead it loads one block index per entry. 
+To speed up the start of the storage engine, we now store the block index for each entry on the disk. This means that the engine doesn't have to read and parse thousands of block descriptors when it starts, instead it loads one block index per entry.
 
 However, this approach brings us to another problem... what if the database was killed or crashed while updating the index file or descriptor? We could have unsynchronised indexes or orphaned blocks. To avoid this, we introduced write ahead logs (WAL). This is a classic approach, before updating a block descriptor or block index, the storage engine writes the change to the WAL. After the changes are successfully committed, the WAL is removed. During startup, the database uses the existing WALs to restore integrity after a failure.
 
 ![Storage Engine after v1.11](./img/new-data-flow.png)
 
-Another advantage of using WALs is that we don't have to update a block descriptor for each new record. We just need to append the WAL and update the descriptor and block index only when the block is complete. This improves write performance by up to 25% on modern hardware. 
+Another advantage of using WALs is that we don't have to update a block descriptor for each new record. We just need to append the WAL and update the descriptor and block index only when the block is complete. This improves write performance by up to 25% on modern hardware.
 
 ---
 

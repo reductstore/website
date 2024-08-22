@@ -8,14 +8,14 @@ date: 2024-07-12
 image: ./img/vibration_data_flow.jpg
 ---
 
-import FilterExampleImg from './img/filter-example.webp';
-import SettingsExampleImg from './img/settings-example.webp';
-import DashboardExampleImg from './img/dashboard-example.webp';
+import FilterExampleImg from "./img/filter-example.webp";
+import SettingsExampleImg from "./img/settings-example.webp";
+import DashboardExampleImg from "./img/dashboard-example.webp";
 
 ![Vibration Data Flow](./img/vibration_data_flow.jpg)
 
 **[ReductStore](/)** is designed to efficiently handle time series unstructured data, making it an excellent choice for storing high frequency vibration sensor measurements.
-This article is the second part of **[How to Store Vibration Sensor Data | Part 1](/blog/how-to-store-vibration-sensor-data)**, 
+This article is the second part of **[How to Store Vibration Sensor Data | Part 1](/blog/how-to-store-vibration-sensor-data)**,
 where we discussed the benefits of storing both raw measures and pre-processed metrics, the advantages of time series databases, and efficient storage and replication strategies.
 
 In this post, we'll dive into a practical example of storing and querying vibration sensor readings using ReductStore and Python.
@@ -32,7 +32,7 @@ Our example will show you how to:
 
 ## Setting Up the Environment
 
-Before we dive into the code, let's set up our environment. 
+Before we dive into the code, let's set up our environment.
 We'll be using Docker to run ReductStore and Python for our client application.
 
 ### ReductStore Setup
@@ -40,7 +40,7 @@ We'll be using Docker to run ReductStore and Python for our client application.
 Create a `docker-compose.yml` file with the following content:
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   reductstore:
@@ -128,7 +128,7 @@ def pack_data(signal: np.ndarray) -> bytes:
 ```
 
 This function uses the `struct` module to pack our numpy array into a binary format, specifically with the format string `">1000f"` (more details on this below).
-You may be wondering why we don't use numpy's `tobytes()` method. While `tobytes()` is convenient, it offers limited control over the byte format, 
+You may be wondering why we don't use numpy's `tobytes()` method. While `tobytes()` is convenient, it offers limited control over the byte format,
 which can lead to compatibility problems when reading the data on different devices.
 
 The `struct` module, on the other hand, allows us to specify byte order and data type, preserving consistent data representation and avoiding compatibility problems.
@@ -165,7 +165,7 @@ async def store_data(
     await bucket.write("sensor_readings", packed_data, timestamp, labels=labels)
 ```
 
-This is where we store our packed chunk of data, along with labels that indicate whether each metric is high or low. 
+This is where we store our packed chunk of data, along with labels that indicate whether each metric is high or low.
 This allows us to later replicate and filter data based on these metrics.
 
 The hard-coded thresholds for high RMS, peak-to-peak, and crest factor values are for demonstration purposes.
@@ -193,11 +193,11 @@ async def query_data(bucket: Bucket, start_time: int, end_time: int):
 ```
 
 This function shows how to query data within a given time range and unpack the binary data back into the original Numpy array.
+
 1. The `read_all()` method reads the whole chunk of data at a given timestamp.
 2. The length of the data is divided by 4 to get the number of float values, since each float is 4 bytes long.
 3. The same format string used to pack the data is used to unpack the data to ensure that the data is interpreted correctly.
 4. The unpacked data is then converted back to a Numpy array, which is more convenient for further processing.
-
 
 ### Main Execution
 
@@ -223,6 +223,7 @@ async def main():
 ```
 
 This is the main execution flow of our script, which demonstrates the complete data flow:
+
 1. We connect to ReductStore and create a bucket.
 2. We store 5 seconds in chunks of 1 second data. Each timestamp is generated using the current time in microseconds.
 3. We query the stored data for the last 5 seconds and print the results.
@@ -234,6 +235,7 @@ Now that we are able to store and query vibration sensor data, let's explore how
 In addition to storing and querying data, we can also set up replication to duplicate our sensor data across multiple ReductStore instances.
 
 Replication tasks can be configured in a variety of ways, such as
+
 - Replicate all data from a source bucket to a target bucket (e.g. `sensor_data` to `backup_data`)
 - Replicate only specific entries, e.g. `sensor_readings`.
 - Replicate data based on labels, e.g. replicate only data with `high` RMS values to `high_peak_to_peak` bucket (as we'll do in this example).
@@ -242,47 +244,56 @@ The replication task can be set using client libraries, HTTP API, CLI, provision
 In this example, we'll use the web console for simplicity, but you can also refer to the **[Replication Guide](/docs/next/guides/data-replication)** for more details.
 
 So the bucket structure that we'll set up is as follows:
+
 - `sensor_data` bucket contains all sensor readings under the entry `sensor_readings`.
 - `high_peak_to_peak` bucket will contain only the sensor readings with high peak-to-peak values under the same entry name `sensor_readings`.
 
 Here's how to set it up:
 
 1. Access the ReductStore web console (typically at `http://localhost:8383` if running locally).
-    
-    <img 
-    src={DashboardExampleImg} 
-    alt="Dashboard Example" 
-    style={{
-        border: '2px solid #2c0548',
-        borderRadius: '10px',
-    }}/>
+
+   <img
+     src={DashboardExampleImg}
+     alt="Dashboard Example"
+     style={{
+       border: "2px solid #2c0548",
+       borderRadius: "10px",
+     }}
+   />
 
 2. Navigate to the "Replications" section to create a new replication with the "+" button.
 3. Enter a name for your replication task and add the following details:
-    - Choose your source bucket (in this case, `sensor_data`).
-    - Enter the destination bucket name (e.g., `high_peak_to_peak`)
-    - Enter the details for your destination ReductStore instance (in this case, the same instance for demonstration purposes `http://localhost:8383`)
-    - Enter the destination token (in this case, the same token `my-token` for demonstration purposes)
 
-        <img 
-        src={SettingsExampleImg} 
-        alt="Settings Example" 
-        width="400" 
-        style={{
-            border: '2px solid #2c0548',
-            borderRadius: '10px',
-        }}/>
-    
-    - Then, set up filters based on labels to replicate only data with `high` RMS.
+   - Choose your source bucket (in this case, `sensor_data`).
+   - Enter the destination bucket name (e.g., `high_peak_to_peak`)
+   - Enter the details for your destination ReductStore instance (in this case, the same instance for demonstration purposes `http://localhost:8383`)
+   - Enter the destination token (in this case, the same token `my-token` for demonstration purposes)
 
-        <img 
-        src={FilterExampleImg} 
-        alt="Filter Example" 
-        width="400" 
-        style={{
-            border: '2px solid #2c0548',
-            borderRadius: '10px',
-        }}/>
+     {" "}
+
+     <img
+       src={SettingsExampleImg}
+       alt="Settings Example"
+       width="400"
+       style={{
+         border: "2px solid #2c0548",
+         borderRadius: "10px",
+       }}
+     />
+
+   - Then, set up filters based on labels to replicate only data with `high` RMS.
+
+     {" "}
+
+     <img
+       src={FilterExampleImg}
+       alt="Filter Example"
+       width="400"
+       style={{
+         border: "2px solid #2c0548",
+         borderRadius: "10px",
+       }}
+     />
 
 4. Click "Create" to start the replication process.
 
@@ -302,8 +313,7 @@ We explored a practical implementation of storing and querying vibration sensor 
 4. We demonstrated how to query the stored data and unpack it back into a usable format.
 5. Finally, we explored how to set up replication using the web console so that we could copy high peak-to-peak metrics into a separate bucket.
 
-
-While we used simulated data here, the same approach works for real sensor readings. 
+While we used simulated data here, the same approach works for real sensor readings.
 This setup can serve as a starting point for building your own vibration data management system, which you'll likely need to tailor to your specific needs and hardware.
 
 ---
