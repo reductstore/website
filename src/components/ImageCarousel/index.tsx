@@ -1,32 +1,41 @@
-import React, { useState } from 'react';
-import styles from './styles.module.css';
-import clsx from 'clsx';
-import { useImageFetcher } from './useImageFetcher';
-import ImageWithLabels from './ImageWithLabels';
-import {
-  FaEye as EyeIcon,
-  FaEyeSlash as EyeSlashIcon,
-} from 'react-icons/fa';
+import React, { useState } from "react";
+import styles from "./styles.module.css";
+import clsx from "clsx";
+import { useImageFetcher } from "./useImageFetcher";
+import ImageWithLabels from "./ImageWithLabels";
+import { FaEye as EyeIcon, FaEyeSlash as EyeSlashIcon } from "react-icons/fa";
+import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 
 const DATASETS = {
   imdb: {
-    id: 'imdb',
-    name: 'IMDB',
-    numImages: 10
+    id: "imdb",
+    name: "IMDB",
+    numImages: 10,
   },
   cats: {
-    id: 'cats',
-    name: 'Cat',
-    numImages: 10
+    id: "cats",
+    name: "Cat",
+    numImages: 10,
   },
   mnist_training: {
-    id: 'mnist_training',
-    name: 'MNIST',
-    numImages: 20
-  }
+    id: "mnist_training",
+    name: "MNIST",
+    numImages: 20,
+  },
 };
 
 const ImageCarousel = () => {
+  if (ExecutionEnvironment.canUseDOM && window.innerWidth < 768) {
+    return (
+      <div className={styles.mainContainer}>
+        <div className="alert alert--warning" role="alert">
+          The datasets are best viewed on a larger screen. Please switch to a
+          desktop or laptop for the best experience.
+        </div>
+      </div>
+    );
+  }
+
   const [dataset, setDataset] = useState("imdb");
   const [start, setStart] = useState(0);
   const [showLabels, setShowLabels] = useState(true);
@@ -35,20 +44,28 @@ const ImageCarousel = () => {
   const datasetName = DATASETS[dataset].name;
   const datasetIds = Object.keys(DATASETS);
 
-  const { datasets, imagesWithLabels, error } = useImageFetcher(dataset, start, numImages, datasetIds);
+  const { datasets, imagesWithLabels, error } = useImageFetcher(
+    dataset,
+    start,
+    numImages,
+    datasetIds
+  );
 
   const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newStart = Number(event.target.value);
     setStart(newStart);
   };
 
-  const maxImages = Number(datasets.find((ds) => ds.name === dataset)?.recordCount) - numImages || 0;
+  const maxImages =
+    Number(datasets.find((ds) => ds.name === dataset)?.recordCount) -
+      numImages || 0;
 
   if (error) {
     return (
       <div className={styles.mainContainer}>
         <div className="alert alert--danger" role="alert">
-          Unfortunately an error occurred while fetching the remote dataset images: &nbsp;
+          Unfortunately an error occurred while fetching the remote dataset
+          images: &nbsp;
           <strong>{error}</strong>
         </div>
       </div>
@@ -61,9 +78,7 @@ const ImageCarousel = () => {
         <div className={clsx("col col--1", styles.labeledInput)}>
           <label className={styles.inputLabel}>Dataset</label>
           <div className="dropdown dropdown--left dropdown--hoverable">
-            <button className="button button--primary" >
-              {datasetName}
-            </button>
+            <button className="button button--primary">{datasetName}</button>
             <ul className="dropdown__menu">
               {datasets.map((ds) => (
                 <li key={ds.name}>
@@ -85,18 +100,28 @@ const ImageCarousel = () => {
 
         <div className={clsx("col col--1", styles.labeledInput)}>
           <label className={styles.inputLabel}>Labels</label>
-          <button className={'button button--secondary'}
+          <button
+            className={"button button--secondary"}
             onClick={() => setShowLabels(!showLabels)}
           >
-            {showLabels ?
-              <EyeIcon size="1em" style={{ color: "var(--ifm-color-primary)" }} /> :
-              <EyeSlashIcon size="1em" style={{ color: "var(--ifm-color-primary)" }} />
-            }
+            {showLabels ? (
+              <EyeIcon
+                size="1em"
+                style={{ color: "var(--ifm-color-primary)" }}
+              />
+            ) : (
+              <EyeSlashIcon
+                size="1em"
+                style={{ color: "var(--ifm-color-primary)" }}
+              />
+            )}
           </button>
         </div>
 
         <div className={clsx("col col--9", styles.labeledInput)}>
-          <label className={styles.inputLabel} htmlFor="start-slider">Timeline</label>
+          <label className={styles.inputLabel} htmlFor="start-slider">
+            Timeline
+          </label>
           <div className={styles.sliderWrapper}>
             <span className={styles.sliderValue}>
               {start + 1} - {start + numImages}
@@ -113,7 +138,6 @@ const ImageCarousel = () => {
             />
           </div>
         </div>
-
       </div>
 
       <div className={styles.imageCarousel}>
