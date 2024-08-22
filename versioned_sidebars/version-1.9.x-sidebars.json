@@ -22,13 +22,6 @@
         },
         {
             "type": "category",
-            "label": "Integration",
-            "items": [
-                "guides/integration/azure"
-            ]
-        },
-        {
-            "type": "category",
             "label": "API Reference",
             "link":  {
               "type": "doc",

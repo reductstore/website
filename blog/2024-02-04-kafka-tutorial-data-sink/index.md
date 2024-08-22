@@ -59,7 +59,7 @@ These lines instantiate a Producer and an AdminClient with the minimal required 
 This setting is crucial as it allows the clients to connect to the Kafka cluster.
 
 ### Kafka Consumer and ReductStore Clients
-We can also use `confluent_kafka` Python package to setup Kafka Consumer client, but we need to install `reduct-py` Package to use [**ReductStore's Python Client**](<https://py.reduct.store/en/latest/>).
+We can also use `confluent_kafka` Python package to setup Kafka Consumer client, but we need to install `reduct-py` Package to use [**ReductStore's Python Client**](https://github.com/reductstore/reduct-py).
 
 Here's how to configure both clients on the consumer side:
 

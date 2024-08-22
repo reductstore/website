@@ -244,7 +244,7 @@ The `capture_and_store` node will start listening to the `/image_raw` topic and 
 
 
 ### Use ReductStore CLI to inspect stored images
-To get started, you need to install the ReductStore CLI by following the instructions [**here**](<https://cli.reduct.store/en/latest/>).
+To get started, you need to install the ReductStore CLI by following the instructions [**here**](https://github.com/reductstore/reduct-cli?tab=readme-ov-file#installing).
 
 Once installed, you can create an alias for the URL of your ReductStore instance using the `rcli alias add` command. For example:
 
@@ -267,9 +267,9 @@ There are several best practices to consider when integrating ReductStore. Here 
 - Use non-blocking operations to avoid blocking the main thread of the ROS 2 node. This ensures that the node can continue processing other tasks while waiting for data to be stored.
 - Serialize data before storing it in ReductStore in a cross-platform binary format to ensure compatibility with different systems and programming languages.
 - Create a ReductStore bucket with a [**FIFO**](<https://www.reduct.store/docs/how-does-it-work#bucket>) quota to prevent disk overwriting in the future.
-- Use token authentication to protect your information. You can use either the [**Web Console**](<https://github.com/reductstore/web-console>) or the [**CLI client**](<https://cli.reduct.store/>) to generate an access token.
-- Set up data replication between two instances using the [**Web Console**](<https://github.com/reductstore/web-console>) or the [**CLI client**](<https://cli.reduct.store/>).
-- Use [**ReductCLI**](<http://cli.reduct.store/>) to perform manual replication or backup.
+- Use token authentication to protect your information. You can use either the [**Web Console**](<https://github.com/reductstore/web-console>) or the [**CLI client**](https://github.com/reductstore/reduct-cli) to generate an access token.
+- Set up data replication between two instances using the [**Web Console**](<https://github.com/reductstore/web-console>) or the [**CLI client**](https://github.com/reductstore/reduct-cli).
+- Use [**ReductCLI**](https://github.com/reductstore/reduct-cli) to perform manual replication or backup.
 
 ## Conclusion
 In conclusion, this blog post has demonstrated how to capture and store raw camera images from a ROS topic in ReductStore. The provided code snippets serve as a practical guide for setting up such a system, highlighting the importance of non-blocking operations and proper serialization to maintain system performance and compatibility.

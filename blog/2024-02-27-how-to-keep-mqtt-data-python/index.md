@@ -186,9 +186,9 @@ As you can see, it is also very easy. We browse all entries in the `mqtt` bucket
 The provided example is basic and might not cover all the complexities you may face in a real-world application. Here are some tips to help you construct a strong and efficient IoT application using ReductStore and MQTT:
 
 - Create a ReductStore bucket with a **[FIFO](https://www.reduct.store/docs/how-does-it-work#bucket)** quota to prevent disk overwriting in the future.
-- Use token authentication to protect your data. You can generate an access token using either the **[Web Console](https://github.com/reductstore/web-console)** or the **[CLI client](https://cli.reduct.store/)**.
+- Use token authentication to protect your data. You can generate an access token using either the **[Web Console](https://github.com/reductstore/web-console)** or the **[CLI client](https://github.com/reductstore/)**.
 - Map **[MQTT5]( ttps://mqtt.org/)** properties to ReductStore labels. This will facilitate data filtering during querying or **[replication](https://www.reduct.store/blog/news/reductstore-8-released)**.
-- Use **[ReductCLI](http://cli.reduct.store/)** for data replication or backup purposes.
+- Use **[ReductCLI](https://github.com/reductstore/)** for data replication or backup purposes.
 
 ## Conclusion
 

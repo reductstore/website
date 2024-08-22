@@ -74,7 +74,7 @@ This will generate a visualization that highlights the areas of the image that t
 
 ## From Lab to Live: Implementing Your Models With ONNX or OpenVINO
 
-Once your model has been trained and validated using Anomalib, the next step is to prepare it for real-time implementation. This is where [**ONNX**](https://onnx.ai/) (Open Neural Network Exchange) or [**OpenVINO**](https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/overview.html) (Open Visual Inference and Neural network Optimization) comes into play.
+Once your model has been trained and validated using Anomalib, the next step is to prepare it for real-time implementation. This is where [**ONNX**](https://onnx.ai/) (Open Neural Network Exchange) or OpenVINO (Open Visual Inference and Neural network Optimization) comes into play.
 
 ONNX offers a standardized platform that allows you to export your trained model into a format that can be easily implemented and run in various environments.
 

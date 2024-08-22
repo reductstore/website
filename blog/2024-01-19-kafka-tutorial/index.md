@@ -196,7 +196,7 @@ To deploy, navigate to your compose file's location in terminal and execute `doc
 ### Implementing a Data Writer with ReductStore's Python Client
 In this example, we store binary data every second in a 'bucket' within ReductStore. Each piece of data is tagged alternately as 'good' or 'bad', and timestamped to log when it was added.
 
-Below is a code snippet demonstrating how to write data with toggling flags using [**ReductStore's Python Client**](<https://py.reduct.store/en/latest/>):
+Below is a code snippet demonstrating how to write data with toggling flags using [**ReductStore's Python Client**](https://github.com/reductstore/reduct-py):
 
 ```python
 import asyncio

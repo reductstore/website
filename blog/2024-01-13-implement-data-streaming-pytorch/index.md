@@ -25,7 +25,7 @@ Let's dig in!
 
 ## Setting Up the Python Client for ReductStore Database
 
-To use ReductStore's playground dataset, you will need to use the [**Python's client**](<https://py.reduct.store/en/latest/>), that you can install with `pip install reduct-py`.
+To use ReductStore's playground dataset, you will need to use the [**Python's client**](https://github.com/reductstore/reduct-py), that you can install with `pip install reduct-py`.
 
 Then, you can instantiate a client with an API token and connect to the database with the following code:
 

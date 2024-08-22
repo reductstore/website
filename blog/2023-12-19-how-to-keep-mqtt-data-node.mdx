@@ -118,7 +118,7 @@ The final step is to write the received message to the database. To accomplish t
   });
 ```
 
-When we call `bucket.beginWrite` we create an entry in the bucket if it doesn’t exist yet. Then we write data to the entry with the current timestamp. Now our MQTT data is safe and sound in the storage, and we can access them by using the same [**SDK**](https://js.reduct.store/).
+When we call `bucket.beginWrite` we create an entry in the bucket if it doesn’t exist yet. Then we write data to the entry with the current timestamp. Now our MQTT data is safe and sound in the storage, and we can access them by using the same [**SDK**](https://github.com/reductstore/reduct-js).
 
 ## Publish Data To MQTT Topic
 
@@ -172,9 +172,9 @@ To retrieve all the records or records within a given time interval, we can use 
 The provided usage example is quite simple and lacks many details that you may encounter in a real-world application. Here are a few pieces of advice to help you build a robust and powerful IoT application based on ReductStore and MQTT:
 
 - Create a ReductStore bucket with a FIFO quota to prevent disk overwriting in the future.
-- Use token authentication to protect your data. You can generate an access token using either the [**Web Console**](https://github.com/reductstore/web-console) or the [**CLI client**](https://cli.reduct.store/).
+- Use token authentication to protect your data. You can generate an access token using either the [**Web Console**](https://github.com/reductstore/web-console) or the [**CLI client**](https://github.com/reductstore/reduct-cli).
 - Map MQTT5 properties to ReductStore labels. This will facilitate data filtering during querying or replication.
-- Utilize [**ReductCLI**](http://cli.reduct.store/) for data replication or backup purposes.
+- Utilize [**ReductCLI**](https://github.com/reductstore/reduct-cli) for data replication or backup purposes.
 
 ## Conclusion
 
@@ -188,6 +188,6 @@ I hope this tutorial has been helpful. If you have any questions or feedback, do
 ### Links
 
 - [**ReductStore**](/docs/getting-started)
-- [**JavaScript Client SDK**](https://js.reduct.store/)
+- [**JavaScript Client SDK**](https://github.com/reductstore/reduct-js)
 - [**Mosquitto MQTT Broker**](https://mosquitto.org/)
 - [**Full example on GitHub**](https://github.com/reductstore/reduct-mqtt-example)
