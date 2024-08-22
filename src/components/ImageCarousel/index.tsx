@@ -48,7 +48,7 @@ const ImageCarousel = () => {
     dataset,
     start,
     numImages,
-    datasetIds
+    datasetIds,
   );
 
   const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {

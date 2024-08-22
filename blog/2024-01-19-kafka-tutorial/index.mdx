@@ -9,50 +9,55 @@ image: ./img/kafka-reductstore-mono-social.jpg
 ---
 
 ![Kafka ReductStore Example](./img/kafka-reductstore-mono.webp)
-<small>Sensor data processed and labeled by AI, stored in ReductStore, with metadata relayed to Kafka</small>
+
+<small>
+  Sensor data processed and labeled by AI, stored in ReductStore, with metadata
+  relayed to Kafka
+</small>
 
 In this tutorial, we will walk through a simple and practical setup for integrating Kafka with ReductStore to handle unstructured data streams from edge devices. We'll cover the basics of setting up Kafka and ReductStore using Docker, creating Kafka topics in Python, and managing blob data and metadata.
 
 If you are new to Kafka and ReductStore, here's a quick summary of the technology:
 
-- [**Apache Kafka**](<https://kafka.apache.org/>) is a distributed streaming platform to share data between applications and services in real-time. 
-- [**ReductStore**](<https://www.reduct.store/>) is a time-series database for blob data, optimized for edge computing and complements Kafka by providing a data storage solution for files larger than 1MB–Kafka's maximum message size.
+- [**Apache Kafka**](https://kafka.apache.org/) is a distributed streaming platform to share data between applications and services in real-time.
+- [**ReductStore**](https://www.reduct.store/) is a time-series database for blob data, optimized for edge computing and complements Kafka by providing a data storage solution for files larger than 1MB–Kafka's maximum message size.
 
 In our example, we will deploy a simple architecture with a single instance of Kafka and ReductStore running on a local machine. We will demonstrate how to create Kafka topics, write data to ReductStore, and forward metadata to Kafka.
 
-For an easy start, you can follow along by cloning the [**reduct-kafka-example**](<https://github.com/reductstore/reduct-kafka-example>) repository containing all the code snippets and Docker Compose files used in this tutorial.
+For an easy start, you can follow along by cloning the [**reduct-kafka-example**](https://github.com/reductstore/reduct-kafka-example) repository containing all the code snippets and Docker Compose files used in this tutorial.
 
 <!--truncate-->
 
 **Table of Contents**
 
 - [Setup Apache Kafka](#setup-apache-kafka)
-    - [Setting Up Zookeeper and Kafka with Docker Compose](#setting-up-zookeeper-and-kafka-with-docker-compose)
-    - [Creating a Kafka Topic Using Python](#creating-a-kafka-topic-using-python)
+  - [Setting Up Zookeeper and Kafka with Docker Compose](#setting-up-zookeeper-and-kafka-with-docker-compose)
+  - [Creating a Kafka Topic Using Python](#creating-a-kafka-topic-using-python)
 - [Setup ReductStore](#setup-reductstore)
-    - [Deploying ReductStore via Docker Compose](#deploying-reductstore-via-docker-compose)
-    - [Implementing a Data Writer with ReductStore's Python Client](#implementing-a-data-writer-with-reductstores-python-client)
+  - [Deploying ReductStore via Docker Compose](#deploying-reductstore-via-docker-compose)
+  - [Implementing a Data Writer with ReductStore's Python Client](#implementing-a-data-writer-with-reductstores-python-client)
 - [Forward Data from ReductStore to Kafka](#forward-data-from-reductstore-to-kafka)
-    - [Consuming Messages from Kafka in Python](#consuming-messages-from-kafka-in-python)
+  - [Consuming Messages from Kafka in Python](#consuming-messages-from-kafka-in-python)
 - [Conclusion](#conclusion)
 
 ## Setup Apache Kafka
-To use Kafka, we also need to deploy a service that keeps configuration informations such as [**Zookeeper**](<https://zookeeper.apache.org/>).
+
+To use Kafka, we also need to deploy a service that keeps configuration informations such as [**Zookeeper**](https://zookeeper.apache.org/).
 
 Simply put, Zookeeper organizes and synchronizes configuration data for distributed systems, and Kafka efficiently processes and moves streams of data in real-time between different parts of an application.
 
 ### Setting Up Zookeeper and Kafka with Docker Compose
-To set up Zookeeper and Kafka using Docker Compose, you will need to have [**Docker installed**](<https://docs.docker.com/engine/install/>) on your machine. Once that's ready, follow these steps:
+
+To set up Zookeeper and Kafka using Docker Compose, you will need to have [**Docker installed**](https://docs.docker.com/engine/install/) on your machine. Once that's ready, follow these steps:
 
 1. Create a new file named `docker-compose.yml` in a directory of your choice.
 
 2. Copy the following YAML configuration into your `docker-compose.yml` file:
 
-
 <!-- -->
 
 ```yaml
-version: '3'
+version: "3"
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -73,8 +78,8 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092 
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR : 1
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 ```
 
 3. Open a terminal in the directory containing the `docker-compose.yml` file.
@@ -83,42 +88,41 @@ services:
 
 5. Verify that both services are running by using a command like `docker ps`.
 
-
 <!-- -->
 
 That's it! You now have a single-node Kafka cluster running alongside Zookeeper, which is accessible on localhost at port 9092 for Kafka and port 2181 for Zookeeper.
 
-The Docker images are provided by Confluent, a company that offers a commercial distribution of Apache Kafka and was founded by the original creators of Kafka. 
-You can find more information about these images and their configuration options in the [**Confluent documentation**](<https://docs.confluent.io/platform/current/installation/docker/config-reference.html>).
+The Docker images are provided by Confluent, a company that offers a commercial distribution of Apache Kafka and was founded by the original creators of Kafka.
+You can find more information about these images and their configuration options in the [**Confluent documentation**](https://docs.confluent.io/platform/current/installation/docker/config-reference.html).
 
 If you are just wondering about the environment variable we used for this tutorial, here is a short explanation:
 
 - **Zookeeper:**
 
-    - `ZOOKEEPER_CLIENT_PORT: 2181`: Specifies the port number (2181) that Zookeeper listens on for client connections.
+  - `ZOOKEEPER_CLIENT_PORT: 2181`: Specifies the port number (2181) that Zookeeper listens on for client connections.
 
-    - `ZOOKEEPER_TICK_TIME: 2000`: Defines a tick as 2000 ms, used for heartbeats and timeouts in Zookeeper, where the minimum session timeout is twice the tickTime (Source: [**Zookeeper doc**](<https://zookeeper.apache.org/doc/r3.9.1/zookeeperStarted.html#getting-started-coordinating-distributed-applications-with-zooKeeper>)).
+  - `ZOOKEEPER_TICK_TIME: 2000`: Defines a tick as 2000 ms, used for heartbeats and timeouts in Zookeeper, where the minimum session timeout is twice the tickTime (Source: [**Zookeeper doc**](https://zookeeper.apache.org/doc/r3.9.1/zookeeperStarted.html#getting-started-coordinating-distributed-applications-with-zooKeeper)).
 
     <!-- -->
 
 - **Kafka:**
 
-    - `KAFKA_BROKER_ID: 1`: Assigns a unique identifier (1) to the Kafka broker. This ID would differentiates it from other brokers in the cluster if we had more than one.
+  - `KAFKA_BROKER_ID: 1`: Assigns a unique identifier (1) to the Kafka broker. This ID would differentiates it from other brokers in the cluster if we had more than one.
 
-    - `KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181`: Tells Kafka how to connect to the Zookeeper service, specifying the hostname (`zookeeper`) and port number (2181).
+  - `KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181`: Tells Kafka how to connect to the Zookeeper service, specifying the hostname (`zookeeper`) and port number (2181).
 
-    - `KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092`: Defines how the Kafka broker communicates its connection details to producers and consumers. In this case, it's using plaintext communication (non-encrypted) and is accessible via `localhost` on port 9092.
+  - `KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092`: Defines how the Kafka broker communicates its connection details to producers and consumers. In this case, it's using plaintext communication (non-encrypted) and is accessible via `localhost` on port 9092.
 
-    - `KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1` means that Kafka will keep only one copy of the information about where each consumer is in reading messages, i.e. the "offset" of each consumer. This setting helps manage where to continue reading from, but with only one copy, if there's a problem, this information could be lost.
+  - `KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1` means that Kafka will keep only one copy of the information about where each consumer is in reading messages, i.e. the "offset" of each consumer. This setting helps manage where to continue reading from, but with only one copy, if there's a problem, this information could be lost.
 
     <!-- -->
-
 
 <!-- -->
 
 This setup is suitable for development purposes where you need to work with streaming data or message queues without complexity. For production environments, remember that while this simple Docker Compose setup gets you started quickly, Apache Kafka can be scaled horizontally by adding more brokers to support higher loads or redundancy requirements.
 
 ### Creating a Kafka Topic Using Python
+
 To create a Kafka topic using Python, you can use the `confluent_kafka` library, which provides the necessary tools to interact with Kafka clusters. The following example shows how to programmatically create a new topic:
 
 ```python
@@ -165,38 +169,40 @@ Regarding the arguments, here's a quick explanation:
 <!-- -->
 
 ## Setup ReductStore
-[**ReductStore**](<https://reduct.store/>) is a specialized time-series database designed for blob data, optimized for edge computing, computer vision, and IoT applications.
+
+[**ReductStore**](https://reduct.store/) is a specialized time-series database designed for blob data, optimized for edge computing, computer vision, and IoT applications.
 
 This database offers a robust solution for storing blobs with real-time FIFO (First-In-First-Out) quota management. This guarantees that edge devices always have sufficient space and maintain a continuous data flow.
 
 Furthermore, it provides functionalities for saving labels, like AI-generated outcomes, for each record.
 
 ### Deploying ReductStore via Docker Compose
+
 Deploying ReductStore via Docker Compose is straightforward:
 
 ```yaml
 reduct-store:
-    image: reduct/store:latest
-    container_name: reduct-store
-    ports:
-      - "8383:8383"
-    volumes:
-      - ./data:/data
+  image: reduct/store:latest
+  container_name: reduct-store
+  ports:
+    - "8383:8383"
+  volumes:
+    - ./data:/data
 ```
 
 - In this configuration, the container named `reduct-store` will use the latest ReductStore image and map port 8383 of your host to port 8383 inside the container, which is used by ReductStore.
 
 - The volume mapping `./data:/data` creates a persistent storage by mapping a local directory (`./data`) to the `/data` directory inside the container.
 
-
 <!-- -->
 
-To deploy, navigate to your compose file's location in terminal and execute `docker-compose up -d`. This command starts ReductStore as a background service. You can then interact with it using its [**API**](<https://www.reduct.store/docs/http-api>) or through any [**client libraries available in the documentation**](<https://www.reduct.store/docs/getting-started>).
+To deploy, navigate to your compose file's location in terminal and execute `docker-compose up -d`. This command starts ReductStore as a background service. You can then interact with it using its [**API**](https://www.reduct.store/docs/http-api) or through any [**client libraries available in the documentation**](https://www.reduct.store/docs/getting-started).
 
 ### Implementing a Data Writer with ReductStore's Python Client
+
 In this example, we store binary data every second in a 'bucket' within ReductStore. Each piece of data is tagged alternately as 'good' or 'bad', and timestamped to log when it was added.
 
-Below is a code snippet demonstrating how to write data with toggling flags using [**ReductStore's Python Client**](<https://py.reduct.store/en/latest/>):
+Below is a code snippet demonstrating how to write data with toggling flags using [**ReductStore's Python Client**](https://github.com/reductstore/reduct-py):
 
 ```python
 import asyncio
@@ -217,7 +223,7 @@ async def writer():
         good = not good
         await asyncio.sleep(1)
 
-# Run the asynchronous writer function using an event 
+# Run the asynchronous writer function using an event
 loop = asyncio.get_event_loop()
 loop.run_until_complete(writer())
 ```
@@ -232,10 +238,10 @@ To implement this in your environment:
 
 3. Check that your local instance of ReductStore receives and stores these entries by accessing its API or UI at **localhost:8383**.
 
-
 <!-- -->
 
 ## Forward Data from ReductStore to Kafka
+
 Integrating ReductStore with Apache Kafka for metadata forwarding involves subscribing to new records in ReductStore and publishing their metadata to a Kafka topic.
 
 The provided Python code demonstrates an asynchronous function `subscriber()` that connects to both systems: it subscribes to records labeled as "good" in a ReductStore bucket and forwards the associated metadata, including timestamps and labels, to a Kafka topic.
@@ -285,10 +291,10 @@ Here's how the integration works step-by-step:
 
 5. **Flush Producer Queue**: Once all desired messages are sent (after 10 iterations in this example), we call `producer.flush()` which ensures that all messages are delivered before ending the program.
 
-
 <!-- -->
 
 ### Consuming Messages from Kafka in Python
+
 In Python, consuming messages from Kafka involves setting up a message consumer that connects to the Kafka cluster and listens for new data on specified topics.
 
 ```python
@@ -337,20 +343,20 @@ The example provided illustrates how to implement this using the `confluent_kafk
 
 5. **Handle Messages and Errors**: Check each polled message; if it is not None, verify whether it contains an error or valid data.
 
-    1. If there’s an error related to partition end (`_PARTITION_EOF`), ignore and continue. In our case, it means we read all available messages in the partition, i.e. we are up-to-date.
+   1. If there’s an error related to partition end (`_PARTITION_EOF`), ignore and continue. In our case, it means we read all available messages in the partition, i.e. we are up-to-date.
 
-    2. For other errors, print them out and exit.
+   2. For other errors, print them out and exit.
 
-    3. If no errors are present, decode and process or print out the message value.
+   3. If no errors are present, decode and process or print out the message value.
 
-    <!-- -->
+   <!-- -->
 
 6. **Clean Up**: Shutdown by enclosing the polling logic in a `try-finally` block where we close the consumer connection in `finally`.
-
 
 <!-- -->
 
 ## Conclusion
+
 In conclusion, integrating Kafka with ReductStore for real-time data streaming and processing is a robust solution that can be implemented relatively easily.
 
 In this guide, we demonstrated the setup for producing and consuming messages using Python, which included initializing a Kafka producer to publish metadata from ReductStore records and setting up a consumer to listen for those messages on a specified topic.
@@ -359,8 +365,8 @@ This example serves as a groundwork that can be adapted to various use cases req
 
 Remember that fine-tuning and customization will be necessary as per the specific requirements of your project to ensure optimal performance and reliability. As always, best practices include thorough testing, monitoring, and setting up proper error handling mechanisms to maintain a stable production environment.
 
-If you have questions about this post or want to learn more about ReductStore, please feel free to join our [**Discord**](<https://discord.com/channels/939475547065561088/1154679443407785984>) community and reach out for assistance.
+If you have questions about this post or want to learn more about ReductStore, please feel free to join our [**Discord**](https://discord.com/channels/939475547065561088/1154679443407785984) community and reach out for assistance.
 
 ## Further Reading
 
-As a continuation of this tutorial, we recommend reading our next guide on [**How To Use Reductstore As A Data Sink For Kafka**](</blog/tutorial/datastreaming/kafka/data-sink-guide>).
+As a continuation of this tutorial, we recommend reading our next guide on [**How To Use Reductstore As A Data Sink For Kafka**](/blog/tutorial/datastreaming/kafka/data-sink-guide).

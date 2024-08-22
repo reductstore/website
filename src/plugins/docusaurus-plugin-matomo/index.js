@@ -6,7 +6,7 @@ module.exports = function (context) {
 
   if (!matomo || !matomo.url || !matomo.container) {
     throw new Error(
-      "You need to specify `url` and `container` for `docusaurus-plugin-matomo` to work."
+      "You need to specify `url` and `container` for `docusaurus-plugin-matomo` to work.",
     );
   }
 
@@ -16,8 +16,8 @@ module.exports = function (context) {
     appEnv === "production"
       ? ""
       : appEnv === "preview"
-      ? matomo.previewSuffix || "_staging"
-      : matomo.devSuffix || "_dev";
+        ? matomo.previewSuffix || "_staging"
+        : matomo.devSuffix || "_dev";
 
   return {
     name: "docusaurus-plugin-crisp",

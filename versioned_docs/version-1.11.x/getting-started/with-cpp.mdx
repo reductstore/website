@@ -15,10 +15,13 @@ import DataQueryingSection from "./common/data_querying";
 import NextStep from "./common/next_steps.mdx";
 
 <head>
-    <link rel="canonical" href="https://www.reduct.store/docs/getting-started/with-cpp"/>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/getting-started/with-cpp"
+  />
 </head>
 
-<Intro language="C++" repository="reduct-cpp"/>
+<Intro language="C++" repository="reduct-cpp" />
 
 ## Installing the C++ SDK
 
@@ -63,15 +66,16 @@ import NextStep from "./common/next_steps.mdx";
     add_executable(quick_start quick_start.cc)
     target_link_libraries(quick_start ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
     ```
+
 </InstallSdk>
 
 ## Running ReductStore
 
-<RunReductStore/>
+<RunReductStore />
 
 ## Hello World Example
 
-<UsingSdkSection example={QuickStart} language="cpp"/>
+<UsingSdkSection example={QuickStart} language="cpp" />
 
 ## Creating a Client
 
@@ -81,6 +85,7 @@ import NextStep from "./common/next_steps.mdx";
 
     ```cpp file=../examples/cpp/src/quick_start.cc start=1. end=2.
     ```
+
 </CreateClientSection>
 
 ## Creating a Bucket
@@ -92,6 +97,7 @@ import NextStep from "./common/next_steps.mdx";
 
     ```cpp file=../examples/cpp/src/quick_start.cc start=2. end=3.
     ```
+
 </CreateBucketSection>
 
 ## Data Ingestion
@@ -103,6 +109,7 @@ import NextStep from "./common/next_steps.mdx";
 
     ```cpp file=../examples/cpp/src/quick_start.cc start=3. end=4.
     ```
+
 </DataIngestionSection>
 
 ## Data Querying
@@ -114,8 +121,9 @@ import NextStep from "./common/next_steps.mdx";
 
     ```cpp file=../examples/cpp/src/quick_start.cc start=4. end=5.
     ```
+
 </DataQueryingSection>
 
 ## Next Steps
 
-<NextStep/>
+<NextStep />

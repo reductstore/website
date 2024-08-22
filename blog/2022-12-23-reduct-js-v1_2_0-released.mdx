@@ -19,14 +19,13 @@ The `Client.me` method is a useful addition to the ReductStore JavaScript SDK, a
 access to the platform. Here is an example of how you might use it in your application:
 
 ```javascript
-const {Client} = require("reduct-js");
+const { Client } = require("reduct-js");
 
-const client = new Client("http://127.0.0.1:8383", {apiToken: "my-token"});
+const client = new Client("http://127.0.0.1:8383", { apiToken: "my-token" });
 const tokenInfo = await client.me();
 
 console.log(tokenInfo.name);
 console.log(tokenInfo.permissions.fullAccess);
-
 ```
 
 In addition to the new `Client.me` method, this release of the ReductStore JavaScript SDK also includes updates to the

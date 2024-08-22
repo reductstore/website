@@ -1,11 +1,10 @@
-import React from 'react';
-import Layout from '@theme/Layout';
+import React from "react";
+import Layout from "@theme/Layout";
 import SimpleHeader from "@site/src/components/SimpleHeader";
 import styles from "./styles.module.css";
-import UseCaseCards from '@site/src/components/UseCaseCards';
-import clsx from 'clsx';
-import useCases from '@site/src/data/useCasesData';
-
+import UseCaseCards from "@site/src/components/UseCaseCards";
+import clsx from "clsx";
+import useCases from "@site/src/data/useCasesData";
 
 export default function UseCases(): JSX.Element {
   return (
@@ -19,6 +18,6 @@ export default function UseCases(): JSX.Element {
           <UseCaseCards useCases={useCases} />
         </div>
       </main>
-    </Layout >
+    </Layout>
   );
 }

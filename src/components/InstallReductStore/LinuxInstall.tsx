@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
-import CodeBlock from '@theme/CodeBlock';
+import React, { useState } from "react";
+import CodeBlock from "@theme/CodeBlock";
 import styles from "./styles.module.css";
-import clsx from 'clsx';
+import clsx from "clsx";
 
 export default function LinuxInstall(props) {
   const [activeTab, setActiveTab] = useState("binary");
 
-const bynaryInstall = `
+  const bynaryInstall = `
 wget https://github.com/reductstore/reductstore/releases/latest/download/reductstore.linux-amd64.tar.gz
 tar xfv reductstore.linux-amd64.tar.gz
 chmod +x reductstore
 RS_DATA_PATH=./data ./reductstore
 `.trim();
-
 
   return (
     <>
@@ -24,7 +23,7 @@ RS_DATA_PATH=./data ./reductstore
             key={tab}
             className={clsx(
               "tabs__item",
-              activeTab === tab && "tabs__item--active"
+              activeTab === tab && "tabs__item--active",
             )}
             onClick={() => setActiveTab(tab)}
           >
@@ -35,9 +34,7 @@ RS_DATA_PATH=./data ./reductstore
 
       <div className={styles.tabContent}>
         {activeTab === "binary" && (
-          <CodeBlock className="language-bash">
-            {bynaryInstall}
-          </CodeBlock>
+          <CodeBlock className="language-bash">{bynaryInstall}</CodeBlock>
         )}
         {activeTab === "snap" && (
           <CodeBlock className="language-bash">

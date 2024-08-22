@@ -1,0 +1,2 @@
+exclude_path = [".docosaurus", "build", "yarn.lock", "./**/**/*.lock", "./node_modules/"]
+exclude = ["^http://127.0.0.1.*", "^http://localhost.*", "^file:///.*"]

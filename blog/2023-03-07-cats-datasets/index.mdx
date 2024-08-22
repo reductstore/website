@@ -31,7 +31,7 @@ token with read access, so that we can connect to the database by using the Clie
 from reduct import Client, Bucket
 
 HOST = "https://play.reduct.store"
-API_TOKEN = "dataset-read-eab13e4f5f2df1e64363806443eea7ba83406ce701d49378d2f54cfbf02850f5"
+API_TOKEN = "reductstore"
 BUCKET = "datasets"
 
 client = Client(HOST, api_token=API_TOKEN)
@@ -75,7 +75,7 @@ async for record in bucket.query(DATASET, start=0, stop=5):
 
     # Show result
     display(Image.fromarray(img))
-```  
+```
 
 ![Cat number 1](./img/cat-number-1.jpeg)
 
@@ -88,4 +88,4 @@ async for record in bucket.query(DATASET, start=0, stop=5):
 This is a trivial example, but you can use this dataset for more sophisticated AI algorithms or image processing. If the
 interaction over the Internet is too slow for your purposes, you can export the dataset to a file system. Alternatively,
 you can spin up your own ReductStore instance locally and copy the dataset to it. See
-the [**Reduct CLI**](https://cli.reduct.store/en/latest/docs/export/) for more information.
+the [**Reduct CLI**](https://github.com/reductstore/reduct-cli) for more information.

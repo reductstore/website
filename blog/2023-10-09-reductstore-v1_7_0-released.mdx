@@ -15,7 +15,6 @@ To download the latest released version, please visit our [**Download Page**](ht
 
 ReductStore v1.7.0 introduces two new features that make it easier to provision resources and write data in batches, which can improve your performance and efficiency when using ReductStore for edge computing and AI applications.
 
-
 {/* truncate */}
 
 ## Provisioning With Environment Variables
@@ -34,13 +33,13 @@ RS_TOKEN_A_VALUE=somesecret
 RS_TOKEN_A_READ=bucket-1,bucket-2
 ```
 
-Here, we create two buckets bucket-1, bucket-2 and a token to read data from them. This feature could be especially useful if you use ReductStore as an [**Azure IoT Module**](https://azuremarketplace.microsoft.com/en-US/marketplace/apps/reductstorellc1689939980623.reductstore) so that you can deploy the database on an edge device with all settings even if the device isn’t available from the Internet.
+Here, we create two buckets bucket-1, bucket-2 and a token to read data from them. This feature could be especially useful if you use ReductStoreas an Azure IoT Module so that you can deploy the database on an edge device with all settings even if the device isn’t available from the Internet.
 
 Read [**the documentation**](/docs/configuration#provisioning) for more details.
 
 ## Batch Writing
 
-We’re continually working on the performance of our database. In this version, we implemented the  [**POST /api/v1/b/:bucket/:entry/batch**](/docs/http-api/entry-api) endpoint, which receives a batch of records in one HTTP request.  This can help in reducing HTTP overhead when you're frequently writing numerous small records. The official client SDK already has support for this feature, and in [**Python**](https://github.com/reductstore/reduct-py), it can be implemented as follows:
+We’re continually working on the performance of our database. In this version, we implemented the [**POST /api/v1/b/:bucket/:entry/batch**](/docs/http-api/entry-api) endpoint, which receives a batch of records in one HTTP request. This can help in reducing HTTP overhead when you're frequently writing numerous small records. The official client SDK already has support for this feature, and in [**Python**](https://github.com/reductstore/reduct-py), it can be implemented as follows:
 
 ```python
 from reduct import Client, Bucket, Batch
@@ -48,15 +47,15 @@ from reduct import Client, Bucket, Batch
 async def main():
     # Create a client for interacting with a ReductStore service
     client = Client("http://localhost:8383")
-    
+
     # Create a bucket and store a reference to it in the `bucket` variable
     bucket: Bucket = await client.create_bucket("my-bucket", exist_ok=True)
-    
+
     # Prepare a batch
     batch = Batch()
     batch.add(timestamp=1000, data=b"new")
     batch.add(timestamp=2000, data=b"reocrd")
-    
+
     # Write it
     await bucket.write_batch("entry-3", batch)
 ```

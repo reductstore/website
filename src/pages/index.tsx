@@ -21,12 +21,12 @@ function HomepageHeader() {
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
-
         <h1 className={clsx("hero__title", styles.heroTitle)}>
           {siteConfig.tagline}
         </h1>
         <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
-          History storage and management of images, vibration data, text, labels, and more - all in one place with the highest performance.
+          History storage and management of images, vibration data, text,
+          labels, and more - all in one place with the highest performance.
         </p>
         <div className={styles.buttons}>
           <Link
@@ -54,7 +54,10 @@ export default function Home(): JSX.Element {
       description="ReductStore is a time series database designed specifically for storing and managing large amounts of unstructured data. 
       It offers high performance for writing and real-time querying, making it suitable for edge computing, computer vision, and IoT applications."
     >
-      <HomepageBanner to="/pricing" text="Free evaluation and Proof of Concept (PoC)" />
+      <HomepageBanner
+        to="/pricing"
+        text="Free evaluation and Proof of Concept (PoC)"
+      />
       <HomepageHeader />
       <main>
         <div className="container">

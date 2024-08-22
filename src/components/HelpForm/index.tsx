@@ -3,8 +3,7 @@ import styles from "./styles.module.css"; // Ensure this path matches the locati
 import Link from "@docusaurus/Link";
 import clsx from "clsx";
 import { useForm, ValidationError } from "@formspree/react";
-import { useLocation } from '@docusaurus/router';
-
+import { useLocation } from "@docusaurus/router";
 
 const topics = [
   {
@@ -39,13 +38,13 @@ interface HelpFormProps {
 
 export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
   const [state, handleSubmit] = useForm("xgejorqo");
-  const [topic, setTopic] = useState(subject || "")
+  const [topic, setTopic] = useState(subject || "");
   const location = useLocation();
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
-    const subject = queryParams.get('subject');
-    const foundTopic = topics.find(t => t.key === subject);
+    const subject = queryParams.get("subject");
+    const foundTopic = topics.find((t) => t.key === subject);
     if (foundTopic) {
       setTopic(foundTopic.key);
     }
@@ -54,16 +53,21 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
   if (state.succeeded) {
     return (
       <div className="alert alert--success">
-
         <h2>Thank You!</h2>
-        <p>We've received your submission. A member of our team will get back to you as soon as possible.</p>
+        <p>
+          We've received your submission. A member of our team will get back to
+          you as soon as possible.
+        </p>
       </div>
     );
   }
 
   return (
-    <form id="contact-us-form" className={styles.helpForm} onSubmit={handleSubmit}>
-
+    <form
+      id="contact-us-form"
+      className={styles.helpForm}
+      onSubmit={handleSubmit}
+    >
       <div className={styles.inputGroup}>
         <label htmlFor="name">Your Name</label>
         <input
@@ -73,11 +77,7 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
           placeholder="Your Name"
           required
         />
-        <ValidationError
-          prefix="Name"
-          field="name"
-          errors={state.errors}
-        />
+        <ValidationError prefix="Name" field="name" errors={state.errors} />
       </div>
       <div className={styles.inputGroup}>
         <label htmlFor="email">Your Email Address</label>
@@ -88,11 +88,7 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
           placeholder="you@example.com"
           required
         />
-        <ValidationError
-          prefix="Email"
-          field="email"
-          errors={state.errors}
-        />
+        <ValidationError prefix="Email" field="email" errors={state.errors} />
       </div>
       <div className={styles.inputGroup}>
         <p>Select a topic:</p>
@@ -127,7 +123,11 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
           rows={4}
           className={styles.textarea}
         ></textarea>
-        <ValidationError prefix="Message" field="message" errors={state.errors} />
+        <ValidationError
+          prefix="Message"
+          field="message"
+          errors={state.errors}
+        />
       </div>
       <div className="col">
         <button

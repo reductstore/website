@@ -7,7 +7,6 @@ slug: comparisons/computer-vision/iot/performance-comparison-reductstore-vs-mini
 date: 2024-02-08
 ---
 
-
 In this article, we will compare two data storage solutions: **[ReductStore](https://reduct.store)** and **[Minio](https://min.io)**. Both offer on-premise blob storage, but they approach it differently. Minio provides traditional S3-like blob storage, while ReductStore is a time series database designed to store a history of blob data. We will focus on their application in scenarios that require storage and access to a history of unstructured data. This includes images from a computer vision camera, vibration sensor data, or binary packages common in industrial data.
 
 ## Handling Historical Data
@@ -23,7 +22,6 @@ bucket
         |---1666225094512397.jpeg
 
 ```
-
 
 {/* truncate */}
 
@@ -189,17 +187,17 @@ python3 main.py
 The script displays the results for the given `BLOB_SIZE` and `SIZE_COUNT`. On my device with an NVMe drive, these were the numbers I received:
 
 | Blob Size | Operation | Minio, blob/s | ReductStore, blob/s | ReductStore, % |
-|-----------|-----------|---------------|---------------------|---------------|
-| 1 KB      | Write     | 548           | 1518                | 176 %         |
-|           | Read      | 1028          | 6868                | 568 %         |
-| 10 KB     | Write     | 533           | 1480                | 177 %         |
-|           | Read      | 1030          | 8386                | 714 %         |
-| 100 KB    | Write     | 360           | 1289                | 258 %         |
-|           | Read      | 844           | 6561                | 677 %         |
-| 1 MB      | Write     | 97            | 568                 | 486 %         |
-|           | Read      | 528           | 944                 | 79 %          |
-| 10 MB     | Write     | 21            | 97                  | 361 %         |
-|           | Read      | 94            | 103                 | 10 %          |
+| --------- | --------- | ------------- | ------------------- | -------------- |
+| 1 KB      | Write     | 548           | 1518                | 176 %          |
+|           | Read      | 1028          | 6868                | 568 %          |
+| 10 KB     | Write     | 533           | 1480                | 177 %          |
+|           | Read      | 1030          | 8386                | 714 %          |
+| 100 KB    | Write     | 360           | 1289                | 258 %          |
+|           | Read      | 844           | 6561                | 677 %          |
+| 1 MB      | Write     | 97            | 568                 | 486 %          |
+|           | Read      | 528           | 944                 | 79 %           |
+| 10 MB     | Write     | 21            | 97                  | 361 %          |
+|           | Read      | 94            | 103                 | 10 %           |
 
 Based on the benchmark results, ReductStore consistently outperformed Minio in both writing and reading operations regardless of the size of the blobs. For writing operations, ReductStore was significantly faster than Minio, especially when dealing with smaller chunk sizes. For reading operations, ReductStore also held a clear advantage, being able to retrieve data faster than Minio especially for blobs smaller than 10MB. These performance results suggest that ReductStore is highly efficient and could be a more effective solution for applications that require frequent and intensive read/write operations.
 

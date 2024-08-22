@@ -70,55 +70,59 @@ $ npm install --save reduct-js async-mqtt
 When we have all the dependencies installed, we can write the script:
 
 ```jsx
-const MQTT = require('async-mqtt');
-const {Client} = require('reduct-js');
+const MQTT = require("async-mqtt");
+const { Client } = require("reduct-js");
 
-MQTT.connectAsync('tcp://localhost:1883').then(async (mqttClient) => {
-  await mqttClient.subscribe('#');
+MQTT.connectAsync("tcp://localhost:1883")
+  .then(async (mqttClient) => {
+    await mqttClient.subscribe("#");
 
-  const reductClient = new Client('http://localhost:8383');
-  const bucket = await reductClient.getOrCreateBucket('mqtt');
+    const reductClient = new Client("http://localhost:8383");
+    const bucket = await reductClient.getOrCreateBucket("mqtt");
 
-  mqttClient.on('message', async (topic, msg) => {
-    const record = await bucket.beginWrite(topic);
-    await record.write(msg)
-    console.log('Received message "%s" from topic "%s" is written', msg,
-        topic);
-  });
-
-}).catch(error => console.error(error));
+    mqttClient.on("message", async (topic, msg) => {
+      const record = await bucket.beginWrite(topic);
+      await record.write(msg);
+      console.log(
+        'Received message "%s" from topic "%s" is written',
+        msg,
+        topic,
+      );
+    });
+  })
+  .catch((error) => console.error(error));
 ```
 
 Let's examine the code in detail. First, we need to establish a connection to the MQTT broker and subscribe to all topics using the `#` wildcard.
 
 ```jsx
-MQTT.connectAsync('tcp://localhost:1883').then(async (mqttClient) => {
-  await mqttClient.subscribe('#');
+MQTT.connectAsync("tcp://localhost:1883")
+  .then(async (mqttClient) => {
+    await mqttClient.subscribe("#");
 
- // rest of code
-
-}).catch(error => console.error(error));
+    // rest of code
+  })
+  .catch((error) => console.error(error));
 ```
 
 If the MQTT connection is successful, we can start dealing with ReductStore. To start writing data there, we need a bucket. We create a bucket with the name `mqtt` or get an existing one:
 
 ```jsx
- const reductClient = new Client('http://localhost:8383');
- const bucket = await reductClient.getOrCreateBucket('mqtt');
+const reductClient = new Client("http://localhost:8383");
+const bucket = await reductClient.getOrCreateBucket("mqtt");
 ```
 
 The final step is to write the received message to the database. To accomplish this, we need to use a callback for the event `message` in order to capture the message. Then, we can write the message to the entry that corresponds to the topic name.
 
 ```jsx
-  mqttClient.on('message', async (topic, msg) => {
-    const record = await bucket.beginWrite(topic);
-    await record.write(msg)
-    console.log('Received message "%s" from topic "%s" is written', msg,
-        topic);
-  });
+mqttClient.on("message", async (topic, msg) => {
+  const record = await bucket.beginWrite(topic);
+  await record.write(msg);
+  console.log('Received message "%s" from topic "%s" is written', msg, topic);
+});
 ```
 
-When we call `bucket.beginWrite` we create an entry in the bucket if it doesn’t exist yet. Then we write data to the entry with the current timestamp. Now our MQTT data is safe and sound in the storage, and we can access them by using the same [**SDK**](https://js.reduct.store/).
+When we call `bucket.beginWrite` we create an entry in the bucket if it doesn’t exist yet. Then we write data to the entry with the current timestamp. Now our MQTT data is safe and sound in the storage, and we can access them by using the same [**SDK**](https://github.com/reductstore/reduct-js).
 
 ## Publish Data To MQTT Topic
 
@@ -135,36 +139,37 @@ $ mosuitto_pub -t topic-2 -m "Hello, topic-2!"
 Now you know how to get data from MQTT and write it to ReductStore, but we need a little NodejS script to read the data from the storage:
 
 ```jsx
-const {Client} = require('reduct-js');
+const { Client } = require("reduct-js");
 
-const client = new Client('http://localhost:8383');
+const client = new Client("http://localhost:8383");
 
-client.getBucket('mqtt').then(async (bucket) => {
-  for (const entry of await bucket.getEntryList()) {
-
-    for await (const record of bucket.query(entry.name)) {
-      data = await record.read();
-      console.log('Found record "%s" with timestamp "%d"', data, record.time);
+client
+  .getBucket("mqtt")
+  .then(async (bucket) => {
+    for (const entry of await bucket.getEntryList()) {
+      for await (const record of bucket.query(entry.name)) {
+        data = await record.read();
+        console.log('Found record "%s" with timestamp "%d"', data, record.time);
+      }
     }
-  }
-
-}).catch(error => console.error(error));
+  })
+  .catch((error) => console.error(error));
 ```
 
 Here, we browse all entries in the `mqtt` bucket and query all records from each entry. Reading the latest record in the entry is very easy.
 
 ```jsx
-const record  = await bucket.beginRead(entry.name);
+const record = await bucket.beginRead(entry.name);
 const data = await record.readAsString();
 ```
 
 To retrieve all the records or records within a given time interval, we can use the `query` method. This method returns an asynchronous iterator, allowing us to use a `for await` loop to iterate over the records.
 
 ```jsx
-   for await (const record of bucket.query(entry.name)) {
-      data = await record.read();
-      console.log('Found record "%s" with timestamp "%d"', data, record.time);
-   }
+for await (const record of bucket.query(entry.name)) {
+  data = await record.read();
+  console.log('Found record "%s" with timestamp "%d"', data, record.time);
+}
 ```
 
 ## Best Practices
@@ -172,9 +177,9 @@ To retrieve all the records or records within a given time interval, we can use 
 The provided usage example is quite simple and lacks many details that you may encounter in a real-world application. Here are a few pieces of advice to help you build a robust and powerful IoT application based on ReductStore and MQTT:
 
 - Create a ReductStore bucket with a FIFO quota to prevent disk overwriting in the future.
-- Use token authentication to protect your data. You can generate an access token using either the [**Web Console**](https://github.com/reductstore/web-console) or the [**CLI client**](https://cli.reduct.store/).
+- Use token authentication to protect your data. You can generate an access token using either the [**Web Console**](https://github.com/reductstore/web-console) or the [**CLI client**](https://github.com/reductstore/reduct-cli).
 - Map MQTT5 properties to ReductStore labels. This will facilitate data filtering during querying or replication.
-- Utilize [**ReductCLI**](http://cli.reduct.store/) for data replication or backup purposes.
+- Utilize [**ReductCLI**](https://github.com/reductstore/reduct-cli) for data replication or backup purposes.
 
 ## Conclusion
 
@@ -185,9 +190,10 @@ To help you better understand how to use these technologies, we've prepared an e
 ---
 
 I hope this tutorial has been helpful. If you have any questions or feedback, don’t hesitate to use the [**ReductStore Community**](https://community.reduct.store) forum.
+
 ### Links
 
 - [**ReductStore**](/docs/getting-started)
-- [**JavaScript Client SDK**](https://js.reduct.store/)
+- [**JavaScript Client SDK**](https://github.com/reductstore/reduct-js)
 - [**Mosquitto MQTT Broker**](https://mosquitto.org/)
 - [**Full example on GitHub**](https://github.com/reductstore/reduct-mqtt-example)

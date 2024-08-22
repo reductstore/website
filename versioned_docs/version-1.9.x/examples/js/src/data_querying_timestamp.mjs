@@ -1,8 +1,8 @@
-import {Client} from "reduct-js";
+import { Client } from "reduct-js";
 import assert from "node:assert";
 
 // Create a client instance, then get or create a bucket
-const client = new Client("http://127.0.0.1:8383", {apiToken: "my-token"});
+const client = new Client("http://127.0.0.1:8383", { apiToken: "my-token" });
 const bucket = await client.getOrCreateBucket("bucket");
 
 // Send a record to the "js-example" entry with the current timestamp in microseconds
@@ -22,4 +22,3 @@ console.log(`Labels: ${JSON.stringify(record.labels)}`);
 // Read the record content
 let content = await record.read();
 assert(content.toString() === "Some binary data");
-

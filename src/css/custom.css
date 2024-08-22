@@ -13,7 +13,7 @@
   --ifm-color-primary-light: #2f054f;
   --ifm-color-primary-lighter: #310653;
   --ifm-color-primary-lightest: #38065e;
-  --ifm-color-primary-hover: #3a0661; 
+  --ifm-color-primary-hover: #3a0661;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
   --reduct-button-color-primary: #d8534e;
@@ -27,7 +27,7 @@
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
+[data-theme="dark"] {
   --ifm-color-primary: #c481f7;
   --ifm-color-primary-dark: #bd73f6;
   --ifm-color-primary-darker: #b765f5;
@@ -75,7 +75,7 @@ img {
 
 /* CSS for Github icon */
 .header-github-link::before {
-  content: '';
+  content: "";
   width: 24px;
   height: 24px;
   display: flex;
@@ -92,7 +92,7 @@ img {
 /* CSS for Cookie Consent */
 #cc-main {
   --cc-modal-border-radius: 0.5rem;
-  --cc-btn-border-radius: .4rem;
+  --cc-btn-border-radius: 0.4rem;
   --cc-modal-transition-duration: 0.25s;
   --cc-modal-margin: 1rem;
   --cc-z-index: 2147483647;

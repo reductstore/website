@@ -89,7 +89,7 @@
 .responseSummaryAndArrow {
   display: flex;
   align-items: center;
-  color: #999; 
+  color: #999;
 }
 
 .responseSummary {
@@ -165,7 +165,6 @@
   background-color: #6c757d;
 }
 
-
 /* Parameter Styles */
 .parameter {
   margin-bottom: 10px;
@@ -188,7 +187,7 @@
 }
 
 .parameterRow + .parameterRow {
-  border-top-color: #e1e4e8; 
+  border-top-color: #e1e4e8;
 }
 
 .parameterName,
@@ -203,7 +202,6 @@
 }
 
 .requiredAsterisk {
-  color: #dc3545; 
+  color: #dc3545;
   margin-left: 5px;
 }
-

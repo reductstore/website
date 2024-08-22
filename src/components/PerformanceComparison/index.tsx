@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 import { PerformanceComparisonData } from "./PerformanceComparisonData";
-import useBaseUrl from '@docusaurus/useBaseUrl';
-import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from "@docusaurus/useBaseUrl";
+import ThemedImage from "@theme/ThemedImage";
 import Link from "@docusaurus/Link";
 import PerformanceComparisonTable from "../PerformanceComparisonTable";
 
@@ -23,11 +23,16 @@ export default function PerformanceComparison(): JSX.Element {
             alt="Get the Best Performance"
             sources={{
               light: useBaseUrl("/img/benefits/get_the_best_performance.webp"),
-              dark: useBaseUrl("/img/benefits/get_the_best_performance_black.webp"),
+              dark: useBaseUrl(
+                "/img/benefits/get_the_best_performance_black.webp",
+              ),
             }}
           />
           <h3>Get the Best Performance</h3>
-          <p>Outperform other databases with a customized solution for time-series object data.</p>
+          <p>
+            Outperform other databases with a customized solution for
+            time-series object data.
+          </p>
         </div>
       </div>
       <div className="col col--4">
@@ -37,7 +42,7 @@ export default function PerformanceComparison(): JSX.Element {
               key={tab}
               className={clsx(
                 "tabs__item",
-                activeTab === tab && "tabs__item--active"
+                activeTab === tab && "tabs__item--active",
               )}
               onClick={() => setActiveTab(tab)}
             >
@@ -48,10 +53,15 @@ export default function PerformanceComparison(): JSX.Element {
         <div className={styles.tabContent}>
           <>
             {activeTab && (
-              <PerformanceComparisonTable data={PerformanceComparisonData[activeTab]} />
+              <PerformanceComparisonTable
+                data={PerformanceComparisonData[activeTab]}
+              />
             )}
             <p>
-              <Link to={PerformanceComparisonData[activeTab].url}>See the full {PerformanceComparisonData[activeTab].title} benchmark.</Link>
+              <Link to={PerformanceComparisonData[activeTab].url}>
+                See the full {PerformanceComparisonData[activeTab].title}{" "}
+                benchmark.
+              </Link>
             </p>
           </>
         </div>

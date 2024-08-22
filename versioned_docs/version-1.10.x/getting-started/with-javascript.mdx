@@ -14,12 +14,14 @@ import DataIngestionSection from "./common/data_ingestion";
 import DataQueryingSection from "./common/data_querying";
 import NextStep from "./common/next_steps.mdx";
 
-
 <head>
-    <link rel="canonical" href="https://www.reduct.store/docs/getting-started/with-javascript"/>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/getting-started/with-javascript"
+  />
 </head>
 
-<Intro language="JavaScript" repository="reduct-js"/>
+<Intro language="JavaScript" repository="reduct-js" />
 
 ## Installing the JavaScript SDK
 
@@ -30,15 +32,16 @@ import NextStep from "./common/next_steps.mdx";
     ```
     npm install reduct-js
     ```
+
 </InstallSdk>
 
 ## Running ReductStore
 
-<RunReductStore/>
+<RunReductStore />
 
 ## Hello World Example
 
-<UsingSdkSection example={QuickStart} language="JavaScript"/>
+<UsingSdkSection example={QuickStart} language="JavaScript" />
 
 ## Creating a Client
 
@@ -48,6 +51,7 @@ import NextStep from "./common/next_steps.mdx";
 
     ```javascript file=../examples/js/src/quick_start.mjs start=1. end=2.
     ```
+
 </CreateClientSection>
 
 ## Creating a Bucket
@@ -59,6 +63,7 @@ import NextStep from "./common/next_steps.mdx";
 
     ```javascript file=../examples/js/src/quick_start.mjs start=2. end=3.
     ```
+
 </CreateBucketSection>
 
 ## Data Ingestion
@@ -73,6 +78,7 @@ import NextStep from "./common/next_steps.mdx";
     ```
 
     Pay attention that the time is a UNIX time in microseconds. This the reason why we use BigInt to represent it.
+
 </DataIngestionSection>
 
 ## Data Querying
@@ -84,8 +90,9 @@ import NextStep from "./common/next_steps.mdx";
 
     ```javascript file=../examples/js/src/quick_start.mjs start=4.
     ```
+
 </DataQueryingSection>
 
 ## Next Steps
 
-<NextStep/>
+<NextStep />

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import styles from './styles.module.css';
-import { useForm, ValidationError } from '@formspree/react';
-import clsx from 'clsx';
-import Link from '@docusaurus/Link';
+import React, { useState } from "react";
+import styles from "./styles.module.css";
+import { useForm, ValidationError } from "@formspree/react";
+import clsx from "clsx";
+import Link from "@docusaurus/Link";
 
-const whitePaperUrl = require("@site/static/pdf/whitepaper/ReductStore_WhitePaper.pdf").default;
+const whitePaperUrl =
+  require("@site/static/pdf/whitepaper/ReductStore_WhitePaper.pdf").default;
 
 export default function WhitePaperForm() {
   const [state, handleSubmit] = useForm("xleylpzp");
@@ -13,9 +14,9 @@ export default function WhitePaperForm() {
   const downloadWhitePaper = () => {
     if (!downloadInitiated) {
       setDownloadInitiated(true);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = whitePaperUrl;
-      link.download = 'ReductStore_WhitePaper.pdf';
+      link.download = "ReductStore_WhitePaper.pdf";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -28,13 +29,25 @@ export default function WhitePaperForm() {
       <div className="alert alert--success">
         <h2>Thank you for your interest!</h2>
         <p>Your white paper download should start shortly.</p>
-        <p>If the download does not start, <strong><Link to={whitePaperUrl} target="_blank">click here</Link></strong> to download it manually.</p>
+        <p>
+          If the download does not start,{" "}
+          <strong>
+            <Link to={whitePaperUrl} target="_blank">
+              click here
+            </Link>
+          </strong>{" "}
+          to download it manually.
+        </p>
       </div>
     );
   }
 
   return (
-    <form id="whitepaper-form" className={styles.whitePaperForm} onSubmit={handleSubmit}>
+    <form
+      id="whitepaper-form"
+      className={styles.whitePaperForm}
+      onSubmit={handleSubmit}
+    >
       <div className={styles.inputGroup}>
         <label htmlFor="InputNameWhitePaper">Your Name</label>
         <input
@@ -58,7 +71,11 @@ export default function WhitePaperForm() {
           required
           className={styles.inputField}
         />
-        <ValidationError prefix="Company" field="company" errors={state.errors} />
+        <ValidationError
+          prefix="Company"
+          field="company"
+          errors={state.errors}
+        />
       </div>
 
       <div className={styles.inputGroup}>
@@ -82,13 +99,10 @@ export default function WhitePaperForm() {
         >
           Download
         </button>
-        <div className={clsx("row", styles.privacyPolicy)} >
+        <div className={clsx("row", styles.privacyPolicy)}>
           <p>
             We'll never share your email with anyone else. See our&nbsp;
-            <Link
-              to="/privacy"
-              target="_blank"
-            >
+            <Link to="/privacy" target="_blank">
               Privacy Policy
             </Link>
           </p>
