@@ -243,8 +243,8 @@ const config = {
                 to: "/docs/getting-started",
               },
               {
-                label: "Remote Datasets",
-                to: "/remote-datasets",
+                label: "Playground Datasets",
+                to: "/datasets",
               },
               {
                 label: "Source Code",
@@ -366,6 +366,10 @@ const config = {
               {
                 label: "HTTP API Reference",
                 href: "/docs/http-api",
+              },
+              {
+                label: "Playground Datasets",
+                to: "/datasets",
               },
               {
                 label: "Download",
