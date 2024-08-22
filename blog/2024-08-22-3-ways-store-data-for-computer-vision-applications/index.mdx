@@ -53,7 +53,7 @@ This is a more flexible approach than a simple file system and has some advantag
 Unfortunately, this solution is also not perfect.
 
 - **Data Reduction**. We have more space for our data, but we still don’t have any solution to remove old data.
-- **Data Accessibility**. The data in the object storage mirrors the structure of a file system, which can lead to similar accessibility issues. Furthermore, it can be slower due to the use of an HTTP layer. Each read and write operation to S3-storage requires a dedicated HTTP request, which may be inefficient for small objects.
+- **Data Accessibility**. The data in the object storage mirrors the structure of a file system, which can lead to similar accessibility issues. Furthermore, it can be slower due to the use of an HTTP layer. Each read and write operation to S3-storage requires a dedicated HTTP request, which [**may be inefficient for small objects**](/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio).
 
 An S3-like storage system may initially appear more promising than a simple file system. However, its tree-like data organization can lead to issues. Eventually, it may fail to meet your needs, necessitating the development of complex software to overcome these limitations. For example, you might need to integrate an additional time-series database to improve search capabilities. We have previously discussed this **[alternative](https://www.reduct.store/blog/comparison/iot/reductstore-benchmark)**, and it's clear that it has its own drawbacks.
 
@@ -63,7 +63,11 @@ An S3-like storage system may initially appear more promising than a simple file
 
 ![ReductStore Usage](./img/reductStore-usage.png)
 
-As you can see, the structure of our application is similar to when using an S3-like storage system, but it works differently. Instead of storing blobs individually, it preallocates blocks of fixed size and writes multiple blobs to each block. This is a more efficient way to write and store data, especially when dealing with small blobs. This approach has the following advantages:
+As you can see, instead of a tree-like structure, it has a flat structure of entries where data is batched and partitioned into blocks. This approach is more efficient for writing because we can pre-allocate a block for future records, and it's also better for querying data over time intervals because we don't need to look up records in time order.
+
+Another very important feature of ReductStore is that it provides data labeling so that you can store the image and the results of the model together. This is a more advanced approach because the labels can be used for data filtering.
+
+Let's summarize the benefits of using ReductStore:
 
 - **Data Accessibility**. ReductStore utilizes record timestamps as unique identifiers and provides an HTTP API for convenient data access based on timestamp or time interval. It also batches smaller objects into a larger HTTP request, which is crucial for networks with high latency.
 - **Data Reduction**. We can specify a quota for each bucket, so that the storage engine starts deleting old data when the bucket size reaches the quota.
@@ -75,9 +79,10 @@ As you can see, the structure of our application is similar to when using an S3-
 
 All the approaches to storing historical data for images that we have discussed in this post have their own strengths and weaknesses, and can be useful in different situations. For example, using a file system can be a simple and effective way to store data during the prototyping or proof of concept stage of a computer vision application. It is easy to set up and use, and does not require any additional components or infrastructure. However, it may not be the most efficient or scalable solution in the long term.
 
-Using an S3-like object storage system can be a good option if you already have this type of infrastructure in place, and if you need to store large amounts of data or access data from multiple locations. It provides many benefits and advantages, such as scalability, durability, and security, which can make it a good choice for many different applications. However, it may require additional setup and configuration, and may be more complex to use than a file system.
+Using an S3-like object storage system can be a good option if you already have this type of infrastructure in place and you need to store large amounts of data or access data from multiple locations. It offers many benefits and advantages, such as scalability, durability, and security, which can make it a good choice for many different applications. However, you may encounter performance issues when writing and reading small objects because each read/write operation is a separate HTTP request.
 
 ReductStore is a specialized time series database for blobs of data in AI/ML applications and edge computing. It is designed to address the challenges of data reduction and availability. It is a good option if you need to store data on an edge device, and if you want to use advanced features such as a real-time disk quota and high performance.
+
 
 ---
 
