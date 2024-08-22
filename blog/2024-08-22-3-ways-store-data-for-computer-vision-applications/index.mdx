@@ -3,9 +3,9 @@ title: "3 Ways to Store Computer Vision Data"
 description: "Learn how to store data in computer vision applications by using ReductStore, S3-like storage or a file system."
 authors: alexey
 tags: [tutorials, computer vision]
-slug: tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications
-date: 2024-02-16
-image: ./img/reductStore-usage.jpeg
+slug: tutorials/computer-vision/3-ways-store-data-for-computer-vision-applications
+date: 2024-08-22
+image: ./img/reductStore-usage.png
 ---
 
 When it comes to computer vision, data storage is a critical component. You need to be able to store images for model training, as well as the results of the processing for model validation. There are a few ways to go about this, each with its own advantages and disadvantages. In this post, we’ll take a look at three different ways to store data in computer vision applications: a file system, an S3-like object storage and **[ReductStore](https://reduct.store/)**. We’ll also discuss some of the pros and cons of each option.
@@ -14,7 +14,7 @@ When it comes to computer vision, data storage is a critical component. You need
 
 For demonstration purposes, we’ll use a simple computer vision application which is connected to a CV camera and runs on an edge device:
 
-![Computer Vision Application](./img/computer-vision-application.jpeg)
+![Computer Vision Application](./img/computer-vision-application.png)
 
 The camera driver captures images from the CV camera every second and forwards them to the model, which then detects objects and displays the results in the user interface.
 
@@ -26,7 +26,7 @@ Your images and results need to be stored for training and validation purposes. 
 
 If an application needs to save an image from a CV camera, it can simply save it on a hard drive. We can use a timestamp as a unique identifier, and organize folders and files so that we can access it later via a time interval.
 
-![File System Usage](./img/file-system-usage.jpeg)
+![File System Usage](./img/file-system-usage.png)
 
 One advantage of this method is that it is very simple. You don’t need any additional components for your system. However, it also has a few drawbacks.
 
@@ -42,7 +42,7 @@ As evident, the file system is a straightforward solution. However, with new req
 
 A more advanced approach is to use an object storage system for images. This allows us to organize our data in the storage engine just like folders and files, but access and manage it using an HTTP API.
 
-![S3-like Storage Usage](./img/s3-like-storage-usage.jpeg)
+![S3-like Storage Usage](./img/s3-like-storage-usage.png)
 
 This is a more flexible approach than a simple file system and has some advantages:
 
@@ -61,7 +61,7 @@ An S3-like storage system may initially appear more promising than a simple file
 
 **[ReductStore](https://www.reduct.store/)** is a time series database for keeping a history of unstructured data. It is designed to solve the problem of data reduction and availability for AI/ML applications, where we have data of various sizes and formats continuously coming from data sources.
 
-![ReductStore Usage](./img/reductStore-usage.jpeg)
+![ReductStore Usage](./img/reductStore-usage.png)
 
 As you can see, the structure of our application is similar to when using an S3-like storage system, but it works differently. Instead of storing blobs individually, it preallocates blocks of fixed size and writes multiple blobs to each block. This is a more efficient way to write and store data, especially when dealing with small blobs. This approach has the following advantages:
 
