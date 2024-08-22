@@ -9,7 +9,7 @@ export default function RemoteDatasetsPage(): JSX.Element {
   return (
     <Layout
       title="Playground Datasets"
-      description="Explore various image datasets hosted in ReductStore’s Time Series Object Store. Access IMDB reviews, cat images, and MNIST digits in this interactive demo."
+      description="Explore various image datasets hosted in ReductStore's Time Series Object Store. Access IMDB reviews, cat images, and MNIST digits in this interactive demo."
     >
       <main>
         <SimpleHeader pageTitle="Playground Datasets" />
