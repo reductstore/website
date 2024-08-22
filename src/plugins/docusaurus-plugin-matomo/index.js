@@ -20,7 +20,7 @@ module.exports = function (context) {
         : matomo.devSuffix || "_dev";
 
   return {
-    name: "docusaurus-plugin-crisp",
+    name: "docusaurus-plugin-matomo",
 
     injectHtmlTags() {
       return {
