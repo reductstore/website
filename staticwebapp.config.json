@@ -231,7 +231,7 @@
     },
     {
       "route": "/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications",
-      "redirect": "/blog/tutorials/computer-vision/3-ways-store-data-for-computer-vision-applications",
+      "redirect": "/blog/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications",
       "statusCode": 301
     }
   ]
