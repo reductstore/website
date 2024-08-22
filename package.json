@@ -12,7 +12,9 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "fmt": "prettier --write .",
+    "fmt:check": "prettier --check ."
   },
   "dependencies": {
     "@algolia/client-search": "^4.20.0",
@@ -53,7 +55,10 @@
     "@docusaurus/tsconfig": "^3.0.1",
     "@docusaurus/types": "^3.0.1",
     "remark-code-snippets": "^1.1.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "prettier": "^3.2.5",
+    "eslint": "^8.13.0",
+    "eslint-config-prettier": "^9.1.0"
   },
   "browserslist": {
     "production": [
