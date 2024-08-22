@@ -10,7 +10,7 @@ module.exports = function (context) {
   }
 
   return {
-    name: "docusaurus-plugin-matomo",
+    name: "docusaurus-plugin-crisp",
 
     injectHtmlTags() {
       return {
