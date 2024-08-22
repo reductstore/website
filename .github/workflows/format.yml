@@ -19,4 +19,4 @@ jobs:
         run: yarn install
 
       - name: Check format
-        run: yarn run format:check
+        run: yarn run fmt:check
