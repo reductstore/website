@@ -1,8 +1,6 @@
-name: Check Links
+name: Check Format
 
 on:
-  schedule:
-    - cron: "00 18 * * *"
   push:
     branches:
       - main
@@ -17,8 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Link Checker
-        id: lychee
-        uses: lycheeverse/lychee-action@v1
-        with:
-           args: . --config lychee.toml
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Check format
+        run: yarn run format:check
