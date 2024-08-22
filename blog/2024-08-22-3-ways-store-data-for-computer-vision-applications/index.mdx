@@ -71,7 +71,7 @@ Let's summarize the benefits of using ReductStore:
 
 - **Data Accessibility**. ReductStore utilizes record timestamps as unique identifiers and provides an HTTP API for convenient data access based on timestamp or time interval. It also [**batches smaller objects**](/docs/guides/data-querying#concepts) into a larger HTTP request, which is crucial for networks with high latency.
 - **Data Reduction**. We can specify a quota for each bucket, so that the storage engine starts deleting old data when the bucket size reaches the quota.
-- **Labeling.**  We can label data and use these labels as [**annotations**](/docs/guides/data-ingestion#annotating-data) and [**search criteria**](/docs/guides/data-replication).
+- **Labeling.**  We can label data and use these labels as [**annotations**](/docs/guides/data-ingestion#annotating-data) and [**search criteria**](/docs/guides/data-querying#using-labels-to-filter-data).
 - **Security**. Like with object storage, we can access data with different permissions.
 - **Data Replication**. Since **[version 1.8](https://www.reduct.store/blog/news/reductstore-8-released)**, it supports append-only [**data replication**](/docs/guides/data-replication), allowing you to automatically stream data from one instance to another. Furthermore, you can conditionally replicate data using labels.
 
