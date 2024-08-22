@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./styles.module.css";
-import Link from '@docusaurus/Link';
-import clsx from 'clsx';
+import Link from "@docusaurus/Link";
+import clsx from "clsx";
 
 interface UseCase {
   title: string;
@@ -10,8 +10,11 @@ interface UseCase {
   image?: string;
 }
 
-export default function UseCaseCards({ useCases }: { useCases: UseCase[] }): JSX.Element {
-
+export default function UseCaseCards({
+  useCases,
+}: {
+  useCases: UseCase[];
+}): JSX.Element {
   return (
     <>
       {useCases.map((useCase, index) => (
@@ -32,7 +35,10 @@ export default function UseCaseCards({ useCases }: { useCases: UseCase[] }): JSX
             <p>{useCase.description}</p>
           </div>
           <div className="card__footer">
-            <Link to={useCase.link} className="button button--primary button--block">
+            <Link
+              to={useCase.link}
+              className="button button--primary button--block"
+            >
               Learn More &rarr;
             </Link>
           </div>

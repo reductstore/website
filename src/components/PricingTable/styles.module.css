@@ -2,7 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 2em; 
+  gap: 2em;
   align-items: flex-start;
 }
 
@@ -22,7 +22,6 @@
   flex-direction: column;
   height: 100%;
   align-items: left;
-
 }
 
 .categorySeparator {
@@ -48,7 +47,8 @@
   margin-bottom: 15px;
 }
 
-.categoryTitle, .categoryDescription {
+.categoryTitle,
+.categoryDescription {
   display: flex;
   align-items: center;
   margin-bottom: 5px;
@@ -85,7 +85,7 @@
 }
 
 .error .errorMessage {
-  display: block; 
+  display: block;
   margin-bottom: -2em;
 }
 

@@ -5,11 +5,14 @@ description: Complete guide to authentication, access control and token manageme
 ---
 
 import CodeBlock from "@theme/CodeBlock";
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 <head>
-    <link rel="canonical" href="https://www.reduct.store/docs/guides/access-control"/>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/guides/access-control"
+  />
 </head>
 
 # Access Control
@@ -33,16 +36,16 @@ If you don't need access control, you can disable token authentication by leavin
 
 Each token has a set of permissions that define what actions can be performed with the token:
 
-* `full_access`: Allows a client to perform any action on the API without any restrictions.
+- `full_access`: Allows a client to perform any action on the API without any restrictions.
 
-* `read`: Allows a client to read data from specific buckets. The list of buckets that can be accessed for reading is defined when the token is created.
+- `read`: Allows a client to read data from specific buckets. The list of buckets that can be accessed for reading is defined when the token is created.
 
-* `write`: Allows a client to write data to specific buckets, which includes adding new entries or deleting existing ones. The list of buckets that can be accessed for writing is defined when the token is created.
+- `write`: Allows a client to write data to specific buckets, which includes adding new entries or deleting existing ones. The list of buckets that can be accessed for writing is defined when the token is created.
 
 The table below shows the list of operations that can be performed for different permissions:
 
 | Operation                | Anonymous          | No permissions     | Read               | Write              | Full Access        |
-|--------------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
+| ------------------------ | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ |
 | Alive check              | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Server Status            | :x:                | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | List Buckets             | :x:                | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
@@ -67,11 +70,9 @@ Note that all the examples are written for a local ReductStore instance availabl
 
 For more information on setting up a local ReductStore instance, see the **[Getting Started](/docs/getting-started/index.mdx)** guide.
 
-
 ### Creating a Token
 
 An access token can be created using the SDKs, CLI client, Web Console, or REST API. The token name must be unique within the store, and a client must have full access permission. You can also provision a token using environment variables. See the examples below:
-
 
 import CreatTokenCLI from "!!raw-loader!../examples/cli/access_control_create_token.sh";
 import CreateTokenPy from "!!raw-loader!../examples/py/src/access_control_create_token.py";
@@ -135,13 +136,12 @@ import CreateTokenProvisioned from "!!raw-loader!../examples/provisioning/access
             {CreateTokenProvisioned}
         </CodeBlock>
     </TabItem>
-</Tabs>
 
+</Tabs>
 
 :::info
 The token value is generated when the token is created and is only available at that time.
 :::
-
 
 ### Browsing Tokens
 
@@ -153,7 +153,6 @@ import BrowseTokensJs from "!!raw-loader!../examples/js/src/access_control_brows
 import BrowseTokensRust from "!!raw-loader!../examples/rs/examples/access_control_browse_tokens.rs";
 import BrowseTokensCpp from "!!raw-loader!../examples/cpp/src/access_control_browse_tokens.cc";
 import BrowseTokensCurl from "!!raw-loader!../examples/curl/access_control_browse_tokens.sh";
-
 
 <Tabs>
     <TabItem value="CLI">
@@ -196,6 +195,7 @@ import BrowseTokensCurl from "!!raw-loader!../examples/curl/access_control_brows
             {BrowseTokensCurl}
         </CodeBlock>
     </TabItem>
+
 </Tabs>
 
 ### Removing a Token
@@ -259,4 +259,5 @@ import RemoveTokenCurl from "!!raw-loader!../examples/curl/access_control_remove
             {RemoveTokenCurl}
         </CodeBlock>
     </TabItem>
+
 </Tabs>

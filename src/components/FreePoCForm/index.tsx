@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import styles from './styles.module.css';
-import { useForm, ValidationError } from '@formspree/react';
+import React, { useState } from "react";
+import styles from "./styles.module.css";
+import { useForm, ValidationError } from "@formspree/react";
 import Link from "@docusaurus/Link";
 import clsx from "clsx";
-import CountdownTimer from '../CountdownTimer';
+import CountdownTimer from "../CountdownTimer";
 
 interface FreePoCFormProps {
   elementId: string;
@@ -11,18 +11,24 @@ interface FreePoCFormProps {
   startDate?: Date;
 }
 
-const FreePoCForm = ({ elementId, targetDate, startDate }: FreePoCFormProps) => {
-  const [state, handleSubmit] = useForm('myyraooa');
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [companyName, setcompanyName] = useState('');
+const FreePoCForm = ({
+  elementId,
+  targetDate,
+  startDate,
+}: FreePoCFormProps) => {
+  const [state, handleSubmit] = useForm("myyraooa");
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [companyName, setcompanyName] = useState("");
 
   if (state.succeeded) {
     return (
-
       <div className={clsx(styles.form, "alert alert--success")}>
         <h2>Thank You!</h2>
-        <p>We've received your request for a Proof of Concept. A member of our team will get back to you soon.</p>
+        <p>
+          We've received your request for a Proof of Concept. A member of our
+          team will get back to you soon.
+        </p>
       </div>
     );
   }
@@ -30,13 +36,18 @@ const FreePoCForm = ({ elementId, targetDate, startDate }: FreePoCFormProps) => 
   return (
     <form id={elementId} className={styles.form} onSubmit={handleSubmit}>
       <h2>Request a Proof of Concept</h2>
-      {targetDate && startDate &&
+      {targetDate && startDate && (
         <div className={styles.countdown}>
-          <CountdownTimer targetDate={targetDate} startDate={startDate} size={45} />
+          <CountdownTimer
+            targetDate={targetDate}
+            startDate={startDate}
+            size={45}
+          />
         </div>
-      }
+      )}
       <p>
-        Our team will reach out to you and we will create a custom software integration for your project.
+        Our team will reach out to you and we will create a custom software
+        integration for your project.
       </p>
 
       <div className={styles.inputGroup}>
@@ -64,7 +75,11 @@ const FreePoCForm = ({ elementId, targetDate, startDate }: FreePoCFormProps) => 
           placeholder="Your Company"
           required
         />
-        <ValidationError prefix="Company" field="company" errors={state.errors} />
+        <ValidationError
+          prefix="Company"
+          field="company"
+          errors={state.errors}
+        />
       </div>
 
       <div className={styles.inputGroup}>

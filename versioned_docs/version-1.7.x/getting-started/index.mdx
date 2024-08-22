@@ -28,7 +28,7 @@ curl http://127.0.0.1:8383/api/v1/info
 
 ## Pre-built Binaries
 
-You can use pre-built binaries for Linux, macOS or Windows operating systems. Download a binary for your OS and platform from [**GitHub release page**](https://github.com/reductstore/reductstore/releases/latest).  Extract the file and then type the commands:
+You can use pre-built binaries for Linux, macOS or Windows operating systems. Download a binary for your OS and platform from [**GitHub release page**](https://github.com/reductstore/reductstore/releases/latest). Extract the file and then type the commands:
 
 On Windows:
 
@@ -47,8 +47,8 @@ RS_DATA_PATH=./data ./reductstore
 
 **Build Requirements:**
 
-* Minimal Rust version: 1.70
-* Protobuf 3.17.3 or later
+- Minimal Rust version: 1.70
+- Protobuf 3.17.3 or later
 
 You can also install the database with cargo:
 
@@ -57,7 +57,6 @@ sudo apt install protobuf-compiler
 cargo install reductstore
 RS_DATA_PATH=./data reductstore
 ```
-
 
 ## Snap
 
@@ -81,10 +80,9 @@ API Token: reductstore
 
 Now the database needs to ingest data. Take one of the officially supported SDKs:
 
-* [**For Rust**](https://github.com/reductstore/reduct-rs)
-* [**For Python**](https://github.com/reductstore/reduct-py)
-* [**For JavaScript/NodeJS/TypeScript**](https://github.com/reductstore/reduct-js)
-* [**For C++**](https://github.com/reductstore/reduct-cpp)
+- [**For Rust**](https://github.com/reductstore/reduct-rs)
+- [**For Python**](https://github.com/reductstore/reduct-py)
+- [**For JavaScript/NodeJS/TypeScript**](https://github.com/reductstore/reduct-js)
+- [**For C++**](https://github.com/reductstore/reduct-cpp)
 
 If you can't find your programming language in the list, you can still use [**the ReductStore HTTP API**](http-api/) or ping us. If you are serious about using it, we can help you with integration.
-

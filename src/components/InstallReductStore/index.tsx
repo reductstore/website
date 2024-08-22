@@ -5,10 +5,10 @@ import clsx from "clsx";
 import styles from "./styles.module.css";
 
 import DockerInstall from "./DockerInstall";
-import LinuxInstall from './LinuxInstall';
-import MacOSInstall from './MacOSInstall';
-import WindowsInstall from './WindowsInstall';
-import AzureInstall from './AzureInstall';
+import LinuxInstall from "./LinuxInstall";
+import MacOSInstall from "./MacOSInstall";
+import WindowsInstall from "./WindowsInstall";
+import AzureInstall from "./AzureInstall";
 
 export default function InstallReductStore(props): JSX.Element {
   const [activeTab, setActiveTab] = useState("docker");
@@ -22,7 +22,7 @@ export default function InstallReductStore(props): JSX.Element {
             key={tab}
             className={clsx(
               "tabs__item",
-              activeTab === tab && "tabs__item--active"
+              activeTab === tab && "tabs__item--active",
             )}
             onClick={() => setActiveTab(tab)}
           >
@@ -32,10 +32,10 @@ export default function InstallReductStore(props): JSX.Element {
       </ul>
       <div className={styles.tabContent}>
         {activeTab === "docker" && <DockerInstall />}
-        {activeTab === 'linux' && <LinuxInstall {...props} />}
-        {activeTab === 'macOs' && <MacOSInstall {...props} />}
-        {activeTab === 'windows' && <WindowsInstall {...props} />}
-        {activeTab === 'azure' && <AzureInstall />}
+        {activeTab === "linux" && <LinuxInstall {...props} />}
+        {activeTab === "macOs" && <MacOSInstall {...props} />}
+        {activeTab === "windows" && <WindowsInstall {...props} />}
+        {activeTab === "azure" && <AzureInstall />}
       </div>
     </>
   );

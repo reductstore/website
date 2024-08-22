@@ -10,7 +10,6 @@ image: ./img/benchmark_results.png
 
 ![Benchmark Results](img/benchmark_results.webp)
 
-
 In [**How to Store Vibration Sensor Data | Part 1**](/blog/how-to-store-vibration-sensor-data), we discussed the importance of efficiently storing both **raw vibration data** and **pre-processed metrics**, and the benefits of using time-series databases such as ReductStore. We explored best practices for setting up a time-series database and implementing data retention policies to effectively manage high-frequency sensor data.
 
 In [**How to Store Vibration Sensor Data | Part 2**](/blog/how-to-store-vibration-sensor-data/part-2), we provided a practical example of how to use ReductStore to store and query vibration sensor readings. We also showed how to store vibration sensor values in **1-second chunks**, each packaged as **binary data**, to optimize the storage process when dealing with high-frequency data such as vibration or acoustic measurements.
@@ -67,7 +66,7 @@ In contrast, **ReductStore**'s storage approach allows it to handle high-frequen
 
 ## Practical Implications for Real-World Applications
 
-The performance results from this benchmark offer valuable insight into how **ReductStore** and **InfluxDB** perform in real-world scenarios. Each database has its strengths, depending on the nature of the data and the application requirements. 
+The performance results from this benchmark offer valuable insight into how **ReductStore** and **InfluxDB** perform in real-world scenarios. Each database has its strengths, depending on the nature of the data and the application requirements.
 
 ### InfluxDB for Traditional Time-Series Applications
 
@@ -92,36 +91,38 @@ When it comes to handling time-series unstructured data, ReductStore is the obvi
 To optimize the performance of your IoT applications using ReductStore, here are some best practices to consider:
 
 - **Set quotas to prevent storage overflows**: Create a ReducStore bucket with a **[FIFO quota](/docs/guides/buckets#quota-type)** (First In, First Out) on edge devices to prevent space from running out. This ensures that older, less important data is automatically deleted as new data arrives, making disk space management more efficient.
-  
 - **Enable token authentication for data security**: Protect your data with token-based authentication. You can generate access tokens using the ReductStore **[Web Console](https://github.com/reductstore/web-console)** or **[CLI Client](https://github.com/reductstore/reduct-cli)**. This feature ensures secure access to your stored sensor data and prevents unauthorized users from accessing sensitive information.
 
 - **Use metadata labels to filter data**: Store labels with each record to provide additional context for your time series data. This allows you to filter data based on key metrics (such as high RMS or peak-to-peak values) during queries or replication processes for more targeted data management.
 
 - **Use Reducer CLI for replication and backup**: Use the **[CLI Client](https://github.com/reductstore/reduct-cli)** to automate data replication across multiple ReductStore instances or to backup critical sensor data. This ensures that high-priority data is securely duplicated or stored for future analysis, reducing the risk of data loss.
 
-
 ## Conclusion
 
 The benchmark results show a clear difference between **ReductStore** and **InfluxDB** when handling vibration sensor data, especially at high frequencies.
 
-**ReductStore** consistently outperforms InfluxDB in both read and write performance, maintaining stable and efficient data management across all frequencies tested. 
+**ReductStore** consistently outperforms InfluxDB in both read and write performance, maintaining stable and efficient data management across all frequencies tested.
 Its ability to handle unstructured time series data without significant performance degradation makes it an ideal choice for applications that require **real-time data processing** of vibration data, such as predictive maintenance and industrial IoT systems.
 
-On the other hand, while **InfluxDB** remains a solid choice for many time-series use cases, its performance suffers as data frequency increases. 
+On the other hand, while **InfluxDB** remains a solid choice for many time-series use cases, its performance suffers as data frequency increases.
 For applications involving high-frequency sensor data, **InfluxDB** can introduce bottlenecks that can limit its effectiveness in such demanding environments.
 
 ## Frequently Asked Questions (FAQs)
 
 ### Can ReductStore handle other types of sensor data besides vibration data?
+
 Yes, ReductStore is designed to efficiently manage any unstructured time series data, making it suitable for a wide range of applications. Whether you're storing audio samples, video frames, geospatial data, or log files in a time-series format, ReductStore's optimized storage mechanism ensures fast access to data without compromising performance.
 
-### Can InfluxDB be tuned for better performance on high-frequency data?  
+### Can InfluxDB be tuned for better performance on high-frequency data?
+
 While InfluxDB can be optimized through configuration changes and additional hardware resources, its performance will still lag behind ReductStore when handling extremely high frequency data such as vibration measurements. This is due to the way data is stored and queried point-by-point in InfluxDB versus ReductStore's binary time-series storage, where it is more efficient to pack and retrieve data in binary chunks.
 
-### How does ReductStore handle data replication?  
+### How does ReductStore handle data replication?
+
 ReductStore provides built-in replication capabilities that allow you to **replicate data across multiple instances** or set up automated backups. You can configure replication tasks using the ReductStore CLI or Web Console, ensuring that critical data is securely duplicated.
 
 ### What are the system requirements for running ReductStore?
+
 ReductStore is designed to be lightweight and efficient, making it suitable for a wide range of hardware configurations. It can run on **low-power edge devices** as well as **high-performance servers**, depending on your application requirements. For optimal performance, we recommend running ReductStore on a system with an SSD drive or NVMe storage to ensure fast read and write speeds.
 
 ---

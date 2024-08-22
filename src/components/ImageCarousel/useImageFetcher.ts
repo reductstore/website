@@ -1,16 +1,27 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Client } from "reduct-js";
 import debounce from "lodash/debounce";
-import { DatasetInfo, ImageWithLabelsItem, PlayServerContextType } from "./ImageCarousel.types";
+import {
+  DatasetInfo,
+  ImageWithLabelsItem,
+  PlayServerContextType,
+} from "./ImageCarousel.types";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
-export const useImageFetcher = (dataset: string, start: number, num_images: number, allowed_datasets: string[]) => {
+export const useImageFetcher = (
+  dataset: string,
+  start: number,
+  num_images: number,
+  allowed_datasets: string[],
+) => {
   const { siteConfig } = useDocusaurusContext();
   const { themeConfig } = siteConfig;
   const playServer = themeConfig.playServer as PlayServerContextType;
 
   const [datasets, setDatasets] = useState<DatasetInfo[]>([]);
-  const [imagesWithLabels, setImagesWithLabels] = useState<ImageWithLabelsItem[]>([]);
+  const [imagesWithLabels, setImagesWithLabels] = useState<
+    ImageWithLabelsItem[]
+  >([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -25,18 +36,20 @@ export const useImageFetcher = (dataset: string, start: number, num_images: numb
       const bucket = await client.getBucket(playServer.bucket);
       const entries = await bucket.getEntryList();
       const availableDatasets = entries.filter(
-        (entry) => entry.recordCount > 0 && allowed_datasets.includes(entry.name)
+        (entry) =>
+          entry.recordCount > 0 && allowed_datasets.includes(entry.name),
       );
 
       setDatasets(
         availableDatasets.map(({ name, recordCount }) => ({
           name,
           recordCount: Number(recordCount),
-        }))
+        })),
       );
     } catch (error) {
-      const errorMessage = `Error fetching bucket info: ${(error as Error).message
-        }`;
+      const errorMessage = `Error fetching bucket info: ${
+        (error as Error).message
+      }`;
       console.error(errorMessage);
       setError(errorMessage);
     }
@@ -72,7 +85,7 @@ export const useImageFetcher = (dataset: string, start: number, num_images: numb
       for await (const record of bucket.query(
         dataset,
         BigInt(start),
-        BigInt(stop)
+        BigInt(stop),
       )) {
         if (signal.aborted) {
           throw new Error("Request aborted");
@@ -86,7 +99,7 @@ export const useImageFetcher = (dataset: string, start: number, num_images: numb
         newImagesWithLabels.push({ url: imageUrl, labels });
       }
 
-      imageUrlsRef.current = newImagesWithLabels.map(img => img.url);
+      imageUrlsRef.current = newImagesWithLabels.map((img) => img.url);
       setImagesWithLabels(newImagesWithLabels);
     } catch (error) {
       if ((error as Error).message !== "Request aborted") {
@@ -99,10 +112,9 @@ export const useImageFetcher = (dataset: string, start: number, num_images: numb
     }
   }, [dataset, start, revokeImageUrls]);
 
-  const debouncedFetchImages = useCallback(
-    debounce(fetchImages, 100),
-    [fetchImages]
-  );
+  const debouncedFetchImages = useCallback(debounce(fetchImages, 100), [
+    fetchImages,
+  ]);
 
   useEffect(() => {
     debouncedFetchImages();

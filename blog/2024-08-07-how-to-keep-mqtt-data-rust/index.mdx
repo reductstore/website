@@ -10,7 +10,6 @@ image: ./img/diagram.png
 
 ![MQTT+ReductStore in Rust](./img/diagram.png)
 
-
 The MQTT protocol is an easy way to connect different data sources to applications. This makes it very popular for IoT (Internet of Things) applications. Some MQTT brokers can store messages for a while, even when the MQTT client is offline. However, sometimes you need to keep this data for a longer period of time. In these cases it's a good idea to use a time series database.
 
 There are many time series databases available, but if you need to store a history of images, **[vibration sensor data](/use-cases/vibration-sensors)** or protobuf messages, you might want to use ReductStore. This database is designed to store a lot of blob data and works well with IoT and edge computing.
@@ -20,7 +19,6 @@ There are many time series databases available, but if you need to store a histo
 Let's build a simple MQTT application to see how it all works.
 
 {/* truncate */}
-
 
 ## Prerequisites
 
@@ -38,7 +36,7 @@ $ sudo apt-get install docker-compose
 $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-If you are using a different operating system, you can find the installation instructions for Docker Compose on **[the official website](https://docs.docker.com/compose/install/)**. 
+If you are using a different operating system, you can find the installation instructions for Docker Compose on **[the official website](https://docs.docker.com/compose/install/)**.
 
 ## Running the MQTT broker and ReductStore using Docker Compose
 
@@ -66,7 +64,6 @@ docker-compose up
 ```
 
 Docker Compose will download the images if they are not available on your device and start the containers. Note that we have released ports 1883 for the MQTT protocol and 8383 for **[ReductStore HTTP API](https://www.reduct.store/docs/http-api)**.
-
 
 ## Writing Rust Program
 
@@ -144,7 +141,6 @@ Let's look at the code in detail. First, we create a client to communicate with 
         .await
         .unwrap();
 ```
-
 
 The bucket, called "mqtt", is a storage unit in ReductStore. It contains rules for storing and accessing data. We'll need this name when reading data.
 

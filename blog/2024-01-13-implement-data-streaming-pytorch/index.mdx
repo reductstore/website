@@ -9,15 +9,16 @@ image: ./img/pytorch-iterabledataset.webp
 ---
 
 ![PyTorch Training Diagram](./img/pytorch-iterabledataset.webp)
+
 <small>PyTorch training loop with data streaming from remote device</small>
 
 When training a model, we aim to process data in batches, shuffle data at each epoch to avoid over fitting, and leverage Python's `multiprocessing` for data fetching through multiple workers.
 
 The reason that we want to use multiple workers is that GPUs are capable of handling large amounts of data concurrently; however, the bottleneck often lies in the time-consuming task of loading this data into the system.
 
-Moreover, the challenge is even trickier when there is simply too much data to store the whole dataset on disk and we need to stream data from a remote database such as [**ReductStore**](<https://www.reduct.store/>).
+Moreover, the challenge is even trickier when there is simply too much data to store the whole dataset on disk and we need to stream data from a remote database such as [**ReductStore**](https://www.reduct.store/).
 
-In this blog post, we will go through a full example and setup a data stream to [**PyTorch**](<https://pytorch.org/>) from a playground dataset on a remote database.
+In this blog post, we will go through a full example and setup a data stream to [**PyTorch**](https://pytorch.org/) from a playground dataset on a remote database.
 
 Let's dig in!
 
@@ -40,7 +41,7 @@ DATASET = "cats"
 client = Client(HOST, api_token=API_TOKEN)
 ```
 
-In this example, we are using the 'Cats' dataset, which contains 10,000 images of cats with labels for the eyes, mouth, and ears. The dataset is available on the [**play.reduct.store**](<https://play.reduct.store/>) and can be accessed with the following parameters:
+In this example, we are using the 'Cats' dataset, which contains 10,000 images of cats with labels for the eyes, mouth, and ears. The dataset is available on the [**play.reduct.store**](https://play.reduct.store/) and can be accessed with the following parameters:
 
     - **API\_TOKEN**: API token for authentication (`"dataset-read-eab13e4f5f2df1e64363806443eea7ba83406ce701d49378d2f54cfbf02850f5"`).
 
@@ -49,24 +50,25 @@ In this example, we are using the 'Cats' dataset, which contains 10,000 images o
     - **DATASET**: Specific dataset containing cats images and labels (`"cats"`).
 
 ### Getting data from playground server
+
 To work with the 'Cats' dataset in Python using ReductStore, a time-series database for blob data, you'll need to consider a few specific aspects.
 Firstly, ensure that you have necessary libraries like NumPy and OpenCV installed.
 
-In addition, when accessing the dataset, remember that ReductStore uses timestamps to define the range of data. 
-These timestamps are expressed as the number of microseconds since January 1, 1970. 
+In addition, when accessing the dataset, remember that ReductStore uses timestamps to define the range of data.
+These timestamps are expressed as the number of microseconds since January 1, 1970.
 For example, to query records, you can use a command like `bucket.query(DATASET, tart=TimestampID1, stop=TimestampID2)`, where TimestampID1 and TimestampID2 are the specific timestamps identifying your range of interest.
 
-In case of the 'Cats' dataset, the timestamps are the record IDs, which are integers ranging from 0 to 9999. 
+In case of the 'Cats' dataset, the timestamps are the record IDs, which are integers ranging from 0 to 9999.
 For instance, to query the first 5 records, you can use `bucket.query(DATASET, start=0, stop=5)`.
 
 Each record fetched contains image annotations and binary image data that can be transformed into an array and then decoded into an image format suitable for display or processing in Python.
 
-For more detailed instructions, check out the blog post [**How to Use 'Cats' dataset with Python ReductStore SDK**](<https://www.reduct.store/blog/tutorials/computer-vision/sdks/cats-datasets>).
+For more detailed instructions, check out the blog post [**How to Use 'Cats' dataset with Python ReductStore SDK**](https://www.reduct.store/blog/tutorials/computer-vision/sdks/cats-datasets).
 
 ## Bridging Async and Sync: Creating Custom Iterators for PyTorch
 
 ReductStore's Python client is asynchronous, which means that it uses asynchronous programming to fetch data from the database.
-On the other hand, [**PyTorch's IterableDataset**](<https://pytorch.org/docs/stable/data.html#torch.utils.data.IterableDataset>) is synchronous, which means that it uses synchronous programming to iterate over the data. 
+On the other hand, [**PyTorch's IterableDataset**](https://pytorch.org/docs/stable/data.html#torch.utils.data.IterableDataset) is synchronous, which means that it uses synchronous programming to iterate over the data.
 
 This is a problem because we can't use the asynchronous data fetching directly in PyTorch's training loop.
 One way to bridge this gap is to create a custom iterator that can be used to iterate over the data fetched asynchronously.
@@ -113,6 +115,7 @@ class MyIterableDataset(IterableDataset):
 This ensures that our main training loop can remain synchronous and operate as usual, while in the background, data is being fetched without blocking the computation.
 
 ## Case Study: RemoteCatsDataset as a PyTorch Dataset Example
+
 Let's build a PyTorch Dataset called `RemoteCatsDataset` to show how to handle asynchronous data fetching in a PyTorch dataset.
 
 ```python
@@ -201,9 +204,10 @@ for images in data_loader:
 Using the `DataLoader` with multiple workers allows for efficient data loading and preprocessing. This parallelism is especially beneficial when training deep-learning models on large datasets where I/O bound operations could become a bottleneck.
 
 ## Implementing a Buffered Shuffle Iterable Dataset
+
 Normally, the entire training set is shuffled after each epoch to avoid over fitting. However, in our scenario, we don't have the full data available on disk, and we don't have all the indexes of the pictures in the database neither. We provide a start and stop index to the database, and it returns the data in that range. So, we can't shuffle the data in the database, and we can't shuffle the data in memory either.
 
-Implementing a Buffered Shuffle Iterable Dataset in PyTorch is a trade-off to be able to shuffle the data we fetch from the remote server. This works, but we have to be careful not to get duplicates when using several workers, and we need to define a different data stream for each separate process. 
+Implementing a Buffered Shuffle Iterable Dataset in PyTorch is a trade-off to be able to shuffle the data we fetch from the remote server. This works, but we have to be careful not to get duplicates when using several workers, and we need to define a different data stream for each separate process.
 
 One way to handle this, is to look at the worker information for each separate process and request different data ranges from the database.
 
@@ -249,6 +253,7 @@ This implementation ensures that each epoch sees a different data order – the 
 In other words, we would maximize the number of workers to match the number of CPU cores, and get the largest possible buffer that doesn't saturate the memory or get performance down, i.e. the GPUs get batches of data fast enough for training and don't wait until the next one is available.
 
 ## Conclusion
+
 In conclusion, implementing async storage data streaming in PyTorch projects requires careful planning around data loading and processing.
 
 By implementing the `BufferedShuffleIterableDataset`, we can manage remote datasets efficiently, ensuring that the shuffling of records mimics traditional in-memory operations as closely as possible.

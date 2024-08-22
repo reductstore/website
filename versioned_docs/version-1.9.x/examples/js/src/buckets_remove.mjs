@@ -1,8 +1,8 @@
-import {Client, QuotaType} from "reduct-js";
+import { Client, QuotaType } from "reduct-js";
 import assert from "node:assert";
 
 // Create a new client with the server URL and an API token
-const client = new Client("http://127.0.0.1:8383", {apiToken: "my-token"});
+const client = new Client("http://127.0.0.1:8383", { apiToken: "my-token" });
 
 // Remove the bucket with the name "bucket-to-remove"
 const bucket = await client.getBucket("bucket-to-remove");

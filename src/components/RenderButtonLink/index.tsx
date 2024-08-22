@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import clsx from 'clsx';
+import React from "react";
+import { Link } from "react-router-dom";
+import clsx from "clsx";
 
 interface RenderButtonLinkProps {
   buttonLabel: string;
@@ -9,10 +9,17 @@ interface RenderButtonLinkProps {
   onClick?: () => void;
 }
 
-const RenderButtonLink = ({ buttonLabel, isHighlight, buttonUrl, onClick }: RenderButtonLinkProps) => {
+const RenderButtonLink = ({
+  buttonLabel,
+  isHighlight,
+  buttonUrl,
+  onClick,
+}: RenderButtonLinkProps) => {
   if (!buttonUrl && !onClick) return null;
 
-  const isExternalLink = buttonUrl && (buttonUrl.startsWith('http://') || buttonUrl.startsWith('https://'));
+  const isExternalLink =
+    buttonUrl &&
+    (buttonUrl.startsWith("http://") || buttonUrl.startsWith("https://"));
 
   const buttonClass = clsx("button button--lg button--block button--primary", {
     "button--primary": !isHighlight,
@@ -34,11 +41,7 @@ const RenderButtonLink = ({ buttonLabel, isHighlight, buttonUrl, onClick }: Rend
   }
 
   return (
-    <Link
-      to={buttonUrl || "#"}
-      onClick={onClick}
-      className={buttonClass}
-    >
+    <Link to={buttonUrl || "#"} onClick={onClick} className={buttonClass}>
       {buttonLabel}
     </Link>
   );

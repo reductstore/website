@@ -2,7 +2,7 @@ import React from "react";
 import Layout from "@theme/Layout";
 import SimpleHeader from "@site/src/components/SimpleHeader";
 import HelpForm from "@site/src/components/HelpForm";
-import styles from './styles.module.css';
+import styles from "./styles.module.css";
 
 export default function ContactPage() {
   return (
@@ -14,8 +14,10 @@ export default function ContactPage() {
         <SimpleHeader pageTitle="Talk With Our Team" />
         <div className="container">
           <p className={styles.introText}>
-            Whether you're experiencing problems, have questions about our products, or just want to say hello, our dedicated team is here to help.
-            Please fill out the form below and we'll get back to you as soon as possible.
+            Whether you're experiencing problems, have questions about our
+            products, or just want to say hello, our dedicated team is here to
+            help. Please fill out the form below and we'll get back to you as
+            soon as possible.
           </p>
           <HelpForm />
         </div>

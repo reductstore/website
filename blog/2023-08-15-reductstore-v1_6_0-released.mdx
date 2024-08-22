@@ -9,7 +9,7 @@ date: 2023-08-15
 
 We are pleased to announce the release of the latest minor version of [**ReductStore**](https://www.reduct.store), [**1.6.0**](https://github.com/reductstore/reductstore/releases/tag/v1.6.0). ReductStore is a time series database designed for storing and managing large amounts of blob data.
 
-To download the latest released version, please visit our [**Download Page**](https://www.reduct.store/download). 
+To download the latest released version, please visit our [**Download Page**](https://www.reduct.store/download).
 
 ## What is new in 1.6.0?
 
@@ -67,7 +67,7 @@ async fn main() -> Result<(), HttpError> {
 
 ## HTTP API 1.6: Removing Entries and Limited Queries
 
-The new API includes  the `DELETE /api/v1/b/:bucket/:entry` endpoint, that allows you to delete an entry from a bucket. When using ReductStore on an edge device, it functions as a large FIFO buffer with a fixed size. In this case, manual deletion of data is unnecessary, as it is automatically overwritten. However, this feature can be useful when storing data without quotas and you would like to remove entries that are no longer in use or were uploaded by mistake.
+The new API includes the `DELETE /api/v1/b/:bucket/:entry` endpoint, that allows you to delete an entry from a bucket. When using ReductStore on an edge device, it functions as a large FIFO buffer with a fixed size. In this case, manual deletion of data is unnecessary, as it is automatically overwritten. However, this feature can be useful when storing data without quotas and you would like to remove entries that are no longer in use or were uploaded by mistake.
 
 Another new feature is the `limit` parameter in the query request (`GET api/v1/b/:bucket/:entry/q`). When a user requests data for a time interval, they may not know how many records are stored because queries work as iterators to avoid spikes for big requests. With the new feature, you can specify a maximum number of records for a request if you only need a certain amount of data.
 

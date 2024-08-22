@@ -10,7 +10,6 @@ image: ./img/snippet.png
 
 ![MQTT+ReductStore in Python](./img/snippet.webp)
 
-
 The **[MQTT protocol](https://mqtt.org/)** is a simple way to connect different sources of data to applications, which makes it very popular for IoT (Internet of Things) applications. Some MQTT brokers can save messages for a while, even when the MQTT client is offline. However, sometimes, you need to keep this data for a longer time. In those cases, it's a good idea to use a time series database.
 
 There are many time series databases available, but if you need to store a history of images, sensor data, or Protobuf messages, you might want to use ReductStore. This database is designed to store a lot of blob data and works well with IoT and edge computing.
@@ -20,7 +19,6 @@ There are many time series databases available, but if you need to store a histo
 Now, let's make a simple MQTT application to see how this all works.
 
 {/* truncate */}
-
 
 ## Prerequisites
 
@@ -37,7 +35,7 @@ $ sudo apt-get update
 $ sudo apt-get install docker-compose python3-pip
 ```
 
-If you are using a different operating system, you can find the installation instructions for Docker Compose on **[the official website](https://docs.docker.com/compose/install/)**. 
+If you are using a different operating system, you can find the installation instructions for Docker Compose on **[the official website](https://docs.docker.com/compose/install/)**.
 
 ## Execute MQTT Broker and ReductStore using Docker Compose
 
@@ -187,7 +185,7 @@ The provided example is basic and might not cover all the complexities you may f
 
 - Create a ReductStore bucket with a **[FIFO](https://www.reduct.store/docs/how-does-it-work#bucket)** quota to prevent disk overwriting in the future.
 - Use token authentication to protect your data. You can generate an access token using either the **[Web Console](https://github.com/reductstore/web-console)** or the **[CLI client](https://github.com/reductstore/)**.
-- Map **[MQTT5]( ttps://mqtt.org/)** properties to ReductStore labels. This will facilitate data filtering during querying or **[replication](https://www.reduct.store/blog/news/reductstore-8-released)**.
+- Map **[MQTT5](ttps://mqtt.org/)** properties to ReductStore labels. This will facilitate data filtering during querying or **[replication](https://www.reduct.store/blog/news/reductstore-8-released)**.
 - Use **[ReductCLI](https://github.com/reductstore/)** for data replication or backup purposes.
 
 ## Conclusion

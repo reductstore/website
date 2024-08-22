@@ -6,7 +6,8 @@ export default function DockerContent() {
     <>
       <p>Runs on amd64, arm64, and arm32 platforms.</p>
       <CodeBlock className="language-bash">
-        docker run -p 8383:8383 -v $&#123;PWD&#125;/data:/data reduct/store:latest
+        docker run -p 8383:8383 -v $&#123;PWD&#125;/data:/data
+        reduct/store:latest
       </CodeBlock>
     </>
   );

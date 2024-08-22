@@ -1,12 +1,14 @@
-import React from 'react';
-import styles from './styles.module.css';
-import { IPerformanceComparisonData } from '../PerformanceComparison/PerformanceComparisonData';
+import React from "react";
+import styles from "./styles.module.css";
+import { IPerformanceComparisonData } from "../PerformanceComparison/PerformanceComparisonData";
 
 interface PerformanceComparisonTableProps {
   data: IPerformanceComparisonData;
 }
 
-const PerformanceComparisonTable: React.FC<PerformanceComparisonTableProps> = ({ data }) => (
+const PerformanceComparisonTable: React.FC<PerformanceComparisonTableProps> = ({
+  data,
+}) => (
   <div className={styles.tableResponsive}>
     <table className={styles.compactTable}>
       <thead>
