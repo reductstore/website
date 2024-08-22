@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { useImageFetcher } from "./useImageFetcher";
 import ImageWithLabels from "./ImageWithLabels";
 import { FaEye as EyeIcon, FaEyeSlash as EyeSlashIcon } from "react-icons/fa";
+import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 
 const DATASETS = {
   imdb: {
@@ -24,7 +25,7 @@ const DATASETS = {
 };
 
 const ImageCarousel = () => {
-  if (window.innerWidth < 768) {
+  if (ExecutionEnvironment.canUseDOM && window.innerWidth < 768) {
     return (
       <div className={styles.mainContainer}>
         <div className="alert alert--warning" role="alert">
