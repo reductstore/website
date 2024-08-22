@@ -5,7 +5,7 @@ description: ReductStore configuration options and provisioning.
 ---
 
 <head>
-  <link rel="canonical" href="https://www.reduct.store/docs/configuration" />
+    <link rel="canonical" href="https://www.reduct.store/docs/configuration"/>
 </head>
 
 # ⚙ Server Configuration and Provisioning
@@ -66,41 +66,11 @@ Or use the `snap connect reductstore:removable-media` command to connect the sna
 
 ## Provisioning
 
-ReductStore provides an HTTP API to create and configure resources such as buckets or access tokens. However, if you are following an Infrastructure as Code (IaC) approach, you may want to provision resources at the deployment stage and ensure that they can't be modified or deleted using the HTTP API. You can use the following environment variables to do this:
+ReductStore provides an HTTP API to create and configure resources such as buckets, access tokens or replication tasks. However, if you are following an Infrastructure as Code (IaC) approach, you may want to provision resources at the deployment stage and ensure that they can't be modified or deleted using the HTTP API.
 
-| Name                                | Default | Description                                                                                                        |
-|-------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------|
-| **Bucket Provisioning**             |         |                                                                                                                    |
-| `RS_BUCKET_<ID>_NAME`               |         | Provisioned bucket name (required)                                                                                 |
-| `RS_BUCKET_<ID>_QUOTA_TYPE`         | NONE    | It can be NONE or FIFO. If it is FIFO, the bucket removes old data.                                                |
-| `RS_BUCKET_<ID>_QUOTA_SIZE`         | ""      | Size of quota to start removing old data e.g. 1 KB, 10.4 MB etc.                                                   |
-| `RS_BUCKET_<ID>_MAX_BLOCK_SIZE`     | 64Mb    | Maximal block size for batched records                                                                             |
-| `RS_BUCKET_<ID>_MAX_BLOCK_RECORDS`  | 256     | Maximal number of batched records in a block                                                                       |
-| **Token Provisioning**              |         |                                                                                                                    |
-| `RS_TOKEN_<ID>_NAME`                |         | Provisioned token name (required)                                                                                  |
-| `RS_TOKEN_<ID>_VALUE`               |         | Provisioned value of token (required)                                                                              |
-| `RS_TOKEN_<ID>_FULL_ACCESS`         | false   | Full access permission                                                                                             |
-| `RS_TOKEN_<ID>_READ`                |         | List of buckets for reading                                                                                        |
-| `RS_TOKEN_<ID>_WRITE`               |         | List of buckets for writing                                                                                        |
-| **Replication Provisioning**        |         |                                                                                                                    |
-| `RS_REPLICATION_<ID>_NAME`          |         | Provisioned replication name (required)                                                                            |
-| `RS_REPLICATION_<ID>_SRC_BUCKET`    |         | Source bucket name (required)                                                                                      |
-| `RS_REPLICATION_<ID>_DST_BUCKET`    |         | Remote bucket name (required). It must be created before replication                                               |
-| `RS_REPLICATION_<ID>_DST_HOST`      |         | URL of destination instance (required). For example, https://play.reduct.store or http://localhost:8383            |
-| `RS_REPLICATION_<ID>_DST_TOKEN`     |         | Token for destination instance                                                                                     |
-| `RS_REPLICATION_<ID>_ENTRIES`       |         | List of entries to replicate. Separate entries with a comma. If the list is empty, all entries will be replicated. |
-| `RS_REPLICATION_<ID>_INCLUDE_<KEY>` |         | Replicate only records with KEY equal to the value of the environment variable. Can be used multiple times.        |
-| `RS_REPLICATION_<ID>_EXCLUDE_<KEY>` |         | Do not replicate records with KEY equal to the value of the environment variable. Can be used multiple times.      |
-| `RS_REPLICATION_<ID>_EACH_S`        |         | Replicate a record every S seconds. Can have a floating-point value.                                               |
-| `RS_REPLICATION_<ID>_EACH_N`        |         | Replicate every N-th record.                                                                                       |
+### Example
 
-:::tip
-You can use any string value for `<ID>`. It is only used to group resources of the same type.
-:::
-
-
-
-&#x20;There is an example where we provide two buckets and a token to access them:
+Here is an example of provisioning two buckets and a token to access them:
 
 ```
 RS_BUCKET_A_NAME=bucket-1
@@ -113,3 +83,56 @@ RS_TOKEN_A_NAME=token
 RS_TOKEN_A_VALUE=somesecret
 RS_TOKEN_A_READ=bucket-1,bucket-2
 ```
+
+As you can see, each resource has a type and an ID. The type is `BUCKET` for buckets and `TOKEN` for tokens. The ID is a unique identifier for the resource. You can use any string value for the ID. It is only used to group resources of the same type.
+
+Below you will find the available settings for each resource type.
+
+
+### Bucket Settings
+
+You can provision buckets by setting environment variables. The following table lists the available settings:
+
+| Name                               | Default | Description                                                         |
+|------------------------------------|---------|---------------------------------------------------------------------|
+| `RS_BUCKET_<ID>_NAME`              |         | Provisioned bucket name (required)                                  |
+| `RS_BUCKET_<ID>_QUOTA_TYPE`        | NONE    | It can be NONE or FIFO. If it is FIFO, the bucket removes old data. |
+| `RS_BUCKET_<ID>_QUOTA_SIZE`        | 0       | Size of quota to start removing old data e.g. 1 KB, 10.4 MB etc.    |
+| `RS_BUCKET_<ID>_MAX_BLOCK_SIZE`    | 64Mb    | Maximal block size for batched records                              |
+| `RS_BUCKET_<ID>_MAX_BLOCK_RECORDS` | 1024    | Maximal number of batched records in a block                        |
+
+For more information about the bucket settings, see the **[Buckets Guide](/docs/guides/buckets.mdx#bucket-settings)**.
+
+
+### Token Settings
+
+You can provision tokens by setting environment variables. The following table lists the available settings:
+
+| Name                        | Default | Description                                      |
+|-----------------------------|---------|--------------------------------------------------|
+| `RS_TOKEN_<ID>_NAME`        |         | Provisioned token name (required)                |
+| `RS_TOKEN_<ID>_VALUE`       |         | Provisioned value of token (required)            |
+| `RS_TOKEN_<ID>_FULL_ACCESS` | false   | Full access permission                           |
+| `RS_TOKEN_<ID>_READ`        |         | List of buckets for reading separate by a comma. |
+| `RS_TOKEN_<ID>_WRITE`       |         | List of buckets for writing separate by a comma. |
+
+For more information about the token settings, see the **[Access Control Guide](/docs/guides/access-control.mdx)**.
+
+### Replication Settings
+
+You can provision replication tasks by setting environment variables. The following table lists the available settings:
+
+| Name                                | Default | Description                                                                                                        |
+|-------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------|
+| `RS_REPLICATION_<ID>_NAME`          |         | Provisioned replication task name (required)                                                                       |
+| `RS_REPLICATION_<ID>_SRC_BUCKET`    |         | Source bucket name (required)                                                                                      |
+| `RS_REPLICATION_<ID>_DST_BUCKET`    |         | Remote bucket name (required). It must be created before replication                                               |
+| `RS_REPLICATION_<ID>_DST_HOST`      |         | URL of destination instance (required). For example, https://play.reduct.store or http://localhost:8383            |
+| `RS_REPLICATION_<ID>_DST_TOKEN`     |         | Token for destination instance                                                                                     |
+| `RS_REPLICATION_<ID>_ENTRIES`       |         | List of entries to replicate. Separate entries with a comma. If the list is empty, all entries will be replicated. |
+| `RS_REPLICATION_<ID>_INCLUDE_<KEY>` |         | Replicate only records with KEY equal to the value of the environment variable. Can be used multiple times.        |
+| `RS_REPLICATION_<ID>_EXCLUDE_<KEY>` |         | Do not replicate records with KEY equal to the value of the environment variable. Can be used multiple times.      |
+| `RS_REPLICATION_<ID>_EACH_S`        |         | Replicate a record every S seconds. Can have a floating-point value.                                               |
+| `RS_REPLICATION_<ID>_EACH_N`        |         | Replicate every N-th record.                                                                                       |
+
+For more information about the replication settings, see the **[Data Replication Guide](/docs/guides/data-replication.mdx)**.
