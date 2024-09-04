@@ -8,10 +8,10 @@ description: HTTP Endpoints for reading data from an entry in the database.
 The API provides several endpoints for reading data from an entry including reading a single record, reading multiple records in a batch, and querying records for a time interval.
 
 <head>
-    <link
-        rel="canonical"
-        href="https://www.reduct.store/docs/http-api/entry-api/read_data"
-    />
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/entry-api/read_data"
+  />
 </head>
 
 import SwaggerComponent from "@site/src/components/SwaggerComponent";
@@ -141,8 +141,8 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
             summary: "Bad timestamp",
         },
     ]}
-/>
 
+/>
 
 <SwaggerComponent
     method="GET"
@@ -235,215 +235,217 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
             summary: "Bad timestamp",
         },
     ]}
+
 />
 
 <SwaggerComponent
-    method="GET"
-    path="/api/v1/b/:bucket_name/:entry_name/q"
-    summary="Query records for a time interval"
-    description={
-        <>
-            The method responds with a JSON document containing an ID which should be
-            used to read records with the following endpoint: <code>GET /b/:bucket_name/:entry_name?q=ID.</code>
-            <br/>
-            The time interval is [start, stop).
-            <br/>
-            <br/>
-            If authentication is enabled, the method needs a valid API token with read
-            access to the bucket of the entry.
-            <br/>
-            <br/>
-            <strong> Changes: </strong>
-            <ul>
-                <li>
-                    Version 1.3: the method also provides the{" "}
-                    <code>include-&lt;label&gt;</code> and{" "}
-                    <code>exclude-&lt;label&gt;</code> query parameters to filter records
-                    based on the values of certain labels. For example:
-                    <p>
-                        <code>
-                            GET
-                            /api/v1/:bucket/:entry/q?include-&lt;label1&gt;=foo&amp;exclude-&lt;label2&gt;=bar
-                        </code>
-                    </p>
-                    This would find all records that have <code>label1</code> equal to
-                    "foo" and excludes those that have <code>label2</code> equal to "bar".
-                    <br/>A user can specify multiple <code>include</code> and{" "}
-                    <code>exclude</code> labels, which will be connected with an AND
-                    operator. For example:
-                    <p>
-                        <code>
-                            GET
-                            /api/v1/:bucket/:entry/q?include-&lt;label1&gt;=foo&amp;include-&lt;label2&gt;=bar
-                        </code>
-                    </p>
-                </li>
-                <li>
-                    Version 1.4: the method has the <code>continuous query</code> flag. If
-                    it is true, the current query will not be discarded if there are no
-                    records. A client can ask them later. The query will not be removed
-                    until its TTL has expired. The <code>stop</code> parameter is ignored
-                    for continuous queries.
-                </li>
-                <li>
-                    Version 1.6: the method provides the <code>limit</code> query
-                    parameter. It limits the number of records in the query. If it is not
-                    set, the query is unlimited by default.
-                </li>
-                <li>
-                    Version 1.10: the method has the <code>each_n</code> and{" "}
-                    <code>each_s</code> query parameters. If the <code>each_n</code>{" "}
-                    parameter is set, the method returns only every <code>each_n</code>-th
-                    record. If the <code>each_s</code> parameter is set, the method
-                    returns only one record per <code>each_s</code> seconds.
-                </li>
-            </ul>
-            <br/>
-            <br/>
-        </>
-    }
-    parameters={[
-        {
-            type: "path",
-            details: {
-                name: ":bucket_name",
-                description: "Name of bucket",
-                isRequired: true,
-            },
-        },
-        {
-            type: "query",
-            details: {
-                name: "start",
-                description:
-                    "A UNIX timestamp in microseconds. If not set, the query starts from the oldest record in the entry.",
-                dataType: "Integer",
-                isRequired: false,
-            },
-        },
-        {
-            type: "query",
-            details: {
-                name: "stop",
-                description:
-                    "A UNIX timestamp in microseconds. If not set, the query starts from the latest record in the entry.",
-                dataType: "Integer",
-                isRequired: false,
-            },
-        },
-        {
-            type: "path",
-            details: {
-                name: ":entry_name",
-                description: "Name of entry",
-                isRequired: true,
-            },
-        },
-        {
-            type: "query",
-            details: {
-                name: "ttl",
-                description:
-                    "Time To Live of the query in seconds. If a client haven't read any record for this time interval, the server removes the query and the query ID becomes invalid. Default value 5 seconds.",
-                dataType: "Integer",
-                isRequired: false,
-            },
-        },
-        {
-            type: "query",
-            details: {
-                name: "include-<label name>",
-                description: "Query records that have a certain value of a label.",
-                isRequired: false,
-            },
-        },
-        {
-            type: "query",
-            details: {
-                name: "exclude-<label name>",
-                description:
-                    "Query records that don't have a certain value of a label.",
-                isRequired: false,
-            },
-        },
-        {
-            type: "query",
-            details: {
-                name: "conitnuous",
-                description: "Keep query if no records for the request",
-                dataType: "Boolean",
-                isRequired: false,
-            },
-        },
-        {
-            type: "query",
-            details: {
-                name: "limit",
-                description:
-                    "Maximum number of records in the query. Default: unlimited.",
-                dataType: "Integer",
-                isRequired: false,
-            },
-        },
-        {
-            type: "query",
-            details: {
-                name: "each_n",
-                description: "Return only every N-th record",
-                dataType: "Integer",
-                isRequired: false,
-            },
-        },
-        {
-            type: "query",
-            details: {
-                name: "each_s",
-                description: "Return only one record per S seconds",
-                dataType: "Float",
-                isRequired: false,
-            },
-        },
-    ]}
-    responses={[
-        {
-            status: "200",
-            message: "OK",
-            description: (
-                <pre>
+  method="GET"
+  path="/api/v1/b/:bucket_name/:entry_name/q"
+  summary="Query records for a time interval"
+  description={
+    <>
+      The method responds with a JSON document containing an ID which should be
+      used to read records with the following endpoint:{" "}
+      <code>GET /b/:bucket_name/:entry_name?q=ID.</code>
+      <br />
+      The time interval is [start, stop).
+      <br />
+      <br />
+      If authentication is enabled, the method needs a valid API token with read
+      access to the bucket of the entry.
+      <br />
+      <br />
+      <strong> Changes: </strong>
+      <ul>
+        <li>
+          Version 1.3: the method also provides the{" "}
+          <code>include-&lt;label&gt;</code> and{" "}
+          <code>exclude-&lt;label&gt;</code> query parameters to filter records
+          based on the values of certain labels. For example:
+          <p>
+            <code>
+              GET
+              /api/v1/:bucket/:entry/q?include-&lt;label1&gt;=foo&amp;exclude-&lt;label2&gt;=bar
+            </code>
+          </p>
+          This would find all records that have <code>label1</code> equal to
+          "foo" and excludes those that have <code>label2</code> equal to "bar".
+          <br />A user can specify multiple <code>include</code> and{" "}
+          <code>exclude</code> labels, which will be connected with an AND
+          operator. For example:
+          <p>
+            <code>
+              GET
+              /api/v1/:bucket/:entry/q?include-&lt;label1&gt;=foo&amp;include-&lt;label2&gt;=bar
+            </code>
+          </p>
+        </li>
+        <li>
+          Version 1.4: the method has the <code>continuous query</code> flag. If
+          it is true, the current query will not be discarded if there are no
+          records. A client can ask them later. The query will not be removed
+          until its TTL has expired. The <code>stop</code> parameter is ignored
+          for continuous queries.
+        </li>
+        <li>
+          Version 1.6: the method provides the <code>limit</code> query
+          parameter. It limits the number of records in the query. If it is not
+          set, the query is unlimited by default.
+        </li>
+        <li>
+          Version 1.10: the method has the <code>each_n</code> and{" "}
+          <code>each_s</code> query parameters. If the <code>each_n</code>{" "}
+          parameter is set, the method returns only every <code>each_n</code>-th
+          record. If the <code>each_s</code> parameter is set, the method
+          returns only one record per <code>each_s</code> seconds.
+        </li>
+      </ul>
+      <br />
+      <br />
+    </>
+  }
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        description: "Name of bucket",
+        isRequired: true,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "start",
+        description:
+          "A UNIX timestamp in microseconds. If not set, the query starts from the oldest record in the entry.",
+        dataType: "Integer",
+        isRequired: false,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "stop",
+        description:
+          "A UNIX timestamp in microseconds. If not set, the query starts from the latest record in the entry.",
+        dataType: "Integer",
+        isRequired: false,
+      },
+    },
+    {
+      type: "path",
+      details: {
+        name: ":entry_name",
+        description: "Name of entry",
+        isRequired: true,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "ttl",
+        description:
+          "Time To Live of the query in seconds. If a client haven't read any record for this time interval, the server removes the query and the query ID becomes invalid. Default value 5 seconds.",
+        dataType: "Integer",
+        isRequired: false,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "include-<label name>",
+        description: "Query records that have a certain value of a label.",
+        isRequired: false,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "exclude-<label name>",
+        description:
+          "Query records that don't have a certain value of a label.",
+        isRequired: false,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "conitnuous",
+        description: "Keep query if no records for the request",
+        dataType: "Boolean",
+        isRequired: false,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "limit",
+        description:
+          "Maximum number of records in the query. Default: unlimited.",
+        dataType: "Integer",
+        isRequired: false,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "each_n",
+        description: "Return only every N-th record",
+        dataType: "Integer",
+        isRequired: false,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "each_s",
+        description: "Return only one record per S seconds",
+        dataType: "Float",
+        isRequired: false,
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      description: (
+        <pre>
           <code>
             {`{
         "id": "integer" // ID of query which can be used in GET /b/:bucket/:entry request
         }`}
           </code>
         </pre>
-            ),
-        },
-        {
-            status: "204",
-            message: "No Content",
-            summary: "No records for the time interval",
-        },
-        {
-            status: "401",
-            message: "Unauthorized",
-            summary: "Access token is invalid or empty",
-        },
-        {
-            status: "403",
-            message: "Forbidden",
-            summary: "Access token doesn't have the required permissions",
-        },
-        {
-            status: "404",
-            message: "Not Found",
-            summary: "The bucket or entry doesn't exist",
-        },
-        {
-            status: "422",
-            message: "Unprocessable Entity",
-            summary: "One or both timestamps are bad, or TTL is not a number",
-        },
-    ]}
+      ),
+    },
+    {
+      status: "204",
+      message: "No Content",
+      summary: "No records for the time interval",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have the required permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "The bucket or entry doesn't exist",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "One or both timestamps are bad, or TTL is not a number",
+    },
+  ]}
 />
 
 ## Reading only meta information
@@ -451,32 +453,31 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
 Sometimes you need to retrieve only the meta information about a record without its content, ReductStore provides the `HEAD` version of the read endpoints for this purpose.
 
 <SwaggerComponent
-    method="HEAD"
-    path="/api/v1/b/:bucket_name/:entry_name"
-    summary="Get only meta information about record"
-    description={
-        <>
-            The endpoint works exactly as
-            <br/>
-            <code>GET /api/v1/b/:bucket_name/:entry_name</code>
-            <br/>
-            but returns only headers with meta information with a body.
-        </>
-    }
+  method="HEAD"
+  path="/api/v1/b/:bucket_name/:entry_name"
+  summary="Get only meta information about record"
+  description={
+    <>
+      The endpoint works exactly as
+      <br />
+      <code>GET /api/v1/b/:bucket_name/:entry_name</code>
+      <br />
+      but returns only headers with meta information with a body.
+    </>
+  }
 />
 
-
 <SwaggerComponent
-    method="HEAD"
-    path="/api/v1/b/:bucket_name/:entry_name/batch"
-    summary="Get only meta information in bulk"
-    description={
-        <>
-            The endpoint works exactly as
-            <br/>
-            <code>GET /api/v1/b/:bucket_name/:entry_name/batch</code>
-            <br/>
-            but returns only headers with meta information with a body.
-        </>
-    }
+  method="HEAD"
+  path="/api/v1/b/:bucket_name/:entry_name/batch"
+  summary="Get only meta information in bulk"
+  description={
+    <>
+      The endpoint works exactly as
+      <br />
+      <code>GET /api/v1/b/:bucket_name/:entry_name/batch</code>
+      <br />
+      but returns only headers with meta information with a body.
+    </>
+  }
 />

@@ -4,20 +4,17 @@ description: HTTP Endpoints for deleting data from an entry in the database.
 ---
 
 <head>
-    <link
-        rel="canonical"
-        href="https://www.reduct.store/docs/http-api/entry-api/delete_data"
-    />
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/entry-api/delete_data"
+  />
 </head>
-
 
 # Entry API to Delete Data
 
-The API provides several endpoints for deleting data from an entry in the database. It can be an entire entry,  a specific record, a batch of records in a single request or records within a time range.
-
+The API provides several endpoints for deleting data from an entry in the database. It can be an entire entry, a specific record, a batch of records in a single request or records within a time range.
 
 import SwaggerComponent from "@site/src/components/SwaggerComponent";
-
 
 <SwaggerComponent
     method="DELETE"
@@ -97,6 +94,7 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
             summary: "The bucket, entry or record doesn't exist",
         },
     ]}
+
 />
 
 <SwaggerComponent
@@ -184,8 +182,8 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
                     "Malformed request",
             },
         ]}
-/>
 
+/>
 
 <SwaggerComponent
     method="DELETE"
@@ -322,4 +320,5 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
             summary: "Malformed request",
         },
     ]}
+
 />
