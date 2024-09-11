@@ -43,6 +43,6 @@ async fn main() -> Result<(), ReductError> {
         .add_timestamp(timestamp + Duration::from_secs(1)).send().await?;
 
     assert_eq!(errors.len(), 1);
-    assert_eq!(errors[&timestamp].status(), ErrorCode::NotFound);
+    assert_eq!(errors.values().next().unwrap().status, ErrorCode::NotFound);
     Ok(())
 }

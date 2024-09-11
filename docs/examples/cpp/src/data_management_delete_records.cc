@@ -27,6 +27,7 @@ int main() {
 
     // Delete a sole record
     err = bucket->RemoveRecord("cpp-example", ts);
+    assert(err == Error::kOk);
 
     // Delete a batch of records
     auto [record_errors, http_err] = bucket->RemoveBatch("cpp-example", [ts](auto batch) {
@@ -35,6 +36,6 @@ int main() {
     });
 
     assert(http_err == Error::kOk);
-    assert(record_errors[ts].code == 404);
+    assert(record_errors.begin()->second.code == 404);
     return 0;
 }
