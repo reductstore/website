@@ -14,11 +14,17 @@ record = await bucket.beginWrite("entry-1", timestamp + 1000_000n);
 await record.write("Some more binary data");
 
 // Delete all records withing a time range
-const removedRecords = await bucket.removeQuery("entry-1", timestamp, timestamp + 2000_000n);
+const removedRecords = await bucket.removeQuery(
+  "entry-1",
+  timestamp,
+  timestamp + 2000_000n,
+);
 assert(removedRecords === 2);
 
 // You can also delete all records with a specific label
-await bucket.removeQuery("entry-1", undefined, undefined, { include: { label1: "value1" } });
+await bucket.removeQuery("entry-1", undefined, undefined, {
+  include: { label1: "value1" },
+});
 
 // Or each N-th record
 await bucket.removeQuery("entry-1", undefined, undefined, { eachN: 2 });

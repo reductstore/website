@@ -26,7 +26,7 @@ int main() {
     assert(err == Error::kOk);
 
     // Delete all records withing a time range
-    auto [removed_records, query_err] = bucket->RemoveQuery("cpp-example", ts, ts + 1s, {});
+    auto [removed_records, query_err] = bucket->RemoveQuery("cpp-example", ts, ts + 2s, {});
     assert(query_err == Error::kOk);
     assert(removed_records == 2);
 

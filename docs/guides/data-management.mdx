@@ -8,10 +8,10 @@ import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
 <head>
-    <link
-        rel="canonical"
-        href="https://www.reduct.store/docs/guides/data-management"
-    />
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/guides/data-management"
+  />
 </head>
 
 # Data Management With ReductStore
@@ -34,21 +34,21 @@ import ChangeLabelsCpp from "!!raw-loader!../examples/cpp/src/data_management_up
 import ChangeLabelsCurl from "!!raw-loader!../examples/curl/data_management_update_labels.sh";
 
 <Tabs>
-    <TabItem value="Python">
-        <CodeBlock language="python">{ChangeLabelsPy}</CodeBlock>
-    </TabItem>
-    <TabItem value="JavaScript">
-        <CodeBlock language="javascript">{ChangeLabelsJs}</CodeBlock>
-    </TabItem>
-    <TabItem value="Rust">
-        <CodeBlock language="rust">{ChangeLabelsRs}</CodeBlock>
-    </TabItem>
-    <TabItem value="C++">
-        <CodeBlock language="cpp">{ChangeLabelsCpp}</CodeBlock>
-    </TabItem>
-    <TabItem value="cURL">
-        <CodeBlock language="bash">{ChangeLabelsCurl}</CodeBlock>
-    </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">{ChangeLabelsPy}</CodeBlock>
+  </TabItem>
+  <TabItem value="JavaScript">
+    <CodeBlock language="javascript">{ChangeLabelsJs}</CodeBlock>
+  </TabItem>
+  <TabItem value="Rust">
+    <CodeBlock language="rust">{ChangeLabelsRs}</CodeBlock>
+  </TabItem>
+  <TabItem value="C++">
+    <CodeBlock language="cpp">{ChangeLabelsCpp}</CodeBlock>
+  </TabItem>
+  <TabItem value="cURL">
+    <CodeBlock language="bash">{ChangeLabelsCurl}</CodeBlock>
+  </TabItem>
 </Tabs>
 
 ## Deleting Data
@@ -68,24 +68,24 @@ import DeleteDataCli from "!!raw-loader!../examples/cli/data_management_delete_d
 import DeleteDataCurl from "!!raw-loader!../examples/curl/data_management_delete_data.sh";
 
 <Tabs>
-    <TabItem value="Python">
-        <CodeBlock language="python">{DeleteDataPy}</CodeBlock>
-    </TabItem>
-    <TabItem value="JavaScript">
-        <CodeBlock language="javascript">{DeleteDataJs}</CodeBlock>
-    </TabItem>
-    <TabItem value="Rust">
-        <CodeBlock language="rust">{DeleteDataRs}</CodeBlock>
-    </TabItem>
-    <TabItem value="C++">
-        <CodeBlock language="cpp">{DeleteDataCpp}</CodeBlock>
-    </TabItem>
-    <TabItem value="CLI">
-        <CodeBlock language="bash">{DeleteDataCli}</CodeBlock>
-    </TabItem>
-    <TabItem value="cURL">
-        <CodeBlock language="bash">{DeleteDataCurl}</CodeBlock>
-    </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">{DeleteDataPy}</CodeBlock>
+  </TabItem>
+  <TabItem value="JavaScript">
+    <CodeBlock language="javascript">{DeleteDataJs}</CodeBlock>
+  </TabItem>
+  <TabItem value="Rust">
+    <CodeBlock language="rust">{DeleteDataRs}</CodeBlock>
+  </TabItem>
+  <TabItem value="C++">
+    <CodeBlock language="cpp">{DeleteDataCpp}</CodeBlock>
+  </TabItem>
+  <TabItem value="CLI">
+    <CodeBlock language="bash">{DeleteDataCli}</CodeBlock>
+  </TabItem>
+  <TabItem value="cURL">
+    <CodeBlock language="bash">{DeleteDataCurl}</CodeBlock>
+  </TabItem>
 </Tabs>
 
 ### Deleting Specific Records
@@ -99,21 +99,21 @@ import DeleteRecordsCpp from "!!raw-loader!../examples/cpp/src/data_management_d
 import DeleteRecordsCurl from "!!raw-loader!../examples/curl/data_management_delete_records.sh";
 
 <Tabs>
-    <TabItem value="Python">
-        <CodeBlock language="python">{DeleteRecordsPy}</CodeBlock>
-    </TabItem>
-    <TabItem value="JavaScript">
-        <CodeBlock language="javascript">{DeleteRecordsJs}</CodeBlock>
-    </TabItem>
-    <TabItem value="Rust">
-        <CodeBlock language="rust">{DeleteRecordsRs}</CodeBlock>
-    </TabItem>
-    <TabItem value="C++">
-        <CodeBlock language="cpp">{DeleteRecordsCpp}</CodeBlock>
-    </TabItem>
-    <TabItem value="cURL">
-        <CodeBlock language="bash">{DeleteRecordsCurl}</CodeBlock>
-    </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">{DeleteRecordsPy}</CodeBlock>
+  </TabItem>
+  <TabItem value="JavaScript">
+    <CodeBlock language="javascript">{DeleteRecordsJs}</CodeBlock>
+  </TabItem>
+  <TabItem value="Rust">
+    <CodeBlock language="rust">{DeleteRecordsRs}</CodeBlock>
+  </TabItem>
+  <TabItem value="C++">
+    <CodeBlock language="cpp">{DeleteRecordsCpp}</CodeBlock>
+  </TabItem>
+  <TabItem value="cURL">
+    <CodeBlock language="bash">{DeleteRecordsCurl}</CodeBlock>
+  </TabItem>
 </Tabs>
 
 ### Deleting Records in a Time Range
@@ -121,7 +121,7 @@ import DeleteRecordsCurl from "!!raw-loader!../examples/curl/data_management_del
 You can delete records in a specific time range by specifying the start and end timestamps, and you can use query parameters to filter the records:
 
 | Parameter | Description                       | Type                    | Default                                        |
-|-----------|-----------------------------------|-------------------------|------------------------------------------------|
+| --------- | --------------------------------- | ----------------------- | ---------------------------------------------- |
 | `start`   | Remove records from               | Timestamp               | The timestamp of the first record in the entry |
 | `end`     | Remove records until              | Timestamp               | The timestamp of the last record in the entry  |
 | `include` | Remove only records with labels   | List of key-value pairs | Disabled                                       |
@@ -138,21 +138,21 @@ import DeleteRecordsRangeCpp from "!!raw-loader!../examples/cpp/src/data_managem
 import DeleteRecordsRangeCurl from "!!raw-loader!../examples/curl/data_management_delete_query.sh";
 
 <Tabs>
-    <TabItem value="Python">
-        <CodeBlock language="python">{DeleteRecordsRangePy}</CodeBlock>
-    </TabItem>
-    <TabItem value="JavaScript">
-        <CodeBlock language="javascript">{DeleteRecordsRangeJs}</CodeBlock>
-    </TabItem>
-    <TabItem value="Rust">
-        <CodeBlock language="rust">{DeleteRecordsRangeRs}</CodeBlock>
-    </TabItem>
-    <TabItem value="C++">
-        <CodeBlock language="cpp">{DeleteRecordsRangeCpp}</CodeBlock>
-    </TabItem>
-    <TabItem value="cURL">
-        <CodeBlock language="bash">{DeleteRecordsRangeCurl}</CodeBlock>
-    </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">{DeleteRecordsRangePy}</CodeBlock>
+  </TabItem>
+  <TabItem value="JavaScript">
+    <CodeBlock language="javascript">{DeleteRecordsRangeJs}</CodeBlock>
+  </TabItem>
+  <TabItem value="Rust">
+    <CodeBlock language="rust">{DeleteRecordsRangeRs}</CodeBlock>
+  </TabItem>
+  <TabItem value="C++">
+    <CodeBlock language="cpp">{DeleteRecordsRangeCpp}</CodeBlock>
+  </TabItem>
+  <TabItem value="cURL">
+    <CodeBlock language="bash">{DeleteRecordsRangeCurl}</CodeBlock>
+  </TabItem>
 </Tabs>
 
 :::info
