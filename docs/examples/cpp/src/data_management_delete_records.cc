@@ -25,7 +25,7 @@ int main() {
     });
     assert(err == Error::kOk);
 
-    // Delete a sole record
+    // Delete a single record
     err = bucket->RemoveRecord("cpp-example", ts);
     assert(err == Error::kOk);
 

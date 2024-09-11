@@ -12,6 +12,6 @@ curl -d "Some binary data" \
   -X POST -a ${API_PATH}/b/example-bucket/entry_1?ts=${TIME}
 
 
-# Delete a sole record
+# Delete a single record
 curl -H "${AUTH_HEADER}" \
   -X DELETE -a ${API_PATH}/b/example-bucket/entry_1?ts=${TIME}

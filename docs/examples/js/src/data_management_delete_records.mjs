@@ -13,7 +13,7 @@ await record.write("Some binary data");
 record = await bucket.beginWrite("entry-1", timestamp + 1000_000n);
 await record.write("Some more binary data");
 
-// Delete a sole record
+// Delete a single record
 await bucket.removeRecord("entry-1", timestamp);
 
 // Delete a batch of records

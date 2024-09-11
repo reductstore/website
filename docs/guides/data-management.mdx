@@ -53,12 +53,12 @@ import ChangeLabelsCurl from "!!raw-loader!../examples/curl/data_management_upda
 
 ## Deleting Data
 
-The ReductStore API allows you to delete specific records from an entry, the entire entry or the entire bucket.
-You can do it data per bucket or per entry by using the Client SDKs, Reduct CLI or HTTP API.
+The ReductStore API allows you to delete specific records from an entry, an entire entry, or an entire bucket.
+You can do this using the Client SDKs, the Reduct CLI, or the HTTP API.
 
 ### Deleting Entry or Bucket
 
-The following examples demonstrate how to delete the entire entry or the entire bucket:
+The following examples show how to delete the entire entry or the entire bucket:
 
 import DeleteDataPy from "!!raw-loader!../examples/py/src/data_management_delete_data.py";
 import DeleteDataJs from "!!raw-loader!../examples/js/src/data_management_delete_data.mjs";
@@ -90,7 +90,7 @@ import DeleteDataCurl from "!!raw-loader!../examples/curl/data_management_delete
 
 ### Deleting Specific Records
 
-You can remove a sole record from an entry or a batch of records by specifying their timestamps.
+You can remove a single record from an entry or a set of records by specifying their timestamps.
 
 import DeleteRecordsPy from "!!raw-loader!../examples/py/src/data_management_delete_records.py";
 import DeleteRecordsJs from "!!raw-loader!../examples/js/src/data_management_delete_records.mjs";
@@ -118,7 +118,7 @@ import DeleteRecordsCurl from "!!raw-loader!../examples/curl/data_management_del
 
 ### Deleting Records in a Time Range
 
-You can delete records in a specific time range by specifying the start and end timestamps and use query parameters to filter the records:
+You can delete records in a specific time range by specifying the start and end timestamps, and you can use query parameters to filter the records:
 
 | Parameter | Description                       | Type                    | Default                                        |
 |-----------|-----------------------------------|-------------------------|------------------------------------------------|
@@ -129,6 +129,7 @@ You can delete records in a specific time range by specifying the start and end 
 | `each_s`  | Remove a record every S seconds   | Float                   | Disabled                                       |
 | `each_n`  | Remove only every N record        | Integer                 | Disabled                                       |
 
+The following examples show how to delete records in a specific time range:
 
 import DeleteRecordsRangePy from "!!raw-loader!../examples/py/src/data_management_delete_query.py";
 import DeleteRecordsRangeJs from "!!raw-loader!../examples/js/src/data_management_delete_query.mjs";
@@ -153,3 +154,7 @@ import DeleteRecordsRangeCurl from "!!raw-loader!../examples/curl/data_managemen
         <CodeBlock language="bash">{DeleteRecordsRangeCurl}</CodeBlock>
     </TabItem>
 </Tabs>
+
+:::info
+Deleting records in a time range is a heavy operation and may take a long time to complete because it copies the retained records to new blocks and deletes the old ones.
+:::

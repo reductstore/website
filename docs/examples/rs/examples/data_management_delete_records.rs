@@ -29,7 +29,7 @@ async fn main() -> Result<(), ReductError> {
         .send()
         .await?;
 
-    //  Delete a sole record
+    //  Delete a single record
     bucket
         .remove_record("rs-example")
         .timestamp(timestamp)

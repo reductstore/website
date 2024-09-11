@@ -21,7 +21,7 @@ async def main():
             ts + 1
         )
 
-        # Delete a sole record
+        # Delete a single record
         await bucket.remove_record("py-example", ts)
 
         # Delete a batch of records
