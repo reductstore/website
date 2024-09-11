@@ -8,10 +8,10 @@ import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
 <head>
-  <link
-    rel="canonical"
-    href="https://www.reduct.store/docs/guides/data-management"
-  />
+    <link
+        rel="canonical"
+        href="https://www.reduct.store/docs/guides/data-management"
+    />
 </head>
 
 # Data Management With ReductStore
@@ -34,26 +34,33 @@ import ChangeLabelsCpp from "!!raw-loader!../examples/cpp/src/data_management_up
 import ChangeLabelsCurl from "!!raw-loader!../examples/curl/data_management_update_labels.sh";
 
 <Tabs>
-  <TabItem value="Python">
-    <CodeBlock language="python">{ChangeLabelsPy}</CodeBlock>
-  </TabItem>
-  <TabItem value="JavaScript">
-    <CodeBlock language="javascript">{ChangeLabelsJs}</CodeBlock>
-  </TabItem>
-  <TabItem value="Rust">
-    <CodeBlock language="rust">{ChangeLabelsRs}</CodeBlock>
-  </TabItem>
-  <TabItem value="C++">
-    <CodeBlock language="cpp">{ChangeLabelsCpp}</CodeBlock>
-  </TabItem>
-  <TabItem value="cURL">
-    <CodeBlock language="bash">{ChangeLabelsCurl}</CodeBlock>
-  </TabItem>
+    <TabItem value="Python">
+        <CodeBlock language="python">{ChangeLabelsPy}</CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">{ChangeLabelsJs}</CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">{ChangeLabelsRs}</CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">{ChangeLabelsCpp}</CodeBlock>
+    </TabItem>
+    <TabItem value="cURL">
+        <CodeBlock language="bash">{ChangeLabelsCurl}</CodeBlock>
+    </TabItem>
 </Tabs>
 
 ## Deleting Data
 
-Currently, you can delete data per bucket or per entry by using the Client SDKs, Reduct CLI or HTTP API:
+
+The ReductStore API allows you to delete specific records from an entry, the entire entry or the entire bucket.
+You can do it data per bucket or per entry by using the Client SDKs, Reduct CLI or HTTP API.
+
+
+### Deleting Entry or Bucket
+
+The  following examples demonstrate how to delete the entire entry or the entire bucket:
 
 import DeleteDataPy from "!!raw-loader!../examples/py/src/data_management_delete_data.py";
 import DeleteDataJs from "!!raw-loader!../examples/js/src/data_management_delete_data.mjs";
@@ -63,22 +70,53 @@ import DeleteDataCli from "!!raw-loader!../examples/cli/data_management_delete_d
 import DeleteDataCurl from "!!raw-loader!../examples/curl/data_management_delete_data.sh";
 
 <Tabs>
-  <TabItem value="Python">
-    <CodeBlock language="python">{DeleteDataPy}</CodeBlock>
-  </TabItem>
-  <TabItem value="JavaScript">
-    <CodeBlock language="javascript">{DeleteDataJs}</CodeBlock>
-  </TabItem>
-  <TabItem value="Rust">
-    <CodeBlock language="rust">{DeleteDataRs}</CodeBlock>
-  </TabItem>
-  <TabItem value="C++">
-    <CodeBlock language="cpp">{DeleteDataCpp}</CodeBlock>
-  </TabItem>
-  <TabItem value="CLI">
-    <CodeBlock language="bash">{DeleteDataCli}</CodeBlock>
-  </TabItem>
-  <TabItem value="cURL">
-    <CodeBlock language="bash">{DeleteDataCurl}</CodeBlock>
-  </TabItem>
+    <TabItem value="Python">
+        <CodeBlock language="python">{DeleteDataPy}</CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">{DeleteDataJs}</CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">{DeleteDataRs}</CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">{DeleteDataCpp}</CodeBlock>
+    </TabItem>
+    <TabItem value="CLI">
+        <CodeBlock language="bash">{DeleteDataCli}</CodeBlock>
+    </TabItem>
+    <TabItem value="cURL">
+        <CodeBlock language="bash">{DeleteDataCurl}</CodeBlock>
+    </TabItem>
 </Tabs>
+
+
+### Deleting Specific Records
+
+You can remove a sole record from an entry or a batch of records by specifying their timestamps.
+
+import DeleteRecordsPy from "!!raw-loader!../examples/py/src/data_management_delete_records.py";
+import DeleteRecordsJs from "!!raw-loader!../examples/js/src/data_management_delete_records.mjs";
+import DeleteRecordsRs from "!!raw-loader!../examples/rs/examples/data_management_delete_records.rs";
+import DeleteRecordsCpp from "!!raw-loader!../examples/cpp/src/data_management_delete_records.cc";
+import DeleteRecordsCurl from "!!raw-loader!../examples/curl/data_management_delete_records.sh";
+
+<Tabs>
+    <TabItem value="Python">
+        <CodeBlock language="python">{DeleteRecordsPy}</CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">{DeleteRecordsJs}</CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">{DeleteRecordsRs}</CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">{DeleteRecordsCpp}</CodeBlock>
+    </TabItem>
+    <TabItem value="cURL">
+        <CodeBlock language="bash">{DeleteRecordsCurl}</CodeBlock>
+    </TabItem>
+</Tabs>
+
+### Deleting Records in a Time Range
