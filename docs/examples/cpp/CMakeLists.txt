@@ -123,3 +123,8 @@ add_executable(data_management_delete_records.cxx
         src/data_management_delete_records.cc
 )
 target_link_libraries(data_management_delete_records.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+
+add_executable(data_management_delete_query.cxx
+        src/data_management_delete_query.cc
+)
+target_link_libraries(data_management_delete_query.cxx ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
