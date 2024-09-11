@@ -33,7 +33,7 @@ async fn main() -> Result<(), ReductError> {
     let removed_records = bucket
         .remove_query("rs-example")
         .start(timestamp)
-        .stop(timestamp + Duration::from_secs(1))
+        .stop(timestamp + Duration::from_secs(2))
         .send()
         .await?;
     assert_eq!(removed_records, 2);
