@@ -92,13 +92,13 @@ Below you will find the available settings for each resource type.
 
 You can provision buckets by setting environment variables. The following table lists the available settings:
 
-| Name                               | Default | Description                                                         |
-| ---------------------------------- | ------- | ------------------------------------------------------------------- |
-| `RS_BUCKET_<ID>_NAME`              |         | Provisioned bucket name (required)                                  |
-| `RS_BUCKET_<ID>_QUOTA_TYPE`        | NONE    | It can be NONE or FIFO. If it is FIFO, the bucket removes old data. |
-| `RS_BUCKET_<ID>_QUOTA_SIZE`        | 0       | Size of quota to start removing old data e.g. 1 KB, 10.4 MB etc.    |
-| `RS_BUCKET_<ID>_MAX_BLOCK_SIZE`    | 64Mb    | Maximal block size for batched records                              |
-| `RS_BUCKET_<ID>_MAX_BLOCK_RECORDS` | 1024    | Maximal number of batched records in a block                        |
+| Name                               | Default | Description                                                      |
+| ---------------------------------- | ------- | ---------------------------------------------------------------- |
+| `RS_BUCKET_<ID>_NAME`              |         | Provisioned bucket name (required)                               |
+| `RS_BUCKET_<ID>_QUOTA_TYPE`        | NONE    | It can be NONE, FIFO or HARD.                                    |
+| `RS_BUCKET_<ID>_QUOTA_SIZE`        | 0       | Size of quota to start removing old data e.g. 1 KB, 10.4 MB etc. |
+| `RS_BUCKET_<ID>_MAX_BLOCK_SIZE`    | 64Mb    | Maximal block size for batched records                           |
+| `RS_BUCKET_<ID>_MAX_BLOCK_RECORDS` | 1024    | Maximal number of batched records in a block                     |
 
 For more information about the bucket settings, see the **[Buckets Guide](/docs/guides/buckets.mdx#bucket-settings)**.
 

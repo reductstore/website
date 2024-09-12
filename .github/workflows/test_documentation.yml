@@ -90,7 +90,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         if: matrix.example == 'rust'
         with:
-          toolchain: 1.75
+          toolchain: 1.80.1
 
       - name: Install Python dependencies
         if: matrix.example == 'python'
