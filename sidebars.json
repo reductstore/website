@@ -59,7 +59,7 @@
     },
     {
       "type": "category",
-      "label": "API Reference",
+      "label": "HTTP API Reference",
       "link": {
         "type": "doc",
         "id": "http-api/index"
@@ -67,7 +67,21 @@
       "items": [
         "http-api/server-api",
         "http-api/bucket-api",
-        "http-api/entry-api",
+        {
+          "type": "category",
+          "label": "Entry API",
+          "link": {
+            "type": "doc",
+            "id": "http-api/entry-api/index"
+          },
+          "collapsed": false,
+          "items": [
+            "http-api/entry-api/read_data",
+            "http-api/entry-api/write_data",
+            "http-api/entry-api/update_data",
+            "http-api/entry-api/delete_data"
+          ]
+        },
         "http-api/token-authentication",
         "http-api/replication-api"
       ]

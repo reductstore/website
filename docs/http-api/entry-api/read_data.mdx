@@ -1,0 +1,419 @@
+---
+title: Read Data
+description: HTTP Endpoints for reading data from an entry in the database.
+---
+
+# Entry API to Read Data
+
+The API provides several endpoints for reading data from an entry including reading a single record, reading multiple records in a batch, and querying records for a time interval.
+
+## Get a Record from an Entry
+
+
+The method finds a record for the given timestamp or query ID and sends its content in
+the HTTP response body. It also sends meta information in headers:
+
+* `x-reduct-time` - UNIX timestamp of the record in microseconds
+* `x-reduct-last` - 1 - if a record is the last record in the query (deprecated since version 1.4, use NoContent response)
+* `x-reduct-label-<name>` - a value of the `<name>` label
+
+
+If authentication is enabled, the method needs a valid API token with read
+access to the entry's bucket.
+
+
+**Changes**:
+
+* Version 1.3: the database supports labels. If a record has some
+  labels, the method sends them as headers that start with `x-reduct-label`.
+* Version 1.4: the `x-reduct-last` header is deprecated. Use the NoContent response instead.
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/entry-api/read_data"
+  />
+</head>
+
+import SwaggerComponent from "@site/src/components/SwaggerComponent";
+
+<SwaggerComponent
+    method="GET"
+    path="/api/v1/b/:bucket_name/:entry_name"
+    summary="Get a record from an entry"
+    fullWidth={false}
+    parameters={[
+        {
+            type: "path",
+            details: {
+                name: ":bucket_name",
+                isRequired: true,
+                description: "Name of bucket",
+            },
+        },
+        {
+            type: "query",
+            details: {
+                name: "q",
+                isRequired: false,
+                description: (
+                    <>
+                        A query ID to read the next record in the query. If it is set, the
+                        parameter <code>ts</code> is ignored.
+                    </>
+                ),
+            },
+        },
+        {
+            type: "path",
+            details: {
+                name: ":entry_name",
+                isRequired: true,
+                description: "Name of entry",
+            },
+        },
+        {
+            type: "query",
+            details: {
+                name: "ts",
+                isRequired: false,
+                description:
+                    "A UNIX timestamp in microseconds. If it is empty, the latest record is returned.",
+            },
+        },
+    ]}
+    responses={[
+        {
+            status: "200",
+            message: "OK",
+            summary: "The record is found and returned in body of the response",
+            description: (
+                <>
+                    <code>"string"</code>
+                </>
+            )
+        },
+        {
+            status: "204",
+            message: "No Content",
+            summary: "If there is no record available for the given query",
+        },
+        {
+            status: "401",
+            message: "Unauthorized",
+            summary: "Access token is invalid or empty",
+        },
+        {
+            status: "403",
+            message: "Forbidden",
+            summary: "Access token doesn",
+        },
+        {
+            status: "404",
+            message: "Not Found",
+            summary: "The bucket or record with the timestamp doesn",
+        },
+        {
+            status: "422",
+            message: "Unprocessable Entity",
+            summary: "Bad timestamp",
+        },
+    ]}
+
+/>
+
+## Get a Batch of Records from an Entry
+
+The method retrieves a batch of records for the given query ID and sends their contents in the HTTP response
+body.
+
+The method works in conjunction with the `GET /b/:bucket/:entry/q` method and uses [the Batch Protocol](https://reduct.store/docs/http-api/entry-api/batch-protocol) to read records in a batch.
+
+If authentication is enabled, the method needs a valid API token with read access to the entry's bucket.
+
+**Changes**:
+
+* Version 1.5: the method was introduced.
+
+
+<SwaggerComponent
+    method="GET"
+    path="/api/v1/b/:bucket_name/:entry_name/batch"
+    summary="Get a bulk of records from an entry"
+    parameters={[
+        {
+            type: "path",
+            details: {
+                name: ":bucket_name",
+                description: "Name of bucket",
+                isRequired: true,
+            },
+        },
+        {
+            type: "query",
+            details: {
+                name: "q",
+                dataType: "Integer",
+                description: "A query ID to read the next record in the query",
+                isRequired: true,
+            },
+        },
+        {
+            type: "path",
+            details: {
+                name: ":entry_name",
+                isRequired: true,
+                description: "Name of entry",
+            },
+        },
+    ]}
+    responses={[
+        {
+            status: "200",
+            message: "OK",
+            summary: "The record is found and returned in body of the response",
+            description: (
+                <>
+                    <code>"string"</code>
+                </>
+            ),
+        },
+        {
+            status: "204",
+            message: "No Content",
+            summary: "If there is no record available for the given query",
+        },
+        {
+            status: "401",
+            message: "Unauthorized",
+            summary: "Access token is invalid or empty",
+        },
+        {
+            status: "403",
+            message: "Forbidden",
+            summary: "Access token doesn",
+        },
+        {
+            status: "404",
+            message: "Not Found",
+            summary: "The bucket or record with the timestamp doesn",
+        },
+        {
+            status: "422",
+            message: "Unprocessable Entity",
+            summary: "Bad timestamp",
+        },
+    ]}
+
+/>
+
+## Query Records for a Time Interval
+
+The method responds with a JSON document containing an ID which should be
+used to read records with the following endpoint: `GET /b/:bucket_name/:entry_name?q=ID.`
+
+The time interval is [start, stop).
+
+If authentication is enabled, the method needs a valid API token with read
+access to the bucket of the entry.
+
+**Changes**:
+
+* Version 1.3: the method also provides the `include-<label>` and `exclude-<label>` query parameters to filter records based on the values of certain labels.
+  For example:
+  ```
+    GET /api/v1/:bucket/:entry/q?include-<label1>=foo&exclude-<label2>=bar
+    ```
+    This would find all records that have `label1` equal to "foo" and excludes those that have `label2` equal to "bar".
+    A user can specify multiple `include` and `exclude` labels, which will be connected with an AND operator. For example:
+    ```
+    GET /api/v1/:bucket/:entry/q?include-<label1>=foo&include-<label2>=bar
+    ```
+* Version 1.4: the method has the `continuous` flag. If it is true, the current query will not be discarded if there are no records.
+  A client can ask them later. The query will not be removed until its TTL has expired. The `stop` parameter is ignored for continuous queries.
+* Version 1.6: the method provides the `limit` query parameter. It limits the number of records in the query. If it is not set, the query is unlimited by default.
+* Version 1.10: the method has the `each_n` and `each_s` query parameters. If the `each_n` parameter is set, the method returns only every `each_n`-th record. If the `each_s` parameter is set, the method returns only one record per `each_s` seconds.
+
+
+
+<SwaggerComponent
+  method="GET"
+  path="/api/v1/b/:bucket_name/:entry_name/q"
+  summary="Query records for a time interval"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        description: "Name of bucket",
+        isRequired: true,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "start",
+        description:
+          "A UNIX timestamp in microseconds. If not set, the query starts from the oldest record in the entry.",
+        dataType: "Integer",
+        isRequired: false,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "stop",
+        description:
+          "A UNIX timestamp in microseconds. If not set, the query starts from the latest record in the entry.",
+        dataType: "Integer",
+        isRequired: false,
+      },
+    },
+    {
+      type: "path",
+      details: {
+        name: ":entry_name",
+        description: "Name of entry",
+        isRequired: true,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "ttl",
+        description:
+          "Time To Live of the query in seconds. If a client haven't read any record for this time interval, the server removes the query and the query ID becomes invalid. Default value 5 seconds.",
+        dataType: "Integer",
+        isRequired: false,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "include-<label name>",
+        description: "Query records that have a certain value of a label.",
+        isRequired: false,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "exclude-<label name>",
+        description:
+          "Query records that don't have a certain value of a label.",
+        isRequired: false,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "conitnuous",
+        description: "Keep query if no records for the request",
+        dataType: "Boolean",
+        isRequired: false,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "limit",
+        description:
+          "Maximum number of records in the query. Default: unlimited.",
+        dataType: "Integer",
+        isRequired: false,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "each_n",
+        description: "Return only every N-th record",
+        dataType: "Integer",
+        isRequired: false,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "each_s",
+        description: "Return only one record per S seconds",
+        dataType: "Float",
+        isRequired: false,
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      description: (
+        <pre>
+          <code>
+            {`{
+        "id": "integer" // ID of query which can be used in GET /b/:bucket/:entry request
+        }`}
+          </code>
+        </pre>
+      ),
+    },
+    {
+      status: "204",
+      message: "No Content",
+      summary: "No records for the time interval",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have the required permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "The bucket or entry doesn't exist",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "One or both timestamps are bad, or TTL is not a number",
+    },
+  ]}
+/>
+
+## Reading only meta information
+
+Sometimes you need to retrieve only the meta information about a record without its content, ReductStore provides the `HEAD` version of the read endpoints for this purpose.
+
+<SwaggerComponent
+  method="HEAD"
+  path="/api/v1/b/:bucket_name/:entry_name"
+  summary="Get only meta information about record"
+  description={
+    <>
+      The endpoint works exactly as
+      <br />
+      <code>GET /api/v1/b/:bucket_name/:entry_name</code>
+      <br />
+      but returns only headers with meta information with a body.
+    </>
+  }
+/>
+
+<SwaggerComponent
+  method="HEAD"
+  path="/api/v1/b/:bucket_name/:entry_name/batch"
+  summary="Get only meta information in bulk"
+  description={
+    <>
+      The endpoint works exactly as
+      <br />
+      <code>GET /api/v1/b/:bucket_name/:entry_name/batch</code>
+      <br />
+      but returns only headers with meta information with a body.
+    </>
+  }
+/>
