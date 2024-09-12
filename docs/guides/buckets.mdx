@@ -35,11 +35,13 @@ Each bucket has settings that determine how data is stored and accessed. These s
 
 ### Quota Type
 
-The quota type determines the method of quota enforcement and can be set to either NONE or FIFO.
+The quota type determines the method of quota enforcement and can be set to either NONE, FIFO or HARD.
 
 NONE implies no quota, allowing data to be stored without any restrictions.
 
 FIFO, short for first-in-first-out, enforces the quota by deleting the oldest block to accommodate new data once the quota is reached. ReductStore ensures that the data does not surpass the quota size, refusing to store new data if there's insufficient room.
+
+HARD is a strict quota type that prevents data from being stored once the quota is reached. This setting is useful when you want to limit the amount of data stored in a bucket but don't want to delete old data.
 
 ### Quota Size
 

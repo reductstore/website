@@ -37,10 +37,11 @@ A container for entries which provides the following storage settings:
 
 - **Maximum block size.** The storage engine creates a new block after the size of the current block reaches this limit. A block might be bigger than this size because the storage engine can write a belated record.
 - **Maximum number of records.** When the current block has more records than this limit, the storage engine creates a new block.
-- **Quota type.** The storage supports two quota types:
+- **Quota type.** The storage supports the following quota types:
   - No quota. The bucket will grow to consume as much free disk space as is available - relative to how much data is written.
   - FIFO. The bucket removes the oldest block of some entry when it reaches the quota limit.
-- **Quota size.**
+  - Hard. The bucket stops writing data when it reaches the quota limit.
+- **Quota size.** The maximum size of the bucket in bytes allowed before the quota type policy is enforced.
 
 A user can manage bucket with [**Bucket API**](./http-api/bucket-api).
 
