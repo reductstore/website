@@ -1,0 +1,74 @@
+---
+title: Entry API
+description: The Entry API allows users to write and read data from their buckets, as well as search for specific entries using query operations.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/entry-api"
+  />
+</head>
+
+import SwaggerComponent from "@site/src/components/SwaggerComponent";
+
+# Entry API Specification Reference
+
+The Entry API allows users to read, write, update, and delete data from their buckets. It also provides query operations to search for specific entries.
+
+The API uses the following types of endpoints each with its own purpose:
+
+- **Single Record Endpoints** - CRUD requests for reading and writing a single record. Which is simple and easy to use.
+- **Batch Endpoints** - For reading and writing multiple records in a single request. It is more efficient for transferring large amounts of data.
+- **Query Endpoints** - For querying data with filters and aggregations over a time range.
+
+## Batch Protocol
+
+To reduce HTTP overhead when sending many small objects, ReductStore provides a batch model for writing and reading data. The meta information about records is serialized in a CSV line in the headers, and the content of the records is sent in the body of an HTTP request or response.
+
+The HTTP header format:
+
+```
+x-reduct-time-<TIME>: [CONTENT_SIZE],[CONTENT_TYPE],[LABEL-KEY1=LABEL-VALUE1],[LABEL-KEY2=LABEL-VALUE2],...
+```
+
+Where:
+
+- `TIME` is the UNIX timestamp of the record in microseconds.
+- `CONTENT_SIZE` is the size of the record content in bytes.
+- `CONTENT_TYPE` is the MIME type of the record content.
+- `LABEL-KEY1=LABEL-VALUE1` is the key-value pair of the record labels. If the value contains a comma, it should be enclosed in quotes.
+
+Example of the HTTP headers:
+
+```
+x-reduct-time-1631540400000000: 1024,application/json,key1=value1,key2=value2,key3="[a,b,c]"
+x-reduct-time-1631540400001000: 2048,application/json,key1=value1,key2=value2,key3="[a,b,c]"
+```
+
+The headers must be sorted by the timestamp in ascending order.
+
+The content of the records is sent in the body of the HTTP request or response in the same order as the headers and concatenated without any separator.
+A client should use the content size from the headers to read the record content from the body.
+
+The response may contain a list of records which were not processed due to errors. The list is serialized in the `x-reduct-errors-<timestamp>` header in the following format:
+
+```
+x-reduct-errors-<TIMESTAMP>: <ERROR_CODE>,<ERROR_MESSAGE>
+```
+
+Where:
+
+- `TIMESTAMP` is the UNIX timestamp of the record in microseconds.
+- `ERROR_CODE` is the HTTP error code of the error.
+- `ERROR_MESSAGE` is the error message.
+
+:::info
+Many HTTP clients have a limit on the size of the headers. If you are sending a large number of records, you may need to split the request into multiple smaller requests.
+:::
+
+## Entry API Endpoints
+
+import DocCardList from "@theme/DocCardList";
+
+<DocCardList />

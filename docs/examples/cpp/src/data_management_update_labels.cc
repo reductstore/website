@@ -13,7 +13,7 @@ int main() {
     auto [bucket, create_err] = client->GetOrCreateBucket("my-bucket");
     assert(create_err == Error::kOk);
 
-    //  Send some records to the "entry" entry with labels
+    //  Send some records to the "cpp-example" entry with labels
     IBucket::Time ts = IBucket::Time::clock::now();
     auto err = bucket->Write("cpp-example", {
             .timestamp = ts,
