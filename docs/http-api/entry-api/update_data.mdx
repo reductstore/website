@@ -14,35 +14,29 @@ description: HTTP Endpoints for updating data in the database.
 
 The API provides several endpoints for updating labels of a record or multiple records in a single request.
 
+
+
 import SwaggerComponent from "@site/src/components/SwaggerComponent";
+
+## Update Labels of a Record
+
+The method allows to update labels of an existing record. It receives
+labels in headers that start with `x-reduct-label-``and updates
+the labels or adds new ones. If a header with a label is empty, the label
+is removed. Because the content of the record is immutable, the method doesn't expect a body, and the content-length header is required, but must be 0.
+
+All existing labels not mentioned in the request stay unchanged.
+
+The method needs a valid API token with write access to the entry's bucket
+if authentication is enabled.
+
+**Changes**:
+* Version 1.11: The method was introduced.
 
 <SwaggerComponent
   method="PATCH"
   path="/api/v1/b/:bucket_name/:entry_name"
   summary="Update labels of a record"
-  description={
-    <>
-      The method allows to update labels of a existing record. It receives
-      labels in headers that start with <code>x-reduct-label-</code> and updates
-      the labels or adds new ones. If a header with a label is empty, the label
-      is removed. Due to the content of the record is immutable, the method
-      doesn't expect a body and the content-length header is required but must
-      be 0.
-      <br />
-      <br />
-      All existing labels not mentioned in the request stay unchanged.
-      <br />
-      <br />
-      The method needs a valid API token with write access to the entry's bucket
-      if authentication is enabled.
-      <br />
-      <br />
-      <strong>Changes:</strong>
-      <ul>
-        <li>Version 1.11: The method was introduced.</li>
-      </ul>
-    </>
-  }
   parameters={[
     {
       type: "path",
@@ -127,23 +121,17 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
   ]}
 />
 
+## Update Labels of Multiple Records
+
+This method allows to update labels of multiple records in a single request. A client should describe the
+records in headers according to [the Batch Protocol](/docs/http-api/entry-api/index.mdx#batch-protocol). The content-length header is required but must be 0.
+
+Existing labels not mentioned in the request stay unchanged.
+
 <SwaggerComponent
     method="PATCH"
     path="/api/v1/b/:bucket_name/:entry_name/batch"
     summary="Update labels of multiple records"
-    description={
-        <>
-            This method allows to update labels of multiple records in a single request. A client should describe the
-            records in headers according to the Batch Protocol. The content-length header is required but must be 0.
-            <br/><br/>
-            Existing labels not mentioned in the request stay unchanged.
-
-            The method returns an HTTP error if the header format or data length is incorrect. It also returns an
-            individual status and error message for each record if the write operation fails:
-            <br/>
-            <code>x-reduct-error-: &lt;STATUS_CODE&gt;,&lt;ERROR_MESSAGE&gt;.</code>
-        </>
-    }
     responses={[
         {
             status: "200",
@@ -176,5 +164,4 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
             summary: "Bad header format"
         }
     ]}
-
 />

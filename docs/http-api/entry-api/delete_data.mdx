@@ -14,35 +14,29 @@ description: HTTP Endpoints for deleting data from an entry in the database.
 
 The API provides several endpoints for deleting data from an entry in the database. It can be an entire entry, a specific record, a batch of records in a single request or records within a time range.
 
+
+## Remove a Record from an Entry
+
+The method removes a record from an entry or the entire entry.
+
+:::danger
+If the `ts` query parameter is set, the record with the timestamp is removed.
+Otherwise, the entire entry is removed.
+:::
+
+If authentication is enabled, the method needs a valid API token with read access to the entry's bucket.
+
+**Changes**:
+
+* Version 1.6: initially, the method removed only the entire entry.
+* Version 1.12: the method can remove a record with a specific timestamp by setting the `ts` query parameter.
+
 import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
 <SwaggerComponent
     method="DELETE"
     path="/api/v1/b/:bucket_name/:entry_name"
     summary="Remove a record from an entry or the entire entry"
-    description={
-        <>
-            The method removes a record from an entry or the entire entry.
-            If the `ts` query parameter is set, the record with the timestamp is removed.
-            Otherwise, the entire entry is removed.
-
-            <br/>
-            <br/>
-            If authentication is enabled, the method needs a valid API token with read access to the entry's bucket.
-            <br/>
-            <br/>
-            <strong> Changes: </strong>
-            <ul>
-                <li>
-                    Version 1.6: Initially, the method removed only the entire entry.
-                </li>
-                <li>
-                    Since 1.12, the method can remove a record with a specific timestamp by setting the `ts` query
-                    parameter.
-                </li>
-            </ul>
-        </>
-    }
     parameters={
         [
             {
@@ -97,29 +91,24 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
 />
 
+
+## Remove a Batch of Records from an Entry
+
+
+The method removes a batch of records from an entry. The list of records to remove is sent in the headers of
+the request. See [the Batch Protocol](/docs/http-api/entry-api/index.mdx#batch-protocol) section for more details.
+
+If authentication is enabled, the method needs a valid API token with read access to the entry's bucket.
+
+**Changes**:
+
+* Version 1.12: the method was introduced.
+
+
 <SwaggerComponent
     method="DELETE"
     path="/api/v1/b/:bucket_name/:entry_name/batch"
     summary="Remove a batch of records from an entry"
-    description={
-        <>
-            The method removes a batch of records from an entry. The list of records to remove is sent in the headers of
-            the request.
-            See the Batch Protocol section for more details.
-
-            <br/>
-            <br/>
-            If authentication is enabled, the method needs a valid API token with read access to the entry's bucket.
-            <br/>
-            <br/>
-            <strong> Changes: </strong>
-            <ul>
-                <li>
-                    Since 1.12, the method was introduced.
-                </li>
-            </ul>
-        </>
-    }
     parameters={
         [
             {
@@ -185,33 +174,26 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
 />
 
+## Remove Records within a Time Range
+
+The method removes records within a time range from an entry. The time range is specified in the query
+parameters.
+The method can return errors for specific records that were not removed in the response headers according to
+the [Batch Protocol](/docs/http-api/entry-api/index.mdx#batch-protocol).
+
+Additionally, you can specify filters to remove only records that match the filter criteria.
+
+If authentication is enabled, the method needs a valid API token with read access to the entry's bucket.
+
+**Changes**:
+
+* Version 1.12: the method was introduced.
+
+
 <SwaggerComponent
     method="DELETE"
     path="/api/v1/b/:bucket_name/:entry_name/q"
     summary="Remove records within a time range"
-    description={
-        <>
-            The method removes records within a time range from an entry. The time range is specified in the query
-            parameters.
-            The method cam return errors for specific records that were not removed in the response headers according to
-            the Batch Protocol.
-
-            <br/>
-            Additionally, you can specify filters to remove only records that match the filter criteria.
-
-            <br/>
-            <br/>
-            If authentication is enabled, the method needs a valid API token with read access to the entry's bucket.
-            <br/>
-            <br/>
-            <strong> Changes: </strong>
-            <ul>
-                <li>
-                    Since 1.12, the method was introduced.
-                </li>
-            </ul>
-        </>
-    }
     parameters={[
         {
             type: "path",

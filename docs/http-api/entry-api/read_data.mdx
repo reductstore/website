@@ -7,6 +7,27 @@ description: HTTP Endpoints for reading data from an entry in the database.
 
 The API provides several endpoints for reading data from an entry including reading a single record, reading multiple records in a batch, and querying records for a time interval.
 
+## Get a Record from an Entry
+
+
+The method finds a record for the given timestamp or query ID and sends its content in
+the HTTP response body. It also sends meta information in headers:
+
+* `x-reduct-time` - UNIX timestamp of the record in microseconds
+* `x-reduct-last` - 1 - if a record is the last record in the query (deprecated since version 1.4, use NoContent response)
+* `x-reduct-label-<name>` - a value of the `<name>` label
+
+
+If authentication is enabled, the method needs a valid API token with read
+access to the entry's bucket.
+
+
+**Changes**:
+
+* Version 1.3: the database supports labels. If a record has some
+  labels, the method sends them as headers that start with `x-reduct-label`.
+* Version 1.4: the `x-reduct-last` header is deprecated. Use the NoContent response instead.
+
 <head>
   <link
     rel="canonical"
@@ -21,45 +42,6 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
     path="/api/v1/b/:bucket_name/:entry_name"
     summary="Get a record from an entry"
     fullWidth={false}
-    description={
-        <>
-            The method finds a record for the given timestamp or query ID and sends its content in
-            the HTTP response body. It also sends meta information in headers:
-            <br/>
-            <ul>
-                <li>
-                    <strong>x-reduct-time:</strong> - UNIX timestamp of the record in
-                    microseconds
-                </li>
-                <li>
-                    <strong>x-reduct-last</strong> - 1 - if a record is the last record in the
-                    query (deprecated since version 1.4, use NoContent response)
-                </li>
-
-                <li>
-                    <strong>x-reduct-label-&lt;name&gt;</strong> - a value of the &lt;name&gt;
-                    label
-                </li>
-            </ul>
-
-            If authentication is enabled, the method needs a valid API token with read
-            access to the entry's bucket.
-            <br/>
-            <br/>
-
-            <strong>Changes:</strong>
-            <ul>
-                <li>
-                    Version 1.3: the database supports labels. If a record has some
-                    labels, the method sends them as headers that start with <code>x-reduct-label</code>.
-                </li>
-                <li>
-                    Version 1.4: the <code>x-reduct-last</code> header is deprecated. Use the NoContent response
-                    instead.
-                </li>
-            </ul>
-        </>
-    }
     parameters={[
         {
             type: "path",
@@ -77,11 +59,7 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
                 description: (
                     <>
                         A query ID to read the next record in the query. If it is set, the
-                        parameter
-                        <br/>
-                        <code>ts</code>
-                        <br/>
-                        is ignored.
+                        parameter <code>ts</code> is ignored.
                     </>
                 ),
             },
@@ -144,33 +122,24 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
 />
 
+## Get a Batch of Records from an Entry
+
+The method retrieves a batch of records for the given query ID and sends their contents in the HTTP response
+body.
+
+The method works in conjunction with the `GET /b/:bucket/:entry/q` method and uses [the Batch Protocol](https://reduct.store/docs/http-api/entry-api/batch-protocol) to read records in a batch.
+
+If authentication is enabled, the method needs a valid API token with read access to the entry's bucket.
+
+**Changes**:
+
+* Version 1.5: the method was introduced.
+
+
 <SwaggerComponent
     method="GET"
     path="/api/v1/b/:bucket_name/:entry_name/batch"
     summary="Get a bulk of records from an entry"
-    description={
-        <>
-            The method retrieves a batch of records for the given query ID and sends their contents in the HTTP response
-            body.
-
-            <br/>
-            The method works in conjunction with the <code>GET /b/:bucket/:entry/q</code> method and uses the Batch
-            Protocol.
-
-            <br/>
-            <br/>
-
-            If authentication is enabled, the method needs a valid API token with read access to the entry's bucket.
-            <br/>
-            <br/>
-            <strong>Changes:</strong>
-            <ul>
-                <li>
-                    Version 1.5: the method was introduced.
-                </li>
-            </ul>
-        </>
-    }
     parameters={[
         {
             type: "path",
@@ -238,72 +207,39 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
 />
 
+## Query Records for a Time Interval
+
+The method responds with a JSON document containing an ID which should be
+used to read records with the following endpoint: `GET /b/:bucket_name/:entry_name?q=ID.`
+
+The time interval is [start, stop).
+
+If authentication is enabled, the method needs a valid API token with read
+access to the bucket of the entry.
+
+**Changes**:
+
+* Version 1.3: the method also provides the `include-<label>` and `exclude-<label>` query parameters to filter records based on the values of certain labels.
+  For example:
+  ```
+    GET /api/v1/:bucket/:entry/q?include-<label1>=foo&exclude-<label2>=bar
+    ```
+    This would find all records that have `label1` equal to "foo" and excludes those that have `label2` equal to "bar".
+    A user can specify multiple `include` and `exclude` labels, which will be connected with an AND operator. For example:
+    ```
+    GET /api/v1/:bucket/:entry/q?include-<label1>=foo&include-<label2>=bar
+    ```
+* Version 1.4: the method has the `continuous` flag. If it is true, the current query will not be discarded if there are no records.
+  A client can ask them later. The query will not be removed until its TTL has expired. The `stop` parameter is ignored for continuous queries.
+* Version 1.6: the method provides the `limit` query parameter. It limits the number of records in the query. If it is not set, the query is unlimited by default.
+* Version 1.10: the method has the `each_n` and `each_s` query parameters. If the `each_n` parameter is set, the method returns only every `each_n`-th record. If the `each_s` parameter is set, the method returns only one record per `each_s` seconds.
+
+
+
 <SwaggerComponent
   method="GET"
   path="/api/v1/b/:bucket_name/:entry_name/q"
   summary="Query records for a time interval"
-  description={
-    <>
-      The method responds with a JSON document containing an ID which should be
-      used to read records with the following endpoint:{" "}
-      <code>GET /b/:bucket_name/:entry_name?q=ID.</code>
-      <br />
-      The time interval is [start, stop).
-      <br />
-      <br />
-      If authentication is enabled, the method needs a valid API token with read
-      access to the bucket of the entry.
-      <br />
-      <br />
-      <strong> Changes: </strong>
-      <ul>
-        <li>
-          Version 1.3: the method also provides the{" "}
-          <code>include-&lt;label&gt;</code> and{" "}
-          <code>exclude-&lt;label&gt;</code> query parameters to filter records
-          based on the values of certain labels. For example:
-          <p>
-            <code>
-              GET
-              /api/v1/:bucket/:entry/q?include-&lt;label1&gt;=foo&amp;exclude-&lt;label2&gt;=bar
-            </code>
-          </p>
-          This would find all records that have <code>label1</code> equal to
-          "foo" and excludes those that have <code>label2</code> equal to "bar".
-          <br />A user can specify multiple <code>include</code> and{" "}
-          <code>exclude</code> labels, which will be connected with an AND
-          operator. For example:
-          <p>
-            <code>
-              GET
-              /api/v1/:bucket/:entry/q?include-&lt;label1&gt;=foo&amp;include-&lt;label2&gt;=bar
-            </code>
-          </p>
-        </li>
-        <li>
-          Version 1.4: the method has the <code>continuous query</code> flag. If
-          it is true, the current query will not be discarded if there are no
-          records. A client can ask them later. The query will not be removed
-          until its TTL has expired. The <code>stop</code> parameter is ignored
-          for continuous queries.
-        </li>
-        <li>
-          Version 1.6: the method provides the <code>limit</code> query
-          parameter. It limits the number of records in the query. If it is not
-          set, the query is unlimited by default.
-        </li>
-        <li>
-          Version 1.10: the method has the <code>each_n</code> and{" "}
-          <code>each_s</code> query parameters. If the <code>each_n</code>{" "}
-          parameter is set, the method returns only every <code>each_n</code>-th
-          record. If the <code>each_s</code> parameter is set, the method
-          returns only one record per <code>each_s</code> seconds.
-        </li>
-      </ul>
-      <br />
-      <br />
-    </>
-  }
   parameters={[
     {
       type: "path",

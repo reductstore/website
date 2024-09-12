@@ -2,11 +2,6 @@
 title: Write Data
 description: HTTP Endpoints for writing data to the database.
 ---
-
-# Entry API to Write Data
-
-The API provides several endpoints for writing data to the database. The endpoints allow writing a single record or a batch of records in a single request.
-
 <head>
   <link
     rel="canonical"
@@ -14,39 +9,37 @@ The API provides several endpoints for writing data to the database. The endpoin
   />
 </head>
 
+
+# Entry API to Write Data
+
+The API provides several endpoints for writing data to the database. The endpoints allow writing a single record or a batch of records in a single request.
+
+## Write a Record to an Entry
+
+ReductStore creates an entry on the first write operation. The record
+should be placed in the body of the HTTP request. The body can also be
+empty.
+
+The method needs a valid API token with write access to the entry's bucket
+if authentication is enabled.
+
+The endpoint can be used with the "Expect 100-continue" header. If the
+header is not set and an error occurs on the database side, the database
+drains the sent body and returns an HTTP status.
+
+**Changes**:
+
+* Version 1.3: the database supports labels. You can assign any number
+  of labels to a record by using headers that start with
+  `x-reduct-label-`.
+
+
 import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
 <SwaggerComponent
   method="POST"
   path="/api/v1/b/:bucket_name/:entry_name"
   summary="Write a record to an entry"
-  description={
-    <>
-      ReductStore creates an entry on the first write operation. The record
-      should be placed in the body of the HTTP request. The body can also be
-      empty.
-      <br />
-      <br />
-      The method needs a valid API token with write access to the entry's bucket
-      if authentication is enabled.
-      <br />
-      <br />
-      The endpoint can be used with the "Expect 100-continue" header. If the
-      header is not set and an error occurs on the database side, the database
-      drains the sent body and returns an HTTP status.
-      <br />
-      <br />
-      <strong>Changes:</strong>
-      <ul>
-        <li>
-          {" "}
-          Version 1.3: the database supports labels. You can assign any number
-          of labels to a record by using headers that start with{" "}
-          <code>x-reduct-label-</code>.
-        </li>
-      </ul>
-    </>
-  }
   parameters={[
     {
       type: "path",
@@ -130,26 +123,23 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
   ]}
 />
 
+
+## Write a Batch of Records
+
+This method allows multiple records to be written in a single request. A
+client should describe the records in headers in the format of [the Batch Protocol](/docs/http-api/entry-api/index.mdx#batch-protocol).
+
+**Changes**:
+
+* Version 1.7: the database supports labels. You can assign any number
+  of labels to a record by using headers that start with `x-reduct-label-`.
+
+
+
 <SwaggerComponent
     method="POST"
     path="/api/v1/b/:bucket_name/:entry_name/batch"
     summary="Write batch of records"
-    description={
-        <>
-            This method allows multiple records to be written in a single request. A
-            client should describe the records in headers in the format of Batch Protocol.
-
-            <br/>
-            <br/>
-
-            <strong>Changes:</strong>
-            <ul>
-                <li> Version 1.7: the database supports labels. You can assign any number
-                    of labels to a record by using headers that start with <code>x-reduct-label-</code>.
-                </li>
-            </ul>
-        </>
-    }
     responses={[
         {
             status: "200",
