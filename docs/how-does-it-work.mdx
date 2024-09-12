@@ -41,7 +41,7 @@ A container for entries which provides the following storage settings:
   - No quota. The bucket will grow to consume as much free disk space as is available - relative to how much data is written.
   - FIFO. The bucket removes the oldest block of some entry when it reaches the quota limit.
   - Hard. The bucket stops writing data when it reaches the quota limit.
-- **Quota size.**
+- **Quota size.** The maximum size of the bucket in bytes allowed before the quota type policy is enforced.
 
 A user can manage bucket with [**Bucket API**](./http-api/bucket-api).
 
