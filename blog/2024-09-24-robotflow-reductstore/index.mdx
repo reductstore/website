@@ -33,7 +33,7 @@ By the end of this article, you will have a clear understanding of how to levera
 Challenges of Traditional Computer Vision Model Deployment
 ----------------------------------------------------------
 
-There are several challenges to deploying computer vision models that can affect the efficiency and scalability of projects. Some of the key issues are:
+There are several challenges to deploying computer vision models that can affect the efficiency and scalability of projects. Some of the key issues are
 
 1.  **Complex infrastructure requirements**: Traditional computer vision models often require a powerful computing infrastructure. This includes high-end GPUs, specialized hardware, and optimized software configurations. For many organizations, setting up this infrastructure can be time consuming and costly.
     
@@ -69,8 +69,7 @@ Benefits of Using Roboflow Inference
 ------------------------------------
 
 Roboflow Inference provides a robust and efficient way to deploy computer vision models. 
-It is designed to simplify the deployment process while maintaining flexibility and performance. 
-Below are some of the key benefits of using Roboflow Inference:
+It is designed to simplify the deployment process while maintaining flexibility and performance. Below are some of the key benefits of using Roboflow Inference.
 
 ### Cost-effectiveness
 
@@ -78,7 +77,7 @@ Roboflow Inference eliminates the need for expensive infrastructure by providing
 
 ### Minimal setup requirements
 
-One of the outstanding features of Roboflow Inference is its ease of setup. The platform supports a wide range of devices, from powerful cloud GPUs to lightweight edge devices, without requiring significant hardware investments. This enables rapid deployment without complex configuration.
+One of the great things about Roboflow Inference is its ease of deployment. The platform supports a wide range of devices, from cloud GPUs to lightweight edge devices, with minimal configuration requirements. This allows for rapid deployment without complex configuration.
 
 ### Offline capabilities
 
@@ -93,7 +92,7 @@ Selecting the right model for your computer vision application is critical to ac
 
 Roboflow provides access to an extensive library of pre-trained models, commonly referred to as the Roboflow Universe. 
 This library covers various tasks such as object detection, image classification, and segmentation. 
-Users can either use these foundation models directly or fine-tune them based on their specific dataset, significantly reducing the time required for model development.
+Users can either use these models directly or fine-tune them based on their specific dataset.
 
 ![Roboflow Universe](./img/roboflow_universe.png)
 <small style={{ display: 'block', marginTop: '-20px' }}>
@@ -104,15 +103,26 @@ Users can either use these foundation models directly or fine-tune them based on
 
 When choosing a model, consider the following factors
 
-1.  Task type: Determine whether your project involves object detection, image classification, or image segmentation.
+1.  **Task Type**: Determine whether your project involves object detection, image classification, or image segmentation. This will significantly influence the type of model you choose.
     
-2.  Model Accuracy: Select a model that meets the accuracy requirements of your application. Pre-trained models such as YOLO, MobileNet, or EfficientDet are available for high performance tasks.
+2.  **Model Accuracy**: Select a model that meets the accuracy requirements of your application. Depending on the task, there are different metrics, such as mAP (mean Average Precision) for object detection or mIoU (mean Intersection over Union) for segmentation, that can help evaluate model performance.
     
-3.  Hardware limitations: Make sure the model you select fits your hardware. For example, smaller models like MobileNet are ideal for edge devices, while more complex models like YOLOv5 can be used in cloud deployments for higher accuracy.
+3.  **Hardware limitations**: Make sure the model you select is compatible with your hardware. For example, smaller models are suitable for edge devices with limited resources, while larger models may require more powerful GPUs.
     
-4.  Latency requirements: For real-time applications such as video surveillance or autonomous systems, choose models that provide low latency during inference.
+4.  **Latency requirements**: Low-latency models are essential for real-time applications such as video surveillance or autonomous systems. In computer vision, GFLOPs (Giga Floating Point Operations) help measure the computational complexity of a model. Lower GFLOPs often mean faster processing times, but may come at the expense of accuracy.
 
-Roboflow's model library is organized to make it easy to browse and select the most appropriate model based on these criteria.
+An helpful approach is to browse the state of the art models in [**paperswithcode**](https://paperswithcode.com/). This will give you an idea of the performance of different models on various tasks.
+
+![Object Detection On COCO](./img/object_detection_coco.png)
+<small style={{ display: 'block', marginTop: '-20px' }}>
+  Object Detection on COCO. Image source: [Papers with Code](https://paperswithcode.com/sota/object-detection-on-coco)
+</small>
+
+The Pareto frontier represents the best tradeoff between two competing objectives, such as accuracy and computational cost (e.g., GFLOPs). Models on the Pareto frontier are the most efficient, meaning that if you want to improve one objective (such as accuracy), you'll have to accept a higher cost in the other (such as more computation).
+
+With all the models available, you can choose the one that best suits your needs. Sometimes it's better to choose a model that has been around longer and has been tested by the community for ease of use and reliability.
+
+Roboflow's model library is organized to help you easily browse and select models based on these tradeoffs.
 
 ![Roboflow Model Selection](./img/roboflow_model_selection.png)
 <small style={{ display: 'block', marginTop: '-20px' }}>
@@ -124,11 +134,6 @@ Roboflow's model library is organized to make it easy to browse and select the m
 Especially in computer vision, breaking down complex tasks into smaller steps can significantly improves accuracy and efficiency.
 
 For instance, recognizing digits on license plates can be split into two tasks: one model detects and localizes the plates, while another focuses on digit recognition. This pipeline approach allows each model to specialize, resulting in better performance. In contrast, using a single model to handle both tasks simultaneously introduces challenges, such as dealing with varied lighting, camera angles, and different plate designs, leading to reduced accuracy and a more complex development process.
-
-![Roboflow Workflows](./img/roboflow_workflows.png)
-<small style={{ display: 'block', marginTop: '-20px' }}>
-  Roboflow Workflows. Image source: [Roboflow](https://roboflow.com/)
-</small>
 
 Benefits of the pipeline approach include:
 
@@ -142,6 +147,15 @@ Benefits of the pipeline approach include:
     
 *   Reusability of the workflow for other tasks or projects.
 
+![Roboflow Workflows](./img/roboflow_workflows.png)
+<small style={{ display: 'block', marginTop: '-20px' }}>
+  Roboflow Workflows. Image source: [Roboflow](https://roboflow.com/)
+</small>
+
+In Roboflow workflows, you can define a series of models or steps to process images, such as resizing, zooming, or splitting them into smaller pieces. This allows you to create complex pipelines that can efficiently perform a variety of tasks.
+
+For example, you can split images into smaller pieces and stitch the results back together for a more accurate prediction:
+
 With split workflow                                              | Without split workflow
 -----------------------------------------------------------------|-----------------------------------------------------------------------
 ![Result with split workflow](./img/roboflow_split_workflow.png) | ![Result without split workflow](./img/roboflow_no_split_workflow.png)
@@ -153,12 +167,10 @@ With split workflow                                              | Without split
 Deployment Methods
 ------------------
 
-Roboflow Inference offers several deployment methods, making it flexible for different types of applications. 
+Roboflow Inference offers multiple deployment methods, making it flexible for different types of applications. 
 Whether you're working with single image analysis, real-time video streams, or offline scenarios, Roboflow can handle these use cases efficiently.
 
 ### Deploying on a Single Image
-
-[https://docs.roboflow.com/deploy/self-hosted-deployments/what-is-inference](https://docs.roboflow.com/deploy/self-hosted-deployments/what-is-inference)
 
 For basic applications such as object recognition or classification of a single image, Roboflow allows you to upload an image and instantly perform inference using a selected model. The process includes
 
@@ -167,6 +179,8 @@ For basic applications such as object recognition or classification of a single 
 2.  Applying the pre-trained model for detection or classification.
     
 3.  Obtain real-time results, including labels and bounding boxes for detected objects.
+
+Here is an example of how you can perform inference on a single image using Roboflow Inference:
 
 ```python
 import cv2
@@ -201,7 +215,7 @@ Image Example | Image Annotated
   Image Example and Annotated Image. Image from Jsbco on Unsplash and annotated using Roboflow Inference.
 </small>
 
-This method is fast, straightforward, and ideal for tasks where high-speed processing isn't critical.
+This method is fast, straightforward, and ideal for tasks where high-speed processing isn't critical. More information on how to perform inference on a single image can be found in [**Roboflow's inference documentation**](https://docs.roboflow.com/deploy/self-hosted-deployments/what-is-inference).
 
 ### Streaming Video Deployment
 
@@ -213,7 +227,7 @@ For real-time applications, Roboflow supports the deployment of models on video 
     
 3.  Output object detections or classifications frame-by-frame.
 
-[https://docs.roboflow.com/workflows/deploy-a-workflow](https://docs.roboflow.com/workflows/deploy-a-workflow)
+Here is an example of how you can perform inference on a video stream using Roboflow InferencePipeline:
 
 ```python
 from inference import InferencePipeline
@@ -233,7 +247,9 @@ pipeline = InferencePipeline.init_with_workflow(
 pipeline.start()
 pipeline.join()
 ```
-    
+
+For more information on how to deploy models on video streams, refer to the [**Roboflow deployment documentation**](https://docs.roboflow.com/workflows/deploy-a-workflow).
+  
 
 Cloud vs. Edge Deployment
 -------------------------
@@ -242,16 +258,16 @@ The choice between cloud and edge depends on the nature of your application. Eac
 
 ### Advantages of Cloud Deployment
 
-*   Scalability: Cloud-based deployments can handle large-scale processing, making them ideal for applications that require heavy computation.
+*   **Scalability**: Cloud-based deployments can handle large-scale processing, making them ideal for applications that require heavy computation.
     
-*   Ease of access: You can deploy and access models from anywhere, and roll out updates easily.
+*   **Ease of access**: You can deploy and access models from anywhere, and roll out updates easily.
     
 
 ### Advantages of Edge Deployment
 
-*   Reduced latency: Running models on edge devices minimizes latency, which is critical for real-time applications.
+*   **Reduced latency**: Running models on edge devices minimizes latency, which is critical for real-time applications.
     
-*   Offline operation: Edge deployments allow models to run in environments where Internet connectivity is unavailable or intermittent.
+*   **Offline operation**: Edge deployments allow models to run in environments where Internet connectivity is unavailable or intermittent.
     
 
 ReductStore for Efficient Data Management
@@ -268,11 +284,9 @@ It is a time-series object store designed for continuous data streams, making it
 
 ### ReductStore Setup
 
-Create a `docker-compose.yml` file with the following content:
+Create a `docker-compose.yml` file with the following configuration:
 
 ```yaml
-version: "3.8"
-
 services:
   reductstore:
     image: reduct/store:latest
@@ -282,41 +296,36 @@ services:
       - data:/data
     environment:
       - RS_API_TOKEN=my-token
-
+      - RS_BUCKET_1_NAME=my-bucket-1
+      - RS_BUCKET_2_NAME=my-bucket-2
+      
 volumes:
   data:
     driver: local
 ```
 
-Then we ca run ReductStore with:
+Then run the following command to start ReductStore:
 
 ```bash
 docker compose up -d
 ```
 
-This will start ReductStore on port 8383 with a simple API token for authentication.
+This will start ReductStore on port 8383 with the specified API token and bucket names.
 
 ![ReductStore Web Console](./img/reductstore_web_console.png)
 <small style={{ display: 'block', marginTop: '-20px' }}>
   ReductStore Web Console. Image source: [ReductStore](/)
 </small>
 
-### Python Setup
-
-Make sure you have Python 3.8+ installed in your environment.
-Then simply install the necessary libraries for our example using pip:
-
 ### Storing Images with AI Labels at the Edge
-
-[https://www.reduct.store/docs/next/guides/data-ingestion](https://www.reduct.store/docs/next/guides/data-ingestion)
 
 One of the key challenges in edge computing is managing large data sets generated by cameras or other imaging devices. ReductStore addresses this by
 
-1.  Storing high-frequency image data: Efficiently manages the storage of continuous streams of images captured at the edge.
+1.  **Storing high-frequency image data**: Efficiently manages the storage of continuous streams of images captured at the edge.
     
-2.  AI-generated labels: ReductStore supports the storage of metadata, such as object labels, directly with the images, simplifying future analysis and retrieval of information.
+2.  **AI-generated labels**: ReductStore supports the storage of metadata, such as object labels, directly with the images, simplifying future analysis and retrieval of information.
     
-3.  Efficient storage management: By optimizing the way images and metadata are stored, ReductStore reduces the overhead of managing large volumes of data on limited edge devices.
+3.  **Efficient storage management**: By optimizing the way images and metadata are stored, ReductStore reduces the overhead of managing large volumes of data on limited edge devices.
     
 ```python
 import time
@@ -334,15 +343,15 @@ async with Client("http://127.0.0.1:8383", api_token="my-token") as client:
     )
 ```
 
-### Selective Data Replication to the Cloud
+For more information on storing images with AI labels at the edge, refer to the [**ReductStore documentation**](https://www.reduct.store/docs/next/guides/data-ingestion).
 
-[https://www.reduct.store/docs/next/guides/data-replication](https://www.reduct.store/docs/next/guides/data-replication)
+### Selective Data Replication to the Cloud
 
 While edge storage is critical for low-latency processing, cloud storage provides scalability and backup for long-term data retention. ReductStore provides selective data replication capabilities that allow users to
 
-1.  Replicate only critical data: Instead of sending all data to the cloud, developers can select which images and metadata to replicate, reducing cloud storage costs.
+1.  **Replicate only critical data**: Instead of sending all data to the cloud, developers can select which images and metadata to replicate, reducing cloud storage costs.
     
-2.  Seamless Sync: ReductStore efficiently synchronizes the selected data with cloud-based storage systems, ensuring that critical information is preserved while maintaining real-time operations at the edge.
+2.  **Seamless Sync**: ReductStore efficiently synchronizes the selected data with cloud-based storage systems, ensuring that critical information is preserved while maintaining real-time operations at the edge.
     
 For setting up replication, you can use the ReductStore web console or the API to define rules for data replication based on specific criteria, such as image metadata, timestamps, or object labels.
 
@@ -351,12 +360,35 @@ For setting up replication, you can use the ReductStore web console or the API t
   ReductStore Data Replication. Image source: [ReductStore](/)
 </small>
 
+For more information on selective data replication to the cloud, refer to the [**ReductStore documentation**](https://www.reduct.store/docs/next/guides/data-replication).
+
+### Querying Data from ReductStore
+
+Once your data is stored in ReductStore, retrieving it for analysis or further processing is easy. Using the API, you can query and retrieve data based on the timestamp used during storage. Below is an example of how to retrieve stored images and their associated metadata:
+
+```python
+async with Client("http://127.0.0.1:8383", api_token="my-token") as client:
+    bucket: Bucket = await client.get_bucket("my-bucket-1")
+
+    async with bucket.read("roboflow", ts) as record:
+        content = await record.read_all()
+        image_reconstructed = bytes_to_image(content)
+        label_reconstructed = unflatten_predictions(record.labels)
+
+        assert np.array_equal(image, image_reconstructed)
+```
+
+In this example, the `bucket.read` method retrieves the data using the same entry name (`"roboflow"`) and timestamp that was used during the storage process. The stored image can be reconstructed from the bytes, and the corresponding AI-generated labels can be recovered from the metadata.
+
+In addition, ReductStore supports querying data over a time range, allowing you to retrieve data between specific timestamps as needed. For more details on query options, please refer to the [**ReductStore documentation**](https://www.reduct.store/docs/guides/data-querying).
+
+
 Conclusion
 ----------
 
-The combination of Roboflow and ReductStore provides a comprehensive solution for efficiently deploying and managing computer vision models. Roboflow simplifies the model development and deployment process, making it accessible to developers and data scientists, while ReductStore ensures that the massive amounts of data generated by these models are effectively managed, especially in real-time environments such as video streams.
+The combination of Roboflow and ReductStore provides a comprehensive solution for efficiently deploying and managing computer vision models. Roboflow simplifies the model development and deployment process and makes it accessible to developers and data scientists, while ReductStore ensures that the massive amounts of data generated by these models are effectively managed, especially in real-time environments such as video streams.
 
-Whether deployed in the cloud or at the edge, these tools reduce operational complexity, lower costs, and provide the flexibility to scale computer vision applications. As computer vision continues to evolve, leveraging these platforms and using pre-trained models from Roboflow Universe
+Whether deployed in the cloud or at the edge, these tools reduce operational complexity, lower costs, and provide the flexibility to scale computer vision applications. As computer vision continues to evolve, taking advantage of these platforms and using pre-trained models from Roboflow Universe
 
 FAQ
 ---
