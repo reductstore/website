@@ -14,7 +14,6 @@ description: HTTP Endpoints for deleting data from an entry in the database.
 
 The API provides several endpoints for deleting data from an entry in the database. It can be an entire entry, a specific record, a batch of records in a single request or records within a time range.
 
-
 ## Remove a Record from an Entry
 
 The method removes a record from an entry or the entire entry.
@@ -28,8 +27,8 @@ If authentication is enabled, the method needs a valid API token with read acces
 
 **Changes**:
 
-* Version 1.6: initially, the method removed only the entire entry.
-* Version 1.12: the method can remove a record with a specific timestamp by setting the `ts` query parameter.
+- Version 1.6: initially, the method removed only the entire entry.
+- Version 1.12: the method can remove a record with a specific timestamp by setting the `ts` query parameter.
 
 import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
@@ -91,9 +90,7 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
 />
 
-
 ## Remove a Batch of Records from an Entry
-
 
 The method removes a batch of records from an entry. The list of records to remove is sent in the headers of
 the request. See [the Batch Protocol](/docs/http-api/entry-api/index.mdx#batch-protocol) section for more details.
@@ -102,8 +99,7 @@ If authentication is enabled, the method needs a valid API token with read acces
 
 **Changes**:
 
-* Version 1.12: the method was introduced.
-
+- Version 1.12: the method was introduced.
 
 <SwaggerComponent
     method="DELETE"
@@ -187,8 +183,7 @@ If authentication is enabled, the method needs a valid API token with read acces
 
 **Changes**:
 
-* Version 1.12: the method was introduced.
-
+- Version 1.12: the method was introduced.
 
 <SwaggerComponent
     method="DELETE"
