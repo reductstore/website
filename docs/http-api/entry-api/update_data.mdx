@@ -14,8 +14,6 @@ description: HTTP Endpoints for updating data in the database.
 
 The API provides several endpoints for updating labels of a record or multiple records in a single request.
 
-
-
 import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
 ## Update Labels of a Record
@@ -31,7 +29,8 @@ The method needs a valid API token with write access to the entry's bucket
 if authentication is enabled.
 
 **Changes**:
-* Version 1.11: The method was introduced.
+
+- Version 1.11: The method was introduced.
 
 <SwaggerComponent
   method="PATCH"
@@ -129,39 +128,40 @@ records in headers according to [the Batch Protocol](/docs/http-api/entry-api/in
 Existing labels not mentioned in the request stay unchanged.
 
 <SwaggerComponent
-    method="PATCH"
-    path="/api/v1/b/:bucket_name/:entry_name/batch"
-    summary="Update labels of multiple records"
-    responses={[
-        {
-            status: "200",
-            message: "OK",
-            summary: "The request was valid. However, some records may not be written. Check headers."
-        },
-        {
-            status: "400",
-            message: "Bad Request",
-            summary: "Posted content bigger or smaller than content-length"
-        },
-        {
-            status: "401",
-            message: "Unauthorized",
-            summary: "Access token is invalid or empty"
-        },
-        {
-            status: "403",
-            message: "Forbidden",
-            summary: "Access token does not have write permissions"
-        },
-        {
-            status: "404",
-            message: "Not Found",
-            summary: "Bucket or entry is not found"
-        },
-        {
-            status: "422",
-            message: "Unprocessable Entity",
-            summary: "Bad header format"
-        }
-    ]}
+  method="PATCH"
+  path="/api/v1/b/:bucket_name/:entry_name/batch"
+  summary="Update labels of multiple records"
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary:
+        "The request was valid. However, some records may not be written. Check headers.",
+    },
+    {
+      status: "400",
+      message: "Bad Request",
+      summary: "Posted content bigger or smaller than content-length",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token does not have write permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket or entry is not found",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "Bad header format",
+    },
+  ]}
 />
