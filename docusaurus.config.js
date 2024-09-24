@@ -211,7 +211,7 @@ const config = {
               },
               {
                 label: "Computer Vision",
-                to: "/blog/tags/computer-vision",
+                to: "/use-cases/computer-vision",
               },
               {
                 label: "IoT (MQTT)",
