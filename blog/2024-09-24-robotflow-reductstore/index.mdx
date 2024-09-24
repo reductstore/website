@@ -353,7 +353,7 @@ For more information on selective data replication to the cloud, refer to the [*
 
 Once your data is stored in ReductStore, retrieving it for analysis or further processing is easy. You can query and retrieve data based on the timestamp used during storage or for a specific time range.
 
-The simplest way to retrieve data is by using the command-line tool reduct-cli. Here’s an example of how to query data for a specific timestamp:
+The easiest way to retrieve data is to use the command line tool `reduct-cli`. Here's an example of how to copy data from a start time and export it to a local directory along with metadata:
 
 ```bash
 reduct-cli alias add local -L http://localhost:8383 -t "my-token"
@@ -361,7 +361,7 @@ reduct-cli alias add local -L http://localhost:8383 -t "my-token"
 reduct-cli cp local/my-bucket-1 ./export --start "2024-09-01T00:00:00Z" --with-meta
 ```
 
-This command fetches the stored data for all the entries in the bucket `my-bucket-1` from the specified start time and exports it to a local directory. The `--with-meta` flag includes the metadata (labels) associated with the records.
+This command fetches the data for all the entries in the bucket `my-bucket-1` from the specified start time and exports it to a local directory. The `--with-meta` flag includes the metadata (labels) associated with the records.
 
 For programmatic access, here is an example of how you would query data from ReductStore using the Python client for a specific timestamp:
 
