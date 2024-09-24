@@ -358,10 +358,10 @@ The easiest way to retrieve data is to use the command line tool `reduct-cli`. H
 ```bash
 reduct-cli alias add local -L http://localhost:8383 -t "my-token"
 # Query data for a specific time range and export it to a local directory
-reduct-cli cp local/my-bucket-1 ./export --start "2024-09-01T00:00:00Z" --with-meta
+reduct-cli cp local/my-bucket-1 ./export --start "2024-09-01T00:00:00Z" --with-meta --limit 100
 ```
 
-This command fetches the data for all the entries in the bucket `my-bucket-1` from the specified start time and exports it to a local directory. The `--with-meta` flag includes the metadata (labels) associated with the records.
+This command fetches the data for all records in the `my-bucket-1` bucket from the specified start time and exports it to a local directory. The `--with-meta` flag includes the metadata (labels) associated with the records, and the `--limit` flag specifies the maximum number of records to fetch.
 
 For programmatic access, here is an example of how you would query data from ReductStore using the Python client for a specific timestamp:
 
