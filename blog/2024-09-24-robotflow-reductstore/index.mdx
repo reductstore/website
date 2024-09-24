@@ -334,11 +334,10 @@ For more information on storing images with AI labels at the edge, refer to the 
 
 While edge storage is critical for low-latency processing, cloud storage provides scalability and backup for long-term data retention. ReductStore provides selective data replication capabilities that allow users to
 
-1.  **Replicate only critical data**: Instead of sending all data to the cloud, developers can choose which records to replicate, significantly reducing cloud storage costs by focusing on critical data.
+1.  **Replicate only critical data**: Rather than sending all data to the cloud, developers can label specific records as critical and replicate only those, significantly reducing cloud storage costs by focusing on the information that matters.
 2.  **Down-sample high-frequency data**: ReductStore supports down-sampling of high-frequency data streams, allowing users to replicate data based on specific criteria, such as
-
-- every nth record (e.g., every 10th record)
-- at specific intervals, such as every s-th second (e.g., every 5 seconds).
+    - every nth record (e.g., every 10th record)
+    - at specific intervals, such as every s-th second (e.g., every 5 seconds).
 
 To set up replication, we can use the ReductStore web console to define the replication source and destination as well as rules such as the replication interval and filtering criteria.
 
@@ -354,7 +353,17 @@ For more information on selective data replication to the cloud, refer to the [*
 
 Once your data is stored in ReductStore, retrieving it for analysis or further processing is easy. You can query and retrieve data based on the timestamp used during storage or for a specific time range.
 
-Here is an example of how you would query data from ReductStore using the Python client for a specific timestamp:
+The simplest way to retrieve data is by using the command-line tool reduct-cli. Here’s an example of how to query data for a specific timestamp:
+
+```bash
+reduct-cli alias add local -L http://localhost:8383 -t "my-token"
+# Query data for a specific time range and export it to a local directory
+reduct-cli cp local/my-bucket-1 ./export --start "2024-09-01T00:00:00Z" --with-meta
+```
+
+This command fetches the stored data for all the entries in the bucket `my-bucket-1` from the specified start time and exports it to a local directory. The `--with-meta` flag includes the metadata (labels) associated with the records.
+
+For programmatic access, here is an example of how you would query data from ReductStore using the Python client for a specific timestamp:
 
 ```python
 async with Client("http://127.0.0.1:8383", api_token="my-token") as client:
@@ -379,6 +388,10 @@ The combination of Roboflow and ReductStore provides a comprehensive solution fo
 Whether deployed in the cloud or at the edge, these tools reduce operational complexity, lower costs, and provide the flexibility to scale computer vision applications. As computer vision continues to evolve, leveraging these platforms will be essential to building efficient and scalable solutions.
 
 ## Frequently Asked Questions (FAQs)
+
+### Does ReductStore offer a cloud solution?
+
+Yes, ReductStore currently offers a cloud solution available on Azure. You can easily deploy ReductStore on an Azure VM to manage your data streams with scalability and flexibility. Please refer to the [**Azure VM Setup Guide**](/docs/guides/integration/azure-vm) for step-by-step instructions.
 
 ### What are the benefits of using ReductStore with Roboflow for computer vision tasks?
 
