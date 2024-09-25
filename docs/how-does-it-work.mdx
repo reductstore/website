@@ -1,6 +1,6 @@
 ---
 sidebar_position: 3
-title: 💡 Basic Concepts
+title: 💡 How Does It Work?
 description: ReductStore basic concepts like buckets, entries, blocks, records, replication, HTTP API etc.
 ---
 
@@ -10,7 +10,7 @@ description: ReductStore basic concepts like buckets, entries, blocks, records, 
 
 # 💡 Basic Concepts Behind ReductStore
 
-## What Is Time Series Blob Storage?
+## What Is Time Series Object Storage?
 
 ReductStore is a time series database designed specifically for storing and managing large amounts of unstructured data. It uses an **[HTTP API](./http-api)** and stores the data as blobs. This means:
 
@@ -20,56 +20,146 @@ ReductStore is a time series database designed specifically for storing and mana
 In comparison to other S3-like object storage, ReductStore works differently:
 
 - **Access By Time.** Each record in an entry is written with a timestamp and to read it you need to know the entry name and time.
-- **Flat Storage Structure.** It doesn't have a tree-like structure for data. There are only buckets and entries with unique names in them.
-- **Batching Data.** It doesn't store each record as a single file. It batches them into blocks of a fixed size so that it can store small objects more efficiently. You don't waste disk space because of the minimum size of file system blocks. Moreover, ReductStore pre-allocate blocks space to increase performance for write operations.
-- **Forward Writing.** The engine records data fastest if it only needs to append records to the current block. It means that, for better performance, you should always write data with the newest timestamps.
-- **Strong FIFO Quota.** When you have intensive write operations, you may run out of disk space quickly. The engine removes the oldest block in a bucket as soon as the amount of the data reaches a specified quota limit.
+- **Flat Storage Structure.** It doesn't have a tree-like structure for data.
+    There are only buckets and entries with unique names in them.
+- **Batching Data.** Historical data is usually written forward and queried by time range.
+    Batching can be used to optimise ingestion, retrieval and storage.
+    The HTTP API provides endpoints to write and query data in batches, reducing the number of requests and HTTP overhead.
+    The storage engine batches objects into blocks of fixed size so that it can store small objects more efficiently.
+    You don't waste disk space because of the minimum file system block size. In addition, ReductStore pre-allocates block space to improve performance during write operations.
+- **Forward Writing.** The engine records data fastest if it only needs to append records to the current block.
+    It means that, for better performance, you should always write data with the newest timestamps.
+- **Labels.** You can assign labels to records to filter them in queries.
+    This allows you to read only part of the data.
+    For example, you can filter records by a label that represents anomaly detection results.
+    You can also use labels to replicate only records with specific labels to another bucket.
+- **Strong FIFO Quota.** When you have intensive write operations, you may run out of disk space quickly.
+    The engine removes the oldest block in a bucket as soon as the amount of the data reaches a specified quota limit.
 
-## Internal Structure
 
-![Internal Structure](./img/internal_structure.svg)
+Compared to other time series databases:
 
-As was mentioned above, ReductStore has flat structure:
+- **No Aggregation.** ReductStore doesn't provide any aggregation functionality.
+    You can't calculate averages, sums or other statistics on the data stored in the storage engine.
+    You must read all the data and calculate the statistics on the client side.
+- **No Query Language.** ReductStore doesn't provide any query language to access the data.
+    You can only read data by time ranges and labels.
+    You can't filter data by values or perform any complex queries.
+- **Blob Optimization.** Most time series databases have poor support for storing blobs and are not optimised for analytical needs.
+    ReductStore is designed to store and manage large amounts of unstructured data.
+    There's no limit to the size of data you can store. You can store images, videos or any other type of data in the storage engine.
 
-#### Bucket
 
-A container for entries which provides the following storage settings:
+All these features make ReductStore a perfect solution for applications when you have continuous data streams and need to store and manage large amounts of unstructured data.
 
-- **Maximum block size.** The storage engine creates a new block after the size of the current block reaches this limit. A block might be bigger than this size because the storage engine can write a belated record.
-- **Maximum number of records.** When the current block has more records than this limit, the storage engine creates a new block.
-- **Quota type.** The storage supports the following quota types:
-  - No quota. The bucket will grow to consume as much free disk space as is available - relative to how much data is written.
-  - FIFO. The bucket removes the oldest block of some entry when it reaches the quota limit.
-  - Hard. The bucket stops writing data when it reaches the quota limit.
-- **Quota size.** The maximum size of the bucket in bytes allowed before the quota type policy is enforced.
+## Storage Engine
 
-A user can manage bucket with [**Bucket API**](./http-api/bucket-api).
 
-#### Entry
+### Buckets
 
-An entry represents a source of data. For example, It might be an image from a camera or the output of an AI model. The entry should have a unique name so that a user can address it with the [**Entry API.**](./http-api/entry-api)
+A bucket is a container for data with a unique name and settings for storage.
 
-**Block**
+![An example of an ReductStore instance with two buckets.
+](./img/buckets.png)
 
-A block of records with a unique ID. The storage engine batches the records by blocks for a few reasons:
+<small style={{ textAlign: "right" }}>
+  An example of a ReductStore instance with two buckets.
+</small>
 
-- Reduce overhead of storing short records. If you store a small chunk of information as separate files they always consume at least one block of the file system. Typically it is 4 kilobytes. So if you have a blob with only 5 bytes of data, it consumes 4 kilobytes as a file anyway.
-- Search records quickly. The storage engine finds a requested block first, then the record.
+If you're familiar with SQL databases, you can think of a bucket as a database.
+Buckets are used to separate data with different purposes or sources, and for data replication.
+In the image above you can see an instance with two buckets:
 
-#### Record
+* Bucket A is an ingest bucket with a FIFO quota of 10GB, it acts as a ring buffer for ingested data.
+    When the bucket reaches its quota limit, the storage engine removes the oldest block of data.
+* Bucket B is a long term storage bucket with a hard quota of 1TB, it receives data from Bucket A and stores it for a long time.
+    When the bucket reaches the quota limit, the Storage Engine stops writing data to the bucket.
 
-A blob with a timestamp and meta information such as content type and labels.
+The buckets have many settings that you can configure. Read more about them in the [**Buckets Guide**](./guides/buckets).
+
+### Entries
+
+An entry represents a source of data and has a unique name within a bucket. You can think of an entry as a table in an SQL database.
+Entries are used to separate data with different sources or purposes within a bucket.
+They are completely independent and can be used in parallel without conflict.
+
+
+![The internal structure of ReductStore entry](./img/entries.png)
+
+<small style={{ textAlign: "right" }}>
+  Internal structure of ReductStore entry.
+</small>
+
+
+The entries responsible for batching data and storing it in blocks.
+The storage engine writes data into the current block until it reaches the block limits.
+It then creates a new block and updates the block index.
+Because the index is only updated when the block is full, all changes are stored in the write-ahead logs to prevent data loss.
+
+### Blocks
+
+
+The storage engine stores data in blocks.
+In this way, ReductStore partitions data based on time to optimise storage and access.
+
+The partitioning data allows the search and access of data to be optimised by time and time ranges.
+The storage engine can quickly locate the required block using the timestamp in the block index, then load its descriptor into the memory cache and find the required record in it.
+Since most data is requested by time range, the storage engine can reuse the same descriptor for multiple requests and stream the contents of the records from the data block into the HTTP response.
+
+Blocks are also used to optimise data storage and access. The storage engine stores records in blocks of a fixed size so that it can store small objects more efficiently.
+You don't waste disk space because of the minimum file system block size.
+In addition, ReductStore pre-allocates block space to improve performance during write operations.
+
+![The internal structure of data block in ReductStore](./img/blocks.png)
+
+<small style={{ textAlign: "right" }}>
+  Internal structure of data block in ReductStore.
+</small>
+
+A block consists of two files:
+
+* **Block Descriptor** - contains meta-information about the records stored in the block, such as record timestamps, content types and labels.
+    It also contains information about where the contents of the records are stored in the data block.
+* **Data Block** - contains the actual data records.
+    The records are stored in the block in the order in which they were written.
+
+Storing data and meta-information in separate files has the following advantages:
+
+* Descriptors are small and cached in memory.
+    This allows the storage engine to update the descriptor in memory by appending new records to the WAls and synchronising with the disk only when the block is full.
+* The storage engine writes the contents of the records directly to the data block.
+    We don't have to write the data twice, once in the WALs and once in the block descriptor.
+* When the required record is found in the descriptor, the storage engine streams the content of the record from the data block into the HTTP response.
+
+The partitioning of data into blocks is based on two criteria:
+
+* **Maximum block size** - the storage engine creates a new block when the current block reaches the maximum size.
+* **Maximum number of records** - the storage engine creates a new block when the current block reaches the maximum number of records.
+
+### Records
+
+
+A record is a piece of data stored in an entry.
+Each record has:
+
+* **Metadata**: the timestamp, content type and labels.
+* **Content**: the actual data.
+
+You can think of a record as a row in an SQL database.
+Records are used to store data in the storage engine.
+This is equivalent to an object or blob.
 
 ## HTTP API
 
-ReductStore provides an HTTP API for managing buckets, entries, and tokens. You can use it to create, read, update, and delete buckets and entries. You can also use it to generate tokens to access the storage.
-Unlike other blob storages, ReductStore also provides an advanced API for efficient data access:
+ReductStore provides an HTTP API for interacting with the storage engine. As mentioned above, the ReductStore HTTP API has the following features
 
-- **Iterate over records.** You can iterate over records in an entry by specifying a time range and a number of records. This is useful when you need to read a large amount of data. The storage engine returns records in chunks of fixed size. This allows you to read and process data in chunks without loading all the data into memory.
-- **Filter records by labels.** You can filter records by labels. This is useful when you need to read only a portion of the data. For example, you can filter records by a label representing anomaly detection results. This allows you to read only records with anomalies and ignore the rest of the data.
-- **Batch records.** You can write a batch of records in a single request. This is useful when you need to read or write a large number of small records and reduce the number of requests to the storage engine.
+- **Iterate over records.** You can iterate over requested records in an entry by specifying a time range and a number of records. This is useful if you need to read a large amount of data. The storage engine returns records in chunks of fixed size. This allows you to read and process data in chunks without loading all the data into memory.
+- **Filter records by labels.** You can filter records by labels. This is useful if you only need to read part of the data. For example, you can filter records by a label that represents anomaly detection results. This allows you to read only records with anomalies and ignore the rest of the data.
+- **You can read, write, update or delete a batch of records in a single request. This is particularly useful if you need to read or write a large number of small records and reduce the number of requests to the storage engine.
 
-## Replication
+See the [**HTTP API Reference**](./http-api) to learn more about the API.
+
+## Data Replication
 
 ReductStore supports append-only replication. The storage engine doesn't support replication of deletions. It means that if you delete a bucket or an entry in the source bucket, the storage engine doesn't delete it in the destination bucket.
 We recommend to use replication for data reduction. For example, you can label records in the source bucket and replicate only records with a specific label to the destination bucket where you can store them for a long time.
@@ -81,9 +171,11 @@ Some more details about replication:
 - **Write-Ahead Log.** The storage engine uses a write-ahead log to replicate data. It means that the storage engine writes data to the log first and then replicates it to the destination bucket. If the destination bucket is unavailable, the storage engine stores data in the log until the destination bucket becomes available again.
 - **Filtering.** You can filter records by labels when you replicate a bucket. This is useful when you need to replicate only a portion of the data.
 
-You can manage replications by using the [**Replication API**](./http-api/replication-api) or provision them with environment variables. See [**Configuration**](./configuration) for more details.
+You can manage replications by using the [**Replication API**](./http-api/replication-api) or provision them with environment variables. See the [**Replication Guide**](./guides/data-replication) for more details.
 
 ## Security
 
 ReductStore provides a simple way to manage access to the storage. It uses tokens for authentication and authorization. You can generate tokens with the [**Token API**](./http-api/token-authentication) and use them to access the data.
 A user can disable the token authorization and use the storage without authentication. In this case, the storage engine doesn't check the token and allows access to all data.
+
+For more details, read the [**Access Control Guide**](./guides/access-control).
