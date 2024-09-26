@@ -21,39 +21,36 @@ In comparison to other S3-like object storage, ReductStore works differently:
 
 - **Access By Time.** Each record in an entry is written with a timestamp and to read it you need to know the entry name and time.
 - **Flat Storage Structure.** It doesn't have a tree-like structure for data.
-    There are only buckets and entries with unique names in them.
+  There are only buckets and entries with unique names in them.
 - **Batching Data.** Historical data is usually written forward and queried by time range.
-    Batching can be used to optimise ingestion, retrieval and storage.
-    The HTTP API provides endpoints to write and query data in batches, reducing the number of requests and HTTP overhead.
-    The storage engine batches objects into blocks of fixed size so that it can store small objects more efficiently.
-    You don't waste disk space because of the minimum file system block size. In addition, ReductStore pre-allocates block space to improve performance during write operations.
+  Batching can be used to optimise ingestion, retrieval and storage.
+  The HTTP API provides endpoints to write and query data in batches, reducing the number of requests and HTTP overhead.
+  The storage engine batches objects into blocks of fixed size so that it can store small objects more efficiently.
+  You don't waste disk space because of the minimum file system block size. In addition, ReductStore pre-allocates block space to improve performance during write operations.
 - **Forward Writing.** The engine records data fastest if it only needs to append records to the current block.
-    It means that, for better performance, you should always write data with the newest timestamps.
+  It means that, for better performance, you should always write data with the newest timestamps.
 - **Labels.** You can assign labels to records to filter them in queries.
-    This allows you to read only part of the data.
-    For example, you can filter records by a label that represents anomaly detection results.
-    You can also use labels to replicate only records with specific labels to another bucket.
+  This allows you to read only part of the data.
+  For example, you can filter records by a label that represents anomaly detection results.
+  You can also use labels to replicate only records with specific labels to another bucket.
 - **Strong FIFO Quota.** When you have intensive write operations, you may run out of disk space quickly.
-    The engine removes the oldest block in a bucket as soon as the amount of the data reaches a specified quota limit.
-
+  The engine removes the oldest block in a bucket as soon as the amount of the data reaches a specified quota limit.
 
 Compared to other time series databases:
 
 - **Blob Optimization.** Most time series databases have poor support for storing blobs and are not optimised for analytical needs.
-    ReductStore is designed to store and manage large amounts of unstructured data.
-    There's no limit to the size of data you can store. You can store images, videos or any other type of data in the storage engine.
+  ReductStore is designed to store and manage large amounts of unstructured data.
+  There's no limit to the size of data you can store. You can store images, videos or any other type of data in the storage engine.
 - **No Aggregation.** ReductStore doesn't provide any aggregation functionality.
-    You can't calculate averages, sums or other statistics on the data stored in the storage engine.
-    You must read all the data and calculate the statistics on the client side.
+  You can't calculate averages, sums or other statistics on the data stored in the storage engine.
+  You must read all the data and calculate the statistics on the client side.
 - **No Query Language.** ReductStore doesn't provide any query language to access the data.
-    You can only read data by time ranges and labels.
-    You can't filter data by values or perform any complex queries.
-
+  You can only read data by time ranges and labels.
+  You can't filter data by values or perform any complex queries.
 
 All these features make ReductStore a perfect solution for applications when you have continuous data streams and need to store and manage large amounts of unstructured data.
 
 ## Storage Engine
-
 
 ### Buckets
 
@@ -70,10 +67,10 @@ If you're familiar with SQL databases, you can think of a bucket as a database.
 Buckets are used to separate data with different purposes or sources, and for data replication.
 In the image above you can see an instance with two buckets:
 
-* Bucket A is an ingest bucket with a FIFO quota of 10GB, it acts as a ring buffer for ingested data.
-    When the bucket reaches its quota limit, the storage engine removes the oldest block of data.
-* Bucket B is a long term storage bucket with a hard quota of 1TB, it receives data from Bucket A and stores it for a long time.
-    When the bucket reaches the quota limit, the storage engine stops writing data to the bucket.
+- Bucket A is an ingest bucket with a FIFO quota of 10GB, it acts as a ring buffer for ingested data.
+  When the bucket reaches its quota limit, the storage engine removes the oldest block of data.
+- Bucket B is a long term storage bucket with a hard quota of 1TB, it receives data from Bucket A and stores it for a long time.
+  When the bucket reaches the quota limit, the storage engine stops writing data to the bucket.
 
 The buckets have many settings that you can configure. Read more about them in the [**Buckets Guide**](./guides/buckets).
 
@@ -83,34 +80,30 @@ An entry represents a source of data and has a unique name within a bucket. You 
 Entries are used to separate data with different sources or purposes within a bucket.
 They are completely independent and can be used in parallel without conflict.
 
-
 ![The internal structure of ReductStore entry](./img/entries.png)
 
 <small style={{ textAlign: "right" }}>
   Internal structure of ReductStore entry.
 </small>
 
-
 The entries are responsible for batching data and storing it in blocks.
 The storage engine writes data into the current block until it reaches the block limits.
 It then creates a new block and updates the block index.
 Because the index is only updated when the block is full, all changes are stored in the write-ahead logs to prevent data loss.
-
 
 ### Records
 
 A record is a piece of data stored in an entry.
 Each record has:
 
-* **Metadata**: the timestamp, content type and labels.
-* **Content**: the actual data.
+- **Metadata**: the timestamp, content type and labels.
+- **Content**: the actual data.
 
 You can think of a record as a row in an SQL database.
 Records are used to store data in the storage engine.
 This is equivalent to an object or blob.
 
 ### Blocks
-
 
 The storage engine stores data in blocks.
 In this way, ReductStore partitions data based on time to optimise storage and access.
@@ -131,24 +124,23 @@ In addition, ReductStore pre-allocates block space to improve performance during
 
 A block consists of two files:
 
-* **Block Descriptor** - contains meta-information about the records stored in the block, such as record timestamps, content types and labels.
-    It also contains information about where the contents of the records are stored in the data block.
-* **Data Block** - contains the actual data records.
-    The records are stored in the block in the order in which they were written.
+- **Block Descriptor** - contains meta-information about the records stored in the block, such as record timestamps, content types and labels.
+  It also contains information about where the contents of the records are stored in the data block.
+- **Data Block** - contains the actual data records.
+  The records are stored in the block in the order in which they were written.
 
 Storing data and meta-information in separate files has the following advantages:
 
-* Descriptors are small and cached in memory.
-    This allows the storage engine to update the descriptor in memory by appending new records to the WALs and synchronising with the disk only when the block is full.
-* The storage engine writes the contents of the records directly to the data block.
-    We don't have to write the data twice, once in the WALs and once in the block descriptor.
-* When the required record is found in the descriptor, the storage engine streams the content of the record from the data block into the HTTP response.
+- Descriptors are small and cached in memory.
+  This allows the storage engine to update the descriptor in memory by appending new records to the WALs and synchronising with the disk only when the block is full.
+- The storage engine writes the contents of the records directly to the data block.
+  We don't have to write the data twice, once in the WALs and once in the block descriptor.
+- When the required record is found in the descriptor, the storage engine streams the content of the record from the data block into the HTTP response.
 
 The partitioning of data into blocks is based on two criteria:
 
-* **Maximum block size** - the storage engine creates a new block when the current block reaches the maximum size.
-* **Maximum number of records** - the storage engine creates a new block when the current block reaches the maximum number of records.
-
+- **Maximum block size** - the storage engine creates a new block when the current block reaches the maximum size.
+- **Maximum number of records** - the storage engine creates a new block when the current block reaches the maximum number of records.
 
 ## HTTP API
 
@@ -159,7 +151,6 @@ ReductStore provides an HTTP API for interacting with the storage engine. As men
 - **Batch records.** You can read, write, update or delete a batch of records in a single request. This is particularly useful if you need to read or write a large number of small records and reduce the number of requests to the storage engine.
 
 See the [**HTTP API Reference**](./http-api) to learn more about the API.
-
 
 :::info
 For convenience, we provide [**Client SDKs**](./getting-started#what-is-next) for many popular programming languages. You can use them to interact with the database without writing HTTP requests manually.
