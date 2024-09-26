@@ -11,14 +11,14 @@ import FreePoCForm from "@site/src/components/FreePoCForm";
 export default function UseCaseComputerVision(): JSX.Element {
   return (
     <Layout
-      title="The Fastest Time Series Object Store for Computer Vision"
-      description="Optimized storage and retrieval for high speed image and video data on edge AI devices and cloud infrastructure."
+      title="High Performance Time Series Object Storage for Computer Vision"
+      description="Fast storage and retrieval for high-speed image and video data on edge devices and in the cloud."
     >
       <FreePoCBanner elementId="free-poc-form" />
       <main>
         <SimpleHeader
-          pageTitle="The Fastest Time Series Object Store for Computer Vision"
-          subtitle="Optimized storage and retrieval for high speed image and video data on edge AI devices and cloud infrastructure."
+          pageTitle="High Performance Time Series Object Storage for Computer Vision"
+          subtitle="Fast storage and retrieval for high-speed image and video data on edge devices and in the cloud"
         />
         <div className="container">
           <>
@@ -49,13 +49,14 @@ const useCases = [
     title: "The Fastest Time Series Object Store",
     description: (
       <p>
-        Comparative performance analysis has underscored the superiority of ReductStore
-        superiority in handling image and video data, consistently outperforming traditional storage
-        storage solutions for read and write operations across a range of file sizes.
-        ReductStore's optimized architecture ensures minimal latency and high throughput,
-        which is critical when dealing with the large datasets typical of computer vision
-        applications. These metrics clearly establish ReductStore as the leading choice for
-        for high-speed image and video environments where optimal performance is critical.
+        Comparative performance tests show that ReductStore has a clear advantage in handling image and video data, 
+        consistently <Link to="/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio">
+        <b>outperforming Minio</b></Link> in both reads and writes across a range of file sizes. Thanks to its optimized 
+        architecture, ReductStore is also <Link to="/blog/comparisons/iot/reductstore-vs-mongodb">
+        <b>faster than MongoDB for blobs</b></Link>, with performance improvements ranging from 65% to 244%. 
+        It also <Link to="/blog/comparisons/iot/reductstore-vs-timescaledb">
+        <b>outperforms TimescaleDB for blobs larger than 100KB</b></Link>. This makes ReductStore a solid choice for 
+        high-speed image and video workloads where performance is critical.
       </p>
     ),
     illustration:
@@ -64,15 +65,16 @@ const useCases = [
     isImageLeft: false,
   },
   {
-    title: "Time Series Database for Images and Video Data",
+    title: "Time Series Storage for High-FPS Image and Video Data",
     description: (
       <p>
-        ReductStore's architecture is ideal for computer vision applications that require
-        unstructured data, such as images and video, in temporal context.
-        This integration facilitates the efficient ingestion, querying, and management of large data sets.
-        where each image or video frame can be associated with a timestamp.
-        As a result, computer vision models benefit from streamlined access to historical and
-        and real-time visual data for analysis and prediction.
+        ReductStore's architecture is specifically designed for high FPS computer vision applications 
+        that generate large amounts of unstructured data such as images and video. For example, in 
+        scenarios where multiple cameras are processed by a single edge device, ReductStore can efficiently 
+        ingest, query, and manage each frame in a time series format, with each image or video frame 
+        associated with a timestamp. This gives computer vision models instant access to historical 
+        and real-time visual data, taking full advantage of disk speed for both read and write operations, 
+        making it ideal for high-throughput environments where performance is critical.
       </p>
     ),
     illustration:
@@ -81,18 +83,17 @@ const useCases = [
     isImageLeft: true,
   },
   {
-    title: "Store Images, Videos, and Models",
+    title: "Store Images, Videos, and AI Models",
     description: (
-      <p>
-        Flexible data management in computer vision requires a storage solution that is both
-        that is both versatile and robust enough to accommodate a wide range of data types.
-        ReductStore provides this versatility by allowing the creation of multiple buckets and in
-        to effectively address different data storage needs. Images and videos can be
-        organized neatly within time-series structures, improving analytical capabilities and temporal
-        temporal query performance. What's more, computer vision models can be stored in the same
-        the same storage, allowing developers and data scientists to systematically track model
-        iterations, ensuring integrity and reproducibility across computer vision workflows.
-      </p>
+        <p>
+          ReductStore is designed to handle and manage large amounts of unstructured data, 
+          with no limits on the size or type of data you can store. 
+          It allows the creation of multiple buckets, making it easy to store images, 
+          videos, AI models, or any other type of data in one place. 
+          This flexibility makes ReductStore an ideal solution for managing diverse datasets, 
+          ensuring that computer vision models and associated data can be stored together 
+          for streamlined workflows and continuous tracking of model iterations.
+        </p>
     ),
     illustration:
       require("@site/static/img/use-cases/ai-workflows/data-replication-with-label-filtering.webp")
@@ -100,18 +101,16 @@ const useCases = [
     isImageLeft: false,
   },
   {
-    title: "Annotations and Metadata for Every Image and Video",
+    title: "Storing AI Labels and Metadata for Every Record",
     description: (
-      <p>
-        ReductStore provides the ability to assign metadata, including annotations and labels, to any image or video in its database,
-        to any image or video in its database. For example, in object recognition tasks, an image file can be
-        file can be tagged with metadata that specifies attributes such as object categories within
-        bounding boxes, segmentation masks, or labels indicating specific visual characteristics.
-        This level of detail ensures that computer vision models and analysis tools can easily
-        annotated datasets, speeding up training and inference processes. In addition,
-        metadata directly into the storage layer, ReductStore simplifies the data pipeline architecture and improves
-        pipeline architecture and improves overall operational efficiency.
-      </p>
+        <p>
+          ReductStore can store metadata, including AI labels, for any image or video in its database. 
+          For example, in object recognition tasks, an image can be tagged with AI-generated labels that specify object categories 
+          within bounding boxes, segmentation masks, or other visual characteristics. 
+          This labeling enables efficient storage of AI model output, making it easier to access and analyze inference results. 
+          By integrating metadata directly into the storage layer, ReductStore simplifies the data pipeline architecture, 
+          streamlining the handling of AI-generated insights and improving overall operational efficiency.
+        </p>
     ),
     illustration:
       require("@site/static/img/use-cases/ai-workflows/time-series-database-for-unstructured-data.webp")
@@ -119,19 +118,19 @@ const useCases = [
     isImageLeft: true,
   },
   {
-    title: "Data Replication With Metadata Filtering",
+    title: "Data Replication With Label Filtering",
     description: (
-      <p>
-        Implementing metadata filtering in data replication processes increases efficiency by
-        ensuring that only relevant information is synchronized across storage buckets.
-        This optimization is critical for maintaining high availability and implementing disaster recovery strategies, especially in
-        disaster recovery strategies, especially in distributed systems where bandwidth and storage
-        and storage resources are at a premium. By filtering data based on annotations or
-        based on annotations or classifications, replication can be targeted to include only the most critical images or
-        or videos. As a result, this selective approach reduces unnecessary storage and network
-        and network traffic, and ensures that replicated environments are always
-        with all relevant operational data while excluding irrelevant information.
-      </p>
+        <p>
+          Label filtering in data replication processes acts as an effective reduction strategy 
+          by ensuring that only essential data is synchronized across storage buckets, 
+          whether in the cloud or at the edge. 
+          This method is particularly valuable for reducing storage and bandwidth consumption 
+          in distributed systems where resources are limited. 
+          By filtering data based on AI labels or classifications, replication is targeted 
+          to include only the most critical images or videos. 
+          As a result, this selective approach minimizes unnecessary storage and network traffic, 
+          ensuring that both cloud and edge environments contain only the most relevant operational data.
+        </p>
     ),
     illustration:
       require("@site/static/img/use-cases/ai-workflows/store-records-and-ai-models.webp")
@@ -141,17 +140,18 @@ const useCases = [
   {
     title: "Real-Time FIFO Quota for Image and Video Streams",
     description: (
-      <p>
-        The implementation of real-time FIFO (First-In, First-Out) quotas in ReductStore
-        significantly improves the efficient management of data volumes, especially for high-throughput
-        high-throughput image and video streams common in computer vision applications.
-        By enforcing FIFO quotas, ReductStore ensures that the oldest data is automatically discarded to make room for newer data.
-        This mechanism is critical in environments such as surveillance, autonomous vehicles, and industrial
-        vehicles, and industrial monitoring, where high-speed data streams can quickly consume
-        of available storage. It also simplifies management requirements by providing an automated
-        based on actual usage rather than arbitrary timeframes, optimizing both storage utilization and system
-        storage utilization and system robustness.
-      </p>
+        <p>
+          ReductStore's unique real-time FIFO (first-in, first-out) quotas based on data volume 
+          enable efficient management of high-throughput image and video streams. 
+          As new data is added, the system automatically removes the oldest data, 
+          ensuring continuous storage availability without manual intervention. 
+          This feature is particularly useful in scenarios such as surveillance, 
+          autonomous vehicles, and industrial monitoring, where large data streams 
+          can quickly fill storage. 
+          By focusing on volume rather than arbitrary time limits, 
+          ReductStore's FIFO quotas optimize storage utilization 
+          and keep systems running smoothly in high-speed data environments.
+        </p>
     ),
     illustration:
       require("@site/static/img/use-cases/ai-workflows/ai-labels-and-metadata-for-every-record.webp")
@@ -168,6 +168,10 @@ const useCasesFaqs = [
       "ReductStore is ideal for applications that deal with large volumes of unstructured visual data in temporal context. These include object recognition, video surveillance, autonomous driving, real-time image analysis, and any other computer vision task that requires efficient storage and retrieval of images and video.",
   },
   {
+    question: "Can ReductStore be deployed on cloud and edge environments?",
+    answer: "Yes, ReductStore supports deployment in both cloud and edge environments. It integrates with Azure using BlobFuse to minimize storage costs while providing scalability. This flexibility allows you to process data locally on edge devices or in the cloud, optimizing performance based on your needs."
+  },
+  {
     question:
       "How does ReductStore handle querying large image and video datasets?",
     answer:
@@ -177,24 +181,18 @@ const useCasesFaqs = [
     question:
       "What type of metadata can be assigned to images and videos in ReductStore?",
     answer:
-      "ReductStore allows you to assign arbitrary key-value pairs as metadata to any image or video. This can include annotations such as labels, bounding boxes, segmentation masks, timestamps, or any other descriptive information relevant to your computer vision tasks.",
+      "ReductStore allows you to assign arbitrary key-value pairs as metadata to any image or video. This can include annotations such as labels, bounding boxes, segmentation masks, or any other descriptive information relevant to your computer vision tasks.",
   },
   {
-    question:
-      "Is ReductStore scalable for large-scale computer vision projects?",
-    answer:
-      "Yes, ReductStore is designed to scale as your data needs grow. It supports large image and video storage requirements without compromising performance, making it suitable for large-scale computer vision projects.",
+    question: "Is ReductStore scalable for large-scale computer vision projects?",
+    answer: "Yes, ReductStore is designed to scale as your data needs grow. It supports large image and video storage requirements without compromising performance, making it suitable for large-scale computer vision projects."
   },
   {
-    question:
-      "What is the advantage of using ReductStore for time-series image and video data?",
-    answer:
-      "ReductStore provides optimized storage and retrieval mechanisms for time-series image and video data. It ensures fast access and efficient processing of temporal queries, which is essential for applications such as video analytics, surveillance, and any scenario where the timing of visual data is critical.",
+    question: "What is the advantage of using ReductStore for time-series image and video data?",
+    answer: "ReductStore provides optimized storage and retrieval mechanisms for time-series image and video data. It ensures fast access and efficient processing of temporal queries, which is essential for applications such as video analytics, surveillance, and any scenario where the timing of visual data is critical."
   },
   {
-    question:
-      "What makes ReductStore suitable for handling high-throughput image and video streams?",
-    answer:
-      "ReductStore provides real-time FIFO quotas to effectively manage data retention in high-throughput environments. It also supports data replication with metadata filtering to reduce network traffic and uses HTTP batching to efficiently handle large numbers of image and video records.",
+    question: "What makes ReductStore suitable for handling high-throughput image and video streams?",
+    answer: "ReductStore provides real-time FIFO quotas to effectively manage data retention in high-throughput environments. It also supports data replication with label filtering to reduce network traffic and uses HTTP batching to efficiently handle large numbers of image and video records."
   },
 ];
