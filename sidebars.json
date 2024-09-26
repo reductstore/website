@@ -1,5 +1,7 @@
 {
   "docSidebar": [
+    "how-does-it-work",
+
     {
       "type": "category",
       "label": "\uD83D\uDE80 Getting Started",
@@ -33,7 +35,6 @@
       ]
     },
     "configuration",
-    "how-does-it-work",
     {
       "type": "category",
       "label": "Guides",
