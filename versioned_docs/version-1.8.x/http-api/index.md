@@ -34,7 +34,6 @@ If a request to ReductStore fails, the API returns an HTTP status code indicatin
 
 Since version 1.2.0, the HTTP API also includes an error message in the `x-reduct-error` header of the response. This error message provides more detailed information about the error, which can be useful for debugging and troubleshooting.
 
-
 ```mdx-code-block
 import DocCardList from '@theme/DocCardList';
 

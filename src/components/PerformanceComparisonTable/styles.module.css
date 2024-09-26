@@ -9,7 +9,8 @@
   font-size: 14px;
 }
 
-.compactTable th, .compactTable td {
+.compactTable th,
+.compactTable td {
   padding: 6px 8px;
   border: 1px solid #ddd;
   text-align: left;

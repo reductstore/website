@@ -5,12 +5,12 @@ module.exports = function (context) {
 
   if (!crisp || !crisp.siteId) {
     throw new Error(
-      "You need to specify `crisp` and `crisp.siteId` in `themeConfig`."
+      "You need to specify `crisp` and `crisp.siteId` in `themeConfig`.",
     );
   }
 
   return {
-    name: "docusaurus-plugin-matomo",
+    name: "docusaurus-plugin-crisp",
 
     injectHtmlTags() {
       return {

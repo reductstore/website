@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import SimpleHeader from "@site/src/components/SimpleHeader";
 import clsx from "clsx";
 import styles from "./styles.module.css";
-import CodeBlock from '@theme/CodeBlock';
+import CodeBlock from "@theme/CodeBlock";
 
 export default function ClientSDKs(): JSX.Element {
   const [activeTab, setActiveTab] = useState("Python");
@@ -16,7 +16,7 @@ export default function ClientSDKs(): JSX.Element {
             key={tab}
             className={clsx(
               "tabs__item",
-              activeTab === tab && "tabs__item--active"
+              activeTab === tab && "tabs__item--active",
             )}
             onClick={() => setActiveTab(tab)}
           >
@@ -26,28 +26,19 @@ export default function ClientSDKs(): JSX.Element {
       </ul>
       <div className={styles.tabContent}>
         {activeTab === "Python" && (
-          <CodeBlock className="language-bash">
-            {pythonSDK}
-          </CodeBlock>
+          <CodeBlock className="language-bash">{pythonSDK}</CodeBlock>
         )}
-        {activeTab === 'Node.js' && (
-          <CodeBlock className="language-bash">
-            {nodeSDK}
-          </CodeBlock>
+        {activeTab === "Node.js" && (
+          <CodeBlock className="language-bash">{nodeSDK}</CodeBlock>
         )}
-        {activeTab === 'C++ (cmake)' && (
-          <CodeBlock className="language-bash">
-            {cppSDK}
-          </CodeBlock>
+        {activeTab === "C++ (cmake)" && (
+          <CodeBlock className="language-bash">{cppSDK}</CodeBlock>
         )}
-        {activeTab === 'Rust' && (
-          <CodeBlock className="language-bash">
-            {rustSDK}
-          </CodeBlock>
+        {activeTab === "Rust" && (
+          <CodeBlock className="language-bash">{rustSDK}</CodeBlock>
         )}
       </div>
     </>
-
   );
 }
 

@@ -11,18 +11,28 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border: 0.1rem solid var(--ifm-color-primary-lighter);
   border-radius: 5px;
-  animation: slide-in 0.5s forwards, overshoot 0.5s 0.5s forwards;
+  animation:
+    slide-in 0.5s forwards,
+    overshoot 0.5s 0.5s forwards;
   z-index: 1000;
 }
 
 @keyframes slide-in {
-  from { right: -100%; }
-  to { right: 80px; }
+  from {
+    right: -100%;
+  }
+  to {
+    right: 80px;
+  }
 }
 
 @keyframes overshoot {
-  0% { right: 80px; }
-  100% { right: 20px; }
+  0% {
+    right: 80px;
+  }
+  100% {
+    right: 20px;
+  }
 }
 
 .closeButton {

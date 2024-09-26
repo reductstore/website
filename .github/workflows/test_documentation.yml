@@ -1,12 +1,11 @@
 name: Test examples from documentation
 
-
 on:
   push:
     branches:
       - main
   pull_request:
-    types: [ opened, synchronize, reopened, closed ]
+    types: [opened, synchronize, reopened, closed]
     branches:
       - main
 
@@ -85,7 +84,7 @@ jobs:
 
       - name: Install Python
         uses: actions/setup-python@v5
-        if : matrix.example == 'python'
+        if: matrix.example == 'python'
         with:
           python-version: 3.8
 
@@ -99,7 +98,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         if: matrix.example == 'rust'
         with:
-          toolchain: 1.75
+          toolchain: 1.80.1
 
       - name: Install Java
         uses: actions/setup-java@v4
@@ -136,7 +135,7 @@ jobs:
           cd reduct-cpp
           cmake -DCMAKE_BUILD_TYPE=Release .
           sudo make install
-          
+
           mkdir -p "$EXAMPLE_DST_PATH"
           cd "$EXAMPLE_DST_PATH"
           cmake -DCMAKE_BUILD_TYPE=Debug ..
@@ -150,7 +149,7 @@ jobs:
           export EXAMPLE_DST_PATH="$PWD/${{ matrix.example_root }}/rs/build"
           mkdir -p "$EXAMPLE_DST_PATH"
           cd "$EXAMPLE_DST_PATH"
-          
+
           cargo install --examples --root . --path "$EXAMPLE_DST_PATH"/..
 
       - name: Run examples
@@ -171,8 +170,7 @@ jobs:
       - name: Print Docker logs
         if: always()
         run: |
-            docker logs reductstore
-
+          docker logs reductstore
 
   test_provisioning:
     runs-on: ubuntu-latest
@@ -189,4 +187,3 @@ jobs:
             docker-compose -f $example up -d
             docker-compose -f $example down
           done
-

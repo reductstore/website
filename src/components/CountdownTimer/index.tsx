@@ -1,4 +1,4 @@
-import { CountdownCircleTimer } from 'react-countdown-circle-timer';
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
 interface CountdownTimerProps {
   targetDate: Date;
@@ -6,15 +6,23 @@ interface CountdownTimerProps {
   size?: number;
 }
 
-const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate, startDate, size }) => {
+const CountdownTimer: React.FC<CountdownTimerProps> = ({
+  targetDate,
+  startDate,
+  size,
+}) => {
   const width = size || 50;
-  const textStyles = { fontSize: `${width / 3.5}px`, fontWeight: 'bold' };
-  const numberStyles = { fontSize: `${width / 3}px`, fontWeight: 'bold' };
+  const textStyles = { fontSize: `${width / 3.5}px`, fontWeight: "bold" };
+  const numberStyles = { fontSize: `${width / 3}px`, fontWeight: "bold" };
   const colors = "var(--ifm-color-primary)";
 
-  const totalDuration = Math.floor((targetDate.getTime() - startDate.getTime()) / 1000);
+  const totalDuration = Math.floor(
+    (targetDate.getTime() - startDate.getTime()) / 1000,
+  );
   const now = new Date();
-  const elapsedDuration = Math.floor((now.getTime() - startDate.getTime()) / 1000);
+  const elapsedDuration = Math.floor(
+    (now.getTime() - startDate.getTime()) / 1000,
+  );
   const remainingDuration = Math.max(totalDuration - elapsedDuration, 0);
 
   const calculateInitialRemainingTime = (unitDuration: number) => {
@@ -27,8 +35,14 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate, startDate, 
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div style={{ display: "flex", justifyContent: "center", gap: "20px" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <CountdownCircleTimer
           isPlaying
           duration={totalDuration}
@@ -39,13 +53,21 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate, startDate, 
         >
           {({ remainingTime }) => (
             <div>
-              <div style={numberStyles}>{Math.floor(remainingTime / (24 * 60 * 60))}</div>
+              <div style={numberStyles}>
+                {Math.floor(remainingTime / (24 * 60 * 60))}
+              </div>
             </div>
           )}
         </CountdownCircleTimer>
         <div style={textStyles}>Days</div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <CountdownCircleTimer
           isPlaying
           duration={24 * 60 * 60}
@@ -57,13 +79,21 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate, startDate, 
         >
           {({ remainingTime }) => (
             <div>
-              <div style={numberStyles}>{Math.floor((remainingTime % (24 * 60 * 60)) / (60 * 60))}</div>
+              <div style={numberStyles}>
+                {Math.floor((remainingTime % (24 * 60 * 60)) / (60 * 60))}
+              </div>
             </div>
           )}
         </CountdownCircleTimer>
         <div style={textStyles}>Hours</div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <CountdownCircleTimer
           isPlaying
           duration={60 * 60}
@@ -75,13 +105,21 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate, startDate, 
         >
           {({ remainingTime }) => (
             <div>
-              <div style={numberStyles}>{Math.floor((remainingTime % (60 * 60)) / 60)}</div>
+              <div style={numberStyles}>
+                {Math.floor((remainingTime % (60 * 60)) / 60)}
+              </div>
             </div>
           )}
         </CountdownCircleTimer>
         <div style={textStyles}>Minutes</div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <>
           <CountdownCircleTimer
             isPlaying

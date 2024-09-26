@@ -63,7 +63,7 @@ export default function SwaggerComponent({
       acc[type].push(param);
       return acc;
     },
-    {}
+    {},
   );
 
   return (
@@ -131,14 +131,14 @@ export default function SwaggerComponent({
                     }
                     className={clsx(
                       styles.responseHeader,
-                      response.description && styles.clickable
+                      response.description && styles.clickable,
                     )}
                   >
                     <div className={styles.responseTextContainer}>
                       <span
                         className={clsx(
                           styles.bullet,
-                          styles[classifyStatusCode(response.status)]
+                          styles[classifyStatusCode(response.status)],
                         )}
                       ></span>
                       {response.status}: {response.message}

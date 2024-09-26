@@ -28,7 +28,7 @@ bucket->Write("entry",
         .timestamp = ts,
         .labels = IBucket::LableMap({"label1", "value3"}),
     },
-    [&blob](auto rec) { rec->WriteAll(blob); 
+    [&blob](auto rec) { rec->WriteAll(blob);
 });
 
 ```
@@ -36,7 +36,7 @@ bucket->Write("entry",
 This labels can be used to filter the results of a query:
 
 ```cpp
-auto err = bucket->Query("entry", ts, ts + us(3), 
+auto err = bucket->Query("entry", ts, ts + us(3),
     IBucket::QueryOptions{.include = IBucket::LabelMap({"label1", "value1"})},
     [&all_data](auto record) {
         std::cout << record->ReadAll() << std::endl;
@@ -60,7 +60,7 @@ bucket->Write("entry", I
  );
 ```
 
-Read more about labels and content type in the [**ReductStore documentation**](/docs/getting-started). 
+Read more about labels and content type in the [**ReductStore documentation**](/docs/getting-started).
 
 I hope you find this release useful. If you have any questions or feedback, don't hesitate to use the [**ReductStore Community**](https://community.reduct.store) forum.
 

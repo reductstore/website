@@ -28,7 +28,7 @@ curl http://127.0.0.1:8383/api/v1/info
 
 ## Pre-built Binaries
 
-You can use pre-built binaries for Linux, macOS or Windows operating systems. Download a binary for your OS and platform from [**GitHub release page**](https://github.com/reductstore/reductstore/releases/latest).  Extract the file and then type the commands:
+You can use pre-built binaries for Linux, macOS or Windows operating systems. Download a binary for your OS and platform from [**GitHub release page**](https://github.com/reductstore/reductstore/releases/latest). Extract the file and then type the commands:
 
 On Windows:
 
@@ -47,8 +47,8 @@ RS_DATA_PATH=./data ./reductstore
 
 **Build Requirements:**
 
-* Minimal Rust version: 1.75
-* Protobuf 3.17.3 or later
+- Minimal Rust version: 1.80
+- Protobuf 3.17.3 or later
 
 You can also install the database with cargo:
 
@@ -63,7 +63,6 @@ RS_DATA_PATH=./data reductstore
 ReductStore is available as an Azure Virtual Machine on the [**Azure Marketplace**](https://azuremarketplace.microsoft.com/en/marketplace/apps/reductsoftware.reductstore-server).
 The virtual machine is pre-configured with ReductStore and all the necessary dependencies to store data in Azure storage accounts.
 Read more about the deployment in the [**Azure Virtual Machine guide**](guides/integration/azure-vm.mdx).
-
 
 ## Snap
 
@@ -87,9 +86,8 @@ API Token: reductstore
 
 Try to use the database with your favorite programming language:
 
-import DocCardList from '@theme/DocCardList';
+import DocCardList from "@theme/DocCardList";
 
 <DocCardList />
 
 If you can't find your programming language in the list, you can still use [**the ReductStore HTTP API**](http-api/) or ping us. If you are serious about using it, we can help you with integration.
-

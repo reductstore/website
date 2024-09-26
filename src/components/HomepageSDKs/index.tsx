@@ -8,7 +8,7 @@ import Link from "@docusaurus/Link";
 export default function HomepageSDKs() {
   return (
     <div className={styles.sdkSection}>
-      <div className="row" style={{ display: 'flex', alignItems: 'center' }}>
+      <div className="row" style={{ display: "flex", alignItems: "center" }}>
         <div className={"col col--7"}>
           <CodeSnippetExample />
         </div>

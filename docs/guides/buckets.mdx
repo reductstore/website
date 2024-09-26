@@ -4,12 +4,12 @@ description: Complete guide to Buckets in ReductStore
 ---
 
 <head>
-  <link rel="canonical" href="https://www.reduct.store/docs/guides/buckets"/>
+  <link rel="canonical" href="https://www.reduct.store/docs/guides/buckets" />
 </head>
 
 import CodeBlock from "@theme/CodeBlock";
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 # ReductStore Bucket Guide
 
@@ -24,7 +24,6 @@ You can read more about blocks and records in the **[How Does It Work?](/docs/ho
 
 Unlike other blob storage or file systems, ReductStore has a flat hierarchy. It doesn't use folders or directories. Instead, all data is stored in entries, which are grouped by buckets.
 
-
 ## Bucket Settings
 
 Each bucket has settings that determine how data is stored and accessed. These settings include:
@@ -36,11 +35,13 @@ Each bucket has settings that determine how data is stored and accessed. These s
 
 ### Quota Type
 
-The quota type determines the method of quota enforcement and can be set to either NONE or FIFO.
+The quota type determines the method of quota enforcement and can be set to either NONE, FIFO or HARD.
 
 NONE implies no quota, allowing data to be stored without any restrictions.
 
 FIFO, short for first-in-first-out, enforces the quota by deleting the oldest block to accommodate new data once the quota is reached. ReductStore ensures that the data does not surpass the quota size, refusing to store new data if there's insufficient room.
+
+HARD is a strict quota type that prevents data from being stored once the quota is reached. This setting is useful when you want to limit the amount of data stored in a bucket but don't want to delete old data.
 
 ### Quota Size
 
@@ -62,7 +63,6 @@ To optimize search performance, bear in mind that record searching consists of t
 - Finding the record within the block. This search time is O(m), with m representing the number of records in the block.
 
 If there are too many blocks, the time spent searching for a block could exceed the time spent searching for the record within the block. In such cases, consider increasing the maximal number of records to reduce the total number of blocks.
-
 
 ## Bucket Operations
 
@@ -167,7 +167,6 @@ import ListBucketsCurl from "!!raw-loader!../examples/curl/buckets_browse.sh";
 
     ![Browse bucket settings with Web Console](./img/buckets_browse_cog.webp)
 
-
   </TabItem>
   <TabItem value="Python">
     <CodeBlock language="python">
@@ -265,7 +264,6 @@ import ChangeBucketCurl from "!!raw-loader!../examples/curl/buckets_change.sh";
 :::note
 You can't change settings for provisioned buckets. You should unprovision it first.
 :::
-
 
 ### Removing a Bucket
 

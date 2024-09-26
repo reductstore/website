@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import CountdownTimer from '../CountdownTimer';
-import styles from './styles.module.css';
-import Link from '@docusaurus/Link';
+import React, { useEffect, useState } from "react";
+import CountdownTimer from "../CountdownTimer";
+import styles from "./styles.module.css";
+import Link from "@docusaurus/Link";
 
 interface FreePoCBannerProps {
   elementId: string;
@@ -19,8 +19,9 @@ const FreePoCBanner = ({ elementId }: FreePoCBannerProps) => {
     const formElement = document.getElementById(elementId);
     if (formElement) {
       const yOffset = -100;
-      const y = formElement.getBoundingClientRect().top + window.scrollY + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+      const y =
+        formElement.getBoundingClientRect().top + window.scrollY + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
     }
   };
 
@@ -31,7 +32,9 @@ const FreePoCBanner = ({ elementId }: FreePoCBannerProps) => {
   return (
     <div className={styles.banner}>
       <span className={styles.bannerText}>
-        <Link onClick={handleClick}>Get a Free PoC Integration for your Project</Link>
+        <Link onClick={handleClick}>
+          Get a Free PoC Integration for your Project
+        </Link>
       </span>
     </div>
   );

@@ -1,0 +1,123 @@
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 3rem;
+}
+
+.inputRow {
+  width: 100%;
+  gap: 1rem;
+}
+
+.labeledInput {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.inputLabel {
+  font-weight: bold;
+  margin-bottom: 0.8rem;
+}
+
+.dropdownLink {
+  cursor: pointer;
+}
+
+/* slider */
+.sliderWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+}
+
+.sliderValue {
+  display: inline-block;
+  min-width: 80px;
+  white-space: nowrap;
+  font-weight: bold;
+  text-align: left;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--ifm-color-primary);
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--ifm-color-primary);
+  cursor: pointer;
+}
+
+.imageCarousel {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
+.imageWithLabels {
+  height: 100%;
+  border: 2px solid #d3d3d3;
+  border-radius: 6px;
+}
+
+.imageContainer {
+  position: relative;
+  max-width: 280px;
+  min-width: 100px;
+  width: 100%;
+  height: 100%;
+}
+
+.imageContainer img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 5px;
+}
+
+.svgImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.imageLabels p {
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin: 0.5rem;
+}

@@ -2,7 +2,7 @@ import React from "react";
 import CodeBlock from "@theme/CodeBlock";
 
 export default function WindowsInstall(props) {
-    const binaryInstall = `
+  const binaryInstall = `
 Invoke-WebRequest -Uri  https://github.com/reductstore/reductstore/releases/latest/download/reductstore.win-amd64.zip -OutFile reductstore.zip
 Expand-Archive -LiteralPath reductstore.zip -DestinationPath .
 .\\reductstore.exe
@@ -10,10 +10,7 @@ Expand-Archive -LiteralPath reductstore.zip -DestinationPath .
   return (
     <>
       <p>Compatible with the amd64 architecture.</p>
-      <CodeBlock className="language-bash">
-        {binaryInstall}
-      </CodeBlock>
+      <CodeBlock className="language-bash">{binaryInstall}</CodeBlock>
     </>
   );
 }
-
