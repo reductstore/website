@@ -78,6 +78,7 @@ const config = {
             "Welcome to ReductStore's Blog – your source for expert articles, updates, and discussions on managing and leveraging time series databases for blob data in edge computing, computer vision, and IoT. Stay informed with our latest content.",
           blogSidebarTitle: "Recent posts",
           blogSidebarCount: 5,
+          postsPerPage: 3,
           showReadingTime: true,
           editUrl: "https://github.com/reductstore/docs/tree/main",
           remarkPlugins: [remarkMath],
@@ -99,7 +100,7 @@ const config = {
               (item) =>
                 !item.url.includes("/blog/page/") &&
                 !item.url.includes("/blog/tags/") &&
-                !item.url.includes("/search"),
+                !item.url.includes("/search")
             );
           },
         },
@@ -154,6 +155,13 @@ const config = {
             "ReductStore, Time-Series Database, Blob Data Management, Edge Computing Database, IoT Data Solutions, Computer Vision Data Storage",
         },
       ],
+
+      // Blog year groupings
+      blog: {
+        sidebar: {
+          groupByYear: false,
+        },
+      },
 
       // Replace with your project's social card
       image: "img/reductstore-social-card.jpg",
