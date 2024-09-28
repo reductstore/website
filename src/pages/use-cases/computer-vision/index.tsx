@@ -68,7 +68,7 @@ const useCases = [
       </p>
     ),
     illustration:
-      require("@site/static/img/use-cases/ai-workflows/time-series-database-for-unstructured-data.webp")
+      require("@site/static/img/use-cases/computer-vision/The_Fastest_Object_Store.webp")
         .default,
     isImageLeft: false,
   },
@@ -89,7 +89,7 @@ const useCases = [
       </p>
     ),
     illustration:
-      require("@site/static/img/use-cases/ai-workflows/real-time-fifo-quota.webp")
+      require("@site/static/img/use-cases/computer-vision/Time_Series_Database_for_images_and_video_data.webp")
         .default,
     isImageLeft: true,
   },
@@ -108,7 +108,7 @@ const useCases = [
       </p>
     ),
     illustration:
-      require("@site/static/img/use-cases/ai-workflows/data-replication-with-label-filtering.webp")
+      require("@site/static/img/use-cases/computer-vision/Store_Images_Videos_and_Models.webp")
         .default,
     isImageLeft: false,
   },
@@ -128,7 +128,7 @@ const useCases = [
       </p>
     ),
     illustration:
-      require("@site/static/img/use-cases/ai-workflows/time-series-database-for-unstructured-data.webp")
+      require("@site/static/img/use-cases/computer-vision/Annotations_and_Metadata_for_Every_Image_and_Video.webp")
         .default,
     isImageLeft: true,
   },
@@ -149,7 +149,7 @@ const useCases = [
       </p>
     ),
     illustration:
-      require("@site/static/img/use-cases/ai-workflows/store-records-and-ai-models.webp")
+      require("@site/static/img/use-cases/computer-vision/Data_Replication_With_Metadata_Filtering.webp")
         .default,
     isImageLeft: false,
   },
@@ -170,7 +170,7 @@ const useCases = [
       </p>
     ),
     illustration:
-      require("@site/static/img/use-cases/ai-workflows/ai-labels-and-metadata-for-every-record.webp")
+      require("@site/static/img/use-cases/computer-vision/Real-Time_FIFO_Quota_for_Image_and_Video_Streams.webp")
         .default,
     isImageLeft: true,
   },
