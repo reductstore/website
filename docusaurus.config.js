@@ -100,7 +100,7 @@ const config = {
               (item) =>
                 !item.url.includes("/blog/page/") &&
                 !item.url.includes("/blog/tags/") &&
-                !item.url.includes("/search")
+                !item.url.includes("/search"),
             );
           },
         },
