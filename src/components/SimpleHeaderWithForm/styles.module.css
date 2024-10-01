@@ -20,7 +20,7 @@
 
 .BannerRight {
   flex: 1 1 50%;
-  text-align: center; 
+  text-align: center;
 }
 
 .BannerTitle {
@@ -59,7 +59,8 @@
     align-items: center;
   }
 
-  .BannerLeft, .BannerRight {
+  .BannerLeft,
+  .BannerRight {
     max-width: 100%;
     text-align: center;
   }

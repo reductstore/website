@@ -16,7 +16,7 @@
   padding: 12px;
   border: 2px solid #ddd;
   border-radius: 6px;
-  margin-right: 0.5rem; 
+  margin-right: 0.5rem;
 }
 
 .emailInput:focus {
@@ -37,7 +37,7 @@
 
 @media (max-width: 997px) {
   .form {
-    align-items: center; 
+    align-items: center;
     text-align: center;
     margin: 0 auto;
   }
@@ -52,5 +52,4 @@
     margin-right: 0;
     margin-bottom: 1rem;
   }
-
 }
