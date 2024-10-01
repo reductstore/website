@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./styles.module.css";
 import { FaCheckCircle } from "react-icons/fa";
+import Modal from "../Modal";
+import FreePoCForm from "../FreePoCForm";
+import Link from "@docusaurus/Link";
 
 const PromotionalBanner = () => {
   const checkedIcon = <FaCheckCircle color="green" size="1em" />;
+  const [openModal, setOpenModal] = useState(false);
 
   return (
     <>
-      <div className="alert alert--warning margin-bottom--lg">
+      <div className="alert alert--warning margin-top--lg">
         <div className="container">
           <div>
             <h3>Free Evaluation and Proof of Concept (PoC)</h3>
@@ -25,9 +29,18 @@ const PromotionalBanner = () => {
                 {checkedIcon} Active support during the PoC phase and beyond
               </li>
             </ul>
+            <Link
+              onClick={() => setOpenModal(true)}
+              className="button button--lg button--primary"
+            >
+              Request a Free PoC
+            </Link>
           </div>
         </div>
       </div>
+      <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
+        <FreePoCForm elementId="free-poc-form" />
+      </Modal>
     </>
   );
 };
