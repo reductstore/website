@@ -1,7 +1,6 @@
 {
   "docSidebar": [
     "how-does-it-work",
-
     {
       "type": "category",
       "label": "\uD83D\uDE80 Getting Started",
@@ -31,6 +30,11 @@
           "type": "doc",
           "label": "With C++",
           "id": "getting-started/with-cpp"
+        },
+        {
+          "type": "doc",
+          "label": "With Java",
+          "id": "getting-started/with-java"
         }
       ]
     },
@@ -56,7 +60,9 @@
     {
       "type": "category",
       "label": "Integration",
-      "items": ["guides/integration/azure-vm"]
+      "items": [
+        "guides/integration/azure-vm"
+      ]
     },
     {
       "type": "category",
@@ -110,6 +116,11 @@
           "type": "link",
           "label": "C++ Client",
           "href": "https://github.com/reductstore/reduct-cpp"
+        },
+        {
+          "type": "link",
+          "label": "Java Client (in progress)",
+          "href": "https://github.com/reductstore/reduct-java"
         }
       ]
     },

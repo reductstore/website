@@ -15,15 +15,19 @@ jobs:
     name: Test examples
     strategy:
       matrix:
-        doc_version: [next, 1.10.x, 1.9.x]
-        example: [python, node, curl, cpp, rust, cli]
+        doc_version: [ next, 1.11.x, 1.10.x, 1.9.x ]
+        example: [ python, node, curl, cpp, rust, java, cli ]
         include:
           - doc_version: next
             reduct_version: main
             example_root: docs/examples
 
-          - doc_version: 1.10.x
+          - doc_version: 1.11.x
             reduct_version: latest
+            example_root: versioned_docs/version-1.11.x/examples/
+
+          - doc_version: 1.10.x
+            reduct_version: v1.10.1
             example_root: versioned_docs/version-1.10.x/examples/
 
           - doc_version: 1.9.x
@@ -53,6 +57,10 @@ jobs:
           - example: cli
             path_prefix: cli
             cmd: sh
+
+          - example: java
+            path_prefix: java/src/main/java/store/reduct/
+            cmd: ./java/example-runner.sh
 
     steps:
       - uses: actions/checkout@v4
@@ -91,6 +99,17 @@ jobs:
         if: matrix.example == 'rust'
         with:
           toolchain: 1.80.1
+
+      - name: Install Java
+        uses: actions/setup-java@v4
+        if: matrix.example == 'java'
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        if: matrix.example == 'java'
 
       - name: Install Python dependencies
         if: matrix.example == 'python'

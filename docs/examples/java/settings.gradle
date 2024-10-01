@@ -1,0 +1,8 @@
+rootProject.name = 'reduct-java-examples'
+
+
+sourceControl {
+    gitRepository("https://github.com/reductstore/reduct-java.git") {
+        producesModule("store.reduct:reduct-java")
+    }
+}

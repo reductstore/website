@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+
+dependencies {
+    implementation('store.reduct:reduct-java') {
+        version {
+            branch  = 'bugfix/47'
+        }
+    }
+}
+
+apply plugin: 'java'
+
+tasks.register('QuickStart', JavaExec) {
+    dependsOn 'classes'
+    main = "store.reduct.QuickStart"
+    classpath = sourceSets.main.runtimeClasspath
+}
