@@ -10,7 +10,7 @@ import rehypeKatex from "rehype-katex";
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "ReductStore",
-  tagline: "The Fastest Time Series Object Store for Edge AI",
+  tagline: "The Fastest Time Series Object Storage for AI Infrastructure",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
@@ -100,7 +100,7 @@ const config = {
               (item) =>
                 !item.url.includes("/blog/page/") &&
                 !item.url.includes("/blog/tags/") &&
-                !item.url.includes("/search"),
+                !item.url.includes("/search")
             );
           },
         },
@@ -197,6 +197,10 @@ const config = {
               {
                 label: "vs MongoDB",
                 to: "/blog/comparisons/iot/reductstore-vs-mongodb",
+              },
+              {
+                label: "Cloud Storage Solution",
+                to: "/solutions/cloud",
               },
               {
                 label: "Schedule a Technical Review",
@@ -317,6 +321,10 @@ const config = {
               {
                 label: "vs MongoDB",
                 to: "/blog/comparisons/iot/reductstore-vs-mongodb",
+              },
+              {
+                label: "Cloud Storage Solution",
+                to: "/solutions/cloud",
               },
               {
                 label: "Edge AI",
