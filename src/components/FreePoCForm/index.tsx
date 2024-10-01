@@ -111,7 +111,7 @@ const FreePoCForm = ({
         to="/privacy"
         target="_blank"
       >
-        Privacy Policy
+        We don't share your information with anyone.
       </Link>
     </form>
   );
