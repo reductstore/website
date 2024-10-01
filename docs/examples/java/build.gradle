@@ -14,13 +14,19 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+
 dependencies {
-    implementation 'store.reduct:reduct-java:0.1.0'
+    implementation('store.reduct:reduct-java') {
+        version {
+            branch  = 'bugfix/47'
+        }
+    }
 }
 
 apply plugin: 'java'
 
-task(QuickStart, dependsOn: 'classes', type: JavaExec) {
+tasks.register('QuickStart', JavaExec) {
+    dependsOn 'classes'
     main = "store.reduct.QuickStart"
     classpath = sourceSets.main.runtimeClasspath
 }

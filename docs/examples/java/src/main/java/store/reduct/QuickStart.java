@@ -23,7 +23,7 @@ public class QuickStart {
                 .quotaSize(1_000_000_000)
                 //.exits(true) TODO: add this method to BucketSettings
                 .build();
-        Bucket bucket = client.createBucket("my-bucket12", settings);
+        Bucket bucket = client.createBucket("my-bucket1", settings);
 
         // 3. Write some data with timestamps in the 'sensor-1' entry
         long timestamp = System.currentTimeMillis() * 1000; // in microseconds
