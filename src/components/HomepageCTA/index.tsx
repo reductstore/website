@@ -7,7 +7,7 @@ function HomepageCTA() {
   return (
     <section className={styles.section}>
       <Heading as="h2">
-        The Fastest Time Series Object Store for Edge AI
+        The Fastest Time Series Object Store for AI Infrastructure
       </Heading>
       <p>
         Discover why ReductStore is the top choice for AI and edge computing
