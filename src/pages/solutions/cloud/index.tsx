@@ -5,7 +5,8 @@ import UseCaseRow from "@site/src/components/UseCaseRow";
 import Faq from "@site/src/components/Faq";
 import SimpleHeaderWithForm from "@site/src/components/SimpleHeaderWithForm";
 import PromotionalWaitingList from "@site/src/components/PromotionalWaitingList";
-import CloudStorageSvg from "@site/static/img/solutions/cloud/cloud_storage.drawio.svg";
+import useBaseUrl from "@docusaurus/useBaseUrl";
+import ThemedImage from "@theme/ThemedImage";
 
 export default function CloudSolution(): JSX.Element {
   return (
@@ -22,7 +23,20 @@ export default function CloudSolution(): JSX.Element {
             "Scalable Data Management",
             "Cost-Effective Storage",
           ]}
-          imageSvg={<CloudStorageSvg className={styles.SvgImage} />}
+          imageSvg={
+            <ThemedImage
+              className={styles.SvgImage}
+              alt="Cloud Storage"
+              sources={{
+                light: useBaseUrl(
+                  "/img/solutions/cloud/cloud_storage_light.drawio.svg"
+                ),
+                dark: useBaseUrl(
+                  "/img/solutions/cloud/cloud_storage_dark.drawio.svg"
+                ),
+              }}
+            />
+          }
         />
         <div className="container">
           <>
@@ -102,17 +116,17 @@ const cloudFaqs = [
   {
     question: "How does ReductStore optimize data management for the cloud?",
     answer:
-      "ReductStore is designed to handle high-frequency time series data and unstructured blobs, ensuring fast access and processing in cloud environments. It's optimized for AI and IoT applications, providing scalable and efficient data storage.",
+      "ReductStore simplifies cloud data management by providing fast, scalable storage specifically for time-series unstructured data, leveraging Google Cloud for cost efficiency and easy scaling.",
   },
   {
     question: "What makes ReductStore secure in the cloud?",
     answer:
-      "ReductStore Cloud is built on Google infrastructure with regional isolation, deep security controls, and SOC2 certification to ensure robust protection. Deploy on our account or yours and manage access with granular permissions.",
+      "ReductStore's cloud solution is built on Google infrastructure with deep security controls and SOC2 certification to ensure robust protection. Deploy on our account or yours and manage access with granular permissions.",
   },
   {
     question: "How does ReductStore handle edge-to-cloud data synchronization?",
     answer:
-      "ReductStore provides data replication between any endpoint, including edge devices and cloud storage, with label and metadata filtering to ensure only relevant data is copied.",
+      "ReductStore provides data replication between any instance, including edge devices and cloud storage, with label and metadata filtering to ensure only relevant data is copied.",
   },
   {
     question: "What are the benefits of joining the ReductStore waiting list?",
