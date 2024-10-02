@@ -5,18 +5,18 @@ import Link from "@docusaurus/Link";
 import clsx from "clsx";
 import CountdownTimer from "../CountdownTimer";
 
-interface FreePoCFormProps {
+interface PriceListFormProps {
   elementId: string;
   targetDate?: Date;
   startDate?: Date;
 }
 
-const FreePoCForm = ({
+const PriceListForm = ({
   elementId,
   targetDate,
   startDate,
-}: FreePoCFormProps) => {
-  const [state, handleSubmit] = useForm("myyraooa");
+}: PriceListFormProps) => {
+  const [state, handleSubmit] = useForm("xeojydgy");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [companyName, setcompanyName] = useState("");
@@ -26,8 +26,7 @@ const FreePoCForm = ({
       <div className={clsx(styles.form, "alert alert--success")}>
         <h2>Thank You!</h2>
         <p>
-          We've received your request for a Proof of Concept. A member of our
-          team will get back to you soon.
+          We've received your request and will send you the price list shortly.
         </p>
       </div>
     );
@@ -35,7 +34,7 @@ const FreePoCForm = ({
 
   return (
     <form id={elementId} className={styles.form} onSubmit={handleSubmit}>
-      <h2>Request a Proof of Concept</h2>
+      <h2>Get Price List</h2>
       {targetDate && startDate && (
         <div className={styles.countdown}>
           <CountdownTimer
@@ -45,10 +44,7 @@ const FreePoCForm = ({
           />
         </div>
       )}
-      <p>
-        Our team will reach out to you and we will create a custom software
-        integration for your project.
-      </p>
+      <p>We will send you the price list shortly.</p>
 
       <div className={styles.inputGroup}>
         <label htmlFor="name">Your Name</label>
@@ -102,7 +98,7 @@ const FreePoCForm = ({
           type="submit"
           disabled={state.submitting}
         >
-          Request a Proof of Concept
+          Get Price List
         </button>
       </div>
 
@@ -117,4 +113,4 @@ const FreePoCForm = ({
   );
 };
 
-export default FreePoCForm;
+export default PriceListForm;

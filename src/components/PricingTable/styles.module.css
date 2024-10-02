@@ -1,4 +1,6 @@
 .pricingTable {
+  margin-top: 4em;
+  margin-bottom: 4em;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -10,7 +12,8 @@
   border: 3px solid #ccc;
   padding: 1em;
   border-radius: 20px;
-  max-width: 300px;
+  max-width: 350px;
+  width: 100%;
 }
 
 .highlight {
@@ -44,7 +47,7 @@
 }
 
 .category {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .categoryTitle,
@@ -59,8 +62,9 @@
 }
 
 .infoIcon {
+  margin-top: 0.3em;
   margin-left: 5px;
-  vertical-align: middle;
+  vertical-align: top;
   cursor: help;
   color: var(--reduct-dimmed-color);
 }
