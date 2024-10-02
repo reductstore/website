@@ -1,4 +1,9 @@
+.noMarginBottom {
+  margin-bottom: 0;
+}
+
 .benefitsList {
+  margin-top: 1rem;
   list-style-type: none;
   padding: 0;
 }

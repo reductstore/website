@@ -15,7 +15,7 @@ const PromotionalBanner = () => {
         <div className="container">
           <div>
             <h3>Free Evaluation and Proof of Concept (PoC)</h3>
-            <p>
+            <p className={styles.noMarginBottom}>
               Secure your spot today, and our team will contact you to
               understand your requirements and provide you with a customized
               evaluation tailored to your project.
