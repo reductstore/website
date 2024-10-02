@@ -12,7 +12,8 @@
   border: 3px solid #ccc;
   padding: 1em;
   border-radius: 20px;
-  max-width: 300px;
+  max-width: 350px;
+  width: 100%;
 }
 
 .highlight {
@@ -46,7 +47,7 @@
 }
 
 .category {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .categoryTitle,
