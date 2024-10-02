@@ -64,7 +64,7 @@ export default function PricingTable() {
             { title: "Architecture Review", description: checkedIcon },
           ]}
           onClick={() => setOpenModal(true)}
-          buttonLabel="Request Price List"
+          buttonLabel="Get Price List"
         />
 
         {/* Cloud Plan */}
@@ -82,7 +82,7 @@ export default function PricingTable() {
             { title: "Easy Setup", description: checkedIcon },
           ]}
           buttonUrl="/solutions/cloud"
-          buttonLabel="Join Waiting List"
+          buttonLabel="Learn More"
         />
       </div>
 

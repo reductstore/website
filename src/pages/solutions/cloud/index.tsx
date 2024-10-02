@@ -86,8 +86,8 @@ const diagrams = [
     title: "Reduce Storage Costs",
     description: (
       <p>
-        ReductStore leverages BlobFuse to provide cost-effective cloud storage.
-        By integrating with Azure Blob Storage, it optimizes storage costs while
+        ReductStore leverages Google Cloud to provide a cost-effective solution.
+        By integrating with blob storage, it optimizes storage costs while
         maintaining high performance. This allows you to store massive amounts
         of data at a lower cost without sacrificing access speed or reliability.
       </p>
@@ -107,7 +107,7 @@ const cloudFaqs = [
   {
     question: "What makes ReductStore secure in the cloud?",
     answer:
-      "ReductStore is built on Azure infrastructure with regional isolation, deep security controls, and SOC2 certification to ensure robust protection. Deploy on our account or yours and manage access with granular permissions.",
+      "ReductStore Cloud is built on Google infrastructure with regional isolation, deep security controls, and SOC2 certification to ensure robust protection. Deploy on our account or yours and manage access with granular permissions.",
   },
   {
     question: "How does ReductStore handle edge-to-cloud data synchronization?",
@@ -118,10 +118,5 @@ const cloudFaqs = [
     question: "What are the benefits of joining the ReductStore waiting list?",
     answer:
       "By joining the waiting list, you'll be among the first to explore ReductStore's cloud solution and receive updates on new features and optimizations for managing time series data in the cloud.",
-  },
-  {
-    question: "How can I reduce storage costs with ReductStore?",
-    answer:
-      "ReductStore integrates with BlobFuse and Azure Blob Storage to provide a cost-effective cloud storage solution while maintaining high performance.",
   },
 ];

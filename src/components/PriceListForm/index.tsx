@@ -34,7 +34,7 @@ const PriceListForm = ({
 
   return (
     <form id={elementId} className={styles.form} onSubmit={handleSubmit}>
-      <h2>Request Price List</h2>
+      <h2>Get Price List</h2>
       {targetDate && startDate && (
         <div className={styles.countdown}>
           <CountdownTimer
@@ -44,7 +44,7 @@ const PriceListForm = ({
           />
         </div>
       )}
-      <p>Get in touch with us to receive a price list for our product.</p>
+      <p>We will send you the price list shortly.</p>
 
       <div className={styles.inputGroup}>
         <label htmlFor="name">Your Name</label>
@@ -98,7 +98,7 @@ const PriceListForm = ({
           type="submit"
           disabled={state.submitting}
         >
-          Request Price List
+          Get Price List
         </button>
       </div>
 
