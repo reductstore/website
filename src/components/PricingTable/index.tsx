@@ -4,7 +4,7 @@ import styles from "./styles.module.css";
 import PricingPlan from "./PricingPlan";
 import { FaCheckCircle } from "react-icons/fa";
 import Modal from "../Modal";
-import FreePoCForm from "../FreePoCForm";
+import PriceListForm from "../PriceListForm";
 
 const checkedIcon = <FaCheckCircle color="green" size="1.2em" />;
 
@@ -15,74 +15,91 @@ export default function PricingTable() {
       <div className={clsx("row", styles.pricingTable)}>
         <PricingPlan
           title="Community"
-          subtitle="For startups and small capital"
-          description="For research, testing, development. Commercial use in production limited to companies with capital less than 2 million USD."
+          subtitle=""
+          description="For research, testing, and development. Commercial use in production limited to companies with capital less than 2 million USD."
           categories={[
             { title: "Full Functionality", description: checkedIcon },
             {
               title: "Support",
-              description: "Community on GitHub or Chat",
+              description: (
+                <>
+                  <a href="https://community.reduct.store/">
+                    <b>Community Forum</b>
+                  </a>{" "}
+                  or{" "}
+                  <a href="https://github.com/reductstore/reductstore">
+                    <b>GitHub</b>
+                  </a>
+                </>
+              ),
               descriptionDetail: "Only latest stable version",
             },
             { title: "Long Term Release Support", description: "-" },
             { title: "Architecture Review", description: "-" },
+            { title: "Proof of Concept (PoC)", description: "-" },
+            { title: "Fully Managed", description: "-" },
+            { title: "Autoscaling", description: "-" },
+            { title: "No-Code Provisioning", description: "-" },
           ]}
           buttonUrl="/docs/getting-started"
           buttonLabel="Start for Free"
           isHighlight
         />
+
         <PricingPlan
-          title="Standard"
-          subtitle="For small scale enterprises"
-          description="For commercial production use in non-critical applications."
+          title="On-Premise"
+          subtitle=""
+          description="Commercial support, POC, and long-term release support for on-premise deployment."
           categories={[
             { title: "Full Functionality", description: checkedIcon },
+            { title: "Support", description: "Commercial support" },
             {
-              title: "Support",
-              description: "Up to 2 business days, Email or Chat",
+              title: "Long Term Release Support",
+              description: "Up to 3 years",
+              descriptionDetail:
+                "No vendor lock-in, legacy versions are free and open source",
             },
-            { title: "Long Term Release Support", description: "1 year" },
-            { title: "Architecture Review", description: "-" },
-          ]}
-          onClick={() => setOpenModal(true)}
-          buttonLabel="Request a PoC"
-        />
-        <PricingPlan
-          title="Premium"
-          subtitle="For critical applications"
-          description="For commercial production use in critical applications with minimum 5TB storage capacity."
-          categories={[
-            { title: "Full Functionality", description: checkedIcon },
-            {
-              title: "Support",
-              description: "Up to 4 hours, Email, Chat, Video call",
-            },
-            { title: "Long Term Release Support", description: "3 years" },
             { title: "Architecture Review", description: checkedIcon },
+            {
+              title: "Proof of Concept (PoC)",
+              description: checkedIcon,
+            },
+            { title: "Fully Managed", description: "-" },
+            { title: "Autoscaling", description: "-" },
+            { title: "No-Code Provisioning", description: "-" },
           ]}
           onClick={() => setOpenModal(true)}
-          buttonLabel="Request a PoC"
+          buttonLabel="Get Price List"
         />
+
         <PricingPlan
-          title="IoT"
-          subtitle="For many small nodes"
-          description="For commercial production use with minimum 10 devices with less than 1TB of storage capacity per unit."
+          title="Cloud"
+          subtitle=""
+          description="Fully managed cloud service. Join our waiting list."
           categories={[
             { title: "Full Functionality", description: checkedIcon },
             {
               title: "Support",
-              description: "Up to 2 business days, Email or Chat",
+              description: "Commercial support",
             },
-            { title: "Long Term Release Support", description: "1 year" },
+            {
+              title: "Long Term Release Support",
+              description: "Always up-to-date",
+            },
             { title: "Architecture Review", description: checkedIcon },
+            { title: "Proof of Concept (PoC)", description: checkedIcon },
+            { title: "Fully Managed", description: checkedIcon },
+            { title: "Autoscaling", description: checkedIcon },
+            { title: "No-Code Provisioning", description: checkedIcon },
           ]}
-          onClick={() => setOpenModal(true)}
-          buttonLabel="Request a PoC"
+          buttonUrl="/solutions/cloud"
+          buttonLabel="Learn More"
         />
       </div>
+
       <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
         <div className={styles.form}>
-          <FreePoCForm elementId="free-poc-form" />
+          <PriceListForm elementId="price-list-form" />
         </div>
       </Modal>
     </section>

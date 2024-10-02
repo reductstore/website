@@ -1,0 +1,25 @@
+.form {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.faqs {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+}
+
+.SvgImage {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 997px) {
+  .SvgImage {
+    margin-top: 20px;
+  }
+}

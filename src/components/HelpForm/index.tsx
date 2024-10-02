@@ -142,7 +142,7 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
           to="/privacy"
           target="_blank"
         >
-          Privacy Policy
+          We don't share your information with anyone.
         </Link>
       </div>
     </form>

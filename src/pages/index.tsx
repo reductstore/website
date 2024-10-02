@@ -25,8 +25,8 @@ function HomepageHeader() {
           {siteConfig.tagline}
         </h1>
         <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
-          History storage and management of images, vibration data, text,
-          labels, and more - all in one place with the highest performance.
+          High-performance time series storage for data of any size-images,
+          text, sensor data, and more.
         </p>
         <div className={styles.buttons}>
           <Link
