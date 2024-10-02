@@ -29,10 +29,10 @@ export default function CloudSolution(): JSX.Element {
               alt="Cloud Storage"
               sources={{
                 light: useBaseUrl(
-                  "/img/solutions/cloud/cloud_storage_light.drawio.svg",
+                  "/img/solutions/cloud/cloud_storage_light.drawio.svg"
                 ),
                 dark: useBaseUrl(
-                  "/img/solutions/cloud/cloud_storage_dark.drawio.svg",
+                  "/img/solutions/cloud/cloud_storage_dark.drawio.svg"
                 ),
               }}
             />
