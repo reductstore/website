@@ -15,21 +15,20 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
 # Replication API Specification Reference
 
-:::info
 Since version 1.8.0, ReductStore supports append-only replication. This feature allows replicating data from one bucket to another.
-The replication is performed in the background and doesn't affect the performance of the main database.
-:::
+
+For more information about replications, read the [**Replication Guide**](../guides/data-replication).
+
+## Get a List of Replication Tasks
+
+The method returns a list of replication Task with their statuses.
+
+To use this method, you need an access token with full access.
 
 <SwaggerComponent
   method="GET"
   path="/api/v1/replications"
-  summary="Get a list of replications"
-  description={
-    <>
-      The method returns a list of replications with their statuses. To use this
-      method, you need an access token with full access.
-    </>
-  }
+  summary="Get a list of replication tasks"
   responses={[
     {
       status: "200",
@@ -62,16 +61,17 @@ The replication is performed in the background and doesn't affect the performanc
   ]}
 />
 
+## Show Information about a Replication Task
+
+This method provides complete information about a replication task, including
+diagnostics.
+
+This method requires a full access token.
+
 <SwaggerComponent
   method="GET"
   path="/api/v1/replications/:replication_name"
-  summary="Show information about a replication"
-  description={
-    <>
-      This method provides complete information about a replication, including
-      diagnostics. This method requires a full access token.
-    </>
-  }
+  summary="Show information about a replication task"
   parameters={[
     {
       type: "path",
@@ -144,16 +144,16 @@ The replication is performed in the background and doesn't affect the performanc
   ]}
 />
 
+## Create a New Replication Task
+
+The method creates a replication task with given settings.
+
+To use this method, you need an access token with full access.
+
 <SwaggerComponent
   method="POST"
   path="/api/v1/replications/:replication"
-  summary="Create a new replication"
-  description={
-    <>
-      The method creates a replication with given settings. To use this method,
-      you need an access token with full access.
-    </>
-  }
+  summary="Create a new replication tasl"
   parameters={[
     {
       type: "path",
@@ -279,16 +279,15 @@ The replication is performed in the background and doesn't affect the performanc
   ]}
 />
 
+## Update an Existing Replication Task
+
+The method updates an existing replication task with given settings. To use
+this method, you need an access token with full access.
+
 <SwaggerComponent
   method="PUT"
   path="/api/v1/replications/:replication_name"
-  summary="Update an existing replication"
-  description={
-    <>
-      The method updates an existing replication with given settings. To use
-      this method, you need an access token with full access.
-    </>
-  }
+  summary="Update an existing replication task"
   parameters={[
     {
       type: "path",
@@ -419,16 +418,16 @@ The replication is performed in the background and doesn't affect the performanc
   ]}
 />
 
+## Delete a Replication Task
+
+The method deletes a replication task.
+
+To use this method, you need an access token with full access.
+
 <SwaggerComponent
   method="DELETE"
   path="/api/v1/replications/:replication_name"
-  summary="Delete a replication"
-  description={
-    <>
-      The method deletes a replication. To use this method, you need an access
-      token with full access.
-    </>
-  }
+  summary="Delete a replication task"
   parameters={[
     {
       type: "path",
