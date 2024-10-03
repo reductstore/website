@@ -144,6 +144,10 @@ parameters are empty.
 If authentication is enabled, the method needs a valid API token with full
 access.
 
+**Changes**:
+
+- v1.12: HARD quota type was introduced.
+
 <SwaggerComponent
   method="POST"
   path="/api/v1/b/:bucket_name"
@@ -231,6 +235,10 @@ with all the settings.
 
 If authentication is enabled, the method needs a valid API token with full access.
 
+**Changes**:
+
+- v1.12: HARD quota type was introduced.
+
 <SwaggerComponent
   method="PUT"
   path="/api/v1/b/:bucket_name"
@@ -266,7 +274,7 @@ If authentication is enabled, the method needs a valid API token with full acces
       type: "body",
       details: {
         name: "quota_type",
-        description: "Type of quota. Can have values 'NONE' or 'FIFO'",
+        description: "Type of quota. Can have values 'NONE', 'FIFO' or 'HARD'",
         dataType: "String",
         isRequired: false,
       },
@@ -306,6 +314,73 @@ If authentication is enabled, the method needs a valid API token with full acces
       status: "409",
       message: "Conflict",
       summary: "Bucket is provisioned",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "JSON request is invalid",
+    },
+  ]}
+/>
+
+## Rename a Bucket
+
+To rename a bucket, the request should have a JSON document with the new name.
+
+If authentication is enabled, the method needs a valid API token with full access.
+
+**Changes**:
+
+- v1.12: the endpoint was introduced.
+
+<SwaggerComponent
+  method="PUT"
+  path="/api/v1/b/:bucket_name/rename"
+  summary="Rename a bucket"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        description: "Name of bucket",
+        isRequired: true,
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "new_name",
+        description: "New name of the bucket",
+        dataType: "String",
+        isRequired: true,
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "The bucket is renamed",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have enough permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket doesn't exist",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "Bucket with the new name already exists",
     },
     {
       status: "422",
