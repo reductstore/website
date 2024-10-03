@@ -24,19 +24,19 @@ Before starting to record data, a user must first create a bucket and specify se
 - Quota type
 - Quota size
 
-For more information about buckets, read the [**how-does-it-work page**](../how-does-it-work.mdx#internal-structure).
+For more information about buckets, read the [**Bucket Guide**](../guides/buckets).
+
+## Get Information about a Bucket
+
+The method returns the current settings, stats, and entry list of the
+bucket in JSON format.
+
+If authentication is enabled, the method needs a valid API token.
 
 <SwaggerComponent
   method="GET"
   path="/api/v1/b/:bucket_name"
   summary="Get information about a bucket"
-  description={
-    <>
-      The method returns the current settings, stats, and entry list of the
-      bucket in JSON format. If authentication is enabled, the method needs a
-      valid API token.
-    </>
-  }
   parameters={[
     {
       type: "path",
@@ -98,13 +98,14 @@ For more information about buckets, read the [**how-does-it-work page**](../how-
   ]}
 />
 
+## Check if a Bucket Exists
+
+If authentication is enabled, the method needs a valid API token.
+
 <SwaggerComponent
   method="HEAD"
   path="/api/v1/b/:bucket_name"
   summary="Check if a bucket exists"
-  description={
-    <>If authentication is enabled, the method needs a valid API token.</>
-  }
   parameters={[
     {
       type: "path",
@@ -134,21 +135,19 @@ For more information about buckets, read the [**how-does-it-work page**](../how-
   ]}
 />
 
+## Create a New Bucket
+
+To create a bucket, the request should contain a JSON document with some
+parameters or empty body. The new bucket uses default values if some
+parameters are empty.
+
+If authentication is enabled, the method needs a valid API token with full
+access.
+
 <SwaggerComponent
   method="POST"
   path="/api/v1/b/:bucket_name"
   summary="Create a new bucket"
-  description={
-    <>
-      To create a bucket, the request should contain a JSON document with some
-      parameters or empty body. The new bucket uses default values if some
-      parameters are empty.
-      <br />
-      <br />
-      If authentication is enabled, the method needs a valid API token with full
-      access.
-    </>
-  }
   parameters={[
     {
       type: "path",
@@ -181,7 +180,7 @@ For more information about buckets, read the [**how-does-it-work page**](../how-
       details: {
         name: "quota_type",
         description:
-          "Type of quota. Can have values 'NONE' or FIFO (default: NONE)",
+          "Type of quota. Can have values 'NONE', FIFO or HARD (default: NONE)",
         dataType: "String",
         isRequired: false,
       },
@@ -225,20 +224,17 @@ For more information about buckets, read the [**how-does-it-work page**](../how-
   ]}
 />
 
+## Change Settings of a Bucket
+
+To update settings of a bucket, the request should have a JSON document
+with all the settings.
+
+If authentication is enabled, the method needs a valid API token with full access.
+
 <SwaggerComponent
   method="PUT"
   path="/api/v1/b/:bucket_name"
   summary="Change settings of a bucket"
-  description={
-    <>
-      To update settings of a bucket, the request should have a JSON document
-      with all the settings.
-      <br />
-      <br />
-      If authentication is enabled, the method needs a valid API token with full
-      access.
-    </>
-  }
   parameters={[
     {
       type: "path",
@@ -319,19 +315,21 @@ For more information about buckets, read the [**how-does-it-work page**](../how-
   ]}
 />
 
+## Remove a Bucket
+
+Remove a bucket with all its entries and stored data.
+
+If authentication is enabled, the method needs a valid API token with full
+access.
+
+:::danger
+This operation is irreversible. All data in the bucket will be lost.
+:::
+
 <SwaggerComponent
   method="DELETE"
   path="/api/v1/b/:bucket_name"
   summary="Remove a bucket"
-  description={
-    <>
-      Remove a bucket with <strong>all its entries and stored data.</strong>
-      <br />
-      <br />
-      If authentication is enabled, the method needs a valid API token with full
-      access.
-    </>
-  }
   parameters={[
     {
       type: "path",
