@@ -21,7 +21,6 @@ We have also optimised the storage engine to improve overall performance when re
 
 {/* truncate */}
 
-
 ### Record Deletion API
 
 The new Record Delete API provides multiple endpoints for deleting data from an entry in the database. You can delete a specific record, a batch of records in a single request, or records within a time range.
@@ -49,10 +48,9 @@ The storage engine is now more efficient at handling large amounts of data and c
 
 What has changed:
 
-* Removed asynchronous calls and tokio runtime from the storage engine to simplify code and improve performance. Reads and writes are **+25%** faster.
-* We have optimized query execution. A query is now executed in a separate thread to pre-prepare the data to be read in parallel with HTTP request processing.
+- Removed asynchronous calls and tokio runtime from the storage engine to simplify code and improve performance. Reads and writes are **+25%** faster.
+- We have optimized query execution. A query is now executed in a separate thread to pre-prepare the data to be read in parallel with HTTP request processing.
   This change improved query performance by **400%** for small objects between 1-10 KB.
-
 
 The fastest time series database just got faster! Update your ReductStore instance to the latest version to take advantage of these improvements.
 
