@@ -73,7 +73,7 @@ if authentication is enabled.
     {
       type: "header",
       details: {
-        name: "x-reduct-label-<name>",
+        name: "x-reduct-label-[name]",
         description: "A value of a label assigned to the record",
         isRequired: false,
       },
@@ -84,13 +84,6 @@ if authentication is enabled.
       status: "200",
       message: "OK",
       summary: "The record is written",
-      description: (
-        <pre>
-          <code>{`{
-    // Response
-}`}</code>
-        </pre>
-      ),
     },
     {
       status: "400",
@@ -162,6 +155,81 @@ Existing labels not mentioned in the request stay unchanged.
       status: "422",
       message: "Unprocessable Entity",
       summary: "Bad header format",
+    },
+  ]}
+/>
+
+## Rename an Entry
+
+To rename an entry, the request should have a JSON document with the new name.
+
+If authentication is enabled, the method needs a valid API token with full access.
+
+**Changes**:
+
+- Version 1.12: The method was introduced.
+
+<SwaggerComponent
+  method="PUT"
+  path="/api/v1/b/:bucket_name/:entry_name/rename"
+  summary="Rename an entry"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        description: "Name of bucket",
+        isRequired: true,
+      },
+    },
+    {
+      type: "path",
+      details: {
+        name: ":entry_name",
+        description: "Name of entry",
+        isRequired: true,
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "new_name",
+        description: "New name of the entry",
+        dataType: "String",
+        isRequired: true,
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "The entry is renamed",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have enough permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket or entry doesn't exist",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "Entry with the new name already exists",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "JSON request is invalid",
     },
   ]}
 />
