@@ -12,7 +12,7 @@ image: TODO
 
 Deploying a vision model like YOLOv10 at the edge has become a game-changer for real-time object detection. Developed by researchers at Tsinghua University, YOLOv10 introduces architectural innovations that optimizes speed and accuracy, making it ideal for vision tasks that require low inference latency.
 
-This article provides resources for training a YOLOv10 model and managing data storage for real-time performance on edge devices. We will look at a combination of tools, including [**Roboflow**](https://roboflow.com/) for dataset preparation, [**Ultralytics**](https://www.ultralytics.com/) for model training, and [**ReductStore for efficient data storage**](https://www.reduct.store/blog/roboflow-reductstore).
+This article provides resources for training a YOLOv10 model and managing data storage for real-time performance on edge devices. We will look at a combination of tools, including [**Roboflow**](https://roboflow.com/) for dataset preparation, [**Ultralytics**](https://www.ultralytics.com/) for model training, and [**ReductStore for efficient data storage**](/blog/roboflow-reductstore).
 
 {/* truncate */}
 
@@ -48,7 +48,7 @@ This combination of speed, accuracy, and easy customization makes YOLOv10 a grea
 Using Roboflow for Data Annotation
 ----------------------------------
 
-[**Roboflow is a powerful tool**](https://www.reduct.store/blog/roboflow-reductstore#benefits-of-using-roboflow-inference) for creating, annotating and managing datasets, which is essential for training a custom YOLOv10 model.
+[**Roboflow is a powerful tool**](/blog/roboflow-reductstore#benefits-of-using-roboflow-inference) for creating, annotating and managing datasets, which is essential for training a custom YOLOv10 model.
 
 1.  **Start with a public dataset**: Roboflow Universe provides a large collection of publicly available, pre-labelled datasets for various use cases. It's ideal for quickly accessing and downloading datasets for common object recognition tasks, saving time on manual annotation.
 2.  **Upload images**: If you have your own data, create a project in Roboflow and upload images. The platform supports bulk uploads, making it possible to manage large datasets.
@@ -98,17 +98,17 @@ The ability to effectively store data at the edge is important to the successful
 
 ReductStore makes edge data management simpler and more effective through a number of key features:
 
-*   **Time-based access**ReductStore indexes each piece of data with a timestamp, making it easy to retrieve data based on specific time frames. This is particularly useful for time-sensitive data such as video feeds, where capturing the right moment for analysis is critical.
-*   **Flat storage structure**Data is stored in a flat format using buckets and entries. This keeps data organized and speeds up retrieval, which is critical when working with large datasets or multiple data sources on edge devices.
+*   **Time-based access**: ReductStore indexes each piece of data with a timestamp, making it easy to retrieve data based on specific time frames. This is particularly useful for time-sensitive data such as video feeds, where capturing the right moment for analysis is critical.
+*   **Flat storage structure**: Data is stored in a flat format using buckets and entries. This keeps data organized and speeds up retrieval, which is critical when working with large datasets or multiple data sources on edge devices.
     
 
 ### Strategies for Handling Multiple Feeds
 
 When dealing with multiple data streams, such as from multiple camera feeds, ReductStore provides effective and robust methods to keep everything organized:
 
-*   **Handling of multiple camera feeds**Store each camera feed as a separate entry in ReductStore. This keeps the data from different feeds properly organized, making it easier to access and process each stream as needed.
-*   **Selective Data Replication**Save bandwidth and optimize storage by [**replicating only critical data to the cloud**](https://www.reduct.store/blog/roboflow-reductstore#selective-data-replication-to-the-cloud). This helps to maintain backups and filter images that require more attention, such as annotation work.
-*   **Quota Policy Based on Volume (FIFO)**:ReducStore supports a quota policy based on data volume using FIFO (First In, First Out) to automatically delete older data while keeping the most recent data available. This ensures efficient storage management, ideal for devices with limited space.
+*   **Handling of multiple camera feeds**: Store each camera feed as a separate entry in ReductStore. This keeps the data from different feeds properly organized, making it easier to access and process each stream as needed.
+*   **Selective Data Replication**: Save bandwidth and optimize storage by [**replicating only critical data to the cloud**](/blog/roboflow-reductstore#selective-data-replication-to-the-cloud). This helps to maintain backups and filter images that require more attention, such as annotation work.
+*   **Quota Policy Based on Volume (FIFO)**: ReducStore supports a quota policy based on data volume using FIFO (First In, First Out) to automatically delete older data while keeping the most recent data available. This ensures efficient storage management, ideal for devices with limited space.
     
 
 Best Practices
