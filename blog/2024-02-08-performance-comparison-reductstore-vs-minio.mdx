@@ -199,9 +199,8 @@ python3 main.py
 
 The script displays the results for the given `BLOB_SIZE` and `SIZE_COUNT`. On my device with an NVMe drive, these were the numbers I received:
 
-
 | Blob Size | Operation | Minio, blob/s | ReductStore, blob/s | ReducStore, % |
-|-----------|-----------|---------------|---------------------|---------------|
+| --------- | --------- | ------------- | ------------------- | ------------- |
 | 1 KB      | Write     | 614           | 9256                | 1400 %        |
 |           | Read      | 724           | 60159               | 8310 %        |
 | 10 KB     | Write     | 570           | 9290                | 1629 %        |
@@ -210,7 +209,6 @@ The script displays the results for the given `BLOB_SIZE` and `SIZE_COUNT`. On m
 |           | Read      | 690           | 10703               | 1552 %        |
 | 1 MB      | Write     | 104           | 975                 | 936 %         |
 |           | Read      | 474           | 1380                | 291 %         |
-
 
 Based on the benchmark results, ReductStore consistently outperformed Minio in both writing and reading operations regardless of the size of the blobs. For writing operations, ReductStore was significantly faster than Minio, especially when dealing with smaller chunk sizes. For reading operations, ReductStore also held a clear advantage, being able to retrieve data faster than Minio especially for blobs smaller than 10MB. These performance results suggest that ReductStore is highly efficient and could be a more effective solution for applications that require frequent and intensive read/write operations.
 

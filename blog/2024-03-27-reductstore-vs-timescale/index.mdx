@@ -217,7 +217,7 @@ python3 main.py
 The script displays results for the specified `BLOB_SIZE` and `SIZE_COUNT`. On my device, which has an NVMe drive, here are the results I obtained:
 
 | Chunk Size | Operation | TimescaleDB, blob/s | ReductStore, blob/s | ReductStore, % |
-|------------|-----------|---------------------|---------------------|----------------|
+| ---------- | --------- | ------------------- | ------------------- | -------------- |
 | 1 KB       | Write     | 3124                | 9322                | +198%          |
 |            | Read      | 40300               | 51505               | +28%           |
 | 10 KB      | Write     | 2114                | 8395                | +297%          |
@@ -226,7 +226,6 @@ The script displays results for the specified `BLOB_SIZE` and `SIZE_COUNT`. On m
 |            | Read      | 1602                | 11244               | +603%          |
 | 1 MB       | Write     | 56                  | 898                 | +1604%         |
 |            | Read      | 173                 | 1336                | +671%          |
-
 
 Based on the benchmark results, ReductStore outperforms TimescaleDB in both write and read operations. The performance difference increases with the blob size, reaching up to 1604% for writing and 671% for reading 1MB blobs. This is due to the fact that ReductStore is optimized for storing and retrieving blobs, while TimescaleDB is designed for structured data and complex queries.
 
