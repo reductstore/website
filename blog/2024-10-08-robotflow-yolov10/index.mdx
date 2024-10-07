@@ -39,7 +39,10 @@ With consistent dual mapping, YOLOv10 eliminates the need for NMS by using an im
 
 Compared to previous versions, YOLOv10 delivers better latency and accuracy thanks to its NMS-free training and key innovations. From the original Tsinghua University paper, we can observe the following latency-accuracy graph for different model sizes:
 
-\[Graph on hardware such as the T4 GPU with TensorRT FP16\]
+![YOLOv10 Benchmark](./img/benchmark.png)
+<small style={{ display: "block", marginTop: "-20px" }}>
+ latency, accuracy, and model size comparison of YOLOv10 on T4 GPU with TensorRT FP16. Source: [**YOLOv10 Paper**](https://arxiv.org/pdf/2405.14458)
+</small>
 
 As shown in the graph, YOLOv10's new model design is faster and more accurate with fewer parameters, making it lighter and more efficient. It also supports the use of pre-trained model weights, such as a [**pre-trained COCO model**](https://github.com/THU-MIG/yolov10/releases), which means you can easily customize and adapt to your specific needs without having to start from scratch.
 
@@ -91,8 +94,6 @@ Edge Data Management Techniques
 -------------------------------
 
 The ability to effectively store data at the edge is important to the successful deployment of computer vision applications, especially when dealing with real-time inputs such as video feeds. ReductStore provides a practical solution for efficient data storage to ensure that images and predictions from real-time detection can be processed.
-
-\[Block diagram with ReductStore and multiple feeds\]
 
 ### Introduction to ReductStore
 
