@@ -7,7 +7,7 @@ slug: comparisons/computer-vision/iot/performance-comparison-reductstore-vs-mini
 date: 2024-02-08
 ---
 
-In this article, we will compare two data storage solutions: **[ReductStore](https://reduct.store)** and **[Minio](https://min.io)**. Both offer on-premise blob storage, but they approach it differently. Minio provides traditional S3-like blob storage, while ReductStore is a time series database designed to store a history of blob data. We will focus on their application in scenarios that require storage and access to a history of unstructured data. This includes images from a computer vision camera, vibration sensor data, or binary packages common in industrial data.
+In this article, we will compare two data storage solutions: **[ReductStore](https://reduct.store)** and **Minio**. Both offer on-premise blob storage, but they approach it differently. Minio provides traditional S3-like blob storage, while ReductStore is a time series database designed to store a history of blob data. We will focus on their application in scenarios that require storage and access to a history of unstructured data. This includes images from a computer vision camera, vibration sensor data, or binary packages common in industrial data.
 
 ## Handling Historical Data
 
@@ -34,7 +34,7 @@ If you need to query data, you should request a list of objects in the `cv_came
 
 **[ReductStore](https://www.reduct.store/)** is designed to address these issues. It features a robust FIFO quota, an HTTP API for data querying and batching over time intervals, and arranges objects (or records) into blocks for optimal disk usage and search efficiency.
 
-Both **[Minio](https://min.io/)** and **[ReductStore](https://www.reduct.store/)** offer Python SDKs. These can be used to implement read and write operations and to compare performance. As both databases utilize the HTTP protocol, we will use blobs of varying sizes to estimate the impact of HTTP overhead and to see how ReductStore optimizes this aspect.
+Both **Minio** and **[ReductStore](https://www.reduct.store/)** offer Python SDKs. These can be used to implement read and write operations and to compare performance. As both databases utilize the HTTP protocol, we will use blobs of varying sizes to estimate the impact of HTTP overhead and to see how ReductStore optimizes this aspect.
 
 ## Read/Write Data With Minio
 
@@ -80,7 +80,8 @@ As a solution, you could store object paths in a time-series database or establi
 
 ## Read/Write Data With ReductStore
 
-With **[ReductStore](https://www.reduct.store/)**, getting data by time intervals is much easier, as it provides a special API for this purpose:
+With **[ReductStore](https://www.reduct.store/)**, you can batch data before writing it to the database. This is more efficient than writing each object individually.
+Moreover, the database allows you to query data within a time range, which is more efficient than browsing the entire folder:
 
 ```python
 from reduct import Client as ReductClient
@@ -88,12 +89,24 @@ from reduct import Client as ReductClient
 reduct_client = ReductClient("http://127.0.0.1:8383")
 
 async def write_to_reduct():
-    async with ReductClient("http://127.0.0.1:8383") as reduct_client:
+    async with ReductClient(
+        "http://127.0.0.1:8383", api_token="reductstore"
+    ) as reduct_client:
         count = 0
-        bucket = await reduct_client.create_bucket("test", exist_ok=True)
-        for i in range(1, BLOB_COUNT):
-            await bucket.write("data", CHUNK)
+        bucket = await reduct_client.get_bucket("test")
+        batch = Batch()
+        for i in range(0, BLOB_COUNT):
+            batch.add(timestamp=time.time(), data=CHUNK)
+            await asyncio.sleep(0.000001)  # To avoid time collisions
             count += BLOB_SIZE
+
+            if  batch.size >= BATCH_MAX_SIZE or len(batch) >= BATCH_MAX_RECORDS:
+                await bucket.write_batch("data", batch)
+                batch.clear()
+
+        if len(batch) > 0:
+            await bucket.write_batch("data", batch)
+
         return count
 
 
@@ -112,10 +125,10 @@ async def read_from_reduct(t1, t2):
 Once we have our read/write functions, we can proceed to write our benchmarks.
 
 ```python
-import io
+
+import asyncio
 import random
 import time
-import asyncio
 
 from minio import Minio
 from reduct import Client as ReductClient
@@ -186,18 +199,18 @@ python3 main.py
 
 The script displays the results for the given `BLOB_SIZE` and `SIZE_COUNT`. On my device with an NVMe drive, these were the numbers I received:
 
-| Blob Size | Operation | Minio, blob/s | ReductStore, blob/s | ReductStore, % |
-| --------- | --------- | ------------- | ------------------- | -------------- |
-| 1 KB      | Write     | 548           | 1518                | 176 %          |
-|           | Read      | 1028          | 6868                | 568 %          |
-| 10 KB     | Write     | 533           | 1480                | 177 %          |
-|           | Read      | 1030          | 8386                | 714 %          |
-| 100 KB    | Write     | 360           | 1289                | 258 %          |
-|           | Read      | 844           | 6561                | 677 %          |
-| 1 MB      | Write     | 97            | 568                 | 486 %          |
-|           | Read      | 528           | 944                 | 79 %           |
-| 10 MB     | Write     | 21            | 97                  | 361 %          |
-|           | Read      | 94            | 103                 | 10 %           |
+
+| Blob Size | Operation | Minio, blob/s | ReductStore, blob/s | ReducStore, % |
+|-----------|-----------|---------------|---------------------|---------------|
+| 1 KB      | Write     | 614           | 9256                | 1400 %        |
+|           | Read      | 724           | 60159               | 8310 %        |
+| 10 KB     | Write     | 570           | 9290                | 1629 %        |
+|           | Read      | 632           | 38996               | 6170 %        |
+| 100 KB    | Write     | 422           | 5434                | 1288 %        |
+|           | Read      | 690           | 10703               | 1552 %        |
+| 1 MB      | Write     | 104           | 975                 | 936 %         |
+|           | Read      | 474           | 1380                | 291 %         |
+
 
 Based on the benchmark results, ReductStore consistently outperformed Minio in both writing and reading operations regardless of the size of the blobs. For writing operations, ReductStore was significantly faster than Minio, especially when dealing with smaller chunk sizes. For reading operations, ReductStore also held a clear advantage, being able to retrieve data faster than Minio especially for blobs smaller than 10MB. These performance results suggest that ReductStore is highly efficient and could be a more effective solution for applications that require frequent and intensive read/write operations.
 

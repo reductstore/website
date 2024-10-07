@@ -17,61 +17,76 @@ export const PerformanceComparisonData: Record<
     title: "TimescaleDB vs ReductStore",
     table: [
       {
-        recordSize: "10 MB",
-        readSpeed: "+850%",
-        writeSpeed: "+1300%",
-      },
-      {
         recordSize: "1 MB",
-        readSpeed: "+855%",
-        writeSpeed: "+1075%",
+        readSpeed: "+671%",
+        writeSpeed: "+1604%",
+      },
+              {
+        recordSize: "100 KB",
+        readSpeed: "+603%",
+        writeSpeed: "+924%",
       },
       {
-        recordSize: "100 KB",
-        readSpeed: "+217%",
-        writeSpeed: "+205%",
+        recordSize: "10 KB",
+        readSpeed: "+313%",
+        writeSpeed: "+297%",
+      },
+      {
+        recordSize: "1 KB",
+        readSpeed: "+28%",
+        writeSpeed: "+198%",
       },
     ],
   },
-  MongoDB: {
+    MongoDB: {
     url: "/blog/comparisons/iot/reductstore-vs-mongodb",
-    title: "MongoDB vs ReductStore",
+    title: "MongoDB with GridFS vs ReductStore",
     table: [
       {
-        recordSize: "10 MB",
-        readSpeed: "+65%",
-        writeSpeed: "+158%",
-      },
-      {
         recordSize: "1 MB",
-        readSpeed: "+112%",
-        writeSpeed: "+137%",
+        readSpeed: "-30%",
+        writeSpeed: "+170%",
       },
       {
         recordSize: "100 KB",
-        readSpeed: "+198%",
-        writeSpeed: "+155%",
+        readSpeed: "+260%",
+        writeSpeed: "+420%",
+      },
+              {
+        recordSize: "10 KB",
+        readSpeed: "+1600%",
+        writeSpeed: "+850%",
+      },
+      {
+        recordSize: "1 KB",
+        readSpeed: "+2300%",
+        writeSpeed: "+900%",
       },
     ],
   },
-  MinIO: {
+    MinIO: {
     url: "/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio",
     title: "MinIO vs ReductStore",
     table: [
       {
-        recordSize: "10 MB",
-        readSpeed: "+10%",
-        writeSpeed: "+361%",
-      },
-      {
         recordSize: "1 MB",
-        readSpeed: "+79%",
-        writeSpeed: "+486%",
+        readSpeed: "+291%",
+        writeSpeed: "+936%",
       },
       {
         recordSize: "100 KB",
-        readSpeed: "+677%",
-        writeSpeed: "+258%",
+        readSpeed: "+1552%",
+        writeSpeed: "+1288%",
+      },
+              {
+        recordSize: "10 KB",
+        readSpeed: "+6170%",
+        writeSpeed: "+1629%",
+      },
+      {
+        recordSize: "1 KB",
+        readSpeed: "+8310%",
+        writeSpeed: "+1400%",
       },
     ],
   },

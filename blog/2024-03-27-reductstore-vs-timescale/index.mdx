@@ -10,7 +10,7 @@ image: ./img/snippet.webp
 
 ![Get history of blobs with TimescaleDB](./img/snippet.webp)
 
-[**TimescaleDB**](https://www.timescale.com/) is an open-source time-series database optimized for fast ingest and complex queries. It is engineered up from [**PostgreSQL**](https://www.postgresql.org/) and offers the power, reliability, and ease-of-use of a relational database, combined with the scalability typically seen in NoSQL systems. It is particularly suited for storing and analyzing things that happen over time, such as metrics, events, and real-time analytics.
+**TimescaleDB** is an open-source time-series database optimized for fast ingest and complex queries. It is engineered up from **PostgreSQL** and offers the power, reliability, and ease-of-use of a relational database, combined with the scalability typically seen in NoSQL systems. It is particularly suited for storing and analyzing things that happen over time, such as metrics, events, and real-time analytics.
 
 Since TimescaleDB is based on PostgreSQL, it supports blob data and can be used to store a history of unstructured data such as images, binary sensor data, or large text documents. In this article, we will use the database as a time-series blob storage and compare its performance with [**ReductStore**](https://www.reduct.store), which is designed specifically for this use case.
 
@@ -20,13 +20,19 @@ TimescaleDB and ReductStore both have Python Client SDKs. We'll create simple Py
 
 ## Read/Write Blob Data With TimescaleDB
 
-Since TimescaleDB is a part of PostgreSQL, you can use the **[psycopg](https://pypi.org/project/psycopg2/)** adapter for Python to manage the database and stream the data. In this section, we initialize the TimescaleDB extension, recreate the benchmark database, and create a table for our blob data. Once the table is prepared, we write a chunk of binary data with the current time `BLOB_COUNT` times.
+Since TimescaleDB is a part of PostgreSQL, you can use the **psycopg** adapter for Python to manage the database and stream the data. In this section, we initialize the TimescaleDB extension, recreate the benchmark database, and create a table for our blob data. Once the table is prepared, we write a chunk of binary data with the current time `BLOB_COUNT` times.
+To speed up the writing process, we use the `execute_values` function from the `psycopg2.extras` module and write data in batches of `BATCH_MAX_RECORDS=80` records or `BATCH_MAX_SIZE=8M` bytes.
 
 ```python
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
-BLOB_SIZE = 100_000
+BLOB_SIZE = 1000_000
+BATCH_MAX_SIZE = 8_000_000
+BATCH_MAX_RECORDS = 80
+
+BLOB_COUNT = min(1000, 1_000_000_000 // BLOB_SIZE)
+
 CHUNK = random.randbytes(BLOB_SIZE)
 
 HOST = "localhost"
@@ -57,20 +63,30 @@ def write_to_timescale():
             con.commit()
 
             count = 0
-            for i in range(1, BLOB_COUNT):
-                cur.execute(
-                    "INSERT INTO data (time, blob_data) VALUES (%s, %s);",
-                    (
-                        datetime.now(),
-                        psycopg2.Binary(CHUNK),
-                    ),
-                )
+            values = []
+            for i in range(0, BLOB_COUNT):
+                values.append((datetime.now(), psycopg2.Binary(CHUNK)))
+                sleep(0.000001)  # To avoid time collisions
                 count += BLOB_SIZE
 
-    return count
+                if len(values) >= BATCH_MAX_RECORDS or len(values) * BLOB_SIZE >= BATCH_MAX_SIZE:
+                    psycopg2.extras.execute_values(
+                        cur,
+                        "INSERT INTO data (time, blob_data) VALUES %s;",
+                        values,
+                    )
+                    values = []
+
+
+            if len(values) > 0:
+                psycopg2.extras.execute_values(
+                    cur,
+                    "INSERT INTO data (time, blob_data) VALUES %s;",
+                    values,
+                )
 ```
 
-Now we need to create a function to read all the blobs from the table, it is quite easy and we need only one `SELECT` request:
+Now we need to create a function to read all the blobs from the table, it is quite easy, and we need only one `SELECT` request:
 
 ```python
 def read_from_timescale(t1, t2):
@@ -96,20 +112,30 @@ Let’s see how you can write and read data with ReductStore.
 
 ## Read/Write Blob Data With ReductStore
 
-With **[ReductStore](https://www.reduct.store/)**, you can write and read data without using SQL requests, simply by utilizing the asynchronous API. Additionally, if you need to handle large blobs, you can stream them in chunks without loading them into memory.
+With **[ReductStore](https://www.reduct.store/)**, you can write and read data without using SQL requests, simply by utilizing the asynchronous API. Additionally, if you need to handle large blobs, you can stream them in chunks without loading them into memory. In this example, we also write data in batches to speed up the process for relatively small blobs.
 
 ```python
 from reduct import Client as ReductClient
 
-async def write_to_reduct():
+async def write_to_reduct():async def write_to_reduct():
     async with ReductClient(
         f"http://{HOST}:8383", api_token="reductstore"
     ) as reduct_client:
         count = 0
         bucket = await reduct_client.get_bucket("benchmark")
-        for i in range(1, BLOB_COUNT):
-            await bucket.write("data", CHUNK)
+        batch = Batch()
+        for i in range(0, BLOB_COUNT):
+            batch.add(timestamp=datetime.now().timestamp(), data=CHUNK)
+            await asyncio.sleep(0.000001)  # To avoid time collisions
             count += BLOB_SIZE
+
+            if  batch.size >= BATCH_MAX_SIZE or len(batch) >= BATCH_MAX_RECORDS:
+                await bucket.write_batch("data", batch)
+                batch.clear()
+
+        if len(batch) > 0:
+            await bucket.write_batch("data", batch)
+
         return count
 
 async def read_from_reduct(t1, t2):
@@ -132,20 +158,20 @@ if __name__ == "__main__":
     print(f"Chunk size={BLOB_SIZE / 1000_000} Mb, count={BLOB_COUNT}")
     ts = time.time()
     size = write_to_timescale()
-    print(f"Write {size / 1000_000} Mb to TimescaleDB: {time.time() - ts} s")
+    print(f"Write {size / 1000_000} Mb to TimescaleDB: {BLOB_COUNT / (time.time() - ts)} req/s")
 
     ts_read = time.time()
     size = read_from_timescale(ts, time.time())
-    print(f"Read {size / 1000_000} Mb from TimescaleDB: {time.time() - ts_read} s")
+    print(f"Read {size / 1000_000} Mb from TimescaleDB: {BLOB_COUNT / (time.time() - ts_read)} req/s")
 
     loop = asyncio.new_event_loop()
     ts = time.time()
     size = loop.run_until_complete(write_to_reduct())
-    print(f"Write {size / 1000_000} Mb to ReductStore: {time.time() - ts} s")
+    print(f"Write {size / 1000_000} Mb to ReductStore: {BLOB_COUNT / (time.time() - ts)} req/s")
 
     ts_read = time.time()
     size = loop.run_until_complete(read_from_reduct(ts, time.time()))
-    print(f"Read {size / 1000_000} Mb from ReductStore: {time.time() - ts_read} s")
+    print(f"Read {size / 1000_000} Mb from ReductStore: {BLOB_COUNT / (time.time() - ts_read)} req/s")
 ```
 
 For testing purposes, we need to run the databases. This can easily be done using docker-compose:
@@ -191,19 +217,18 @@ python3 main.py
 The script displays results for the specified `BLOB_SIZE` and `SIZE_COUNT`. On my device, which has an NVMe drive, here are the results I obtained:
 
 | Chunk Size | Operation | TimescaleDB, blob/s | ReductStore, blob/s | ReductStore, % |
-| ---------- | --------- | ------------------- | ------------------- | -------------- |
-| 1 KB       | Write     | 2475                | 1463                | -41%           |
-|            | Read      | 2361                | 1260                | -47%           |
-| 10 KB      | Write     | 1557                | 1500                | -4%            |
-|            | Read      | 1333                | 1280                | -4%            |
-| 100 KB     | Write     | 447                 | 1366                | +205%          |
-|            | Read      | 353                 | 1120                | +217%          |
-| 1 MB       | Write     | 53                  | 571                 | +1075%         |
-|            | Read      | 40                  | 382                 | +855%          |
-| 10 Mb      | Write     | 5                   | 70                  | +1300%         |
-|            | Read      | 4                   | 38                  | +850%          |
+|------------|-----------|---------------------|---------------------|----------------|
+| 1 KB       | Write     | 3124                | 9322                | +198%          |
+|            | Read      | 40300               | 51505               | +28%           |
+| 10 KB      | Write     | 2114                | 8395                | +297%          |
+|            | Read      | 10241               | 42322               | +313%          |
+| 100 KB     | Write     | 491                 | 5026                | +924%          |
+|            | Read      | 1602                | 11244               | +603%          |
+| 1 MB       | Write     | 56                  | 898                 | +1604%         |
+|            | Read      | 173                 | 1336                | +671%          |
 
-Based on the benchmark results, TimescaleDB demonstrates better performance for blobs less 10KB. However, for larger blobs, ReductStore significantly outperforms TimescaleDB in both write and read operations.
+
+Based on the benchmark results, ReductStore outperforms TimescaleDB in both write and read operations. The performance difference increases with the blob size, reaching up to 1604% for writing and 671% for reading 1MB blobs. This is due to the fact that ReductStore is optimized for storing and retrieving blobs, while TimescaleDB is designed for structured data and complex queries.
 
 ## Other Considerations
 
