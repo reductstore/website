@@ -49,7 +49,7 @@ The storage engine is now more efficient at handling large amounts of data and c
 What has changed:
 
 - Removed asynchronous calls and tokio runtime from the storage engine to simplify code and improve performance. Reads and writes are **+25%** faster.
-- We have optimized query execution. A query is now executed in a separate thread to pre-prepare the data to be read in parallel with HTTP request processing.
+- We have optimized query execution. The query execution now runs in a separate thread, allowing data to be prepared in advance while simultaneously handling the HTTP request.
   This change improved query performance by **400%** for small objects between 1-10 KB.
 
 The fastest time series database just got faster! Update your ReductStore instance to the latest version to take advantage of these improvements.
