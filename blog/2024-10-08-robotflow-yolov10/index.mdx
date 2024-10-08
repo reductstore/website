@@ -30,9 +30,9 @@ Let's dive in!
 
 YOLOv10 introduces an updated architecture that optimizes the trade-off between speed and accuracy, making it an ideal real-time object detection model. A key change is the removal of Non-Maximum Suppression (NMS) for post-processing, which simplifies the detection pipeline while maintaining accuracy.
 
-In the [**original YOLOv10 paper**](https://arxiv.org/pdf/2405.14458), researchers introduced a new approach called _consistent_ _dual assignment\_\_s_ to enable NMS-free training. Traditionally, YOLO models used NMS to remove overlapping boxes, which often slowed the model's inference time due to the extra post-processing step.
+In the [**original YOLOv10 paper**](https://arxiv.org/pdf/2405.14458), researchers introduced a new approach called _consistent dual assignments_ to enable NMS-free training. Traditionally, YOLO models used NMS to remove overlapping boxes, which often slowed the model's inference time due to the extra post-processing step.
 
-With consistent dual mapping, YOLOv10 eliminates the need for NMS by using an improved training strategy that helps the model better distinguish between objects directly. This results in lower inference latency, making the model faster and more efficient without the added computational overhead.
+YOLOv10 eliminates the need for NMS by using an improved training strategy that helps the model better distinguish between objects directly. This results in lower inference latency, making the model faster and more efficient without the added computational overhead.
 
 ### Comparison With State-Of-The-Arts
 
@@ -91,6 +91,9 @@ As you can see, Ultralytics and Roboflow have made it very easy to train a custo
 ## Edge Data Management Techniques
 
 The ability to effectively store data at the edge is important to the successful deployment of computer vision applications, especially when dealing with real-time inputs such as video feeds. ReductStore provides a practical solution for efficient data storage to ensure that images and predictions from real-time detection can be processed.
+
+![Pipeline Block Diagram](./img/reductstore_yolov10_pipeline.drawio.png)
+
 
 ### Introduction to ReductStore
 
