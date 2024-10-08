@@ -1,0 +1,13 @@
+---
+---
+
+If you don't already have a ReductStore instance running, you can easily spin up one as a Docker container. To do this,
+run the following command:
+
+```
+docker run -p 8383:8383 -e RS_API_TOKEN="my-token" reduct/store:latest
+```
+
+This will start a ReductStore instance listening on port 8383 on your local machine. The `RS_API_TOKEN` environment variable is used to authenticate requests to the ReductStore instance. You can set it to any value you like, but you will need to use the same value when creating a `Client` object in your code.
+
+If Docker is not an option, you can also download the ReductStore binaries. Check the **[Download Page](/download)**.
