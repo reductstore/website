@@ -1,0 +1,18 @@
+version: "3"
+services:
+  reductstore:
+    image: reduct/store:latest
+    ports:
+      - "8383:8383"
+    volumes:
+      - ./data:/data
+    environment:
+      - RS_API_TOKEN=my-api-token
+      - RS_BUCKET_1_NAME=src_bucket
+      - RS_REPLICATION_1_NAME=my_replication
+      - RS_REPLICATION_1_SRC_BUCKET=src_bucket
+      - RS_REPLICATION_1_DST_BUCKET=demo
+      - RS_REPLICATION_1_DST_HOST=https://play.reduct.store
+      - RS_REPLICATION_1_DST_TOKEN=reductstore
+      - RS_REPLICATION_1_ENTRIES=exampl-*
+      - RS_REPLICATION_1_INCLUDE_anomaly=1

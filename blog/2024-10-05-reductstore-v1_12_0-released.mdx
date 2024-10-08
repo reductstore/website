@@ -1,0 +1,61 @@
+---
+title: "ReducStore v1.12.0 released: record deletion API and storage engine optimization"
+description: ReductStore v1.12.0 introduces a new record deletion API and storage engine optimization that can help you manage your data more efficiently.
+authors: alexey
+tags: [news]
+slug: news/reductstore-v1_12_0-released
+date: 2024-10-05
+---
+
+We are pleased to announce the release of the latest minor version of [**ReductStore**](/), [**1.12.0**](https://github.com/reductstore/reductstore/releases/tag/v1.12.0). ReductStore is a time series database designed for storing and managing large amounts of blob data.
+
+To download the latest released version, please visit our [**Download Page**](/download).
+
+## What's new in 1.12.0?
+
+Over the last few months we've been working hard to make ReductStore even more powerful and efficient as a central repository for your time series data.
+Where you can collect data from a variety of sources, including IoT and edge devices, and store it in one place for further analysis and processing.
+
+In this release, we've added a new record delete API that allows you to remove specific records from an entry. This can be useful if you want to clean up your data or remove obsolete records and need more flexibility than FIFO bucket quotas.
+We have also optimised the storage engine to improve overall performance when reading and writing data.
+
+{/* truncate */}
+
+### Record Deletion API
+
+The new Record Delete API provides multiple endpoints for deleting data from an entry in the database. You can delete a specific record, a batch of records in a single request, or records within a time range.
+This is already supported in our official client SDKs and you can start using it right away.
+
+A simple example of how to remove records for a time range using filter by label:
+
+```python
+from reduct import Client, Bucket
+
+async with Client("http://localhost:8383", api_token="my-token") as client:
+    bucket: Bucket = await client.get_bucket("my-bucket")
+    removed_records = await bucket.remove_query("py-example",
+        "2024-01-10T10:00",
+        "2024-01-10T12:00",
+        include={"key1": "value1"})
+```
+
+Update your client SDK to the latest version to start using this feature and other improvements.
+
+### Storage Engine Improvements
+
+We've optimized the storage engine to improve overall performance when reading and writing data.
+The storage engine is now more efficient at handling large amounts of data and can provide better throughput and latency for your applications.
+
+What has changed:
+
+- Removed asynchronous calls and tokio runtime from the storage engine to simplify code and improve performance. Reads and writes are **+25%** faster.
+- We have optimized query execution. The query execution now runs in a separate thread, allowing data to be prepared in advance while simultaneously handling the HTTP request.
+  This change improved query performance by **400%** for small objects between 1-10 KB.
+
+The fastest time series database just got faster! Update your ReductStore instance to the latest version to take advantage of these improvements.
+
+---
+
+I hope you find those new features useful. If you have any questions or feedback, don’t hesitate to use the [**ReductStore Community**](https://community.reduct.store) forum.
+
+Thanks for using [**ReductStore**](https://www.reduct.store/)!
