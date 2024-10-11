@@ -37,18 +37,37 @@ interface HelpFormProps {
 }
 
 export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
-  const [state, handleSubmit] = useForm("xgejorqo");
-  const [topic, setTopic] = useState(subject || "");
   const location = useLocation();
 
+  const [state, handleSubmit] = useForm("xgejorqo");
+  const [topic, setTopic] = useState(subject || "");
+  const [utmParams, setUtmParams] = useState({
+    utm_campaign: "",
+    utm_source: "",
+    utm_medium: "",
+    utm_term: "",
+    utm_content: "",
+    utm_id: "",
+  });
+
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const subject = queryParams.get("subject");
+    const urlParams = new URLSearchParams(location.search);
+    const subject = urlParams.get("subject");
     const foundTopic = topics.find((t) => t.key === subject);
     if (foundTopic) {
       setTopic(foundTopic.key);
     }
-  }, [location.search]);
+    setUtmParams({
+      utm_campaign: urlParams.get("utm_campaign") || "",
+      utm_source: urlParams.get("utm_source") || "",
+      utm_medium: urlParams.get("utm_medium") || "",
+      utm_term: urlParams.get("utm_term") || "",
+      utm_content: urlParams.get("utm_content") || "",
+      utm_id: urlParams.get("utm_id") || "",
+    });
+  }, [location]);
+
+  const pagePath = location.pathname;
 
   if (state.succeeded) {
     return (
@@ -129,6 +148,14 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
           errors={state.errors}
         />
       </div>
+      {/* Hidden fields for page path and UTM parameters */}
+      <input type="hidden" name="pagePath" value={pagePath} />
+      <input type="hidden" name="utm_campaign" value={utmParams.utm_campaign} />
+      <input type="hidden" name="utm_source" value={utmParams.utm_source} />
+      <input type="hidden" name="utm_medium" value={utmParams.utm_medium} />
+      <input type="hidden" name="utm_term" value={utmParams.utm_term} />
+      <input type="hidden" name="utm_content" value={utmParams.utm_content} />
+      <input type="hidden" name="utm_id" value={utmParams.utm_id} />
       <div className="col">
         <button
           className={"row button button--primary"}
