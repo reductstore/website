@@ -36,7 +36,13 @@ const WaitingListForm = () => {
 
   if (state.succeeded) {
     return (
-      <div className={clsx(styles.form, "alert alert--success")}>
+      <div
+        className={clsx(
+          styles.form,
+          styles.thankYouMessage,
+          "alert alert--success",
+        )}
+      >
         <p>Thank you! You've been added to the waiting list.</p>
       </div>
     );

@@ -71,7 +71,7 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
 
   if (state.succeeded) {
     return (
-      <div className="alert alert--success">
+      <div className={clsx(styles.helpForm, "alert alert--success")}>
         <h2>Thank You!</h2>
         <p>
           We've received your submission. A member of our team will get back to
