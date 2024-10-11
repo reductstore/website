@@ -25,20 +25,6 @@ export default function ReductAI(): JSX.Element {
       <main>
         <SimpleHeader pageTitle="An Efficient Time-Series Database for IoT and Edge Computing in AI infrastructure" />
         <div className={clsx("container", styles.whitePaperContainer)}>
-          {/* Download Block */}
-          <div className={styles.downloadBlock}>
-            <p>
-              Explore ReductStore: A new solution for managing unstructured time
-              series data.
-            </p>
-            <button
-              onClick={openModal}
-              className={"button button--lg button--primary"}
-            >
-              Download White Paper
-            </button>
-          </div>
-
           <div className="row">
             {/* Description Column*/}
             <div className="col col--6">
@@ -118,6 +104,20 @@ export default function ReductAI(): JSX.Element {
                 />
               </div>
             </div>
+          </div>
+
+          {/* Download Block */}
+          <div className={styles.downloadBlock}>
+            <p>
+              Explore ReductStore: A new solution for managing unstructured time
+              series data.
+            </p>
+            <button
+              onClick={openModal}
+              className={"button button--lg button--primary"}
+            >
+              Download White Paper
+            </button>
           </div>
 
           {/* Download Modal*/}
