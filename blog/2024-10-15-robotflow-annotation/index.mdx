@@ -1,6 +1,6 @@
 ---
-title: Reducing Annotation Work in High-Speed Vision Tasks with Roboflow
-description: High-speed computer vision applications require efficient data annotation and storage. Learn how Roboflow and ReductStore can help reduce the annotation workload and speed up the process.
+title: Reducing Annotation Work in High-FPS Vision Applications with Roboflow
+description: High-FPS computer vision applications require efficient data annotation and storage. Learn how Roboflow and ReductStore can help reduce the workload and speed up the process.
 authors: anthony
 tags: [computer vision, edge computing, roboflow]
 slug: roboflow-annotation
@@ -10,17 +10,19 @@ image: ./img/roboflow_annotation.drawio.png
 
 ![Roboflow Annotation Diagram](./img/roboflow_annotation.drawio.png)
 
-High speed performance is increasingly required in computer vision. By high-speed, I mean applications that can handle high FPS (frames per second) and require fast algorithms and efficient data storage. 
+High-speed performance is a must for today's computer vision applications, but it comes with many challenges. These include processing a high volume of frames per second (FPS), which requires not only fast algorithms, but also efficient data storage to handle the large quantities of images being processed in real time.
 
-Traditional annotation methods are often time-consuming and labor-intensive for training machine learning models. They create bottlenecks that slow down project progress. [**Roboflow was developed to address the challenges**](/blog/roboflow-reductstore) associated with data annotation, but annotating all images is often tedious and unrealistic. Here ReductStore can provide the tools to query and replicate specific images for further annotation and training.
+Traditional annotation methods are often time-consuming and labor-intensive for training machine learning models. In other words, they create bottlenecks that slow down projects from getting done.
 
-In this article, we'll explore how Roboflow reduces the annotation workload and how to use ReductStore to store images and filter out important images.
+At the same time, [**Roboflow was designed to address the challenges**](/blog/roboflow-reductstore) associated with annotating data, but manually labeling all images is often tedious and unrealistic. In this case, [**ReductStore**](/) can provide the tools to query, filter, and replicate specific images for further annotation and training.
+
+In this article, we'll explain how Roboflow can help reduce the time and effort required to annotate images, and how ReductStore can be used to store and filter important images.
 
 {/* truncate */}
 
 ## High-FPS Computer Vision Applications
 
-High FPS applications are essential in areas requiring real-time analysis, such as autonomous vehicles, surveillance, or even sports analytics. These applications rapidly process and analyze thousands of images to make real-time decisions. The large amount of data generated at high frame rates requires a practical storage and retrieval system.
+Applications such as autonomous vehicles, surveillance, robotics, or even sports analytics often require real-time image processing. These systems can analyze thousands of images at high speed, but the large number of images they process requires an efficient storage and retrieval system to properly handle the load
 
 The requirements for storage and querying images are the following:
 - High-performance database that can read and write images quickly.
@@ -40,7 +42,7 @@ Here are some strategies:
 
 ## Efficient Annotation Process
 
-A platform like [**Roboflow Annotate**](https://roboflow.com/annotate) makes annotation faster and more accurate. One tool I particularly like is Label Assist, which speeds up the process by using models such as Meta's Segment Anything Model (SAM) to automatically annotate images. In this case, the manual effort is more about making sure the annotation is accurate. 
+A platform like [**Roboflow Annotate**](https://roboflow.com/annotate) makes annotation faster and more accurate. One tool I particularly like is Label Assist, which speeds up the process by using models like Meta's Segment Anything Model (SAM) to automatically annotate images. In that case, the manual work is more about checking that the annotation is accurate.
 
 Here are some of the features that I find especially relevant:
 
@@ -66,21 +68,24 @@ Designed to store large volumes of time-series unstructured data on edge devices
 
 ## Annotating Data in High-FPS Environments
 
-Due to the large amount of data, manually annotating each image is virtually impossible in high FPS environments. We need to filter important images based on time and labels to focus annotation effort on important images.
+In high FPS environments, manually annotating every frame is often unrealistic. Instead, we need to focus on filtering key frames based on time and inference results.
 
-By important, I mean images that have already been inferred by a deep learning model and the result is of interest to us:
+By "key frames" I mean images that have already been processed by a deep learning model and whose results are important to us:
 
-- Based on model certainty. For example, if the model is uncertain about its prediction. A low certainty score from the model indicates that it probably needs to be annotated and retrained.
-- Based on labels. For example, we know that our model performs poorly on red cars, and we want to query all red cars in the last three months.
+- **Low model confidence**: If the model is uncertain about its prediction, a low confidence score means that the image is more likely to be misclassified. We can use this information to prioritize images with low confidence scores for further review.
+- **Specific annotations**: For example, if our model has trouble identifying red cars, we can request all red car images from the last three months for review. This allows us to focus on the most relevant data for training.
 
 ![Roboflow Reductstore Diagram](./img/roboflow_reductstore.drawio.png)
 
-As shown in the diagram, ReductStore provides the ability to filter and query images based on time information and AI labels. Roboflow then provides the tools that can significantly speed up the annotation process.
+As shown in the diagram, ReductStore can filter images based on time and AI labels, so that we can focus on the most relevant frames. 
+
+Once filtered, Roboflow provides annotation tools that speed up the process of labeling these images, saving time and reducing the manual effort required for model training. This combination of filtering and fast annotation clearly helps to simplify the workflows required for high-speed vision tasks.
 
 ## Conclusion
 
-In summary, combining Roboflow's annotation tools with ReductStore's data storage and filtering capabilities simplifies the workflow for high FPS vision applications.
+In summary, the combination of Roboflow's annotation tools and ReductStore's storage and filtering capabilities greatly improves the efficiency of training machine learning models for high-FPS computer vision applications:
 
-Instead of manually annotating every frame, ReductStore allows you to filter and query only the most relevant images, significantly reducing annotation time. Roboflow then further accelerates the process with features such as Label Assist and Auto Label, making high-speed, high-volume computer vision tasks more manageable and scalable for real-time applications.
+- ReductStore allows you to filter and query only the most relevant images, reducing the need for manual annotation.
+- Roboflow then provides fast and accurate annotation tools to label these images, speeding up the training process.
 
-Together, these tools enable you to build better models, faster.
+Together, these tools help you focus on the most important images, reducing the time and effort required to train your models. This is especially important in high-speed vision applications, where the volume of data can be overwhelming.
