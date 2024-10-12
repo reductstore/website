@@ -69,8 +69,7 @@ export default function ReductAI(): JSX.Element {
                     TimescaleDB
                   </BulletPointItem>
                   <BulletPointItem icon={subBulletIcon} size={"xs"}>
-                    Up to 291% faster read speeds on 1MB blobs compared to
-                    MinIO
+                    Up to 291% faster read speeds on 1MB blobs compared to MinIO
                   </BulletPointItem>
                 </ul>
                 <BulletPointItem>
