@@ -65,11 +65,12 @@ export default function ReductAI(): JSX.Element {
                 </BulletPointItem>
                 <ul className={styles.subBulletPoints}>
                   <BulletPointItem icon={subBulletIcon} size={"xs"}>
-                    Up to 1300% faster write speeds for 10MB records compared to
+                    Up to 1604% faster write speeds for 1MB records compared to
                     TimescaleDB
                   </BulletPointItem>
                   <BulletPointItem icon={subBulletIcon} size={"xs"}>
-                    244% faster read speeds on 10KB blobs compared to MongoDB
+                    Up to 291% faster read speeds on 1MB blobs compared to
+                    MinIO
                   </BulletPointItem>
                 </ul>
                 <BulletPointItem>
@@ -77,7 +78,7 @@ export default function ReductAI(): JSX.Element {
                 </BulletPointItem>
                 <ul className={styles.subBulletPoints}>
                   <BulletPointItem icon={subBulletIcon} size={"xs"}>
-                    Example showing potential savings of $522,000 per year for a
+                    Example showing potential savings of $273,000 per year for a
                     large operation
                   </BulletPointItem>
                 </ul>
