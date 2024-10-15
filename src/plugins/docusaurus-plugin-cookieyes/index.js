@@ -18,13 +18,24 @@ module.exports = function (context) {
           {
             tagName: "script",
             innerHTML: `
-              <!-- Start CookieYes banner -->
+              // Load the CookieYes script
               var cookieyes = document.createElement('script');
               cookieyes.id = 'cookieyes';
               cookieyes.type = 'text/javascript';
               cookieyes.src = 'https://cdn-cookieyes.com/client_data/${cmp.cookieyesId}/script.js';
               document.head.appendChild(cookieyes);
-              <!-- End CookieYes banner -->
+              
+              // Add a listener for cookie consent updates
+              document.addEventListener("cookieyes_consent_update", function (eventData) {
+                const data = eventData.detail;
+                if (data.accepted.includes("analytics")) {
+                  window._mtm = window._mtm || [];
+                  _mtm.push({"event": "giveConsent"});
+                } else {
+                  window._mtm = window._mtm || [];
+                  _mtm.push({"event": "forgetConsent"});
+                }
+              });
             `,
             attributes: {
               type: "text/javascript",
