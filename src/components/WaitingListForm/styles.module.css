@@ -6,6 +6,10 @@
   width: 100%;
 }
 
+.thankYouMessage {
+  margin-bottom: 2rem;
+}
+
 .inputGroup {
   display: flex;
   width: 100%;
