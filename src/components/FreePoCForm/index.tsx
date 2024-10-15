@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import { useForm, ValidationError } from "@formspree/react";
+import { useLocation } from "@docusaurus/router";
 import Link from "@docusaurus/Link";
 import clsx from "clsx";
 import CountdownTimer from "../CountdownTimer";
@@ -16,10 +17,35 @@ const FreePoCForm = ({
   targetDate,
   startDate,
 }: FreePoCFormProps) => {
+  const location = useLocation();
+
   const [state, handleSubmit] = useForm("myyraooa");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [companyName, setcompanyName] = useState("");
+  const [utmParams, setUtmParams] = useState({
+    utm_campaign: "",
+    utm_source: "",
+    utm_medium: "",
+    utm_term: "",
+    utm_content: "",
+    utm_id: "",
+  });
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+
+    setUtmParams({
+      utm_campaign: urlParams.get("utm_campaign") || "",
+      utm_source: urlParams.get("utm_source") || "",
+      utm_medium: urlParams.get("utm_medium") || "",
+      utm_term: urlParams.get("utm_term") || "",
+      utm_content: urlParams.get("utm_content") || "",
+      utm_id: urlParams.get("utm_id") || "",
+    });
+  }, [location]);
+
+  const pagePath = location.pathname;
 
   if (state.succeeded) {
     return (
@@ -49,7 +75,6 @@ const FreePoCForm = ({
         Our team will reach out to you and we will create a custom software
         integration for your project.
       </p>
-
       <div className={styles.inputGroup}>
         <label htmlFor="name">Your Name</label>
         <input
@@ -63,7 +88,6 @@ const FreePoCForm = ({
         />
         <ValidationError prefix="Name" field="name" errors={state.errors} />
       </div>
-
       <div className={styles.inputGroup}>
         <label htmlFor="InputCompanyWhitePaper">Your Company</label>
         <input
@@ -81,7 +105,6 @@ const FreePoCForm = ({
           errors={state.errors}
         />
       </div>
-
       <div className={styles.inputGroup}>
         <label htmlFor="email">Your Email Address</label>
         <input
@@ -95,7 +118,14 @@ const FreePoCForm = ({
         />
         <ValidationError prefix="Email" field="email" errors={state.errors} />
       </div>
-
+      {/* Hidden fields for page path and UTM parameters */}
+      <input type="hidden" name="pagePath" value={pagePath} />
+      <input type="hidden" name="utm_campaign" value={utmParams.utm_campaign} />
+      <input type="hidden" name="utm_source" value={utmParams.utm_source} />
+      <input type="hidden" name="utm_medium" value={utmParams.utm_medium} />
+      <input type="hidden" name="utm_term" value={utmParams.utm_term} />
+      <input type="hidden" name="utm_content" value={utmParams.utm_content} />
+      <input type="hidden" name="utm_id" value={utmParams.utm_id} />
       <div className={styles.buttonGroup}>
         <button
           className={"button button--primary"}
@@ -105,7 +135,6 @@ const FreePoCForm = ({
           Request a Proof of Concept
         </button>
       </div>
-
       <Link
         className={clsx(styles.privacyPolicy)}
         to="/privacy"

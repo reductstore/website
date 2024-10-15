@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import { useForm, ValidationError } from "@formspree/react";
+import { useLocation } from "@docusaurus/router";
 import clsx from "clsx";
 import Link from "@docusaurus/Link";
 
@@ -8,8 +9,33 @@ const whitePaperUrl =
   require("@site/static/pdf/whitepaper/ReductStore_WhitePaper.pdf").default;
 
 export default function WhitePaperForm() {
+  const location = useLocation();
+
   const [state, handleSubmit] = useForm("xleylpzp");
   const [downloadInitiated, setDownloadInitiated] = useState(false);
+  const [utmParams, setUtmParams] = useState({
+    utm_campaign: "",
+    utm_source: "",
+    utm_medium: "",
+    utm_term: "",
+    utm_content: "",
+    utm_id: "",
+  });
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+
+    setUtmParams({
+      utm_campaign: urlParams.get("utm_campaign") || "",
+      utm_source: urlParams.get("utm_source") || "",
+      utm_medium: urlParams.get("utm_medium") || "",
+      utm_term: urlParams.get("utm_term") || "",
+      utm_content: urlParams.get("utm_content") || "",
+      utm_id: urlParams.get("utm_id") || "",
+    });
+  }, [location]);
+
+  const pagePath = location.pathname;
 
   const downloadWhitePaper = () => {
     if (!downloadInitiated) {
@@ -60,7 +86,6 @@ export default function WhitePaperForm() {
         />
         <ValidationError prefix="Name" field="name" errors={state.errors} />
       </div>
-
       <div className={styles.inputGroup}>
         <label htmlFor="InputCompanyWhitePaper">Your Company</label>
         <input
@@ -77,7 +102,6 @@ export default function WhitePaperForm() {
           errors={state.errors}
         />
       </div>
-
       <div className={styles.inputGroup}>
         <label htmlFor="InputEmailWhitePaper">Your Email</label>
         <input
@@ -90,7 +114,14 @@ export default function WhitePaperForm() {
         />
         <ValidationError prefix="Email" field="email" errors={state.errors} />
       </div>
-
+      {/* Hidden fields for page path and UTM parameters */}
+      <input type="hidden" name="pagePath" value={pagePath} />
+      <input type="hidden" name="utm_campaign" value={utmParams.utm_campaign} />
+      <input type="hidden" name="utm_source" value={utmParams.utm_source} />
+      <input type="hidden" name="utm_medium" value={utmParams.utm_medium} />
+      <input type="hidden" name="utm_term" value={utmParams.utm_term} />
+      <input type="hidden" name="utm_content" value={utmParams.utm_content} />
+      <input type="hidden" name="utm_id" value={utmParams.utm_id} />
       <div className="col">
         <button
           className={"row button button--primary button--md"}
