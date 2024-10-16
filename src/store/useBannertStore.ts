@@ -7,11 +7,11 @@ interface CookieConsentState {
   setBannerShown: (shown: boolean) => void;
 }
 
-const useCookieConsentStore = create<CookieConsentState>((set) => ({
+const useBannertStore = create<CookieConsentState>((set) => ({
   isModalOpen: false,
   setModalOpen: (isOpen) => set({ isModalOpen: isOpen }),
   wasBannerShown: false,
   setBannerShown: (shown) => set({ wasBannerShown: shown }),
 }));
 
-export default useCookieConsentStore;
+export default useBannertStore;
