@@ -47,6 +47,7 @@ const config = {
 
   plugins: [
     require.resolve("./src/plugins/docusaurus-plugin-matomo"),
+    require.resolve("./src/plugins/docusaurus-plugin-cookieyes"),
     require.resolve("./src/plugins/docusaurus-plugin-crisp"),
     require.resolve("./src/plugins/docusaurus-plugin-stream"),
   ],
@@ -126,6 +127,11 @@ const config = {
         container: "lnt4UdBs",
         previewSuffix: "_staging_24832eb3877816bd5f3a40a3",
         devSuffix: "_dev_f19bac1b68c75bffed400ddd",
+      },
+
+      // Consent management platform (CMP)
+      cmp: {
+        cookieyesId: "28ee242ee07e2579793c1355",
       },
 
       // Crisp chat integration
