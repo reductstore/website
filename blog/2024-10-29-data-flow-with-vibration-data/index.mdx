@@ -89,7 +89,7 @@ With a time series object store, each chunk of vibration data is stored as a bin
 
 ![Data Flow Schema](./img/vibration_data_flow.webp)
 
-This method allows efficient management of large vibration datasets by providing fast access to specific time periods. In fact, [**ReductStore outperforms TimescaleDB for blobs ranging from 100KB and larger**](https://www.reduct.store/blog/comparisons/iot/reductstore-vs-timescaledb) using this method, with improvements ranging from 205% to 1300%.
+This method allows efficient management of large vibration datasets by providing fast access to specific time periods. In fact, [**ReductStore outperforms TimescaleDB for blobs ranging from 1KB and larger**](https://www.reduct.store/blog/comparisons/iot/reductstore-vs-timescaledb) using this method, with improvements ranging from 205% to 1300%.
 
 ## Adopt Efficient Data Retention and Replication Strategies
 
@@ -199,7 +199,7 @@ def generate_sensor_data(frequency: int = 1000, duration: int = 1) -> np.ndarray
 This function generates a simulated sensor signal: a simple sine wave with added noise.
 In a real-world scenario, you would replace this with actual sensor readings.
 
-As we saw in **[How to Store Vibration Sensor Data | Part 1](/blog/how-to-store-vibration-sensor-data)**, it's beneficial to divide the data into chunks for more efficient storage and querying.
+As we saw earlier, it's beneficial to divide the data into chunks for more efficient storage and querying.
 In this example, we generate 1 second of data at a time (1,000 samples at 1 kHz), that we'll store as a single entry in ReductStore.
 
 ### Calculating Metrics
@@ -335,6 +335,8 @@ Replication tasks can be configured in a variety of ways, such as
 - Replicate only specific entries, e.g. `sensor_readings`.
 - Replicate data based on labels, e.g. replicate only data with `high` RMS values to `high_peak_to_peak` bucket (as we'll do in this example).
 
+![Data Replication Flow](./img/vibration_data_flow_replication.webp)
+
 The replication task can be set using client libraries, HTTP API, CLI, provisioning, or the ReductStore web console.
 In this example, we'll use the web console for simplicity, but you can also refer to the **[Replication Guide](/docs/next/guides/data-replication)** for more details.
 
@@ -346,7 +348,6 @@ So the bucket structure that we'll set up is as follows:
 Here's how to set it up:
 
 1. Access the ReductStore web console (typically at `http://localhost:8383` if running locally).
-
    <img
      src={DashboardExampleImg}
      alt="Dashboard Example"
@@ -355,16 +356,13 @@ Here's how to set it up:
        borderRadius: "10px",
      }}
    />
-
 2. Navigate to the "Replications" section to create a new replication with the "+" button.
 3. Enter a name for your replication task and add the following details:
-
    - Choose your source bucket (in this case, `sensor_data`).
    - Enter the destination bucket name (e.g., `high_peak_to_peak`)
    - Enter the details for your destination ReductStore instance (in this case, the same instance for demonstration purposes `http://localhost:8383`)
-   - Enter the destination token (in this case, the same token `my-token` for demonstration purposes)
+   - Enter the destination token (in this case, the same token `my-token`)
      {" "}
-
      <img
        src={SettingsExampleImg}
        alt="Settings Example"
@@ -374,11 +372,8 @@ Here's how to set it up:
          borderRadius: "10px",
        }}
      />
-
    - Then, set up filters based on labels to replicate only data with `high` RMS.
-
      {" "}
-
      <img
        src={FilterExampleImg}
        alt="Filter Example"
@@ -388,7 +383,6 @@ Here's how to set it up:
          borderRadius: "10px",
        }}
      />
-
 4. Click "Create" to start the replication process.
 
 With this new replication task, all new data from the `sensor_data` bucket with the label `peak_to_peak = high` will be replicated to the `high_peak_to_peak` bucket.
