@@ -10,9 +10,9 @@ image: ./img/benchmark_results.png
 
 ![Benchmark Results](img/benchmark_results.webp)
 
-In [**How to Store Vibration Sensor Data | Part 1**](/blog/how-to-store-vibration-sensor-data), we discussed the importance of efficiently storing both **raw vibration data** and **pre-processed metrics**, and the benefits of using time-series databases such as ReductStore. We explored best practices for setting up a time-series database and implementing data retention policies to effectively manage high-frequency sensor data.
+In [**How to Store Vibration Sensor Data**](/blog/how-to-store-vibration-sensor-data), we discuss the importance of efficiently storing both **raw vibration data** and **pre-processed metrics**, and the benefits of using time-series databases such as ReductStore. We explore best practices for setting up a time-series database and implementing data retention policies to effectively manage high-frequency sensor data.
 
-In [**How to Store Vibration Sensor Data | Part 2**](/blog/how-to-store-vibration-sensor-data/part-2), we provided a practical example of how to use ReductStore to store and query vibration sensor readings. We also showed how to store vibration sensor values in **1-second chunks**, each packaged as **binary data**, to optimize the storage process when dealing with high-frequency data such as vibration or acoustic measurements.
+We also see [**how to store vibration sensor values in 1-second chunks**](/blog/how-to-store-vibration-sensor-data#full-data-flow-example-with-python), each packaged as **binary data**, to optimize the storage process when dealing with high-frequency data such as vibration or acoustic measurements.
 
 In this post, we compare [**ReductStore**](/) and [**InfluxDB**](https://www.influxdata.com/) in a real-world benchmark scenario, focusing on their **write** and **read** performance for high-frequency sensor data. We show how ReductStore's binary storage provides superior efficiency and scalability over InfluxDB when handling large volumes of unstructured time-series data.
 
