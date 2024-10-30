@@ -25,7 +25,7 @@ The following guide provides instructions on how to deploy ReductStore as a virt
 The virtual machine is pre-configured with ReductStore and all the necessary dependencies to store data in Azure storage accounts.
 This provides a low cost storage solution that is easy to provision and scale as the data is stored away from the virtual machine.
 
-![Azure Virtual Machine](./img/azure_vm_diagram.svg)
+![Azure Virtual Machine with ReductStore integration](./img/azure_vm_diagram.png)
 
 ReductStore doesn't have native support for Azure Storage Accounts, but the virtual machine is preconfigured with **[Azure BlobFuse](https://learn.microsoft.com/en-us/azure/storage/blobs/blobfuse2-what-is)** to mount the Azure Storage Account as a local file system.
 It uses a local disk cache to optimise read and write operations by reducing the number of requests to the Azure Storage Account.
