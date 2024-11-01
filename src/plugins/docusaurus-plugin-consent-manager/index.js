@@ -2,12 +2,21 @@ module.exports = function (context) {
   const { siteConfig } = context;
   const { themeConfig } = siteConfig;
   const { cmp } = themeConfig;
+  const appEnv = process.env.APP_ENV;
 
-  if (!cmp || !cmp.cookieyesId || !cmp.googleTagManagerId) {
+  if (
+    !cmp ||
+    !cmp.cookieyesId ||
+    !cmp.stagingCookieyesId ||
+    !cmp.googleTagManagerId
+  ) {
     throw new Error(
-      "You need to specify `cmp`, `cmp.cookieyesId` and `cmp.googleTagManager` for `docusaurus-plugin-cookieyes` to work.",
+      "You need to specify `cookieyesId`, `stagingCookieyesId`, and `googleTagManagerId` for `docusaurus-plugin-consent-manager` to work.",
     );
   }
+
+  const cookieyesId =
+    appEnv === "production" ? cmp.cookieyesId : cmp.stagingCookieyesId;
 
   return {
     name: "docusaurus-plugin-consent-manager",
@@ -48,7 +57,7 @@ module.exports = function (context) {
               var cookieyes = document.createElement('script');
               cookieyes.id = 'cookieyes';
               cookieyes.type = 'text/javascript';
-              cookieyes.src = 'https://cdn-cookieyes.com/client_data/${cmp.cookieyesId}/script.js';
+              cookieyes.src = 'https://cdn-cookieyes.com/client_data/${cookieyesId}/script.js';
               document.head.appendChild(cookieyes);
               
               // Matomo consent handling

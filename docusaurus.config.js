@@ -132,6 +132,7 @@ const config = {
       // Consent management platform (CMP)
       cmp: {
         cookieyesId: "28ee242ee07e2579793c1355",
+        stagingCookieyesId: "3d9b3daecacd570c664904b4",
         googleTagManagerId: "GTM-WBJ3M84W",
       },
 
