@@ -6,6 +6,7 @@ This website is built using [**Docusaurus**](https://docusaurus.io/), a modern s
 
 ```
 $ yarn
+$ pipx install pydoc-markdown
 ```
 
 ### Local Development
