@@ -1,0 +1,153 @@
+---
+title: Server Module
+description: API reference for the Server Module Module of the ReductStore Client SDK for Python.
+---
+<head>
+    <link rel="canonical" href="https://www.reduct.store/docs/sdk/py/msg.server" />
+</head>
+
+# Server Module
+
+<a id="reduct.msg.server"></a>
+
+# reduct.msg.server
+
+Message types for the Server API
+
+<a id="reduct.msg.server.Defaults"></a>
+
+## Defaults
+
+```python
+class Defaults(BaseModel)
+```
+
+Default server settings
+
+<a id="reduct.msg.server.Defaults.bucket"></a>
+
+#### bucket
+
+settings for a new bucket
+
+<a id="reduct.msg.server.LicenseInfo"></a>
+
+## LicenseInfo
+
+```python
+class LicenseInfo(BaseModel)
+```
+
+License information
+
+<a id="reduct.msg.server.LicenseInfo.licensee"></a>
+
+#### licensee
+
+Licensee usually is the company name
+
+<a id="reduct.msg.server.LicenseInfo.invoice"></a>
+
+#### invoice
+
+Invoice number
+
+<a id="reduct.msg.server.LicenseInfo.expiry_date"></a>
+
+#### expiry\_date
+
+Expiry date of the license in ISO 8601 format (UTC)
+
+<a id="reduct.msg.server.LicenseInfo.plan"></a>
+
+#### plan
+
+Plan name
+
+<a id="reduct.msg.server.LicenseInfo.device_number"></a>
+
+#### device\_number
+
+Number of devices (0 for unlimited)
+
+<a id="reduct.msg.server.LicenseInfo.disk_quota"></a>
+
+#### disk\_quota
+
+Disk quota in TB (0 for unlimited)
+
+<a id="reduct.msg.server.LicenseInfo.fingerprint"></a>
+
+#### fingerprint
+
+License fingerprint
+
+<a id="reduct.msg.server.ServerInfo"></a>
+
+## ServerInfo
+
+```python
+class ServerInfo(BaseModel)
+```
+
+Server stats
+
+<a id="reduct.msg.server.ServerInfo.version"></a>
+
+#### version
+
+version of the storage in x.y.z format
+
+<a id="reduct.msg.server.ServerInfo.bucket_count"></a>
+
+#### bucket\_count
+
+number of buckets in the storage
+
+<a id="reduct.msg.server.ServerInfo.usage"></a>
+
+#### usage
+
+stored data in bytes
+
+<a id="reduct.msg.server.ServerInfo.uptime"></a>
+
+#### uptime
+
+storage uptime in seconds
+
+<a id="reduct.msg.server.ServerInfo.oldest_record"></a>
+
+#### oldest\_record
+
+UNIX timestamp of the oldest record in microseconds
+
+<a id="reduct.msg.server.ServerInfo.latest_record"></a>
+
+#### latest\_record
+
+UNIX timestamp of the latest record in microseconds
+
+<a id="reduct.msg.server.ServerInfo.license"></a>
+
+#### license
+
+license information
+
+<a id="reduct.msg.server.ServerInfo.defaults"></a>
+
+#### defaults
+
+Default server settings
+
+<a id="reduct.msg.server.BucketList"></a>
+
+## BucketList
+
+```python
+class BucketList(BaseModel)
+```
+
+List of buckets
+
+
