@@ -51,22 +51,9 @@ module.exports = function (context) {
               cookieyes.src = 'https://cdn-cookieyes.com/client_data/${cmp.cookieyesId}/script.js';
               document.head.appendChild(cookieyes);
               
-              // Listener for cookie consent updates
+              // Matomo consent handling
               document.addEventListener("cookieyes_consent_update", function (eventData) {
-                const data = eventData.detail;
-
-                // Google Tag Manager consent handling
-                gtag('consent', 'update', {
-                  'ad_storage': data.accepted.includes("advertisement") ? 'granted' : 'denied',
-                  'ad_user_data': data.accepted.includes("advertisement") ? 'granted' : 'denied',
-                  'ad_personalization': data.accepted.includes("advertisement") ? 'granted' : 'denied',
-                  'analytics_storage': data.accepted.includes("analytics") ? 'granted' : 'denied',
-                  'functionality_storage': data.accepted.includes("functional") ? 'granted' : 'denied',
-                  'personalization_storage': data.accepted.includes("functional") ? 'granted' : 'denied',
-                  'security_storage': 'granted', // Always granted for security reasons
-                });
-
-                // Matomo consent handling
+                const data = eventData.detail;                
                 if (data.accepted.includes("analytics")) {
                   window._mtm = window._mtm || [];
                   _mtm.push({"event": "giveConsent"});
