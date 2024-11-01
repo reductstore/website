@@ -106,8 +106,6 @@ export default async function (context, opts) {
     name: "docusaurus-plugin-py-sdk-gen",
 
     async loadContent() {
-      console.log("install pydoc-markdown");
-      exec("pipx install pydoc-markdown").unref();
       const tmpDir = os.tmpdir() + "/build/reduct-py";
       console.log(
         `fetch source code from ${opts.sdkRepo}#${opts.sdkBranch} to ${tmpDir}`,

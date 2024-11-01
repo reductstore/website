@@ -20,6 +20,15 @@ jobs:
           submodules: true
           lfs: false
 
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'
+
+      - name: Install pydoc-markdown for Python Documentation
+        run: |
+          python -m pip install --upgrade pip
+          pipx install pydoc-markdown
+
       # Set environment variable for production
       - name: Set Production Environment Variable
         if: github.ref == 'refs/heads/main'
