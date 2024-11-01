@@ -20,10 +20,6 @@ jobs:
           submodules: true
           lfs: false
 
-      - name: Install pydoc-markdown for Python Documentation
-        run: |
-          pipx install pydoc-markdown
-
       # Set environment variable for production
       - name: Set Production Environment Variable
         if: github.ref == 'refs/heads/main'
