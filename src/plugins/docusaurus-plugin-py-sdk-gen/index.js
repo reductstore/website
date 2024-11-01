@@ -1,7 +1,6 @@
-const exec = require("child_process").exec
-const fs = require("fs")
-const os = require("os")
-
+const exec = require("child_process").exec;
+const fs = require("fs");
+const os = require("os");
 
 /**
  * Generate the index.md file for the SDK documentation with the given body.
@@ -9,7 +8,7 @@ const os = require("os")
  * @returns {string}
  */
 function generateIndexDocument(body) {
-    return `---
+  return `---
 sidebar_position: 0
 title: ReductStore Client SDK
 description: API reference for the ReductStore Client SDK for Python.
@@ -24,7 +23,7 @@ ${body}
 import DocCardList from '@theme/DocCardList';
 
 <DocCardList />
-`
+`;
 }
 
 /**
@@ -45,10 +44,13 @@ import DocCardList from '@theme/DocCardList';
  * @returns {*}
  */
 function convertExamplesToMarkdown(data) {
-    return data.replace(/(?:\*\*Examples\*\*|\*\*Example\*\*):\n(\s*\n)*((?:\s*>>>.*\n)+)/g, (match, p1, p2) => {
-        const codeBlock = p2.replace(/>>>/g, '').replace(/^/gm, '   ');
-        return `\*\*Example\*\*:\n\`\`\`python\n${codeBlock}\n\`\`\`\n`;
-    });
+  return data.replace(
+    /(?:\*\*Examples\*\*|\*\*Example\*\*):\n(\s*\n)*((?:\s*>>>.*\n)+)/g,
+    (match, p1, p2) => {
+      const codeBlock = p2.replace(/>>>/g, "").replace(/^/gm, "   ");
+      return `\*\*Example\*\*:\n\`\`\`python\n${codeBlock}\n\`\`\`\n`;
+    },
+  );
 }
 
 /**
@@ -56,16 +58,15 @@ function convertExamplesToMarkdown(data) {
  * @param title
  * @returns {string}
  */
-function renderCfg  (title) {
-    return `{
+function renderCfg(title) {
+  return `{
     renderer: {
       type: markdown,
       descriptive_class_title: false,
       render_page_title: false,
     }
-}`
+}`;
 }
-
 
 /**
  * Add the Docusaurus header to the given content.
@@ -75,7 +76,7 @@ function renderCfg  (title) {
  * @returns {string}
  */
 function addHeader(module, title, content) {
-    return `---
+  return `---
 title: ${title}
 description: API reference for the ${title} Module of the ReductStore Client SDK for Python.
 ---
@@ -86,7 +87,7 @@ description: API reference for the ${title} Module of the ReductStore Client SDK
 # ${title}
 
 ${content}
-`
+`;
 }
 
 /**
@@ -95,59 +96,69 @@ ${content}
  * @returns {string}
  */
 function getTitleFromModuleName(val) {
-    const parts = val.split('.');
-    const lastName = parts[parts.length - 1];
-    return lastName.charAt(0).toUpperCase() + String(lastName).slice(1);
+  const parts = val.split(".");
+  const lastName = parts[parts.length - 1];
+  return lastName.charAt(0).toUpperCase() + String(lastName).slice(1);
 }
 
 export default async function (context, opts) {
-    return {
-        name: "docusaurus-plugin-py-sdk-gen",
+  return {
+    name: "docusaurus-plugin-py-sdk-gen",
 
+    async loadContent() {
+      console.log("install pydoc-markdown");
+      exec("pipx install pydoc-markdown").unref();
+      const tmpDir = os.tmpdir() + "/build/reduct-py";
+      console.log(
+        `fetch source code from ${opts.sdkRepo}#${opts.sdkBranch} to ${tmpDir}`,
+      );
 
-        async loadContent() {
-            console.log("install pydoc-markdown");
-            exec("pipx install pydoc-markdown").unref()
-            const tmpDir = os.tmpdir() + "/build/reduct-py"
-            console.log(`fetch source code from ${opts.sdkRepo}#${opts.sdkBranch} to ${tmpDir}`)
+      if (fs.existsSync(tmpDir)) {
+        fs.rmdirSync(tmpDir, { recursive: true });
+      }
 
-            if (fs.existsSync(tmpDir)) {
-                fs.rmdirSync(tmpDir, { recursive: true })
-            }
+      exec(
+        `git clone --depth 1 --branch ${opts.sdkBranch} ${opts.sdkRepo}  ${tmpDir}`,
+        (err, stdout, stderr) => {
+          if (err) {
+            console.error(err);
+            console.error(stderr);
+            process.exit(1);
+          }
 
-            exec(`git clone --depth 1 --branch ${opts.sdkBranch} ${opts.sdkRepo}  ${tmpDir}`, (err, stdout, stderr) => {
+          // generate markdown
+          for (const module of opts.modules) {
+            const title = getTitleFromModuleName(module) + " Module";
+            exec(
+              `pydoc-markdown -I ${tmpDir} -m reduct.${module} '${renderCfg()}'`,
+              (err, stdout, stderr) => {
                 if (err) {
-                    console.error(err)
-                    console.error(stderr)
-                    process.exit(1)
+                  console.error(err);
+                  console.error(stderr);
+                  process.exit(1);
+                }
+                let md = convertExamplesToMarkdown(stdout);
+                md = addHeader(module, title, md);
+
+                const path =
+                  `${opts.destination}/` + module.split(".").join("/");
+                if (!fs.existsSync(path)) {
+                  fs.mkdirSync(path, { recursive: true });
                 }
 
-                // generate markdown
-                for (const module of opts.modules) {
-                    const title = getTitleFromModuleName(module) + " Module"
-                    exec(`pydoc-markdown -I ${tmpDir} -m reduct.${module} '${renderCfg()}'`, (err, stdout, stderr) => {
-                        if (err) {
-                            console.error(err)
-                            console.error(stderr)
-                            process.exit(1)
-                        }
-                        let  md = convertExamplesToMarkdown(stdout)
-                        md = addHeader(module, title, md)
+                fs.writeFileSync(`${path}/index.mdx`, md);
+              },
+            );
+          }
 
-                        const path = `${opts.destination}/` +  module.split('.').join('/')
-                        if (!fs.existsSync(path)) {
-                            fs.mkdirSync(path, { recursive: true })
-                        }
-
-                        fs.writeFileSync(`${path}/index.mdx`, md);
-                    })
-                }
-
-                // copy README.md to index.md
-                let readme = fs.readFileSync(`${tmpDir}/README.md`, 'utf8')
-                fs.writeFileSync(`${opts.destination}/index.mdx`, generateIndexDocument(readme))
-            });
-        }
-    }
-
+          // copy README.md to index.md
+          let readme = fs.readFileSync(`${tmpDir}/README.md`, "utf8");
+          fs.writeFileSync(
+            `${opts.destination}/index.mdx`,
+            generateIndexDocument(readme),
+          );
+        },
+      );
+    },
+  };
 }
