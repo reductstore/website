@@ -1,5 +1,8 @@
 version: 1
 
 pre-build:
+  apt-get update
+  apt-get install -y python3 pipx
   pipx install pydoc-markdown
+
 
