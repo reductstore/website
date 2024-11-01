@@ -20,6 +20,12 @@ description: API reference for the ReductStore Client SDK for Python.
 
 ${body}
 
+## Reference
+
+- **[Getting Started]**(/docs/getting-started/with-python.mdx)
+- **[Guides]**(/docs/guides/index.mdx)
+- **[Source Code]**(https://github.com/reductstore/reduct-py)
+
 import DocCardList from '@theme/DocCardList';
 
 <DocCardList />
