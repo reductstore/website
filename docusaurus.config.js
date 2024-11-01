@@ -105,6 +105,9 @@ const config = {
             );
           },
         },
+        googleTagManager: {
+          containerId: "GTM-WBJ3M84W",
+        },
       }),
     ],
   ],
