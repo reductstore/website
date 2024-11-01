@@ -1,4 +1,4 @@
-verscion: 1
+version: 1
 
 pre-build:
   pip install pydoc-markdown
