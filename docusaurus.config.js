@@ -54,7 +54,7 @@ const config = {
       require.resolve("./src/plugins/docusaurus-plugin-py-sdk-gen"),
       {
         sdkRepo: "https://github.com/reductstore/reduct-py.git",
-        sdkBranch: "RS-466-improve-documentation",
+        sdkBranch: "main",
         destination: "docs/sdk/py",
         modules: [
           "client",
