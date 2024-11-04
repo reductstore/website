@@ -56,7 +56,7 @@ function convertExamplesToMarkdown(data) {
     /(?:\*\*Examples\*\*|\*\*Example\*\*):\n(\s*\n)*((?:\s*>>>.*\n)+)/g,
     (match, p1, p2) => {
       const codeBlock = p2.replace(/>>>/g, "").replace(/^/gm, "   ");
-      return `\*\*Example\*\*:\n\`\`\`python\n${codeBlock}\n\`\`\`\n`;
+      return `\*\*Example\*\*:\n\`\`\`python\n${codeBlock}\`\`\`\n`;
     },
   );
 }
@@ -84,6 +84,8 @@ function renderCfg(title) {
  * @returns {string}
  */
 function addHeader(module, title, content) {
+  // remove # module.name from the content
+  content = content.replace(`# reduct.${module}`, "");
   return `---
 title: ${title}
 description: API reference for the ${title} Module of the ReductStore Client SDK for Python.

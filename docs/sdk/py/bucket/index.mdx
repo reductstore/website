@@ -10,7 +10,7 @@ description: API reference for the Bucket Module Module of the ReductStore Clien
 
 <a id="reduct.bucket"></a>
 
-# reduct.bucket
+
 
 Bucket module for ReductStore HTTP API
 
@@ -36,7 +36,7 @@ Get current bucket settings
 
 **Returns**:
 
-  BucketSettings:
+- `BucketSettings` - the bucket settings
 
 **Raises**:
 
@@ -72,7 +72,7 @@ Get statistics about bucket
 
 **Returns**:
 
-  BucketInfo:
+- `BucketInfo` - the bucket information
 
 **Raises**:
 
@@ -90,7 +90,7 @@ Get list of entries with their stats
 
 **Returns**:
 
-  List[EntryInfo]
+- `List[EntryInfo]` - the list of entries with stats
 
 **Raises**:
 
@@ -166,7 +166,7 @@ Remove batch of records from entries in a sole request
 
 **Returns**:
 
-  dict of errors with timestamps as keys
+  Dict[int, ReductError]: the dictionary of errors with  record timestamps as keys
 
 **Raises**:
 
@@ -267,7 +267,7 @@ Read a record from entry
 
 **Returns**:
 
-  async context with a record
+- `Record` - async context with a record
 
 **Raises**:
 
@@ -278,8 +278,7 @@ Read a record from entry
       async def reader():
           async with bucket.read("entry", timestamp=123456789) as record:
               data = await record.read_all()
-   
-```
+   ```
 
 <a id="reduct.bucket.Bucket.write"></a>
 
@@ -327,8 +326,7 @@ Write a record to entry
           for chunk in [b"part1", b"part2", b"part3"]:
               yield chunk
       await bucket.write("entry-1", sender(), content_length=15)
-   
-```
+   ```
 
 <a id="reduct.bucket.Bucket.write_batch"></a>
 
@@ -347,7 +345,7 @@ Write a batch of records to entries in a sole request
 
 **Returns**:
 
-  dict of errors with timestamps as keys
+  Dict[int, ReductError]: the dictionary of errors with  record timestamps as keys
 
 **Raises**:
 
@@ -380,8 +378,7 @@ If a label is empty, it will be removed.
 **Example**:
 ```python
       await bucket.update("entry-1", "2022-01-01T01:00:00",
-   
-```
+   ```
 - `{"label1"` - "value1", "label2": ""})
 
 <a id="reduct.bucket.Bucket.update_batch"></a>
@@ -404,7 +401,7 @@ If a label is empty, it will be removed.
 
 **Returns**:
 
-  dict of errors with timestamps as keys
+  Dict[int, ReductError]: the dictionary of errors with  record timestamps as keys
 
 **Raises**:
 
@@ -416,8 +413,7 @@ If a label is empty, it will be removed.
       batch = Batch()
       batch.add(1640995200000000, labels={"label1": "value1", "label2": ""})
       await bucket.update_batch("entry-1", batch)
-   
-```
+   ```
 
 <a id="reduct.bucket.Bucket.query"></a>
 
@@ -465,8 +461,7 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
           # or
           async for chunk in record.read(n=1024):
               print(chunk)
-   
-```
+   ```
 
 <a id="reduct.bucket.Bucket.get_full_info"></a>
 
@@ -477,6 +472,10 @@ async def get_full_info() -> BucketFullInfo
 ```
 
 Get full information about bucket (settings, statistics, entries)
+
+**Returns**:
+
+- `BucketFullInfo` - the full information about the bucket
 
 <a id="reduct.bucket.Bucket.subscribe"></a>
 
@@ -519,7 +518,6 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
           # or
           async for chunk in record.read(n=1024):
               print(chunk)
-   
-```
+   ```
 
 

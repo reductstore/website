@@ -10,7 +10,7 @@ description: API reference for the Client Module Module of the ReductStore Clien
 
 <a id="reduct.client"></a>
 
-# reduct.client
+
 
 Client module for ReductStore HTTP API
 
@@ -52,8 +52,7 @@ Constructor
 ```python
       client = Client("http://127.0.0.1:8383")
       info = await client.info()
-   
-```
+   ```
 
 <a id="reduct.client.Client.info"></a>
 
@@ -67,7 +66,7 @@ Get high level server info
 
 **Returns**:
 
-  ServerInfo:
+- `ServerInfo` - server information
   
 
 **Raises**:
@@ -82,11 +81,11 @@ Get high level server info
 async def list() -> List[BucketInfo]
 ```
 
-Return a list of all buckets on server
+Get a list of all buckets on server
 
 **Returns**:
 
-  List[BucketInfo]
+- `List[BucketInfo]` - the list of buckets
 
 **Raises**:
 
@@ -108,7 +107,7 @@ Load a bucket to work with
 
 **Returns**:
 
-  Bucket
+- `Bucket` - the bucket object
 
 **Raises**:
 
@@ -154,7 +153,7 @@ Get a list of all tokens
 
 **Returns**:
 
-  List[Token]
+- `List[Token]` - the list of tokens
 
 **Raises**:
 
@@ -176,7 +175,7 @@ Get a token by name
 
 **Returns**:
 
-  Token
+- `FullTokenInfo` - the token information with permissions
 
 **Raises**:
 
@@ -235,7 +234,7 @@ Get information about the current token
 
 **Returns**:
 
-  FullTokenInfo
+- `FullTokenInfo` - the current token information with permission
 
 **Raises**:
 
