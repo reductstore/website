@@ -166,7 +166,8 @@ Remove batch of records from entries in a sole request
 
 **Returns**:
 
-  Dict[int, ReductError]: the dictionary of errors with  record timestamps as keys
+  Dict[int, ReductError]: the dictionary of errors
+  with  record timestamps as keys
 
 **Raises**:
 
@@ -267,7 +268,7 @@ Read a record from entry
 
 **Returns**:
 
-- `Record` - async context with a record
+- `AsyncContextManager[Record]` - the record object
 
 **Raises**:
 
@@ -345,7 +346,8 @@ Write a batch of records to entries in a sole request
 
 **Returns**:
 
-  Dict[int, ReductError]: the dictionary of errors with  record timestamps as keys
+  Dict[int, ReductError]: the dictionary of errors
+  with record timestamps as keys
 
 **Raises**:
 
@@ -401,7 +403,8 @@ If a label is empty, it will be removed.
 
 **Returns**:
 
-  Dict[int, ReductError]: the dictionary of errors with  record timestamps as keys
+  Dict[int, ReductError]: the dictionary of errors
+  with record timestamps as keys
 
 **Raises**:
 

@@ -8,7 +8,15 @@ const os = require("os");
  * @returns {string}
  */
 function generateIndexDocument(body) {
-  return `---
+    // bold MD links but no for images [![...](...)](...)
+    body = body.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, p1, p2) => {
+        if (p1.startsWith("!")) {
+            return `[${p1}](${p2})`;
+        }
+        return `**[${p1}](${p2})**`;
+    });
+
+    return `---
 sidebar_position: 0
 title: ReductStore Client SDK
 description: API reference for the ReductStore Client SDK for Python.
