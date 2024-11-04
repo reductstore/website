@@ -1,0 +1,181 @@
+---
+title: Bucket Module
+description: API reference for the Bucket Module Module of the ReductStore Client SDK for Python.
+---
+<head>
+    <link rel="canonical" href="https://www.reduct.store/docs/sdk/py/msg.bucket" />
+</head>
+
+# Bucket Module
+
+<a id="reduct.msg.bucket"></a>
+
+
+
+Message types for the Bucket API
+
+<a id="reduct.msg.bucket.QuotaType"></a>
+
+## QuotaType
+
+```python
+class QuotaType(Enum)
+```
+
+determines if database has a fixed size
+
+<a id="reduct.msg.bucket.BucketSettings"></a>
+
+## BucketSettings
+
+```python
+class BucketSettings(BaseModel)
+```
+
+Configuration for a bucket
+
+<a id="reduct.msg.bucket.BucketSettings.max_block_size"></a>
+
+#### max\_block\_size
+
+max block size in bytes
+
+<a id="reduct.msg.bucket.BucketSettings.max_block_records"></a>
+
+#### max\_block\_records
+
+max number of records in a block
+
+<a id="reduct.msg.bucket.BucketSettings.quota_type"></a>
+
+#### quota\_type
+
+quota type
+
+<a id="reduct.msg.bucket.BucketSettings.quota_size"></a>
+
+#### quota\_size
+
+quota size in bytes
+
+<a id="reduct.msg.bucket.BucketInfo"></a>
+
+## BucketInfo
+
+```python
+class BucketInfo(BaseModel)
+```
+
+Information about each bucket
+
+<a id="reduct.msg.bucket.BucketInfo.name"></a>
+
+#### name
+
+name of bucket
+
+<a id="reduct.msg.bucket.BucketInfo.entry_count"></a>
+
+#### entry\_count
+
+number of entries in the bucket
+
+<a id="reduct.msg.bucket.BucketInfo.size"></a>
+
+#### size
+
+size of bucket data in bytes
+
+<a id="reduct.msg.bucket.BucketInfo.oldest_record"></a>
+
+#### oldest\_record
+
+UNIX timestamp of the oldest record in microseconds
+
+<a id="reduct.msg.bucket.BucketInfo.latest_record"></a>
+
+#### latest\_record
+
+UNIX timestamp of the latest record in microseconds
+
+<a id="reduct.msg.bucket.BucketInfo.is_provisioned"></a>
+
+#### is\_provisioned
+
+bucket is provisioned amd you can't remove it or change its settings
+
+<a id="reduct.msg.bucket.EntryInfo"></a>
+
+## EntryInfo
+
+```python
+class EntryInfo(BaseModel)
+```
+
+Entry of bucket
+
+<a id="reduct.msg.bucket.EntryInfo.name"></a>
+
+#### name
+
+name of entry
+
+<a id="reduct.msg.bucket.EntryInfo.size"></a>
+
+#### size
+
+size of stored data in bytes
+
+<a id="reduct.msg.bucket.EntryInfo.block_count"></a>
+
+#### block\_count
+
+number of blocks
+
+<a id="reduct.msg.bucket.EntryInfo.record_count"></a>
+
+#### record\_count
+
+number of records
+
+<a id="reduct.msg.bucket.EntryInfo.oldest_record"></a>
+
+#### oldest\_record
+
+UNIX timestamp of the oldest record in microseconds
+
+<a id="reduct.msg.bucket.EntryInfo.latest_record"></a>
+
+#### latest\_record
+
+UNIX timestamp of the latest record in microseconds
+
+<a id="reduct.msg.bucket.BucketFullInfo"></a>
+
+## BucketFullInfo
+
+```python
+class BucketFullInfo(BaseModel)
+```
+
+Information about bucket and contained entries
+
+<a id="reduct.msg.bucket.BucketFullInfo.info"></a>
+
+#### info
+
+statistics about bucket
+
+<a id="reduct.msg.bucket.BucketFullInfo.settings"></a>
+
+#### settings
+
+settings of bucket
+
+<a id="reduct.msg.bucket.BucketFullInfo.entries"></a>
+
+#### entries
+
+information about entries of bucket
+
+
