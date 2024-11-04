@@ -50,6 +50,24 @@ const config = {
     require.resolve("./src/plugins/docusaurus-plugin-consent-manager"),
     require.resolve("./src/plugins/docusaurus-plugin-crisp"),
     require.resolve("./src/plugins/docusaurus-plugin-stream"),
+    [
+      require.resolve("./src/plugins/docusaurus-plugin-py-sdk-gen"),
+      {
+        sdkRepo: "https://github.com/reductstore/reduct-py.git",
+        sdkBranch: "main",
+        destination: "docs/sdk/py",
+        modules: [
+          "client",
+          "bucket",
+          "record",
+          "error",
+          "msg.bucket",
+          "msg.replication",
+          "msg.server",
+          "msg.token",
+        ],
+      },
+    ],
   ],
 
   // LaTex support

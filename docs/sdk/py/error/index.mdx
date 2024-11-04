@@ -1,0 +1,62 @@
+---
+title: Error Module
+description: API reference for the Error Module Module of the ReductStore Client SDK for Python.
+---
+<head>
+    <link rel="canonical" href="https://www.reduct.store/docs/sdk/py/error" />
+</head>
+
+# Error Module
+
+<a id="reduct.error"></a>
+
+
+
+Reduct Errors
+
+<a id="reduct.error.ReductError"></a>
+
+## ReductError
+
+```python
+class ReductError(Exception)
+```
+
+General exception for all HTTP errors
+
+<a id="reduct.error.ReductError.from_header"></a>
+
+#### from\_header
+
+```python
+@staticmethod
+def from_header(header: str) -> "ReductError"
+```
+
+Create ReductError from HTTP header
+with status code and message (batched write
+)
+
+<a id="reduct.error.ReductError.status_code"></a>
+
+#### status\_code
+
+```python
+@property
+def status_code()
+```
+
+Return HTTP status code
+
+<a id="reduct.error.ReductError.message"></a>
+
+#### message
+
+```python
+@property
+def message()
+```
+
+Return error message
+
+
