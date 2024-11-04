@@ -253,7 +253,7 @@ Rename bucket
 @asynccontextmanager
 async def read(entry_name: str,
                timestamp: Optional[Union[int, datetime, float, str]] = None,
-               head: bool = False) -> Record
+               head: bool = False) -> AsyncIterator[Record]
 ```
 
 Read a record from entry
@@ -268,7 +268,7 @@ Read a record from entry
 
 **Returns**:
 
-- `AsyncContextManager[Record]` - the record object
+- `AsyncIterator[Record]` - the record object
 
 **Raises**:
 
