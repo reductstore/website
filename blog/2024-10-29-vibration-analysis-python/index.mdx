@@ -35,6 +35,7 @@ In Python, we can calculate RMS as follows:
 
 ```python
 import numpy as np
+import numpy as np
 import matplotlib.pyplot as plt
 
 np.random.seed(0)
@@ -44,13 +45,14 @@ signal = 0.5 * np.random.randn(1000)  # standard deviation 0.5
 rms = np.sqrt(np.mean(signal**2))
 
 plt.plot(signal, c="indigo")
-plt.axhline(y=rms, color='red', linestyle='--', label=f"RMS: {rms:.2f}") plt.title(f"Signal with RMS: {rms:.2f}")
+plt.axhline(y=rms, color='red', linestyle='--', label=f"RMS: {rms:.2f}")
+plt.title(f"Signal with RMS: {rms:.2f}")
 plt.xlabel("Sample")
 plt.ylabel("Amplitude")
 plt.show()
 ```
 
-![RMS plot of zero-centered Gaussian noise, stddev=0.5](./img/social-card.jpg)
+![RMS plot of zero-centered Gaussian noise, stddev=0.5](./img/rms_noise.png)
 
 As we could expect for the normally distributed zero-centered noise with a standard deviation of 0.5, we get an RMS value also about 0.5.
 If we add to the signal any summand, we'll see in RMS its additional energy:
@@ -69,13 +71,14 @@ signal = noise + spike
 rms = np.sqrt(np.mean(signal**2))
 
 plt.plot(signal, c="indigo")
-plt.axhline(y=rms, color='red', linestyle='--', label=f"RMS: {rms:.2f}") plt.title(f"Signal with RMS: {rms:.2f}")
+plt.axhline(y=rms, color='red', linestyle='--', label=f"RMS: {rms:.2f}")
+plt.title(f"Signal with RMS: {rms:.2f}")
 plt.xlabel("Sample")
 plt.ylabel("Amplitude")
 plt.show()
 ```
 
-![RMS plot with peak](./img/social-card.jpg)
+![RMS plot with peak](./img/rms.png)
 
 ### Peak amplitude and crest factor
 
@@ -105,12 +108,13 @@ plt.legend()
 plt.show()
 ```
 
-![Peak amplitude plot](./img/social-card.jpg)
+![Peak amplitude plot](./img/peak.png)
 
 The crest factor for several signals can be computed as follows:
 
 ```python
-import numpy as np import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib.pyplot as plt
 
 np.random.seed(0)
 
@@ -119,18 +123,22 @@ low_crest_signal = np.sin(2 * np.pi * 5 * np.linspace(0, 1, 1000))
 high_crest_signal = low_crest_signal.copy()
 high_crest_signal[500] += 5  # add single peak value
 
-low_crest_factor = np.max(np.abs(low_crest_signal)) / np.sqrt(np.mean(low_crest_signal2))
-high_crest_factor = np.max(np.abs(high_crest_signal)) / np.sqrt(np.mean(high_crest_signal2))
+low_crest_factor = np.max(np.abs(low_crest_signal)) / np.sqrt(np.mean(low_crest_signal**2))
+high_crest_factor = np.max(np.abs(high_crest_signal)) / np.sqrt(np.mean(high_crest_signal**2))
 
 plt.figure(figsize=(12, 4))
 
-plt.subplot(1, 2, 1) plt.plot(low_crest_signal, c="indigo") plt.title(f"Low Crest Factor: {low_crest_factor:.2f}")
-plt.subplot(1, 2, 2) plt.plot(high_crest_signal, c="indigo") plt.title(f"High Crest Factor: {high_crest_factor:.2f}")
+plt.subplot(1, 2, 1)
+plt.plot(low_crest_signal, c="indigo")
+plt.title(f"Low Crest Factor: {low_crest_factor:.2f}")
+plt.subplot(1, 2, 2)
+plt.plot(high_crest_signal, c="indigo")
+plt.title(f"High Crest Factor: {high_crest_factor:.2f}")
 
 plt.show()
 ```
 
-![Crest factor plot](./img/social-card.jpg)
+![Crest factor plot](./img/crest_factor.png)
 
 As we can see, adding a single peak strongly affects the crest factor of the window.
 
@@ -151,24 +159,39 @@ np.random.seed(0)
 lowest_kurtosis_signal = scipy.signal.square( 2 * np.pi * 5 * np.linspace(0, 1, 1000, endpoint=False), 0.5)
 low_kurtosis_signal = np.sin(2 * np.pi * 5 * np.linspace(0, 1, 1000, endpoint=False))
 medium_kurtosis_signal = np.random.randn(1000)
-high_kurtosis_signal = medium_kurtosis_signal.copy() high_kurtosis_signal[::100] += 8 # add high peaks
+high_kurtosis_signal = medium_kurtosis_signal.copy()
+high_kurtosis_signal[::100] += 8 # add high peaks
 
-def kurtosis(window): 
+def kurtosis(window):
     return np.mean((window - np.mean(window)) ** 4) / (np.std(window) ** 4)
 
-high_kurtosis = kurtosis(high_kurtosis_signal) medium_kurtosis = kurtosis(medium_kurtosis_signal) low_kurtosis = kurtosis(low_kurtosis_signal) lowest_kurtosis = kurtosis(lowest_kurtosis_signal)
+high_kurtosis = kurtosis(high_kurtosis_signal)
+medium_kurtosis = kurtosis(medium_kurtosis_signal)
+low_kurtosis = kurtosis(low_kurtosis_signal)
+lowest_kurtosis = kurtosis(lowest_kurtosis_signal)
 
 plt.figure(figsize=(12, 4))
 
-plt.subplot(1, 4, 1) plt.plot(lowest_kurtosis_signal, c="indigo") plt.title(f"Lowest Kurtosis: {lowest_kurtosis:.2f}")
-plt.subplot(1, 4, 2) plt.plot(low_kurtosis_signal, c="indigo") plt.title(f"Low Kurtosis: {low_kurtosis:.2f}")
-plt.subplot(1, 4, 3) plt.plot(medium_kurtosis_signal, c="indigo") plt.title(f"Medium Kurtosis: {medium_kurtosis:.2f}")
-plt.subplot(1, 4, 4) plt.plot(high_kurtosis_signal, c="indigo") plt.title(f"High Kurtosis: {high_kurtosis:.2f}")
+plt.subplot(1, 4, 1)
+plt.plot(lowest_kurtosis_signal, c="indigo")
+plt.title(f"Lowest Kurtosis: {lowest_kurtosis:.2f}")
+
+plt.subplot(1, 4, 2)
+plt.plot(low_kurtosis_signal, c="indigo")
+plt.title(f"Low Kurtosis: {low_kurtosis:.2f}")
+
+plt.subplot(1, 4, 3)
+plt.plot(medium_kurtosis_signal, c="indigo")
+plt.title(f"Medium Kurtosis: {medium_kurtosis:.2f}")
+
+plt.subplot(1, 4, 4)
+plt.plot(high_kurtosis_signal, c="indigo")
+plt.title(f"High Kurtosis: {high_kurtosis:.2f}")
 
 plt.show()
 ```
 
-![Kurtosis plot](./img/social-card.jpg)
+![Kurtosis plot](./img/kurtosis.png)
 
 Here we see kurtosis values for square, sine, zero-centered normally distributed noise with unit standard deviation (which results in a value near 3), and the same noise with added high peaks, that affect a tail of the distribution and increase kurtosis.
 Skewness, the 4th central moment, reflects asymmetry in amplitudes, which in turn may be caused by any mechanical asymmetry like rubbing of rotating parts, specific wear, etc. As said above, it may be hard to interpret skewness in acceleration in terms of mechanics, and for some mechanical systems skewness may be nonzero by design, so in most cases it should be analyzed in comparison to the proven reference normal state of the machine. Also, skewness as a measure of directed acceleration impulses, may strongly depend on the orientation of the sensor. With this directional selectivity, it may be useful for discovering subtle, but meaningful changes in operation. 
@@ -179,7 +202,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 np.random.seed(0)
-positive_skew_signal = np.random.exponential(1, 1000) - 0.5 near_centered_signal = np.random.randn(1000) + np.sin(2 * np.pi * 5 * np.linspace(0, 1, 1000))
+positive_skew_signal = np.random.exponential(1, 1000) - 0.5
+near_centered_signal = np.random.randn(1000) + np.sin(2 * np.pi * 5 * np.linspace(0, 1, 1000))
 negative_skew_signal = -positive_skew_signal
 
 def skewness(window):
@@ -191,14 +215,22 @@ negative_skewness = skewness(negative_skew_signal)
 
 plt.figure(figsize=(12, 4))
 
-plt.subplot(1, 3, 1) plt.plot(positive_skew_signal, c="indigo") plt.title(f"Positive Skewness: {positive_skewness:.2f}")
-plt.subplot(1, 3, 2) plt.plot(near_centered_signal, c="indigo") plt.title(f"Near-zero Skewness: {near_zero_skewbess:.2f}")
-plt.subplot(1, 3, 3) plt.plot(negative_skew_signal, c="indigo") plt.title(f"Negative Skewness: {negative_skewness:.2f}")
+plt.subplot(1, 3, 1)
+plt.plot(positive_skew_signal, c="indigo")
+plt.title(f"Positive Skewness: {positive_skewness:.2f}")
+
+plt.subplot(1, 3, 2)
+plt.plot(near_centered_signal, c="indigo")
+plt.title(f"Near-zero Skewness: {near_zero_skewbess:.2f}")
+
+plt.subplot(1, 3, 3)
+plt.plot(negative_skew_signal, c="indigo")
+plt.title(f"Negative Skewness: {negative_skewness:.2f}")
 
 plt.show()
 ```
 
-![Skewness plot](./img/social-card.jpg)
+![Skewness plot](./img/skweness.png)
 
 As expected, for the signal with the zero-symmetric distribution of the amplitude (5 full periods of noisy sine wave), skewness is about 0.
 
@@ -264,7 +296,7 @@ plt.title("Noise")
 plt.show()
 ```
 
-![Spectrogram plot](./img/social-card.jpg)
+![Spectrogram plot](./img/spectrogram.png)
 
 In this example, we can observe the full picture of the signal at once and see the tone of constant frequency, the chirp tone that increases its frequency over time and the noise in the background. In the waveform (especially if we magnify it along the time axis), we also can see that components interfering, so it's much harder to interpret, hence the use of spectrograms.
 The following example also shows the computation of PDF estimation with Scypy implementation of Welch's method, for 5 seconds of stationary signal. Note that the input is assumed to be the whole record, not a window.
@@ -281,14 +313,14 @@ multi_freq_signal = np.sin(2 * np.pi * 500 * t) + np.sin(2 * np.pi * 1000 * t) +
 # 3 sine components, each 1 octave higher than previous
 
 frequencies, psd = scipy.signal.welch(multi_freq_signal, fs=5000)
-plt.plot(frequencies, 10 * np.log10(psd))
+plt.plot(frequencies, 10 * np.log10(psd), c="indigo")
 plt.title("Power Spectral Density of Multi-Frequency Signal")
 plt.xlabel("Frequency [Hz]")
 plt.ylabel("Power/Frequency (dB/Hz)")
 plt.show()
 ```
 
-![PSD plot](./img/social-card.jpg)
+![PSD plot](./img/psd.png)
 
 We can see here 3 frequency peaks of equal power that correspond to 3 sine components in the signal generation code.
 
