@@ -79,7 +79,7 @@ There are also more advanced parameters available in the SDKs and HTTP API to co
 | `ttl`           | Time-to-live of the query. The query is automatically closed after TTL | Integer | 60      |
 | `head`          | Retrieve only metadata                                                 | Boolean | False   |
 | `continuous`    | Keep the query open for continuous data retrieval                      | Boolean | False   |
-| `pool_interval` | Time interval for pooling data in continuous mode                      | Integer | 1       |
+| `poll_interval` | Time interval for polling data in continuous mode                      | Integer | 1       |
 
 **TTL (Time-to-Live)**
 
@@ -91,7 +91,7 @@ The `head` flag is used to retrieve only metadata. When set to `true`, the query
 
 **Continuous Mode**
 
-The `continuous` flag is used to keep the query open for continuous data retrieval. This mode is useful when you need to monitor data in real-time. The SDKs provide `pool_interval` parameter to specify the time interval for pooling data in continuous mode. The default interval is 1 second.
+The `continuous` flag is used to keep the query open for continuous data retrieval. This mode is useful when you need to monitor data in real-time. The SDKs provide `poll_interval` parameter to specify the time interval for polling data in continuous mode. The default interval is 1 second.
 
 ## Typical Data Querying Cases
 
