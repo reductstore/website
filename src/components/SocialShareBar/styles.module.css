@@ -1,33 +1,44 @@
-.shareText {
-  font-size: 0.8rem;
-  color: var(--reduct-dimmed-color);
+.shareContainer {
+  text-align: center;
+  margin: 3rem 0;
 }
 
-.shareBar {
+.shareLabel {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
-  height: 3rem;
-  border-top: 1px solid #e5e5e5;
-  border-bottom: 1px solid #e5e5e5;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  justify-content: center;
+  color: var(--reduct-dimmed-color);
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
 }
 
-.shareButton {
+.shareLabel::before,
+.shareLabel::after {
+  content: "";
+  flex: 1;
+  height: 0.5px;
+  background-color: var(--reduct-dimmed-color);
+  margin: 0 0.5rem;
+}
+
+.shareIcons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.shareIcons a {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 2.5rem;
   height: 2.5rem;
+  background-color: var(--reduct--background-white);
   border-radius: 50%;
-  background-color: #fff;
   border: 1px solid #e5e5e5;
-  cursor: pointer;
+  transition: transform 0.3s ease;
 }
 
-@media (max-width: 600px) {
-  .shareBar {
-    gap: 0.5rem;
-  }
+.shareIcons a:hover {
+  transform: translateY(-5px);
 }
