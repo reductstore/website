@@ -26,7 +26,7 @@ In our example, we will deploy a simple architecture with a single instance of K
 
 For an easy start, you can follow along by cloning the [**reduct-kafka-example**](https://github.com/reductstore/reduct-kafka-example) repository containing all the code snippets and Docker Compose files used in this tutorial.
 
-<!--truncate-->
+{/* truncate */}
 
 **Table of Contents**
 
@@ -51,11 +51,7 @@ Simply put, Zookeeper organizes and synchronizes configuration data for distribu
 To set up Zookeeper and Kafka using Docker Compose, you will need to have [**Docker installed**](https://docs.docker.com/engine/install/) on your machine. Once that's ready, follow these steps:
 
 1. Create a new file named `docker-compose.yml` in a directory of your choice.
-
 2. Copy the following YAML configuration into your `docker-compose.yml` file:
-
-<!-- -->
-
 ```yaml
 version: "3"
 services:
@@ -81,14 +77,9 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 ```
-
 3. Open a terminal in the directory containing the `docker-compose.yml` file.
-
 4. Run `docker-compose up -d` to start Zookeeper and Kafka in detached mode.
-
 5. Verify that both services are running by using a command like `docker ps`.
-
-<!-- -->
 
 That's it! You now have a single-node Kafka cluster running alongside Zookeeper, which is accessible on localhost at port 9092 for Kafka and port 2181 for Zookeeper.
 
@@ -98,26 +89,13 @@ You can find more information about these images and their configuration options
 If you are just wondering about the environment variable we used for this tutorial, here is a short explanation:
 
 - **Zookeeper:**
-
   - `ZOOKEEPER_CLIENT_PORT: 2181`: Specifies the port number (2181) that Zookeeper listens on for client connections.
-
   - `ZOOKEEPER_TICK_TIME: 2000`: Defines a tick as 2000 ms, used for heartbeats and timeouts in Zookeeper, where the minimum session timeout is twice the tickTime (Source: [**Zookeeper doc**](https://zookeeper.apache.org/doc/r3.9.1/zookeeperStarted.html#getting-started-coordinating-distributed-applications-with-zooKeeper)).
-
-    <!-- -->
-
 - **Kafka:**
-
   - `KAFKA_BROKER_ID: 1`: Assigns a unique identifier (1) to the Kafka broker. This ID would differentiates it from other brokers in the cluster if we had more than one.
-
   - `KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181`: Tells Kafka how to connect to the Zookeeper service, specifying the hostname (`zookeeper`) and port number (2181).
-
   - `KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092`: Defines how the Kafka broker communicates its connection details to producers and consumers. In this case, it's using plaintext communication (non-encrypted) and is accessible via `localhost` on port 9092.
-
   - `KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1` means that Kafka will keep only one copy of the information about where each consumer is in reading messages, i.e. the "offset" of each consumer. This setting helps manage where to continue reading from, but with only one copy, if there's a problem, this information could be lost.
-
-    <!-- -->
-
-<!-- -->
 
 This setup is suitable for development purposes where you need to work with streaming data or message queues without complexity. For production environments, remember that while this simple Docker Compose setup gets you started quickly, Apache Kafka can be scaled horizontally by adding more brokers to support higher loads or redundancy requirements.
 
@@ -158,15 +136,12 @@ This function encapsulates all necessary steps: it requires you to provide a `to
 To execute this function in your environment:
 
 1. Ensure you have installed `confluent_kafka` via pip (`pip install confluent-kafka`).
-
 2. Call this function with appropriate arguments for your use case. For instance, the `metadata_topic` topic can be created with: `create_kafka_topic("metadata_topic", num_partitions=1, replication_factor=1)`
 
 Regarding the arguments, here's a quick explanation:
 
 - `num_partitions`: The number of partitions for the topic. Partitions are used to distribute messages across multiple brokers in a Kafka cluster. This setting is useful for parallelizing data processing and increasing throughput.
 - `replication_factor`: The number of copies of each partition that should be kept in the cluster. This setting is useful for redundancy and fault tolerance.
-
-<!-- -->
 
 ## Setup ReductStore
 
@@ -191,10 +166,7 @@ reduct-store:
 ```
 
 - In this configuration, the container named `reduct-store` will use the latest ReductStore image and map port 8383 of your host to port 8383 inside the container, which is used by ReductStore.
-
 - The volume mapping `./data:/data` creates a persistent storage by mapping a local directory (`./data`) to the `/data` directory inside the container.
-
-<!-- -->
 
 To deploy, navigate to your compose file's location in terminal and execute `docker-compose up -d`. This command starts ReductStore as a background service. You can then interact with it using its [**API**](https://www.reduct.store/docs/http-api) or through any [**client libraries available in the documentation**](https://www.reduct.store/docs/getting-started).
 
@@ -233,12 +205,8 @@ This example shows how to use the `Client` class from the `reduct` library to co
 To implement this in your environment:
 
 1. Install the `reduct` Python package via pip (`pip install reduct-py`).
-
 2. Use the script by running it within an environment where Python's asyncio library can operate (e.g., any modern Python 3.x interpreter).
-
 3. Check that your local instance of ReductStore receives and stores these entries by accessing its API or UI at **localhost:8383**.
-
-<!-- -->
 
 ## Forward Data from ReductStore to Kafka
 
@@ -282,16 +250,10 @@ async def subscriber():
 Here's how the integration works step-by-step:
 
 1. **Initialize the Kafka Producer**: A `Producer` object from a Kafka library is instantiated with configuration parameters (`kafka_conf`).
-
 2. **Create or Access a Bucket**: The `create_bucket` method of the ReductStore client is used to create or access an existing bucket where blob data is stored.
-
 3. **Subscribe to Records**: Using the `subscribe` method on the bucket object, we listen for new records matching certain criteria (in this case, having a label `"good": True`). The subscription starts from a specific timestamp and polls at regular intervals.
-
 4. **Extract Metadata & Publish**: For each received record, we extract its timestamp and labels into a dictionary named `metadata`. This metadata is then published as JSON-like string bytes to a specified Kafka topic (`"metadata_topic"`).
-
 5. **Flush Producer Queue**: Once all desired messages are sent (after 10 iterations in this example), we call `producer.flush()` which ensures that all messages are delivered before ending the program.
-
-<!-- -->
 
 ### Consuming Messages from Kafka in Python
 
@@ -334,26 +296,14 @@ consume_messages("metadata_topic")
 The example provided illustrates how to implement this using the `confluent_kafka` library. Here's a step-by-step explanation of how it works:
 
 1. **Configure Consumer**: Define configuration settings such as `bootstrap.servers` (Kafka broker address), `group.id` (consumer group identity), and `auto.offset.reset` (where to start reading messages).
-
 2. **Initialize Consumer**: Create an instance of the `Consumer` class with the defined configuration.
-
 3. **Subscribe to Topic**: Call the `subscribe()` method on the consumer instance with a list containing topic names you wish to listen for.
-
 4. **Poll Messages**: Initiate an infinite loop that continuously polls for new messages using the consumer's `poll()` method, which is given a timeout value in seconds.
-
 5. **Handle Messages and Errors**: Check each polled message; if it is not None, verify whether it contains an error or valid data.
-
    1. If there’s an error related to partition end (`_PARTITION_EOF`), ignore and continue. In our case, it means we read all available messages in the partition, i.e. we are up-to-date.
-
    2. For other errors, print them out and exit.
-
    3. If no errors are present, decode and process or print out the message value.
-
-   <!-- -->
-
 6. **Clean Up**: Shutdown by enclosing the polling logic in a `try-finally` block where we close the consumer connection in `finally`.
-
-<!-- -->
 
 ## Conclusion
 
