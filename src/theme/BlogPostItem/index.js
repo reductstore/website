@@ -9,15 +9,15 @@ export default function BlogPostItemWrapper(props) {
   const { frontMatter } = props.children.type;
 
   const pagePath = useLocation().pathname;
-  const isBlogHome = /^\/blog\/?$/.test(pagePath);
-  const isBlogPage = /^\/blog\/page\/\d+/.test(pagePath);
-  const isSpecificBlogPost = /^\/blog\/[^/]+\/[^/]+/.test(pagePath);
-
-  const isBlogArticle = isSpecificBlogPost && !isBlogHome && !isBlogPage;
+  const pathSegments = pagePath.split("/").filter(Boolean);
+  const isBlogHome = pagePath === "/blog" || pagePath === "/blog/";
+  const isBlogPage = pathSegments[0] === "blog" && pathSegments[1] === "page";
+  const isSpecificBlogPost =
+    pathSegments[0] === "blog" && !isBlogHome && !isBlogPage;
   return (
     <>
       <BlogPostItem {...props} />
-      {isBlogArticle && (
+      {isSpecificBlogPost && (
         <>
           <SocialShareBar frontMatter={frontMatter} />
           <BlogForm frontMatter={frontMatter} />
