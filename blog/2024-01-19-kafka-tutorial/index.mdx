@@ -52,6 +52,7 @@ To set up Zookeeper and Kafka using Docker Compose, you will need to have [**Doc
 
 1. Create a new file named `docker-compose.yml` in a directory of your choice.
 2. Copy the following YAML configuration into your `docker-compose.yml` file:
+
 ```yaml
 version: "3"
 services:
@@ -77,6 +78,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 ```
+
 3. Open a terminal in the directory containing the `docker-compose.yml` file.
 4. Run `docker-compose up -d` to start Zookeeper and Kafka in detached mode.
 5. Verify that both services are running by using a command like `docker ps`.
