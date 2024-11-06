@@ -11,16 +11,16 @@ export default function AzureInstall() {
         Discover{" "}
         <strong>
           <Link
-            href="https://azuremarketplace.microsoft.com/en-US/marketplace/apps/reductstorellc1689939980623.reductstore"
+            href="https://azuremarketplace.microsoft.com/en/marketplace/apps/reductsoftware.reductstore-server"
             target="_blank"
             rel="noopener noreferrer"
           >
             ReductStore on Azure Marketplace
           </Link>
         </strong>
-        . For more detailed information and guidance, refer to our{" "}
+        . For more detailed information and guidance, refer to the{" "}
         <strong>
-          <Link to="/docs/azure">official documentation</Link>
+          <Link to="docs/guides/integration/azure-vm">Azure VM guide</Link>
         </strong>
         .
       </p>
