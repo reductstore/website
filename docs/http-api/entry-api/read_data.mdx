@@ -230,6 +230,10 @@ access to the bucket of the entry.
 - Version 1.6: the method provides the `limit` query parameter. It limits the number of records in the query. If it is not set, the query is unlimited by default.
 - Version 1.10: the method has the `each_n` and `each_s` query parameters. If the `each_n` parameter is set, the method returns only every `each_n`-th record. If the `each_s` parameter is set, the method returns only one record per `each_s` seconds.
 
+:::warning
+ Since version 1.13, te method is deprecated. Use the [**Query API**](/docs/http-api/entry-api/run_query.mdx) instead.
+:::
+
 <SwaggerComponent
   method="GET"
   path="/api/v1/b/:bucket_name/:entry_name/q"
