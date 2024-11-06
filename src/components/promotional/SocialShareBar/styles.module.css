@@ -3,17 +3,17 @@
   margin: 3rem 0;
 }
 
-.shareLabel {
+.lineWithLabel {
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--reduct-dimmed-color);
   font-size: 1.1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
-.shareLabel::before,
-.shareLabel::after {
+.lineWithLabel::before,
+.lineWithLabel::after {
   content: "";
   flex: 1;
   height: 0.5px;

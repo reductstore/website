@@ -29,7 +29,7 @@ const SocialShareBar: React.FC<SocialShareBarProps> = ({ frontMatter }) => {
 
   return (
     <div className={styles.shareContainer}>
-      <div className={styles.shareLabel}>Share</div>
+      <div className={styles.lineWithLabel}>Share</div>
       <div className={styles.shareIcons}>
         {/* LINKEDIN */}
         <Link
