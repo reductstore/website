@@ -9,16 +9,8 @@ image: ./img/social-card.jpg
 ---
 
 ![Photo by Luke Southern](./img/luke-southern.webp)
-
-<small>
-  Photo by{" "}
-  <a href="https://unsplash.com/@lukesouthern?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
-    Luke Southern
-  </a>{" "}
-  on{" "}
-  <a href="https://unsplash.com/photos/open-led-signage-4kCGEB7Kt4k?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
-    Unsplash
-  </a>
+<small style={{ display: "block", marginTop: "-20px" }}>
+  Photo by Luke Southern
 </small>
 
 In the thriving world of IoT, integrating MLOps for Edge AI is important for creating intelligent, autonomous devices that are not only efficient but also trustworthy and manageable.
@@ -28,12 +20,10 @@ MLOps—or Machine Learning Operations—is a multidisciplinary field that mixes
 In this field, important factors to consider are:
 
 - **explainability**, ensuring that decisions made by AI are interpretable by humans;
-
 - **orchestration**, which involves managing the various components of machine learning in production–at scale; and
-
 - **reproducibility**, guaranteeing consistent results across different environments or experiments.
 
-<!--truncate-->
+{/* truncate */}
 
 Naturally, the complexity of each of those key concepts increases when considering the entire stack encompassing cloud computing, local development, and inference on edge devices.
 
@@ -58,7 +48,6 @@ For a visual exploration, I like [**Map of Github**](https://anvaka.github.io/ma
 When looking at the possible open-source projects to train AI models as performant as Landing AI, we need to find SOTA models for:
 
 - supervised learning for object detection; and
-
 - semi-supervised learning for anomaly detection.
 
 When browsing the state-of-the-art in object detection on [**Papers with Code**](https://paperswithcode.com/task/object-detection), I found the YOLO model to be one of the most popular, accurate, and fastest. That being said, I would recommend having a look at [**Ultralytics**](https://github.com/ultralytics/ultralytics), which provides the tools to evaluate, predict, and export the latest versions of YOLO models with only a few lines of code.
@@ -122,9 +111,7 @@ It's about efficiently managing the tasks such as data preprocessing, training m
 Here are some projects that I would recommend to watch:
 
 - [**Kubeflow**](https://www.kubeflow.org/) for ML workflows on Kubernetes, making it easier to deploy and maintain ML systems on a complex infrastructure.
-
 - For those seeking a lightweight solution for setting up deep learning REST APIs across platforms without the complexity of Kubernetes, [**Deepdetect**](https://www.deepdetect.com/) is worth considering.
-
 - For the efficiency of "serverless" functions, I would consider [**Nuclio**](https://nuclio.io/) as a viable option to rely on.
 
 ## On-Premise Alternative to LandingEdge
@@ -134,11 +121,8 @@ When seeking an on-premise alternative to [**LandingEdge**](https://landing.ai/v
 Some of the key features of ReductStore include:
 
 - **Time Series Blob Storage:** Efficient handling of sequential data storage which is crucial for time-sensitive applications.
-
 - **Real-Time FIFO Quota:** Preventing disk space shortage where storage capacity is limited.
-
 - **Data Labeling:** Annotate, filter, and save AI labels or meta-data for each image.
-
 - **Data Batching:** Grouping data to minimize network overhead in areas with high latency by fetching records in batched HTTP responses.
 
 ## Conclusion
