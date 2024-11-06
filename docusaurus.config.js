@@ -463,7 +463,7 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
-        additionalLanguages: ["rust"],
+        additionalLanguages: ["rust", "bash"],
       },
       colorMode: {
         defaultMode: "light",
