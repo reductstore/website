@@ -40,11 +40,6 @@ const config = {
     locales: ["en"],
   },
 
-  // Pass custom environment variables to the site
-  customFields: {
-    calendarLink: process.env.CALENDAR_LINK,
-  },
-
   plugins: [
     require.resolve("./src/plugins/docusaurus-plugin-matomo"),
     require.resolve("./src/plugins/docusaurus-plugin-consent-manager"),

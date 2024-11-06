@@ -44,7 +44,6 @@ jobs:
           output_location: "build" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
         env:
-          CALENDAR_LINK: ${{ vars.CALENDAR_LINK }}
           APP_ENV: ${{ env.APP_ENV }}
 
   close_pull_request_job:
