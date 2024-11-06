@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import styles from "./styles.module.css";
 import useBannertStore from "@site/src/store/useBannertStore";
 import { useLocation } from "@docusaurus/router";
+
 const whitePaperImage =
   require("@site/static/img/whitepaper/whitepaper.webp").default;
 
@@ -11,19 +12,18 @@ const SlidingBanner: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const { wasBannerShown, setBannerShown } = useBannertStore();
   const pagePath = useLocation().pathname;
-  const isCorrectPath = !pagePath.endsWith("/blog");
 
   useEffect(() => {
     const isMobile = window.innerWidth <= 768;
     const isDismissed = Cookies.get("reductstore_bannerDismissed") === "true";
-    if (isCorrectPath && !wasBannerShown && !isMobile && !isDismissed) {
+    if (!wasBannerShown && !isMobile && !isDismissed) {
       const timeout = setTimeout(() => {
         setVisible(true);
         setBannerShown(true);
       }, 13_000);
       return () => clearTimeout(timeout);
     }
-  }, [wasBannerShown, setBannerShown, setVisible, isCorrectPath]);
+  }, [wasBannerShown, setBannerShown, setVisible]);
 
   const handleClose = () => {
     setVisible(false);
