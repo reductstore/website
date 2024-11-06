@@ -4,11 +4,13 @@ import styles from "./styles.module.css";
 interface PromotionalWaitingListProps {
   title: string;
   subtitle: string;
+  formId: string;
 }
 
 const PromotionalWaitingList = ({
   title,
   subtitle,
+  formId,
 }: PromotionalWaitingListProps) => {
   return (
     <>
@@ -18,7 +20,7 @@ const PromotionalWaitingList = ({
             <h3>{title}</h3>
             <p>{subtitle}</p>
             <div className={styles.WaitingListForm}>
-              <WaitingListForm />
+              <WaitingListForm elementId={formId} />
             </div>
           </div>
         </div>

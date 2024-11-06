@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./styles.module.css";
 import { FaCheckCircle } from "react-icons/fa";
 import Modal from "../../shared/Modal";
-import FreePoCForm from "../FreePoCForm";
+import FreePoCForm from "../../forms/FreePoCForm";
 import Link from "@docusaurus/Link";
 
 const PromotionalBanner = () => {

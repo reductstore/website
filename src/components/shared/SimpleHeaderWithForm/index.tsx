@@ -9,6 +9,7 @@ interface SimpleHeaderWithFormProps {
   subtitle: string;
   benefits: string[];
   imageSvg: React.ReactNode;
+  formId: string;
   headerTag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 }
 
@@ -17,6 +18,7 @@ function SimpleHeaderWithForm({
   subtitle,
   benefits,
   imageSvg,
+  formId,
   headerTag = "h1",
 }: SimpleHeaderWithFormProps) {
   return (
@@ -27,7 +29,7 @@ function SimpleHeaderWithForm({
             {title}
           </Heading>
           <p className={styles.BannerSubtitle}>{subtitle}</p>
-          <WaitingListForm />
+          <WaitingListForm elementId={formId} />
           <ul className={styles.BenefitsList}>
             {benefits.map((benefit, index) => (
               <li key={index} className={styles.BenefitItem}>

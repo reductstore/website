@@ -5,7 +5,11 @@ import { useLocation } from "@docusaurus/router";
 import Link from "@docusaurus/Link";
 import clsx from "clsx";
 
-const WaitingListForm = () => {
+interface WaitingListFormProps {
+  elementId: string;
+}
+
+const WaitingListForm = ({ elementId }: WaitingListFormProps) => {
   const location = useLocation();
 
   const [state, handleSubmit] = useForm("xzzpnwrl");
@@ -49,7 +53,7 @@ const WaitingListForm = () => {
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form id={elementId} className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.inputGroup}>
         <input
           id="email"

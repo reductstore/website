@@ -16,6 +16,7 @@ export default function CloudSolution(): JSX.Element {
     >
       <main>
         <SimpleHeaderWithForm
+          formId="cloud-waiting-list-form-top"
           title="Cloud Time Series Object Storage"
           subtitle="High-performance cloud storage for data of any size—images, text, sensor data, and more"
           benefits={[
@@ -52,6 +53,7 @@ export default function CloudSolution(): JSX.Element {
           </>
           <div className={styles.form}>
             <PromotionalWaitingList
+              formId="cloud-waiting-list-form-bottom"
               title="Join the Waiting List"
               subtitle="Join the waiting list for early access to ReductStore's cloud storage solution and updates"
             />

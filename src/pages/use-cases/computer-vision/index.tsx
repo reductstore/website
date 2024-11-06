@@ -6,7 +6,7 @@ import UseCaseRow from "@site/src/components/useCases/UseCaseRow";
 import Faq from "@site/src/components/shared/Faq";
 import Link from "@docusaurus/Link";
 import FreePoCBanner from "@site/src/components/promotional/FreePoCBanner";
-import FreePoCForm from "@site/src/components/promotional/FreePoCForm";
+import FreePoCForm from "@site/src/components/forms/FreePoCForm";
 
 export default function UseCaseComputerVision(): JSX.Element {
   return (

@@ -5,33 +5,6 @@ import clsx from "clsx";
 import { useForm, ValidationError } from "@formspree/react";
 import { useLocation } from "@docusaurus/router";
 
-const topics = [
-  {
-    key: "TechnicalReview",
-    label: "Schedule a Technical Review",
-  },
-  {
-    key: "GeneralInquiry",
-    label: "General Inquiry",
-  },
-  {
-    key: "LicenseQuestion",
-    label: "License Question",
-  },
-  {
-    key: "SupportRequest",
-    label: "Support Request",
-  },
-  {
-    key: "Feedback",
-    label: "Feedback",
-  },
-  {
-    key: "BillingIssue",
-    label: "Billing Issue",
-  },
-];
-
 interface HelpFormProps {
   subject?: string;
 }
@@ -175,3 +148,30 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
     </form>
   );
 }
+
+const topics = [
+  {
+    key: "TechnicalReview",
+    label: "Schedule a Technical Review",
+  },
+  {
+    key: "GeneralInquiry",
+    label: "General Inquiry",
+  },
+  {
+    key: "LicenseQuestion",
+    label: "License Question",
+  },
+  {
+    key: "SupportRequest",
+    label: "Support Request",
+  },
+  {
+    key: "Feedback",
+    label: "Feedback",
+  },
+  {
+    key: "BillingIssue",
+    label: "Billing Issue",
+  },
+];

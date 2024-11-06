@@ -20,7 +20,7 @@ export default function BlogPostItemWrapper(props) {
       {isSpecificBlogPost && (
         <>
           <SocialShareBar frontMatter={frontMatter} />
-          <BlogForm frontMatter={frontMatter} />
+          <BlogForm elementId="subscribe-blog-form" frontMatter={frontMatter} />
           <SlidingBanner />
         </>
       )}
