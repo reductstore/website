@@ -41,7 +41,7 @@ There are also more advanced parameters available in the SDKs and HTTP API, such
 
 - Query TTL (Time to Live)
 - Continuous flag to keep the query open for continuous data retrieval
-- Pool interval to specify the time interval for pooling data in continuous mode
+- Poll interval to specify the time interval for polling data in continuous mode
 
 ### Time Range
 
@@ -69,7 +69,7 @@ The `head` flag is used to retrieve only metadata. When set to `true`, the query
 
 ### Continuous Mode
 
-The `continuous` flag is used to keep the query open for continuous data retrieval. This mode is useful when you need to monitor data in real-time. The SDKs provide `pool_interval` parameter to specify the time interval for pooling data in continuous mode. The default interval is 1 second.
+The `continuous` flag is used to keep the query open for continuous data retrieval. This mode is useful when you need to monitor data in real-time. The SDKs provide `poll_interval` parameter to specify the time interval for polling data in continuous mode. The default interval is 1 second.
 
 ## Typical Data Querying Cases
 
