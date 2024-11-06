@@ -1,15 +1,19 @@
 ---
 title: Vibration Data Analysis Using Python
-description: The post overviews basic features (RMS, creat factor, etc.) and transforms (spectrogram, PSD) used in viration analysis, each with Python example, provides a use case that leverages elementary vibration analysis to utilize ReductStore's selective duplication features is discussed, and also dicsuddes notion and benefits of machine learning and perspectives of its applications to signal analysis and anomaly detection
+description: This article reviews the basic functions (RMS, creat factor, etc.) and transforms (spectrogram, PSD) used in vibration analysis, each with a Python example, provides a use case that uses elementary vibration analysis to exploit ReductStore's selective replication feature, and discusses the concept and benefits of machine learning and perspectives of its applications to signal analysis and anomaly detection.
 authors: max
 tags: [vibration analysis, vibration sensor, machine learning, signal procesing]
 slug: vibration-analysis-python
 date: 2024-11-05
-image: ./img/social-card.jpg # TODO: Add social card image
+image: ./img/D_014934_e_violet_2000.JPG
 ---
 
+![Interfering waves](./img/D_014934_e_violet_2000.JPG)
+
 Recorded vibrations carry extensive information about the dynamic state of a mechanical system, describing the processes within it in both direct and detailed ways. Vibration signal naturally reflects the mechanical process, often including its very subtle aspects, so its proper analysis may help to monitor not only the system’s dynamic state and operating conditions but also the physical properties and changes in its components, such as wear or faults in bearings or transmission gears, physical defects or breakage of parts, deformations and imbalance, lack of lubrication, etc.
-When conducted comprehensively and involves modern ML techniques, vibration analysis approaches the skill of an experienced mechanic’s trained ear, capable of sensing a mechanism's condition through subtle, often indescribable changes in its sound.
+
+> When conducted comprehensively and involves modern ML techniques, vibration analysis approaches the skill of an experienced mechanic’s trained ear, capable of sensing a mechanism's condition through subtle, often indescribable changes in its sound.
+
 However, let’s start with basic vibration analysis methods, specifically by calculating statistics or features that reflect certain well-interpreted properties of the process, each with clear physical meaning. This type of analysis addresses the most common questions about the process, while more subtle features - or those harder to formalize, or just specific for a particular case - may remain unqueried, despite their value for diagnostic and prognostic purposes.
 
 {/* truncate */}
@@ -17,13 +21,14 @@ However, let’s start with basic vibration analysis methods, specifically by ca
 ## Input variables
 
 Sensors of different types provide data on displacement, speed (the first derivative of displacement), and acceleration (the 2nd derivative). Acceleration is typically most sensitive to changes in the dynamic state, so, in most cases, it is the primary input for vibration analysis, which we'll focus on below.
+
 However, interpreting acceleration data in terms of actual machine part movement can be challenging. Reconstructing displacement by double integration of (potentially noisy) acceleration data is often impractical and unreliable. Therefore, in tasks where it is essential to monitor speed or the explicit trajectory of vibration, speed or displacement sensors (typically aligned along orthogonal axes) may be required.
 
 ## Common features
 
 ### Root Mean Square
 
-The simplest thing we might want to know about vibration signal is its "overall intensity", which can be formalized via the concept of energy: we may just consider its average energy within some time window. Energy, by its physical meaning, is a product of two primary (atomic, directly measurable) values: in mechanics, it's a product of force (or, better, acceleration or added velocity) and initial velocity, which leads to well-known energy formula with squared velocity, in electricity, energy is a product of voltage and current, that also can be converted to the formula with the squared current. To make our measure of intensity proportional to the amplitude of the signal, we can take the square root of average energy, i.e. get the constant value of amplitude that represents the same energy as the original signal within a time window. This measure is known as the **Root Mean Square (RMS)** of the signal x of length n:
+The simplest thing we might want to know about vibration signal is its "overall intensity", which can be formalized via the concept of energy: we may just consider its average energy within some time window. Energy, by its physical meaning, is a product of two primary (atomic, directly measurable) values: in mechanics, it's a product of force (or, better, acceleration or added velocity) and initial velocity, which leads to well-known expression of energy $$E = \frac{mv^2}{2}$$. To make our measure of intensity proportional to the amplitude of the signal, we can take the square root of average energy, i.e. get the amplitude of a square or constant signal that would have the same energy as the original signal within a time window. This measure is known as the **Root Mean Square (RMS)** of the signal $$x$$ of length $$n$$:
 
 $$\text{RMS} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} x_i^2}$$
 
@@ -85,7 +90,7 @@ plt.show()
 
 Windowed **peak amplitude** is simply the highest absolute amplitude in the window, and it tells nothing about all other points of the signal than the highest peak. A more informative feature is the ratio of peak energy to average energy, i.e. the squared peak amplitude divided by the squared RMS, known as the **crest factor**. The crest factor indicates how much the peak energy exceeds the average energy.
 
-However, it relies on only peak values, which may appear by chance and may not reflect the signal’s essential characteristics. Kurtosis, discussed below, also captures the relationship between 'central' and 'marginal' amplitude values, but it considers all values, not just the peaks.
+However, it relies on only peak values, which may appear by chance and may not reflect the signal’s essential characteristics. Kurtosis, discussed below, also captures the relationship between "central" and "marginal" amplitude values, but it considers all values, not just the peaks.
 
 Here's a Python code for peak amplitude computed for the same signal:
 
@@ -248,7 +253,7 @@ One of the ways to get a detailed view of the vibration signal is spectral analy
 
 The procedure of conversion, well known as the Fourier transform, possesses numerous fascinatingly powerful mathematical properties, including
 
-- linearity; the transform decomposes the signal into linear combinations of its components,
+- linearity: the transform decomposes the signal into linear combinations of its components,
 - duality: the symmetry of time and frequency representations enables, in particular, full reversibility, i.e. allows lossless reconstruction (synthesis) of the waveform from its spectrum,
 - possibility to replace convolution in the time domain with simple multiplication in the frequency domain, as well as differentiation with multiplication by a complex number,
 - unitarity, or energy equivalence (guaranteed by Parseval's theorem): energy can be calculated in the same way (as inner square, as discussed above regarding RMS) in both domains, which makes energy remain a central notion of analysis.
@@ -261,7 +266,7 @@ Because of the energy equivalence property of the Fourier Transform, the area un
 
 Amplitude (and sometimes power) spectra obtained from sliding windows form the history if changes in frequency domain called spectrogram. In most cases, it is a spectacular representation of signal history, that can lead to meaningful interpretation even while observed by eyes. It also provides a strong starting point for feature engineering and subsequent statistical or time series analysis, as well as for artificial intelligence (ML or DL) approaches.
 
-The commonly used algorithm that implements the Fourier transform is called Fast Fourier Transform (FFT). It gets the benefits of cascaded processing of the signal but poses such an additional requirement, that the length of the signal must equal to integer degree of 2 (e.g. 32, 64, 128 etc.) In Python, there are different implementations of FFT and general Fourier Transform: native Numpy one, Scipy's, and PyFFTW, based on the FFTW free C library, which is considered to be fastest but requires additional setup (for details of efficiency benchmarking and comparison, as well as PyFFTW tweaking, refer to [**this article**](https://blog.endaq.com/matlab-vs-python-speed-for-vibration-analysis-free-download).
+The commonly used algorithm that implements the Fourier transform is called Fast Fourier Transform (FFT). It gets the benefits of cascaded processing of the signal but poses such an additional requirement, that the length of the signal must equal to integer degree of 2 (e.g. 32, 64, 128 etc.) In Python, there are different implementations of FFT and general Fourier Transform: native Numpy one, Scipy's, and PyFFTW, based on the FFTW free C library, which is considered to be fastest but requires additional setup (for details of efficiency benchmarking and comparison, as well as PyFFTW tweaking, refer to this article [**MATLAB vs Python: Speed Test for Vibration Analysis**](https://blog.endaq.com/matlab-vs-python-speed-for-vibration-analysis-free-download).
 
 To build an (amplitude) spectrogram in Python, one often does not need to run FFT directly, as there are put-of-the-box implementations of Short-Time Fourier Transform (STFT), that apply the transform to small windows of the signal. The following example shows Scipy's spectrogram function with 5 seconds of synthetic signal, built of constant frequency sine, increasing frequency sine and weak noise. Note that, unlike in previous examples that process only individual windows cut from the signal, the input sample here is assumed to be the entire signal record, which may span a long period and be non-stationary, i.e. exhibit changes over time.
 

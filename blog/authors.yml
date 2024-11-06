@@ -24,6 +24,9 @@ max:
   name: Max Filippov
   title: ML Software Developer - C++, Python, R, Matlab
   url: https://github.com/maxfilippov
+  image_url: https://github.com/maxfilippov.png
+  description: A software developer in fields of machine learning, data analysis, signal and image processing, simulations.
+  page: true
   socials:
     linkedin: max-filippov-0a6070247
     github: maxfilippov
