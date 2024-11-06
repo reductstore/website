@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./styles.module.css";
-import Faq from "../Faq";
+import Faq from "../../shared/Faq";
 import Heading from "@theme/Heading";
 import Link from "@docusaurus/Link";
 

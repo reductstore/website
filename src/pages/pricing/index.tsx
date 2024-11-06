@@ -1,8 +1,8 @@
 import Layout from "@theme/Layout";
-import PricingTable from "@site/src/components/PricingTable";
-import SimpleHeader from "@site/src/components/SimpleHeader";
-import Faq from "@site/src/components/Faq";
-import PromotionalBanner from "@site/src/components/PromotionalBanner";
+import PricingTable from "@site/src/components/shared/PricingTable";
+import SimpleHeader from "@site/src/components/shared/SimpleHeader";
+import Faq from "@site/src/components/shared/Faq";
+import PromotionalBanner from "@site/src/components/promotional/PromotionalBanner";
 
 export default function Pricing(): JSX.Element {
   return (

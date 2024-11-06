@@ -1,5 +1,5 @@
 import React from "react";
-import CodeSnippetExample from "../CodeSnippetExample";
+import CodeSnippetExample from "../../docs/CodeSnippetExample";
 import clsx from "clsx";
 import { SiPython, SiJavascript, SiRust, SiCplusplus } from "react-icons/si";
 import styles from "./styles.module.css";

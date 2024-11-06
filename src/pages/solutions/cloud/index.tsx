@@ -1,10 +1,10 @@
 import React from "react";
 import Layout from "@theme/Layout";
 import styles from "./styles.module.css";
-import UseCaseRow from "@site/src/components/UseCaseRow";
-import Faq from "@site/src/components/Faq";
-import SimpleHeaderWithForm from "@site/src/components/SimpleHeaderWithForm";
-import PromotionalWaitingList from "@site/src/components/PromotionalWaitingList";
+import UseCaseRow from "@site/src/components/useCases/UseCaseRow";
+import Faq from "@site/src/components/shared/Faq";
+import SimpleHeaderWithForm from "@site/src/components/shared/SimpleHeaderWithForm";
+import PromotionalWaitingList from "@site/src/components/promotional/PromotionalWaitingList";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import ThemedImage from "@theme/ThemedImage";
 

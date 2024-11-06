@@ -1,7 +1,7 @@
 import React, { SVGProps } from "react";
 import styles from "./styles.module.css";
 import Heading from "@theme/Heading";
-import WaitingListForm from "../WaitingListForm";
+import WaitingListForm from "../../forms/WaitingListForm";
 import { FaCheck } from "react-icons/fa"; // Importing icon
 
 interface SimpleHeaderWithFormProps {

@@ -1,4 +1,4 @@
-import WaitingListForm from "../WaitingListForm";
+import WaitingListForm from "../../forms/WaitingListForm";
 import styles from "./styles.module.css";
 
 interface PromotionalWaitingListProps {

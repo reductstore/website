@@ -1,8 +1,8 @@
 import React from "react";
 import BlogPostItem from "@theme-original/BlogPostItem";
-import SocialShareBar from "@site/src/components/SocialShareBar";
-import SlidingBanner from "@site/src/components/SlidingBanner";
-import BlogForm from "@site/src/components/BlogForm";
+import SocialShareBar from "@site/src/components/promotional/SocialShareBar";
+import SlidingBanner from "@site/src/components/promotional/SlidingBanner";
+import BlogForm from "@site/src/components/forms/BlogForm";
 import { useLocation } from "@docusaurus/router";
 
 export default function BlogPostItemWrapper(props) {

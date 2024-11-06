@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./styles.module.css";
-import UseCaseCards from "../UseCaseCards";
+import UseCaseCards from "../../useCases/UseCaseCards";
 import Heading from "@theme/Heading";
 import Link from "@docusaurus/Link";
 import clsx from "clsx";

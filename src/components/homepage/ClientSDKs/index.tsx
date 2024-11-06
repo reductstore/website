@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import SimpleHeader from "@site/src/components/SimpleHeader";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 import CodeBlock from "@theme/CodeBlock";

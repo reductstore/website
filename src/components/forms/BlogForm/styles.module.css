@@ -20,7 +20,6 @@
     var(--reduct--background-white) 80%,
     var(--reduct-background-gray-light) 80%,
     var(--reduct-background-gray-light)
-
   );
 }
 
@@ -30,7 +29,7 @@
   margin-bottom: 20px;
 }
 
-.inputButtonContainer{
+.inputButtonContainer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;

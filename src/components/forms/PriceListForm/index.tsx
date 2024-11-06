@@ -4,7 +4,7 @@ import { useForm, ValidationError } from "@formspree/react";
 import { useLocation } from "@docusaurus/router";
 import Link from "@docusaurus/Link";
 import clsx from "clsx";
-import CountdownTimer from "../CountdownTimer";
+import CountdownTimer from "../../promotional/CountdownTimer";
 
 interface PriceListFormProps {
   elementId: string;

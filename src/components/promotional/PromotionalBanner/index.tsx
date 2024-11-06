@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./styles.module.css";
 import { FaCheckCircle } from "react-icons/fa";
-import Modal from "../Modal";
+import Modal from "../../shared/Modal";
 import FreePoCForm from "../FreePoCForm";
 import Link from "@docusaurus/Link";
 

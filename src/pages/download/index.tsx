@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import SimpleHeader from "@site/src/components/SimpleHeader";
+import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import Layout from "@theme/Layout";
-import InstallReductStore from "@site/src/components/InstallReductStore";
-import ClientSDKs from "@site/src/components/ClientSDKs";
-import InstallClientCLI from "@site/src/components/InstallClientCLI";
+import InstallReductStore from "@site/src/components/docs/InstallReductStore";
+import ClientSDKs from "@site/src/components/homepage/ClientSDKs";
+import InstallClientCLI from "@site/src/components/docs/InstallClientCLI";
 import Link from "@docusaurus/Link";
 import styles from "./styles.module.css";
 

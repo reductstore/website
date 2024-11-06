@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 import LinuxInstall from "./LinuxInstall";
 import MacOSInstall from "./MacOSInstall";
 import WindowsInstall from "./WindowsInstall";
-import CargoInstall from "@site/src/components/InstallClientCLI/CargoInstall";
+import CargoInstall from "@site/src/components/docs/InstallClientCLI/CargoInstall";
 
 export default function InstallReductStore(props): JSX.Element {
   const [activeTab, setActiveTab] = useState("linux");

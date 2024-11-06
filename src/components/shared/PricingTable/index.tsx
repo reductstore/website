@@ -4,7 +4,7 @@ import styles from "./styles.module.css";
 import PricingPlan from "./PricingPlan";
 import { FaCheckCircle } from "react-icons/fa";
 import Modal from "../Modal";
-import PriceListForm from "../PriceListForm";
+import PriceListForm from "../../forms/PriceListForm";
 
 const checkedIcon = <FaCheckCircle color="green" size="1.2em" />;
 
