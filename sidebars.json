@@ -77,11 +77,11 @@
           },
           "collapsed": false,
           "items": [
+            "http-api/entry-api/run_query",
             "http-api/entry-api/read_data",
             "http-api/entry-api/write_data",
             "http-api/entry-api/update_data",
-            "http-api/entry-api/delete_data",
-            "http-api/entry-api/run_query"
+            "http-api/entry-api/delete_data"
           ]
         },
         "http-api/token-authentication",
