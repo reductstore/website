@@ -88,7 +88,9 @@ plt.show()
 
 ### Peak amplitude and crest factor
 
-Windowed **peak amplitude** is simply the highest absolute amplitude in the window, and it tells nothing about all other points of the signal than the highest peak. A more informative feature is the ratio of peak energy to average energy, i.e. the squared peak amplitude divided by the squared RMS, known as the **crest factor**. The crest factor indicates how much the peak energy exceeds the average energy.
+Windowed **peak amplitude** is simply the highest absolute amplitude in the window, and it tells nothing about all other points of the signal than the highest peak. A more informative feature is the ratio of the peak amplitude to RMS, known as the **crest factor**:
+
+$$CF = \frac{max_i\abs{x_i}}{RMS(x)}$$
 
 However, it relies on only peak values, which may appear by chance and may not reflect the signal’s essential characteristics. Kurtosis, discussed below, also captures the relationship between "central" and "marginal" amplitude values, but it considers all values, not just the peaks.
 
