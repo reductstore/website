@@ -1,12 +1,12 @@
 import React from "react";
-import SimpleHeader from "@site/src/components/SimpleHeader";
+import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import Layout from "@theme/Layout";
 import styles from "./styles.module.css";
-import UseCaseRow from "@site/src/components/UseCaseRow";
-import Faq from "@site/src/components/Faq";
+import UseCaseRow from "@site/src/components/useCases/UseCaseRow";
+import Faq from "@site/src/components/shared/Faq";
 import Link from "@docusaurus/Link";
-import FreePoCBanner from "@site/src/components/FreePoCBanner";
-import FreePoCForm from "@site/src/components/FreePoCForm";
+import FreePoCBanner from "@site/src/components/promotional/FreePoCBanner";
+import FreePoCForm from "@site/src/components/forms/FreePoCForm";
 
 export default function UseCaseAI(): JSX.Element {
   return (

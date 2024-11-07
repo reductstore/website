@@ -18,7 +18,7 @@ By conducting performance tests on binary data insertion and retrieval, we aim t
 
 For those interested in replicating our benchmarks or conducting their own evaluations, we've made our methods easily accessible through [**this repository**](https://github.com/reductstore/reduct-vs-mongodb).
 
-<!--truncate-->
+{/* truncate */}
 
 ## Launching ReductStore and MongoDB Using Docker
 
@@ -29,14 +29,9 @@ This setup initializes a MongoDB container with exposed ports for local access, 
 The process is straightforward:
 
 - Define service configurations for both `mongodb` and `reductstore`.
-
 - Specify Docker images: `mongo:latest` for MongoDB and `reduct/store:latest` for ReductStore.
-
 - Configure environment variables such as credentials and bucket properties.
-
 - Assign volumes to ensure data persists across container restarts.
-
-<!-- -->
 
 Here's the Docker Compose snippet:
 
@@ -112,12 +107,8 @@ GridFS is a specification for storing and retrieving large files in MongoDB, bre
 The following Python script demonstrates how to write time series blob data to MongoDB using GridFS:
 
 - Establish a connection using `MongoClient`.
-
 - Access the database and GridFS.
-
 - Insert blob data into GridFS and reference it in the collection with a timestamp.
-
-<!-- -->
 
 ```python
 def write_to_mongodb():
@@ -139,14 +130,9 @@ def write_to_mongodb():
 ### Write to ReductStore
 
 - Create an asynchronous session using `ReductClient`.
-
 - Access the desired bucket within ReductStore.
-
 - Create a batch object to store multiple blobs and write them to the bucket.
-
 - Write the batch to the bucket and clear it for the next set of blobs. In our example, we write blobs in chunks of 80 or until the batch size exceeds 8 MB.
-
-<!-- -->
 
 ```python
 async def write_to_reduct():
@@ -250,11 +236,8 @@ The results show that ReductStore outperforms MongoDB with GridFS enabled across
 When selecting a database for blob storage, other criteria than performance must be taken into account:
 
 - **Retention policy**: both ReductStore and MongoDB offer distinct retention strategies. ReductStore uses disk utilization-based policies, essential for edge computing and IoT. MongoDB's time-series collections, on the other hand, can automatically purge documents after a set period of time, useful for managing data lifecycle when dealing with non-blob data such as numerical values or logs in time series scenarios.
-
 - **Replication features**: Replication in ReductStore is append-only, with label-based filtering options. This feature can contribute to an effective data reduction strategy by selectively replicating relevant blobs. MongoDB, on the other hand, offers replication sets for high availability and redundancy, ensuring data integrity and fault tolerance in distributed environments.
-
 - **License Consideration**: MongoDB is governed by the Server Side Public License (SSPL), asking service providers using MongoDB to open source their modifications. ReductStore, under the Business Source License 1.1 (BSL), allows production use, subject to payment for larger companies, and transitions to the Mozilla Public License Version 2.0 (MPL-2.0) after three years.
-
 - **Cost considerations**: ReductStore's pricing model is based on storage which aligns well with retention policies based on data volume for a predictable cost structure. MongoDB's pricing is based on instance size and usage, which can be more complex to estimate.
 
 ## Conclusion

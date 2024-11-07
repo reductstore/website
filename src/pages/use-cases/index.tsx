@@ -1,8 +1,8 @@
 import React from "react";
 import Layout from "@theme/Layout";
-import SimpleHeader from "@site/src/components/SimpleHeader";
+import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import styles from "./styles.module.css";
-import UseCaseCards from "@site/src/components/UseCaseCards";
+import UseCaseCards from "@site/src/components/useCases/UseCaseCards";
 import clsx from "clsx";
 import useCases from "@site/src/data/useCasesData";
 

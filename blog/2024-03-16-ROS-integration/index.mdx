@@ -16,7 +16,7 @@ Processing camera output with computer vision requires efficient solutions to ha
 
 Addressing this challenge, this blog post will guide you through setting up ROS 2 with ReductStore—a time-series database for unstructured data optimized for edge computing, ensuring your robotic applications can process and store camera outputs effectively.
 
-<!--truncate-->
+{/* truncate */}
 
 ## ROS 2 distributions
 
@@ -25,10 +25,7 @@ To install ROS 2, you'll need to select a distribution that aligns with your pro
 Among them, two distributions are currently actively maintained :
 
 - **Iron Irwini** (`iron`) (Release date: May 23rd, 2023; End of life: November 2024)
-
 - **Humble Hawksbill** (`humble`) (Release date: May 23rd, 2022; End of life: May 2027)
-
-<!-- -->
 
 We recommend the `humble` distribution for its long-term support until May 2027. This is the eighth release of ROS 2 and caters to various platforms including Ubuntu Linux, Windows, RHEL (Red Hat Enterprise Linux), or macOS.
 
@@ -39,14 +36,9 @@ To install the Humble Hawksbill distribution on your preferred operating system,
 Integrating ReductStore with ROS provides many benefits for robotic applications:
 
 - **Best performance**: ReductStore's time-series design is tailored to the sequential nature of robotic applications and optimized for unstructured data, such as images, audio, and sensor readings.
-
 - **Real-time data management**: ReductStore provides real-time First In First Out (FIFO) quota management, which is critical for maintaining a balance between storage space and continuous data flow on edge devices.
-
 - **Metadata association**: It supports the association of labels or AI-generated analytics results directly with each stored record, enriching the dataset and facilitating subsequent processing or machine learning tasks.
-
 - **Replication**: ReductStore offers the ability to replicate data across a distributed network based on user-defined filters. For instance, to copy important data to a central server or cloud storage for further analysis.
-
-<!-- -->
 
 ## Example to capture and store raw camera images
 
@@ -174,10 +166,7 @@ The `store_data` method is designed to receive timestamped image data and write 
 To store data, we need at least two parameters:
 
 - **Timestamp Parameter**: The `timestamp` argument ensures that each piece of data can be associated with the exact time it was captured.
-
 - **Data Serialization**: The `data` parameter expects a byte stream, which implies that image messages from ROS need to be serialized before being passed to this function.
-
-<!-- -->
 
 With these considerations in mind, here's how you can define the `store_data` method within the `ImageListener` class:
 
@@ -201,8 +190,6 @@ class ImageListener(Node):
 When the `store_data` method is called, it first checks if the bucket has been initialized. If not, it calls the `init_bucket` method to create the bucket. Then, it writes the serialized data to the bucket entry `image` with the provided timestamp.
 
 As you can see, the `store_data` method is designed to be non-blocking, ensuring that the main thread can continue processing other tasks without waiting for the data to be stored.
-
-<!-- -->
 
 ## Testing the image storage system
 
