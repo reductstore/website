@@ -169,7 +169,7 @@ const ImageWithLabels: React.FC<ImageWithLabelsProps> = ({
       case "imdb":
         return (
           <div className={styles.imageLabels}>
-            <p>Image number: {imageNumber}</p>
+            <p>ID: {imageNumber}</p>
             <p>Name: {String(image.labels.name).slice(2, -1)}</p>
             <p>Gender: {image.labels.gender === "1.0" ? "Male" : "Female"}</p>
             <p>Photo Taken: {Number(image.labels.photo_taken)}</p>
