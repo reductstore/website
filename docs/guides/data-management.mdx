@@ -112,11 +112,11 @@ import DeleteRecordsCli from "!!raw-loader!../examples/cli/data_management_delet
   <TabItem value="C++">
     <CodeBlock language="cpp">{DeleteRecordsCpp}</CodeBlock>
   </TabItem>
+    <TabItem value="CLI">
+    <CodeBlock language="bash">{DeleteRecordsCli}</CodeBlock>
+  </TabItem>
   <TabItem value="cURL">
     <CodeBlock language="bash">{DeleteRecordsCurl}</CodeBlock>
-  </TabItem>
-  <TabItem value="CLI">
-    <CodeBlock language="bash">{DeleteRecordsCli}</CodeBlock>
   </TabItem>
 </Tabs>
 
@@ -163,6 +163,6 @@ import DeleteRecordsRangeCli from "!!raw-loader!../examples/cli/data_management_
   </TabItem>
 </Tabs>
 
-:::warn
+:::warning
 Deleting records in a time range is a heavy operation and may take a long time to complete because it copies the retained records to new blocks and deletes the old ones.
 :::
