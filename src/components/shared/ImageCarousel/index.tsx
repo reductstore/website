@@ -145,6 +145,7 @@ const ImageCarousel = () => {
           <ImageWithLabels
             key={index}
             image={image}
+            imageNumber={start + index + 1}
             showLabels={showLabels}
             dataset={dataset}
           />

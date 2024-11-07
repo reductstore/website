@@ -4,6 +4,7 @@ import { ImageWithLabelsProps } from "./ImageCarousel.types";
 
 const ImageWithLabels: React.FC<ImageWithLabelsProps> = ({
   image,
+  imageNumber,
   showLabels,
   dataset,
 }) => {
@@ -168,6 +169,7 @@ const ImageWithLabels: React.FC<ImageWithLabelsProps> = ({
       case "imdb":
         return (
           <div className={styles.imageLabels}>
+            <p>Image number: {imageNumber}</p>
             <p>Name: {String(image.labels.name).slice(2, -1)}</p>
             <p>Gender: {image.labels.gender === "1.0" ? "Male" : "Female"}</p>
             <p>Photo Taken: {Number(image.labels.photo_taken)}</p>
@@ -181,11 +183,16 @@ const ImageWithLabels: React.FC<ImageWithLabelsProps> = ({
       case "mnist_training":
         return (
           <div className={styles.imageLabels}>
-            <p>Digit: {Number(image.labels.digit)}</p>
+            <p>Image number: {imageNumber}</p>
+            <p>Digit in picture: {Number(image.labels.digit)}</p>
           </div>
         );
       default:
-        return null;
+        return (
+          <div className={styles.imageLabels}>
+            <p>Image number: {imageNumber}</p>
+          </div>
+        );
     }
   };
 

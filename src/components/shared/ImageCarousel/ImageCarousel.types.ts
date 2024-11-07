@@ -7,6 +7,7 @@ export interface ImageWithLabelsItem {
 
 export interface ImageWithLabelsProps {
   image: ImageWithLabelsItem;
+  imageNumber: number;
   showLabels: boolean;
   dataset: string;
 }
