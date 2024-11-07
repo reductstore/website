@@ -208,8 +208,6 @@ plt.show()
 
 Here we see kurtosis values for square, sine, zero-centered normally distributed noise with unit standard deviation (which results in a value near 3), and the same noise with added high peaks, that affect a tail of the distribution and increase kurtosis.
 
-Alternatively, the Scipy implementation `scipy.stats.kurtosis`, can be used, but by default it returns the so-called Kurtosis Excess, which differs from kurtosis by -3, so that outputs 0 instead of 3 for normally distributed signal. To switch to the defunition described above, use `scipy.stats.kurtosis(window, fisher=False)`.
-
 **Skewness**, the 3rd standardized moment, reflects asymmetry in amplitudes, which in turn may be caused by any mechanical asymmetry like rubbing of rotating parts, specific wear, etc. As said above, it may be hard to interpret skewness in acceleration in terms of mechanics, and for some mechanical systems skewness may be nonzero by design, so in most cases it should be analyzed in comparison to the proven reference normal state of the machine. Also, skewness as a measure of directed acceleration impulses, may strongly depend on the orientation of the sensor. With this directional selectivity, it may be useful for discovering subtle, but meaningful changes in operation.
 
 in Python, skewness can be found as follows:
@@ -383,4 +381,3 @@ Python is a great tool for performing both basic and advanced signal analysis, i
 
 Thanks for reading.
 If you have any questions or comments, feel free to use the [**ReductStore Community Forum**](https://community.reduct.store).
-
