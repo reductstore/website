@@ -1,9 +1,9 @@
 import React from "react";
-import SimpleHeader from "@site/src/components/SimpleHeader";
+import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
 
-import ImageCarousel from "@site/src/components/ImageCarousel";
+import ImageCarousel from "@site/src/components/shared/ImageCarousel";
 
 export default function RemoteDatasetsPage(): JSX.Element {
   return (

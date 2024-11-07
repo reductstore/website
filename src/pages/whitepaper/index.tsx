@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import SimpleHeader from "@site/src/components/SimpleHeader";
+import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import Layout from "@theme/Layout";
-import WhitePaperForm from "@site/src/components/WhitePaperForm";
+import WhitePaperForm from "@site/src/components/forms/WhitePaperForm";
 
 import styles from "./styles.module.css";
 import clsx from "clsx";
-import BulletPointItem from "@site/src/components/BulletPointItem";
+import BulletPointItem from "@site/src/components/shared/BulletPointItem";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import Modal from "@site/src/components/Modal";
+import Modal from "@site/src/components/shared/Modal";
 
 const WhitePaperImg =
   require("@site/static/img/whitepaper/whitepaper.webp").default;

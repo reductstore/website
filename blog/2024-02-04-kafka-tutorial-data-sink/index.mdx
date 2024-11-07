@@ -22,7 +22,7 @@ This guide builds upon an existing tutorial which provides detailed steps for in
 
 You can also find the code for this tutorial in the [**kafka_to_reduct demo**](https://github.com/reductstore/reduct-kafka-example/) on GitHub.
 
-<!--truncate-->
+{/* truncate */}
 
 **Table of Contents**
 
@@ -213,10 +213,7 @@ When a message is fetched successfully without errors, its headers can be decode
 Subsequently, this composite data structure is written into ReductStore using the bucket's `write` method:
 
 - The kafka headers information can be stored in `labels`
-
 - The binary data can be written in a bucket under a certain entry. In our case, we used the `topic_name` as the entry name for the bucket
-
-<!-- -->
 
 ## Conclusion
 

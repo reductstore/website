@@ -8,8 +8,6 @@ date: 2024-05-16
 image: ./img/social-card.jpg
 ---
 
-import ConsultationBanner from "@site/src/components/ConsultationBanner";
-
 ![Photo by Jan Antonin Kolar](./img/jan-antonin-kolar.webp)
 
 <small style={{ display: "block", marginTop: "-20px" }}>
@@ -43,8 +41,6 @@ Let's get started!
 | Large volumes of unstructured or semi-structured data | NoSQL                      | MongoDB, Amazon DynamoDB, Apache Cassandra                 |
 | Large amounts of blob data (multimedia files)         | Blob Storage               | Azure Blob Storage, Google Cloud Storage, Amazon, MinIO S3 |
 | Strong data consistency and complex relationships     | Relational                 | MySQL, PostgreSQL, Oracle Database                         |
-
-<ConsultationBanner />
 
 ## Brief explanation of MQTT and its use in IoT projects
 
@@ -130,7 +126,6 @@ In addition, if you plan on performing analytics on your MQTT data, you will nee
 Cost is another important factor to consider when selecting a storage solution. Overall, the cost of a database can be broken down into two categories:
 
 - Upfront costs include the initial purchase price of the database, along with any additional hardware or software required to run it.
-
 - Ongoing costs include maintenance fees, support fees, and any other recurring expenses associated with using the database.
 
 It is essential to consider both the upfront and ongoing costs when evaluating different storage solutions to ensure that the chosen database is affordable and cost-effective in the long run.
@@ -155,11 +150,8 @@ They provide built-in functions and query capabilities that are well-suited for 
 Some popular time-series databases that are commonly used for storing MQTT data include:
 
 - [**ReductStore**](/): a specialized time-series database designed for storing MQTT data in the form of time-series blob data. It allows for storing unstructured data (blobs) along with their associated timestamps, making it suitable for scenarios where MQTT data includes large textual information, images, audio, videos, or other types of binary files.
-
 - **InfluxDB**: an open-source database that provides high-performance storage and retrieval of time-stamped data with a SQL-like query language. You can store numbers (integer or floating point values), boolean values, or text strings–with a limit of 64KB–that's 4000 times less than MQTT's payload capacity.
-
 - **TimescaleDB**: an extension of PostgreSQL that adds time-series capabilities to the relational database model. It provides scalability and performance optimizations for handling large volumes of time-stamped data while maintaining the flexibility of a relational database. If you are interested in learning more about the differences between ReductStore and TimescaleDB, you can check out our article [**ReductStore vs. TimescaleDB**](/blog/comparisons/iot/reductstore-vs-timescaledb).
-
 - **Prometheus**: another widely used open-source monitoring system and time-series database designed for collecting metrics from various sources. It offers powerful querying capabilities, alerting functionalities, and easy integration with Grafana (an open-source visualization and monitoring tool).
 
 ### NoSQL databases
@@ -171,9 +163,7 @@ NoSQL databases are often famous for storing MQTT data due to their flexibility 
 Some popular NoSQL databases commonly used for storing MQTT data include:
 
 - **MongoDB**: a document-oriented database with high scalability and flexibility for handling unstructured or semi-structured data. It offers rich querying capabilities, indexing options, and support for distributed data storage with a technique called _sharding_. Some of the differences between ReductStore and MongoDB are discussed in our article [**ReductStore vs. MongoDB**](/blog/comparisons/iot/reductstore-vs-mongodb).
-
 - **Apache Cassandra**: a highly scalable and fault-tolerant database that can handle large volumes of data across multiple nodes or clusters. It provides fast read and write operations, making it suitable for real-time analytics or applications with high throughput requirements.
-
 - **Amazon DynamoDB**: a NoSQL database which is fully managed. Meaning that it offers automatic scaling, low latency access to data, durability guarantees, and integration with other AWS services.
 
 ### Blob storage
@@ -189,11 +179,8 @@ If you need to install a blob storage on your edge device, you should consider M
 Then, there are well-known cloud service providers:
 
 - **Azure Blob Storage**: a scalable and highly available object storage service provided by Microsoft Azure. They offer various storage tiers, so you can optimize cost and performance based on your requirements. They also provides features like lifecycle management, versioning, and data encryption.
-
 - **Google Cloud Storage**: a globally distributed object storage service offered by Google Cloud Platform. They provide trustworthy and scalable databases for storing large amounts of blob data. They also provide a way to optimize cost and performance with different storage classes and pricing options.
-
 - **Amazon S3**: a widely used object storage service thanks to its global infrastructure and integration with other AWS services. They also provide features like lifecycle policies, versioning, and server-side encryption.
-
 - **MinIO**: an open-source object storage system that is compatible with Amazon S3 and provides high performance and scalability for storing large amounts of unstructured data. It is designed to be lightweight and easy to deploy on edge devices or in the cloud. For more information about MinIO, you can check out our article [**Performance Comparison: ReductStore vs. MinIO**](/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio).
 
 ### Relational databases
@@ -205,9 +192,7 @@ Relational databases use tables with predefined schemas to store data, allowing 
 Some popular relational database management systems (RDBMS) that are commonly used include MySQL, PostgreSQL, or Oracle Database.
 
 - **MySQL**: an open-source RDBMS that is widely used in IoT projects due to its simplicity, reliability, and scalability. It offers strong data consistency and supports efficient querying using SQL.
-
 - **PostgreSQL**: another popular open-source RDBMS known for its robustness, extensibility, and support for advanced features like JSON data types and spatial indexing.
-
 - **Oracle Database**: a commercial RDBMS with a proven track record in handling multiple databases. It offers advanced security features and analytics capabilities.
 
 ## Conclusion

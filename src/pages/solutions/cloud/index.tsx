@@ -1,10 +1,10 @@
 import React from "react";
 import Layout from "@theme/Layout";
 import styles from "./styles.module.css";
-import UseCaseRow from "@site/src/components/UseCaseRow";
-import Faq from "@site/src/components/Faq";
-import SimpleHeaderWithForm from "@site/src/components/SimpleHeaderWithForm";
-import PromotionalWaitingList from "@site/src/components/PromotionalWaitingList";
+import UseCaseRow from "@site/src/components/useCases/UseCaseRow";
+import Faq from "@site/src/components/shared/Faq";
+import SimpleHeaderWithForm from "@site/src/components/shared/SimpleHeaderWithForm";
+import PromotionalWaitingList from "@site/src/components/promotional/PromotionalWaitingList";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import ThemedImage from "@theme/ThemedImage";
 
@@ -16,6 +16,7 @@ export default function CloudSolution(): JSX.Element {
     >
       <main>
         <SimpleHeaderWithForm
+          formId="cloud-waiting-list-form-top"
           title="Cloud Time Series Object Storage"
           subtitle="High-performance cloud storage for data of any size—images, text, sensor data, and more"
           benefits={[
@@ -52,6 +53,7 @@ export default function CloudSolution(): JSX.Element {
           </>
           <div className={styles.form}>
             <PromotionalWaitingList
+              formId="cloud-waiting-list-form-bottom"
               title="Join the Waiting List"
               subtitle="Join the waiting list for early access to ReductStore's cloud storage solution and updates"
             />

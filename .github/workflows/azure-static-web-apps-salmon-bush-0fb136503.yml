@@ -42,9 +42,9 @@ jobs:
           app_location: "/" # App source code path
           api_location: "api" # Api source code path - optional
           output_location: "build" # Built app content directory - optional
+          app_build_command: "npm run build:azure"
           ###### End of Repository/Build Configurations ######
         env:
-          CALENDAR_LINK: ${{ vars.CALENDAR_LINK }}
           APP_ENV: ${{ env.APP_ENV }}
 
   close_pull_request_job:
