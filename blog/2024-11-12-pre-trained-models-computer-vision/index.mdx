@@ -20,55 +20,48 @@ However, computer vision models often require large datasets of labeled images o
 
 Here's what we'll cover in this article:
 
-* [**Why Use Pre-Trained Models for Image Classification?**](#why-use-pre-trained-models-for-image-classification)
-* [**Key Criteria for Choosing a Pre-Trained Model**](#key-criteria-for-choosing-a-pre-trained-model)
-* [**Top Resources for Finding Pre-Trained Models in Image Classification**](#top-resources-for-finding-pre-trained-models-in-image-classification)
-* [**Fine-Tune a Pre-Trained Model with Roboflow**](#fine-tune-a-pre-trained-model-with-roboflow)
-* [**Best Practices**](#best-practices)
-    
+- [**Why Use Pre-Trained Models for Image Classification?**](#why-use-pre-trained-models-for-image-classification)
+- [**Key Criteria for Choosing a Pre-Trained Model**](#key-criteria-for-choosing-a-pre-trained-model)
+- [**Top Resources for Finding Pre-Trained Models in Image Classification**](#top-resources-for-finding-pre-trained-models-in-image-classification)
+- [**Fine-Tune a Pre-Trained Model with Roboflow**](#fine-tune-a-pre-trained-model-with-roboflow)
+- [**Best Practices**](#best-practices)
 
-Why Use Pre-Trained Models for Image Classification?
-====================================================
+# Why Use Pre-Trained Models for Image Classification?
 
-Training computer vision models from scratch presents several significant challenges that can impact project timelines and budget allocations. Firstly, the process demands extensive computational resources and high-performing GPUs, which can be expensive to access and maintain. Additionally, it requires massive labeled datasets - often hundreds of thousands of images and videos - which are time-consuming and expensive to collect, clean, and annotate. 
+Training computer vision models from scratch presents several significant challenges that can impact project timelines and budget allocations. Firstly, the process demands extensive computational resources and high-performing GPUs, which can be expensive to access and maintain. Additionally, it requires massive labeled datasets - often hundreds of thousands of images and videos - which are time-consuming and expensive to collect, clean, and annotate.
 
 When training from scratch, the process itself can extend to weeks or even months, depending on the model's complexity and dataset size, with no guarantee of achieving desired accuracy levels. Lastly, developing and training models from scratch involves complex architectural decisions and hyperparameter tuning, requiring in-depth technical knowledge of the domain.
 
 Pre-trained models address these challenges through _transfer learning_, and the key benefits include:
 
-*   **Resource Efficiency**: Minimizes computational and data requirements through existing learned parameters, reducing both infrastructure costs and data collection efforts.
-*   **Robust Feature Learning**: Uses advanced feature representations learned from large and diverse datasets, providing better initial performance and more stable learning dynamics.
-*   **Reduced Development Time**: Significantly reduces implementation time from weeks to days or even hours.
-*   **Better Generalization**: Provides more robust performance across multiple scenarios compared to models trained on limited datasets due to broad exposure to different patterns and features during pre-training.
-*   **Proven Architecture**: Benefits from architectures that have been tested and validated by the research community, reducing the risk of structural issues and optimization problems.
-    
+- **Resource Efficiency**: Minimizes computational and data requirements through existing learned parameters, reducing both infrastructure costs and data collection efforts.
+- **Robust Feature Learning**: Uses advanced feature representations learned from large and diverse datasets, providing better initial performance and more stable learning dynamics.
+- **Reduced Development Time**: Significantly reduces implementation time from weeks to days or even hours.
+- **Better Generalization**: Provides more robust performance across multiple scenarios compared to models trained on limited datasets due to broad exposure to different patterns and features during pre-training.
+- **Proven Architecture**: Benefits from architectures that have been tested and validated by the research community, reducing the risk of structural issues and optimization problems.
 
-Key Criteria for Choosing a Pre-Trained Model
-=============================================
+# Key Criteria for Choosing a Pre-Trained Model
 
 When selecting a pre-trained model for image classification, several critical considerations come into play:
 
-*   **Model Accuracy**: While accuracy serves as the primary metric due to its simplicity, it shouldn't be the sole determining factor. Precision, recall, and F1 scores offer deeper insights into model performance, especially with imbalanced datasets. For specialized tasks, object detection models utilize mAP, while segmentation tasks rely on mIoU for quality evaluation.
-*   **Model Architecture Complexity**: The complexity of the model is also a deciding factor when it comes to choosing a pre-trained model, particularly in edge deployment scenarios. While deeper networks with numerous convolutional and dense layers might achieve superior accuracy, they often come with significant computational overhead. A model with millions of parameters might excel in a cloud environment but prove impractical for edge devices with limited processing power and memory constraints. For edge applications, apart from the performance metrics, developers should also consider the processing times, the model's size, and the power consumption.
-*   **Accessibility and compatibility**: The model's integration capabilities are crucial factors. Different models may have varying levels of compatibility with frameworks, programming languages, and runtime environments, which can significantly impact implementation timelines and development complexity.
-    
+- **Model Accuracy**: While accuracy serves as the primary metric due to its simplicity, it shouldn't be the sole determining factor. Precision, recall, and F1 scores offer deeper insights into model performance, especially with imbalanced datasets. For specialized tasks, object detection models utilize mAP, while segmentation tasks rely on mIoU for quality evaluation.
+- **Model Architecture Complexity**: The complexity of the model is also a deciding factor when it comes to choosing a pre-trained model, particularly in edge deployment scenarios. While deeper networks with numerous convolutional and dense layers might achieve superior accuracy, they often come with significant computational overhead. A model with millions of parameters might excel in a cloud environment but prove impractical for edge devices with limited processing power and memory constraints. For edge applications, apart from the performance metrics, developers should also consider the processing times, the model's size, and the power consumption.
+- **Accessibility and compatibility**: The model's integration capabilities are crucial factors. Different models may have varying levels of compatibility with frameworks, programming languages, and runtime environments, which can significantly impact implementation timelines and development complexity.
 
-Top Resources for Finding Pre-Trained Models in Image Classification
-====================================================================
+# Top Resources for Finding Pre-Trained Models in Image Classification
 
 There are so many available that finding pre-trained models can be overwhelming, but several platforms have proven to be useful resources for finding and implementing state-of-the-art image classification models. You can find a summarized version of my go to platforms in the table below:
 
-| **Platform** | **Overview** | **Key Features** | **Implementation Example** |
-|---|---|---|---|
-| PapersWithCode | A research-focused platform that closes the gap between academic work and practical implementation. | <ul> <li>State-of-the-art leaderboard</li> <li>Direct links to research papers</li> <li>Lots of benchmarks</li> <li>GitHub implementation links</li> </ul> | Find top-performing models for specific tasks, such as facial recognition, by filtering benchmarks and accessing implementation code directly through linked repositories. |
-| Roboflow Universe | A broad computer vision platform that focuses on practical applications and provides end-to-end solutions. | <ul> <li>Curated datasets and models</li> <li>Industry-specific solutions</li> <li>Easy export and deployment</li> <li>Community insights</li> </ul> | Access pre-trained models for anomaly detection in manufacturing, with deployment guidelines and sample applications |
-| Hugging Face | A hub for transformers and ML models, known for its extensive model repository and active community support. | <ul> <li>Good model documentation</li> <li>Fine-tuning scripts</li> <li>Version control</li> <li>Community discussions</li> </ul> | Find highly specialized models, such as bird species identification, with exhaustive performance metrics. |
-| Kaggle | A competitive data science platform  that hosts competitions and serves as a repository for collaborative notebooks | <ul> <li>Interactive notebooks</li> <li>Competition-winning models</li> <li>Community discussions</li> <li>End-to-end tutorials</li> </ul> | Learn new approaches and customize notebooks for your own data sets. |
-| TensorFlow Hub | Google's official model repository for TensorFlow, dedicated to production-ready models. | <ul> <li>TensorFlow models</li> <li>Mobile and browser friendly models</li> </ul> | Deploy efficient models for mobile applications with minimal setup. |
-| PyTorch Hub | Meta's official model repository for PyTorch, featuring research-oriented implementations and seamless integration with PyTorch. | <ul> <li>PyTorch models</li> <li>Research-focused implementations</li> <li>Extensive documentation</li> </ul> | Implement complex architectures with detailed examples and performance guidelines. |
+| **Platform**      | **Overview**                                                                                                                     | **Key Features**                                                                                                                                           | **Implementation Example**                                                                                                                                                 |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| PapersWithCode    | A research-focused platform that closes the gap between academic work and practical implementation.                              | <ul> <li>State-of-the-art leaderboard</li> <li>Direct links to research papers</li> <li>Lots of benchmarks</li> <li>GitHub implementation links</li> </ul> | Find top-performing models for specific tasks, such as facial recognition, by filtering benchmarks and accessing implementation code directly through linked repositories. |
+| Roboflow Universe | A broad computer vision platform that focuses on practical applications and provides end-to-end solutions.                       | <ul> <li>Curated datasets and models</li> <li>Industry-specific solutions</li> <li>Easy export and deployment</li> <li>Community insights</li> </ul>       | Access pre-trained models for anomaly detection in manufacturing, with deployment guidelines and sample applications                                                       |
+| Hugging Face      | A hub for transformers and ML models, known for its extensive model repository and active community support.                     | <ul> <li>Good model documentation</li> <li>Fine-tuning scripts</li> <li>Version control</li> <li>Community discussions</li> </ul>                          | Find highly specialized models, such as bird species identification, with exhaustive performance metrics.                                                                  |
+| Kaggle            | A competitive data science platform that hosts competitions and serves as a repository for collaborative notebooks               | <ul> <li>Interactive notebooks</li> <li>Competition-winning models</li> <li>Community discussions</li> <li>End-to-end tutorials</li> </ul>                 | Learn new approaches and customize notebooks for your own data sets.                                                                                                       |
+| TensorFlow Hub    | Google's official model repository for TensorFlow, dedicated to production-ready models.                                         | <ul> <li>TensorFlow models</li> <li>Mobile and browser friendly models</li> </ul>                                                                          | Deploy efficient models for mobile applications with minimal setup.                                                                                                        |
+| PyTorch Hub       | Meta's official model repository for PyTorch, featuring research-oriented implementations and seamless integration with PyTorch. | <ul> <li>PyTorch models</li> <li>Research-focused implementations</li> <li>Extensive documentation</li> </ul>                                              | Implement complex architectures with detailed examples and performance guidelines.                                                                                         |
 
-Fine-Tune a Pre-Trained Model with Roboflow
-===========================================
+# Fine-Tune a Pre-Trained Model with Roboflow
 
 In this section, we'll walk you through the process of fine-tuning a model for the [**‘rock-paper-scissors' object detection task in Roboflow**](https://universe.roboflow.com/roboflow-58fyf/rock-paper-scissors-sxsw). This example will focus on dataset preparation, model selection, model training, fine-tuning, and deployment. Please note that for the sake of simplicity, we will be using an already labeled dataset that is publicly available on Roboflow. If you are in need of an efficient data management solution, consider exploring [**ReductStore**](/) as a solution to optimize edge-to-cloud image storage.
 
@@ -87,7 +80,6 @@ Finding an appropriate model for the task requires some research on the platform
 In our case, after exploring various options, we found a project on Kaggle, [**Rock Paper Scissors Detection using YOLOV11**](https://www.kaggle.com/code/abdallahwagih/rock-paper-scissors-detection-using-yolov11), which showed that YOLOv11 could perform very well on such a task, so we decided to proceed with this model as our pre-trained model of choice.
 
 3.  **Fine-tuning and Training the Model**
-    
 
 With the model selected and the dataset prepared, we can move on to fine-tuning and training the model. The initial setup includes installing the necessary packages, authenticating with Roboflow, and downloading the dataset. Here is an example from a Jupyter Notebook available in the [**reduct-roboflow-example repository**](https://github.com/reductstore/reduct-roboflow-example):
 
@@ -126,20 +118,17 @@ Once training is complete, you can deploy your fine-tuned YOLOv11 model to Robof
 !project.version(dataset.version).deploy(model_type="yolov11", model_path=f"{HOME}/runs/detect/train/")
 ```
 
-After uploading the model, go to the Deployment tab in your Roboflow project to access your custom-trained model. You can [**use this model for inference either in the cloud or for edge deployment**](/blog/roboflow-reductstore#cloud-vs-edge-deployment) depending on your specific requirements. 
+After uploading the model, go to the Deployment tab in your Roboflow project to access your custom-trained model. You can [**use this model for inference either in the cloud or for edge deployment**](/blog/roboflow-reductstore#cloud-vs-edge-deployment) depending on your specific requirements.
 
-Best Practices 
-===============
+# Best Practices 
 
 Here are some best practices to maintain model performance and data quality over time:
 
-*   **Select appropriate evaluation metrics**: It is important to monitor general accuracy metrics such as overall accuracy, precision, recall, mAP, as well as operational performance metrics such as inference time, model size, and resource usage.
-*   **Implement continuous monitoring**: Regularly tracking model performance is the only way to detect degradation in accuracy over time. You can monitor confidence levels across classes and look for "patterns" of misclassification.
-*   **Use an efficient data storage system**: A robust data storage solution keeps your training samples organized and easy to retrieve, helping you quickly update and maintain models. Solutions like [**ReductStore**](/) are designed specifically for this purpose, making data handling smoother and more effective.
-    
+- **Select appropriate evaluation metrics**: It is important to monitor general accuracy metrics such as overall accuracy, precision, recall, mAP, as well as operational performance metrics such as inference time, model size, and resource usage.
+- **Implement continuous monitoring**: Regularly tracking model performance is the only way to detect degradation in accuracy over time. You can monitor confidence levels across classes and look for "patterns" of misclassification.
+- **Use an efficient data storage system**: A robust data storage solution keeps your training samples organized and easy to retrieve, helping you quickly update and maintain models. Solutions like [**ReductStore**](/) are designed specifically for this purpose, making data handling smoother and more effective.
 
-Conclusion
-==========
+# Conclusion
 
 Pre-trained models have truly changed the way we approach image classification and provide a foundation for custom applications. We can all accelerate the way we develop models by using platforms like PapersWithCode, Roboflow Universe, Hugging Face, Kaggle, TensorFlow Hub, and PyTorch Hub.
 
