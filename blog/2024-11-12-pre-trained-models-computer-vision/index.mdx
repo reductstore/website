@@ -65,7 +65,7 @@ There are so many available that finding pre-trained models can be overwhelming,
 
 In this section, we'll walk you through the process of fine-tuning a model for the [**‘rock-paper-scissors' object detection task in Roboflow**](https://universe.roboflow.com/roboflow-58fyf/rock-paper-scissors-sxsw). This example will focus on dataset preparation, model selection, model training, fine-tuning, and deployment. Please note that for the sake of simplicity, we will be using an already labeled dataset that is publicly available on Roboflow. If you are in need of an efficient data management solution, consider exploring [**ReductStore**](/) as a solution to optimize edge-to-cloud image storage.
 
-1.  **Preparing the Dataset**
+### Preparing the Dataset
 
 The first step of the training process is to find a suitable dataset. You can either create and label your own dataset from scratch or, more conveniently, find a pre-existing one on platforms like Kaggle and Roboflow Universe. For this example, we'll use a [**labeled dataset of over 7,000 images**](https://universe.roboflow.com/roboflow-58fyf/rock-paper-scissors-sxsw/dataset/14) provided by the previously mentioned _rock-paper-scissors_ project.
 
@@ -73,13 +73,13 @@ In your Roboflow workspace project dashboard, navigate to the _Versions_ tab to 
 
 ![Roboflow Dashboard](./img/roboflow_dashboard.png)
 
-2.  **Model Selection**
+### Model Selection
 
 Finding an appropriate model for the task requires some research on the platforms discussed in the previous section, but we should also look at model accuracy, hardware limitations, and latency requirements as discussed in the [**Computer Vision Made Simple with ReductStore and Roboflow (Model Selection Criteria).**](/blog/roboflow-reductstore#criteria-for-model-selection)
 
 In our case, after exploring various options, we found a project on Kaggle, [**Rock Paper Scissors Detection using YOLOV11**](https://www.kaggle.com/code/abdallahwagih/rock-paper-scissors-detection-using-yolov11), which showed that YOLOv11 could perform very well on such a task, so we decided to proceed with this model as our pre-trained model of choice.
 
-3.  **Fine-tuning and Training the Model**
+### Fine-tuning and Training the Model
 
 With the model selected and the dataset prepared, we can move on to fine-tuning and training the model. The initial setup includes installing the necessary packages, authenticating with Roboflow, and downloading the dataset. Here is an example from a Jupyter Notebook available in the [**reduct-roboflow-example repository**](https://github.com/reductstore/reduct-roboflow-example):
 
@@ -110,7 +110,7 @@ This command initiates model training, and when it's complete, you'll have acces
 
 ![Confusion Matrix](./img/confusion_matrix.png)
 
-4.  **Deployment**
+### Deployment
 
 Once training is complete, you can deploy your fine-tuned YOLOv11 model to Roboflow with the following command:
 
