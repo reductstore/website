@@ -10,9 +10,7 @@ image: ./img/transfer_vs_no_transfer.drawio.png
 
 ![Transfer vs No Transfer Learning](./img/transfer_vs_no_transfer.drawio.png)
 
-A pre-trained model is a neural network that has already been trained on a large dataset to perform specific tasks, such as image classification or object detection. In today's rapidly changing field of computer vision, these models are highly valuable, allowing developers to build on previous knowledge rather than starting from scratch.
-
-By using pre-trained models, teams can save significant time and resources, improve accuracy, and focus on optimizing and fine-tuning models to meet their unique requirements.
+A pre-trained model is a neural network that has already been trained on a large dataset to perform specific tasks, such as image classification or object detection. These models are highly valuable, allowing us to build on previous knowledge rather than starting from scratch.
 
 However, computer vision models often require large datasets of labeled images or videos, which can quickly become challenging to manage, especially when sourced from continuous data streams. [**ReductStore**](/) addresses this need by providing an efficient and reliable time-series object store capable of handling large volumes of high-frequency, unstructured data such as video streams or labeled images. For practical guidance on implementing ReductStore and integrating it with Roboflow to develop high-performing computer vision models, refer to the guide: [**Computer Vision Made Simple with ReductStore and Roboflow.**](/blog/roboflow-reductstore)
 
@@ -44,9 +42,9 @@ Pre-trained models address these challenges through _transfer learning_, and the
 
 When selecting a pre-trained model for image classification, several critical considerations come into play:
 
-- **Model Accuracy**: While accuracy serves as the primary metric due to its simplicity, it shouldn't be the sole determining factor. Precision, recall, and F1 scores offer deeper insights into model performance, especially with imbalanced datasets. For specialized tasks, object detection models utilize mAP, while segmentation tasks rely on mIoU for quality evaluation.
-- **Model Architecture Complexity**: The complexity of the model is also a deciding factor when it comes to choosing a pre-trained model, particularly in edge deployment scenarios. While deeper networks with numerous convolutional and dense layers might achieve superior accuracy, they often come with significant computational overhead. A model with millions of parameters might excel in a cloud environment but prove impractical for edge devices with limited processing power and memory constraints. For edge applications, apart from the performance metrics, developers should also consider the processing times, the model's size, and the power consumption.
-- **Accessibility and compatibility**: The model's integration capabilities are crucial factors. Different models may have varying levels of compatibility with frameworks, programming languages, and runtime environments, which can significantly impact implementation timelines and development complexity.
+- **Model Accuracy**: While accuracy serves as the primary metric due to its simplicity, it shouldn't be the only determining factor. Precision, recall, and F1 scores offer deeper insights into model performance, especially with imbalanced datasets. Not to mention the mAP (mean Average Precision) metric, which is particularly useful for object detection tasks.
+- **Model Architecture Complexity**: The complexity of the model is also a deciding factor when it comes to choosing a pre-trained model, particularly in edge deployment scenarios. While deeper networks with a lot of convolutional and dense layers might achieve better accuracy, they often come with significant computational overhead. A model with millions of parameters may be great in a cloud environment, but impractical for edge devices with limited processing power and memory constraints. For edge applications in particular, we should consider processing times, model size and power consumption in addition to performance metrics.
+- **Accessibility and compatibility**: Different models may have varying levels of compatibility with frameworks, programming languages, and runtime environments, which can significantly impact implementation timelines and development complexity.
 
 ## Top Resources for Finding Pre-Trained Models in Image Classification
 
@@ -130,11 +128,11 @@ Here are some best practices to maintain model performance and data quality over
 
 ## Conclusion
 
-Pre-trained models have truly changed the way we approach image classification and provide a foundation for custom applications. We can all accelerate the way we develop models by using platforms like PapersWithCode, Roboflow Universe, Hugging Face, Kaggle, TensorFlow Hub, and PyTorch Hub.
+Pre-trained models have truly changed the way we approach image classification and provide a foundation for custom applications. We can all speed up the way we develop models by using platforms like Roboflow and by using pre-trained models from Hugging Face, TensorFlow Hub or PyTorch Hub. Not to mention Kaggle and PapersWithCode, which are also great resources for finding the latest research and implementations.
 
 One aspect that can be overlooked is the storage infrastructure that must be in place to store images and inference labels at the edge and in the cloud. [**ReductStore**](/)'s specialized capabilities provide the necessary infrastructure to handle billions of time-stamped images with AI labels.
 
-In closing, I'd like to encourage you to take the next step in your computer vision journey by exploring the above platforms to find the perfect state-of-the-art pre-trained model for your specific use case, and consider implementing a robust data management solution like ReductStore to complement your AI architecture.
+In closing, I'd like to encourage you to take the next step in your computer vision journey by exploring the above platforms to find the perfect state-of-the-art pre-trained model for your specific use case, and consider implementing a robust data management solution like ReductStore to complement your AI infrastructure.
 
 ---
 
