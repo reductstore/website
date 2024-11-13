@@ -1,0 +1,88 @@
+---
+title: Conditional Query Reference
+description: Learn how to use conditional queries to filter data in ReductStore.
+---
+
+Conditional Query is a query language based on JSON syntax that allows you to filter records in ReductStore using labels and their values.
+
+## Query Syntax
+
+The query object is a JSON object containing one or more conditions, a condition can be nested and have a tree-like structure.
+A condition can be written in one of two notations:
+
+- **object notation**: A condition is a key-value pair, where the key is the label reference and the value is an object with the operator and operand:
+
+  ```json
+  {
+      "&label_name": { "$gt": 10 }
+  }
+    ```
+
+- **Array notation**: A condition is a key-value pair where the key is the operator and the value is an array with its operands:
+
+  ```json
+  {
+      "$gt": ["&label_name", 10]
+  }
+    ```
+
+The query object can contain multiple conditions that are linked using the AND operator:
+
+```json
+{
+    "&label_name": { "$gt": 10 },
+    "&label_name": { "$lt": 20 }
+}
+```
+
+This is the same as
+
+```json
+{
+    "$and": [
+        { "&label_name": { "$gt": 10 } },
+        { "&label_name": { "$lt": 20 } }
+    ]
+}
+```
+
+The queries use a special naming convention for labels and operators to extend the JSON syntax with additional functionality:
+
+
+| Type     | Convention    | Description                                          |
+|----------|---------------|------------------------------------------------------|
+| Label    | "&label_name" | Reference to a label in the record starting with `&` |
+| Operator | "$operator"   | Reference to an operator starting with `$`           |
+| Constant | JSON types    | A constant value in the query, e.g. `10`, `"string"` |
+
+
+## Type System and Casting
+
+The query language supports a simple type system with four types: **boolean**, **integer**, **float**, and **string**:
+
+| Type    | Size   | Description                                     |
+|---------|--------|-------------------------------------------------|
+| boolean | 1      | Boolean value can be `true` or `false`          |
+| integer | 8      | Signed 64-bit integer                           |
+| float   | 8      | IEEE-754 double-precision floating-point number |
+| string  | 1-2^16 | UTF-8 encoded string                            |
+
+
+The storage engine stores a label as a string without any type information, so the query engine tries to parse its value to a type in the following order
+
+1. If a label has a value of true or false, it is converted to a boolean.
+2. If a label has a number without a decimal point, it is converted to an integer.
+3. If a label has a number with a decimal point, it is converted to a float.
+4. If all other conversions fail, it is converted to a string.
+
+
+During the execution of the query, the engine will try to cast types of operands to the same type.
+Logical operators like `$and`, `$or`, `$not` will cast the result to a boolean.
+Comparison and arithmetic operators will cast the operands to the most precise type in the following order:
+
+|             | boolean | integer | float | string |
+|-------------|---------|---------|-------|--------|
+| **boolean** | boolean | integer | float | -      |
+| **integer** | integer | integer | float | -      |
+| **float**   | float   | float   | float | -      |
+| **string**  | -       | -       | -     | string |

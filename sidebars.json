@@ -1,7 +1,6 @@
 {
   "docSidebar": [
     "how-does-it-work",
-
     {
       "type": "category",
       "label": "\uD83D\uDE80 Getting Started",
@@ -55,8 +54,13 @@
     },
     {
       "type": "category",
-      "label": "Integration",
-      "items": ["guides/integration/azure-vm"]
+        "label": "Conditional Query Reference",
+        "link": {
+          "type": "doc",
+          "id": "conditional-query/index"
+        },
+        "items": [
+        ]
     },
     {
       "type": "category",
@@ -86,6 +90,13 @@
         },
         "http-api/token-authentication",
         "http-api/replication-api"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Integration",
+      "items": [
+        "guides/integration/azure-vm"
       ]
     },
     {

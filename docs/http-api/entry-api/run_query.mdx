@@ -108,6 +108,15 @@ The request body should be a JSON object with the following parameters:
     // Records with any of the specified labels are excluded.
     exclude?: "Dict[string, string]"
 
+    // Optional. A conditional query to filter records.
+    when?: "object"
+
+    // Optional. Return a record every S seconds
+    each_s?: "float"
+
+    // Optional. Return only every N record
+    each_n?: "integer"
+
     // Optional. The maximum number of records to return.
     limit?: "integer"
 
@@ -124,13 +133,15 @@ The request body should be a JSON object with the following parameters:
   "query_type": "QUERY",
   "start": 1630000000000000,
   "end": 1630000001000000,
-  "include": {
-    "sensor": "temperature",
-    "location": "room1"
+  "when": {
+    "&label_name": { "$gt": 10 }
   },
   "limit": 100
 }
 ```
+
+If you use the `when` field in the query, read the [**Conditional Query Reference**](/docs/conditional-query/index.mdx) for more information.
+
 
 ## Retrieve Records
 
