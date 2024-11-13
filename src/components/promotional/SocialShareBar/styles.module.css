@@ -1,0 +1,44 @@
+.shareContainer {
+  text-align: center;
+  margin: 3rem 0;
+}
+
+.lineWithLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--reduct-dimmed-color);
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.lineWithLabel::before,
+.lineWithLabel::after {
+  content: "";
+  flex: 1;
+  height: 0.5px;
+  background-color: var(--reduct-dimmed-color);
+  margin: 0 0.5rem;
+}
+
+.shareIcons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.shareIcons a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: var(--reduct--background-white);
+  border-radius: 50%;
+  border: 1px solid #e5e5e5;
+  transition: transform 0.3s ease;
+}
+
+.shareIcons a:hover {
+  transform: translateY(-5px);
+}

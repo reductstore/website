@@ -14,15 +14,24 @@ jobs:
     runs-on: ubuntu-latest
     name: Test examples
     strategy:
+      max-parallel: 4
       matrix:
-        doc_version: [ next, 1.11.x, 1.10.x, 1.9.x ]
-        example: [ python, node, curl, cpp, rust, java, cli ]
+        doc_version: [next, 1.12.x, 1.11.x, 1.10.x, 1.9.x]
+        example: [python, node, curl, cpp, rust, cli]
         include:
           - doc_version: next
             reduct_version: main
             example_root: docs/examples
 
+          - doc_version: 1.12.x
+            reduct_version: v1.12.0
+            example_root: versioned_docs/version-1.12.x/examples/
+
           - doc_version: 1.11.x
+            reduct_version: v1.11.2
+            example_root: versioned_docs/version-1.11.x/examples/
+
+          - doc_version: 1.10.x
             reduct_version: latest
             example_root: versioned_docs/version-1.11.x/examples/
 

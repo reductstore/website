@@ -10,7 +10,7 @@ import rehypeKatex from "rehype-katex";
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "ReductStore",
-  tagline: "The Fastest Time Series Object Store for Edge AI",
+  tagline: "The Fastest Time Series Object Storage for AI Infrastructure",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
@@ -40,15 +40,29 @@ const config = {
     locales: ["en"],
   },
 
-  // Pass custom environment variables to the site
-  customFields: {
-    calendarLink: process.env.CALENDAR_LINK,
-  },
-
   plugins: [
     require.resolve("./src/plugins/docusaurus-plugin-matomo"),
+    require.resolve("./src/plugins/docusaurus-plugin-consent-manager"),
     require.resolve("./src/plugins/docusaurus-plugin-crisp"),
     require.resolve("./src/plugins/docusaurus-plugin-stream"),
+    [
+      require.resolve("./src/plugins/docusaurus-plugin-py-sdk-gen"),
+      {
+        sdkRepo: "https://github.com/reductstore/reduct-py.git",
+        sdkBranch: "main",
+        destination: "docs/sdk/py",
+        modules: [
+          "client",
+          "bucket",
+          "record",
+          "error",
+          "msg.bucket",
+          "msg.replication",
+          "msg.server",
+          "msg.token",
+        ],
+      },
+    ],
   ],
 
   // LaTex support
@@ -78,6 +92,7 @@ const config = {
             "Welcome to ReductStore's Blog – your source for expert articles, updates, and discussions on managing and leveraging time series databases for blob data in edge computing, computer vision, and IoT. Stay informed with our latest content.",
           blogSidebarTitle: "Recent posts",
           blogSidebarCount: 5,
+          postsPerPage: 3,
           showReadingTime: true,
           editUrl: "https://github.com/reductstore/docs/tree/main",
           remarkPlugins: [remarkMath],
@@ -127,6 +142,13 @@ const config = {
         devSuffix: "_dev_f19bac1b68c75bffed400ddd",
       },
 
+      // Consent management platform (CMP)
+      cmp: {
+        cookieyesId: "28ee242ee07e2579793c1355",
+        stagingCookieyesId: "3d9b3daecacd570c664904b4",
+        googleTagManagerId: "GTM-WBJ3M84W",
+      },
+
       // Crisp chat integration
       crisp: {
         siteId: "735614ef-d4bd-4d27-8700-aac9e08f8bc9",
@@ -154,6 +176,13 @@ const config = {
             "ReductStore, Time-Series Database, Blob Data Management, Edge Computing Database, IoT Data Solutions, Computer Vision Data Storage",
         },
       ],
+
+      // Blog year groupings
+      blog: {
+        sidebar: {
+          groupByYear: false,
+        },
+      },
 
       // Replace with your project's social card
       image: "img/reductstore-social-card.jpg",
@@ -191,6 +220,10 @@ const config = {
                 to: "/blog/comparisons/iot/reductstore-vs-mongodb",
               },
               {
+                label: "Cloud Storage Solution",
+                to: "/solutions/cloud",
+              },
+              {
                 label: "Schedule a Technical Review",
                 to: "/contact?subject=TechnicalReview",
               },
@@ -211,7 +244,7 @@ const config = {
               },
               {
                 label: "Computer Vision",
-                to: "/blog/tags/computer-vision",
+                to: "/use-cases/computer-vision",
               },
               {
                 label: "IoT (MQTT)",
@@ -309,6 +342,10 @@ const config = {
               {
                 label: "vs MongoDB",
                 to: "/blog/comparisons/iot/reductstore-vs-mongodb",
+              },
+              {
+                label: "Cloud Storage Solution",
+                to: "/solutions/cloud",
               },
               {
                 label: "Edge AI",
@@ -421,7 +458,7 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
-        additionalLanguages: ["rust"],
+        additionalLanguages: ["rust", "bash"],
       },
       colorMode: {
         defaultMode: "light",

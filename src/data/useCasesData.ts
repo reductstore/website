@@ -26,7 +26,7 @@ const useCases: UseCase[] = [
   {
     title: "Computer Vision Applications",
     description: "Learn how to store data for computer vision applications.",
-    link: "/blog/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications",
+    link: "/use-cases/computer-vision",
     image: require("@site/static/img/use-cases/computer-vision.webp").default,
   },
   {

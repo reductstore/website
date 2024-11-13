@@ -83,6 +83,7 @@
           },
           "collapsed": false,
           "items": [
+            "http-api/entry-api/run_query",
             "http-api/entry-api/read_data",
             "http-api/entry-api/write_data",
             "http-api/entry-api/update_data",
@@ -98,14 +99,33 @@
       "label": "Client SDKs",
       "items": [
         {
-          "type": "link",
-          "label": "Rust Client",
-          "href": "https://github.com/reductstore/reduct-rs"
+          "type": "category",
+          "label": "Python Client",
+          "link": {
+            "type": "doc",
+            "id": "sdk/py/index"
+          },
+          "items": [
+            "sdk/py/client/index",
+            "sdk/py/bucket/index",
+            "sdk/py/record/index",
+            "sdk/py/error/index",
+            {
+              "type": "category",
+              "label": "Messages",
+              "items": [
+                "sdk/py/msg/server/index",
+                "sdk/py/msg/bucket/index",
+                "sdk/py/msg/replication/index",
+                "sdk/py/msg/token/index"
+              ]
+            }
+          ]
         },
         {
           "type": "link",
-          "label": "Python Client",
-          "href": "https://github.com/reductstore/reduct-py"
+          "label": "Rust Client",
+          "href": "https://github.com/reductstore/reduct-rs"
         },
         {
           "type": "link",

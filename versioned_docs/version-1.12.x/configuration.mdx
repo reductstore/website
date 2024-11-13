@@ -1,0 +1,136 @@
+---
+sidebar_position: 3
+title: ⚙ Configuration
+description: ReductStore configuration options and provisioning.
+---
+
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/configuration" />
+</head>
+
+# ⚙ Server Configuration and Provisioning
+
+## Settings
+
+ReductStore uses environment variables for configuration. Here is a list of available settings:
+
+| Name                   | Default | Description                                                                                                               |
+| ---------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `RS_LOG_LEVEL`         | INFO    | Logging level, can be: TRACE, DEBUG, INFO, WARNING, ERROR                                                                 |
+| `RS_HOST`              | 0.0.0.0 | Listening IP address                                                                                                      |
+| `RS_PORT`              | 8383    | Listening port                                                                                                            |
+| `RS_API_BASE_PATH`     | /       | Prefix for all URLs of requests                                                                                           |
+| `RS_DATA_PATH`         | /data   | Path to a folder where the storage stores the data                                                                        |
+| `RS_API_TOKEN`         |         | If set, the storage uses token authorsization                                                                             |
+| `RS_CERT_PATH`         |         | Path to an SSL certificate. If unset, the storage uses HTTP instead of HTTPS                                              |
+| `RS_CERT_KEY_PATH`     |         | Path to the private key of the desired SSL certificate. Should be set with RS_CERT_PATH                                   |
+| `RS_LICENSE_PATH`      |         | Path to the license file. Required for commercial usage. See **[Pricing](/pricing)** for more details.                    |
+| `RS_CORS_ALLOW_ORIGIN` |         | Sets the `Access-Control-Allow-Origin header`. Use `*` to allow all origins or list specific origins separated by commas. |
+
+### For Snap Users
+
+If you use snap, you can configure the database by using the `snap set` command:
+
+```
+snap set reductstore log-level=DEBUG
+```
+
+This command changes the log level to DEBUG and restarts the database. You can check the current configuration with the `snap get reductstoret` command:
+
+```
+snap get reductstore
+Key            Value
+api-base       /
+api-token
+cert-key-path
+cert-path
+data-path      /var/snap/reductstore/common
+host           0.0.0.0
+log-level      DEBUG
+port           8383
+```
+
+By default, the database uses the `/var/snap/reductstore/common` folder to store data. Due to snap restrictions, you can't use root filesystem folders.
+We recommend that you connect the snap to the `removable-media` interface and store the data in a folder outside the snap in `/mnt/*` or `/media/*` folders:
+
+```
+snap connect reductstore:removable-media
+mkdir /mnt/data
+snap set reductstore data-path=/mnt/data
+```
+
+:::danger
+Removing the snap will remove all data stored in the default data path. If you want to keep the data, you need to move it to another location before removing the snap.
+Or use the `snap connect reductstore:removable-media` command to connect the snap to the `removable-media` interface and store the data in a folder outside the snap.
+:::
+
+## Provisioning
+
+ReductStore provides an HTTP API to create and configure resources such as buckets, access tokens or replication tasks. However, if you are following an Infrastructure as Code (IaC) approach, you may want to provision resources at the deployment stage and ensure that they can't be modified or deleted using the HTTP API.
+
+### Example
+
+Here is an example of provisioning two buckets and a token to access them:
+
+```
+RS_BUCKET_A_NAME=bucket-1
+RS_BUCKET_A_QUOTA_TYPE=FIFO
+RS_BUCKET_A_QUOTA_SIZE=1Tb
+
+RS_BUCKET_B_NAME=bucket-2
+
+RS_TOKEN_A_NAME=token
+RS_TOKEN_A_VALUE=somesecret
+RS_TOKEN_A_READ=bucket-1,bucket-2
+```
+
+As you can see, each resource has a type and an ID. The type is `BUCKET` for buckets and `TOKEN` for tokens. The ID is a unique identifier for the resource. You can use any string value for the ID. It is only used to group resources of the same type.
+
+Below you will find the available settings for each resource type.
+
+### Bucket Settings
+
+You can provision buckets by setting environment variables. The following table lists the available settings:
+
+| Name                               | Default | Description                                                      |
+| ---------------------------------- | ------- | ---------------------------------------------------------------- |
+| `RS_BUCKET_<ID>_NAME`              |         | Provisioned bucket name (required)                               |
+| `RS_BUCKET_<ID>_QUOTA_TYPE`        | NONE    | It can be NONE, FIFO or HARD.                                    |
+| `RS_BUCKET_<ID>_QUOTA_SIZE`        | 0       | Size of quota to start removing old data e.g. 1 KB, 10.4 MB etc. |
+| `RS_BUCKET_<ID>_MAX_BLOCK_SIZE`    | 64Mb    | Maximal block size for batched records                           |
+| `RS_BUCKET_<ID>_MAX_BLOCK_RECORDS` | 1024    | Maximal number of batched records in a block                     |
+
+For more information about the bucket settings, see the **[Buckets Guide](/docs/guides/buckets.mdx#bucket-settings)**.
+
+### Token Settings
+
+You can provision tokens by setting environment variables. The following table lists the available settings:
+
+| Name                        | Default | Description                                      |
+| --------------------------- | ------- | ------------------------------------------------ |
+| `RS_TOKEN_<ID>_NAME`        |         | Provisioned token name (required)                |
+| `RS_TOKEN_<ID>_VALUE`       |         | Provisioned value of token (required)            |
+| `RS_TOKEN_<ID>_FULL_ACCESS` | false   | Full access permission                           |
+| `RS_TOKEN_<ID>_READ`        |         | List of buckets for reading separate by a comma. |
+| `RS_TOKEN_<ID>_WRITE`       |         | List of buckets for writing separate by a comma. |
+
+For more information about the token settings, see the **[Access Control Guide](/docs/guides/access-control.mdx)**.
+
+### Replication Settings
+
+You can provision replication tasks by setting environment variables. The following table lists the available settings:
+
+| Name                                | Default | Description                                                                                                        |
+| ----------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
+| `RS_REPLICATION_<ID>_NAME`          |         | Provisioned replication task name (required)                                                                       |
+| `RS_REPLICATION_<ID>_SRC_BUCKET`    |         | Source bucket name (required)                                                                                      |
+| `RS_REPLICATION_<ID>_DST_BUCKET`    |         | Remote bucket name (required). It must be created before replication                                               |
+| `RS_REPLICATION_<ID>_DST_HOST`      |         | URL of destination instance (required). For example, https://play.reduct.store or http://localhost:8383            |
+| `RS_REPLICATION_<ID>_DST_TOKEN`     |         | Token for destination instance                                                                                     |
+| `RS_REPLICATION_<ID>_ENTRIES`       |         | List of entries to replicate. Separate entries with a comma. If the list is empty, all entries will be replicated. |
+| `RS_REPLICATION_<ID>_INCLUDE_<KEY>` |         | Replicate only records with KEY equal to the value of the environment variable. Can be used multiple times.        |
+| `RS_REPLICATION_<ID>_EXCLUDE_<KEY>` |         | Do not replicate records with KEY equal to the value of the environment variable. Can be used multiple times.      |
+| `RS_REPLICATION_<ID>_EACH_S`        |         | Replicate a record every S seconds. Can have a floating-point value.                                               |
+| `RS_REPLICATION_<ID>_EACH_N`        |         | Replicate every N-th record.                                                                                       |
+
+For more information about the replication settings, see the **[Data Replication Guide](/docs/guides/data-replication.mdx)**.

@@ -3,9 +3,30 @@ alexey:
   title: Software Engineer - Database, Rust, C++
   url: https://github.com/atimin
   image_url: https://github.com/atimin.png
+  description: A software engineer with a passion for databases, Rust, and C++, always looking for new challenges and opportunities to build efficient, scalable systems for managing large amounts of data.
+  page: true
+  socials:
+    linkedin: atimin
+    github: atimin
 
 anthony:
   name: Anthony Cavin
   title: Data Scientist - ML/AI, Python, TypeScript
   url: https://github.com/AnthonyCvn
   image_url: https://github.com/AnthonyCvn.png
+  description: A data scientist specializing in machine learning, AI, Python, and TypeScript, with a strong interest in applying these technologies to data-driven projects and innovative AI solutions.
+  page: true
+  socials:
+    linkedin: anthonycavin
+    github: AnthonyCvn
+
+max:
+  name: Max Filippov
+  title: ML Software Developer - C++, Python, R, Matlab
+  url: https://github.com/maxfilippov
+  image_url: https://github.com/maxfilippov.png
+  description: A software developer in fields of machine learning, data analysis, signal and image processing, simulations.
+  page: true
+  socials:
+    linkedin: max-filippov-0a6070247
+    github: maxfilippov

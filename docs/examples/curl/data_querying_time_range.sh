@@ -12,7 +12,9 @@ curl -d "Some binary data" \
 
 # Query data for a specific time range
 STOP_TIME=`date +%s000000`
-ID=`curl -H "${AUTH_HEADER}" -X GET -a "${API_PATH}/b/example-bucket/entry_1/q?start=${TIME}&stop=${STOP_TIME}" | jq -r ".id"`
+ID=`curl -H "${AUTH_HEADER}" \
+  -d '{"query_type": "QUERY", "start": '${TIME}', "stop": '${STOP_TIME}'}' \
+  -X POST -a "${API_PATH}/b/example-bucket/entry_1/q" | jq -r ".id"`
 # Fetch the data (without batching)
 curl -H "${AUTH_HEADER}" -X GET -a "${API_PATH}/b/example-bucket/entry_1?q=${ID}"
 curl -H "${AUTH_HEADER}" -X GET -a "${API_PATH}/b/example-bucket/entry_1?q=${ID}"

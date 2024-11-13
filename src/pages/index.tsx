@@ -3,17 +3,17 @@ import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
-import PerformanceComparison from "../components/PerformanceComparison";
-import HomepageFeatures from "../components/HomepageFeatures";
-import HomepageTestimonials from "../components/HomepageTestimonials";
-import HomepageCTA from "../components/HomepageCTA";
-import HomepageFaqs from "../components/HomepageFaqs";
-import HomepageSDKs from "../components/HomepageSDKs";
-import HomepageWebConsole from "../components/HomepageWebConsole";
-import HomepageCLI from "../components/HomepageCLI";
-import HomepageBenefits from "../components/HomepageBenefits";
-import HomepageUseCase from "../components/HomepageUseCase";
-import HomepageBanner from "../components/HomepageBanner";
+import PerformanceComparison from "../components/homepage/PerformanceComparison";
+import HomepageFeatures from "../components/homepage/HomepageFeatures";
+import HomepageTestimonials from "../components/homepage/HomepageTestimonials";
+import HomepageCTA from "../components/homepage/HomepageCTA";
+import HomepageFaqs from "../components/homepage/HomepageFaqs";
+import HomepageSDKs from "../components/homepage/HomepageSDKs";
+import HomepageWebConsole from "../components/homepage/HomepageWebConsole";
+import HomepageCLI from "../components/homepage/HomepageCLI";
+import HomepageBenefits from "../components/homepage/HomepageBenefits";
+import HomepageUseCase from "../components/homepage/HomepageUseCase";
+import HomepageBanner from "../components/homepage/HomepageBanner";
 import styles from "./index.module.css";
 
 function HomepageHeader() {
@@ -25,8 +25,8 @@ function HomepageHeader() {
           {siteConfig.tagline}
         </h1>
         <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
-          History storage and management of images, vibration data, text,
-          labels, and more - all in one place with the highest performance.
+          High-performance time series storage for data of any size-images,
+          text, sensor data, and more.
         </p>
         <div className={styles.buttons}>
           <Link

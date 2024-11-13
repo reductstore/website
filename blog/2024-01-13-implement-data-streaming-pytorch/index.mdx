@@ -22,7 +22,7 @@ In this blog post, we will go through a full example and setup a data stream to 
 
 Let's dig in!
 
-<!--truncate-->
+{/* truncate */}
 
 ## Setting Up the Python Client for ReductStore Database
 
@@ -44,9 +44,7 @@ client = Client(HOST, api_token=API_TOKEN)
 In this example, we are using the 'Cats' dataset, which contains 10,000 images of cats with labels for the eyes, mouth, and ears. The dataset is available on the [**play.reduct.store**](https://play.reduct.store/) and can be accessed with the following parameters:
 
     - **API\_TOKEN**: API token for authentication (`"dataset-read-eab13e4f5f2df1e64363806443eea7ba83406ce701d49378d2f54cfbf02850f5"`).
-
     - **BUCKET**: Name of the bucket containing the data (`"datasets"`).
-
     - **DATASET**: Specific dataset containing cats images and labels (`"cats"`).
 
 ### Getting data from playground server

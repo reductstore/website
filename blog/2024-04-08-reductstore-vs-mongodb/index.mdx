@@ -10,7 +10,7 @@ image: ./img/reduct_vs_mongodb.webp
 
 ![ReductStore vs MongoDB](./img/reduct_vs_mongodb.webp)
 
-In edge computing, managing time series blob data efficiently is critical for performance-sensitive applications. This blog post will compare [**ReductStore**](https://www.reduct.store/), a specialized time series database for unstructured data, and [**MongoDB**](https://www.mongodb.com/), a widely-used NoSQL database.
+In edge computing, managing time series blob data efficiently is critical for performance-sensitive applications. This blog post will compare [**ReductStore**](https://www.reduct.store/), a specialized time series database for unstructured data, and **MongoDB**, a widely-used NoSQL database.
 
 Using Docker containers for straightforward setup, we'll examine the speed of each system. We'll go through setting up ReductStore buckets and preparing MongoDB collections, focusing on how to effectively store and access blob data for time series scenarios.
 
@@ -18,7 +18,7 @@ By conducting performance tests on binary data insertion and retrieval, we aim t
 
 For those interested in replicating our benchmarks or conducting their own evaluations, we've made our methods easily accessible through [**this repository**](https://github.com/reductstore/reduct-vs-mongodb).
 
-<!--truncate-->
+{/* truncate */}
 
 ## Launching ReductStore and MongoDB Using Docker
 
@@ -29,14 +29,9 @@ This setup initializes a MongoDB container with exposed ports for local access, 
 The process is straightforward:
 
 - Define service configurations for both `mongodb` and `reductstore`.
-
 - Specify Docker images: `mongo:latest` for MongoDB and `reduct/store:latest` for ReductStore.
-
 - Configure environment variables such as credentials and bucket properties.
-
 - Assign volumes to ensure data persists across container restarts.
-
-<!-- -->
 
 Here's the Docker Compose snippet:
 
@@ -112,12 +107,8 @@ GridFS is a specification for storing and retrieving large files in MongoDB, bre
 The following Python script demonstrates how to write time series blob data to MongoDB using GridFS:
 
 - Establish a connection using `MongoClient`.
-
 - Access the database and GridFS.
-
 - Insert blob data into GridFS and reference it in the collection with a timestamp.
-
-<!-- -->
 
 ```python
 def write_to_mongodb():
@@ -139,12 +130,9 @@ def write_to_mongodb():
 ### Write to ReductStore
 
 - Create an asynchronous session using `ReductClient`.
-
 - Access the desired bucket within ReductStore.
-
-- Use bucket's `write` method directly to store binary chunks of time series data.
-
-<!-- -->
+- Create a batch object to store multiple blobs and write them to the bucket.
+- Write the batch to the bucket and clear it for the next set of blobs. In our example, we write blobs in chunks of 80 or until the batch size exceeds 8 MB.
 
 ```python
 async def write_to_reduct():
@@ -153,16 +141,28 @@ async def write_to_reduct():
     ) as reduct_client:
         count = 0
         bucket = await reduct_client.get_bucket("benchmark")
+        batch = Batch()
         for _ in range(BLOB_COUNT):
-            await bucket.write("data", CHUNK)
-            count += BLOB_SIZE
+            batch.add(timestamp=datetime.now().timestamp(), data=CHUNK)
+            await asyncio.sleep(0.000001)  # To avoid time collisions
+            if len(batch) > 80 or batch.size > 8_000_000:
+                await bucket.write_batch("data", batch)
+                count += batch.size
+                batch.clear()
+
+        # Write the last batch
+        if len(batch) > 0:
+            await bucket.write_batch("data", batch)
+            count += batch.size
 
         return count
 ```
 
 Comparing these two methods shows that MongoDB requires setting up GridFS explicitly while also maintaining references between filesystem objects and collection documents.
 
-Conversely, ReductStore simplifies this process by providing direct binary writes into buckets without additional setup. These distinctions are key when choosing a platform based on ease of implementation and alignment with your application's needs regarding unstructured time series data management.
+Conversely, ReductStore simplifies this process by providing direct binary writes to buckets without additional setup.
+These differences are critical when choosing a platform based on ease of implementation and alignment with your application's unstructured time series data management needs.
+In addition, ReductStore's batch approach allows for efficient writing of multiple blobs, ensuring optimal performance when handling large amounts of binary data.
 
 ## Reading Back the Time: Retrieval of Blob Data from MongoDB vs. ReductStore
 
@@ -214,35 +214,30 @@ The `read_all` method in ReductStore retrieves the entire binary content of a re
 
 ## Performance Analysis: Insertion and Retrieval Speeds for Binary Data in MongoDB and ReductStore
 
-To evaluate the performance of MongoDB and ReductStore, we conducted a test using varying blob sizes ranging from 10 KB to 10 MB. The test measured the speed of writing and reading binary data on an NVMe drive.
+To evaluate the performance of MongoDB and ReductStore, we conducted a test using varying blob sizes ranging from 1KB KB to 1 MB. The test measured the speed of writing and reading binary data on an NVMe drive.
 
-For 10 KB chunks, MongoDB writes at a rate of 529 blobs per second, while ReductStore records a significantly higher rate at 1531 blobs per second—a 190% increase. Moreover, when reading the same chunk size, ReductStore shows a substantial speed advantage with an increase of 244%.
-
-As chunk sizes increase to 100 KB and up to 10 MB, ReductStore's performance advantage over MongoDB remains significant. Write speeds maintain a robust advantage, ranging from +155% at 100 KB to +158% at 10 MB. Read operations, however, show a more varied improvement, starting at +198% for 100 KB chunks and moderating to +65% for 10 MB chunks, underscoring ReductStore's adaptability and efficiency in handling larger binary payloads.
+The results are summarized in the table below:
 
 | Chunk Size | Operation | MongoDB, blob/s | ReductStore, blob/s | ReductStore, % |
 | ---------- | --------- | --------------- | ------------------- | -------------- |
-| 10 KB      | Write     | 529             | 1531                | +190%          |
-|            | Read      | 379             | 1303                | +244%          |
-| 100 KB     | Write     | 542             | 1384                | +155%          |
-|            | Read      | 380             | 1131                | +198%          |
-| 1 MB       | Write     | 224             | 531                 | +137%          |
-|            | Read      | 169             | 358                 | +112%          |
-| 10 MB      | Write     | 31              | 80                  | +158%          |
-|            | Read      | 23              | 38                  | +65%           |
+| 1 KB       | Write     | 799             | 7994                | +900%          |
+|            | Read      | 2008            | 47979               | +2300%         |
+| 10 KB      | Write     | 783             | 7431                | +850%          |
+|            | Read      | 1918            | 32888               | +1600%         |
+| 100 KB     | Write     | 694             | 3612                | +420%          |
+|            | Read      | 1730            | 6250                | +260%          |
+| 1 MB       | Write     | 246             | 663                 | +170%          |
+|            | Read      | 776             | 540                 | -30%           |
 
-The observed performance trends underscore that while both systems are capable of managing binary data effectively, their throughput varies depending on blob sizes—with ReductStore having a significant edge for unstructured data.
+The results show that ReductStore outperforms MongoDB with GridFS enabled across all blob sizes, with significant performance gains in both write and read operations. ReductStore's batch write approach and direct binary storage contribute to its superior performance, making it an attractive option for applications dealing with large time series blob data.
 
 ## Additional Criteria
 
 When selecting a database for blob storage, other criteria than performance must be taken into account:
 
 - **Retention policy**: both ReductStore and MongoDB offer distinct retention strategies. ReductStore uses disk utilization-based policies, essential for edge computing and IoT. MongoDB's time-series collections, on the other hand, can automatically purge documents after a set period of time, useful for managing data lifecycle when dealing with non-blob data such as numerical values or logs in time series scenarios.
-
 - **Replication features**: Replication in ReductStore is append-only, with label-based filtering options. This feature can contribute to an effective data reduction strategy by selectively replicating relevant blobs. MongoDB, on the other hand, offers replication sets for high availability and redundancy, ensuring data integrity and fault tolerance in distributed environments.
-
 - **License Consideration**: MongoDB is governed by the Server Side Public License (SSPL), asking service providers using MongoDB to open source their modifications. ReductStore, under the Business Source License 1.1 (BSL), allows production use, subject to payment for larger companies, and transitions to the Mozilla Public License Version 2.0 (MPL-2.0) after three years.
-
 - **Cost considerations**: ReductStore's pricing model is based on storage which aligns well with retention policies based on data volume for a predictable cost structure. MongoDB's pricing is based on instance size and usage, which can be more complex to estimate.
 
 ## Conclusion

@@ -14,7 +14,8 @@
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc",
     "fmt": "prettier --write .",
-    "fmt:check": "prettier --check ."
+    "fmt:check": "prettier --check .",
+    "build:azure": "npm run clear && npm run build"
   },
   "dependencies": {
     "@algolia/client-search": "^4.20.0",
@@ -37,28 +38,27 @@
     "react-cookie-consent": "^9.0.0",
     "react-countdown-circle-timer": "^3.2.1",
     "react-dom": "^18.2.0",
-    "react-icons": "^4.11.0",
+    "react-icons": "^5.3.0",
     "react-loadable": "^5.5.0",
     "react-tooltip": "^5.26.0",
     "reduct-js": "^1.11.0",
     "rehype-katex": "7",
     "remark-math": "6",
     "search-insights": "^2.10.0",
-    "vanilla-cookieconsent": "3.0.1",
     "xterm": "^5.3.0",
     "xterm-addon-fit": "^0.8.0",
     "xterm-addon-web-links": "^0.9.0",
-    "zustand": "^4.5.2"
+    "zustand": "^5.0.0"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.0.1",
     "@docusaurus/tsconfig": "^3.0.1",
     "@docusaurus/types": "^3.0.1",
-    "remark-code-snippets": "^1.1.0",
-    "typescript": "^5.2.2",
-    "prettier": "^3.2.5",
     "eslint": "^8.13.0",
-    "eslint-config-prettier": "^9.1.0"
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.5",
+    "remark-code-snippets": "^1.1.0",
+    "typescript": "^5.2.2"
   },
   "browserslist": {
     "production": [

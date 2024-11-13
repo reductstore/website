@@ -1,8 +1,8 @@
 import Layout from "@theme/Layout";
-import PricingTable from "@site/src/components/PricingTable";
-import SimpleHeader from "@site/src/components/SimpleHeader";
-import Faq from "@site/src/components/Faq";
-import PromotionalBanner from "@site/src/components/PromotionalBanner";
+import PricingTable from "@site/src/components/shared/PricingTable";
+import SimpleHeader from "@site/src/components/shared/SimpleHeader";
+import Faq from "@site/src/components/shared/Faq";
+import PromotionalBanner from "@site/src/components/promotional/PromotionalBanner";
 
 export default function Pricing(): JSX.Element {
   return (
@@ -16,16 +16,13 @@ export default function Pricing(): JSX.Element {
         <SimpleHeader pageTitle="Tailored for Every Scale" />
         <div className="container">
           <p>
-            Our Community Edition is free for small organizations and provides
+            Our Community Edition is free for small organisations and offers
             full feature access and public source code. For larger
-            organizations, our licensed editions offer dedicated support and
+            organisations, our licensed editions offer dedicated support and
             long-term release support, with storage- or device-based pricing.
-            This customized approach ensures that you only pay for what you
-            need, with the ability to contribute to the code base and scale as
-            your business grows.
           </p>
-          <PromotionalBanner />
           <PricingTable />
+          <PromotionalBanner />
         </div>
         <br />
         <SimpleHeader pageTitle="Frequently Asked Questions" pageTitleAs="h2" />

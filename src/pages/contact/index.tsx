@@ -1,7 +1,7 @@
 import React from "react";
 import Layout from "@theme/Layout";
-import SimpleHeader from "@site/src/components/SimpleHeader";
-import HelpForm from "@site/src/components/HelpForm";
+import SimpleHeader from "@site/src/components/shared/SimpleHeader";
+import HelpForm from "@site/src/components/forms/HelpForm";
 import styles from "./styles.module.css";
 
 export default function ContactPage() {
