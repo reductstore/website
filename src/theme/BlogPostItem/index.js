@@ -12,8 +12,15 @@ export default function BlogPostItemWrapper(props) {
   const pathSegments = pagePath.split("/").filter(Boolean);
   const isBlogHome = pagePath === "/blog" || pagePath === "/blog/";
   const isBlogPage = pathSegments[0] === "blog" && pathSegments[1] === "page";
+  const isAuthorPage =
+    pathSegments[0] === "blog" && pathSegments[1] === "authors";
+  const isTagPage = pathSegments[0] === "blog" && pathSegments[1] === "tags";
   const isSpecificBlogPost =
-    pathSegments[0] === "blog" && !isBlogHome && !isBlogPage;
+    pathSegments[0] === "blog" &&
+    !isBlogHome &&
+    !isBlogPage &&
+    !isAuthorPage &&
+    !isTagPage;
   return (
     <>
       <BlogPostItem {...props} />
