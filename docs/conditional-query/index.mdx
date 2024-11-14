@@ -3,10 +3,6 @@ title: Conditional Query Reference
 description: Learn how to use conditional queries to filter data in ReductStore.
 ---
 
-import CodeBlock from "@theme/CodeBlock";
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
-
 <head>
   <link
     rel="canonical"
@@ -21,13 +17,14 @@ Conditional Query is a query language based on JSON syntax that allows you to fi
 The query object is a JSON object containing one or more conditions, a condition can be nested and have a tree-like structure.
 A condition can be written in one of two notations:
 
-- **object notation**: A condition is a key-value pair, where the key is the label reference and the value is an object with the operator and operand:
+- **Object notation**: A condition is a key-value pair, where the key is the label reference and the value is an object with the operator and operand:
 
   ```json
   {
     "&label_name": { "$gt": 10 }
   }
   ```
+  The object  notation is the most common and easiest to read and write, but it has the limitation that you can't have more than two operands in a condition, and the first must be the label reference.
 
 - **Array notation**: A condition is a key-value pair where the key is the operator and the value is an array with its operands:
 
@@ -36,6 +33,8 @@ A condition can be written in one of two notations:
     "$gt": ["&label_name", 10]
   }
   ```
+
+  The array notation is more flexible and allows you to have more than two operands in a condition, but it looks more complex.
 
 The query object can contain multiple conditions that are linked using the AND operator:
 
@@ -46,7 +45,7 @@ The query object can contain multiple conditions that are linked using the AND o
 }
 ```
 
-This is the same as
+This is the same as:
 
 ```json
 {
@@ -64,7 +63,7 @@ The queries use a special naming convention for labels and operators to extend t
 
 ## Type System and Casting
 
-The query language supports a simple type system with four types: **boolean**, **integer**, **float**, and **string**:
+The conditional query language supports a simple type system with four types: **boolean**, **integer**, **float**, and **string**:
 
 | Type    | Size   | Description                                     |
 | ------- | ------ | ----------------------------------------------- |
@@ -90,3 +89,12 @@ Comparison and arithmetic operators will cast the operands to the most precise t
 | **integer** | integer | integer | float | -      |
 | **float**   | float   | float   | float | -      |
 | **string**  | -       | -       | -     | string |
+
+
+## Operators
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+
+<DocCardList />
+```

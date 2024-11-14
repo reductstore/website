@@ -59,7 +59,10 @@
         "type": "doc",
         "id": "conditional-query/index"
       },
-      "items": []
+      "items": [
+        "conditional-query/logical-operators",
+        "conditional-query/comparison-operators"
+      ]
     },
     {
       "type": "category",
