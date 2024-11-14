@@ -12,30 +12,40 @@ description: Learn how to use conditional queries to filter data in ReductStore.
 
 Conditional Query is a query language based on JSON syntax that allows you to filter records in ReductStore using labels and their values.
 
+The query language is used in the [**query endpoint**](/docs/http-api/entry-api/run_query.mdx) of the HTTP API.
+You can also find usage examples with many SDKs and tools in the [**Data Querying**](/docs/guides/data-querying.mdx)  and
+in the [**Data Management**](/docs/guides/data-management.mdx) guides.
+
 ## Query Syntax
 
 The query object is a JSON object containing one or more conditions, a condition can be nested and have a tree-like structure.
 A condition can be written in one of two notations:
 
-- **Object notation**: A condition is a key-value pair, where the key is the label reference and the value is an object with the operator and operand:
+### Object notation
 
-  ```json
-  {
-    "&label_name": { "$gt": 10 }
-  }
-  ```
+A condition is a key-value pair, where the key is the label reference and the value is an object with the operator and operand:
 
-  The object notation is the most common and easiest to read and write, but it has the limitation that you can't have more than two operands in a condition, and the first must be the label reference.
+```json
+{
+  "&label_name": { "$gt": 10 }
+}
+```
 
-- **Array notation**: A condition is a key-value pair where the key is the operator and the value is an array with its operands:
+The object notation is the most common and easiest to read and write, but it has the limitation that you can't have more than two operands in a condition, and the first must be the label reference.
 
-  ```json
-  {
-    "$gt": ["&label_name", 10]
-  }
-  ```
+### Array notation
 
-  The array notation is more flexible and allows you to have more than two operands in a condition, but it looks more complex.
+A condition is a key-value pair where the key is the operator and the value is an array with its operands:
+
+```json
+{
+  "$gt": ["&label_name", 10]
+}
+```
+
+The array notation is more flexible and allows you to have more than two operands in a condition, but it looks more complex.
+
+### Multiple conditions
 
 The query object can contain multiple conditions that are linked using the AND operator:
 
@@ -54,6 +64,8 @@ This is the same as:
 }
 ```
 
+### JSON Extension
+
 The queries use a special naming convention for labels and operators to extend the JSON syntax with additional functionality:
 
 | Type     | Convention    | Description                                          |
@@ -62,7 +74,9 @@ The queries use a special naming convention for labels and operators to extend t
 | Operator | "$operator"   | Reference to an operator starting with `$`           |
 | Constant | JSON types    | A constant value in the query, e.g. `10`, `"string"` |
 
-## Type System and Casting
+## Type System
+
+### Supported Types
 
 The conditional query language supports a simple type system with four types: **boolean**, **integer**, **float**, and **string**:
 
@@ -73,12 +87,16 @@ The conditional query language supports a simple type system with four types: **
 | float   | 8      | IEEE-754 double-precision floating-point number |
 | string  | 1-2^16 | UTF-8 encoded string                            |
 
-The storage engine stores a label as a string without any type information, so the query engine tries to parse its value to a type in the following order
 
+### Type Inference
+
+The storage engine stores a label as a string without any type information, so the query engine tries to infer the type of the label based on its value:
 1. If a label has a value of true or false, it is converted to a boolean.
 2. If a label has a number without a decimal point, it is converted to an integer.
 3. If a label has a number with a decimal point, it is converted to a float.
 4. If all other conversions fail, it is converted to a string.
+
+### Type Casting
 
 During the execution of the query, the engine will try to cast types of operands to the same type.
 Logical operators like `$and`, `$or`, `$not` will cast the result to a boolean.
@@ -92,6 +110,9 @@ Comparison and arithmetic operators will cast the operands to the most precise t
 | **string**  | -       | -       | -     | string |
 
 ## Operators
+
+The conditional query language supports many operators for comparison, arithmetic, and logical operations.
+See the following sections for more information:
 
 ```mdx-code-block
 import DocCardList from '@theme/DocCardList';
