@@ -5,7 +5,7 @@ import Link from "@docusaurus/Link";
 export default function AzureInstall() {
   return (
     <>
-      <p>Runs on amd64, arm64, and arm32 platforms.</p>
+      <p>Runs as a virtual machine on Azure and connect with Azure Storage Account.</p>
 
       <p>
         Discover{" "}
