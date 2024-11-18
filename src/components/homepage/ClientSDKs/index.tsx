@@ -34,7 +34,18 @@ export default function ClientSDKs(): JSX.Element {
           <CodeBlock className="language-bash">{cppSDK}</CodeBlock>
         )}
         {activeTab === "Rust" && (
-          <CodeBlock className="language-bash">{rustSDK}</CodeBlock>
+          <>
+            <CodeBlock className="language-bash">{rustSDK}</CodeBlock>
+            <p>
+              You may need to install the latest version of Rust. Read the{" "}
+              <b>
+                <a href="https://www.rust-lang.org/tools/install">
+                  official Rust installation guide
+                </a>
+              </b>{" "}
+              for more information.
+            </p>
+          </>
         )}
       </div>
     </>
@@ -55,7 +66,7 @@ include(FetchContent)
 FetchContent_Declare(
     ReductCpp
     GIT_REPOSITORY https://github.com/reductstore/reduct-cpp.git
-    GIT_TAG 
+    GIT_TAG main
 )
 
 find_package(ReductCpp)
