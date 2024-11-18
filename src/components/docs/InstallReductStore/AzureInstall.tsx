@@ -5,7 +5,10 @@ import Link from "@docusaurus/Link";
 export default function AzureInstall() {
   return (
     <>
-      <p>Runs as a virtual machine on Azure and connect with Azure Storage Account.</p>
+      <p>
+        Runs as a virtual machine on Azure and connect with Azure Storage
+        Account.
+      </p>
 
       <p>
         Discover{" "}

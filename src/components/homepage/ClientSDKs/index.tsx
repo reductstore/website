@@ -34,11 +34,18 @@ export default function ClientSDKs(): JSX.Element {
           <CodeBlock className="language-bash">{cppSDK}</CodeBlock>
         )}
         {activeTab === "Rust" && (
-            <>
-          <CodeBlock className="language-bash">{rustSDK}</CodeBlock>
-                <p>You may need to install the latest version of Rust. Read more about it <b><a href="https://www.rust-lang.org/tools/install">here</a></b>.</p>
-        </>
-          )}
+          <>
+            <CodeBlock className="language-bash">{rustSDK}</CodeBlock>
+            <p>
+              You may need to install the latest version of Rust. Read more
+              about it{" "}
+              <b>
+                <a href="https://www.rust-lang.org/tools/install">here</a>
+              </b>
+              .
+            </p>
+          </>
+        )}
       </div>
     </>
   );
