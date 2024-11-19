@@ -3,6 +3,7 @@ import styles from "./styles.module.css";
 import { FaCheckCircle } from "react-icons/fa";
 import { PopupModal } from "react-calendly";
 import Link from "@docusaurus/Link";
+import BrowserOnly from "@docusaurus/BrowserOnly";
 
 const PromotionalBanner = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +26,6 @@ const PromotionalBanner = () => {
               <li>{checkedIcon} No Strings Attached—Just Results</li>
             </ul>
             <Link
-              id="schedule-quick-review"
               className="button button--lg button--primary"
               onClick={() => setIsOpen(true)}
             >
@@ -36,12 +36,16 @@ const PromotionalBanner = () => {
       </div>
 
       {/* Calendly Popup Modal */}
-      <PopupModal
-        url="https://calendly.com/anthony-reductstore/call"
-        open={isOpen}
-        onModalClose={() => setIsOpen(false)}
-        rootElement={document.getElementById("__docusaurus")}
-      />
+      <BrowserOnly>
+        {() => (
+          <PopupModal
+            url="https://calendly.com/anthony-reductstore/call"
+            open={isOpen}
+            onModalClose={() => setIsOpen(false)}
+            rootElement={document.getElementById("__docusaurus")}
+          />
+        )}
+      </BrowserOnly>
     </>
   );
 };
