@@ -25,8 +25,10 @@ function HomepageHeader() {
           {siteConfig.tagline}
         </h1>
         <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
-          High-performance time series storage for data of any size-images,
-          text, sensor data, and more.
+          High-performance time series object storage, written in Rust, designed
+          for speed, simplicity and robustness. Handle data of any size -
+          images, files, text, vibration data and more. Store billions of blobs
+          with time indexing and AI labels.
         </p>
         <div className={styles.buttons}>
           <Link
