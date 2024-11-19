@@ -56,7 +56,7 @@ export default function Home(): JSX.Element {
     >
       <HomepageBanner
         to="/pricing"
-        text="Free evaluation and Proof of Concept (PoC)"
+        text="Get Your Quick Storage Workflow Review"
       />
       <HomepageHeader />
       <main>
