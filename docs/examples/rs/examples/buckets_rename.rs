@@ -1,4 +1,4 @@
-use reduct_rs::{ErrorCode, ReductClient, ReductError};
+use reduct_rs::{ReductClient, ReductError};
 use tokio;
 
 #[tokio::main]
@@ -9,14 +9,17 @@ async fn main() -> Result<(), ReductError> {
         .api_token("my-token")
         .build();
 
-    // Rename the bucket "bucket-to-rename" to "bucket-renamed"
-    let mut bucket = client.get_bucket("bucket-to-rename").await?;
-    bucket.rename("bucket-renamed").await?;
+    // Get the bucket 'example-bucket'
+    let bucket = client.get_bucket("example-bucket").await?;
 
-    // Check that the bucket was renamed
-    let bucket = client.get_bucket("bucket-renamed").await?;
-    assert_eq!(bucket.name(), "bucket-renamed");
-    let bucket = client.get_bucket("bucket-to-rename").await;
-    assert_eq!(bucket.err().unwrap().status, ErrorCode::NotFound);
+    // Rename the entry 'entry_1' to 'entry_2'
+    bucket.rename_entry("entry_1", "entry_2").await?;
+
+    // Check that the entry was renamed
+    let entries = bucket.entries().await?;
+    let entry_names: Vec<String> = entries.iter().map(|entry| entry.name.clone()).collect();
+    assert!(entry_names.contains(&"entry_2".to_string()));
+    assert!(!entry_names.contains(&"entry_1".to_string()));
+
     Ok(())
 }

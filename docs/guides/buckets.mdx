@@ -254,6 +254,66 @@ import ChangeBucketCurl from "!!raw-loader!../examples/curl/buckets_change.sh";
 You can't change settings for provisioned buckets. You should unprovision it first.
 :::
 
+### Renaming a Bucket
+
+A bucket can be renamed using the SDKs, CLI client, Web Console, or REST API. A client must have full access permission to rename a bucket if the authorization is enabled.
+
+import RenameBucketCLI from "!!raw-loader!../examples/cli/buckets_rename.sh";
+import RenameBucketPy from "!!raw-loader!../examples/py/src/buckets_rename.py";
+import RenameBucketJs from "!!raw-loader!../examples/js/src/buckets_rename.mjs";
+import RenameBucketRs from "!!raw-loader!../examples/rs/examples/buckets_rename.rs";
+import RenameBucketCpp from "!!raw-loader!../examples/cpp/src/buckets_rename.cc";
+import RenameBucketCurl from "!!raw-loader!../examples/curl/buckets_rename.sh";
+
+<Tabs>
+  <TabItem value="CLI">
+    <CodeBlock language="shell">
+      {RenameBucketCLI}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="Web Console">
+    Steps to remove a bucket using the Web Console:
+    1. Open the Web Console at [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
+    2. Enter the API token if the authorization is enabled.
+    3. Click on the **"Buckets"** tab in the left sidebar.
+    4. You will see a list of all buckets in the store.
+    5. Click on the edit icon in the bucket panel:
+    ![Browse buckets with Web Console](./img/bucket_rename.webp)
+    6. Rename the bucket and click on the **Save** button:
+    ![Remove a bucket with Web Console](./img/bucket_rename_save.webp)
+
+  </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">
+      {RenameBucketPy}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="JavaScript">
+    <CodeBlock language="javascript">
+      {RenameBucketJs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="Rust">
+    <CodeBlock language="rust">
+      {RenameBucketRs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="C++">
+    <CodeBlock language="cpp">
+      {RenameBucketCpp}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="cURL">
+    <CodeBlock language="bash">
+      {RenameBucketCurl}
+    </CodeBlock>
+  </TabItem>
+</Tabs>
+
+:::note
+You can't rename a provisioned bucket. You should unprovision it first.
+:::
+
 ### Removing a Bucket
 
 A bucket can be deleted using the SDKs, CLI client, Web Console, or REST API. A client must have full access permission to delete a bucket if the authorization is enabled.
@@ -319,59 +379,3 @@ Removing a bucket will also remove all the data stored in it. This action is irr
 :::note
 You can't remove a provisioned bucket. You should unprovision it first.
 :::
-
-### Renaming a Bucket
-
-A bucket can be renamed using the SDKs, CLI client, Web Console, or REST API. A client must have full access permission to rename a bucket if the authorization is enabled.
-
-import RenameBucketCLI from "!!raw-loader!../examples/cli/buckets_rename.sh";
-import RenameBucketPy from "!!raw-loader!../examples/py/src/buckets_rename.py";
-import RenameBucketJs from "!!raw-loader!../examples/js/src/buckets_rename.mjs";
-import RenameBucketRs from "!!raw-loader!../examples/rs/examples/buckets_rename.rs";
-import RenameBucketCpp from "!!raw-loader!../examples/cpp/src/buckets_rename.cc";
-import RenameBucketCurl from "!!raw-loader!../examples/curl/buckets_rename.sh";
-
-<Tabs>
-  <TabItem value="CLI">
-    <CodeBlock language="shell">
-      {RenameBucketCLI}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="Web Console">
-    Steps to remove a bucket using the Web Console:
-    1. Open the Web Console at [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
-    2. Enter the API token if the authorization is enabled.
-    3. Click on the **"Buckets"** tab in the left sidebar.
-    4. You will see a list of all buckets in the store.
-    5. Click on the edit icon in the bucket panel:
-    ![Browse buckets with Web Console](./img/bucket_rename.webp)
-    6. Rename the bucket and click on the **Save** button:
-    ![Remove a bucket with Web Console](./img/bucket_rename_save.webp)
-
-  </TabItem>
-  <TabItem value="Python">
-    <CodeBlock language="python">
-      {RenameBucketPy}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="JavaScript">
-    <CodeBlock language="javascript">
-      {RenameBucketJs}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="Rust">
-    <CodeBlock language="rust">
-      {RenameBucketRs}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="C++">
-    <CodeBlock language="cpp">
-      {RenameBucketCpp}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="cURL">
-    <CodeBlock language="bash">
-      {RenameBucketCurl}
-    </CodeBlock>
-  </TabItem>
-</Tabs>

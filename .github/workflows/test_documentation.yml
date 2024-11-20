@@ -159,6 +159,7 @@ jobs:
             curl -X POST -H "Authorization: Bearer my-token" -d "" http://127.0.0.1:8383/api/v1/b/bucket-to-remove/example-entry?ts=1 || true
             reduct-cli bucket rm http://my-token@127.0.0.1:8383/bucket-renamed -y || true
             reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-rename || true
+            reduct-cli bucket rename --only-entry entry_2 local/example-bucket entry_1 || true
           done
       - name: Print Docker logs
         if: always()
