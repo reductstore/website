@@ -21,8 +21,8 @@ export default function Pricing(): JSX.Element {
             organisations, our licensed editions offer dedicated support and
             long-term release support, with storage- or device-based pricing.
           </p>
-          <PricingTable />
           <PromotionalBanner />
+          <PricingTable />
         </div>
         <br />
         <SimpleHeader pageTitle="Frequently Asked Questions" pageTitleAs="h2" />
