@@ -16,4 +16,3 @@ repos:
         language: system
         args:
           - fmt
-          - --check
