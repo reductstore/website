@@ -33,11 +33,11 @@ max:
 
 gracija:
   name: Gracija Nikolovska
-  title: TODO
+  title: Software Developer - C#, Python, ROS
   url: https://github.com/gracija
   image_url: https://github.com/gracija.png
-  description: TODO
+  description: A software developer with a background in machine learning, robotics, and programming in Python, C#, and ROS, focused on building practical solutions with innovative technologies.
   page: true
   socials:
-    linkedin: TODO
+    linkedin: gracija-nikolovska
     github: gracija
