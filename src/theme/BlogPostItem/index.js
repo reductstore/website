@@ -58,7 +58,10 @@ export default function BlogPostItemWrapper(props) {
             <div className={styles.discourseTitle}>
               Comments from the Community
             </div>
-            <div id="discourse-comments" className={styles.iframeContainer}></div>
+            <div
+              id="discourse-comments"
+              className={styles.iframeContainer}
+            ></div>
           </div>
           <SlidingBanner />
         </>
