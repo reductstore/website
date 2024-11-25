@@ -89,21 +89,20 @@ import CreateBucketCurl from "!!raw-loader!../examples/curl/buckets_create.sh";
       {CreateBucketCLI}
     </CodeBlock>
   </TabItem>
+
   <TabItem value="Web Console">
-    Steps to create a bucket using the Web Console:
+
     1. Open the Web Console at **[http://127.0.0.1:8383](http://127.0.0.1:8383)** in your browser.
     2. Enter the API token if the authorization is enabled.
     3. Click on the **"Buckets"** tab in the left sidebar.
     4. Click on the plus icon in the top right corner to create a new bucket:
-
     ![Create a bucket with Web Console](./img/buckets_create.webp)
-
     5. In the **"Add a new bucket"** dialog, enter the bucket name and settings.
-    6. Click on the "Create" button:
-
+    6. Click on the "Create" button to create the bucket:
     ![Set bucket settings with Web Console](./img/buckets_create_settings.webp)
 
   </TabItem>
+
   <TabItem value="Python">
     <CodeBlock language="python">
       {CreateBucketPy}
@@ -153,21 +152,19 @@ import ListBucketsCurl from "!!raw-loader!../examples/curl/buckets_browse.sh";
       {ListBucketsCLI}
     </CodeBlock>
   </TabItem>
+
   <TabItem value="Web Console">
-    Steps to browse buckets using the Web Console:
     1. Open the Web Console at **[http://127.0.0.1:8383](http://127.0.0.1:8383)** in your browser.
     2. Enter the API token if the authorization is enabled.
     3. Click on the **"Buckets"** tab in the left sidebar.
     4. You will see a list of all buckets in the store.
     5. Click on a specific bucket to view its details:
-
     ![Browse buckets with Web Console](./img/buckets_browse_all.webp)
-
     6. You can see the bucket settings by clicking on the **cog icon(⚙️)** in the bucket panel:
-
     ![Browse bucket settings with Web Console](./img/buckets_browse_cog.webp)
 
   </TabItem>
+
   <TabItem value="Python">
     <CodeBlock language="python">
       {ListBucketsPy}
@@ -215,25 +212,22 @@ import ChangeBucketCurl from "!!raw-loader!../examples/curl/buckets_change.sh";
       {ChangeBucketCLI}
     </CodeBlock>
   </TabItem>
+
   <TabItem value="Web Console">
-    Steps to change bucket setting using the Web Console:
+
     1. Open the Web Console at [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
     2. Enter the API token if the authorization is enabled.
     3. Click on the **"Buckets"** tab in the left sidebar.
     4. You will see a list of all buckets in the store.
     5. Click on a specific bucket in the list:
-
     ![Browse buckets with Web Console](./img/buckets_browse_all.webp)
-
     6. Open the bucket settings by clicking on **cog icon(⚙️)** in the bucket panel:
-
     ![Browse a bucket with Web Console](./img/buckets_change_cog.webp)
-
     7. Modify the settings as needed and click on the **Update** button:
-
     ![Change bucket settings with Web Console](./img/buckets_change_settings.webp)
 
   </TabItem>
+
   <TabItem value="Python">
     <CodeBlock language="python">
       {ChangeBucketPy}
@@ -265,6 +259,68 @@ import ChangeBucketCurl from "!!raw-loader!../examples/curl/buckets_change.sh";
 You can't change settings for provisioned buckets. You should unprovision it first.
 :::
 
+### Renaming a Bucket
+
+A bucket can be renamed using the SDKs, CLI client, Web Console, or REST API. A client must have full access permission to rename a bucket if the authorization is enabled.
+
+import RenameBucketCLI from "!!raw-loader!../examples/cli/buckets_rename.sh";
+import RenameBucketPy from "!!raw-loader!../examples/py/src/buckets_rename.py";
+import RenameBucketJs from "!!raw-loader!../examples/js/src/buckets_rename.mjs";
+import RenameBucketRs from "!!raw-loader!../examples/rs/examples/buckets_rename.rs";
+import RenameBucketCpp from "!!raw-loader!../examples/cpp/src/buckets_rename.cc";
+import RenameBucketCurl from "!!raw-loader!../examples/curl/buckets_rename.sh";
+
+<Tabs>
+  <TabItem value="CLI">
+    <CodeBlock language="shell">
+      {RenameBucketCLI}
+    </CodeBlock>
+  </TabItem>
+
+  <TabItem value="Web Console">
+
+    1. Open the Web Console at [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
+    2. Enter the API token if the authorization is enabled.
+    3. Click on the **"Buckets"** tab in the left sidebar.
+    4. You will see a list of all buckets in the store.
+    5. Click on the edit icon in the bucket panel:
+    ![Browse buckets with Web Console](./img/bucket_rename.webp)
+    6. Rename the bucket and click on the **Save** button:
+    ![Remove a bucket with Web Console](./img/bucket_rename_save.webp)
+
+  </TabItem>
+
+  <TabItem value="Python">
+    <CodeBlock language="python">
+      {RenameBucketPy}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="JavaScript">
+    <CodeBlock language="javascript">
+      {RenameBucketJs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="Rust">
+    <CodeBlock language="rust">
+      {RenameBucketRs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="C++">
+    <CodeBlock language="cpp">
+      {RenameBucketCpp}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="cURL">
+    <CodeBlock language="bash">
+      {RenameBucketCurl}
+    </CodeBlock>
+  </TabItem>
+</Tabs>
+
+:::note
+You can't rename a provisioned bucket. You should unprovision it first.
+:::
+
 ### Removing a Bucket
 
 A bucket can be deleted using the SDKs, CLI client, Web Console, or REST API. A client must have full access permission to delete a bucket if the authorization is enabled.
@@ -282,25 +338,22 @@ import RemoveBucketCurl from "!!raw-loader!../examples/curl/buckets_remove.sh";
       {RemoveBucketCLI}
     </CodeBlock>
   </TabItem>
+
   <TabItem value="Web Console">
-    Steps to remove a bucket using the Web Console:
+  
     1. Open the Web Console at [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
     2. Enter the API token if the authorization is enabled.
     3. Click on the **"Buckets"** tab in the left sidebar.
     4. You will see a list of all buckets in the store.
     5. Click on a specific bucket in the list:
-
     ![Browse buckets with Web Console](./img/buckets_browse_all.webp)
-
     6. Click on the **Trash** icon in the bucket panel:
-
     ![Remove a bucket with Web Console](./img/buckets_remove.webp)
-
     7. Confirm the deletion by typing the bucket name and clicking on the **Remove** button:
-
     ![Confirm bucket removal with Web Console](./img/buckets_remove_confirm.webp)
 
   </TabItem>
+
   <TabItem value="Python">
     <CodeBlock language="python">
       {RemoveBucketPy}

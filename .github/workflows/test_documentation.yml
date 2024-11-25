@@ -77,11 +77,13 @@ jobs:
           chmod +x reduct-cli
           sudo mv reduct-cli /usr/local/bin
           reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-remove
+          reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-rename
           reduct-cli cp https://reductstore@play.reduct.store/datasets  http://my-token@127.0.0.1:8383/example-bucket --limit 100
           reduct-cli replica create http://my-token@127.0.0.1:8383/example-replication  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
           reduct-cli replica create http://my-token@127.0.0.1:8383/repl-to-remove  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
           reduct-cli token create http://my-token@127.0.0.1:8383/token-to-remove
           curl -X POST -H "Authorization: Bearer my-token" -d "" http://127.0.0.1:8383/api/v1/b/bucket-to-remove/example-entry?ts=1
+          curl -X POST -H "Authorization: Bearer my-token" -d "" http://127.0.0.1:8383/api/v1/b/example-bucket/entry_1?ts=1
 
       - name: Install Python
         uses: actions/setup-python@v5
@@ -156,6 +158,9 @@ jobs:
             fi
             reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-remove || true
             curl -X POST -H "Authorization: Bearer my-token" -d "" http://127.0.0.1:8383/api/v1/b/bucket-to-remove/example-entry?ts=1 || true
+            reduct-cli bucket rm http://my-token@127.0.0.1:8383/bucket-renamed -y || true
+            reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-rename || true
+            reduct-cli bucket rename --only-entry entry_2 http://my-token@127.0.0.1:8383/example-bucket entry_1 || true
           done
       - name: Print Docker logs
         if: always()
