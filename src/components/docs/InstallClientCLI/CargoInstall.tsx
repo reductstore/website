@@ -8,8 +8,16 @@ cargo install reduct-cli
 
   return (
     <>
-      <p>Compatible with the amd64 architecture.</p>
       <CodeBlock className="language-bash">{binaryInstall}</CodeBlock>
+      <p>
+        You may need to install the latest version of Rust. Read the{" "}
+        <b>
+          <a href="https://www.rust-lang.org/tools/install">
+            official Rust installation guide
+          </a>
+        </b>{" "}
+        for more information.
+      </p>
     </>
   );
 }
