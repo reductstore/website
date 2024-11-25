@@ -17,9 +17,9 @@ async fn main() -> Result<(), ReductError> {
 
     // Check that the entry was renamed
     let entries = bucket.entries().await?;
-    let entry_names: Vec<String> = entries.iter().map(|entry| entry.name.clone()).collect();
-    assert!(entry_names.contains(&"entry_2".to_string()));
-    assert!(!entry_names.contains(&"entry_1".to_string()));
+    let entry_names: Vec<&str> = entries.iter().map(|entry| entry.name.as_str()).collect();
+    assert!(entry_names.contains(&"entry_2"));
+    assert!(!entry_names.contains(&"entry_1"));
 
     Ok(())
 }
