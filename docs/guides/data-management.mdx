@@ -166,3 +166,50 @@ import DeleteRecordsRangeCli from "!!raw-loader!../examples/cli/data_management_
 :::warning
 Deleting records in a time range is a heavy operation and may take a long time to complete because it copies the retained records to new blocks and deletes the old ones.
 :::
+
+## Renaming Entries
+
+An entry can be renamed using the SDKs, CLI client, Web Console, or REST API. A client must have write permission to a bucket to rename its entries if the authorization is enabled.
+
+import RenameEntryCLI from "!!raw-loader!../examples/cli/data_management_rename_entries.sh";
+import RenameEntryPy from "!!raw-loader!../examples/py/src/data_management_rename_entries.py";
+import RenameEntryJs from "!!raw-loader!../examples/js/src/data_management_rename_entries.mjs";
+import RenameEntryRs from "!!raw-loader!../examples/rs/examples/data_management_rename_entries.rs";
+import RenameEntryCpp from "!!raw-loader!../examples/cpp/src/data_management_rename_entries.cc";
+import RenameEntryCurl from "!!raw-loader!../examples/curl/data_management_rename_entries.sh";
+
+<Tabs>
+  <TabItem value="CLI">
+    <CodeBlock language="shell">{RenameEntryCLI}</CodeBlock>
+  </TabItem>
+
+  <TabItem value="Web Console">
+  
+    1. Open the Web Console at [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
+    2. Enter the API token if the authorization is enabled.
+    3. Select the bucket that contains the entry you want to rename:
+    ![Browse buckets with Web Console](./img/entry_rename_select_bucket.webp)
+    4. You will see a list of all the entries in the bucket
+    5. Click on the edit icon in the entry row:
+    ![Edit entry with Web Console](./img/entry_rename_edit.webp)
+    6. Rename the entry and click on the **Save** button:
+    ![Save entry name with Web Console](./img/entry_rename_save.webp)
+    
+  </TabItem>
+  
+  <TabItem value="Python">
+    <CodeBlock language="python">{RenameEntryPy}</CodeBlock>
+  </TabItem>
+  <TabItem value="JavaScript">
+    <CodeBlock language="javascript">{RenameEntryJs}</CodeBlock>
+  </TabItem>
+  <TabItem value="Rust">
+    <CodeBlock language="rust">{RenameEntryRs}</CodeBlock>
+  </TabItem>
+  <TabItem value="C++">
+    <CodeBlock language="cpp">{RenameEntryCpp}</CodeBlock>
+  </TabItem>
+  <TabItem value="cURL">
+    <CodeBlock language="bash">{RenameEntryCurl}</CodeBlock>
+  </TabItem>
+</Tabs>
