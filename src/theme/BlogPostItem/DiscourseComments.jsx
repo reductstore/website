@@ -13,7 +13,6 @@ const DiscourseComments = ({ embedUrl }) => {
       'iframe[src*="community.reduct.store"]',
     );
     if (iframe && iframe.contentWindow) {
-      console.log("Sending theme to iframe", colorMode);
       iframe.contentWindow.postMessage({ theme: colorMode }, discourseUrl);
     }
   };
