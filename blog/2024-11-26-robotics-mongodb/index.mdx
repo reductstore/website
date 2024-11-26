@@ -1,6 +1,6 @@
 ---
 title: "MongoDB vs ReductStore: Choosing the Right Database for Robotics Applications"
-description: TODO
+description: Learn the differences between MongoDB and ReductStore for managing data in robotics applications. Compare their architecture, data querying, communication protocols, data batching, replication, retention policies, and performance.
 authors: gracija
 tags: [comparison, mongodb, robotics]
 slug: robotics-mongodb-vs-reductstore
@@ -8,7 +8,7 @@ date: 2024-11-26
 image: ./img/introduction_diagram.drawio.png
 ---
 
-![TODO](./img/introduction_diagram.drawio.png)
+![Introduction Diagram](./img/introduction_diagram.drawio.png)
 
 Robotics applications generate and process a wide variety of data, such as sensor readings, video streams, logs, and AI model outputs. Managing this data efficiently is crucial because it affects the performance, scalability, and reliability of the entire system.
 
@@ -97,7 +97,7 @@ For a real-world robotics system, consider a scenario where numerous robots are 
 
 As the amount of data accumulates, it is very important to efficiently replicate this data to the cloud for further analysis and long-term storage. This is where ReductStore comes into play. The data replication strategy involves decreasing the volume of data by filtering out less important information automatically. By using ReductStore's edge-to-cloud replication and data filtering capabilities, only the most relevant time-series data is transmitted to the cloud, making sure that resources are used efficiently and bandwidth is optimized. This reduction strategy can be applied by using predefined rules or dynamic triggers, such as certain events or changes in sensor readings, helping improve performance and save on cloud costs.
 
-![TODO](./img/robots_reductstore.drawio.png)
+![ReductStore in Robotics Application](./img/robots_reductstore.drawio.png)
 
 ## Conclusion
 
