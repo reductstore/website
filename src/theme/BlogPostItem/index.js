@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
 import BlogPostItem from "@theme-original/BlogPostItem";
 import SocialShareBar from "@site/src/components/promotional/SocialShareBar";
 import SlidingBanner from "@site/src/components/promotional/SlidingBanner";
 import BlogForm from "@site/src/components/forms/BlogForm";
+import DiscourseComments from "./DiscourseComments";
 import { useLocation } from "@docusaurus/router";
 import styles from "./styles.module.css";
 
@@ -22,31 +22,6 @@ export default function BlogPostItemWrapper(props) {
     !isBlogPage &&
     !isAuthorPage &&
     !isTagPage;
-
-  useEffect(() => {
-    if (isSpecificBlogPost) {
-      const discourseUsername = "system";
-      const discourseUrl = "https://community.reduct.store/";
-      const embedUrl = `https://www.reduct.store${pagePath}`;
-
-      window.DiscourseEmbed = {
-        discourseUrl,
-        discourseEmbedUrl: embedUrl,
-      };
-
-      const meta = document.createElement("meta");
-      meta.name = "discourse-username";
-      meta.content = discourseUsername;
-      document.head.appendChild(meta);
-
-      const script = document.createElement("script");
-      script.type = "text/javascript";
-      script.async = true;
-      script.src = `${discourseUrl}javascripts/embed.js`;
-      document.body.appendChild(script);
-    }
-  }, [isSpecificBlogPost, pagePath]);
-
   return (
     <>
       <BlogPostItem {...props} />
@@ -58,10 +33,9 @@ export default function BlogPostItemWrapper(props) {
             <div className={styles.discourseTitle}>
               Comments from the Community
             </div>
-            <div
-              id="discourse-comments"
-              className={styles.iframeContainer}
-            ></div>
+            <DiscourseComments
+              embedUrl={`https://www.reduct.store${pagePath}`}
+            />
           </div>
           <SlidingBanner />
         </>
