@@ -2,3 +2,189 @@
 title: Logical Operators
 description: Learn how to use logical operators in conditional queries to filter data in ReductStore.
 ---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/conditional-query/logical-operators"
+  />
+</head>
+
+The logical operators are used to combine multiple conditions in a query.
+
+The following logical operators are supported:
+
+| Operator             | Description                                                                      |
+| -------------------- | -------------------------------------------------------------------------------- |
+| `$and` \| `$all_of`  | Logical AND operator. For result to be true, all conditions must be true.        |
+| `$or` \| `$any_of`   | Logical OR operator. For result to be true, at least one condition must be true. |
+| `$xor` \| `$one_of`  | Logical XOR operator. For result to be true, exactly one condition must be true. |
+| `$not` \| `$none_of` | Logical NOT operator. For result to be true, all conditions must be false.       |
+
+## $and | $all_of
+
+The `$and` or `$all_of` operator is used to combine multiple conditions in a query. The result is true only if all conditions are true.
+
+### Syntax
+
+```
+{
+  "$and" | "$all_of: [
+    { expression_1 },
+    { expression_2},
+    ...
+  ]
+}
+```
+
+### Behavior
+
+The operator evaluates each condition in the array and returns true only if all conditions are true.
+It stops evaluating conditions as soon as one of them is false.
+Empty list of conditions is always true.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&label_name_1": { "$and": "&label_name_2" }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$all_of": [
+    { "&label_name": { "$gt": 10 } },
+    { "&label_name": { "$lt": 20 } }
+  ]
+}
+```
+
+## $or | $any_of
+
+The `$or` or `$any_of` operator is used to combine multiple conditions in a query. The result is true if at least one condition is true.
+
+### Syntax
+
+```
+{
+  "$or" | "$any_of": [
+    { expression_1 },
+    { expression_2},
+    ...
+  ]
+}
+```
+
+### Behavior
+
+The operator evaluates each condition in the array and returns true if at least one condition is true.
+It stops evaluating conditions as soon as one of them is true. Empty list of conditions is always false.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&label_name_1": { "$or": "&label_name_2" }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$any_of": [
+    { "&label_name": { "$gt": 10 } },
+    { "&label_name": { "$lt": 20 } }
+  ]
+}
+```
+
+## $xor | $one_of
+
+The `$xor` or `$one_of` operator is used to combine multiple conditions in a query. The result is true only if exactly one condition is true.
+
+### Syntax
+
+```
+{
+  "$xor" | "$one_of": [
+    { expression_1 },
+    { expression_2 },
+    ...
+  ]
+}
+```
+
+### Behavior
+
+The operator evaluates each condition in the array and returns true only if exactly one condition is true.
+It stops evaluating conditions as soon as more than one of them is true. Empty list of conditions is always false.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&label_name_1": { "$xor": "&label_name_2" }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$one_of": [
+    { "&label_name": { "$gt": 10 } },
+    { "&label_name": { "$lt": 20 } }
+  ]
+}
+```
+
+## $not | $none_of
+
+The `$not` or `$none_of` operator is used to negate a condition in a query. The result is true only if all conditions are false.
+
+### Syntax
+
+```
+{
+  "$not" | "$none_of": [
+    { expression_1 },
+    { expression_2 },
+  ]
+}
+```
+
+### Behavior
+
+The operator evaluates each condition in the array and returns true only if all conditions are false.
+It stops evaluating conditions as soon as one of them is true. Empty list of conditions is always true.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&label_name_1": { "$not": "&label_name_2" }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$none_of": [
+    { "&label_name": { "$gt": 10 } },
+    { "&label_name": { "$lt": 20 } }
+  ]
+}
+```
