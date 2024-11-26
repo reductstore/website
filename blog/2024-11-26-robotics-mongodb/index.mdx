@@ -56,7 +56,11 @@ On the other hand, **MongoDB** uses its native _MongoDB Wire Protocol_, a lightw
 
 ## Data Management Features
 
+Data batching, edge-to-cloud replication, and retention policies are key in robotics, especially for high-frequency, real-time applications. Here's why:
+
 ### Data batching capabilities
+
+Robots often generate high-frequency data from sensors and cameras, which requires efficient data transfer to avoid bottlenecks.
 
 **ReductStore** enables efficient _data batching_ by grouping multiple records into a single HTTP request, minimizing delays and reducing the number of queries needed. ReductStore optimizes data retrieval by batching multiple records into a single HTTP request, reducing network overhead and delays. The storage system ensures data records are batched optimally for the HTTP protocol, supporting use cases such as real-time monitoring and historical data analysis with minimal query overhead.
 
@@ -64,11 +68,15 @@ On the other hand, **MongoDB** uses its native _MongoDB Wire Protocol_, a lightw
 
 ### Edge-to-Cloud Replication
 
+In robotics, data is often processed locally (on edge devices) to reduce latency and dependence on cloud connectivity. However, important data still needs to be replicated to the cloud for centralized analysis, long-term storage, or to train machine learning models.
+
 [**ReductStore offers granular control over data filtering during replication**](/docs/guides/data-replication), making it easy to move specific subsets of data between edge devices and the cloud. This feature allows efficient syncing, ensuring only necessary data is transferred to reduce bandwidth usage. This makes ReductStore particularly well-suited for applications like robotics where data is processed in real-time at the edge, and only relevant or high-priority data needs to be replicated to the cloud for analysis or storage.
 
 **MongoDB's** replication system mainly focuses on maintaining data consistency and fault tolerance across multiple replica sets. While it is very reliable and flexible for general-purpose applications, it is not specifically suited for edge-to-cloud workflows since it does not natively allow data filtering during the replication process.
 
 ### Retention policies
+
+Robotic systems generate large amounts of data, much of which quickly becomes irrelevant. Efficient retention policies are a must to maintain performance and avoid disk space issues on edge devices.
 
 **ReductStore's** retention policies are based on _volume thresholds_, meaning that older entries are automatically removed as new ones are added. The platform follows a _FIFO (first-in, first-out)_ rule, making it a perfect solution for applications where only recent data needs to be kept, such as sensor readings or telemetry logs. These retention policies can be customized for each data bucket, which ensures efficient data management.
 
