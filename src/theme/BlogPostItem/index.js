@@ -1,9 +1,10 @@
-import React from "react";
 import BlogPostItem from "@theme-original/BlogPostItem";
 import SocialShareBar from "@site/src/components/promotional/SocialShareBar";
 import SlidingBanner from "@site/src/components/promotional/SlidingBanner";
 import BlogForm from "@site/src/components/forms/BlogForm";
+import DiscourseComments from "./DiscourseComments";
 import { useLocation } from "@docusaurus/router";
+import styles from "./styles.module.css";
 
 export default function BlogPostItemWrapper(props) {
   const { frontMatter } = props.children.type;
@@ -28,6 +29,14 @@ export default function BlogPostItemWrapper(props) {
         <>
           <SocialShareBar frontMatter={frontMatter} />
           <BlogForm elementId="subscribe-blog-form" frontMatter={frontMatter} />
+          <div className={styles.commentsContainer}>
+            <div className={styles.discourseTitle}>
+              Comments from the Community
+            </div>
+            <DiscourseComments
+              embedUrl={`https://www.reduct.store${pagePath}`}
+            />
+          </div>
           <SlidingBanner />
         </>
       )}
