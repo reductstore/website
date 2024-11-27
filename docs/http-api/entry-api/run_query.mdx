@@ -102,10 +102,12 @@ The request body should be a JSON object with the following parameters:
 
     // Optional. A list of labels to include in the query.
     // Only records with all the specified labels are included.
+    // DEPRECATED: Use "when" instead.
     include?: "Dict[string, string]"
 
     // Optional. A list of labels to exclude in the query.
     // Records with any of the specified labels are excluded.
+    // DEPRECATED: Use "when" instead.
     exclude?: "Dict[string, string]"
 
     // Optional. A conditional query to filter records.
