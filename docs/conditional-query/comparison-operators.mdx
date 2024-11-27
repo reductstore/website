@@ -2,3 +2,227 @@
 title: Comparison Operators
 description: Learn how to use comparison operators in conditional queries to filter data in ReductStore.
 ---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/conditional-query/comparison-operators"
+  />
+</head>
+
+The comparison operators are used to compare values in a query.
+
+The following comparison operators are supported:
+
+| Operator | Description                                                                                 |
+| -------- | ------------------------------------------------------------------------------------------- |
+| `$eq`    | Equal. Returns true if the values are equal.                                                |
+| `$ne`    | Not equal. Returns true if the values are not equal.                                        |
+| `$gt`    | Greater than. Returns true if the first value is greater than the second.                   |
+| `$gte`   | Greater than or equal. Returns true if the first value is greater than the second or equal. |
+| `$lt`    | Less than. Returns true if the first value is less than the second.                         |
+| `$lte`   | Less than or equal. Returns true if the first value is less than the second or equal.       |
+
+## $eq
+
+The `$eq` operator is used to compare values for equality.
+
+### Syntax
+
+```
+{
+  "$eq": [ <expression_1>, <expression_2> ]
+}
+```
+
+### Behavior
+
+The operator returns true if the values of the two expressions are equal.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&label_name": { "$eq": 10 }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$eq": ["&label_name", 10]
+}
+```
+
+## $ne
+
+The `$ne` operator is used to compare values for inequality.
+
+### Syntax
+
+```
+{
+  "$ne": [ <expression_1>, <expression_2> ]
+}
+```
+
+### Behavior
+
+The operator returns true if the values of the two expressions are not equal.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&label_name": { "$ne": 10 }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$ne": ["&label_name", 10]
+}
+```
+
+## $gt
+
+The `$gt` operator is used to compare values for greater than.
+
+### Syntax
+
+```
+{
+  "$gt": [ <expression_1>, <expression_2> ]
+}
+```
+
+### Behavior
+
+The operator returns true if the value of the first expression is greater than the value of the second expression.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&label_name": { "$gt": 10 }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$gt": ["&label_name", 10]
+}
+```
+
+## $gte
+
+The `$gte` operator is used to compare values for greater than or equal.
+
+### Syntax
+
+```
+{
+  "$gte": [ <expression_1>, <expression_2> ]
+}
+```
+
+### Behavior
+
+The operator returns true if the value of the first expression is greater than or equal to the value of the second expression.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&label_name": { "$gte": 10 }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$gte": ["&label_name", 10]
+}
+```
+
+## $lt
+
+The `$lt` operator is used to compare values for less than.
+
+### Syntax
+
+```
+{
+  "$lt": [ <expression_1>, <expression_2> ]
+}
+```
+
+### Behavior
+
+The operator returns true if the value of the first expression is less than the value of the second expression.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&label_name": { "$lt": 10 }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$lt": ["&label_name", 10]
+}
+```
+
+## $lte
+
+The `$lte` operator is used to compare values for less than or equal.
+
+### Syntax
+
+```
+{
+  "$lte": [ <expression_1>, <expression_2> ]
+}
+```
+
+### Behavior
+
+The operator returns true if the value of the first expression is less than or equal to the value of the second expression.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&label_name": { "$lte": 10 }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$lte": ["&label_name", 10]
+}
+```

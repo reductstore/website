@@ -30,8 +30,8 @@ The `$and` or `$all_of` operator is used to combine multiple conditions in a que
 ```
 {
   "$and" | "$all_of: [
-    { expression_1 },
-    { expression_2},
+    { <expression_1> },
+    { <expression_2> },
     ...
   ]
 }
@@ -73,8 +73,8 @@ The `$or` or `$any_of` operator is used to combine multiple conditions in a quer
 ```
 {
   "$or" | "$any_of": [
-    { expression_1 },
-    { expression_2},
+    { <expression_1> },
+    { <expression_2>},
     ...
   ]
 }
@@ -115,8 +115,8 @@ The `$xor` or `$one_of` operator is used to combine multiple conditions in a que
 ```
 {
   "$xor" | "$one_of": [
-    { expression_1 },
-    { expression_2 },
+    { <expression_1> },
+    { <expression_2> },
     ...
   ]
 }
@@ -157,8 +157,8 @@ The `$not` or `$none_of` operator is used to negate a condition in a query. The 
 ```
 {
   "$not" | "$none_of": [
-    { expression_1 },
-    { expression_2 },
+    { <expression_1> },
+    { <expression_2> },
   ]
 }
 ```
