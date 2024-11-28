@@ -113,6 +113,10 @@ The request body should be a JSON object with the following parameters:
     // Optional. A conditional query to filter records.
     when?: "object"
 
+    // Optional. If true, the query will be strict and return an error if any of the conditions cannot be evaluated
+    // during query execution. If false or unset, the query will consider the incomplete condition to be false.
+    strict?: "boolean"
+
     // Optional. Return a record every S seconds
     each_s?: "float"
 
