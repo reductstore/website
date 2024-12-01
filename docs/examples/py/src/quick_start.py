@@ -11,14 +11,17 @@ async def main():
             exist_ok=True,
         )
 
-        # 3. Write some data with timestamps in the 'sensor-1' entry
-        await bucket.write("sensor-1", b"Record #1", timestamp="2024-01-01T10:00:00Z")
-        await bucket.write("sensor-1", b"Record #2", timestamp="2024-01-01T10:00:01Z")
+        # 3. Write some data with timestamps and labels to the 'entry-1' entry
+        await bucket.write("sensor-1", b"<Blob data>", timestamp="2024-01-01T10:00:00Z",
+                           labels={"score": 10})
+        await bucket.write("sensor-1", b"<Blob data>", timestamp="2024-01-01T10:00:01Z",
+                           labels={"score": 20})
 
-        # 4. Query the data by time range
-        async for record in bucket.query(
-            "sensor-1", start="2024-01-01T10:00:00Z", end="2024-01-01T10:00:02Z"
-        ):
+        # 4. Query the data by time range and condition
+        async for record in bucket.query("sensor-1",
+                                         start="2024-01-01T10:00:00Z",
+                                         end="2024-01-01T10:00:02Z",
+                                         when={"&score": {"$gt": 10}}):
             print(f"Record timestamp: {record.timestamp}")
             print(f"Record size: {record.size}")
             print(await record.read_all())

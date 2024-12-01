@@ -182,6 +182,7 @@ async def remove_query(entry_name: str,
                        start: Optional[Union[int, datetime, float,
                                              str]] = None,
                        stop: Optional[Union[int, datetime, float, str]] = None,
+                       when: Optional[Dict] = None,
                        **kwargs) -> int
 ```
 
@@ -196,13 +197,17 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
 - `start` - the beginning of the time interval.
   If None, then from the first record
 - `stop` - the end of the time interval. If None, then to the latest record
+- `when` - condtion to filter
 
 **Arguments**:
 
-- `include` _dict_ - remove records which have all labels from this dict
-- `exclude` _dict_ - remove records which doesn't have all labels from this
+- `include` _dict_ - remove records which have all labels
+  from this dict (DEPRECATED use when)
+- `exclude` _dict_ - remove records which doesn't have all labels
+  from this (DEPRECATED use when)
   each_s(Union[int, float]): remove a record for each S seconds
 - `each_n(int)` - remove each N-th record
+- `strict(bool)` - if True: strict query
 
 **Returns**:
 
@@ -313,16 +318,16 @@ Write a record to entry
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-  
+
 
 **Example**:
 ```python
       await bucket.write("entry-1", b"some_data",
          timestamp="2021-09-10T10:30:00")
-     
+
       # You can write data chunk-wise using an asynchronous iterator and the
       # size of the content:
-     
+
       async def sender():
           for chunk in [b"part1", b"part2", b"part3"]:
               yield chunk
@@ -375,7 +380,7 @@ If a label is empty, it will be removed.
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-  
+
 
 **Example**:
 ```python
@@ -409,7 +414,7 @@ If a label is empty, it will be removed.
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-  
+
 
 **Example**:
 ```python
@@ -427,6 +432,7 @@ async def query(entry_name: str,
                 start: Optional[Union[int, datetime, float, str]] = None,
                 stop: Optional[Union[int, datetime, float, str]] = None,
                 ttl: Optional[int] = None,
+                when: Optional[Dict] = None,
                 **kwargs) -> AsyncIterator[Record]
 ```
 
@@ -442,20 +448,24 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
   If None, then from the first record
 - `stop` - the end of the time interval. If None, then to the latest record
 - `ttl` - Time To Live of the request in seconds
+- `when` - condtion to filter records
 
 **Arguments**:
 
-- `include` _dict_ - query records which have all labels from this dict
-- `exclude` _dict_ - query records which doesn't have all labels from this
+- `include` _dict_ - query records which have all labels
+  from this dict (DEPRECATED use when)
+- `exclude` _dict_ - query records which doesn't have all labels
+  from this (DEPRECATED use when)
 - `head` _bool_ - if True: get only the header of a recod with metadata
   each_s(Union[int, float]): return a record for each S seconds
 - `each_n(int)` - return each N-th record
 - `limit` _int_ - limit the number of records
+- `strict(bool)` - if True: strict query
 
 **Returns**:
 
 - `AsyncIterator[Record]` - iterator to the records
-  
+
 
 **Example**:
 ```python
@@ -488,6 +498,7 @@ Get full information about bucket (settings, statistics, entries)
 async def subscribe(entry_name: str,
                     start: Optional[Union[int, datetime, float, str]] = None,
                     poll_interval=1.0,
+                    when: Optional[Dict] = None,
                     **kwargs) -> AsyncIterator[Record]
 ```
 
@@ -502,17 +513,21 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
 - `start` - the beginning timestamp to read records.
   If None, then from the first record.
 - `poll_interval` - inteval to ask new records in seconds
+- `when` - condtion to filter records
 
 **Arguments**:
 
-- `include` _dict_ - query records which have all labels from this dict
-- `exclude` _dict_ - query records which doesn't have all labels from this dict
+- `include` _dict_ - query records which have all labels
+  from this dict (DEPRECATED use when)
+- `exclude` _dict_ - query records which doesn't have all labels
+  from this (DEPRECATED use when)
 - `head` _bool_ - if True: get only the header of a recod with metadata
+- `strict(bool)` - if True: strict query
 
 **Returns**:
 
 - `AsyncIterator[Record]` - iterator to the records
-  
+
 
 **Example**:
 ```python
@@ -522,5 +537,3 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
           async for chunk in record.read(n=1024):
               print(chunk)
    ```
-
-

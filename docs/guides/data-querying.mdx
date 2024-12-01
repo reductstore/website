@@ -35,27 +35,22 @@ are divided into two categories: filter and control parameters.
 
 Filter parameters are used to select records based on specific criteria. You can combine multiple filter parameters to create complex queries. This is the list of filter parameters, sorted by priority:
 
-| Parameter | Description                     | Type                    | Default                                        |
-| --------- | ------------------------------- | ----------------------- | ---------------------------------------------- |
-| `start`   | Start time of the query         | Timestamp               | The timestamp of the first record in the entry |
-| `end`     | End time of the query           | Timestamp               | The timestamp of the last record in the entry  |
-| `include` | List of label values to include | List of key-value pairs | Disabled                                       |
-| `exclude` | List of labels to exclude       | List of key-value pairs | Disabled                                       |
-| `each_s`  | Return a record every S seconds | Float                   | Disabled                                       |
-| `each_n`  | Return only every N record      | Integer                 | Disabled                                       |
-| `limit`   | Limit on the number of records  | Integer                 | All records are returned                       |
+| Parameter | Description                     | Type             | Default                                        |
+| --------- | ------------------------------- | ---------------- | ---------------------------------------------- |
+| `start`   | Start time of the query         | Timestamp        | The timestamp of the first record in the entry |
+| `end`     | End time of the query           | Timestamp        | The timestamp of the last record in the entry  |
+| `when`    | Conditional query               | JSON-like object | No condition                                   |
+| `each_s`  | Return a record every S seconds | Float            | Disabled                                       |
+| `each_n`  | Return only every N record      | Integer          | Disabled                                       |
+| `limit`   | Limit on the number of records  | Integer          | All records are returned                       |
 
 **Time Range**
 
 The time range is defined by the `start` and `end` parameters. Records with a timestamp equal to or greater than `start` and less than `end` are included in the result. If the `start` parameter is not set, the query starts from the begging of the entry. If the `end` parameter is not set, the query continues to the end of the entry. If both `start` and `end` are not set, the query returns the entire entry.
 
-**Include Labels**
+**When Condition**
 
-The `include` parameter filters the records by the specified label values. Only those that match ALL the specified label values are included in the result.
-
-**Exclude Labels**
-
-The `exclude` parameter filters records based on specified labels. Any records matching ALL of these labels will be omitted from the results.
+The `when` parameter is used to filter records based on labels. The condition is specified as a JSON-like object. The query returns only records that match the specified condition. The condition can be a simple equality check or a more complex expression using comparison operators. For more information on conditional queries, see the **[Conditional Query Reference](/docs/conditional-query/index)**.
 
 **One Record Every S Seconds**
 
@@ -79,6 +74,7 @@ There are also more advanced parameters available in the SDKs and HTTP API to co
 | `head`          | Retrieve only metadata                                                               | Boolean | False   |
 | `continuous`    | Keep the query open for continuous data retrieval                                    | Boolean | False   |
 | `poll_interval` | Time interval in seconds for polling data in continuous mode data in continuous mode | Integer | 1       |
+| `strict`        | Enable strict mode for conditional queries                                           | Boolean | False   |
 
 **TTL (Time-to-Live)**
 
@@ -91,6 +87,11 @@ The `head` flag is used to retrieve only metadata. When set to `true`, the query
 **Continuous Mode**
 
 The `continuous` flag is used to keep the query open for continuous data retrieval. This mode is useful when you need to monitor data in real-time. The SDKs provide `poll_interval` parameter to specify the time interval for polling data in continuous mode. The default interval is 1 second.
+
+**Strict Mode**
+
+The `strict` flag is used to enable strict mode for conditional queries in the `where` parameter. In strict mode, the query fails if the condition is invalid or contains an unknown field.
+When the strict mode is disabled, the invalid condition is considered as `false` and the unknown field is ignored.
 
 ## Typical Data Querying Cases
 
@@ -160,9 +161,10 @@ import ReadRecordCurl from "!!raw-loader!../examples/curl/data_querying_timestam
 
 ### Using Labels to Filter Data
 
-Filtering data by labels is another common use case. You can use `include` and `exclude` parameters to filter records by specific labels. The `include` parameter is used to filter records by specified labels values. Only records that match all specified labels values will be included in the result. Conversely, the `exclude` parameter is used to exclude records that match all specified labels from the result.
+Filtering data by labels is another common use case. You can use the `when` parameter to filter records based on labels.
+ReductStore supports a wide range of operators for conditional queries, including equality, comparison, and logical operators. Refer to the **[Conditional Query Reference](/docs/conditional-query/index)** for more information.
 
-For example, consider a data set with annotated photos of celebrities. We want to retrieve the first 10 photos of celebrities taken in 2006, excluding those of Rowan Atkinson:
+For example, consider a data set with annotated photos of celebrities. We want to retrieve the first 10 photos of celebrities taken after 2006, excluding those of Rowan Atkinson:
 
 import FilterQueryPy from "!!raw-loader!../examples/py/src/data_querying_filter.py";
 import FilterQueryJs from "!!raw-loader!../examples/js/src/data_querying_filter.mjs";
