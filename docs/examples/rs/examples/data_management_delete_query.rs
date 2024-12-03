@@ -1,7 +1,7 @@
 use std::time::{Duration, SystemTime};
 
 use bytes::Bytes;
-use reduct_rs::{ErrorCode, RecordBuilder, ReductClient, ReductError};
+use reduct_rs::{ReductClient, ReductError};
 use serde_json::json;
 use tokio;
 

@@ -1,4 +1,3 @@
-use bytes::Bytes;
 use reduct_rs::{RecordBuilder, ReductClient, ReductError};
 use tokio;
 

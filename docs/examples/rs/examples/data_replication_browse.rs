@@ -1,4 +1,4 @@
-use reduct_rs::{Labels, ReductClient, ReductError};
+use reduct_rs::{ReductClient, ReductError};
 use tokio;
 
 #[tokio::main]
