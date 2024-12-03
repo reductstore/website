@@ -31,6 +31,10 @@ import NextStep from "./common/next_steps.mdx";
     ```toml
     [dependencies]
     reduct-rs = "1"
+    serde_json = "1"
+    tokio = "1"
+    futures = "0.3"
+    futures-util = "0.3"
     ```
 
     Then, import the `reduct-rs` crate in your Rust code:
@@ -74,8 +78,9 @@ import NextStep from "./common/next_steps.mdx";
 <DataIngestionSection>
     To write a timestamped record to an entry in a bucket, you should use the `write_record` method on a `Bucket` instance.
     Pass the name of the entry you want to write to as an argument. The method will return a `RecordBuilder` instance to
-    pass the data and timestamp you want to write. Call the `send` method on the `RecordBuilder` to send the request to
-    the ReductStore server and write the record:
+    pass the data and timestamp you want to write. Additionally, you can provide labels to the record to make it easier to query later.
+
+    Call the `send` method on the `RecordBuilder` to send the request to the ReductStore server and write the record:
 
     ```rust file=../examples/rs/examples/quick_start.rs start=3. end=4.
     ```
@@ -87,6 +92,9 @@ import NextStep from "./common/next_steps.mdx";
 <DataQueryingSection>
     To iterate over all records in a given time range, you should use the `query` method on a bucket instance. Pass the
     name of the entry to iterate over. The method will return a `QueryBuilder` instance to specify the time interval.
+    You can also provide conditions to filter records based on labels using the `when` method. Read more about the query syntax in
+    the [**Conditional Query Reference**](/docs/conditional-query/index.mdx).
+
     Call the `send` method on the `QueryBuilder` to send the request to the ReductStore server and return a stream of
     records:
 
