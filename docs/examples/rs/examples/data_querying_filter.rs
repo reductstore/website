@@ -1,5 +1,6 @@
 use futures::StreamExt;
 use reduct_rs::{ReductClient, ReductError};
+use serde_json::json;
 use tokio;
 
 #[tokio::main]
@@ -18,8 +19,10 @@ async fn main() -> Result<(), ReductError> {
     // Query 10 photos from "imdb" entry which taken in 2006 but don't contain "Rowan Atkinson"
     let query = bucket
         .query("imdb")
-        .add_include("photo_taken", "2006")
-        .add_exclude("name", "b'Rowan Atkinson'")
+        .when(json!({
+            "&photo_taken": {"$gt": 2006},
+            "&name": {"$ne": "b'Rowan Atkinson'"},
+        }))
         .limit(10)
         .send()
         .await?;

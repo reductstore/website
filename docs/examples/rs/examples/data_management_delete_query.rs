@@ -2,6 +2,7 @@ use std::time::{Duration, SystemTime};
 
 use bytes::Bytes;
 use reduct_rs::{ErrorCode, RecordBuilder, ReductClient, ReductError};
+use serde_json::json;
 use tokio;
 
 #[tokio::main]
@@ -24,7 +25,7 @@ async fn main() -> Result<(), ReductError> {
 
     bucket
         .write_record("rs-example")
-        .timestamp(timestamp  + Duration::from_secs(1))
+        .timestamp(timestamp + Duration::from_secs(1))
         .data(Bytes::from("Some more binary data"))
         .send()
         .await?;
@@ -41,15 +42,11 @@ async fn main() -> Result<(), ReductError> {
     // You can also delete all records with a specific label
     bucket
         .remove_query("rs-example")
-        .add_include("label1", "value1")
+        .when(json!({"&key1": {"$eq": "value1"}}))
         .send()
         .await?;
 
     // Or each N-th record
-    bucket
-        .remove_query("rs-example")
-        .each_n(2)
-        .send()
-        .await?;
+    bucket.remove_query("rs-example").each_n(2).send().await?;
     Ok(())
 }

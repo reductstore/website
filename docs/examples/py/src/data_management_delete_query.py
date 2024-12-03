@@ -26,7 +26,7 @@ async def main():
         assert removed_records == 2
 
         # You can also delete all records with a specific label
-        await bucket.remove_query("py-example", ts, ts + 2, where={"&key1": {"$eq": "value1"}})
+        await bucket.remove_query("py-example", ts, ts + 2, when={"&key1": {"$eq": "value1"}})
 
         # Or each N-th record
         await bucket.remove_query("py-example", ts, ts + 2, each_n=2)

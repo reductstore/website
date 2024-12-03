@@ -26,7 +26,7 @@ async fn main() -> Result<(), ReductError> {
 
     bucket
         .write_record("rs-example")
-        .timestamp(timestamp  + Duration::from_secs(1))
+        .timestamp(timestamp + Duration::from_secs(1))
         .add_label("key1", "value1")
         .add_label("key2", "value2")
         .data(Bytes::from("Some more binary data"))
@@ -41,7 +41,11 @@ async fn main() -> Result<(), ReductError> {
         .update_label("key1", "value3")
         .send()
         .await?;
-    let record = bucket.read_record("rs-example").timestamp(timestamp).send().await?;
+    let record = bucket
+        .read_record("rs-example")
+        .timestamp(timestamp)
+        .send()
+        .await?;
     assert_eq!(record.labels().get("key1"), Some(&"value3".to_string()));
     assert_eq!(record.labels().get("key2"), None);
 
@@ -49,16 +53,17 @@ async fn main() -> Result<(), ReductError> {
     let record1 = RecordBuilder::new()
         .timestamp(timestamp)
         .add_label("key1", "value1")
-        .add_label("key2", "")  // Remove label "key2"
+        .add_label("key2", "") // Remove label "key2"
         .build();
 
     let record2 = RecordBuilder::new()
         .timestamp(timestamp + Duration::from_secs(1))
         .add_label("key1", "value1")
-        .add_label("key2", "")  // Remove label "key2"
+        .add_label("key2", "") // Remove label "key2"
         .build();
 
-    let errors = bucket.update_batch("rs-example")
+    let errors = bucket
+        .update_batch("rs-example")
         .add_records(vec![record1, record2])
         .send()
         .await?;
