@@ -18,7 +18,7 @@ int main() {
     auto err = bucket->Query("imdb", std::nullopt, std::nullopt, {
             .when=R"({
                 "&photo_taken": {"$gt": 2006},
-                "&name": {"$ne": "b'Rowan Atkinson'"},
+                "&name": {"$ne": "b'Rowan Atkinson'"}
             })",
             .limit = 10,
     }, [](auto rec) {
