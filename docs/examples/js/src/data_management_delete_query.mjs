@@ -23,7 +23,7 @@ assert(removedRecords === 2);
 
 // You can also delete all records with a specific label
 await bucket.removeQuery("entry-1", undefined, undefined, {
-  where: { "&key1": { $eq: "value1" } },
+  when: { "&key1": { $eq: "value1" } },
 });
 
 // Or each N-th record

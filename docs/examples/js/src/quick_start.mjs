@@ -34,7 +34,7 @@ for await (const record of bucket.query(
   us("2021-01-01T00:00:00Z"),
   us("2021-01-01T00:00:02Z"),
   {
-    where: { "&score": { $gt: 10 } },
+    when: { "&score": { $gt: 10 } },
   },
 )) {
   console.log(`Record timestamp: ${record.timestamp}`);
