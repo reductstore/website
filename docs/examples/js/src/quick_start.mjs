@@ -19,8 +19,8 @@ let record = await bucket.beginWrite("sensor-1", {
     score: 10,
   },
 });
-
 await record.write("<Blob data>");
+
 record = await bucket.beginWrite("sensor-1", {
   ts: us("2021-01-01T00:00:01Z"),
   labels: {

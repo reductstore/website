@@ -164,7 +164,7 @@ import ReadRecordCurl from "!!raw-loader!../examples/curl/data_querying_timestam
 Filtering data by labels is another common use case. You can use the `when` parameter to filter records based on labels.
 ReductStore supports a wide range of operators for conditional queries, including equality, comparison, and logical operators. Refer to the **[Conditional Query Reference](/docs/conditional-query/index.mdx)** for more information.
 
-For example, consider a data set with annotated photos of celebrities. We want to retrieve the first 10 photos of celebrities taken after 2006, excluding those of Rowan Atkinson:
+For example, consider a data set with annotated photos of celebrities. We want to retrieve the first 10 photos of celebrities taken after 2006 with a score less than 4:
 
 import FilterQueryPy from "!!raw-loader!../examples/py/src/data_querying_filter.py";
 import FilterQueryJs from "!!raw-loader!../examples/js/src/data_querying_filter.mjs";
