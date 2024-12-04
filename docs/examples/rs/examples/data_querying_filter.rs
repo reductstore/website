@@ -16,12 +16,12 @@ async fn main() -> Result<(), ReductError> {
         .send()
         .await?;
 
-    // Query 10 photos from "imdb" entry which taken in 2006 but don't contain "Rowan Atkinson"
+    // Query 10 photos from "imdb" entry which taken after 2006 with the face score less than 4
     let query = bucket
         .query("imdb")
         .when(json!({
             "&photo_taken": {"$gt": 2006},
-            "&name": {"$ne": "b'Rowan Atkinson'"},
+            "&face_score": {"$gt": 4}
         }))
         .limit(10)
         .send()
@@ -32,7 +32,7 @@ async fn main() -> Result<(), ReductError> {
         let record = record?;
         println!("Name: {:?}", record.labels().get("name"));
         println!("Photo Taken: {:?}", record.labels().get("photo_taken"));
-        println!("Gender: {:?}", record.labels().get("gender"));
+        println!("Face Score: {:?}", record.labels().get("face_score"));
 
         _ = record.bytes().await?;
     }

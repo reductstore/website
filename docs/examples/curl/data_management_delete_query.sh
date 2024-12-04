@@ -19,7 +19,7 @@ curl -H "${AUTH_HEADER}" \
 
 # You can also delete all records with a specific label
 curl -H "${AUTH_HEADER}" \
-  -d '{"query_type": "DELETE", "where": {"&key1": {"$eq": "value1"}}' \
+  -d '{"query_type": "DELETE", "when": {"&key1": {"$eq": "value1"}}' \
   -X POST -a ${API_PATH}/b/example-bucket/entry_1/q
 
 # Or each N-th record

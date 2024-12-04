@@ -8,18 +8,18 @@ async def main():
     async with Client("http://127.0.0.1:8383", api_token="my-token") as client:
         bucket: Bucket = await client.get_bucket("example-bucket")
 
-        # Query 10 photos from "imdb" entry which taken after 2006 but don't contain "Rowan Atkinson"
+        # Query 10 photos from "imdb" entry which taken after 2006 with the face score less than 4
         async for record in bucket.query(
                 "imdb",
                 limit=10,
                 when={
                     "&photo_taken": {"$gt": 2006},
-                    "&name": {"$ne": "b'Rowan Atkinson'"},
+                    "&face_score": {"$gt": 4},
                 },
         ):
             print("Name", record.labels["name"])
-            print("Phot taken", record.labels["photo_taken"])
-            print("Gender", record.labels["gender"])
+            print("Photo taken", record.labels["photo_taken"])
+            print("Face score", record.labels["face_score"])
             _jpeg = await record.read_all()
 
 
