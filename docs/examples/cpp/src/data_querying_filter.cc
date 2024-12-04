@@ -14,10 +14,12 @@ int main() {
     auto [bucket, create_err] = client->GetOrCreateBucket("example-bucket");
     assert(create_err == Error::kOk);
 
-    // Query 10 photos from "imdb" entry which taken in 2006 but don't contain "Rowan Atkinson"
+    // Query 10 photos from "imdb" entry which taken after 2006 but don't contain "Rowan Atkinson"
     auto err = bucket->Query("imdb", std::nullopt, std::nullopt, {
-            .include = {{"photo_taken", "2006"}},
-            .exclude = {{"name", "b'Rowan Atkinson'"}},
+            .when=R"({
+                "&photo_taken": {"$gt": 2006},
+                "&name": {"$ne": "b'Rowan Atkinson'"},
+            })",
             .limit = 10,
     }, [](auto rec) {
         std::cout << "Name: " << rec.labels["name"] << std::endl;

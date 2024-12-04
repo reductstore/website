@@ -32,7 +32,7 @@ int main() {
 
     // You can also delete all records with a specific label
     bucket->RemoveQuery("cpp-example", {}, {},{
-        .include = {{"key1", "value1"}}
+        .when = R"({"&key1": {"$eq": "value1"}}))"
     });
 
     // Or each N-th record
