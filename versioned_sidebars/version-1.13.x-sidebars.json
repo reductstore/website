@@ -1,0 +1,164 @@
+{
+  "docSidebar": [
+    "how-does-it-work",
+    {
+      "type": "category",
+      "label": "\uD83D\uDE80 Getting Started",
+      "collapsed": false,
+      "collapsible": false,
+      "link": {
+        "type": "doc",
+        "id": "getting-started/index"
+      },
+      "items": [
+        {
+          "type": "doc",
+          "label": "With Python",
+          "id": "getting-started/with-python"
+        },
+        {
+          "type": "doc",
+          "label": "With JavaScript",
+          "id": "getting-started/with-javascript"
+        },
+        {
+          "type": "doc",
+          "label": "With Rust",
+          "id": "getting-started/with-rust"
+        },
+        {
+          "type": "doc",
+          "label": "With C++",
+          "id": "getting-started/with-cpp"
+        }
+      ]
+    },
+    "configuration",
+    {
+      "type": "category",
+      "label": "Guides",
+      "collapsed": false,
+      "collapsible": false,
+      "link": {
+        "type": "doc",
+        "id": "guides/index"
+      },
+      "items": [
+        "guides/buckets",
+        "guides/data-ingestion",
+        "guides/data-querying",
+        "guides/data-management",
+        "guides/data-replication",
+        "guides/access-control"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Conditional Query Reference",
+      "link": {
+        "type": "doc",
+        "id": "conditional-query/index"
+      },
+      "items": [
+        "conditional-query/logical-operators",
+        "conditional-query/comparison-operators"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "HTTP API Reference",
+      "link": {
+        "type": "doc",
+        "id": "http-api/index"
+      },
+      "items": [
+        "http-api/server-api",
+        "http-api/bucket-api",
+        {
+          "type": "category",
+          "label": "Entry API",
+          "link": {
+            "type": "doc",
+            "id": "http-api/entry-api/index"
+          },
+          "collapsed": false,
+          "items": [
+            "http-api/entry-api/run_query",
+            "http-api/entry-api/read_data",
+            "http-api/entry-api/write_data",
+            "http-api/entry-api/update_data",
+            "http-api/entry-api/delete_data"
+          ]
+        },
+        "http-api/token-authentication",
+        "http-api/replication-api"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Integration",
+      "items": ["guides/integration/azure-vm"]
+    },
+    {
+      "type": "category",
+      "label": "Client SDKs",
+      "items": [
+        {
+          "type": "category",
+          "label": "Python Client",
+          "link": {
+            "type": "doc",
+            "id": "sdk/py/index"
+          },
+          "items": [
+            "sdk/py/client/index",
+            "sdk/py/bucket/index",
+            "sdk/py/record/index",
+            "sdk/py/error/index",
+            {
+              "type": "category",
+              "label": "Messages",
+              "items": [
+                "sdk/py/msg/server/index",
+                "sdk/py/msg/bucket/index",
+                "sdk/py/msg/replication/index",
+                "sdk/py/msg/token/index"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "link",
+          "label": "Rust Client",
+          "href": "https://github.com/reductstore/reduct-rs"
+        },
+        {
+          "type": "link",
+          "label": "JavaScript Client",
+          "href": "https://github.com/reductstore/reduct-js"
+        },
+        {
+          "type": "link",
+          "label": "C++ Client",
+          "href": "https://github.com/reductstore/reduct-cpp"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Tools",
+      "items": [
+        {
+          "type": "link",
+          "label": "CLI Client",
+          "href": "https://github.com/reductstore/reduct-cli"
+        },
+        {
+          "type": "link",
+          "label": "Web Console",
+          "href": "https://github.com/reductstore/web-console"
+        }
+      ]
+    }
+  ]
+}
