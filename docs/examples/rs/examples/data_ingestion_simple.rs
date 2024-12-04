@@ -1,6 +1,5 @@
 use std::time::SystemTime;
 
-use bytes::Bytes;
 use reduct_rs::{ReductClient, ReductError};
 use tokio;
 

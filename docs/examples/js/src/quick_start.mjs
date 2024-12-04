@@ -11,20 +11,34 @@ const bucket = await client.getOrCreateBucket("my-bucket", {
   quotaSize: BigInt(1e9),
 });
 
-// 3. Write some data with timestamps in the 'sensor-1' entry
+// 3. Write some data with timestamps and labels to the 'entry-1' entry
 const us = (dateString) => BigInt(Date.parse(dateString) * 1000);
-let record = await bucket.beginWrite("sensor-1", us("2021-01-01T00:00:00Z"));
-await record.write("Record #1");
-record = await bucket.beginWrite("sensor-1", us("2021-01-01T00:00:01Z"));
-await record.write("Record #2");
+let record = await bucket.beginWrite("sensor-1", {
+  ts: us("2021-01-01T00:00:00Z"),
+  labels: {
+    score: 10,
+  },
+});
+await record.write("<Blob data>");
 
-// 4. Query the data by time range
+record = await bucket.beginWrite("sensor-1", {
+  ts: us("2021-01-01T00:00:01Z"),
+  labels: {
+    score: 20,
+  },
+});
+await record.write("<Blob data>");
+
+// 4. Query the data by time range and condition
 for await (const record of bucket.query(
   "sensor-1",
   us("2021-01-01T00:00:00Z"),
   us("2021-01-01T00:00:02Z"),
+  {
+    when: { "&score": { $gt: 10 } },
+  },
 )) {
-  console.log(`Record timestamp: ${record.timestamp}`);
+  console.log(`Record timestamp: ${record.time}`);
   console.log(`Record size: ${record.size}`);
   console.log(await record.readAsString());
 }

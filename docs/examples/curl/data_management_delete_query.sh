@@ -4,7 +4,7 @@ set -e -x
 API_PATH="http://127.0.0.1:8383/api/v1"
 AUTH_HEADER="Authorization: Bearer my-token"
 
-# Send a record  with labels a
+# Write a record
 TIME=`date +%s000000`
 curl -d "Some binary data" \
   -H "${AUTH_HEADER}" \
@@ -19,7 +19,7 @@ curl -H "${AUTH_HEADER}" \
 
 # You can also delete all records with a specific label
 curl -H "${AUTH_HEADER}" \
-  -d '{"query_type": "DELETE", "include": {"label1": "value1"}}' \
+  -d '{"query_type": "DELETE", "when": {"&key1": {"$eq": "value1"}}' \
   -X POST -a ${API_PATH}/b/example-bucket/entry_1/q
 
 # Or each N-th record
