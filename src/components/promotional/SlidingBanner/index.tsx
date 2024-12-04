@@ -41,17 +41,15 @@ const SlidingBanner: React.FC = () => {
       <div className={styles.bannerContent}>
         <img src={whitePaperImage} alt="White Paper" className={styles.image} />
         <div className={styles.textBlock}>
-          <div className={styles.title}>Free White Paper</div>
-          <div className={styles.subtitle}>
-            Get Your White Paper: AI on the Edge!
-          </div>
+          <div className={styles.title}>Time Series Object Storage</div>
+          <div className={styles.subtitle}>Get Your White Paper</div>
           <Link
             id="whitepaper-banner-button"
             to="/whitepaper"
             className="button button--primary button--lg"
             onClick={handleDownloadClick}
           >
-            Download Now →
+            Read Now →
           </Link>
         </div>
       </div>
