@@ -4,11 +4,13 @@ import { Client } from "reduct-js";
 const client = new Client("http://127.0.0.1:8383", { apiToken: "my-token" });
 const bucket = await client.getBucket("example-bucket");
 
-// Query 10 photos from "imdb" entry which taken in 2006 but don't contain "Rowan Atkinson"
+// Query 10 photos from "imdb" entry which taken after 2006 but don't contain "Rowan Atkinson"
 for await (const record of bucket.query("imdb", undefined, undefined, {
   limit: 10,
-  include: { photo_taken: "2006" },
-  exclude: { name: "b'Rowan Atkinson'" },
+  when: {
+    "&photo_taken": { $gt: 2006 },
+    "&name": { $ne: "b'Rowan Atkinson'" },
+  },
 })) {
   console.log("Name", record.labels.name);
   console.log("Phot taken", record.labels.photo_taken);
