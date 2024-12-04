@@ -1,4 +1,4 @@
-use reduct_rs::{Permissions, QuotaType, ReductClient, ReductError};
+use reduct_rs::{Permissions, ReductClient, ReductError};
 use tokio;
 
 #[tokio::main]

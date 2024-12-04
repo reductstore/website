@@ -32,9 +32,9 @@ export default function DataIngestionSection(
       <p> {children} </p>
 
       <p>
-        This is the simplest case of writing data using the Python SDK. You can
-        also write data in chunks and annotate records with labels. You can find
-        more information and examples in the{" "}
+        This is the simplest case of writing data with the SDK. You can also
+        stream data in chunks and annotate records with many labels. You can
+        find more information and examples in the{" "}
         <b>
           <Link to={`${activeVersion.path}/guides/data-ingestion`}>
             Data Ingestion Guide

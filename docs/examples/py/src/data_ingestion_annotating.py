@@ -14,7 +14,7 @@ async def main():
             "py-example",
             b"Some binary data",
             ts,
-            labels={"name": "example", "type": "simple"},
+            labels={"name": "example", "score": 0.9},
             content_type="text/plain",
         )
 

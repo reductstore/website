@@ -1,7 +1,7 @@
 use std::time::{Duration, SystemTime};
 
 use bytes::Bytes;
-use reduct_rs::{ErrorCode, RecordBuilder, ReductClient, ReductError};
+use reduct_rs::{ErrorCode, ReductClient, ReductError};
 use tokio;
 
 #[tokio::main]
@@ -24,7 +24,7 @@ async fn main() -> Result<(), ReductError> {
 
     bucket
         .write_record("rs-example")
-        .timestamp(timestamp  + Duration::from_secs(1))
+        .timestamp(timestamp + Duration::from_secs(1))
         .data(Bytes::from("Some more binary data"))
         .send()
         .await?;
@@ -39,8 +39,10 @@ async fn main() -> Result<(), ReductError> {
     //  Delete a batch of records
     let batch = bucket.remove_batch("rs-example");
     let errors = batch
-        .add_timestamp(timestamp)   // was already deleted, so this error will be in the errors map
-        .add_timestamp(timestamp + Duration::from_secs(1)).send().await?;
+        .add_timestamp(timestamp) // was already deleted, so this error will be in the errors map
+        .add_timestamp(timestamp + Duration::from_secs(1))
+        .send()
+        .await?;
 
     assert_eq!(errors.len(), 1);
     assert_eq!(errors.values().next().unwrap().status, ErrorCode::NotFound);

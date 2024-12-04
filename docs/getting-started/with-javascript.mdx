@@ -71,8 +71,10 @@ import NextStep from "./common/next_steps.mdx";
 <DataIngestionSection>
     To write a timestamped record to an entry in a bucket, you should use the `beginWrite` method on a `Bucket` object.
     Pass the name of the entry you want to write to as an argument, along with the data and timestamp you want to write.
+    Additionally, you can provide labels to the record to make it easier to query later.
+
     The `beginWrite` method will create the `sensor-1` entry if it doesn't exist and return a `WritableRecord` object.
-    The `WritableRecord` object can be used to send the data to the database.
+    The `WritableRecord` object can be used to send the data to the database:
 
     ```javascript file=../examples/js/src/quick_start.mjs start=3. end=4.
     ```
@@ -85,8 +87,11 @@ import NextStep from "./common/next_steps.mdx";
 
 <DataQueryingSection>
     To iterate over all records in a given time range, you should use the `query` method on a bucket instance. Pass the
-    name of the entry to iterate over, and `start` and `stop` arguments to specify the time interval. The `query`
-    method returns an async iterator over the records in the entry:
+    name of the entry to iterate over, and `start` and `stop` arguments to specify the time interval. You can also
+    provide a `when` condition to filter records based on labels. Read more about the query syntax in
+    the [**Conditional Query Reference**](/docs/conditional-query/index.mdx).
+
+    The `query` method returns an async iterator over the records in the entry:
 
     ```javascript file=../examples/js/src/quick_start.mjs start=4.
     ```

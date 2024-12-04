@@ -14,15 +14,17 @@ int main() {
     auto [bucket, create_err] = client->GetOrCreateBucket("example-bucket");
     assert(create_err == Error::kOk);
 
-    // Query 10 photos from "imdb" entry which taken in 2006 but don't contain "Rowan Atkinson"
+    // Query 10 photos from "imdb" entry which taken after 2006 with the face score less than 4
     auto err = bucket->Query("imdb", std::nullopt, std::nullopt, {
-            .include = {{"photo_taken", "2006"}},
-            .exclude = {{"name", "b'Rowan Atkinson'"}},
+            .when=R"({
+                "&photo_taken": {"$gt": 2006},
+                "&name": {"$lt": 4}
+            })",
             .limit = 10,
     }, [](auto rec) {
         std::cout << "Name: " << rec.labels["name"] << std::endl;
         std::cout << "Photo Taken: " << rec.labels["photo_taken"] << std::endl;
-        std::cout << "Gender: " << rec.labels["gender"] << std::endl;
+        std::cout << "Face Score: " << rec.labels["face_score"] << std::endl;
 
         auto [_, read_err] = rec.ReadAll();
         assert(read_err == Error::kOk);
