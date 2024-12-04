@@ -14,7 +14,7 @@ async def main():
                 limit=10,
                 when={
                     "&photo_taken": {"$gt": 2006},
-                    "&face_score": {"$gt": 4},
+                    "&face_score": {"$lt": 4},
                 },
         ):
             print("Name", record.labels["name"])
