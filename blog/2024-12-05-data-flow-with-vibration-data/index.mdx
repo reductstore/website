@@ -68,19 +68,19 @@ At the same time, access to raw data is critical, as it enables the calculation 
 
 Storing raw data in the context of vibration monitoring offers significant advantages. In other words, the time waveform allows for extensive post-processing and re-analysis using multiple algorithms or filters.
 
-This flexibility is essential for developing new diagnostic tools or improving existing ones without the need for repeated data acquisition. For example, raw data can be used with the Fast Fourier Transform (FFT) to identify frequency components (see example below). This type of spectral analysis can reveal hidden patterns or anomalies that may not be apparent from pre-processed metrics alone. 
+This flexibility is essential for developing new diagnostic tools or improving existing ones without the need for repeated data acquisition. For example, raw data can be used with the Fast Fourier Transform (FFT) to identify frequency components (see example below). This type of spectral analysis can reveal hidden patterns or anomalies that may not be apparent from pre-processed metrics alone.
 
 ![FFT Image Example](./img/fft_example.webp)
 
-By converting time-domain data to the frequency domain, we can generate a frequency spectrum that shows the amplitude of different frequency components within the signal. This helps to identify specific frequencies that may indicate mechanical problems or resonances. 
+By converting time-domain data to the frequency domain, we can generate a frequency spectrum that shows the amplitude of different frequency components within the signal. This helps to identify specific frequencies that may indicate mechanical problems or resonances.
 
-When dealing with vibration data, it's common to consider both time and frequency domain analysis. Time domain waveforms provide insight into the behavior of the signal over time, allowing the detection of transient events and irregularities. 
+When dealing with vibration data, it's common to consider both time and frequency domain analysis. Time domain waveforms provide insight into the behavior of the signal over time, allowing the detection of transient events and irregularities.
 
 In contrast, the frequency domain focuses on the frequency content of the signal, revealing underlying patterns such as natural frequencies and harmonic components.
 
 ### Importance of Sampling Rate
 
-Sampling rate is a critical factor in the accurate acquisition of vibration data. A higher sampling rate ensures that all relevant frequency components are captured, especially those close to the equipment's natural frequencies. 
+Sampling rate is a critical factor in the accurate acquisition of vibration data. A higher sampling rate ensures that all relevant frequency components are captured, especially those close to the equipment's natural frequencies.
 
 According to the Nyquist theorem, the sampling rate should be at least twice the highest frequency present in the signal to avoid aliasing. For example, if the highest frequency of interest is 5 kHz, a sampling rate of at least 10 kHz is required.
 
@@ -402,7 +402,7 @@ The replication task can be set using client libraries, HTTP API, CLI, provision
 
 In this example, we'll use the web console for simplicity, but you can also refer to the **[Replication Guide](/docs/guides/data-replication)** for more details.
 
-For simplicity and demonstration purposes, let's assume we have sensor data with a label indicating whether the peak-to-peak is high or low. We'll set up a replication task to copy data with high peak-to-peak values to a separate bucket. 
+For simplicity and demonstration purposes, let's assume we have sensor data with a label indicating whether the peak-to-peak is high or low. We'll set up a replication task to copy data with high peak-to-peak values to a separate bucket.
 
 At the end of this process, we'll have two buckets:
 
