@@ -1,0 +1,98 @@
+---
+title: "ReductStore v1.13.0 Released With New Conditional Query API"
+description: ReductStore v1.13.0 is now available with a new conditional query API that allows use logical and comparison operators to filter records by labels when quering or removing
+authors: alexey
+tags: [news]
+slug: news/reductstore-v1_13_0-released
+date: 2024-12-05
+---
+
+We are pleased to announce the release of the latest minor version of [**ReductStore**](/), [**1.13.0**](https://github.com/reductstore/reductstore/releases/tag/v1.13.0). ReductStore is a time series database designed for storing and managing large amounts of blob data.
+
+To download the latest released version, please visit our [**Download Page**](/download).
+
+## What's new in 1.13.0?
+
+This release introduces a new conditional query API that should significantly improve your experience when querying or removing records. The new conditional queries allow you to use logical and comparison operators to filter records by labels.
+Previously, you could only filter records by labels using the `include` and `exclude` options, which were limited to exact matches. This means that you had to classify your records in advance at the ingest stage to be able to filter them later.
+Now, all you have to do is label your records with metric labels and then use the conditional queries to filter them by any condition you want.
+
+{/* truncate */}
+
+### Conditional Query Syntax
+
+The conditional query syntax is inspired by the MongoDB query language and is based on the JSON format. The query consists of a set of conditions that are combined using logical operators. It can be written in simple object notation:
+
+```json
+{
+  "&label_name": { "$gt": 10 }
+}
+```
+
+Or in array notation:
+
+```json
+{
+  "$any_of": [
+    { "&label_name": { "$gt": 10 } },
+    { "&label_name": { "$lt": 20 } },
+    { "&label_name": { "$eq": 15 } }
+  ]
+}
+```
+
+Here we refer to labels with the `&` symbol followed by the label name. All operators start with the `$` symbol followed by the operator name. Constant values are just JSON values. And that's it! You don't have to learn a new query language to start using conditional queries.
+
+The current version of the Conditional Query API supports all the logical and comparison operators you need to filter records by labels. For a complete list of supported operators, see the [**Comparison Operators**](/docs/conditional-query/comparison-operators) and [**Logical Operators**](/docs/conditional-query/logical-operators) sections of the documentation.
+
+### Real-world Example
+
+But why do you need to use conditional queries? Let's look at a real-world example. Suppose you collect raw vibration data from a machine and store it in ReductStore. You can calculate the vibration metrics, such as RMS and crest factor, and store them as labels. Now you can use the conditional queries to filter the records by the vibration metrics. For example, we know that when the machine is working, the RMS must be greater than 10, and some problems with the engine happen when the crest factor is greater than 2.5. You can write the following conditional query to get the raw data for detailed analysis:
+
+```json
+{
+  "&rms": { "$gt": 10 },
+  "&crest_factor": { "$lt": 2.5 }
+}
+```
+
+With our Python SDK, the conditional query can be used like this:
+
+```python
+
+import time
+import asyncio
+from reduct import Client, Bucket
+
+async def main():
+    # Create a client instance, then get or create a bucket
+    async with Client("http://127.0.0.1:8383", api_token="my-token") as client:
+        bucket: Bucket = await client.get_bucket("vibration")
+
+        # Query vibration data with RMS > 10 and crest factor < 2.5
+        async for record in bucket.query(
+                "sensor-1",
+                when={
+                    "&rms": {"$gt": 10},
+                    "&crest_factor": {"$lt": 2.5}
+                },
+        ):
+
+            _raw_data = await record.read_all()
+
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
+```
+
+We have updated all of our official SDKs to support the new Conditional Query API for querying and removing data. Read our **[Guides](/docs/guides/)** to learn more about conditional queries and how to use them in your applications.
+
+### What next?
+
+This release introduces only the basic set of logical and comparison operators. We plan to add more operators and functionality to the Conditional Query API in future releases. It will also be available in the replication engine to filter records during the replication process.
+
+---
+
+I hope you find those new features useful. If you have any questions or feedback, don’t hesitate to use the [**ReductStore Community**](https://community.reduct.store) forum.
+
+Thanks for using [**ReductStore**](https://www.reduct.store/)!
