@@ -146,7 +146,7 @@ Both the pre-processed metrics and the raw data are then automatically replicate
 The replication strategy in this scenario focuses on reducing data transfer by replicating raw data only when necessary, based on the insights derived from the pre-processed metrics.
 
 This approach ensures that important diagnostic information is preserved even if the raw data must be dropped due to storage constraints.
-For more details on data replication, check out this [**data replication guide**](https://www.reduct.store/docs/guides/data-replication).
+For more details on data replication, check out this [**data replication guide**](/docs/guides/data-replication).
 
 ## Setting Up the Environment to Store Vibration Sensor Data
 
@@ -384,7 +384,7 @@ async for record in bucket.query(
 
 These examples show how labels and the `when` parameter can be used to efficiently filter data. The flexibility of ReductStore's query system allows simple or complex filtering conditions to be created to support different applications.
 
-For a the full list of supported operators and query options, refer to the [**Data Querying Guide**](/docs/next/guides/data-querying#using-labels-to-filter-data).
+For a the full list of supported operators and query options, refer to the [**Data Querying Guide**](/docs/guides/data-querying#using-labels-to-filter-data).
 
 ## Replication with ReductStore Web Console
 
@@ -400,7 +400,7 @@ Replication tasks can be configured in a variety of ways, such as:
 
 The replication task can be set using client libraries, HTTP API, CLI, provisioning, or the ReductStore web console.
 
-In this example, we'll use the web console for simplicity, but you can also refer to the **[Replication Guide](/docs/next/guides/data-replication)** for more details.
+In this example, we'll use the web console for simplicity, but you can also refer to the **[Replication Guide](/docs/guides/data-replication)** for more details.
 
 For simplicity and demonstration purposes, let's assume we have sensor data with a label indicating whether the peak-to-peak is high or low. We'll set up a replication task to copy data with high peak-to-peak values to a separate bucket. 
 
