@@ -14,34 +14,34 @@ import DashboardExampleImg from "./img/dashboard-example.webp";
 
 ![Vibration Data Flow Intro](./img/vibration_data_flow_intro.webp)
 
-Efficient and effective storage of vibration data is important to a wide range of industries, particularly where accurate and complex predictive maintenance or optimization is required.
+This is a complete guide to storing vibration sensor data efficiently and effectively. We'll cover everything from the basics of vibration data to best practices for managing it as well as setting up a robust and scalable environment to store, query, and replicate vibration sensor data.
 
-This blog post looks at best practices for managing vibration data, starting with storing both raw and pre-processed metrics to take advantage of their unique benefits. Then, we'll explore the differences between traditional time series databases and a time series object storage such as ReductStore.
+Vibration data is typically collected from sensors attached to machinery or equipment to monitor its health and performance. This data can be used to detect anomalies, predict failures, and optimize maintenance schedules.
 
-**[ReductStore](/)** is designed to efficiently handle time series unstructured data, making it an excellent choice for storing high frequency vibration sensor measurements.
+However, effectively managing vibration data can be challenging due to its high frequency, large volume, and complex nature. To address these challenges, we must implement efficient storage strategies that balance data retention with storage constraints.
 
-We'll also cover strategies for eliminating data loss through volume-based retention policy and automated replication, ensuring that critical information is always available for diagnostics and analysis.
+After covering the basics of vibration data, we'll explore the best practices for managing this data, including storing both raw and pre-processed metrics to take advantage of their benefits. We'll also look at the differences between traditional time series databases and a time series object store such as [**ReductStore**](/), which is designed to efficiently handle time series unstructured data, making it an excellent choice for storing high-frequency vibration sensor measurements.
+
+We'll then cover a real-world example of storing vibration sensor data using Python and ReductStore. This example will show you step-by-step how to store raw sensor data, calculate key metrics, and query and retrieve this data for analysis.
+
+Finally, we'll discuss strategies for preventing data loss through volume-based retention policies and automated replication to ensure that valuable information is always available for diagnosis and analysis.
 
 {/* truncate */}
 
 Here is a summary of the topics we'll cover:
 
-- [**Store Both Raw and Pre-Processed Metrics**](#store-both-raw-and-pre-processed-metrics)
-- [**Use Time Series Databases**](#use-time-series-databases)
-- [**Adopt Efficient Data Retention and Replication Strategies**](#adopt-efficient-data-retention-and-replication-strategies)
-- [**Setting Up the Environment for Data Flow Example**](#setting-up-the-environment-for-data-flow-example)
-- [**Full Data Flow Example with Python**](#full-data-flow-example-with-python)
+- [**An Overview of Vibration Data**](#an-overview-of-vibration-data)
+- [**The Need for Time Series Databases**](#the-need-for-time-series-databases)
+- [**Data Retention and Replication Strategies**](#data-retention-and-replication-strategies)
+- [**Setting Up the Environment to Store Vibration Sensor Data**](#setting-up-the-environment-to-store-vibration-sensor-data)
+- [**Full Example to Store, Query, and Replicate Vibration Sensor Data**](#full-example-to-store-query-and-replicate-vibration-sensor-data)
+- [**A Note on Using Labels to Filter Data**](#a-note-on-using-labels-to-filter-data)
 - [**Replication with ReductStore Web Console**](#replication-with-reductstore-web-console)
 - [**Conclusion**](#conclusion)
 
-## Store Both Raw and Pre-Processed Metrics
+## An Overview of Vibration Data
 
-Maintaining both raw data and pre-processed metrics such as RMS (Root Mean Square), peak-to-peak and crest factor can be beneficial for several reasons.
-
-- Raw data provides the detailed granularity required for in-depth diagnostics and future algorithm development.
-- Pre-processed metrics provide immediate insight into equipment condition without the need for heavy computation.
-
-### Benefits of Pre-Processing Before Storage
+### Comon Pre-Processing Metrics
 
 The main advantage of pre-processing metrics is that it significantly reduces storage requirements by summarizing raw data into key metrics.
 
@@ -64,18 +64,41 @@ The typical metrics include:
 Many other metrics can be calculated depending on the application, and more advanced signal processing or machine learning techniques can be applied to extract more information from the signal.
 At the same time, access to raw data is critical, as it enables the calculation of these various metrics and the application of various analytical methods. This is especially important as new techniques and algorithms are developed, allowing for continuous improvement and more accurate diagnosis.
 
-### Advantages of Storing Raw Data
+### Raw Signal (Time Waveform) and Frequency Domain Analysis
 
-Storing raw data in the context of vibration monitoring offers significant advantages. Raw sensor output stored as a blob captures the full fidelity of the original signal, allowing extensive post-processing and re-analysis using different algorithms or filters.
+Storing raw data in the context of vibration monitoring offers significant advantages. In other words, the time waveform allows for extensive post-processing and re-analysis using multiple algorithms or filters.
 
-This flexibility is essential for developing new diagnostic tools or improving existing ones without the need for repeated data acquisition. For example, raw data can be used to perform detailed frequency analysis using FFT (see example below), detect spikes using time domain analysis, identify signal variations using wavelet transform, find faults in rotating equipment using envelope analysis, and understand structural vibrations using modal analysis.
+This flexibility is essential for developing new diagnostic tools or improving existing ones without the need for repeated data acquisition. For example, raw data can be used with the Fast Fourier Transform (FFT) to identify frequency components (see example below). This type of spectral analysis can reveal hidden patterns or anomalies that may not be apparent from pre-processed metrics alone. 
 
 ![FFT Image Example](./img/fft_example.webp)
 
-In this example, the Fast Fourier Transform (FFT) is calculated to identify the frequency content of the signal.
-This information can be used to identify the dominant frequencies in the signal, which in turn can be an indication of rotating equipment faults such as unbalance, misalignment or bearing failure.
+By converting time-domain data to the frequency domain, we can generate a frequency spectrum that shows the amplitude of different frequency components within the signal. This helps to identify specific frequencies that may indicate mechanical problems or resonances. 
 
-## Use Time Series Databases
+When dealing with vibration data, it's common to consider both time and frequency domain analysis. Time domain waveforms provide insight into the behavior of the signal over time, allowing the detection of transient events and irregularities. 
+
+In contrast, the frequency domain focuses on the frequency content of the signal, revealing underlying patterns such as natural frequencies and harmonic components.
+
+### Importance of Sampling Rate
+
+Sampling rate is a critical factor in the accurate acquisition of vibration data. A higher sampling rate ensures that all relevant frequency components are captured, especially those close to the equipment's natural frequencies. 
+
+According to the Nyquist theorem, the sampling rate should be at least twice the highest frequency present in the signal to avoid aliasing. For example, if the highest frequency of interest is 5 kHz, a sampling rate of at least 10 kHz is required.
+
+![Aliasing Effect](./img/aliasing_effect.webp)
+
+As you can see from the diagram above, selecting the right vibration sensor that can handle the sampling rate we need is a must for spectrum analysis and accurate representation of the vibration signal in both the time and frequency domains.
+
+### Integrating sensor data for improved diagnostics
+
+The capacity to acquire and store multiple sensor data is inevitable for most industrial applications, which typically provide multiple sensors for a single piece of equipment (e.g., temperature, vibration, pressure, etc.).
+
+For example, temperature data can reveal problems such as overheating or lubrication issues that vibration analysis alone may not reveal. When analyzed together, these data sources can help pinpoint the root cause of potential problems more effectively.
+
+This sounds great in theory, but in practice it can be challenging to manage and analyze data from multiple sensors that may have different sampling rates, data formats and storage requirements.
+
+This is where a time series object store can be particularly useful, as it can handle multiple data sources with different formats and requirements, providing a unified storage solution for all sensor data.
+
+## The Need for Time Series Databases
 
 Time Series Databases (TSDBs) are specialised data storage systems optimised for handling time-indexed data. They excel at managing large volumes of sequentially generated data points, such as vibration measurements, by providing efficient write and read operations.
 
@@ -91,7 +114,7 @@ With a time series object store, each chunk of vibration data is stored as a bin
 
 This method allows efficient management of large vibration datasets by providing fast access to specific time periods. In fact, [**ReductStore outperforms TimescaleDB for blobs ranging from 1KB and larger**](https://www.reduct.store/blog/comparisons/iot/reductstore-vs-timescaledb) using this method, with improvements ranging from 205% to 1300%.
 
-## Adopt Efficient Data Retention and Replication Strategies
+## Data Retention and Replication Strategies
 
 By storing raw sensor data locally, we minimize latency and retain critical information for immediate diagnosis.
 
@@ -125,7 +148,7 @@ The replication strategy in this scenario focuses on reducing data transfer by r
 This approach ensures that important diagnostic information is preserved even if the raw data must be dropped due to storage constraints.
 For more details on data replication, check out this [**data replication guide**](https://www.reduct.store/docs/guides/data-replication).
 
-## Setting Up the Environment for Data Flow Example
+## Setting Up the Environment to Store Vibration Sensor Data
 
 Before we dive into the code, let's set up our environment.
 We'll be using Docker to run ReductStore and Python for our client application.
@@ -171,9 +194,7 @@ pip install reduct-py numpy
 
 Now that we have our environment set up, let's dive into the code.
 
-## Full Data Flow Example with Python
-
-Let's break down the main components of our Python script:
+## Full Example to Store, Query, and Replicate Vibration Sensor Data
 
 ### Connecting to ReductStore
 
@@ -193,7 +214,6 @@ def generate_sensor_data(frequency: int = 1000, duration: int = 1) -> np.ndarray
     t = np.linspace(0, duration, frequency * duration)
     signal = np.sin(2 * np.pi * 10 * t) + 0.5 * np.random.randn(len(t))
     return signal.astype(np.float32)
-
 ```
 
 This function generates a simulated sensor signal: a simple sine wave with added noise.
@@ -326,25 +346,68 @@ This is the main execution flow of our script, which demonstrates the complete d
 
 Now that we are able to store and query vibration sensor data, let's explore how to duplicate important data using ReductStore's replication feature.
 
+## A Note on Using Labels to Filter Data
+
+In ReductStore, **labels** are key-value pairs attached to data entries, allowing you to filter data during queries. This is particularly useful when working with vibration sensor data, as it enables retrieving specific entries based on metrics like RMS, peak-to-peak, or crest factor.
+
+For instance, to retrieve data where `rms` exceeds `1.0`, you can use the following query:
+
+```python
+async for record in bucket.query(
+    "sensor_readings",
+    start=start_time,
+    stop=end_time,
+    when={"&rms": {"$gt": 1.0}},
+):
+    # Process the record
+    print(f"RMS: {record.labels['rms']}")
+    data = await record.read_all()
+```
+
+If you need to combine conditions, such as retrieving data where `rms` > 1.0 **and** `crest_factor` > 3.0, you can write:
+
+```python
+async for record in bucket.query(
+    "sensor_readings",
+    start=start_time,
+    stop=end_time,
+    when={
+      "&rms": {"$gt": 1.0},
+      "&crest_factor": {"$gt": 3.0}
+    },
+):
+    # Process the record
+    print(f"RMS: {record.labels['rms']}")
+    print(f"Crest Factor: {record.labels['crest_factor']}")
+    data = await record.read_all()
+```
+
+These examples show how labels and the `when` parameter can be used to efficiently filter data. The flexibility of ReductStore's query system allows simple or complex filtering conditions to be created to support different applications.
+
+For a the full list of supported operators and query options, refer to the [**Data Querying Guide**](/docs/next/guides/data-querying#using-labels-to-filter-data).
+
 ## Replication with ReductStore Web Console
 
 In addition to storing and querying data, we can also set up replication to duplicate our sensor data across multiple ReductStore instances.
 
-Replication tasks can be configured in a variety of ways, such as
+Replication tasks can be configured in a variety of ways, such as:
 
 - Replicate all data from a source bucket to a target bucket (e.g. `sensor_data` to `backup_data`)
 - Replicate only specific entries, e.g. `sensor_readings`.
-- Replicate data based on labels, e.g. replicate only data with `high` RMS values to `high_peak_to_peak` bucket (as we'll do in this example).
+- Replicate data based on labels, e.g. replicate only data with `high` peak-to-peak values to `high_peak_to_peak` bucket.
 
 ![Data Replication Flow](./img/vibration_data_flow_replication.webp)
 
 The replication task can be set using client libraries, HTTP API, CLI, provisioning, or the ReductStore web console.
+
 In this example, we'll use the web console for simplicity, but you can also refer to the **[Replication Guide](/docs/next/guides/data-replication)** for more details.
 
-So the bucket structure that we'll set up is as follows:
+For simplicity and demonstration purposes, let's assume we have sensor data with a label indicating whether the peak-to-peak is high or low. We'll set up a replication task to copy data with high peak-to-peak values to a separate bucket. 
+
+At the end of this process, we'll have two buckets:
 
 - `sensor_data` bucket contains all sensor readings under the entry `sensor_readings`.
-- `high_peak_to_peak` bucket will contain only the sensor readings with high peak-to-peak values under the same entry name `sensor_readings`.
+- `high_peak_to_peak` bucket will contain only the sensor readings with `high` peak-to-peak values under the same entry name `sensor_readings`.
 
 Here's how to set it up:
 
@@ -400,7 +463,8 @@ We explored a practical implementation of storing and querying vibration sensor 
 2. We simulated vibration sensor data, calculated key metrics (RMS, peak-to-peak, and crest factor), and packaged the data into a binary format that we can configure to ensure the data can be read by other devices.
 3. We stored the data in ReductStore, along with labels indicating whether each metric was high or low.
 4. We demonstrated how to query the stored data and unpack it back into a usable format.
-5. Finally, we explored how to set up replication using the web console so that we could copy high peak-to-peak metrics into a separate bucket.
+5. We discussed how to use labels to filter data based on specific metrics.
+6. Finally, we explored how to set up replication using the web console so that we could copy high peak-to-peak metrics into a separate bucket.
 
 This setup can serve as a starting point for building your own vibration data management system, which you'll likely need to tailor to your specific needs and hardware.
 
