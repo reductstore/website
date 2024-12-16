@@ -2,8 +2,8 @@
 title: The MinIO alternative for Time-Series Based Data
 description: ReductStore is a MinIO alternative that is purpose-built for unstructured time-series data. It is designed to efficiently handle and store large scale unstructured and time-stamped data. Composed of buckets, entries, blocks, and records, our system leverages configurable attributes, such as maximum block size, maximum record count per block, and quotas to govern storage restrictions. This adaptability is key to ensuring we can leverage vast amounts of blob data efficiently.
 authors: anthony
-tags: [database]
-slug: todo
+tags: [database, comparison]
+slug: minio-alternative-time-series-data
 date: 2024-12-17
 image: ./img/minio_vs_reductstore.webp
 ---
@@ -43,7 +43,7 @@ In addition to the above, optional values can be added, including:
 - Labels as key-value pairs which can be used for annotating and querying data
 - Content type which can be used for data interpretation
 
-You can choose to stream data for large records, or batch them for smaller. If streaming is selected, they are continuously fed into a file system in chunks, ensuring efficient ingestion, and reducing the memory footprint of the server. Small records can optionally be ingested using a batch ingestion mode, further reducing HTTP overhead. Such an ingestion solution can be tailored to any time series data - computer vision data (LLTV cameras, robotics), real time shipping gps information, vibration data, and more.
+You can choose to stream data for large records, or batch them for smaller. If streaming is selected, they are continuously fed into a file system in chunks, ensuring efficient ingestion, and reducing the memory footprint of the server. Small records can optionally be ingested using a batch ingestion mode, further reducing HTTP overhead. Such an ingestion solution can be tailored to any time series data - computer vision data (LLTV cameras, robotics), real time shipping GPS information, vibration data, and more.
 
 Data can be queried via the ReductStore CLI, SDKs, or HTTP API. Queries are divided into [**filter and control parameters**](/docs/guides/data-querying). Multiple filter and control parameters can be configured for more complex queries, to tailor queries for your specific needs. Your queries can be configured to retrieve records with specific filters and controls, or from a specified time range, rather than pulling the entire data set. ReductStore also allows you to batch data before reading (and before writing), which is more efficient than reading each object/record individually (especially for small records).
 
