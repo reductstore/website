@@ -102,3 +102,8 @@ img {
 .footer__link-item:hover {
   color: #c481f7;
 }
+
+/* Overflow issue */
+html, body {
+  overflow-x: hidden;
+}
