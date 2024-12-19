@@ -104,6 +104,7 @@ img {
 }
 
 /* Overflow issue */
-html, body {
+html,
+body {
   overflow-x: hidden;
 }
