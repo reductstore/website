@@ -19,7 +19,7 @@
   flex-direction: row;
   gap: 50px;
   align-items: center;
-  font-size: 24px;
+  font-size: 1.4rem;
 }
 
 .bannerText a {
