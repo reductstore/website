@@ -18,18 +18,24 @@
   margin-bottom: 3rem;
 }
 
-.buttons {
+.buttonContainer {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
 }
 
-.buttons :last-of-type {
-  margin-left: 1rem;
+.buttonLeft {
+  width: 200px;
+}
+
+.buttonRight * {
+  width: 200px;
   color: white !important;
 }
 
-.buttons :last-of-type:hover {
+.buttonRight :hover {
+  color: white !important;
   background-color: var(--ifm-color-primary-lighter);
 }
 
