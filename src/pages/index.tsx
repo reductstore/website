@@ -15,6 +15,7 @@ import HomepageBenefits from "../components/homepage/HomepageBenefits";
 import HomepageUseCase from "../components/homepage/HomepageUseCase";
 import HomepageBanner from "../components/homepage/HomepageBanner";
 import styles from "./index.module.css";
+import HomepageStats from "../components/homepage/HomepageStats";
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -64,7 +65,9 @@ export default function Home(): JSX.Element {
       <main>
         <div className="container">
           <HomepageBenefits />
-          <PerformanceComparison />
+
+          <hr />
+          <HomepageStats />
           <hr />
           <HomepageTestimonials />
           <hr />
