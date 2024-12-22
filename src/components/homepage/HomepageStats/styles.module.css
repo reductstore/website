@@ -1,0 +1,43 @@
+.statsSection {
+  margin-top: var(--reduct-section-space);
+  margin-bottom: var(--reduct-section-space);
+  text-align: center;
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.statsSubheader {
+  margin-bottom: 2rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.statsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.statCard {
+  width: 200px;
+  height: 150px;
+  text-align: center;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: bold;
+  color: black;
+}
+
+.statDescription {
+  font-size: 0.875rem;
+  color: black;
+}
