@@ -31,19 +31,23 @@ function HomepageHeader() {
           images, files, text, vibration data and more. Store billions of blobs
           with time indexing and AI labels.
         </p>
-        <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="/docs/getting-started"
-          >
-            Get Started
-          </Link>
-          <Link
-            className="button  button--outline button--secondary button--lg"
-            to="/whitepaper"
-          >
-            White Paper
-          </Link>
+        <div className={styles.buttonContainer}>
+          <div className={styles.buttonLeft}>
+            <Link
+              className="button button--secondary button--block button--lg"
+              to="/solutions/cloud"
+            >
+              Cloud Solution
+            </Link>
+          </div>
+          <div className={styles.buttonRight}>
+            <Link
+              className="button button--outline button--secondary button--block button--lg"
+              to="/docs/getting-started"
+            >
+              On-Premise
+            </Link>
+          </div>
         </div>
       </div>
     </header>
