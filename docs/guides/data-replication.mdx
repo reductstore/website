@@ -20,7 +20,7 @@ Data replication is a process of copying data from one database to another. Redu
 
 ## Concepts
 
-The data replication in ReductStore is based on the concept of a **Replication Task**. A replication task is a configurable thread that filters and copies records from a source bucket to a target bucket. The buckets can belong to the same or different ReductStore instances. For more information on buckets, see the **[Buckets](/docs/guides/buckets.mdx)** guide.
+The data replication in ReductStore is based on the concept of a **Replication Task**. A replication task is a configurable thread that filters and copies records from a source bucket to a target bucket. The target bucket can belong to the same or a different ReductStore instance. For more information on buckets, see the **[Buckets](/docs/guides/buckets.mdx)** guide.
 
 ![Data Replication with ReductStore](./img/data_replication_diagram.png)
 
@@ -34,13 +34,12 @@ This approach ensures that data is replicated in real time and that the replicat
 
 A replication task can filter records before replicating them to the target bucket. You can specify the following filters:
 
-| Parameter | Description                                                                                                                                                                                                                        | Type                    |
-| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `entries` | A list of entries that the replication task will use to filter records. Only records with these entries will be replicated. If the list is empty, all records will be replicated. You can use the `*` wildcard to match any entry. | List of strings         |
-| `include` | A list of key-value pairs that the replication task will use to filter records. Only records with these labels will be replicated.                                                                                                 | List of key-value pairs |
-| `exclude` | A list of key-value pairs that the replication task will use to filter records. Records with these labels will not be replicated.                                                                                                  | List of key-value pairs |
-| `each_s`  | Replicate a record every S seconds                                                                                                                                                                                                 | Float                   |
-| `each_n`  | Replicate only every N record                                                                                                                                                                                                      | Integer                 |
+| Parameter | Description                                                                                                                                                                                                                              | Type             |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `entries` | A list of entries that the replication task will use to filter records. Only records with these entries will be replicated. If the list is empty, all records will be replicated. You can use the `*` wildcard to match any entry.       | List of strings  |
+| `when`    | A set of conditions that the record must meet to be replicated. The conditions are based on the record labels. For more information on conditional queries, see the **[Conditional Query Reference](/docs/conditional-query/index.mdx)** | JSON-like object |
+| `each_s`  | Replicate a record every S seconds                                                                                                                                                                                                       | Float            |
+| `each_n`  | Replicate only every N record                                                                                                                                                                                                            | Integer          |
 
 ### Usage Example
 
@@ -54,10 +53,7 @@ In this case, the conditional replication settings will be:
 
 ```yaml
 entries: ["sensor-1"]
-include:
-  engine_status: "working"
-exclude:
-  sensor_status: "corrupted"
+where: { "&rms": { "$gt": 2.0 }, "&quality": { "$eq": "ok" } }
 ```
 
 See the next section for more information on how to create a replication task with conditional replication settings.
