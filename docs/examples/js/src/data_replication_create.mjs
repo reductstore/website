@@ -12,6 +12,6 @@ const settings = {
   dstHost: "https://play.reduct.store",
   dstToken: "reductstore",
   entries: ["js-entry"],
-  include: { anomaly: "1" },
+  when: { "&anomaly": { $eq: 1 } },
 };
 await client.createReplication("my-replication", settings);
