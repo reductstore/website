@@ -3,8 +3,8 @@ title: "How to Store and Manage Robotic Data"
 description: Explore how ReductStore is optimized for managing robotics data, offering superior performance in handling time-series data. Learn about its efficient data batching, advanced replication capabilities, and robust retention policies designed for the needs of robotics applications.
 authors: gracija
 tags: [robotics]
-slug: 
-date: 
+slug:
+date:
 image: ./img/introduction_diagram.drawio.png
 ---
 
@@ -30,9 +30,9 @@ What we’ll cover:
 
 Robots often operate in dynamic and unpredictable environments and are continuously generating large amounts of data. Therefore, finding an efficient way to store and manage this data can at times be challenging, mainly due to the following factors:
 
-- **High Frequency and Real-Time Requirements**: Robots often operate in real-time environments; for example, a drone navigating through a city must process camera and sensor data in milliseconds to avoid potential obstacles and stay on track.  Data storage solutions must be able to manage these high-frequency streams and make them easily and quickly accessible in order to ensure fast analysis and good decision-making.
+- **High Frequency and Real-Time Requirements**: Robots often operate in real-time environments; for example, a drone navigating through a city must process camera and sensor data in milliseconds to avoid potential obstacles and stay on track. Data storage solutions must be able to manage these high-frequency streams and make them easily and quickly accessible in order to ensure fast analysis and good decision-making.
 - **Limited On-Device Storage**: Most robots cannot store all the data they generate because they have limited edge storage capacity due to size, weight, and power limitations. That’s why it’s important for engineers to make effective data management strategies and ensure that important data is maintained without exceeding storage limits.
-- **High Volume of Data**:  An autonomous vehicle can produce up to 5 terabytes of data every hour, including camera feeds, LiDAR scans, radar data, GPS logs, and sensor readings. Processing, storing, and managing such large datasets requires storage systems designed for scalability, which is something traditional relational databases often lack.
+- **High Volume of Data**: An autonomous vehicle can produce up to 5 terabytes of data every hour, including camera feeds, LiDAR scans, radar data, GPS logs, and sensor readings. Processing, storing, and managing such large datasets requires storage systems designed for scalability, which is something traditional relational databases often lack.
 - **Cloud Storage Costs**: Sending all robotic data to the cloud is impractical and costly. Cloud services charge for storage and data transfer, and since robots generate many terabytes of data, the costs can grow quickly. Balancing what to store locally and what to offload to the cloud is an important part of cost-effective data management.
 - **Synchronization Challenges**: Keeping data consistent between robots (edge devices) and central storage systems (cloud or on-premises servers) can be complicated. Without proper synchronization, data can become disconnected, leading to problems with analysis and system updates.
 
@@ -63,7 +63,7 @@ ReductStore can actually achieve 10-100x better performance for 1/10th of the co
 
 ReductStore leverages Azure's storage tiers and stores infrequently accessed data in lower-cost tiers like Cool or Cold, and it also utilizes a _pay-as-you-go model_. Moreover, while traditional databases require high IOPS (Input/Output Operations per Second) and often rely on expensive storage options like SSDs to maintain performance, ReductStore, with BlobFuse, stores data directly in Blob Storage, eliminating the need for redundant high-cost storage setups. BlobFuse allows ReductStore to treat blob storage like a local file system, meaning that data can be quickly accessed without having duplicate data in other layers like caches or local databases. Plus, unlike traditional databases, _Blob Storage can scale virtually infinitely_. ReductStore takes advantage of this scalability without additional costs for maintaining database indexes or clusters.
 
-When it comes to data replication, ReductStore allows _replication at the bucket level_, not the entire dataset, meaning we may only replicate high-priority sensor data or logs while leaving unimportant data untouched. This minimizes storage and network costs compared to traditional databases that replicate entire datasets. In addition, _ReductStore replicates data incrementally_, which ensures that only changes or new data will be replicated and in this way avoids extra costs for potential duplicate files. When it comes to edge-to-cloud replication, only summary metrics are saved on the cloud while other data can be processed locally for real-time use cases, which saves on high costs which might happen if transferring large chunks of unprocessed data. 
+When it comes to data replication, ReductStore allows _replication at the bucket level_, not the entire dataset, meaning we may only replicate high-priority sensor data or logs while leaving unimportant data untouched. This minimizes storage and network costs compared to traditional databases that replicate entire datasets. In addition, _ReductStore replicates data incrementally_, which ensures that only changes or new data will be replicated and in this way avoids extra costs for potential duplicate files. When it comes to edge-to-cloud replication, only summary metrics are saved on the cloud while other data can be processed locally for real-time use cases, which saves on high costs which might happen if transferring large chunks of unprocessed data.
 
 ### Query Language and Batching Capabilities
 
@@ -123,7 +123,7 @@ services:
       - data:/data
     environment:
       - RS_API_TOKEN=my-token
- 
+
 volumes:
   data:
     driver: local
@@ -148,6 +148,7 @@ One last thing you need to do before we begin is make sure you have the necessar
 ```bash
 pip install reduct-py numpy
 ```
+
 ### Store and Manage Data
 
 Now that ReductStore is running and we have everything that we need installed, let's look at how we can store robotic data. In our example, we’ll work with trajectory data like coordinates, speed, and orientation.
@@ -176,7 +177,7 @@ Now, let’s create a _generate_trajectory_data_ function that simulates the gen
 async def generate_trajectory_data(frequency: int = 10, duration: int = 1):
 	interval = 1 / frequency
 	start_time = datetime.now()
- 
+
 	for i in range(frequency * duration):
     	time_step = i * interval
     	x = np.sin(2 * np.pi * time_step) + 0.2 * np.random.randn()
@@ -184,7 +185,7 @@ async def generate_trajectory_data(frequency: int = 10, duration: int = 1):
     	yaw = np.degrees(np.arctan2(y, x)) + np.random.uniform(-5, 5)
     	speed = abs(np.sin(2 * np.pi * time_step)) + 0.1 * np.random.randn()
     	timestamp = start_time + timedelta(seconds=time_step)
- 
+
     	yield {
         	"timestamp": timestamp.isoformat(),
         	"position": {"x": round(x, 2), "y": round(y, 2)},
@@ -204,13 +205,13 @@ Now, we would like to calculate some important metrics that can be useful for fu
 def calculate_trajectory_metrics(trajectory: list) -> tuple:
 	positions = np.array([[point["position"]["x"], point["position"]["y"]] for point in trajectory])
 	speeds = np.array([point["speed"] for point in trajectory])
- 
+
 	deltas = np.diff(positions, axis=0)
 	distances = np.sqrt(np.sum(deltas**2, axis=1))
 	total_distance = np.sum(distances)
- 
+
 	average_speed = np.mean(speeds)
- 
+
 	return total_distance, average_speed
 ```
 
@@ -221,25 +222,25 @@ async def store_trajectory_data():
 	trajectory_data = []
 	async for data_point in generate_trajectory_data(frequency=10, duration=1):
     	trajectory_data.append(data_point)
- 
+
 	total_distance, average_speed = calculate_trajectory_metrics(trajectory_data)
- 
+
 	labels = {
     	"total_distance": total_distance,
     	"average_speed": average_speed,
     	"high_distance": total_distance > HIGH_DISTANCE,
     	"high_average_speed": average_speed > HIGH_AVERAGE_SPEED,
 	}
-	
+
 	packed_data = pack_trajectory_data(trajectory_data)
-	
+
 	timestamp = datetime.now()
- 
+
 	async with Client("http://localhost:8383", api_token="my-token") as client:
     	bucket = await client.get_bucket("trajectory_data")
     	await bucket.write("trajectory_data", packed_data, timestamp, labels=labels)
- 
- 
+
+
 def pack_trajectory_data(trajectory: list) -> bytes:
 	"""Pack trajectory data json format"""
 	return json.dumps(trajectory).encode("utf-8")
@@ -260,7 +261,7 @@ async def query_by_label(bucket_name, entry_name, label_key, label_value):
 	async with Client("http://localhost:8383", api_token="my-token") as client:
     	try:
         	bucket = await client.get_bucket(bucket_name)
- 
+
         	async for record in bucket.query(
             	entry_name,
             	when={
@@ -268,7 +269,7 @@ async def query_by_label(bucket_name, entry_name, label_key, label_value):
             	},
         	):
             	print(record)
- 
+
     	except Exception as e:
         	print(f"Error querying data by label: {e}")
         	return None
@@ -287,13 +288,13 @@ async def main():
 	label_query_result = await query_by_label("trajectory_data", "trajectory_data", "&high_distance", "False")
 	if label_query_result:
     	print(f"Data queried by label: {label_query_result}")
- 	
+
 asyncio.run(main())
 ```
 
 ## Conclusion
 
-Managing robotic data doesn't have to be complicated. With the right tools and strategies, you can handle large amounts of data efficiently while keeping costs low. ReductStore offers a practical solution that meets the unique needs of robotics systems, from real-time processing to smart storage management. By implementing these approaches, robotics teams can focus less on data management and more on building better robots. 
+Managing robotic data doesn't have to be complicated. With the right tools and strategies, you can handle large amounts of data efficiently while keeping costs low. ReductStore offers a practical solution that meets the unique needs of robotics systems, from real-time processing to smart storage management. By implementing these approaches, robotics teams can focus less on data management and more on building better robots.
 
 Ready to improve your robotic data management? Try ReductStore today at [**reduct.store**](/) or check out our [**documentation**](/docs/how-does-it-work) to get started.
 
