@@ -99,7 +99,7 @@ title: ${title}
 description: API reference for the ${title} Module of the ReductStore Client SDK for Python.
 ---
 <head>
-    <link rel="canonical" href="https://www.reduct.store/docs/sdk/py/${module}" />
+    <link rel="canonical" href="https://www.reduct.store/docs/sdk/py/${module.replace(".", "/")}" />
 </head>
 
 # ${title}
