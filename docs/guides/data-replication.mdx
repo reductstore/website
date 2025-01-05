@@ -97,13 +97,17 @@ import CreateReplicaProvision from "!!raw-loader!../examples/provisioning/data_r
     <CodeBlock language="bash">{CreateReplicaCli}</CodeBlock>
   </TabItem>
   <TabItem value="Web Console">
-    Steps to create a replication task using the Web Console: 1. Open the Web
-    Console at **[http://127.0.0.1:8383](http://127.0.0.1:8383)** in your
-    browser. 2. Enter the API token if the authorization is enabled. 3. Click on
-    the **"Replication"** tab in the left sidebar. 4. Click on the plus icon in
+    Steps to create a replication task using the Web Console:
+      1. Open the Web Console at **[http://127.0.0.1:8383](http://127.0.0.1:8383)** in your browser.
+      2. Enter the API token if the authorization is enabled.
+      3. Click on
+    the **"Replication"** tab in the left sidebar.
+      4. Click on the plus icon in
     the top right corner to create a new replication task: ![Create Replication
-    Task](./img/data_replication_create.webp) 5. In the **"Create a new
+    Task](./img/data_replication_create.webp)
+      5. In the **"Create a new
     replication"** dialog, entre the name of the replication name and settings:{" "}
+
     <img
       src={
         require("@site/docs/guides/img/data_replication_settings.webp").default
@@ -113,6 +117,7 @@ import CreateReplicaProvision from "!!raw-loader!../examples/provisioning/data_r
     />
     6. Click on the **"Create Replication"** button to create the replication
     task.
+
   </TabItem>
   <TabItem value="Python">
     <CodeBlock language="python">{CreateReplicaPy}</CodeBlock>
@@ -162,16 +167,15 @@ import BrowseReplicaCurl from "!!raw-loader!../examples/curl/data_replication_br
     <CodeBlock language="bash">{BrowseReplicaCLI}</CodeBlock>
   </TabItem>
   <TabItem value="Web Console">
-    Steps to browse a replication task using the Web Console: 1. Open the Web
-    Console at **[http://127.0.0.1:8383](http://127.0.0.1:8383)** in your
-    browser. 2. Enter the API token if the authorization is enabled. 3. Click on
-    the **"Replication"** tab in the left sidebar. 4. You will see a list of all
-    replication tasks with their status 5. Click on a specific replication task
-    in the list: ![Browse Replication Task](./img/data_replication_list.webp) 6.
-    You will see the details of the replication task: ![Browse Replication Task
-    Details](./img/data_replication_details.webp) 7. You can also see or update
-    the replication task settings by clicking he **cog icon(⚙️)** in the
-    replication task panel.
+    Steps to browse a replication task using the Web Console:
+      1. Open the Web Console at **[http://127.0.0.1:8383](http://127.0.0.1:8383)** in your browser.
+      2. Enter the API token if the authorization is enabled.
+      3. Click on the **"Replication"** tab in the left sidebar.
+      4. You will see a list of all replication tasks with their status
+      5. Click on a specific replication task in the list: ![Browse Replication Task](./img/data_replication_list.webp)
+      6. You will see the details of the replication task: ![Browse Replication Task Details](./img/data_replication_details.webp)
+      7. You can also see or update the replication task settings by clicking he **cog icon(⚙️)** in the replication task panel.
+
   </TabItem>
   <TabItem value="Python">
     <CodeBlock language="python">{BrowseReplicaPy}</CodeBlock>
@@ -211,17 +215,15 @@ import RemoveReplicaCurl from "!!raw-loader!../examples/curl/data_replication_re
     <CodeBlock language="bash">{RemoveReplicaCli}</CodeBlock>
   </TabItem>
   <TabItem value="Web Console">
-    Steps to remove a replication task using the Web Console: 1. Open the Web
-    Console at **[http://127.0.0.1:8383](http://127.0.0.1:8383)** in your
-    browser. 2. Enter the API token if the authorization is enabled. 3. Click on
-    the **"Replication"** tab in the left sidebar. 4. You will see a list of all
-    replication tasks with their status 5. Click on a specific replication task
-    in the list: ![Browse Replication Task](./img/data_replication_list.webp) 6.
-    Click on the **"Remove"** button in the replication task panel. ![Remove
-    Replication Task](./img/data_replication_remove.webp) 7. Confirm the
-    deletion by typing the replication task name and clicking on the **Remove**
-    button: ![Remove Replication Task
-    Confirmation](./img/data_replication_remove_confirm.webp)
+    Steps to remove a replication task using the Web Console:
+      1. Open the Web Console at **[http://127.0.0.1:8383](http://127.0.0.1:8383)** in your browser.
+      2. Enter the API token if the authorization is enabled.
+      3. Click on the **"Replication"** tab in the left sidebar.
+      4. You will see a list of all replication tasks with their status
+      5. Click on a specific replication task in the list: ![Browse Replication Task](./img/data_replication_list.webp)
+      6. Click on the **"Remove"** button in the replication task panel. ![Remove Replication Task](./img/data_replication_remove.webp)
+      7. Confirm the deletion by typing the replication task name and clicking on the **Remove** button: ![Remove Replication Task Confirmation](./img/data_replication_remove_confirm.webp)
+
   </TabItem>
   <TabItem value="Python">
     <CodeBlock language="python">{RemoveReplicaPy}</CodeBlock>
