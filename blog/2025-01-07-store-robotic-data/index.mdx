@@ -12,7 +12,7 @@ image: ./img/introduction_diagram.drawio.png
 
 Robots generate massive amounts of data that must be managed effectively. Challenges like limited on-device storage, the need for real-time processing, and high cloud storage costs make it essential to find efficient solutions. Balancing edge and cloud storage while keeping data synchronized is a key part of effective management.
 
-This article begins by outlining these challenges and offering practical strategies, such as using time-series databases and implementing retention policies. We will then introduce [**ReductStore**](/), a specialized database designed to meet the unique needs of robotic systems. With features like real-time ingestion, efficient querying with batching, smart retention policies, and edge-to-cloud syncing, _ReductStore offers a cost-effective and high-performance solution for storing and managing robotic data._
+This article begins by outlining these challenges and offering practical strategies, such as using time-series databases and implementing retention policies. We will then introduce [**ReductStore**](/), a specialized database designed to meet the unique needs of robotic systems. With features like real-time ingestion, efficient querying with batching, smart retention policies, and edge-to-cloud replication, _ReductStore offers a cost-effective and high-performance solution for storing and managing robotic data._
 
 We’ll also explore a hand-on example where we’ll show how you can set up ReductStore and use it for storing and managing data. Finally, we will compare ReductStore with MongoDB, explaining why ReductStore is the better choice for robotics. This comprehensive guide is designed to help engineers and developers overcome the challenges of robotic data management and optimize their systems.
 
@@ -34,15 +34,15 @@ Robots often operate in dynamic and unpredictable environments and are continuou
 - **Limited On-Device Storage**: Most robots cannot store all the data they generate because they have limited edge storage capacity due to size, weight, and power limitations. That’s why it’s important for engineers to make effective data management strategies and ensure that important data is maintained without exceeding storage limits.
 - **High Volume of Data**: An autonomous vehicle can produce up to 5 terabytes of data every hour, including camera feeds, LiDAR scans, radar data, GPS logs, and sensor readings. Processing, storing, and managing such large datasets requires storage systems designed for scalability, which is something traditional relational databases often lack.
 - **Cloud Storage Costs**: Sending all robotic data to the cloud is impractical and costly. Cloud services charge for storage and data transfer, and since robots generate many terabytes of data, the costs can grow quickly. Balancing what to store locally and what to offload to the cloud is an important part of cost-effective data management.
-- **Synchronization Challenges**: Keeping data consistent between robots (edge devices) and central storage systems (cloud or on-premises servers) can be complicated. Without proper synchronization, data can become disconnected, leading to problems with analysis and system updates.
+- **Reduction Challenges**: Implementing good reduction strategies can be tricky, as it requires balancing storage efficiency with maintaining important information. Without clear strategies, valuable data might be lost, or storage could fill up with unnecessary details.
 
 ## General Strategies for Managing Robotic Data
 
 In order to have an effective data management system for handling robotic data, engineers must have a clear strategy and use various specialized tools. The key is to implement solutions that can handle high-frequency data streams while at the same time optimizing storage space and costs.
 
-- **Time-Series Databases**: Time-series databases (TSDBs), such as ReductStore, are designed to handle high-frequency, time-stamped data streams, which makes them ideal for managing robotic data. They offer efficient storage, real-time querying, and built-in analysis tools, ensuring that robots can operate effectively while keeping costs manageable.
+- **Time-Series Object Stores**: Time-series object stores, such as ReductStore, are designed to handle high-frequency, time-stamped data streams, which makes them ideal for managing robotic data. They offer efficient storage, real-time querying, and built-in analysis tools, ensuring that robots can operate effectively while keeping costs manageable.
 - **Balance Edge and Cloud Storage**: To optimize storage, keep critical data - such as the latest logs or details of high-priority events - on edge devices for immediate access, while moving less time-sensitive data to the cloud for long-term analysis and archiving. With such hybrid model, you can definitely reduce cloud storage, while also making sure that there will be a minimal delay when accessing decision-making data.
-- **Implement Retention Policies**: Retention policies are automated rules for data lifecycle management, and they help manage storage by automatically deleting or archiving outdated or non-essential data. For instance, a robot can be programmed to keep sensor logs from the last 24 hours for active use while purging (deleting) older data. Implementing retention policies are a must if you want to make sure that your devices won’t run out of storage and maintain consistent system performance.
+- **Implement Retention Policies**: Retention policies are automated rules for data lifecycle management, and they help manage storage by automatically deleting or archiving outdated or non-essential data. Robot's Edge devices are quite space-constrained, and often we just want to keep as much history as possible. The best retention policy in this case is a FIFO quota based on storage volume. For example, an entry with a 1TB FIFO quota would not delete older records until the quota was full.
 - **Compress and Optimize Data**: Another way to reduce storage but still maintain usability is to compress large datasets, such as images or videos. Advanced compression formats like H.265 for video and JPEG for images allow robotics teams to save loads of storage space.
 - **Prioritize Data Relevance**: Not all robotic data holds the same value, so it’s important for engineers to know how to make the distinction between what’s considered critical data and should be kept, and what data is not important and can be discarded.
 
@@ -52,22 +52,22 @@ In this section, we’ll get into more detail about what ReductStore actually is
 
 ### Key Features and Benefits
 
-ReductStore is a high-performance, time-series database specifically designed to handle the complex data needs of robotics systems and the challenges that we’ve discussed about in the previous sections. It is designed to handle both structured and unstructured data and is optimized for real-time data ingestion, allowing it to process high-frequency sensor readings and large data streams generated by autonomous vehicles, drones, industrial robots, and more.
+ReductStore is a high-performance, time-series database specifically designed to handle the complex data needs of robotics systems and the challenges that we’ve discussed about in the previous sections. It is designed to handle unstructured data and is optimized for real-time data ingestion, allowing it to process high-frequency sensor readings and large data streams generated by autonomous vehicles, drones, industrial robots, and more.
 
 ### Cost-Efficiency
 
-ReductStore can actually achieve 10-100x better performance for 1/10th of the cost compared to traditional time-series databases. But how exactly does it do it? Well, firstly, it integrates with _Azure Blob Storage_ and utilizes _BlobFuse_.
+ReductStore can actually achieve 10-100x better performance for 1/10th of the cost compared to traditional time-series object stores when working with records of around 100KB. But how exactly does it do it? Well, firstly, it can integrate with blob storages like _Azure Blob Storage_ or _Google Cloud Storage_ with a _Fuse driver_. In the example below, we’ll be using Azure Blob Storage.
 
 - **Azure Blob Storage**: A scalable object storage service optimized for large amounts of unstructured data.
 - **BlobFuse**: An open-source virtual file system driver for Azure Blob Storage.
 
 ReductStore leverages Azure's storage tiers and stores infrequently accessed data in lower-cost tiers like Cool or Cold, and it also utilizes a _pay-as-you-go model_. Moreover, while traditional databases require high IOPS (Input/Output Operations per Second) and often rely on expensive storage options like SSDs to maintain performance, ReductStore, with BlobFuse, stores data directly in Blob Storage, eliminating the need for redundant high-cost storage setups. BlobFuse allows ReductStore to treat blob storage like a local file system, meaning that data can be quickly accessed without having duplicate data in other layers like caches or local databases. Plus, unlike traditional databases, _Blob Storage can scale virtually infinitely_. ReductStore takes advantage of this scalability without additional costs for maintaining database indexes or clusters.
 
-When it comes to data replication, ReductStore allows _replication at the bucket level_, not the entire dataset, meaning we may only replicate high-priority sensor data or logs while leaving unimportant data untouched. This minimizes storage and network costs compared to traditional databases that replicate entire datasets. In addition, _ReductStore replicates data incrementally_, which ensures that only changes or new data will be replicated and in this way avoids extra costs for potential duplicate files. When it comes to edge-to-cloud replication, only summary metrics are saved on the cloud while other data can be processed locally for real-time use cases, which saves on high costs which might happen if transferring large chunks of unprocessed data.
+When it comes to data replication, ReductStore allows _replication at the bucket level_, not the entire dataset, meaning we may only replicate high-priority sensor data or logs while leaving unimportant data untouched. This minimizes storage and network costs compared to traditional databases that replicate entire datasets. In addition, _ReductStore replicates data incrementally_, which ensures that only changes or new data will be replicated and in this way avoids extra costs for potential duplicate files. Additionally, ReductStore supports storing _summary metrics as labels_ alongside each record. These labels act as metadata, making it easier to filter important records and design efficient replication strategies for selectively replicating only the most critical data to the cloud.
 
 ### Query Language and Batching Capabilities
 
-ReductStore uses a flexible and powerful query language that supports SQL-like syntax but is optimized for robotics data. The query language allows for real-time and historical analysis of data, as well as powerful filtering, aggregation, and joining of datasets. For robotics applications, where performance and precision are critical, the ability to run complex queries in real-time is essential.
+ReductStore uses a flexible and powerful [**query language that is based on JSON syntax**](/docs/next/conditional-query#query-syntax) and is optimized for robotics data. The query language allows for real-time and historical analysis of data, as well as powerful filtering, aggregation, and joining of datasets. For robotics applications, where performance and precision are critical, the ability to run complex queries in real-time is essential.
 
 The query language also supports time-series operations, which allow engineers to analyze sensor data over specified time windows. For example, you can query for vibration data from a specific robot within a defined timeframe or compare sensor data from different robots in parallel.
 
@@ -105,8 +105,9 @@ For a deeper analysis, explore the full comparison here: [**MongoDB vs ReductSto
 
 ## Hands-On Example: Storing and Handling Robotic Data in ReductStore
 
-In this section, we’ll walk through a practical example of how to store and handle robotic data using ReductStore. For this example, we’ll use Python, so make sure you have _Python 3.8+_ installed in your environment.
+In this section, we’ll walk through a practical example of how to store and handle robotic data using ReductStore. ReductStore is very efficient for storing “episodes” - for example, 10-second raw data with all the logs generated by robots that would be around 100KB. For simplicity reasons, we’ll show how to store trajectory data, but in reality, engineers will most probably work with bigger and more diverse data.
 
+For this example, we’ll use Python, so make sure you have _Python 3.8+_ installed in your environment.
 ### Setting Up ReductStore
 
 We’ll start by using Docker to set up ReductStore in a containerized environment. Docker ensures that our setup is isolated, reproducible, and easy to manage. To get started, create a folder on your system, and inside of it, create a _docker-compose.yaml_ file with the necessary configuration to run ReductStore:
@@ -227,9 +228,7 @@ async def store_trajectory_data():
 
 	labels = {
     	"total_distance": total_distance,
-    	"average_speed": average_speed,
-    	"high_distance": total_distance > HIGH_DISTANCE,
-    	"high_average_speed": average_speed > HIGH_AVERAGE_SPEED,
+    	"average_speed": average_speed
 	}
 
 	packed_data = pack_trajectory_data(trajectory_data)
@@ -265,7 +264,7 @@ async def query_by_label(bucket_name, entry_name, label_key, label_value):
         	async for record in bucket.query(
             	entry_name,
             	when={
-                	label_key: {"$eq": label_value}
+                	label_key: {"$gt": label_value}
             	},
         	):
             	print(record)
@@ -285,7 +284,7 @@ This is our main function in which we’re calling the functions for creating th
 async def main():
 	await create_trajectory_bucket()
 	await store_trajectory_data()
-	label_query_result = await query_by_label("trajectory_data", "trajectory_data", "&high_distance", "False")
+	label_query_result = await query_by_label("trajectory_data", "trajectory_data", "&total_distance", HIGH_DISTANCE)
 	if label_query_result:
     	print(f"Data queried by label: {label_query_result}")
 
