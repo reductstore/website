@@ -30,6 +30,11 @@ For efficiency, the replication task replicates multiple records in a single bat
 Once the record has been successfully replicated, the replication task deletes the record from the transaction log.
 This approach ensures that data is replicated in real time and that the replication process is fault-tolerant and can recover from failures.
 
+:::info
+The replication engine only replicates new records written or updated to the source bucket after the replication task is created.
+It doesn't replicate deletions or existing records in the source bucket.
+:::
+
 ### Conditional Replication
 
 A replication task can filter records before replicating them to the target bucket. You can specify the following filters:
@@ -199,7 +204,7 @@ import BrowseReplicaCurl from "!!raw-loader!../examples/curl/data_replication_br
 You can remove a replication task by using the ReductStore SDKs, REST API, CLI and Web Console. Once you remove a replication task, the replication process stops immediately, and the transaction log is deleted from the database.
 
 :::info
-You can't remove a provisioned replication task. Before removing a provisioned replication task, you need to
+You can't remove a provisioned replication task. Before removing it, you need to
 unset the corresponding environment variables and restart the ReductStore instance.
 :::
 
