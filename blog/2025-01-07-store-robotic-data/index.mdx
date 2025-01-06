@@ -180,21 +180,21 @@ async def generate_trajectory_data(frequency: int = 10, duration: int = 1):
  interval = 1 / frequency
  start_time = datetime.now()
 
- for i in range(frequency * duration):
-	time_step = i * interval
-	x = np.sin(2 * np.pi * time_step) + 0.2 * np.random.randn()
-	y = np.cos(2 * np.pi * time_step) + 0.2 * np.random.randn()
-	yaw = np.degrees(np.arctan2(y, x)) + np.random.uniform(-5, 5)
-	speed = abs(np.sin(2 * np.pi * time_step)) + 0.1 * np.random.randn()
-	timestamp = start_time + timedelta(seconds=time_step)
+  for i in range(frequency * duration):
+    time_step = i * interval
+    x = np.sin(2 * np.pi * time_step) + 0.2 * np.random.randn()
+    y = np.cos(2 * np.pi * time_step) + 0.2 * np.random.randn()
+    yaw = np.degrees(np.arctan2(y, x)) + np.random.uniform(-5, 5)
+    speed = abs(np.sin(2 * np.pi * time_step)) + 0.1 * np.random.randn()
+    timestamp = start_time + timedelta(seconds=time_step)
 
-	yield {
-	  "timestamp": timestamp.isoformat(),
-	  "position": {"x": round(x, 2), "y": round(y, 2)},
-	  "orientation": {"yaw": round(yaw, 2)},
-	  "speed": round(speed, 2),
-	}
-	await asyncio.sleep(interval)
+    yield {
+      "timestamp": timestamp.isoformat(),
+      "position": {"x": round(x, 2), "y": round(y, 2)},
+      "orientation": {"yaw": round(yaw, 2)},
+      "speed": round(speed, 2),
+    }
+    await asyncio.sleep(interval)
 ```
 
 The frequency is the number of data points generated per second (default is 10 Hz), while the duration is the total time, in seconds, for which the data generation will run (the default is 1 second). _X_ and _y_ are the coordinates and they dictate the position of the robot, _yaw_ is its orientation, _speed_ is its approximate speed based on position changes, while _timestamp_ is the current timestamp for the current data point.
