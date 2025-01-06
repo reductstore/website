@@ -1,6 +1,5 @@
 use futures::StreamExt;
-use reduct_rs::{ReductClient, ReductError};
-use serde_json::json;
+use reduct_rs::{condition, ReductClient, ReductError};
 use tokio;
 
 #[tokio::main]
@@ -19,7 +18,7 @@ async fn main() -> Result<(), ReductError> {
     // Query 10 photos from "imdb" entry which taken after 2006 with the face score less than 4
     let query = bucket
         .query("imdb")
-        .when(json!({
+        .when(condition!({
             "&photo_taken": {"$gt": 2006},
             "&face_score": {"$gt": 4}
         }))

@@ -23,7 +23,7 @@ int main() {
         .dst_host = "https://play.reduct.store",
         .dst_token = "reductstore",
         .entries = {"cpp-example"},
-        .include = {{"anomaly", "1"}},
+        .when = R"({"&anomaly":{"$eq": 1}})"
     });
     assert(repl_err == Error::kOk);
 }

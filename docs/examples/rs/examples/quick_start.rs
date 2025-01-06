@@ -1,6 +1,5 @@
 use futures_util::stream::StreamExt;
-use reduct_rs::{QuotaType, ReductClient, ReductError};
-use serde_json::json;
+use reduct_rs::{condition, QuotaType, ReductClient, ReductError};
 use std::pin::pin;
 use std::time::{Duration, SystemTime};
 use tokio;
@@ -45,7 +44,7 @@ async fn main() -> Result<(), ReductError> {
         .query("sensor-1")
         .start(start)
         .stop(start + Duration::from_secs(2))
-        .when(json!({"&score": {"$gt": 15}}))
+        .when(condition!({"&score": {"$gt": 15}}))
         .send()
         .await?;
 
