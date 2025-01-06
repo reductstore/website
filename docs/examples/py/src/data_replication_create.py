@@ -14,9 +14,9 @@ async def main():
             src_bucket="my-bucket",
             dst_bucket="demo",
             dst_host="https://play.reduct.store",
-            dst_api_token="reductstore",
+            dst_token="reductstore",
             entries=["py-example"],
-            include={"anomaly": "1"},
+            when= {"&anomaly": {"$eq": 1}},
         )
         await client.create_replication("my-replication", replication_settings)
 

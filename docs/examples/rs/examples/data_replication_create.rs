@@ -1,4 +1,4 @@
-use reduct_rs::{Labels, ReductClient, ReductError};
+use reduct_rs::{condition, Labels, ReductClient, ReductError};
 use tokio;
 
 #[tokio::main]
@@ -23,10 +23,11 @@ async fn main() -> Result<(), ReductError> {
         .dst_host("https://play.reduct.store")
         .dst_token("reductstore")
         .entries(vec!["rs-example".to_string()])
-        .include(Labels::from_iter(vec![(
-            "anomaly".to_string(),
-            "1".to_string(),
-        )]))
+        .when(condition!({
+            "&anomaly": {
+                "$eq": 1
+            }
+        }))
         .send()
         .await?;
     Ok(())

@@ -1,8 +1,7 @@
 use std::time::{Duration, SystemTime};
 
 use bytes::Bytes;
-use reduct_rs::{ReductClient, ReductError};
-use serde_json::json;
+use reduct_rs::{condition, ReductClient, ReductError};
 use tokio;
 
 #[tokio::main]
@@ -42,7 +41,7 @@ async fn main() -> Result<(), ReductError> {
     // You can also delete all records with a specific label
     bucket
         .remove_query("rs-example")
-        .when(json!({"&key1": {"$eq": "value1"}}))
+        .when(condition!({"&key1": {"$eq": "value1"}}))
         .send()
         .await?;
 

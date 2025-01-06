@@ -15,7 +15,11 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
 # Replication API Specification Reference
 
-Since version 1.8.0, ReductStore supports append-only replication. This feature allows replicating data from one bucket to another.
+ReductStore supports append-only replication. This feature allows you to replicate records from one bucket to another.
+To use the replication feature, you must create a replication task with the source and destination buckets.
+This reference describes the API for managing replication tasks.
+
+The API is available at the `/api/v1/replications` endpoint and requires an access token with full access.
 
 For more information about replications, read the [**Replication Guide**](../guides/data-replication).
 
@@ -23,7 +27,9 @@ For more information about replications, read the [**Replication Guide**](../gui
 
 The method returns a list of replication Task with their statuses.
 
-To use this method, you need an access token with full access.
+**Changes**:
+
+- v1.8: The endpoint was added
 
 <SwaggerComponent
   method="GET"
@@ -64,9 +70,12 @@ To use this method, you need an access token with full access.
 ## Show Information about a Replication Task
 
 This method provides complete information about a replication task, including
-diagnostics.
+diagnostics and settings.
 
-This method requires a full access token.
+**Changes**:
+
+- v1.8: The endpoint was added
+- v1.14: The `when` field was added with conditional query to filter records
 
 <SwaggerComponent
   method="GET"
@@ -114,14 +123,14 @@ This method requires a full access token.
             "dst_host": "string",         // url of destination host e.g https://play.reduct.store
             "entries": [],                // list of replication entries. If empty, all records will be replicated. Wildcards are supported
             "include": {
-                 "string": "string"       // key-value pairs to include records that should be replicated. If empty, all records will be replicated
+                 "string": "string"       // DEPRECATED. Key-value pairs to include records that should be replicated. If empty, all records will be replicated
             },
             "exclude": {
-                "string": "string"        // key-value pairs to exclude records that should not be replicated. If empty, all records will be replicated
+                "string": "string"        // DEPRECATED. Key-value pairs to exclude records that should not be replicated. If empty, all records will be replicated
             },
             "each_s": "float",            // replicate a record every S seconds
             "each_n": "int",              // replicate every Nth record
-        },
+            "when": "string"              // conditional query to filter records
 }`}</code>
         </pre>
       ),
@@ -148,7 +157,10 @@ This method requires a full access token.
 
 The method creates a replication task with given settings.
 
-To use this method, you need an access token with full access.
+**Changes**:
+
+- v1.8: The endpoint was added
+- v1.14: The `when` field was added with conditional query to filter records
 
 <SwaggerComponent
   method="POST"
@@ -248,6 +260,15 @@ To use this method, you need an access token with full access.
         description: "Replicate every Nth record",
       },
     },
+    {
+      type: "body",
+      details: {
+        name: "when",
+        dataType: "Object",
+        isRequired: false,
+        description: "Conditional query to filter records",
+      },
+    },
   ]}
   responses={[
     {
@@ -283,6 +304,11 @@ To use this method, you need an access token with full access.
 
 The method updates an existing replication task with given settings. To use
 this method, you need an access token with full access.
+
+**Changes**:
+
+- v1.8: The endpoint was added
+- v1.14: The `when` field was added with conditional query to filter records
 
 <SwaggerComponent
   method="PUT"
@@ -382,6 +408,15 @@ this method, you need an access token with full access.
         description: "Replicate every Nth record",
       },
     },
+    {
+      type: "body",
+      details: {
+        name: "when",
+        dataType: "Object",
+        isRequired: false,
+        description: "Conditional query to filter records",
+      },
+    },
   ]}
   responses={[
     {
@@ -422,7 +457,9 @@ this method, you need an access token with full access.
 
 The method deletes a replication task.
 
-To use this method, you need an access token with full access.
+**Changes**:
+
+- v1.8: The endpoint was added
 
 <SwaggerComponent
   method="DELETE"

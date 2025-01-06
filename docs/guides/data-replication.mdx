@@ -20,7 +20,7 @@ Data replication is a process of copying data from one database to another. Redu
 
 ## Concepts
 
-The data replication in ReductStore is based on the concept of a **Replication Task**. A replication task is a configurable thread that filters and copies records from a source bucket to a target bucket. The buckets can belong to the same or different ReductStore instances. For more information on buckets, see the **[Buckets](/docs/guides/buckets.mdx)** guide.
+The data replication in ReductStore is based on the concept of a **Replication Task**. A replication task is a configurable thread that filters and copies records from a source bucket to a target bucket. The target bucket can belong to the same or a different ReductStore instance. For more information on buckets, see the **[Buckets](/docs/guides/buckets.mdx)** guide.
 
 ![Data Replication with ReductStore](./img/data_replication_diagram.png)
 
@@ -30,17 +30,21 @@ For efficiency, the replication task replicates multiple records in a single bat
 Once the record has been successfully replicated, the replication task deletes the record from the transaction log.
 This approach ensures that data is replicated in real time and that the replication process is fault-tolerant and can recover from failures.
 
+:::info
+The replication engine only replicates new records written or updated to the source bucket after the replication task is created.
+It doesn't replicate deletions or existing records in the source bucket.
+:::
+
 ### Conditional Replication
 
 A replication task can filter records before replicating them to the target bucket. You can specify the following filters:
 
-| Parameter | Description                                                                                                                                                                                                                        | Type                    |
-| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `entries` | A list of entries that the replication task will use to filter records. Only records with these entries will be replicated. If the list is empty, all records will be replicated. You can use the `*` wildcard to match any entry. | List of strings         |
-| `include` | A list of key-value pairs that the replication task will use to filter records. Only records with these labels will be replicated.                                                                                                 | List of key-value pairs |
-| `exclude` | A list of key-value pairs that the replication task will use to filter records. Records with these labels will not be replicated.                                                                                                  | List of key-value pairs |
-| `each_s`  | Replicate a record every S seconds                                                                                                                                                                                                 | Float                   |
-| `each_n`  | Replicate only every N record                                                                                                                                                                                                      | Integer                 |
+| Parameter | Description                                                                                                                                                                                                                              | Type             |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `entries` | A list of entries that the replication task will use to filter records. Only records with these entries will be replicated. If the list is empty, all records will be replicated. You can use the `*` wildcard to match any entry.       | List of strings  |
+| `when`    | A set of conditions that the record must meet to be replicated. The conditions are based on the record labels. For more information on conditional queries, see the **[Conditional Query Reference](/docs/conditional-query/index.mdx)** | JSON-like object |
+| `each_s`  | Replicate a record every S seconds                                                                                                                                                                                                       | Float            |
+| `each_n`  | Replicate only every N record                                                                                                                                                                                                            | Integer          |
 
 ### Usage Example
 
@@ -54,10 +58,7 @@ In this case, the conditional replication settings will be:
 
 ```yaml
 entries: ["sensor-1"]
-include:
-  engine_status: "working"
-exclude:
-  sensor_status: "corrupted"
+where: { "&rms": { "$gt": 2.0 }, "&quality": { "$eq": "ok" } }
 ```
 
 See the next section for more information on how to create a replication task with conditional replication settings.
@@ -101,22 +102,24 @@ import CreateReplicaProvision from "!!raw-loader!../examples/provisioning/data_r
     <CodeBlock language="bash">{CreateReplicaCli}</CodeBlock>
   </TabItem>
   <TabItem value="Web Console">
-    Steps to create a replication task using the Web Console: 1. Open the Web
-    Console at **[http://127.0.0.1:8383](http://127.0.0.1:8383)** in your
-    browser. 2. Enter the API token if the authorization is enabled. 3. Click on
-    the **"Replication"** tab in the left sidebar. 4. Click on the plus icon in
+    Steps to create a replication task using the Web Console:
+      1. Open the Web Console at **[http://127.0.0.1:8383](http://127.0.0.1:8383)** in your browser.
+      2. Enter the API token if the authorization is enabled.
+      3. Click on
+    the **"Replication"** tab in the left sidebar.
+      4. Click on the plus icon in
     the top right corner to create a new replication task: ![Create Replication
-    Task](./img/data_replication_create.webp) 5. In the **"Create a new
-    replication"** dialog, entre the name of the replication name and settings:{" "}
-    <img
+    Task](./img/data_replication_create.webp)
+      5. In the **"Create a new
+    replication"** dialog, entre the name of the replication name and settings:{" "}<img
       src={
         require("@site/docs/guides/img/data_replication_settings.webp").default
       }
       alt="Create Replication Task Dialog"
       width="300"
     />
-    6. Click on the **"Create Replication"** button to create the replication
-    task.
+      6. Click on the **"Create Replication"** button to create the replication task.
+
   </TabItem>
   <TabItem value="Python">
     <CodeBlock language="python">{CreateReplicaPy}</CodeBlock>
@@ -166,16 +169,15 @@ import BrowseReplicaCurl from "!!raw-loader!../examples/curl/data_replication_br
     <CodeBlock language="bash">{BrowseReplicaCLI}</CodeBlock>
   </TabItem>
   <TabItem value="Web Console">
-    Steps to browse a replication task using the Web Console: 1. Open the Web
-    Console at **[http://127.0.0.1:8383](http://127.0.0.1:8383)** in your
-    browser. 2. Enter the API token if the authorization is enabled. 3. Click on
-    the **"Replication"** tab in the left sidebar. 4. You will see a list of all
-    replication tasks with their status 5. Click on a specific replication task
-    in the list: ![Browse Replication Task](./img/data_replication_list.webp) 6.
-    You will see the details of the replication task: ![Browse Replication Task
-    Details](./img/data_replication_details.webp) 7. You can also see or update
-    the replication task settings by clicking he **cog icon(⚙️)** in the
-    replication task panel.
+    Steps to browse a replication task using the Web Console:
+      1. Open the Web Console at **[http://127.0.0.1:8383](http://127.0.0.1:8383)** in your browser.
+      2. Enter the API token if the authorization is enabled.
+      3. Click on the **"Replication"** tab in the left sidebar.
+      4. You will see a list of all replication tasks with their status
+      5. Click on a specific replication task in the list: ![Browse Replication Task](./img/data_replication_list.webp)
+      6. You will see the details of the replication task: ![Browse Replication Task Details](./img/data_replication_details.webp)
+      7. You can also see or update the replication task settings by clicking he **cog icon(⚙️)** in the replication task panel.
+
   </TabItem>
   <TabItem value="Python">
     <CodeBlock language="python">{BrowseReplicaPy}</CodeBlock>
@@ -199,7 +201,7 @@ import BrowseReplicaCurl from "!!raw-loader!../examples/curl/data_replication_br
 You can remove a replication task by using the ReductStore SDKs, REST API, CLI and Web Console. Once you remove a replication task, the replication process stops immediately, and the transaction log is deleted from the database.
 
 :::info
-You can't remove a provisioned replication task. Before removing a provisioned replication task, you need to
+You can't remove a provisioned replication task. Before removing it, you need to
 unset the corresponding environment variables and restart the ReductStore instance.
 :::
 
@@ -215,17 +217,15 @@ import RemoveReplicaCurl from "!!raw-loader!../examples/curl/data_replication_re
     <CodeBlock language="bash">{RemoveReplicaCli}</CodeBlock>
   </TabItem>
   <TabItem value="Web Console">
-    Steps to remove a replication task using the Web Console: 1. Open the Web
-    Console at **[http://127.0.0.1:8383](http://127.0.0.1:8383)** in your
-    browser. 2. Enter the API token if the authorization is enabled. 3. Click on
-    the **"Replication"** tab in the left sidebar. 4. You will see a list of all
-    replication tasks with their status 5. Click on a specific replication task
-    in the list: ![Browse Replication Task](./img/data_replication_list.webp) 6.
-    Click on the **"Remove"** button in the replication task panel. ![Remove
-    Replication Task](./img/data_replication_remove.webp) 7. Confirm the
-    deletion by typing the replication task name and clicking on the **Remove**
-    button: ![Remove Replication Task
-    Confirmation](./img/data_replication_remove_confirm.webp)
+    Steps to remove a replication task using the Web Console:
+      1. Open the Web Console at **[http://127.0.0.1:8383](http://127.0.0.1:8383)** in your browser.
+      2. Enter the API token if the authorization is enabled.
+      3. Click on the **"Replication"** tab in the left sidebar.
+      4. You will see a list of all replication tasks with their status
+      5. Click on a specific replication task in the list: ![Browse Replication Task](./img/data_replication_list.webp)
+      6. Click on the **"Remove"** button in the replication task panel. ![Remove Replication Task](./img/data_replication_remove.webp)
+      7. Confirm the deletion by typing the replication task name and clicking on the **Remove** button: ![Remove Replication Task Confirmation](./img/data_replication_remove_confirm.webp)
+
   </TabItem>
   <TabItem value="Python">
     <CodeBlock language="python">{RemoveReplicaPy}</CodeBlock>
