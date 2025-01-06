@@ -161,12 +161,12 @@ Let us first create a new bucket for storing the robot trajectory data named _tr
 
 ```python
 async def create_trajectory_bucket():
-	async with Client("http://localhost:8383", api_token="my-token") as client:
-    	settings = BucketSettings(
-        	quota_type=QuotaType.FIFO,
-        	quota_size=1000_000_000,
-    	)
-    	await client.create_bucket("trajectory_data", settings, exist_ok=True)
+ async with Client("http://localhost:8383", api_token="my-token") as client:
+  settings = BucketSettings(
+	 quota_type=QuotaType.FIFO,
+	 quota_size=1000_000_000,
+	)
+  await client.create_bucket("trajectory_data", settings, exist_ok=True)
 ```
 
 The quota type of this bucket will be FIFO and its size will be 1 GB. In case we don’t define this as a setting, the bucket will be created with a default quota type of _NONE_.
@@ -177,24 +177,24 @@ Now, let’s create a _generate_trajectory_data_ function that simulates the gen
 
 ```python
 async def generate_trajectory_data(frequency: int = 10, duration: int = 1):
-	interval = 1 / frequency
-	start_time = datetime.now()
+ interval = 1 / frequency
+ start_time = datetime.now()
 
-	for i in range(frequency * duration):
-    	time_step = i * interval
-    	x = np.sin(2 * np.pi * time_step) + 0.2 * np.random.randn()
-    	y = np.cos(2 * np.pi * time_step) + 0.2 * np.random.randn()
-    	yaw = np.degrees(np.arctan2(y, x)) + np.random.uniform(-5, 5)
-    	speed = abs(np.sin(2 * np.pi * time_step)) + 0.1 * np.random.randn()
-    	timestamp = start_time + timedelta(seconds=time_step)
+ for i in range(frequency * duration):
+	time_step = i * interval
+	x = np.sin(2 * np.pi * time_step) + 0.2 * np.random.randn()
+	y = np.cos(2 * np.pi * time_step) + 0.2 * np.random.randn()
+	yaw = np.degrees(np.arctan2(y, x)) + np.random.uniform(-5, 5)
+	speed = abs(np.sin(2 * np.pi * time_step)) + 0.1 * np.random.randn()
+	timestamp = start_time + timedelta(seconds=time_step)
 
-    	yield {
-        	"timestamp": timestamp.isoformat(),
-        	"position": {"x": round(x, 2), "y": round(y, 2)},
-        	"orientation": {"yaw": round(yaw, 2)},
-        	"speed": round(speed, 2),
-    	}
-    	await asyncio.sleep(interval)
+	yield {
+	  "timestamp": timestamp.isoformat(),
+	  "position": {"x": round(x, 2), "y": round(y, 2)},
+	  "orientation": {"yaw": round(yaw, 2)},
+	  "speed": round(speed, 2),
+	}
+	await asyncio.sleep(interval)
 ```
 
 The frequency is the number of data points generated per second (default is 10 Hz), while the duration is the total time, in seconds, for which the data generation will run (the default is 1 second). _X_ and _y_ are the coordinates and they dictate the position of the robot, _yaw_ is its orientation, _speed_ is its approximate speed based on position changes, while _timestamp_ is the current timestamp for the current data point.
@@ -205,45 +205,45 @@ Now, we would like to calculate some important metrics that can be useful for fu
 
 ```python
 def calculate_trajectory_metrics(trajectory: list) -> tuple:
-	positions = np.array([[point["position"]["x"], point["position"]["y"]] for point in trajectory])
-	speeds = np.array([point["speed"] for point in trajectory])
+  positions = np.array([[point["position"]["x"], point["position"]["y"]] for   point in trajectory])
+  speeds = np.array([point["speed"] for point in trajectory])
 
-	deltas = np.diff(positions, axis=0)
-	distances = np.sqrt(np.sum(deltas**2, axis=1))
-	total_distance = np.sum(distances)
+  deltas = np.diff(positions, axis=0)
+  distances = np.sqrt(np.sum(deltas**2, axis=1))
+  total_distance = np.sum(distances)
 
-	average_speed = np.mean(speeds)
+  average_speed = np.mean(speeds)
 
-	return total_distance, average_speed
+  return total_distance, average_speed
 ```
 
 #### Storing data in ReductStore
 
 ```python
 async def store_trajectory_data():
-	trajectory_data = []
-	async for data_point in generate_trajectory_data(frequency=10, duration=1):
-    	trajectory_data.append(data_point)
+  trajectory_data = []
+  async for data_point in generate_trajectory_data(frequency=10, duration=1):
+    trajectory_data.append(data_point)
 
-	total_distance, average_speed = calculate_trajectory_metrics(trajectory_data)
+  total_distance, average_speed = calculate_trajectory_metrics(trajectory_data)
 
-	labels = {
-    	"total_distance": total_distance,
-    	"average_speed": average_speed
-	}
+  labels = {
+    "total_distance": total_distance,
+    "average_speed": average_speed
+  }
 
-	packed_data = pack_trajectory_data(trajectory_data)
+  packed_data = pack_trajectory_data(trajectory_data)
 
-	timestamp = datetime.now()
+  timestamp = datetime.now()
 
-	async with Client("http://localhost:8383", api_token="my-token") as client:
-    	bucket = await client.get_bucket("trajectory_data")
-    	await bucket.write("trajectory_data", packed_data, timestamp, labels=labels)
+  async with Client("http://localhost:8383", api_token="my-token") as client:
+    bucket = await client.get_bucket("trajectory_data")
+    await bucket.write("trajectory_data", packed_data, timestamp, labels=labels)
 
 
 def pack_trajectory_data(trajectory: list) -> bytes:
-	"""Pack trajectory data json format"""
-	return json.dumps(trajectory).encode("utf-8")
+  """Pack trajectory data json format"""
+  return json.dumps(trajectory).encode("utf-8")
 ```
 
 In the _store_trajectory_data_ function, we’re making use of the functions we previously created to generate the data and calculate the metrics. Then, we need to somehow pack the data, therefore we create the _pack_trajectory_data_ function where, as an example, we convert the trajectory list output to a json dump. Next step is to store that data in the bucket we have already created. The fact that we’re calling the functions for generating the data and calculating the metrics inside of the _store_trajectory_data_ function is due to simplicity reasons, but in general, these functions should be called from the outside and then simply fed to this function.
@@ -258,21 +258,16 @@ The next step would be to retrieve the data we just stored queried by a specific
 
 ```python
 async def query_by_label(bucket_name, entry_name, label_key, label_value):
-	async with Client("http://localhost:8383", api_token="my-token") as client:
-    	try:
-        	bucket = await client.get_bucket(bucket_name)
+  async with Client("http://localhost:8383", api_token="my-token") as client:
+    bucket = await client.get_bucket(bucket_name)
 
-        	async for record in bucket.query(
-            	entry_name,
-            	when={
-                	label_key: {"$gt": label_value}
-            	},
-        	):
-            	print(record)
-
-    	except Exception as e:
-        	print(f"Error querying data by label: {e}")
-        	return None
+    async for record in bucket.query(
+      entry_name,
+      when={
+        label_key: {"$gt": label_value}
+      },
+    ):
+      # Do something with the record
 ```
 
 Note that in order to get all records with no filtering at all, you just have to remove the _‘when’_ condition.
@@ -283,11 +278,11 @@ This is our main function in which we’re calling the functions for creating th
 
 ```python
 async def main():
-	await create_trajectory_bucket()
-	await store_trajectory_data()
-	label_query_result = await query_by_label("trajectory_data", "trajectory_data", "&total_distance", HIGH_DISTANCE)
-	if label_query_result:
-    	print(f"Data queried by label: {label_query_result}")
+  await create_trajectory_bucket()
+    await store_trajectory_data()
+    label_query_result = await query_by_label("trajectory_data", "trajectory_data", "&total_distance", HIGH_DISTANCE)
+    if label_query_result:
+      print(f"Data queried by label: {label_query_result}")
 
 asyncio.run(main())
 ```
