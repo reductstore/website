@@ -300,8 +300,8 @@ const config = {
             position: "left",
           },
           {
-            to: "/contact",
-            label: "Contact Us",
+            to: "/solutions/cloud",
+            label: "Cloud Solution",
             position: "right",
           },
           {
