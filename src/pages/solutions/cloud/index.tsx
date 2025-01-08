@@ -6,6 +6,7 @@ import Faq from "@site/src/components/shared/Faq";
 import SimpleHeaderWithButton from "@site/src/components/shared/SimpleHeaderWithButton";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import ThemedImage from "@theme/ThemedImage";
+import Link from "@docusaurus/Link";
 
 export default function CloudSolution(): JSX.Element {
   const title = "Cloud Time Series Object Storage";
@@ -49,6 +50,15 @@ export default function CloudSolution(): JSX.Element {
               />
             ))}
           </>
+          <div className={styles.buttonSection}>
+            <Link
+              className="button button--primary button--lg"
+              to="https://cloud.reduct.store"
+            >
+              Try It for Free
+            </Link>
+            <p>No credit card required.</p>
+          </div>
           <div className={styles.faqs}>
             <Faq faqs={cloudFaqs} defaultOpenCount={3} />
           </div>
