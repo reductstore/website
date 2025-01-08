@@ -13,7 +13,6 @@ import HomepageWebConsole from "../components/homepage/HomepageWebConsole";
 import HomepageCLI from "../components/homepage/HomepageCLI";
 import HomepageBenefits from "../components/homepage/HomepageBenefits";
 import HomepageUseCase from "../components/homepage/HomepageUseCase";
-import HomepageBanner from "../components/homepage/HomepageBanner";
 import styles from "./index.module.css";
 import HomepageStats from "../components/homepage/HomepageStats";
 
@@ -28,8 +27,8 @@ function HomepageHeader() {
         <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
           High-performance time series object storage, written in Rust, designed
           for speed, simplicity and robustness. Handle data of any size -
-          images, files, text, vibration data and more. Store billions of blobs
-          with time indexing and AI labels.
+          images, files, text, vibration data, robot logs, and more. Store
+          billions of blobs with time indexing and AI labels.
         </p>
         <div className={styles.buttonContainer}>
           <div className={styles.buttonLeft}>

@@ -9,9 +9,12 @@ import ThemedImage from "@theme/ThemedImage";
 import Link from "@docusaurus/Link";
 
 export default function CloudSolution(): JSX.Element {
-  const title = "Cloud Time Series Object Storage";
+  const title = "Time Series Data Lakehouse";
   const description =
-    "Store and manage time series data at a low blob storage cost. Designed for images, vibration data, text, logs, and more, ReductStore offers faster performance at a fraction of the cost compared to traditional time series solutions.";
+    "Store and manage time series objects with low blob storage costs. \
+     Designed for images, files, text, vibration data, robot logs, and more, \
+     ReductStore offers faster performance at a fraction of the cost compared \
+     to traditional time series databases.";
   return (
     <Layout title={title} description={description}>
       <main>

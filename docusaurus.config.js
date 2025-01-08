@@ -10,7 +10,7 @@ import rehypeKatex from "rehype-katex";
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "ReductStore",
-  tagline: "The Fastest Time Series Object Storage for AI Infrastructure",
+  tagline: "Time Series Data Lakehouse for AI Infrastructure",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
