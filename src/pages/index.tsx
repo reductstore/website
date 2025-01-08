@@ -3,7 +3,7 @@ import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
-import PerformanceComparison from "../components/homepage/PerformanceComparison";
+import PerformanceComparison from "../components/tables/PerformanceComparison";
 import HomepageFeatures from "../components/homepage/HomepageFeatures";
 import HomepageTestimonials from "../components/homepage/HomepageTestimonials";
 import HomepageCTA from "../components/homepage/HomepageCTA";

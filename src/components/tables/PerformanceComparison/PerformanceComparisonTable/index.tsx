@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./styles.module.css";
-import { IPerformanceComparisonData } from "../PerformanceComparison/PerformanceComparisonData";
+import { IPerformanceComparisonData } from "../PerformanceComparisonData";
 
 interface PerformanceComparisonTableProps {
   data: IPerformanceComparisonData;
