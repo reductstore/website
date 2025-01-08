@@ -220,7 +220,7 @@ const config = {
                 to: "/blog/comparisons/iot/reductstore-vs-mongodb",
               },
               {
-                label: "Cloud Storage Solution",
+                label: "Cloud Solution",
                 to: "/solutions/cloud",
               },
               {
@@ -300,8 +300,8 @@ const config = {
             position: "left",
           },
           {
-            to: "/solutions/cloud",
-            label: "Cloud Solution",
+            href: "https://cloud.reduct.store/",
+            label: "Sign In",
             position: "right",
           },
           {
