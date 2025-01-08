@@ -3,7 +3,6 @@ import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
-import PerformanceComparison from "../components/homepage/PerformanceComparison";
 import HomepageFeatures from "../components/homepage/HomepageFeatures";
 import HomepageTestimonials from "../components/homepage/HomepageTestimonials";
 import HomepageCTA from "../components/homepage/HomepageCTA";
@@ -54,11 +53,12 @@ function HomepageHeader() {
 }
 
 export default function Home(): JSX.Element {
+  const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title="Time-Series Object Store for Edge Computing"
-      description="ReductStore is a time series database designed specifically for storing and managing large amounts of unstructured data. 
-      It offers high performance for writing and real-time querying, making it suitable for edge computing, computer vision, and IoT applications."
+      title={siteConfig.tagline}
+      description="ReductStore is a time series data lakehouse designed specifically for storing and managing large amounts of unstructured data. 
+      It offers high performance for writing and real-time querying, making it suitable for cloud, edge computing, computer vision, robotics, and IoT applications."
     >
       <HomepageHeader />
       <main>

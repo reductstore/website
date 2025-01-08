@@ -87,9 +87,9 @@ const config = {
           remarkPlugins: [codeImport],
         },
         blog: {
-          blogTitle: "Blog | Time-Series Object Store for Edge Computing",
+          blogTitle: "Blog | Time-Series Data Lakehouse",
           blogDescription:
-            "Welcome to ReductStore's Blog – your source for expert articles, updates, and discussions on managing and leveraging time series databases for blob data in edge computing, computer vision, and IoT. Stay informed with our latest content.",
+            "ReductStore's Blog - Expert articles, updates, and discussions on managing and leveraging time series data in edge and cloud computing, robotics, computer vision, and IoT.",
           blogSidebarTitle: "Recent posts",
           blogSidebarCount: 5,
           postsPerPage: 3,
@@ -173,7 +173,7 @@ const config = {
         {
           name: "keywords",
           content:
-            "ReductStore, Time-Series Database, Blob Data Management, Edge Computing Database, IoT Data Solutions, Computer Vision Data Storage",
+            "ReductStore, Lakehouse, Time Series Database, Blob Data Management, Robotics, Computer Vision, Predictive Maintenance",
         },
       ],
 
