@@ -1,0 +1,284 @@
+---
+title: Arithmetic Operators
+description: Learn how to use arithmetic operators in conditional queries to filter data in ReductStore.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/conditional-query/arithmetic-operators"
+  />
+</head>
+
+The arithmetic operators are used to perform mathematical operations on the values of labels in a query and use them to filter records.
+
+The following arithmetic operators are supported:
+
+| Operator   | Description                                                                         |
+| ---------- | ----------------------------------------------------------------------------------- |
+| `$add`     | Adds the value of the label to the operand.                                         |
+| `$sub`     | Subtracts the value of the label from the operand.                                  |
+| `$mult`    | Multiplies the value of the label by the operand.                                   |
+| `$div`     | Divides the value of the label by the operand.                                      |
+| `$div_num` | Divides the value of the label by the operand and returns the result as an integer. |
+| `$rem`     | Returns the remainder of the division of the value of the label by the operand.     |
+| `$abs`     | Returns the absolute value of the label.                                            |
+
+## $add
+
+The `$add` operator is used to add the values of multiple operands.
+
+### Syntax
+
+```
+{
+  "$add":  [ <expression_1>, <expression_2>, ... ]
+}
+```
+
+### Behavior
+
+The operator adds the values of the expressions and returns the result.
+It casts the result to the type of the most precise operand according to [the default casting rules](/docs/conditional-query/index.mdx#type-casting).
+
+Additional rules:
+
+- Boolean operands are cast to integers before the operation.
+- If the list of operands is empty, the operator returns 0.
+- If the operands are strings, they are concatenated.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&label_name": { "$add": 10 }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$add": [true, 10, 30.0]
+}
+```
+
+## $sub
+
+The `$sub` operator is used to subtract the values of the operands.
+
+### Syntax
+
+```
+{
+  "$sub": [ <expression_1>, <expression_2> ]
+}
+```
+
+### Behavior
+
+The operator subtracts the value of the second expression from the value of the first expression and returns the result.
+It casts the result to the type of the most precise operand according to [the default casting rules](/docs/conditional-query/index.mdx#type-casting).
+
+Additional rules: \* Boolean operands are cast to integers before the operation.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&label_name": { "$sub": 10 }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$sub": [100, "&label_name"]
+}
+```
+
+## $mult
+
+The `$mult` operator is used to multiply the values of the operands.
+
+### Syntax
+
+```
+{
+  "$mult": [ <expression_1>, <expression_2> ]
+}
+```
+
+### Behavior
+
+The operator multiplies the values of the expressions and returns the result.
+
+Additional rules:
+_ Boolean operands are cast to integers before the operation.
+_ If the list of operands is empty, the operator returns 1.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&label_name": { "$mult": 10 }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$mult": [true, 10, 30.0]
+}
+```
+
+## $div
+
+The `$div` operator is used to divide the value of the first expression by the value of the second expression.
+
+### Syntax
+
+```
+{
+  "$div": [ <expression_1>, <expression_2> ]
+}
+```
+
+### Behavior
+
+The operator divides the value of the first expression by the value of the second expression and returns the result as a floating-point number.
+
+Additional rules:
+_ All operands are cast to floats before the operation.
+_ If the second operand is 0, the operator returns an error.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&label_name": { "$div": 10 }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$div": [100, "&label_name"]
+}
+```
+
+## $div_num
+
+The `$div_num` operator is used to divide the value of the first expression by the value of the second expression and return the result as an integer.
+
+### Syntax
+
+```
+{
+  "$div_num": [ <expression_1>, <expression_2> ]
+}
+```
+
+### Behavior
+
+The operator divides the value of the first expression by the value of the second expression and returns the result as an integer.
+
+Additional rules:
+_ All operands are cast to integers before the operation.
+_ If the second operand is 0, the operator returns an error.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&label_name": { "$div_num": 10 }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$div_num": [100, "&label_name"]
+}
+```
+
+## $rem
+
+The `$rem` operator is used to return the remainder of the division of the value of the first expression by the value of the second expression.
+
+### Syntax
+
+```
+{
+  "$rem": [ <expression_1>, <expression_2> ]
+}
+```
+
+### Behavior
+
+The operator returns the remainder of the division of the value of the first expression by the value of the second expression.
+It casts the result to the type of the most precise operand according to [the default casting rules](/docs/conditional-query/index.mdx#type-casting).
+
+Additional rules:
+_ Boolean operands are cast to integers before the operation.
+_ The remainder can be negative. \* If the second operand is 0, the operator returns an error.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&label_name": { "$rem": 10 }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$rem": [100, "&label_name"]
+}
+```
+
+## $abs
+
+The `$abs` operator is used to return the absolute value of the expression.
+
+### Syntax
+
+```
+{
+  "$abs": [<expression>]
+}
+```
+
+### Behavior
+
+The operator returns the absolute value of the expression.
+
+Additional rules: \* Boolean operands are cast to integers before the operation.
+
+### Examples
+
+Array notation:
+
+```json
+{
+  "$abs": ["&label_name"]
+}
+```

@@ -24,7 +24,8 @@ In addition, a special naming convention is used to extend the JSON syntax.
 
 ### Object notation
 
-A condition is a key-value pair, where the key is the label reference and the value is an object with the operator and operand:
+A condition is a key-value pair, where the key is the label reference and the value is an object with the operator and operand.
+For example, to filter records where the value of the `label_name` is greater than 10:
 
 ```json
 {
@@ -44,7 +45,17 @@ A condition is a key-value pair where the key is the operator and the value is a
 }
 ```
 
-The array notation is more flexible and allows you to have more than two operands in a condition, but it looks more complex.
+The array notation is more flexible and allows you to have more than two operands in a condition:
+
+```json
+{
+  "$and": [
+    { "&x": { "$gt": 10 } },
+    { "&y": { "$lt": 20 } },
+    { "&z": { "$eq": 30 } }
+  ]
+}
+```
 
 ### Multiple conditions
 
@@ -109,6 +120,8 @@ Comparison and arithmetic operators will cast the operands to the most precise t
 | **integer** | integer | integer | float | -      |
 | **float**   | float   | float   | float | -      |
 | **string**  | -       | -       | -     | string |
+
+There are some exceptions to this rule, read the operator documentation for more information.
 
 ## Operators
 
