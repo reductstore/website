@@ -16,7 +16,7 @@ async def main():
         )
 
         # Query records in the "py-example" entry of the bucket
-        async for record in bucket.query("py-example", start=ts, end=ts + 1):
+        async for record in bucket.query("py-example", start=ts, stop=ts + 1):
             # Print  meta information
             print(f"Timestamp: {record.timestamp}")
             print(f"Content Length: {record.size}")
