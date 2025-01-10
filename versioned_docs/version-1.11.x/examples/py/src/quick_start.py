@@ -17,7 +17,7 @@ async def main():
 
         # 4. Query the data by time range
         async for record in bucket.query(
-            "sensor-1", start="2024-01-01T10:00:00Z", end="2024-01-01T10:00:02Z"
+            "sensor-1", start="2024-01-01T10:00:00Z", stop="2024-01-01T10:00:02Z"
         ):
             print(f"Record timestamp: {record.timestamp}")
             print(f"Record size: {record.size}")
