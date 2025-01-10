@@ -39,7 +39,7 @@ async def main():
     bucket: Bucket = await client.get_bucket("my-bucket")
 
     # Query every 10-th record in the "vibration-sensor-1" entry of the bucket
-    async for record in bucket.query("vibration-sensor-1", start="2024-06-11T00:00:00Z", end="2024-06-11T01:00:00Z", each_n=10):
+    async for record in bucket.query("vibration-sensor-1", start="2024-06-11T00:00:00Z", stop="2024-06-11T01:00:00Z", each_n=10):
         # Read the record content
         content = await record.read_all()
         print(content)
