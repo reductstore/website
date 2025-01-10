@@ -114,14 +114,14 @@ During the execution of the query, the engine will try to cast types of operands
 Logical operators like `$and`, `$or`, `$not` will cast the result to a boolean.
 Comparison and arithmetic operators will cast the operands to the most precise type in the following order:
 
-|             | boolean | integer | float | string |
-| ----------- | ------- | ------- | ----- | ------ |
-| **boolean** | boolean | integer | float | -      |
-| **integer** | integer | integer | float | -      |
-| **float**   | float   | float   | float | -      |
-| **string**  | -       | -       | -     | string |
+|             | boolean | integer                         | float                             | string |
+| ----------- | ------- | ------------------------------- | --------------------------------- | ------ |
+| **boolean** | boolean | integer (false -> 0, true -> 1) | float (false -> 0.0, true -> 1.0) | -      |
+| **integer** | integer | integer                         | float                             | -      |
+| **float**   | float   | float                           | float                             | -      |
+| **string**  | -       | -                               | -                                 | string |
 
-There are some exceptions to this rule, read the operator documentation for more information.
+There are some exceptions to this rule, read **[the arithmetic operator documentation](/docs/conditional-query/arithmetic-operators.mdx)** for more information.
 
 ## Operators
 
