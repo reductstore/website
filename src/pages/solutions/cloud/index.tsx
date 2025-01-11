@@ -30,10 +30,10 @@ export default function CloudSolution(): JSX.Element {
               alt="Cloud Storage"
               sources={{
                 light: useBaseUrl(
-                  "/img/solutions/cloud/cloud_storage_light.drawio.svg",
+                  "/img/solutions/cloud/cloud_solution_light.svg",
                 ),
                 dark: useBaseUrl(
-                  "/img/solutions/cloud/cloud_storage_dark.drawio.svg",
+                  "/img/solutions/cloud/cloud_solution_dark.svg",
                 ),
               }}
             />
@@ -59,6 +59,18 @@ export default function CloudSolution(): JSX.Element {
               Try It for Free
             </Link>
             <p>No credit card required.</p>
+            <ThemedImage
+              className={styles.SvgImage}
+              alt="Cloud Storage"
+              sources={{
+                light: useBaseUrl(
+                  "/img/solutions/cloud/cloud_storage_light.drawio.svg",
+                ),
+                dark: useBaseUrl(
+                  "/img/solutions/cloud/cloud_storage_dark.drawio.svg",
+                ),
+              }}
+            />
           </div>
           <div className={styles.faqs}>
             <Faq faqs={cloudFaqs} defaultOpenCount={3} />
