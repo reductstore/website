@@ -57,8 +57,10 @@ export default function Home(): JSX.Element {
   return (
     <Layout
       title={siteConfig.tagline}
-      description="ReductStore is a time series data lakehouse designed specifically for storing and managing large amounts of unstructured data. 
-      It offers high performance for writing and real-time querying, making it suitable for cloud, edge computing, computer vision, robotics, and IoT applications."
+      description="ReductStore is a high-performance time series object store written in Rust and designed for speed, simplicity, and robustness. 
+      It efficiently stores and manages large amounts of unstructured data, including images, files, text, vibration data, and robot logs. 
+      ReductStore provides cost-effective central storage in the cloud and is optimized for on-premises deployments such as industrial plants 
+      and private infrastructures that require secure and local data management."
     >
       <HomepageHeader />
       <main>

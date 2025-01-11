@@ -10,7 +10,7 @@ import rehypeKatex from "rehype-katex";
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "ReductStore",
-  tagline: "Time Series Data Lakehouse for AI Infrastructure",
+  tagline: "The Fastest Time Series Object Storage for AI Infrastructure",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
@@ -87,7 +87,7 @@ const config = {
           remarkPlugins: [codeImport],
         },
         blog: {
-          blogTitle: "Blog | Time-Series Data Lakehouse",
+          blogTitle: "Blog | Time Series Object Storage for AI Infrastructure",
           blogDescription:
             "ReductStore's Blog - Expert articles, updates, and discussions on managing and leveraging time series data in edge and cloud computing, robotics, computer vision, and IoT.",
           blogSidebarTitle: "Recent posts",
@@ -173,7 +173,7 @@ const config = {
         {
           name: "keywords",
           content:
-            "ReductStore, Lakehouse, Time Series Database, Blob Data Management, Robotics, Computer Vision, Predictive Maintenance",
+            "ReductStore, Time Series Database, Blob Data Management, Robotics, Computer Vision, Predictive Maintenance",
         },
       ],
 
