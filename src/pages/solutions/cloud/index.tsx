@@ -10,7 +10,7 @@ import Link from "@docusaurus/Link";
 
 export default function CloudSolution(): JSX.Element {
   const title =
-    "The Fastest and Most Cost-Effective Cloud Storage for Time Series Objects.";
+    "The Fastest and Most Cost-Effective Cloud Storage for Time Series Objects";
   const description =
     "Designed for time-series data with records larger than a few kilobytes such as images, video, files, text, logs, ReductStore delivers faster performance at a fraction of the cost of traditional time-series databases.";
   return (
