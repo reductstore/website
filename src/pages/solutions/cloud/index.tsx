@@ -95,7 +95,7 @@ const diagrams = [
         of data at a lower cost without sacrificing access speed or reliability.
       </p>
     ),
-    image: require("@site/static/img/solutions/cloud/real-time-fifo-quota.webp")
+    image: require("@site/static/img/solutions/cloud/blob-storage.webp")
       .default,
     isImageLeft: false,
   },
@@ -109,9 +109,8 @@ const diagrams = [
         your data infrastructure is always ready to grow.
       </p>
     ),
-    image:
-      require("@site/static/img/solutions/cloud/scalable-data-pipeline.webp")
-        .default,
+    image: require("@site/static/img/solutions/cloud/scalable-data.webp")
+      .default,
     isImageLeft: true,
   },
 ];
