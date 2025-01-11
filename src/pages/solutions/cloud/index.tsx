@@ -9,12 +9,10 @@ import ThemedImage from "@theme/ThemedImage";
 import Link from "@docusaurus/Link";
 
 export default function CloudSolution(): JSX.Element {
-  const title = "Time Series Data Lakehouse";
+  const title =
+    "The Fastest and Most Cost-Effective Cloud Storage for Time Series Objects.";
   const description =
-    "Store and manage time series objects with low blob storage costs. \
-     Designed for images, files, text, vibration data, robot logs, and more, \
-     ReductStore offers faster performance at a fraction of the cost compared \
-     to traditional time series databases.";
+    "Designed for time-series data with records larger than a few kilobytes such as images, video, files, text, logs, ReductStore delivers faster performance at a fraction of the cost of traditional time-series databases.";
   return (
     <Layout title={title} description={description}>
       <main>
@@ -22,9 +20,9 @@ export default function CloudSolution(): JSX.Element {
           title={title}
           subtitle={description}
           benefits={[
-            "Faster Data Access",
-            "Scalable Data Management",
-            "Cost-Effective Storage",
+            "10x Faster Performance",
+            "1/10th the Storage Cost",
+            "Scales to Petabytes",
           ]}
           imageSvg={
             <ThemedImage
