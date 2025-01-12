@@ -143,9 +143,4 @@ const cloudFaqs = [
     answer:
       "ReductStore provides data replication between any instance, including edge devices and cloud storage, with label and metadata filtering to ensure only relevant data is copied.",
   },
-  {
-    question: "What are the benefits of joining the ReductStore waiting list?",
-    answer:
-      "By joining the waiting list, you'll be among the first to explore ReductStore's cloud solution and receive updates on new features and optimizations for managing time series data in the cloud.",
-  },
 ];
