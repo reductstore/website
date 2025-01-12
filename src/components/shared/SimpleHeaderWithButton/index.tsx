@@ -26,13 +26,15 @@ function SimpleHeaderWithButton({
             {title}
           </Heading>
           <p className={styles.BannerSubtitle}>{subtitle}</p>
-          <Link
-            className="button button--primary button--lg"
-            to="https://cloud.reduct.store"
-          >
-            Start for Free
-          </Link>
-          <p>No credit card required.</p>
+          <div className={styles.ButtonWithText}>
+            <Link
+              className="button button--primary button--lg"
+              to="https://cloud.reduct.store"
+            >
+              Start for Free
+            </Link>
+            <p>No credit card required.</p>
+          </div>
 
           <ul className={styles.BenefitsList}>
             {benefits.map((benefit, index) => (
