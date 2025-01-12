@@ -33,6 +33,12 @@
   margin-bottom: 30px;
 }
 
+.ButtonWithText {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 /* Benefits list styling */
 .BenefitsList {
   margin-top: 0;

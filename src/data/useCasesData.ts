@@ -7,16 +7,14 @@ export interface UseCase {
 
 const useCases: UseCase[] = [
   {
-    title: "The Fastest Time Series Object Store for Edge AI",
+    title: "Robotics Data",
     description:
-      "Learn how to store and manage data for edge computing and AI applications.",
-    link: "/use-cases/ai-workflows",
-    image:
-      require("@site/static/img/use-cases/ai-workflows/ai-labels-and-metadata-for-every-record.webp")
-        .default,
+      "Learn how to store and manage image data for ROS-based computer vision applications.",
+    link: "/blog/tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision",
+    image: require("@site/static/img/use-cases/robot.webp").default,
   },
   {
-    title: "High Frequency Vibration Data Storage",
+    title: "Vibration Sensor",
     description: "Learn how to store and manage high-frequency vibration data.",
     link: "/use-cases/vibration-sensors",
     image:
@@ -24,7 +22,7 @@ const useCases: UseCase[] = [
         .default,
   },
   {
-    title: "Computer Vision Applications",
+    title: "Computer Vision",
     description: "Learn how to store data for computer vision applications.",
     link: "/use-cases/computer-vision",
     image: require("@site/static/img/use-cases/computer-vision.webp").default,
@@ -36,11 +34,13 @@ const useCases: UseCase[] = [
     image: require("@site/static/img/use-cases/mqtt.webp").default,
   },
   {
-    title: "Robot Operating System (ROS)",
+    title: "Edge Computing",
     description:
-      "Learn how to store and manage image data for ROS-based computer vision applications.",
-    link: "/blog/tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision",
-    image: require("@site/static/img/use-cases/robot.webp").default,
+      "Learn how to store and manage data for edge computing and AI applications.",
+    link: "/use-cases/ai-workflows",
+    image:
+      require("@site/static/img/use-cases/ai-workflows/ai-labels-and-metadata-for-every-record.webp")
+        .default,
   },
   {
     title: "Kafka Data Sink",
