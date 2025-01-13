@@ -15,11 +15,11 @@ description: ReductStore basic concepts like buckets, entries, blocks, records, 
 ReductStore is a time series database designed specifically for storing and managing large amounts of unstructured data. It uses an **[HTTP API](./http-api)** and stores the data as blobs. This means:
 
 - ReductStore has no information about the format of the stored data. So, you can write whatever you want, but the storage can't aggregate your data. You have to read the same data, what you have written.
-- The **[HTTP API](./http-api)** provides a simple and portable way to communicate with the storage engine, but the engine doesn't provide any query language to access the data. However, you can use labels for filtering data in requests.
+- The **[HTTP API](./http-api)** provides a simple and portable way to communicate with the storage engine.
 
 In comparison to other S3-like object storage, ReductStore works differently:
 
-- **Access By Time.** Each record in an entry is written with a timestamp and to read it you need to know the entry name and time.
+- **Indexing By Time.** Each record in an entry is written with a unique timestamp. The storage engine is optimised for reading data by time ranges.
 - **Flat Storage Structure.** It doesn't have a tree-like structure for data.
   There are only buckets and entries with unique names in them.
 - **Batching Data.** Historical data is usually written forward and queried by time range.
@@ -29,24 +29,19 @@ In comparison to other S3-like object storage, ReductStore works differently:
   You don't waste disk space because of the minimum file system block size. In addition, ReductStore pre-allocates block space to improve performance during write operations.
 - **Forward Writing.** The engine records data fastest if it only needs to append records to the current block.
   It means that, for better performance, you should always write data with the newest timestamps.
-- **Labels.** You can assign labels to records to filter them in queries.
-  This allows you to read only part of the data.
-  For example, you can filter records by a label that represents anomaly detection results.
-  You can also use labels to replicate only records with specific labels to another bucket.
+- **Labels.** A record can have labels that are used as annotations for the data.
+- **Data Querying.** You can filter records by labels using the [**Conditional Query**](/docs/conditional-query/index.mdx) language.
 - **Strong FIFO Quota.** When you have intensive write operations, you may run out of disk space quickly.
   The engine removes the oldest block in a bucket as soon as the amount of the data reaches a specified quota limit.
 
 Compared to other time series databases:
 
-- **Blob Optimization.** Most time series databases have poor support for storing blobs and are not optimised for analytical needs.
+- **Blob Optimization.** Most time series databases have poor support for storing blobs and are optimised only for analytical needs.
   ReductStore is designed to store and manage large amounts of unstructured data.
   There's no limit to the size of data you can store. You can store images, videos or any other type of data in the storage engine.
 - **No Aggregation.** ReductStore doesn't provide any aggregation functionality.
   You can't calculate averages, sums or other statistics on the data stored in the storage engine.
   You must read all the data and calculate the statistics on the client side.
-- **No Query Language.** ReductStore doesn't provide any query language to access the data.
-  You can only read data by time ranges and labels.
-  You can't filter data by values or perform any complex queries.
 
 All these features make ReductStore a perfect solution for applications when you have continuous data streams and need to store and manage large amounts of unstructured data.
 
@@ -144,11 +139,12 @@ The partitioning of data into blocks is based on two criteria:
 
 ## HTTP API
 
-ReductStore provides an HTTP API for interacting with the storage engine. As mentioned above, the ReductStore HTTP API has the following features
+ReductStore provides an [**HTTP API**](/docs/http-api/index.mdx) for interacting with the storage engine. As mentioned above, the ReductStore HTTP API has the following features
 
-- **Iterate over records.** You can iterate over requested records in an entry by specifying a time range and a number of records. This is useful if you need to read a large amount of data. The storage engine returns records in chunks of fixed size. This allows you to read and process data in chunks without loading all the data into memory.
-- **Filter records by labels.** You can filter records by labels. This is useful if you only need to read part of the data. For example, you can filter records by a label that represents anomaly detection results. This allows you to read only records with anomalies and ignore the rest of the data.
-- **Batch records.** You can read, write, update or delete a batch of records in a single request. This is particularly useful if you need to read or write a large number of small records and reduce the number of requests to the storage engine.
+- **Iterating over Records.** A client doesn't read all the data at once. Instead, it requests it in batches or record by record.
+  This allows the client to read large amounts of data without running out of memory or overloading the network and storage.
+- **Filtering Records by Labels.** A client can filter records by labels using the [**Conditional Query**](/docs/conditional-query/index.mdx) language.
+- **Batching Records.** A client can write and read data in batches. This reduces the number of requests and the HTTP overhead for small records.
 
 See the [**HTTP API Reference**](./http-api) to learn more about the API.
 
@@ -166,7 +162,7 @@ Some more details about replication:
 - **Bucket replication.** You can only replicate a bucket to another bucket. The destination bucket can be in the same storage or in another storage.
 - **Append-only.** The storage engine doesn't support replication of deletions.
 - **Write-Ahead Log.** The storage engine uses a write-ahead log to replicate data. It means that the storage engine writes data to the log first and then replicates it to the destination bucket. If the destination bucket is unavailable, the storage engine stores data in the log until the destination bucket becomes available again.
-- **Filtering.** You can filter records by labels when you replicate a bucket. This is useful when you need to replicate only a portion of the data.
+- **Filtering.** The storage engine supports filtering records using the [**Conditional Query**](/docs/conditional-query/index.mdx) language, so that you can replicate only records that match the query.
 
 You can manage replications by using the Replication API or provision them with environment variables. See the [**Replication Guide**](./guides/data-replication) for more details.
 
