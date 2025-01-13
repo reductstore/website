@@ -93,7 +93,7 @@ import NextStep from "./common/next_steps.mdx";
     To iterate over all records in a given time range, you should use the `query` method on a bucket instance. Pass the
     name of the entry to iterate over. The method will return a `QueryBuilder` instance to specify the time interval.
     You can also provide a `when` condition to filter records based on labels using the `when` method. Read more about the query syntax in
-    the [**Conditional Query Reference**](/docs/conditional-query/index.mdx).
+    the [**Conditional Query Reference**](../conditional-query/index.mdx).
 
     Call the `send` method on the `QueryBuilder` to send the request to the ReductStore server and return a stream of
     records:
