@@ -1,0 +1,18 @@
+.tabs {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.tabContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tabContent p {
+  color: var(--reduct-dimmed-color);
+  font-size: 0.8rem;
+}
