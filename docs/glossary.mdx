@@ -7,9 +7,9 @@ description: Glossary of key terms and concepts for ReductStore.
 
 ## bucket
 
-A container for storing data in ReductStore. Buckets are uniquely named and can have configurable storage settings, such as quotas and replication policies. Buckets are used to separate data by source or purpose and support FIFO quotas for managing storage efficiently.
+A container for storing data in ReductStore. Buckets are uniquely named and can have configurable storage settings, such as quotas and replication policies. Buckets are used to separate data by source or purpose and support FIFO or HARD quotas for managing storage efficiently.
 
-_Related entries:_ [**entry**](#entry), [**record**](#record), [**replication**](#replication), [**FIFO quota**](#fifo-quota)
+_Related entries:_ [**entry**](#entry), [**record**](#record), [**replication**](#replication), [**FIFO quota**](#fifo-quota), [**HARD quota**](#hard-quota)
 
 ## entry
 
@@ -25,7 +25,7 @@ _Related entries:_ [**entry**](#entry), [**block**](#block)
 
 ## block
 
-A partitioned unit of storage in ReductStore. Blocks store records in fixed-size segments, optimizing data access by time ranges. Each block includes a descriptor file (metadata) and a data block (actual data).
+A batch of records stored on disk. Blocks store records in fixed-size segments, optimizing data access by time ranges. Each block includes a descriptor file (metadata) and a data block (actual data).
 
 _Related entries:_ [**record**](#record), [**entry**](#entry), [**batching**](#batching)
 
@@ -38,6 +38,12 @@ _Related entries:_ [**block**](#block), [**record**](#record)
 ## FIFO quota
 
 A "First-In-First-Out" quota based on the volume of stored data in a bucket. When the storage volume in a bucket reaches its specified limit, the oldest blocks are removed automatically to make room for new data. This ensures efficient use of storage without manual intervention.
+
+_Related entries:_ [**bucket**](#bucket), [**block**](#block)
+
+## HARD Quota
+
+A strict limit on the total storage capacity allocated to a bucket. When the storage usage reaches the specified limit, no new records can be added until space is freed by deleting existing data. This ensures complete control over storage usage within predefined limits.
 
 _Related entries:_ [**bucket**](#bucket), [**block**](#block)
 
