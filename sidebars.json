@@ -1,7 +1,6 @@
 {
   "docSidebar": [
     "how-does-it-work",
-    "glossary",
     {
       "type": "category",
       "label": "\uD83D\uDE80 Getting Started",
@@ -35,6 +34,7 @@
       ]
     },
     "configuration",
+    "glossary",
     {
       "type": "category",
       "label": "Guides",
@@ -99,7 +99,9 @@
     {
       "type": "category",
       "label": "Integration",
-      "items": ["guides/integration/azure-vm"]
+      "items": [
+        "guides/integration/azure-vm"
+      ]
     },
     {
       "type": "category",
