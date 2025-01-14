@@ -12,9 +12,9 @@ description: Learn how to use conditional queries to filter data in ReductStore.
 
 Conditional Query is a query language based on JSON syntax that allows you to filter records in ReductStore using labels and their values.
 
-The query language is used in the [**query endpoint**](/docs/http-api/entry-api/run_query.mdx) of the HTTP API.
-You can also find usage examples with many SDKs and tools in the [**Data Querying**](/docs/guides/data-querying.mdx) and
-in the [**Data Management**](/docs/guides/data-management.mdx) guides.
+The query language is used in the [**query endpoint**](../http-api/entry-api/run_query.mdx) of the HTTP API.
+You can also find usage examples with many SDKs and tools in the [**Data Querying**](../guides/data-querying.mdx) and
+in the [**Data Management**](../guides/data-management.mdx) guides.
 
 ## Query Syntax
 
@@ -24,7 +24,8 @@ In addition, a special naming convention is used to extend the JSON syntax.
 
 ### Object notation
 
-A condition is a key-value pair, where the key is the label reference and the value is an object with the operator and operand:
+A condition is a key-value pair, where the key is the label reference and the value is an object with the operator and operand.
+For example, to filter records where the value of the `label_name` is greater than 10:
 
 ```json
 {
@@ -44,7 +45,17 @@ A condition is a key-value pair where the key is the operator and the value is a
 }
 ```
 
-The array notation is more flexible and allows you to have more than two operands in a condition, but it looks more complex.
+The array notation is more flexible and allows you to have more than two operands in a condition:
+
+```json
+{
+  "$and": [
+    { "&x": { "$gt": 10 } },
+    { "&y": { "$lt": 20 } },
+    { "&z": { "$eq": 30 } }
+  ]
+}
+```
 
 ### Multiple conditions
 
@@ -103,12 +114,14 @@ During the execution of the query, the engine will try to cast types of operands
 Logical operators like `$and`, `$or`, `$not` will cast the result to a boolean.
 Comparison and arithmetic operators will cast the operands to the most precise type in the following order:
 
-|             | boolean | integer | float | string |
-| ----------- | ------- | ------- | ----- | ------ |
-| **boolean** | boolean | integer | float | -      |
-| **integer** | integer | integer | float | -      |
-| **float**   | float   | float   | float | -      |
-| **string**  | -       | -       | -     | string |
+|             | boolean | integer                         | float                             | string |
+| ----------- | ------- | ------------------------------- | --------------------------------- | ------ |
+| **boolean** | boolean | integer (false -> 0, true -> 1) | float (false -> 0.0, true -> 1.0) | -      |
+| **integer** | integer | integer                         | float                             | -      |
+| **float**   | float   | float                           | float                             | -      |
+| **string**  | -       | -                               | -                                 | string |
+
+There are some exceptions to this rule, read **[the arithmetic operator documentation](./arithmetic-operators.mdx)** for more information.
 
 ## Operators
 

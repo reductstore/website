@@ -6,11 +6,13 @@ import Faq from "@site/src/components/shared/Faq";
 import SimpleHeaderWithButton from "@site/src/components/shared/SimpleHeaderWithButton";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import ThemedImage from "@theme/ThemedImage";
+import Link from "@docusaurus/Link";
 
 export default function CloudSolution(): JSX.Element {
-  const title = "Cloud Time Series Object Storage";
+  const title =
+    "The Fastest and Most Cost-Effective Cloud Storage for Time Series Objects";
   const description =
-    "Store and manage time series data at a low blob storage cost. Designed for images, vibration data, text, logs, and more, ReductStore offers faster performance at a fraction of the cost compared to traditional time series solutions.";
+    "Designed for time-series data with records larger than a few kilobytes such as images, video, files, text, logs, ReductStore delivers faster performance at a fraction of the cost of traditional time-series databases.";
   return (
     <Layout title={title} description={description}>
       <main>
@@ -18,9 +20,9 @@ export default function CloudSolution(): JSX.Element {
           title={title}
           subtitle={description}
           benefits={[
-            "Faster Data Access",
-            "Scalable Data Management",
-            "Cost-Effective Storage",
+            "10x Faster Performance",
+            "1/10th the Storage Cost",
+            "Scales to Petabytes",
           ]}
           imageSvg={
             <ThemedImage
@@ -28,10 +30,10 @@ export default function CloudSolution(): JSX.Element {
               alt="Cloud Storage"
               sources={{
                 light: useBaseUrl(
-                  "/img/solutions/cloud/cloud_storage_light.drawio.svg",
+                  "/img/solutions/cloud/cloud_solution_light.svg",
                 ),
                 dark: useBaseUrl(
-                  "/img/solutions/cloud/cloud_storage_dark.drawio.svg",
+                  "/img/solutions/cloud/cloud_solution_dark.svg",
                 ),
               }}
             />
@@ -49,6 +51,27 @@ export default function CloudSolution(): JSX.Element {
               />
             ))}
           </>
+          <div className={styles.buttonSection}>
+            <Link
+              className="button button--primary button--lg"
+              to="https://cloud.reduct.store"
+            >
+              Try It for Free
+            </Link>
+            <p>No credit card required.</p>
+            <ThemedImage
+              className={styles.SvgImage}
+              alt="Cloud Storage"
+              sources={{
+                light: useBaseUrl(
+                  "/img/solutions/cloud/cloud_storage_light.drawio.svg",
+                ),
+                dark: useBaseUrl(
+                  "/img/solutions/cloud/cloud_storage_dark.drawio.svg",
+                ),
+              }}
+            />
+          </div>
           <div className={styles.faqs}>
             <Faq faqs={cloudFaqs} defaultOpenCount={3} />
           </div>
@@ -84,7 +107,7 @@ const diagrams = [
         of data at a lower cost without sacrificing access speed or reliability.
       </p>
     ),
-    image: require("@site/static/img/solutions/cloud/real-time-fifo-quota.webp")
+    image: require("@site/static/img/solutions/cloud/blob-storage.webp")
       .default,
     isImageLeft: false,
   },
@@ -98,9 +121,8 @@ const diagrams = [
         your data infrastructure is always ready to grow.
       </p>
     ),
-    image:
-      require("@site/static/img/solutions/cloud/scalable-data-pipeline.webp")
-        .default,
+    image: require("@site/static/img/solutions/cloud/scalable-data.webp")
+      .default,
     isImageLeft: true,
   },
 ];
@@ -120,10 +142,5 @@ const cloudFaqs = [
     question: "How does ReductStore handle edge-to-cloud data synchronization?",
     answer:
       "ReductStore provides data replication between any instance, including edge devices and cloud storage, with label and metadata filtering to ensure only relevant data is copied.",
-  },
-  {
-    question: "What are the benefits of joining the ReductStore waiting list?",
-    answer:
-      "By joining the waiting list, you'll be among the first to explore ReductStore's cloud solution and receive updates on new features and optimizations for managing time series data in the cloud.",
   },
 ];

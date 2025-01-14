@@ -3,7 +3,6 @@ import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
-import PerformanceComparison from "../components/tables/PerformanceComparison";
 import HomepageFeatures from "../components/homepage/HomepageFeatures";
 import HomepageTestimonials from "../components/homepage/HomepageTestimonials";
 import HomepageCTA from "../components/homepage/HomepageCTA";
@@ -13,7 +12,6 @@ import HomepageWebConsole from "../components/homepage/HomepageWebConsole";
 import HomepageCLI from "../components/homepage/HomepageCLI";
 import HomepageBenefits from "../components/homepage/HomepageBenefits";
 import HomepageUseCase from "../components/homepage/HomepageUseCase";
-import HomepageBanner from "../components/homepage/HomepageBanner";
 import styles from "./index.module.css";
 import HomepageStats from "../components/homepage/HomepageStats";
 
@@ -28,8 +26,8 @@ function HomepageHeader() {
         <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
           High-performance time series object storage, written in Rust, designed
           for speed, simplicity and robustness. Handle data of any size -
-          images, files, text, vibration data and more. Store billions of blobs
-          with time indexing and AI labels.
+          images, files, text, vibration data, robot logs, and more. Store
+          billions of blobs with time indexing and AI labels.
         </p>
         <div className={styles.buttonContainer}>
           <div className={styles.buttonLeft}>
@@ -55,21 +53,19 @@ function HomepageHeader() {
 }
 
 export default function Home(): JSX.Element {
+  const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title="Time-Series Object Store for Edge Computing"
-      description="ReductStore is a time series database designed specifically for storing and managing large amounts of unstructured data. 
-      It offers high performance for writing and real-time querying, making it suitable for edge computing, computer vision, and IoT applications."
+      title={siteConfig.tagline}
+      description="ReductStore is a high-performance time series object store written in Rust and designed for speed, simplicity, and robustness. 
+      It efficiently stores and manages large amounts of unstructured data, including images, files, text, vibration data, and robot logs. 
+      ReductStore provides cost-effective central storage in the cloud and is optimized for on-premises deployments such as industrial plants 
+      and private infrastructures that require secure and local data management."
     >
-      <HomepageBanner
-        to="/pricing"
-        text="Get Your Quick Storage Workflow Review"
-      />
       <HomepageHeader />
       <main>
         <div className="container">
           <HomepageBenefits />
-
           <hr />
           <HomepageStats />
           <hr />

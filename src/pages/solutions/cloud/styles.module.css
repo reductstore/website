@@ -1,3 +1,12 @@
+.buttonSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 5rem;
+}
+
 .faqs {
   margin-top: 5rem;
   margin-bottom: 5rem;
@@ -7,11 +16,14 @@
   width: 100%;
   max-width: 800px;
   height: auto;
+  margin-top: 1rem;
+  padding: 3rem;
 }
 
 /* Responsive adjustments */
 @media (max-width: 997px) {
   .SvgImage {
-    margin-top: 20px;
+    margin-top: 1rem;
+    padding: 0;
   }
 }
