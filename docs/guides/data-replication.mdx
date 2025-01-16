@@ -39,12 +39,12 @@ It doesn't replicate deletions or existing records in the source bucket.
 
 A replication task can filter records before replicating them to the target bucket. You can specify the following filters:
 
-| Parameter | Description                                                                                                                                                                                                                              | Type             |
-| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `entries` | A list of entries that the replication task will use to filter records. Only records with these entries will be replicated. If the list is empty, all records will be replicated. You can use the `*` wildcard to match any **[entry](../glossary#entry)**.       | List of strings  |
-| `when`    | A set of conditions that the record must meet to be replicated. The conditions are based on the record labels. For more information on conditional queries, see the **[Conditional Query Reference](/docs/conditional-query/index.mdx)** | JSON-like object |
-| `each_s`  | Replicate a record every S seconds                                                                                                                                                                                                       | Float            |
-| `each_n`  | Replicate only every N record                                                                                                                                                                                                            | Integer          |
+| Parameter | Description                                                                                                                                                                                                                                                 | Type             |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `entries` | A list of entries that the replication task will use to filter records. Only records with these entries will be replicated. If the list is empty, all records will be replicated. You can use the `*` wildcard to match any **[entry](../glossary#entry)**. | List of strings  |
+| `when`    | A set of conditions that the record must meet to be replicated. The conditions are based on the record labels. For more information on conditional queries, see the **[Conditional Query Reference](/docs/conditional-query/index.mdx)**                    | JSON-like object |
+| `each_s`  | Replicate a record every S seconds                                                                                                                                                                                                                          | Float            |
+| `each_n`  | Replicate only every N record                                                                                                                                                                                                                               | Integer          |
 
 ### Usage Example
 
