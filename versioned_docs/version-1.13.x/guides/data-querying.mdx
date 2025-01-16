@@ -16,15 +16,15 @@ import TabItem from "@theme/TabItem";
 
 # Data Querying From ReductStore Database
 
-ReductStore is a time series database that provides efficient data retrieval capabilities. This guide explains how to query data from ReductStore using the CLI, HTTP API, and SDKs.
+ReductStore is a time series database that provides efficient data retrieval capabilities. This guide explains how to query data from ReductStore using the **[CLI](../glossary#cli)**, **[HTTP API](../glossary#http-api)**, and SDKs.
 
 ## Concepts
 
-ReductStore provides an efficient data retrieval solution by batching multiple records within a specified time interval into a single HTTP request, which is beneficial for managing large volumes of data as it reduces the number of requests and overall delay.
+ReductStore provides an efficient data retrieval solution by **[batching](../glossary#batching)** multiple records within a specified time interval into a single HTTP request, which is beneficial for managing large volumes of data as it reduces the number of requests and overall delay.
 
 The query process is designed as an iterator, returning a batch of records in each iteration. This method allows data to be processed in segments, an approach that is useful when managing large datasets.
 
-While it is possible to retrieve a record by its timestamp, this method is less optimal than querying by a time range due to the lack of batching. However, this approach can be useful for querying specific versions of non-time series records, such as AI models, configurations, or file versions, when timestamps are used as identifiers.
+While it is possible to retrieve a **[record](../glossary#record)** by its timestamp, this method is less optimal than querying by a time range due to the lack of batching. However, this approach can be useful for querying specific versions of non-time series records, such as AI models, configurations, or file versions, when timestamps are used as identifiers.
 
 ## Query Parameters
 
@@ -35,14 +35,14 @@ are divided into two categories: filter and control parameters.
 
 Filter parameters are used to select records based on specific criteria. You can combine multiple filter parameters to create complex queries. This is the list of filter parameters, sorted by priority:
 
-| Parameter | Description                     | Type             | Default                                        |
-| --------- | ------------------------------- | ---------------- | ---------------------------------------------- |
-| `start`   | Start time of the query         | Timestamp        | The timestamp of the first record in the entry |
-| `end`     | End time of the query           | Timestamp        | The timestamp of the last record in the entry  |
-| `when`    | Conditional query               | JSON-like object | No condition                                   |
-| `each_s`  | Return a record every S seconds | Float            | Disabled                                       |
-| `each_n`  | Return only every N record      | Integer          | Disabled                                       |
-| `limit`   | Limit on the number of records  | Integer          | All records are returned                       |
+| Parameter | Description                     | Type             | Default                                                                 |
+| --------- | ------------------------------- | ---------------- | ----------------------------------------------------------------------- |
+| `start`   | Start time of the query         | Timestamp        | The timestamp of the first record in the **[entry](../glossary#entry)** |
+| `end`     | End time of the query           | Timestamp        | The timestamp of the last record in the entry                           |
+| `when`    | Conditional query               | JSON-like object | No condition                                                            |
+| `each_s`  | Return a record every S seconds | Float            | Disabled                                                                |
+| `each_n`  | Return only every N record      | Integer          | Disabled                                                                |
+| `limit`   | Limit on the number of records  | Integer          | All records are returned                                                |
 
 **Time Range**
 

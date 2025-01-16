@@ -16,15 +16,15 @@ import TabItem from "@theme/TabItem";
 
 # Data Ingestion With ReductStore
 
-Data ingestion is the process of collecting, transferring, and loading data into a system. In ReductStore, data ingestion is the first step in storing data. This guide provides an overview of data ingestion in ReductStore and explains how to ingest data using the ReductStore SDKs or the HTTP API.
+Data ingestion is the process of collecting, transferring, and loading data into a system. In ReductStore, data ingestion is the first step in storing data. This guide provides an overview of data ingestion in ReductStore and explains how to ingest data using the ReductStore SDKs or the **[HTTP API](../glossary#http-api)**.
 
 ## Concepts
 
-Data ingestion in ReductStore is based on HTTP API. Each record is sent as a binary object in the body of the POST request
+Data ingestion in ReductStore is based on HTTP API. Each **[record](../glossary#record)** is sent as a binary object in the body of the POST request
 and must have the following information:
 
 - Bucket name, which must exist in the instance.
-- Entry name, which is a unique identifier of a data source in the bucket. If the entry doesn't exist, it will be created.
+- Entry name, which is a unique identifier of a data source in the **[bucket](../glossary#bucket)**. If the **[entry](../glossary#entry)** doesn't exist, it will be created.
 - Timestamp as a Unix timestamp in microseconds, which is used for sorting and querying data. Must be unique for each record.
 
 Additionally, a writer can add the following information:
