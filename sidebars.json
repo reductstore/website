@@ -34,7 +34,6 @@
       ]
     },
     "configuration",
-    "glossary",
     {
       "type": "category",
       "label": "Guides",
@@ -53,6 +52,7 @@
         "guides/access-control"
       ]
     },
+    "glossary",
     {
       "type": "category",
       "label": "Conditional Query Reference",
@@ -99,7 +99,9 @@
     {
       "type": "category",
       "label": "Integration",
-      "items": ["guides/integration/azure-vm"]
+      "items": [
+        "guides/integration/azure-vm"
+      ]
     },
     {
       "type": "category",
