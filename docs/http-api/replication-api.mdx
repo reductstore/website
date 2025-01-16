@@ -15,11 +15,11 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
 # Replication API Specification Reference
 
-ReductStore supports append-only replication. This feature allows you to replicate records from one bucket to another.
+ReductStore supports append-only **[replication](../glossary#replication)**. This feature allows you to replicate records from one **[bucket](../glossary#bucket)** to another.
 To use the replication feature, you must create a replication task with the source and destination buckets.
 This reference describes the API for managing replication tasks.
 
-The API is available at the `/api/v1/replications` endpoint and requires an access token with full access.
+The API is available at the `/api/v1/replications` endpoint and requires an **[access token](../glossary#access-token)** with full access.
 
 For more information about replications, read the [**Replication Guide**](../guides/data-replication).
 
@@ -75,7 +75,7 @@ diagnostics and settings.
 **Changes**:
 
 - v1.8: The endpoint was added
-- v1.14: The `when` field was added with conditional query to filter records
+- v1.14: The `when` field was added with **[conditional query](../glossary#conditional-query)** to filter records
 
 <SwaggerComponent
   method="GET"

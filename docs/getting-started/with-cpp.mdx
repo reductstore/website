@@ -26,7 +26,7 @@ import NextStep from "./common/next_steps.mdx";
 ## Installing the C++ SDK
 
 <InstallSdk>
-    The ReductStore C++ SDK requires the following dependencies:
+    The ReductStore C++ **[SDK](../glossary#sdk)** requires the following dependencies:
 
     * GCC 11.2 or higher (support C++20)
     * CMake 3.18 or higher
@@ -91,7 +91,7 @@ import NextStep from "./common/next_steps.mdx";
 ## Creating a Bucket
 
 <CreateBucketSection>
-    To create a bucket, you should use the `GetOrCreateBucket` method on a `Client` instance. Pass the name of the bucket
+    To create a **[bucket](../glossary#bucket)**, you should use the `GetOrCreateBucket` method on a `Client` instance. Pass the name of the bucket
     you want to create as an argument, along with settings.  If the bucket already exists, the `GetOrCreateBucket`
     method will return it:
 
@@ -103,7 +103,7 @@ import NextStep from "./common/next_steps.mdx";
 ## Data Ingestion
 
 <DataIngestionSection>
-    To write a timestamped record to an entry in a bucket, you should use the `Write` method on a `Bucket` instance.
+    To write a timestamped **[record](../glossary#record)** to an **[entry](../glossary#entry)** in a bucket, you should use the `Write` method on a `Bucket` instance.
     Pass the name of the entry you want to write to as an argument, along with the timestamp you want to write.
     Additionally, you can provide labels to the record to make it easier to query later.
 

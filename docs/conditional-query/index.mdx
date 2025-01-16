@@ -12,7 +12,7 @@ description: Learn how to use conditional queries to filter data in ReductStore.
 
 Conditional Query is a query language based on JSON syntax that allows you to filter records in ReductStore using labels and their values.
 
-The query language is used in the [**query endpoint**](../http-api/entry-api/run_query.mdx) of the HTTP API.
+The query language is used in the [**query endpoint**](../http-api/entry-api/run_query.mdx) of the **[HTTP API](./glossary#http-api)**.
 You can also find usage examples with many SDKs and tools in the [**Data Querying**](../guides/data-querying.mdx) and
 in the [**Data Management**](../guides/data-management.mdx) guides.
 
@@ -82,7 +82,7 @@ The queries use a special naming convention for labels and operators to extend t
 
 | Type     | Convention    | Description                                          |
 | -------- | ------------- | ---------------------------------------------------- |
-| Label    | "&label_name" | Reference to a label in the record starting with `&` |
+| Label    | "&label_name" | Reference to a label in the **[record](./glossary#record)** starting with `&` |
 | Operator | "$operator"   | Reference to an operator starting with `$`           |
 | Constant | JSON types    | A constant value in the query, e.g. `10`, `"string"` |
 
@@ -90,7 +90,7 @@ The queries use a special naming convention for labels and operators to extend t
 
 ### Supported Types
 
-The conditional query language supports a simple type system with four types: **boolean**, **integer**, **float**, and **string**:
+The **[conditional query](./glossary#conditional-query)** language supports a simple type system with four types: **boolean**, **integer**, **float**, and **string**:
 
 | Type    | Size   | Description                                     |
 | ------- | ------ | ----------------------------------------------- |

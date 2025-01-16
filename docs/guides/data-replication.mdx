@@ -16,7 +16,7 @@ import TabItem from "@theme/TabItem";
 
 # Data Replication With ReductStore
 
-Data replication is a process of copying data from one database to another. ReductStore provides simple and efficient append-only replication to stream data from one bucket to another one.
+Data **[replication](../glossary#replication)** is a process of copying data from one database to another. ReductStore provides simple and efficient append-only replication to stream data from one **[bucket](../glossary#bucket)** to another one.
 
 ## Concepts
 
@@ -25,7 +25,7 @@ The data replication in ReductStore is based on the concept of a **Replication T
 ![Data Replication with ReductStore](./img/data_replication_diagram.png)
 
 Once a replication task is created, a ReductStore instance starts a new thread that waits for new records in the source bucket.
-When a new record arrives, the HTTP frontend stores the record in the source bucket and registers it in a transaction log. The replication task periodically checks the transaction log for new records and replicates them to the target bucket.
+When a new **[record](../glossary#record)** arrives, the HTTP frontend stores the record in the source bucket and registers it in a transaction log. The replication task periodically checks the transaction log for new records and replicates them to the target bucket.
 For efficiency, the replication task replicates multiple records in a single batch.
 Once the record has been successfully replicated, the replication task deletes the record from the transaction log.
 This approach ensures that data is replicated in real time and that the replication process is fault-tolerant and can recover from failures.
@@ -41,7 +41,7 @@ A replication task can filter records before replicating them to the target buck
 
 | Parameter | Description                                                                                                                                                                                                                              | Type             |
 | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `entries` | A list of entries that the replication task will use to filter records. Only records with these entries will be replicated. If the list is empty, all records will be replicated. You can use the `*` wildcard to match any entry.       | List of strings  |
+| `entries` | A list of entries that the replication task will use to filter records. Only records with these entries will be replicated. If the list is empty, all records will be replicated. You can use the `*` wildcard to match any **[entry](../glossary#entry)**.       | List of strings  |
 | `when`    | A set of conditions that the record must meet to be replicated. The conditions are based on the record labels. For more information on conditional queries, see the **[Conditional Query Reference](/docs/conditional-query/index.mdx)** | JSON-like object |
 | `each_s`  | Replicate a record every S seconds                                                                                                                                                                                                       | Float            |
 | `each_n`  | Replicate only every N record                                                                                                                                                                                                            | Integer          |
@@ -65,7 +65,7 @@ See the next section for more information on how to create a replication task wi
 
 ## Managing Data Replication Tasks
 
-Here you will find examples of how to create, list, retrieve, update, and delete replication tasks using the ReductStore SDKs, REST API, CLI and Web Console.
+Here you will find examples of how to create, list, retrieve, update, and delete replication tasks using the ReductStore SDKs, REST API, **[CLI](../glossary#cli)** and **[Web Console](../glossary#web-console)**.
 
 Pay attention that all the examples are written for a local ReductStore instance available at **`http://127.0.0.1:8383`** with API token `my-token`.
 
