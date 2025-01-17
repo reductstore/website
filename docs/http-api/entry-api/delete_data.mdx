@@ -12,7 +12,7 @@ description: HTTP Endpoints for deleting data from an entry in the database.
 
 # Entry API to Delete Data
 
-The API provides several endpoints for deleting data from an entry in the database. It can be an entire entry, a specific record, a batch of records in a single request or records within a time range.
+The API provides several endpoints for deleting data from an **[entry](../../glossary#entry)** in the database. It can be an entire entry, a specific **[record](../../glossary#record)**, a batch of records in a single request or records within a time range.
 
 ## Remove a Record from an Entry
 
@@ -23,7 +23,7 @@ If the `ts` query parameter is set, the record with the timestamp is removed.
 Otherwise, the entire entry is removed.
 :::
 
-If authentication is enabled, the method needs a valid API token with read access to the entry's bucket.
+If authentication is enabled, the method needs a valid API token with read access to the entry's **[bucket](../../glossary#bucket)**.
 
 **Changes**:
 

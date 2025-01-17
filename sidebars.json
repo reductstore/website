@@ -52,6 +52,7 @@
         "guides/access-control"
       ]
     },
+    "glossary",
     {
       "type": "category",
       "label": "Conditional Query Reference",

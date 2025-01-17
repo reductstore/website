@@ -22,7 +22,7 @@ ReductStore provides straightforward access management based on token authentica
 
 ### Token Authentication
 
-ReductStore uses token-based authentication to secure the HTTP API. A client must send a valid token in the `Authorization` header in order to access it.
+ReductStore uses token-based authentication to secure the **[HTTP API](../glossary#http-api)**. A client must send a valid token in the `Authorization` header in order to access it.
 A ReductStore instance must have an initial token to enable authentication and access management. The initial token is configured using the `RS_API_TOKEN` environment variable and has full access permissions.
 
 Access tokens are immutable and can't be updated. If you need to change the token, you must create a new token and update the clients with the new token. The value of the token is a random string that is generated when the token is created and is only available at that time.
@@ -61,12 +61,12 @@ The table below shows the list of operations that can be performed for different
 | Manage Replication Tasks | :x:                | :x:                | :x:                | :x:                | :white_check_mark: |
 
 :::note
-`Anonymous` refers to clients that don't send an access token in the `Authorization` header.
+`Anonymous` refers to clients that don't send an **[access token](../glossary#access-token)** in the `Authorization` header.
 :::
 
 ## Managing Tokens
 
-Here you will find examples of how to create, browse, retrieve, and delete access tokens using the ReductStore SDKs, REST API, CLI and Web Console.
+Here you will find examples of how to create, browse, retrieve, and delete access tokens using the ReductStore SDKs, REST API, **[CLI](../glossary#cli)** and **[Web Console](../glossary#web-console)**.
 
 Note that all the examples are written for a local ReductStore instance available at **`http://127.0.0.1:8383`** with the API token `my-token`.
 
