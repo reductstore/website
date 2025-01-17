@@ -66,7 +66,7 @@ Or use the `snap connect reductstore:removable-media` command to connect the sna
 
 ## Provisioning
 
-ReductStore provides an HTTP API to create and configure resources such as buckets, access tokens or replication tasks. However, if you are following an Infrastructure as Code (IaC) approach, you may want to provision resources at the deployment stage and ensure that they can't be modified or deleted using the HTTP API.
+ReductStore provides an **[HTTP API](./glossary#http-api)** to create and configure resources such as buckets, access tokens or **[replication](./glossary#replication)** tasks. However, if you are following an Infrastructure as Code (IaC) approach, you may want to provision resources at the deployment stage and ensure that they can't be modified or deleted using the HTTP API.
 
 ### Example
 
@@ -94,10 +94,10 @@ You can provision buckets by setting environment variables. The following table 
 
 | Name                               | Default | Description                                                      |
 | ---------------------------------- | ------- | ---------------------------------------------------------------- |
-| `RS_BUCKET_<ID>_NAME`              |         | Provisioned bucket name (required)                               |
+| `RS_BUCKET_<ID>_NAME`              |         | Provisioned **[bucket](./glossary#bucket)** name (required)      |
 | `RS_BUCKET_<ID>_QUOTA_TYPE`        | NONE    | It can be NONE, FIFO or HARD.                                    |
 | `RS_BUCKET_<ID>_QUOTA_SIZE`        | 0       | Size of quota to start removing old data e.g. 1 KB, 10.4 MB etc. |
-| `RS_BUCKET_<ID>_MAX_BLOCK_SIZE`    | 64Mb    | Maximal block size for batched records                           |
+| `RS_BUCKET_<ID>_MAX_BLOCK_SIZE`    | 64Mb    | Maximal **[block](./glossary#block)** size for batched records   |
 | `RS_BUCKET_<ID>_MAX_BLOCK_RECORDS` | 1024    | Maximal number of batched records in a block                     |
 
 For more information about the bucket settings, see the **[Buckets Guide](./guides/buckets.mdx#bucket-settings)**.
@@ -130,7 +130,7 @@ You can provision replication tasks by setting environment variables. The follow
 | `RS_REPLICATION_<ID>_ENTRIES`       |         | List of entries to replicate. Separate entries with a comma. If the list is empty, all entries will be replicated. |
 | `RS_REPLICATION_<ID>_INCLUDE_<KEY>` |         | Replicate only records with KEY equal to the value of the environment variable. Can be used multiple times.        |
 | `RS_REPLICATION_<ID>_EXCLUDE_<KEY>` |         | Do not replicate records with KEY equal to the value of the environment variable. Can be used multiple times.      |
-| `RS_REPLICATION_<ID>_EACH_S`        |         | Replicate a record every S seconds. Can have a floating-point value.                                               |
+| `RS_REPLICATION_<ID>_EACH_S`        |         | Replicate a **[record](./glossary#record)** every S seconds. Can have a floating-point value.                      |
 | `RS_REPLICATION_<ID>_EACH_N`        |         | Replicate every N-th record.                                                                                       |
 
 For more information about the replication settings, see the **[Data Replication Guide](./guides/data-replication.mdx)**.

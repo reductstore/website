@@ -26,7 +26,7 @@ import NextStep from "./common/next_steps.mdx";
 ## Installing the Rust SDK
 
 <InstallSdk>
-    To start using the ReductStore Rust SDK, add the following dependency to your `Cargo.toml` file:
+    To start using the ReductStore Rust **[SDK](../glossary#sdk)**, add the following dependency to your `Cargo.toml` file:
 
     ```toml
     [dependencies]
@@ -64,7 +64,7 @@ import NextStep from "./common/next_steps.mdx";
 ## Creating a Bucket
 
 <CreateBucketSection>
-    To create a bucket, you should use the `create_bucket` method on a `Client` instance. The method takes the name of
+    To create a **[bucket](../glossary#bucket)**, you should use the `create_bucket` method on a `Client` instance. The method takes the name of
     the bucket you want to create as an argument and returns a `BucketBuilder` instance to configure the bucket settings.
     Call the `send` method on the `BucketBuilder` to send the request to the ReductStore server and create the bucket:
 
@@ -76,7 +76,7 @@ import NextStep from "./common/next_steps.mdx";
 ## Data Ingestion
 
 <DataIngestionSection>
-    To write a timestamped record to an entry in a bucket, you should use the `write_record` method on a `Bucket` instance.
+    To write a timestamped **[record](../glossary#record)** to an **[entry](../glossary#entry)** in a bucket, you should use the `write_record` method on a `Bucket` instance.
     Pass the name of the entry you want to write to as an argument. The method will return a `RecordBuilder` instance to
     pass the data and timestamp you want to write. Additionally, you can provide labels to the record to make it easier to query later.
 

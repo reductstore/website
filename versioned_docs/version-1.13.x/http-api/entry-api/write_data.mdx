@@ -12,15 +12,15 @@ description: HTTP Endpoints for writing data to the database.
 
 # Entry API to Write Data
 
-The API provides several endpoints for writing data to the database. The endpoints allow writing a single record or a batch of records in a single request.
+The API provides several endpoints for writing data to the database. The endpoints allow writing a single **[record](../../glossary#record)** or a batch of records in a single request.
 
 ## Write a Record to an Entry
 
-ReductStore creates an entry on the first write operation. The record
+ReductStore creates an **[entry](../../glossary#entry)** on the first write operation. The record
 should be placed in the body of the HTTP request. The body can also be
 empty.
 
-The method needs a valid API token with write access to the entry's bucket
+The method needs a valid API token with write access to the entry's **[bucket](../../glossary#bucket)**
 if authentication is enabled.
 
 The endpoint can be used with the "Expect 100-continue" header. If the

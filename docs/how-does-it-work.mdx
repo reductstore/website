@@ -19,20 +19,20 @@ ReductStore is a time series database designed specifically for storing and mana
 
 In comparison to other S3-like object storage, ReductStore works differently:
 
-- **Indexing By Time.** Each record in an entry is written with a unique timestamp. The storage engine is optimised for reading data by time ranges.
+- **Indexing By Time.** Each **[record](./glossary#record)** in an **[entry](./glossary#entry)** is written with a unique timestamp. The storage engine is optimised for reading data by time ranges.
 - **Flat Storage Structure.** It doesn't have a tree-like structure for data.
   There are only buckets and entries with unique names in them.
 - **Batching Data.** Historical data is usually written forward and queried by time range.
   Batching can be used to optimise ingestion, retrieval and storage.
-  The HTTP API provides endpoints to write and query data in batches, reducing the number of requests and HTTP overhead.
+  The **[HTTP API](./glossary#http-api)** provides endpoints to write and query data in batches, reducing the number of requests and HTTP overhead.
   The storage engine batches objects into blocks of fixed size so that it can store small objects more efficiently.
-  You don't waste disk space because of the minimum file system block size. In addition, ReductStore pre-allocates block space to improve performance during write operations.
+  You don't waste disk space because of the minimum file system **[block](./glossary#block)** size. In addition, ReductStore pre-allocates block space to improve performance during write operations.
 - **Forward Writing.** The engine records data fastest if it only needs to append records to the current block.
   It means that, for better performance, you should always write data with the newest timestamps.
 - **Labels.** A record can have labels that are used as annotations for the data.
 - **Data Querying.** You can filter records by labels using the [**Conditional Query**](./conditional-query/index.mdx) language.
 - **Strong FIFO Quota.** When you have intensive write operations, you may run out of disk space quickly.
-  The engine removes the oldest block in a bucket as soon as the amount of the data reaches a specified quota limit.
+  The engine removes the oldest block in a **[bucket](./glossary#bucket)** as soon as the amount of the data reaches a specified quota limit.
 
 Compared to other time series databases:
 
@@ -59,10 +59,10 @@ A bucket is a container for data with a unique name and settings for storage.
 </small>
 
 If you're familiar with SQL databases, you can think of a bucket as a database.
-Buckets are used to separate data with different purposes or sources, and for data replication.
+Buckets are used to separate data with different purposes or sources, and for data **[replication](./glossary#replication)**.
 In the image above you can see an instance with two buckets:
 
-- Bucket A is an ingest bucket with a FIFO quota of 10GB, it acts as a ring buffer for ingested data.
+- Bucket A is an ingest bucket with a **[FIFO quota](./glossary#fifo-quota)** of 10GB, it acts as a ring buffer for ingested data.
   When the bucket reaches its quota limit, the storage engine removes the oldest block of data.
 - Bucket B is a long term storage bucket with a hard quota of 1TB, it receives data from Bucket A and stores it for a long time.
   When the bucket reaches the quota limit, the storage engine stops writing data to the bucket.
@@ -81,7 +81,7 @@ They are completely independent and can be used in parallel without conflict.
   Internal structure of ReductStore entry.
 </small>
 
-The entries are responsible for batching data and storing it in blocks.
+The entries are responsible for **[batching](./glossary#batching)** data and storing it in blocks.
 The storage engine writes data into the current block until it reaches the block limits.
 It then creates a new block and updates the block index.
 Because the index is only updated when the block is full, all changes are stored in the write-ahead logs to prevent data loss.

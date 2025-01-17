@@ -5,7 +5,7 @@ description: HTTP Endpoints for reading data from an entry in the database.
 
 # Entry API to Read Data
 
-The API provides several endpoints for reading data from an entry including reading a single record, reading multiple records in a batch, and querying records for a time interval.
+The API provides several endpoints for reading data from an **[entry](../../glossary#entry)** including reading a single **[record](../../glossary#record)**, reading multiple records in a batch, and querying records for a time interval.
 
 ## Get a Record from an Entry
 
@@ -17,7 +17,7 @@ the HTTP response body. It also sends meta information in headers:
 - `x-reduct-label-<name>` - a value of the `<name>` label
 
 If authentication is enabled, the method needs a valid API token with read
-access to the entry's bucket.
+access to the entry's **[bucket](../../glossary#bucket)**.
 
 **Changes**:
 

@@ -26,7 +26,7 @@ import NextStep from "./common/next_steps.mdx";
 ## Installing the Python SDK
 
 <InstallSdk>
-    To install the ReductStore SDK, you will need to have Python 3.8 or higher installed on your machine. Once Python is
+    To install the ReductStore **[SDK](../glossary#sdk)**, you will need to have Python 3.8 or higher installed on your machine. Once Python is
     installed, you can use the `pip` package manager to install the `reduct-py` package:
 
     ```
@@ -58,7 +58,7 @@ import NextStep from "./common/next_steps.mdx";
 ## Creating a Bucket
 
 <CreateBucketSection>
-    To create a bucket, you should use the `create_bucket` method on a `Client` instance. Pass the name of the bucket
+    To create a **[bucket](../glossary#bucket)**, you should use the `create_bucket` method on a `Client` instance. Pass the name of the bucket
     you want to create as an argument, along with settings. You can set the `exist_ok` argument to True to get the
     bucket if it already exists:
 
@@ -70,7 +70,7 @@ import NextStep from "./common/next_steps.mdx";
 ## Data Ingestion
 
 <DataIngestionSection>
-    To write a timestamped record to an entry in a bucket, you should use the `write` method on a `Bucket` instance.
+    To write a timestamped **[record](../glossary#record)** to an **[entry](../glossary#entry)** in a bucket, you should use the `write` method on a `Bucket` instance.
     Pass the name of the entry you want to write to as an argument, along with the data and timestamp you want to write.
     Additionally, you can provide labels to the record to make it easier to query later.
 
