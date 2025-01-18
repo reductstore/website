@@ -5,7 +5,7 @@ authors: gracija
 tags: [robotics]
 slug: store-ros-topics
 date: 2025-01-21
-# image: ./img/introduction_diagram.drawio.png
+image: ./img/introduction_diagram.drawio.png
 ---
 
 ![Introduction Diagram](./img/introduction_diagram.drawio.png)
@@ -37,7 +37,9 @@ Each method of storing ROS topics has its strengths, so let’s dive into the th
 
 - **Easy to set up**: Rosbag is a built-in ROS tool, so no additional software installation is required.
 - **Offline analysis**: There is no need to connect to the live robot in order to analyze the recorded data.
-  **Drawbacks**:
+
+**Drawbacks**:
+
 - **Limited scalability**: Managing and storing large Rosbag files can become a bit difficult as the amount of data grows.
 - **No advanced filtering**: Rosbag doesn’t provide advanced tools for filtering or querying data efficiently.
 - **No built-in User Interface**: Rosbag is a command line tool and as such, it has no built-in UI, meaning engineers have to interact with Rosbag through terminal commands.
@@ -54,7 +56,9 @@ Another option is to store compressed Rosbag files in a _time-series object stor
 
 - **Advanced filtering**: Labels make it easier to search and filter large datasets based on specific criteria.
 - **Scalable**: ReductStore can easily handle large amounts of data, making it suitable for long-term storage of robotic data.
-  **Drawbacks**:
+
+**Drawbacks**:
+
 - **Learning curve**: Engineers new to time-series storage may need some time to set up and learn how to use them effectively.
 - **Costs**: Using cloud-based object storage can cost more than simply storing the files on your system.
 
@@ -70,7 +74,9 @@ This approach also makes it easier to replicate data to the cloud. For example, 
 
 - **Better control over your data**: You can customize how each topic is stored, compressed, and labeled.
 - **Conditional filtering and replication**: With the ability to filter records based on metadata, you can quickly find what you need. You can also have granular replication by replicating only the important topics to the cloud.
-  **Drawbacks**:
+
+**Drawbacks**:
+
 - **Requires careful management**: Storing topics as separate records means you'll need to plan ahead to keep track of the data and its metadata, ensuring everything stays well-organized and manageable.
 
 **Examples**:
