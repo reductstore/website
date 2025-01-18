@@ -63,7 +63,8 @@
       "items": [
         "conditional-query/logical-operators",
         "conditional-query/comparison-operators",
-        "conditional-query/arithmetic-operators"
+        "conditional-query/arithmetic-operators",
+        "conditional-query/string-operators"
       ]
     },
     {
