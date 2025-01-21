@@ -91,12 +91,13 @@ This approach also makes it easier to replicate data to the cloud. For example, 
 When choosing how to store ROS topics, consider the following:
 
 - **Data Size and Scalability**: For large datasets like LiDAR or images, ReductStore's time-series storage is ideal. Simpler solutions like Rosbag are enough for smaller data, but become difficult to manage as the project grows.
-- **Query and Filtering Needs**: Storing each topic separately in ReductStore allows you to query data based on metadata, enabling you to retrieve only the specific data you need. So, in case you need more granular filtering of the data, the best option would be storing each topic in its own record.
+- **Query and Filtering Needs**: Storing each topic separately in ReductStore allows you to query data based on labels, enabling you to retrieve only the specific data you need. So, in case you need more granular filtering of the data, the best option would be storing each topic in its own record.
 - **Cost and Complexity**: Storing topics separately offers great flexibility, but it takes more planning and management. If you're on a budget, simpler solutions like Rosbag or storing entire bag files in a time-series storage like ReductStore can work well for smaller projects.
 
 ## Conclusion
 
-In conclusion, there are various ways to store ROS data, each with its own set of advantages and disadvantages. Choosing the right storage method for your ROS topics depends on data size, query needs, and scalability. For larger datasets and advanced filtering, ReductStore's time-series storage is a great fit. Smaller projects may find simpler options like Rosbag more suitable. Therefore, it's important to consider the specific requirement of your project and plan accordingly. Discover how [**ReductStore**](/) can simplify your ROS topic storage, making it easier to manage images and other data efficiently.
+In conclusion, there are various ways to store ROS data, each with its own set of advantages and disadvantages. Choosing the right storage method for your ROS topics depends on data size, query needs, and scalability. For larger datasets and advanced filtering, [**ReductStore**](/)'s time-series storage is a great fit. Smaller projects may find simpler options like Rosbag more suitable. Therefore, it's important to consider the specific requirement of your project and plan accordingly.
 
 ---
+
 If you have any questions or comments, feel free to use the [**ReductStore Community Forum**](https://community.reduct.store).
