@@ -12,7 +12,7 @@ image: ./img/introduction_diagram.drawio.png
 
 The **Robot Operating System (ROS)** is a powerful framework for developing and managing robotic systems. It simplifies integration, communication, and development through various tools and libraries. ROS is built around a communication system that uses a _publish-subscribe model_ to connect components, where some, like sensors or cameras, act as _publishers_, and others, like motors or processors, are _subscribers_. The data shared between these components is organized into _topics_.
 
-To make the most of this data, especially when it's needed later for analysis, debugging, or sharing, it's crucial to store it efficiently. In this article, we'll dive into three methods for storing ROS topics, comparing their benefits and limitations to help you choose the best one for your needs. In case you need to gain a broader understanding of how to handle robotic data effectively, make sure to check out our [**article on storing and managing robotic data**](/blog/store-robotic-data) first.
+To make the most of this data, especially when it's needed later for analysis, debugging, or sharing, it's crucial to store it efficiently. In this article, we'll dive into three methods for storing ROS topics, comparing their benefits and limitations to help you choose the best one for your needs. In case you need to gain a broader understanding of how to handle robotics data effectively, make sure to check out our [**article on storing and managing robotics data**](/blog/store-robotic-data) first.
 
 {/* truncate */}
 
@@ -40,7 +40,7 @@ Each method of storing ROS topics has its strengths, so let’s dive into the th
 
 **Drawbacks**:
 
-- **Limited scalability**: Managing and storing large Rosbag files can become a bit difficult as the amount of data grows.
+- **Limited scalability**: Since Rosbag is made for debugging but not for storing data continuously, managing and storing large Rosbag files can become very difficult as the amount of data grows.
 - **No advanced filtering**: Rosbag doesn’t provide advanced tools for filtering or querying data efficiently.
 - **No built-in User Interface**: Rosbag is a command line tool and as such, it has no built-in UI, meaning engineers have to interact with Rosbag through terminal commands.
 
@@ -50,12 +50,12 @@ Each method of storing ROS topics has its strengths, so let’s dive into the th
 
 ![Method 2 Diagram](./img/method2.drawio.png)
 
-Another option is to store compressed Rosbag files in a _time-series object storage solution_ like [**ReductStore**](/). Time-series storage works really well for ROS data because it sorts and retrieves information by time, which fits naturally with how robots process and use data. This approach also lets you add helpful labels to the files, like timestamps, sensor types, or recording locations, making it easier to manage and access your data.
+Another option is to store compressed Rosbag files in a _time-series object storage solution_ like [**ReductStore**](/). Time-series storage works really well for ROS data because it sorts and retrieves information by time, which fits naturally with how robots process and use data. This approach also lets you add helpful labels to the files, like AI labels, sensor types, or recording locations, making it easier to manage and access your data.
 
 **Advantages**:
 
 - **Advanced filtering**: Labels make it easier to search and filter large datasets based on specific criteria.
-- **Scalable**: ReductStore can easily handle large amounts of data, making it suitable for long-term storage of robotic data.
+- **Scalable**: ReductStore can easily handle large amounts of data, making it suitable for long-term storage of robotics data.
 
 **Drawbacks**:
 
@@ -73,7 +73,7 @@ This approach also makes it easier to replicate data to the cloud. For example, 
 **Advantages**:
 
 - **Better control over your data**: You can customize how each topic is stored, compressed, and labeled.
-- **Conditional filtering and replication**: With the ability to filter records based on metadata, you can quickly find what you need. You can also have granular replication by replicating only the important topics to the cloud.
+- **Conditional filtering and replication**: With the ability to filter records based on label, you can quickly find what you need. You can also have granular replication by replicating only the important topics to the cloud.
 
 **Drawbacks**:
 
@@ -88,13 +88,15 @@ This approach also makes it easier to replicate data to the cloud. For example, 
 
 ## Best Practices for Storing ROS Topics
 
-When choosing how to store ROS topics, consider data size, query needs, and scalability.
+When choosing how to store ROS topics, consider the following:
 
-- **Data Size and Scalability**: For large datasets like LiDAR or images, ReductStore's time-series storage is ideal. Simpler solutions like Rosbag are enough for smaller data but may become difficult to manage as the project grows.
-- **Query and Filtering Needs**: Storing each topic separately in ReductStore gives you more control over how you query and filter the data, especially when you need specific metadata, like vibration data or logs, for efficient analysis.
+- **Data Size and Scalability**: For large datasets like LiDAR or images, ReductStore's time-series storage is ideal. Simpler solutions like Rosbag are enough for smaller data, but become difficult to manage as the project grows.
+- **Query and Filtering Needs**: Storing each topic separately in ReductStore allows you to query data based on metadata, enabling you to retrieve only the specific data you need. So, in case you need more granular filtering of the data, the best option would be storing each topic in its own record.
 - **Cost and Complexity**: Storing topics separately offers great flexibility, but it takes more planning and management. If you're on a budget, simpler solutions like Rosbag or storing entire bag files in a time-series storage like ReductStore can work well for smaller projects.
 
-Conclusion
+## Conclusion
+
 In conclusion, there are various ways to store ROS data, each with its own set of advantages and disadvantages. Choosing the right storage method for your ROS topics depends on data size, query needs, and scalability. For larger datasets and advanced filtering, ReductStore's time-series storage is a great fit. Smaller projects may find simpler options like Rosbag more suitable. Therefore, it's important to consider the specific requirement of your project and plan accordingly. Discover how [**ReductStore**](/) can simplify your ROS topic storage, making it easier to manage images and other data efficiently.
 
+---
 If you have any questions or comments, feel free to use the [**ReductStore Community Forum**](https://community.reduct.store).
