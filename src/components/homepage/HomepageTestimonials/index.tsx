@@ -9,7 +9,6 @@ const testimonials = [
     author: "Ingo Kaiser",
     position: "CEO and Co-founder",
     company: "PANDA GmbH",
-    homepage: "https://panda.technology",
     image: require("@site/static/img/testimonials/panda.webp").default,
   },
   {
@@ -18,7 +17,6 @@ const testimonials = [
     author: "Daniel Wedlund",
     position: "Founder",
     company: "Mounte AB",
-    homepage: "https://mounte.se",
     image: require("@site/static/img/testimonials/mounte.webp").default,
   },
   {
@@ -27,7 +25,6 @@ const testimonials = [
     author: "Michael Welsh",
     position: "Founder",
     company: "Metric Space UG",
-    homepage: "https://www.metric-space.ai/",
     image: require("@site/static/img/testimonials/metric-space.webp").default,
   },
 ];
@@ -48,8 +45,7 @@ function HomepageTestimonials() {
             </div>
             <div className={styles.authorInfo}>
               <div className={styles.authorName}>{testimonial.author}</div>
-              {testimonial.position} at{" "}
-              <Link to={testimonial.homepage}>{testimonial.company}</Link>
+              {testimonial.position} at {testimonial.company}
             </div>
           </div>
         ))}
