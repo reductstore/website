@@ -5,9 +5,8 @@
 }
 
 .testimonialImage {
-  max-width: 125px;
+  max-width: 100px;
   height: auto;
-  margin-bottom: 1rem;
   border-radius: 50%;
 }
 
