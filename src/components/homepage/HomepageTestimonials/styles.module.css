@@ -1,11 +1,10 @@
 .testimonials {
-  margin-top: var(--reduct-section-space);
-  margin-bottom: var(--reduct-section-space);
+  margin-top: 5rem;
   text-align: center;
 }
 
 .testimonialImage {
-  max-width: 100px;
+  max-width: 125px;
   height: auto;
   border-radius: 50%;
 }

@@ -1,0 +1,22 @@
+.partners {
+  margin-top: 5rem;
+  margin-bottom: var(--reduct-section-space);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7rem;
+}
+
+.partnerImage {
+  max-width: 250px;
+  height: 90px;
+  border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+  .partners {
+    gap: 3rem;
+  }
+}
