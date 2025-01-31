@@ -26,7 +26,9 @@ IoTDB uses a columnar structure, particularly effective for time-series data whe
   IoTDB Scenarios. Source: [IoTDB](https://iotdb.apache.org/)
 </small>
 
-IoTDB is highly optimized for structured, schema-based time-series data with pre-defined fields and hierarchies (e.g., devices, measurements, etc.). This is espacialy good, if you have many devices of the same type, such as gasoline vehicles, and their measurements (such as speed, fuel quantity, etc.) are of the same type, storing metadata for each time series can cause problems. The metadata (such as units and measurement types) takes up a lot of storage, and managing so many records becomes complex. To solve this problem, IoTDB uses a schema template feature that allows similar devices to share the same metadata, reducing storage usage and making it easier to manage data from many devices.
+IoTDB is highly optimized for structured, schema-based time-series data with pre-defined fields and hierarchies (e.g., devices, measurements, etc.). This is especially good when you have many devices of the same type, for example, many gasoline vehicles in different cities with similar measurement types, such as speed, amount of fuel, and so on. 
+
+Because storing metadata for each time series can cause problems as it can take up a lot of storage space, IoTDB uses schema templates that allow similar devices to share the same metadata, reducing storage requirements and making it easier to manage data from many similar devices.
 
 Along with strong integration with other Apache open-source projects like Kafka, Hadoop, NiFi and others, a strong ETL (or ELT) data pipeline can be configured for high-end data analysis of both structured and unstructured data. However, the abundance of Apache projects means that you will spend considerable time determining the best fit, learning the product, and integrating each piece of the solution. Considering that Apache projects are open-source and have strong community support, this is a trade-off many organizations are willing to make.
 
