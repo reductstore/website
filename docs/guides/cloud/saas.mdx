@@ -15,11 +15,22 @@ import Tabs from "@theme/Tabs";
   />
 </head>
 
-ReductStore Cloud is available as a [SaaS offering](/solutions/cloud), allowing you to deploy ReductStore instances on-demand without managing the underlying infrastructure. This guide provides information about the architecture and instructions for deploying ReductStore as a SaaS instance on ReductStore Cloud.
+ReductStore is available as a [SaaS offering](/solutions/cloud), allowing you to deploy ReductStore instances on-demand without managing the underlying infrastructure. This guide provides information about the architecture and instructions for deploying ReductStore as a SaaS instance on ReductStore Cloud.
 
 ## Overview
 
+The ReductStore Cloud uses a multi-tenant architecture on GKE (Google Kubernetes Engine) clusters.
+Each instance is isolated from others and stores data in a dedicated GCS (Google Cloud Storage) bucket.
+
 ![ReductStore Cloud architecture](./img/saas_diagram.png)
+
+## Deploy ReductStore Instance
+
+## Manage ReductStore Instance
+
+## Best Practices
+
+## Troubleshooting
 
 ## Next Steps
 
