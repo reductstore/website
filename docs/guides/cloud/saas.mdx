@@ -23,7 +23,7 @@ This guide provides information about the architecture and instructions for depl
 The ReductStore Cloud uses a multi-tenant architecture on GKE (Google Kubernetes Engine) clusters, where each instance is isolated from others and stores data in a dedicated GCS (Google Cloud Storage) bucket.
 Its infrastructure provides automatic scaling, elastic storage, and high availability for ReductStore instances.
 
-![ReductStore Cloud Architecture](./img/saas_diagram.png)
+![ReductStore Cloud Architecture](./img/saas_diagram.webp)
 
 The ReductStore Cloud architecture consists of the following components:
 
@@ -48,7 +48,7 @@ Before deploying ReductStore as a SaaS instance, you must register for a ReductS
 1. Sign up for a ReductStore account at **[cloud.reduct.store](https://cloud.reduct.store/signup)** with the following information:
 
    <img
-     src={require("@site/docs/guides/cloud/img/saas_signup.png").default}
+     src={require("@site/docs/guides/cloud/img/saas_signup.webp").default}
      alt="Sign up for ReductStore"
      width="500"
      style={{ border: "1px solid #eaecef" }}
@@ -57,7 +57,7 @@ Before deploying ReductStore as a SaaS instance, you must register for a ReductS
 2. Select the plan that best suits your needs (each plan has a **Pricing** tab where you can view details) and complete your subscription:
 
    <img
-     src={require("@site/docs/guides/cloud/img/plans.png").default}
+     src={require("@site/docs/guides/cloud/img/plans.webp").default}
      alt="Sign up for ReductStore"
      width="800"
      style={{ border: "1px solid #eaecef" }}
@@ -72,7 +72,7 @@ Once you have registered and subscribed to a plan, you can deploy a ReductStore 
 1. In the Resources section of the left sidebar, click the ReductStore resource and then click the Create button:
 
    <img
-     src={require("@site/docs/guides/cloud/img/saas_resources.png").default}
+     src={require("@site/docs/guides/cloud/img/saas_resources.webp").default}
      alt="Create ReductStore Instance"
      width="800"
      style={{ border: "1px solid #eaecef" }}
@@ -86,7 +86,7 @@ Once you have registered and subscribed to a plan, you can deploy a ReductStore 
 
    <img
      src={
-       require("@site/docs/guides/cloud/img/saas_create_instance.png").default
+       require("@site/docs/guides/cloud/img/saas_create_instance.webp").default
      }
      alt="Create ReductStore Instance Dialog"
      width="500"
@@ -105,7 +105,7 @@ To do this, you will need the URL of the ReductStore instance and the API token 
 2. Click the **Connectivity** tab to copy the URL of the ReductStore instance:
 
    <img
-     src={require("@site/docs/guides/cloud/img/saas_connectivity.png").default}
+     src={require("@site/docs/guides/cloud/img/saas_connectivity.webp").default}
      alt="ReductStore Instance Connectivity"
      width="800"
      style={{ border: "1px solid #eaecef" }}
@@ -116,7 +116,7 @@ To do this, you will need the URL of the ReductStore instance and the API token 
 Open the URL in your browser to access the ReductStore Web Console, then log in with the API token you provided during the deployment:
 
     <img
-      src={require("@site/docs/guides/cloud/img/saas_web_console.png").default}
+      src={require("@site/docs/guides/cloud/img/saas_web_console.webp").default}
       alt="ReductStore Web Console"
       width="300"
       style={{ border: "1px solid #eaecef" }}
@@ -164,7 +164,9 @@ If you don't need the ReductStore instance temporarily, you can stop it to save 
 3. Click the **Actions** button and select **Stop** to stop the instance:
 
    <img
-     src={require("@site/docs/guides/cloud/img/saas_stop_instance.png").default}
+     src={
+       require("@site/docs/guides/cloud/img/saas_stop_instance.webp").default
+     }
      alt="Stop ReductStore Instance"
      width="800"
      style={{ border: "1px solid #eaecef" }}
