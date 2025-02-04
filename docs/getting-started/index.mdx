@@ -43,6 +43,26 @@ On Linux or macOS
 RS_DATA_PATH=./data ./reductstore
 ```
 
+## ReductStore Cloud
+
+You can access ReductStore as a service through the [**ReductStore Cloud platform**](https://cloud.reduct.store/signup).
+Simply create an account to start using the database immediately.
+For more details on deployment, check out the [**ReductStore Cloud guide**](../guides/cloud/saas.mdx).
+
+## Azure Virtual Machine
+
+ReductStore is available as an Azure Virtual Machine on the [**Azure Marketplace**](https://azuremarketplace.microsoft.com/en/marketplace/apps/reductsoftware.reductstore-server).
+The virtual machine is pre-configured with ReductStore and all the necessary dependencies to store data in Azure storage accounts.
+Read more about the deployment in the [**Azure Virtual Machine guide**](../guides/cloud/azure-vm.mdx).
+
+## Demo Server
+
+If you don't want to deal with the installation, but just want to play with the database, you can use our demo server:
+
+URL: [**https://play.reduct.store**](https://play.reduct.store)
+
+API Token: **reductstore**
+
 ## Cargo
 
 If you familiar with Rust, you can build the database from the source code. The source code is available on [**GitHub**](https://github.com/reductstore/reductstore) or
@@ -63,12 +83,6 @@ RS_DATA_PATH=./data reductstore
 
 You may need to install a newer Rust version. Read the **[official Rust installation guide](https://www.rust-lang.org/tools/install)** for more information.
 
-## Azure Virtual Machine
-
-ReductStore is available as an Azure Virtual Machine on the [**Azure Marketplace**](https://azuremarketplace.microsoft.com/en/marketplace/apps/reductsoftware.reductstore-server).
-The virtual machine is pre-configured with ReductStore and all the necessary dependencies to store data in Azure storage accounts.
-Read more about the deployment in the [**Azure Virtual Machine guide**](guides/integration/azure-vm.mdx).
-
 ## Snap
 
 You can install the database with snap:
@@ -78,14 +92,6 @@ sudo snap install reductstore
 ```
 
 ReductStore will be available on port http://127.0.01:8383 and store data in the `/var/snap/reductstore/common/data` directory.
-
-### Demo Server
-
-If you don't want to deal with the installation, but just want to play with the database, you can use our demo server:
-
-URL: [**https://play.reduct.store**](https://play.reduct.store)
-
-API Token: **reductstore**
 
 ## What Is Next?
 
