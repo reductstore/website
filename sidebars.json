@@ -36,7 +36,7 @@
     "configuration",
     {
       "type": "category",
-      "label": "Guides",
+      "label": "\uD83D\uDCDA Guides",
       "collapsed": false,
       "collapsible": false,
       "link": {
@@ -49,10 +49,19 @@
         "guides/data-querying",
         "guides/data-management",
         "guides/data-replication",
-        "guides/access-control"
+        "guides/access-control",
+        {
+          "type": "category",
+          "label": "Cloud",
+          "items": ["guides/cloud/saas", "guides/cloud/azure-vm"]
+        }
       ]
     },
-    "glossary",
+    {
+      "type": "doc",
+      "label": "\uD83D\uDDD2\uFE0F Glossary",
+      "id": "glossary"
+    },
     {
       "type": "category",
       "label": "Conditional Query Reference",
@@ -96,11 +105,6 @@
         "http-api/token-authentication",
         "http-api/replication-api"
       ]
-    },
-    {
-      "type": "category",
-      "label": "Integration",
-      "items": ["guides/integration/azure-vm"]
     },
     {
       "type": "category",
