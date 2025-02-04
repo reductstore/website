@@ -240,16 +240,6 @@
       "statusCode": 301
     },
     {
-      "route": "/blog/how-to-store-vibration-sensor-data/part-2",
-      "redirect": "/blog/how-to-store-vibration-sensor-data",
-      "statusCode": 301
-    },
-    {
-      "route": "/docs/next/guides/integration/azure-vm",
-      "redirect": "/docs/guides/cloud/azure-vm",
-      "statusCode": 301
-    },
-    {
       "route": "/docs/next/guides/integration/azure-vm",
       "redirect": "/docs/guides/cloud/azure-vm",
       "statusCode": 301
