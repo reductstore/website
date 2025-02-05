@@ -1,0 +1,133 @@
+---
+title: Misc Operators
+description: Learn how to use miscellaneous operators to filter data in ReductStore.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/conditional-query/misc-operators"
+  />
+</head>
+
+Besides the main categories of operators, ReductStore supports a few miscellaneous operators that provide additional functionality:
+
+| Operator  | Description                                         |
+| --------- | --------------------------------------------------- |
+| `$exists` | Checks if a label exists in a record.               |
+| `$cast`   | Casts a label value to a different type explicitly. |
+| `$ref`    | References a label value in a record explicitly.    |
+
+## $exists
+
+The `$exists` operator is used to check if a [**label**](../glossary#label) exists in a [**record**](../glossary#record).
+
+The operator is useful when you want to filter records based on the presence of a label, regardless of its value.
+
+### Syntax
+
+```
+{
+  "$exists": [ <expression as label reference> ]
+}
+```
+
+### Behavior
+
+The operator evaluates the first expression as a string and checks if the label exists in the record.
+
+Additional rules:
+
+- If the expression is not a string, it is cast to a string.
+- The operator is case-sensitive.
+
+### Examples
+
+Array notation:
+
+```json
+{
+  "$exists": ["label_name"]
+}
+```
+
+## $cast
+
+The `$cast` operator is used to cast a [**label**](../glossary#label) value to a different type explicitly.
+
+The condition query engine automatically casts values to the correct type when comparing them, but sometimes you may want to cast a value explicitly.
+
+### Syntax
+
+```
+{
+  "$cast": [ <expression as label reference>, <"bool" | "int" | "float" | "string"> ]
+}
+```
+
+### Behavior
+
+The operator evaluates the first expression then casts the value to the specified type in the second argument.
+
+Supported types:
+
+- `bool`: Casts the value to a boolean.
+- `int`: Casts the value to an integer.
+- `float`: Casts the value to a float.
+- `string`: Casts the value to a string.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "$cast": {
+    "&label_name": "int"
+  }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$cast": ["&label_name", "int"]
+}
+```
+
+## $ref
+
+The `$ref` operator is used to reference a [**label**](../glossary#label) value in a [**record**](../glossary#record) explicitly.
+
+This is equivalent to using the label reference "&" in the query object, however, it allows you to use expressions to reference labels.
+
+### Syntax
+
+```
+{
+  "$ref": [ <expression as label reference> ]
+}
+```
+
+### Behavior
+
+The operator evaluates the first expression as a string and references the label value in the record.
+
+### Examples
+
+Simple reference to a label:
+
+```json
+{
+  "$ref": ["label_name"]
+}
+```
+
+Using an expression to reference a label:
+
+```json
+{
+  "$ref": [{ "$concat": ["label_", "name"] }]
+}
+```
