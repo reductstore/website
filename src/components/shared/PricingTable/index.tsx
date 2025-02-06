@@ -23,7 +23,7 @@ export default function PricingTable() {
               title: "Support",
               description: (
                 <>
-                  <a href="https://community.reduct.store/">
+                  <a href="https://community.reduct.store/signup/">
                     <b>Community Forum</b>
                   </a>{" "}
                   or{" "}
