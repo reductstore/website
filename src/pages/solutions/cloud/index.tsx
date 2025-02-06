@@ -54,7 +54,7 @@ export default function CloudSolution(): JSX.Element {
           <div className={styles.buttonSection}>
             <Link
               className="button button--primary button--lg"
-              to="https://cloud.reduct.store"
+              to="https://cloud.reduct.store/signup"
             >
               Try It for Free
             </Link>

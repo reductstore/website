@@ -285,7 +285,7 @@ const config = {
               },
               {
                 label: "Community",
-                href: "https://community.reduct.store",
+                href: "https://community.reduct.store/signup",
               },
             ],
           },
@@ -440,7 +440,7 @@ const config = {
             items: [
               {
                 label: "Discourse",
-                href: "https://community.reduct.store",
+                href: "https://community.reduct.store/signup",
               },
               {
                 label: "LinkedIn",
