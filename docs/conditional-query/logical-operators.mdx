@@ -10,7 +10,7 @@ description: Learn how to use logical operators in conditional queries to filter
   />
 </head>
 
-The logical operators are used to combine multiple conditions in a query.
+The logical operators are used to combine multiple **[conditions in a query](../glossary#conditional-query)**.
 
 The following logical operators are supported:
 
@@ -20,6 +20,8 @@ The following logical operators are supported:
 | `$or` \| `$any_of`   | Logical OR operator. For result to be true, at least one condition must be true. |
 | `$xor` \| `$one_of`  | Logical XOR operator. For result to be true, exactly one condition must be true. |
 | `$not` \| `$none_of` | Logical NOT operator. For result to be true, all conditions must be false.       |
+| `$in`                | Checks if the first expression is equal to any of the following expressions.     |
+| `$nin`               | Checks if the first expression is not equal to any of the following expressions. |
 
 ## $and | $all_of
 
@@ -186,5 +188,61 @@ Array notation:
     { "&label_name": { "$gt": 10 } },
     { "&label_name": { "$lt": 20 } }
   ]
+}
+```
+
+## $in
+
+The `$in` operator is used to check if the first expression is equal to any of the following expressions.
+
+### Syntax
+
+```
+{
+  "$in": [ <expression as label reference>, <expression as element 1>, <expression as element 2>, ... ]
+}
+```
+
+### Behavior
+
+The operator evaluates the first expression and checks if it is equal to any of the following expressions.
+It evaluates all of the following expressions to determine if the first expression is not equal to any of them
+and stops evaluating as soon as one of the following expressions is equal to the first expression.
+
+### Examples
+
+Array notation:
+
+```json
+{
+  "$in": ["&severity", "high", "critical"]
+}
+```
+
+## $nin
+
+The `$nin` operator is used to check if the first expression is not equal to any of the following expressions.
+
+### Syntax
+
+```
+{
+  "$nin": [ <expression as label reference>, <expression as element 1>, <expression as element 2>, ... ]
+}
+```
+
+### Behavior
+
+The operator evaluates the first expression and checks if it is equal to any of the following expressions.
+It evaluates all of the following expressions to determine if the first expression is not equal to any of them
+and stops evaluating if any of the following expressions is not equal to the first expression.
+
+### Examples
+
+Array notation:
+
+```json
+{
+  "$nin": ["&severity", "low", "medium"]
 }
 ```
