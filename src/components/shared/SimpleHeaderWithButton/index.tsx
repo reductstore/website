@@ -29,7 +29,7 @@ function SimpleHeaderWithButton({
           <div className={styles.ButtonWithText}>
             <Link
               className="button button--primary button--lg"
-              to="https://cloud.reduct.store"
+              to="https://cloud.reduct.store/signup"
             >
               Start for Free
             </Link>
