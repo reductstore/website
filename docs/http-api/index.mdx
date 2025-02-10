@@ -37,6 +37,10 @@ If a request to ReductStore fails, the API returns an HTTP status code indicatin
 
 As of version 1.2.0, the HTTP API also includes an error message in the `x-reduce-error` header of the response. This error message provides more detailed information about the error, which can be useful for debugging and troubleshooting.
 
+## HTTP/1.1 and HTTP/2 Support
+
+The HTTP API supports both HTTP/1.1 and HTTP/2 protocols. If a client sends an HTTP/2 request, the server will respond with an HTTP/2 response. If a client sends an HTTP/1.1 request, the server will respond with an HTTP/1.1 response.
+
 import DocCardList from "@theme/DocCardList";
 
 <DocCardList />

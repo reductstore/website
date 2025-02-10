@@ -63,9 +63,7 @@ Where:
 - `ERROR_CODE` is the HTTP error code of the error.
 - `ERROR_MESSAGE` is the error message.
 
-:::info
-Many HTTP clients have a limit on the size of the headers. If you are sending a large number of records, you may need to split the request into multiple smaller requests.
-:::
+On the server side you can control the parameters of batching by using the **[I/O Settings](../configuration#io-settings)**.
 
 ## Entry API Endpoints
 
