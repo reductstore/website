@@ -28,32 +28,13 @@ import NextStep from "./common/next_steps.mdx";
 <InstallSdk>
     The ReductStore C++ **[SDK](../glossary#sdk)** requires the following dependencies:
 
-    * GCC >= 11.2 (support C++20)
-    * CMake >= 3.18
+    * GCC >= 11.4 (support C++20)
+    * CMake >= 3.22
     * ZLib
-    * OpenSSL >= 3.0 (if conan is not used)
-    * Conan >= 2.0 (optionally)
+    * OpenSSL >= 3.0
 
     To install the ReductStore C++ SDK, follow these steps:
 
-    ### With Conan (recommended)
-    ```shell
-    # Run conan install
-    conan install . --build=missing -s:a=compiler.cppstd=20
-
-    # Run cmake configuration
-    cmake --preset conan-release # for linux
-    cmake --preset conan-default # for windows
-
-    # Build
-    cmake --build --preset conan-release # for linux
-    cmake --build build --config Release # for windows
-
-    # Install
-    sudo cmake --install build/Release
-    ```
-
-    ## Without Conan
     ```shell
     git clone https://github.com/reductstore/reduct-cpp.git
     cd reduct-cpp
@@ -70,14 +51,11 @@ import NextStep from "./common/next_steps.mdx";
     sudo cmake --install build
     ```
 
-    CMake tries to use the `conan` package manager if it is installed. If it isn't, it downloads all the dependencies by using
-    FetchContent. To use ReductStore SDK you need only to use `find_pacakge` in your cmake lists:
-
     After installing the SDK, you need to link the `ReductCpp` library to your project. The following example shows how
     to do this using CMake:
 
     ```cmake
-    cmake_minimum_required(VERSION 3.18)
+    cmake_minimum_required(VERSION 3.22)
 
     project(ReductCppExample)
     set(CMAKE_CXX_STANDARD 20)
