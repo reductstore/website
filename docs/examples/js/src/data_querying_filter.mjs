@@ -14,6 +14,6 @@ for await (const record of bucket.query("imdb", undefined, undefined, {
 })) {
   console.log("Name", record.labels.name);
   console.log("Photo taken", record.labels.photo_taken);
-  console.log("Face score", record.labels.fase_score);
+  console.log("Face score", record.labels.face_score);
   await record.readAsString();
 }
