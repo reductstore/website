@@ -81,7 +81,7 @@ In addition to general settings, you can configure I/O settings to optimize comm
 Most of the I/O settings are related to **[batching](./glossary#batching)** and specify the size of the batch, the number of records in the batch, and the timeout for preparing and sending the batch on the server side.
 
 However, if a client is using the HTTP/1.1 protocol, the `RS_IO_BATCH_MAX_METADATA_SIZE` and `RS_IO_BATCH_MAX_RECORDS` settings are used to limit the size of the headers in the HTTP request from the client.
-This means that the client cannot send more records in a single batch than specified by the `RS_IO_BATCH_MAX_RECORDS`and the size of the headers in the request can't exceed the value of the `RS_IO_BATCH_MAX_METADATA_SIZE` setting.
+This means that the client can't send more records in a single batch than specified by the `RS_IO_BATCH_MAX_RECORDS` and the size of the headers in the request can't exceed the value of the `RS_IO_BATCH_MAX_METADATA_SIZE` setting.
 
 Read more about batching in the **[HTTP API Reference](./http-api/entry-api#batch-protocol)**.
 
