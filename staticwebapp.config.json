@@ -28,7 +28,7 @@
       "headers": {
         "X-Robots-Tag": "noindex"
       }
-    }, 
+    },
     {
       "route": "/blog/archive",
       "headers": {
