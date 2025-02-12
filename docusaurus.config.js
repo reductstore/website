@@ -110,14 +110,49 @@ const config = {
             ...params
           }) => {
             const items = await defaultCreateSitemapItems(params);
-            return items.filter(
-              (item) =>
-                !item.url.includes("/blog/page/") &&
-                !item.url.includes("/blog/tags/") &&
-                !item.url.includes("/blog/archive") &&
-                !item.url.includes("/search") &&
-                !item.url.match(/\/docs\/(next|\d+\.\d+\.x)\//),
-            );
+            const externalPages = [
+              {
+                url: "https://community.reduct.store/",
+                lastmod: "date",
+                priority: null,
+                changefreq: null,
+              },
+              {
+                url: "https://play.reduct.store/",
+                lastmod: "date",
+                priority: null,
+                changefreq: null,
+              },
+              {
+                url: "https://cloud.reduct.store/",
+                lastmod: "date",
+                priority: null,
+                changefreq: null,
+              },
+              {
+                url: "https://cloud.reduct.store/signup",
+                lastmod: "date",
+                priority: null,
+                changefreq: null,
+              },
+              {
+                url: "https://cloud.reduct.store/signin",
+                lastmod: "date",
+                priority: null,
+                changefreq: null,
+              },
+            ];
+            return [
+              ...items.filter(
+                (item) =>
+                  !item.url.includes("/blog/page/") &&
+                  !item.url.includes("/blog/tags/") &&
+                  !item.url.includes("/blog/archive") &&
+                  !item.url.includes("/search") &&
+                  !item.url.match(/\/docs\/(next|\d+\.\d+\.x)\//),
+              ),
+              ...externalPages,
+            ];
           },
         },
       }),
