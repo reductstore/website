@@ -146,7 +146,7 @@ const config = {
               ...items.filter(
                 (item) =>
                   !item.url.includes("/blog/page/") &&
-                  !item.url.includes("/blog/tags/") &&
+                  !item.url.includes("/blog/tags") &&
                   !item.url.includes("/blog/archive") &&
                   !item.url.includes("/search") &&
                   !item.url.match(/\/docs\/(next|\d+\.\d+\.x)\//),
