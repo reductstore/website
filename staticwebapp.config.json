@@ -28,6 +28,12 @@
       "headers": {
         "X-Robots-Tag": "noindex"
       }
+    }, 
+    {
+      "route": "/blog/archive",
+      "headers": {
+        "X-Robots-Tag": "noindex"
+      }
     },
     {
       "route": "/docs",
