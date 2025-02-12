@@ -113,31 +113,31 @@ const config = {
             const externalPages = [
               {
                 url: "https://community.reduct.store/",
-                lastmod: "date",
+                lastmod: new Date().toISOString(),
                 priority: null,
                 changefreq: null,
               },
               {
                 url: "https://play.reduct.store/",
-                lastmod: "date",
+                lastmod: new Date().toISOString(),
                 priority: null,
                 changefreq: null,
               },
               {
                 url: "https://cloud.reduct.store/",
-                lastmod: "date",
+                lastmod: new Date().toISOString(),
                 priority: null,
                 changefreq: null,
               },
               {
                 url: "https://cloud.reduct.store/signup",
-                lastmod: "date",
+                lastmod: new Date().toISOString(),
                 priority: null,
                 changefreq: null,
               },
               {
                 url: "https://cloud.reduct.store/signin",
-                lastmod: "date",
+                lastmod: new Date().toISOString(),
                 priority: null,
                 changefreq: null,
               },
