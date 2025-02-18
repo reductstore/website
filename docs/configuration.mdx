@@ -85,6 +85,15 @@ This means that the client can't send more records in a single batch than specif
 
 Read more about batching in the **[HTTP API Reference](./http-api/entry-api#batch-protocol)**.
 
+### Replication Settings
+
+ReductStore supports **[data replication](./guides/data-replication.mdx)** between different instances. You can configure replication settings using the following environment variables:
+
+| Name                      | Default | Description                                                                                                             |
+| ------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `RS_REPLICATION_TIMEOUT`  | 5s      | TTimeout for attempts to reconnect to the target server in seconds.                                                     |
+| `RS_REPLICATION_LOG_SIZE` | 1000000 | Maximum number of pending records in the replication log. The oldest records are overwritten when the limit is reached. |
+
 ## Provisioning
 
 ReductStore provides an **[HTTP API](./glossary#http-api)** to create and configure resources such as buckets, access tokens or **[replication](./glossary#replication)** tasks. However, if you are following an Infrastructure as Code (IaC) approach, you may want to provision resources at the deployment stage and ensure that they can't be modified or deleted using the HTTP API.
