@@ -12,9 +12,9 @@ image: ./img/diagram.png
 
 The MQTT protocol is an easy way to connect different data sources to applications. This makes it very popular for IoT (Internet of Things) applications. Some MQTT brokers can store messages for a while, even when the MQTT client is offline. However, sometimes you need to keep this data for a longer period of time. In these cases it's a good idea to use a time series database.
 
-There are many time series databases available, but if you need to store a history of images, **[vibration sensor data](/use-cases/vibration-sensors)** or protobuf messages, you might want to use ReductStore. This database is designed to store a lot of blob data and works well with IoT and edge computing.
+There are [**many databases available for storing MQTT data**](/blog/advice/database/mqtt-data-storage), but if you need to store a history of images, vibration sensor data or protobuf messages, you might want to use [**ReductStore**](/). This database is designed to store a lot of blob data and works well with IoT and edge computing.
 
-**[ReductStore](https://www.reduct.store)** has client SDKs (software development kits) for many programming languages. This means you can easily use it in your existing system. For this example, we'll use the **[Rust SDK](https://github.com/reductstore/reduct-rs)** from ReductStore.
+ReductStore has client SDKs (software development kits) for many programming languages. This means you can easily use it in your existing system. For this example, we'll use the **[Rust SDK](https://github.com/reductstore/reduct-rs)** from ReductStore.
 
 Let's build a simple MQTT application to see how it all works.
 

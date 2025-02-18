@@ -55,7 +55,7 @@ Unfortunately, this solution is also not perfect.
 - **Data Reduction**. We have more space for our data, but we still don’t have any solution to remove old data.
 - **Data Accessibility**. The data in the object storage mirrors the structure of a file system, which can lead to similar accessibility issues. Furthermore, it can be slower due to the use of an HTTP layer. Each read and write operation to S3-storage requires a dedicated HTTP request, which [**may be inefficient for small objects**](/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio).
 
-An S3-like storage system may initially appear more promising than a simple file system. However, its tree-like data organization can lead to issues. Eventually, it may fail to meet your needs, necessitating the development of complex software to overcome these limitations. For example, you might need to integrate an additional time-series database to improve search capabilities. We have previously discussed this **[alternative](https://www.reduct.store/blog/comparison/iot/reductstore-benchmark)**, and it's clear that it has its own drawbacks.
+An S3-like storage system may initially appear more promising than a simple file system. However, its tree-like data organization can lead to issues. Eventually, it may fail to meet your needs, necessitating the development of complex software to overcome these limitations. For example, you might need to integrate an additional time-series database to improve search capabilities. We have previously discussed this **[alternative](/blog/comparison/iot/reductstore-benchmark)**, and it's clear that it has its own drawbacks.
 
 ## ReductStore
 
