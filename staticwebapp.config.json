@@ -30,6 +30,12 @@
       }
     },
     {
+      "route": "/blog/archive",
+      "headers": {
+        "X-Robots-Tag": "noindex"
+      }
+    },
+    {
       "route": "/docs",
       "redirect": "/docs/getting-started",
       "statusCode": 301

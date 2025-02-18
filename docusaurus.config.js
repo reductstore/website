@@ -110,12 +110,49 @@ const config = {
             ...params
           }) => {
             const items = await defaultCreateSitemapItems(params);
-            return items.filter(
-              (item) =>
-                !item.url.includes("/blog/page/") &&
-                !item.url.includes("/blog/tags/") &&
-                !item.url.includes("/search"),
-            );
+            const externalPages = [
+              {
+                url: "https://community.reduct.store/",
+                lastmod: new Date().toISOString(),
+                priority: null,
+                changefreq: null,
+              },
+              {
+                url: "https://play.reduct.store/",
+                lastmod: new Date().toISOString(),
+                priority: null,
+                changefreq: null,
+              },
+              {
+                url: "https://cloud.reduct.store/",
+                lastmod: new Date().toISOString(),
+                priority: null,
+                changefreq: null,
+              },
+              {
+                url: "https://cloud.reduct.store/signup",
+                lastmod: new Date().toISOString(),
+                priority: null,
+                changefreq: null,
+              },
+              {
+                url: "https://cloud.reduct.store/signin",
+                lastmod: new Date().toISOString(),
+                priority: null,
+                changefreq: null,
+              },
+            ];
+            return [
+              ...items.filter(
+                (item) =>
+                  !item.url.includes("/blog/page/") &&
+                  !item.url.includes("/blog/tags") &&
+                  !item.url.includes("/blog/archive") &&
+                  !item.url.includes("/search") &&
+                  !item.url.match(/\/docs\/(next|\d+\.\d+\.x)\//),
+              ),
+              ...externalPages,
+            ];
           },
         },
       }),
