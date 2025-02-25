@@ -4,8 +4,11 @@ description: ReductStore v1.14 introduces new conditional query operators, confi
 authors: alexey
 tags: [news]
 slug: news/reductstore-v1_14_0-released
-date: 2025-02-24
+date: 2025-02-25
+image: ./img/release_note_v1.14.png
 ---
+
+![ReductStore v1.14.0 Released](./img/release_note_v1.14.png)
 
 We are pleased to announce the release of the latest minor version of [**ReductStore**](/), [**1.14.0**](https://github.com/reductstore/reductstore/releases/tag/v1.14.0). ReductStore is a time series database designed for storing and managing large amounts of blob data.
 
@@ -19,9 +22,10 @@ This release introduces several new features and enhancements, including new con
 
 ### New Conditional Query Operators
 
-The new version of ReductStore introduces several new conditional query operators that allow you to filter data more effectively. The new operators include
+In **[version 1.13](/blog/2024-12-05-reductstore-v1_13_0-released.mdx)** we introduced support for conditional queries, allowing you to filter data using labels in complex conditions.
+Now we have added several new conditional query operators that allow you to filter data more effectively.
 
-**[Arithmetic Operators](/docs/conditional-query/arithmetic-operators)** performs arithmetic operations on labels in a query like `$add`, `$sub`, and `$mult`.
+**[Arithmetic Operators](/docs/conditional-query/arithmetic-operators)** perform arithmetic operations on labels in a query like arithmetic addition, subtraction etc.
 This allows you to perform complex calculations on the fly when querying data and use the results to filter records.
 For example, you can use arithmetic operators to filter records where the deviation of `score` is greater than 10 of its mean:
 
@@ -36,7 +40,7 @@ For example, you can use arithmetic operators to filter records where the deviat
 }
 ```
 
-**[String Operators](/docs/conditional-query/string-operators)** performs string operations on values in a query like `$contains`, `$starts_with`, and `$ends_with`.
+**[String Operators](/docs/conditional-query/string-operators)** perform string operations on values in a query like checking if a string contains a substring, starts with, or ends with.
 You can use string operators to filter records based on the string values of their labels.
 For example, you can filter records where the `name` label contains the substring `bottle`:
 
@@ -46,7 +50,7 @@ For example, you can filter records where the `name` label contains the substrin
 }
 ```
 
-**[Miscellaneous Operators](/docs/conditional-query/miscellaneous-operators)** provides additional functionality like `$exists`, `$cast`, and `$ref`.
+**[Miscellaneous Operators](/docs/conditional-query/miscellaneous-operators)** provide additional functionality like checking if a label exists in a record, casting a label value to a different type, or referencing a label value in a record.
 These can be useful if you want to filter records based on the presence of a label, explicitly cast a label value to another type, or explicitly reference a label value in a record.
 
 All these new operators are available in the latest version of ReductStore and its client SDKs.
@@ -86,7 +90,7 @@ Read more about all available settings in the [**Configuration Reference**](/doc
 ReductStore has an embedded Web Console that allows you to manage your buckets, monitor data ingestion, and manage replication settings.
 Since version 1.14.0, the Web Console has a new feature that allows you to browse the data stored in your buckets.
 
-[WAITING FOR SCREENSHOT]
+![Data Browsing in Web Console](./img/data_browsing.webp)
 
 Now you can easily view the records stored in your buckets, filter them by labels, and download the contents of the records.
 This feature can be useful if you want to quickly check the data stored in your buckets or debug problems related to data ingestion.
