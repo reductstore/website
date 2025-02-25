@@ -260,7 +260,7 @@ There are several best practices to consider when integrating ReductStore. Here 
 
 - Use non-blocking operations to avoid blocking the main thread of the ROS 2 node. This ensures that the node can continue processing other tasks while waiting for data to be stored.
 - Serialize data before storing it in ReductStore in a cross-platform binary format to ensure compatibility with different systems and programming languages.
-- Create a ReductStore bucket with a [**FIFO**](/docs/how-does-it-work#bucket) quota to prevent disk overwriting in the future.
+- Create a ReductStore bucket with a [**FIFO**](/docs/how-does-it-work#buckets) quota to prevent disk overwriting in the future.
 - Use token authentication to protect your information. You can use either the [**Web Console**](https://github.com/reductstore/web-console) or the [**CLI client**](https://github.com/reductstore/reduct-cli) to generate an access token.
 - Set up data replication between two instances using the [**Web Console**](https://github.com/reductstore/web-console) or the [**CLI client**](https://github.com/reductstore/reduct-cli).
 - Use [**ReductCLI**](https://github.com/reductstore/reduct-cli) to perform manual replication or backup.
