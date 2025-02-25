@@ -1,0 +1,136 @@
+---
+title: Quick Start With C++
+description: Getting started with the ReductStore C++ Client SDK.
+---
+
+import Intro from "./common/intro.tsx";
+import InstallSdk from "./common/install_sdk";
+import RunReductStore from "./common/run_reductstore.mdx";
+import QuickStart from "!!raw-loader!../examples/cpp/src/quick_start.cc";
+import UsingSdkSection from "./common/using_sdk";
+import CreateClientSection from "./common/create_client";
+import CreateBucketSection from "./common/create_bucket";
+import DataIngestionSection from "./common/data_ingestion";
+import DataQueryingSection from "./common/data_querying";
+import NextStep from "./common/next_steps.mdx";
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/getting-started/with-cpp"
+  />
+</head>
+
+<Intro language="C++" repository="reduct-cpp" />
+
+## Installing the C++ SDK
+
+<InstallSdk>
+    The ReductStore C++ **[SDK](../glossary#sdk)** requires the following dependencies:
+
+    * GCC >= 11.4 (support C++20)
+    * CMake >= 3.22
+    * ZLib
+    * OpenSSL >= 3.0
+
+    To install the ReductStore C++ SDK, follow these steps:
+
+    ```shell
+    git clone https://github.com/reductstore/reduct-cpp.git
+    cd reduct-cpp
+
+    # Run cmake configuration
+    cmake -S . -B build -DREDUCT_CPP_USE_STD_CHRONO=OFF # for linux
+    cmake -S . -B build -DREDUCT_CPP_USE_STD_CHRONO=ON # for windows
+
+    # Build
+    cmake --build build # for linux
+    cmake --build build --config Release # for windows
+
+    # Install
+    sudo cmake --install build
+    ```
+
+    After installing the SDK, you need to link the `ReductCpp` library to your project. The following example shows how
+    to do this using CMake:
+
+    ```cmake
+    cmake_minimum_required(VERSION 3.22)
+
+    project(ReductCppExample)
+    set(CMAKE_CXX_STANDARD 20)
+
+    find_package(ZLIB)
+    find_package(OpenSSL)
+
+
+    find_package(ReductCpp)
+
+    add_executable(quick_start quick_start.cc)
+    target_link_libraries(quick_start ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+    ```
+
+</InstallSdk>
+
+## Running ReductStore
+
+<RunReductStore />
+
+## Hello World Example
+
+<UsingSdkSection example={QuickStart} language="cpp" />
+
+## Creating a Client
+
+<CreateClientSection>
+    To create a ReductStore client, you can use the `IClient::Build` fabric method from the `reduct` namespace. Pass the URL of the
+    ReductStore instance you want to connect to as an argument to the method.
+
+    ```cpp file=../examples/cpp/src/quick_start.cc start=1. end=2.
+    ```
+
+</CreateClientSection>
+
+## Creating a Bucket
+
+<CreateBucketSection>
+    To create a **[bucket](../glossary#bucket)**, you should use the `GetOrCreateBucket` method on a `Client` instance. Pass the name of the bucket
+    you want to create as an argument, along with settings.  If the bucket already exists, the `GetOrCreateBucket`
+    method will return it:
+
+    ```cpp file=../examples/cpp/src/quick_start.cc start=2. end=3.
+    ```
+
+</CreateBucketSection>
+
+## Data Ingestion
+
+<DataIngestionSection>
+    To write a timestamped **[record](../glossary#record)** to an **[entry](../glossary#entry)** in a bucket, you should use the `Write` method on a `Bucket` instance.
+    Pass the name of the entry you want to write to as an argument, along with the timestamp you want to write.
+    Additionally, you can provide labels to the record to make it easier to query later.
+
+    The `Write` method will call a callback function with the `WritableRecord` instance to write to the entry:
+
+    ```cpp file=../examples/cpp/src/quick_start.cc start=3. end=4.
+    ```
+
+</DataIngestionSection>
+
+## Data Querying
+
+<DataQueryingSection>
+    To iterate over all records in a given time range, you should use the `Query` method on a bucket instance. Pass the
+    name of the entry to iterate over, and `start` and `stop` arguments to specify the time interval.You can also
+    provide a `when` condition to filter records based on labels. Read more about the query syntax in the [**Conditional Query Reference**](../conditional-query/index.mdx).
+
+    The method will return a callback function with the `ReadableRecord` instance for each record in the time range:
+
+    ```cpp file=../examples/cpp/src/quick_start.cc start=4. end=5.
+    ```
+
+</DataQueryingSection>
+
+## Next Steps
+
+<NextStep />

@@ -1,0 +1,136 @@
+---
+sidebar_position: 2
+title: Server API
+description: The server API provides HTTP methods for checking the status of the server, listing the available buckets, and retrieving the permissions for the current API token.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/server-api"
+  />
+</head>
+
+import SwaggerComponent from "@site/src/components/SwaggerComponent";
+
+# Server API Specification Reference
+
+The server API provides HTTP methods for checking the status of the server, listing the available buckets, and retrieving the permissions for the current API token.
+
+## Get Statistical Information about Instance
+
+You can use this method to get stats of the storage, check its version and
+license.
+
+If authentication is enabled, the method needs a valid API token.
+
+<SwaggerComponent
+  method="get"
+  path="/api/v1/info"
+  summary="Get statistical information about the storage"
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "Returns information in JSON format",
+      description: (
+        <>
+          <pre>
+            <code>
+              {`{
+    "version": "string",
+    "bucket_count": "integer",  // number of buckets in storage
+    "usage": "integer",         // disk usage in bytes
+    "uptime": "integer",        // uptime in seconds
+    "oldest_record": "integer", // unix timestamp of oldest record in microseconds
+    "latest_record": "integer"  // unix timestamp of latest record in microseconds
+    "license" : {               // if a commercial license is used
+      "licensee": "string",     // Licensee usually is the company name
+      "invoice": "string"       // Invoice number
+      "expiry_date": "string"   // Expiry date of the license in ISO 8601 format (UTC)
+      "plan": "string"          // Plan name
+      "device_number": "integer"// Number of devices (0 for unlimited)
+      "disk_quota": "integer"   // Disk quota in TB (0 for unlimited)
+      "fingerprint": "string"   // License fingerprint
+    }
+    "defaults":{
+      "bucket":{                  // default settings for a new bucket
+          "max_block_size": "integer",            // max block content_length in bytes
+          "max_block_records": "integer",         // max number of records in a block
+          "quota_type": Union["NONE", "FIFO", "HARD"],    // quota type
+          "quota_size": "integer"                 // quota content_length in bytes
+      }
+}`}
+            </code>
+          </pre>
+        </>
+      ),
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary:
+        "If authentication is enabled and access token is invalid or empty",
+    },
+  ]}
+/>
+
+## Get a Bucket List with Metadata
+
+You can use this method to browse the buckets of the storage.
+
+If authentication is enabled, the method needs a valid API token.
+
+<SwaggerComponent
+  method="get"
+  path="/api/v1/list"
+  summary="Get a list of the buckets with their stats"
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      description: (
+        <>
+          <pre>
+            <code>
+              {`{
+    "buckets": [
+      {
+        "name": "string",         // name of the bucket
+        "entry_count": "integer", // number of entries in the bucket
+        "size": "integer",        // size of stored data in the bucket in bytes
+        "oldest_record": "integer", // unix timestamp of oldest record in microseconds
+        "latest_record": "integer"  // unix timestamp of latest record in microseconds
+      }
+    ]
+}`}
+            </code>
+          </pre>
+        </>
+      ),
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary:
+        "If authentication is enabled and access token is invalid or empty",
+    },
+  ]}
+/>
+
+## Check if the Storage Engine is Alive
+
+You can use this method for health checks in Docker or Kubernetes
+environment. The method has anonymous access.
+
+<SwaggerComponent
+  method="head"
+  path="/api/v1/alive"
+  summary="Check if the storage engine is working"
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+    },
+  ]}
+/>

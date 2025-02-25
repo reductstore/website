@@ -1,0 +1,226 @@
+---
+title: Replication Module
+description: API reference for the Replication Module Module of the ReductStore Client SDK for Python.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/sdk/py/msg/replication"
+  />
+</head>
+
+# Replication Module
+
+<a id="reduct.msg.replication"></a>
+
+Message types for the Replication API
+
+<a id="reduct.msg.replication.ReplicationInfo"></a>
+
+## ReplicationInfo
+
+```python
+class ReplicationInfo(BaseModel)
+```
+
+Replication information
+
+<a id="reduct.msg.replication.ReplicationInfo.name"></a>
+
+#### name
+
+name of the replication
+
+<a id="reduct.msg.replication.ReplicationInfo.is_provisioned"></a>
+
+#### is_provisioned
+
+replication is provisioned and can't be deleted or changed
+
+<a id="reduct.msg.replication.ReplicationInfo.is_active"></a>
+
+#### is_active
+
+replication is active and the remote server is reachable
+
+<a id="reduct.msg.replication.ReplicationInfo.pending_records"></a>
+
+#### pending_records
+
+number of records to replicate
+
+<a id="reduct.msg.replication.ReplicationList"></a>
+
+## ReplicationList
+
+```python
+class ReplicationList(BaseModel)
+```
+
+List of replications
+
+<a id="reduct.msg.replication.ReplicationList.replications"></a>
+
+#### replications
+
+list of replications
+
+<a id="reduct.msg.replication.ReplicationDiagnosticsError"></a>
+
+## ReplicationDiagnosticsError
+
+```python
+class ReplicationDiagnosticsError(BaseModel)
+```
+
+Error information for replication
+
+<a id="reduct.msg.replication.ReplicationDiagnosticsError.count"></a>
+
+#### count
+
+number of times this error occurred
+
+<a id="reduct.msg.replication.ReplicationDiagnosticsError.last_message"></a>
+
+#### last_message
+
+last error message for this error
+
+<a id="reduct.msg.replication.ReplicationDiagnosticsDetail"></a>
+
+## ReplicationDiagnosticsDetail
+
+```python
+class ReplicationDiagnosticsDetail(BaseModel)
+```
+
+Diagnostics information for replication
+
+<a id="reduct.msg.replication.ReplicationDiagnosticsDetail.ok"></a>
+
+#### ok
+
+number of successful replications
+
+<a id="reduct.msg.replication.ReplicationDiagnosticsDetail.errored"></a>
+
+#### errored
+
+number of failed replications
+
+<a id="reduct.msg.replication.ReplicationDiagnosticsDetail.errors"></a>
+
+#### errors
+
+list of errors grouped by status code
+
+<a id="reduct.msg.replication.ReplicationDiagnostics"></a>
+
+## ReplicationDiagnostics
+
+```python
+class ReplicationDiagnostics(BaseModel)
+```
+
+Detailed diagnostics for replication
+
+<a id="reduct.msg.replication.ReplicationDiagnostics.hourly"></a>
+
+#### hourly
+
+hourly diagnostics
+
+<a id="reduct.msg.replication.ReplicationSettings"></a>
+
+## ReplicationSettings
+
+```python
+class ReplicationSettings(BaseModel)
+```
+
+Settings for creating a replication
+
+<a id="reduct.msg.replication.ReplicationSettings.src_bucket"></a>
+
+#### src_bucket
+
+source bucket name
+
+<a id="reduct.msg.replication.ReplicationSettings.dst_bucket"></a>
+
+#### dst_bucket
+
+destination bucket name
+
+<a id="reduct.msg.replication.ReplicationSettings.dst_host"></a>
+
+#### dst_host
+
+url of the destination instance
+
+<a id="reduct.msg.replication.ReplicationSettings.dst_token"></a>
+
+#### dst_token
+
+access token for the destination instance
+
+<a id="reduct.msg.replication.ReplicationSettings.entries"></a>
+
+#### entries
+
+list of entries to replicate. If empty, all entries are replicated.
+Wildcards are supported
+
+<a id="reduct.msg.replication.ReplicationSettings.include"></a>
+
+#### include
+
+replicate only records with these labels
+
+<a id="reduct.msg.replication.ReplicationSettings.exclude"></a>
+
+#### exclude
+
+exclude records with these labels
+
+<a id="reduct.msg.replication.ReplicationSettings.each_s"></a>
+
+#### each_s
+
+replicate a record every S seconds
+
+<a id="reduct.msg.replication.ReplicationSettings.each_n"></a>
+
+#### each_n
+
+replicate every Nth record
+
+<a id="reduct.msg.replication.ReplicationDetailInfo"></a>
+
+## ReplicationDetailInfo
+
+```python
+class ReplicationDetailInfo(BaseModel)
+```
+
+Complete information about a replication
+
+<a id="reduct.msg.replication.ReplicationDetailInfo.diagnostics"></a>
+
+#### diagnostics
+
+diagnostics information
+
+<a id="reduct.msg.replication.ReplicationDetailInfo.info"></a>
+
+#### info
+
+replication information
+
+<a id="reduct.msg.replication.ReplicationDetailInfo.settings"></a>
+
+#### settings
+
+replication settings

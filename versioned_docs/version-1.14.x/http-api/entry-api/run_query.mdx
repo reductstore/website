@@ -1,0 +1,173 @@
+---
+title: Run Query
+description: HTTP Endpoints for running queries on an entry in the database.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/entry-api/run_query"
+  />
+</head>
+
+# Entry API to Run Query
+
+The API provides a single endpoint for running queries on an **[entry](../../glossary#entry)** in the database to retrieve or delete data via a timerange, labels, and other parameters.
+
+**Changes**:
+
+- Version 1.13: the method was introduced.
+
+import SwaggerComponent from "@site/src/components/SwaggerComponent";
+
+<SwaggerComponent
+  method="POST"
+  path="/api/v1/b/:bucket_name/:entry_name/q"
+  summary="Run a query on an entry"
+  fullWidth={false}
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        isRequired: true,
+        description: "Name of bucket",
+      },
+    },
+    {
+      type: "path",
+      details: {
+        name: ":entry_name",
+        isRequired: true,
+        description: "Name of entry",
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary:
+        "The query was successful. The response contains the requested data depending on the query parameters.",
+      description: (
+        <>
+          <code>"string"</code>
+        </>
+      ),
+    },
+    {
+      status: "204",
+      message: "No Content",
+      summary: "If there is no record available for the given query",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "The bucket or record with the timestamp doesn",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "Bad timestamp",
+    },
+  ]}
+/>
+
+### JSON Request Body
+
+The request body should be a JSON object with the following parameters:
+
+```typescript
+{
+    // Required. The type of query to run. Possible values are "QUERY" and "DELETE".
+    query_type: "string"
+
+    // Optional. The start UNIX timestamp of the query in microseconds.
+    // If not set, the query starts from the beginning of the entry.
+    start?: "integer"
+
+    // Optional. The end UNIX timestamp of the query in microseconds.
+    // If not set, the query continues to the end of the entry.
+    end?: "integer"
+
+    // Optional. A list of labels to include in the query.
+    // Only records with all the specified labels are included.
+    // DEPRECATED: Use "when" instead.
+    include?: "Dict[string, string]"
+
+    // Optional. A list of labels to exclude in the query.
+    // Records with any of the specified labels are excluded.
+    // DEPRECATED: Use "when" instead.
+    exclude?: "Dict[string, string]"
+
+    // Optional. A conditional query to filter records.
+    when?: "object"
+
+    // Optional. If true, the query will be strict and return an error
+    // if any of the conditions cannot be evaluated during query execution.
+    // If false or unset, the query will consider the incomplete condition to be false.
+    strict?: "boolean"
+
+    // Optional. Return a record every S seconds
+    each_s?: "float"
+
+    // Optional. Return only every N record
+    each_n?: "integer"
+
+    // Optional. The maximum number of records to return.
+    limit?: "integer"
+
+    // Optional. If true, the query will remain open
+    // for continuous data retrieval until TTL is reached.
+    continuous?: "boolean"
+}
+```
+
+**Example**:
+
+```json
+{
+  "query_type": "QUERY",
+  "start": 1630000000000000,
+  "end": 1630000001000000,
+  "when": {
+    "&label_name": { "$gt": 10 }
+  },
+  "limit": 100
+}
+```
+
+If you use the `when` field in the query, read the [**Conditional Query Reference**](/docs/conditional-query/index.mdx) for more information.
+
+## Retrieve Records
+
+If the query type is `QUERY`, the API returns a JSON object with the query ID:
+
+```typescript
+{
+  id: "integer";
+}
+```
+
+The query ID must be used to retrieve the query results. See the [**Get a Record from an Entry**](/docs/http-api/entry-api/read_data.mdx#get-a-record-from-an-entry) and
+[**Get a Batch of Records from an Entry**](/docs/http-api/entry-api/read_data.mdx#get-a-batch-of-records-from-an-entry) sections for more details.
+
+## Delete Records
+
+If the query type is `DELETE`, the API returns a JSON object with the number of records deleted:
+
+```typescript
+{
+  removed_records: "integer";
+}
+```

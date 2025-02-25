@@ -435,7 +435,7 @@ const config = {
               },
               {
                 label: "Integration with Azure VM",
-                href: "/docs/guides/integration/azure-vm",
+                href: "/docs/guides/cloud/azure-vm",
               },
               {
                 label: "HTTP API Reference",

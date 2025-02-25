@@ -8223,10 +8223,10 @@ recursive-readdir@^2.2.2:
   dependencies:
     minimatch "^3.0.5"
 
-reduct-js@^1.11.0:
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/reduct-js/-/reduct-js-1.11.0.tgz#fbed43c3467b29bc8a451f153c23ff601be16c02"
-  integrity sha512-sOuwrQDaQg1Ra2j/Hc2CIQgFqZcRkat5vuR/y77HZmw8/vr2LzKLz/uMOe8Y72Q6GPABok9eZHQPjxFZlqwtVg==
+reduct-js@^1.13.0:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/reduct-js/-/reduct-js-1.13.0.tgz#1cc2cc683b6a92aa927f34bcb90a4b011faa90f4"
+  integrity sha512-t01wRbm2/xoDRyvH+IbD3TGO44pfMN/NhGTG3ZFmdkeNW83JiI2ryYYrXj2Wsgpqg8PmJDvmPd5GKdhpXuyqzw==
   dependencies:
     axios "^0.27.2"
     json-bigint "^1.0.0"
