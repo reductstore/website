@@ -23,7 +23,7 @@ export default function AzureInstall() {
         </strong>
         . For more detailed information and guidance, refer to the{" "}
         <strong>
-          <Link to="docs/guides/integration/azure-vm">Azure VM guide</Link>
+          <Link to="docs/guides/cloud/azure-vm">Azure VM guide</Link>
         </strong>
         .
       </p>
