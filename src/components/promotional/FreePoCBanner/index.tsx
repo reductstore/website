@@ -32,9 +32,7 @@ const FreePoCBanner = ({ elementId }: FreePoCBannerProps) => {
   return (
     <div className={styles.banner}>
       <span className={styles.bannerText}>
-        <Link onClick={handleClick}>
-          Get a Free PoC Integration for your Project
-        </Link>
+        <Link onClick={handleClick}>Start Free with ReductStore</Link>
       </span>
     </div>
   );

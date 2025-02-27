@@ -8,18 +8,15 @@ export default function Pricing(): JSX.Element {
   return (
     <Layout
       title="Pricing: Tailored for Every Scale"
-      description="Explore ReductStore's clear and flexible pricing. 
-      Our Community Edition is free for small entities, offering complete feature access and public source code. 
-      For larger businesses, the Enterprise Edition provides custom solutions with storage-based pricing and dedicated support."
+      description="ReductStore is free for research, testing, and development. For commercial use, we offer a different plan for every scale and level of support."
     >
       <main>
         <SimpleHeader pageTitle="Tailored for Every Scale" />
         <div className="container">
           <p>
-            Our Community Edition is free for small organisations and offers
-            full feature access and public source code. For larger
-            organisations, our licensed editions offer dedicated support and
-            long-term release support, with storage- or device-based pricing.
+            ReductStore is free for research, testing, and development. For
+            commercial use, we offer a different plan for every scale and level
+            of support.
           </p>
           <PromotionalBanner />
           <PricingTable />

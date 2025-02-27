@@ -3,7 +3,8 @@ import styles from "./styles.module.css";
 import { FaCheckCircle } from "react-icons/fa";
 import { PopupModal } from "react-calendly";
 import Link from "@docusaurus/Link";
-import BrowserOnly from "@docusaurus/BrowserOnly";
+import Modal from "../../shared/Modal";
+import FreePoCForm from "../../forms/FreePoCForm";
 
 const PromotionalBanner = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,41 +12,34 @@ const PromotionalBanner = () => {
 
   return (
     <>
-      <div className="alert alert--warning margin-top--lg">
+      <div className="alert alert--success margin-top--lg">
         <div className="container">
           <div>
-            <h3>Get Your Quick Storage Workflow Review</h3>
+            <h3>Start Free with ReductStore</h3>
             <p className={styles.noMarginBottom}>
-              Whether you're just starting to explore ReductStore, testing it
-              for a project, or are new to working with databases, we're here to
-              support you through the process and help you get the best results.
+              Get your own ReductStore environment - deploy privately for free
+              and enjoy 10GB of free cloud storage. We'll set it up for you!
             </p>
             <ul className={styles.benefitsList}>
-              <li>{checkedIcon} 20 Minutes to Save Hours on Your Setup</li>
-              <li>{checkedIcon} Quick Setup Tips for Your Use Case</li>
-              <li>{checkedIcon} No Strings Attached—Just Results</li>
+              <li>{checkedIcon} 10GB free cloud storage</li>
+              <li>{checkedIcon} No credit card required</li>
+              <li>{checkedIcon} Expert setup assistance</li>
             </ul>
             <Link
               className="button button--lg button--primary"
               onClick={() => setIsOpen(true)}
             >
-              Schedule Quick Review
+              Claim Free Tier →
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Calendly Popup Modal */}
-      <BrowserOnly>
-        {() => (
-          <PopupModal
-            url="https://calendly.com/anthony-reductstore/call"
-            open={isOpen}
-            onModalClose={() => setIsOpen(false)}
-            rootElement={document.getElementById("__docusaurus")}
-          />
-        )}
-      </BrowserOnly>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <div className={styles.form}>
+          <FreePoCForm elementId="free-poc-form" />
+        </div>
+      </Modal>
     </>
   );
 };
