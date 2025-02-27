@@ -260,10 +260,6 @@ const config = {
                 label: "Cloud Solution",
                 to: "/solutions/cloud",
               },
-              {
-                label: "Schedule a Technical Review",
-                to: "/contact?subject=TechnicalReview",
-              },
             ],
           },
           {
@@ -307,8 +303,6 @@ const config = {
                 to: "/download",
               },
               {
-                type: "docSidebar",
-                sidebarId: "docSidebar",
                 label: "Documentation",
                 to: "/docs/getting-started",
               },
@@ -403,10 +397,6 @@ const config = {
               {
                 label: "Robotics (ROS)",
                 to: "/blog/tags/ros",
-              },
-              {
-                label: "Schedule a Technical Review",
-                to: "/contact?subject=TechnicalReview",
               },
             ],
           },
