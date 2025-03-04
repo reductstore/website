@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import CountdownTimer from "../CountdownTimer";
 import styles from "./styles.module.css";
 import Link from "@docusaurus/Link";
 
