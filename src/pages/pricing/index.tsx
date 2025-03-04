@@ -2,7 +2,7 @@ import Layout from "@theme/Layout";
 import PricingTable from "@site/src/components/shared/PricingTable";
 import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import Faq from "@site/src/components/shared/Faq";
-import PromotionalBanner from "@site/src/components/promotional/PromotionalBanner";
+import SandboxOffer from "@site/src/components/promotional/SandboxOffer";
 
 export default function Pricing(): JSX.Element {
   return (
@@ -18,7 +18,7 @@ export default function Pricing(): JSX.Element {
             commercial use, we offer a different plan for every scale and level
             of support.
           </p>
-          <PromotionalBanner />
+          <SandboxOffer />
           <PricingTable />
         </div>
         <br />
