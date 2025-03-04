@@ -52,14 +52,15 @@ function HomepageCLI() {
         >
           <h2 className="hideOnMobile">CLI Client</h2>
           <p>
-            You can customize data retention and replication policies using the{" "}
-            <strong>
-              <Link to="https://github.com/reductstore/reduct-cli">
-                ReductStore CLI client
-              </Link>
-            </strong>
-            .
+            You can customize data retention and replication policies using the
+            ReductStore CLI client.
           </p>
+          <Link
+            className={clsx("button button--primary button--lg", styles.btn)}
+            to="/docs/getting-started"
+          >
+            Try CLI →
+          </Link>
         </div>
       </div>
     </div>

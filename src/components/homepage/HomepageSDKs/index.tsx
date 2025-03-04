@@ -21,30 +21,36 @@ export default function HomepageSDKs() {
             </p>
             <div className={clsx("text--center", styles.sdkIcons)}>
               <Link
-                to="https://github.com/reductstore/reduct-py"
+                to="/docs/getting-started/with-python"
                 className={styles.sdkIcon}
               >
                 <SiPython size="3em" />
               </Link>
               <Link
-                to="https://github.com/reductstore/reduct-js"
+                to="/docs/getting-started/with-javascript"
                 className={styles.sdkIcon}
               >
                 <SiJavascript size="3em" />
               </Link>
               <Link
-                to="https://github.com/reductstore/reduct-cpp"
+                className={styles.sdkIcon}
+                to="/docs/getting-started/with-rust"
+              >
+                <SiRust size="3em" />
+              </Link>
+              <Link
+                to="/docs/getting-started/with-cpp"
                 className={styles.sdkIcon}
               >
                 <SiCplusplus size="3em" />
               </Link>
-              <Link
-                className={styles.sdkIcon}
-                to="https://github.com/reductstore/reduct-rs"
-              >
-                <SiRust size="3em" />
-              </Link>
             </div>
+            <Link
+              className={clsx("button button--primary button--lg", styles.btn)}
+              to="/docs/getting-started"
+            >
+              Try SDKs →
+            </Link>
           </div>
         </div>
       </div>

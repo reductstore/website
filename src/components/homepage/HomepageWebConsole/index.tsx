@@ -12,23 +12,22 @@ function HomepageWebConsole() {
         <div className={"col col--5 text--center"}>
           <h2 className="hideOnMobile">Web Console</h2>
           <p>
-            ReductStore has an integrated{" "}
-            <strong>
-              <Link href="https://github.com/reductstore/web-console">
-                web console
-              </Link>
-            </strong>{" "}
-            that allows you to easily manage your data and access to it.
+            ReductStore has an integrated web console that allows you to easily
+            manage your data and access to it.
           </p>
+          <Link
+            className={clsx("button button--primary button--lg", styles.btn)}
+            to="/docs/getting-started"
+          >
+            Try Web Console →
+          </Link>
         </div>
         <div className="col col--7 text--center">
-          <Link to="https://github.com/reductstore/web-console">
-            <img
-              src={CliImage}
-              className={styles.webConsoleImage}
-              alt="ReductStore Web Console"
-            />
-          </Link>
+          <img
+            src={CliImage}
+            className={styles.webConsoleImage}
+            alt="ReductStore Web Console"
+          />
         </div>
       </div>
     </div>

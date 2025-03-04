@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./styles.module.css";
 import clsx from "clsx";
+import Link from "@docusaurus/Link";
 
 const stats = [
   { value: "+40K", description: "downloads" },
@@ -30,6 +31,12 @@ function HomepageStats() {
             </div>
           ))}
         </div>
+        <Link
+          className={clsx("button button--outline button--lg", styles.btn)}
+          to="/docs/getting-started"
+        >
+          Try ReductStore →
+        </Link>
       </div>
     </section>
   );
