@@ -22,7 +22,7 @@ export default function CloudSolution(): JSX.Element {
           benefits={[
             "10x Faster Performance",
             "1/10th the Storage Cost",
-            "Scales to Petabytes",
+            "Scale to Petabytes",
           ]}
           imageSvg={
             <ThemedImage
@@ -83,7 +83,7 @@ export default function CloudSolution(): JSX.Element {
 
 const diagrams = [
   {
-    title: "Optimized for Speed",
+    title: "10x Faster Performance",
     description: (
       <p>
         Designed for high-performance workloads, ReductStore ensures fast access
@@ -92,13 +92,12 @@ const diagrams = [
         solutions, it is ideal for AI, IoT, and edge applications.
       </p>
     ),
-    image:
-      require("@site/static/img/solutions/cloud/performance-comparison.webp")
-        .default,
+    image: require("@site/static/img/solutions/cloud/faster-performance.png")
+      .default,
     isImageLeft: true,
   },
   {
-    title: "Reduce Storage Costs",
+    title: "1/10th the Storage Cost",
     description: (
       <p>
         ReductStore leverages Google Cloud to provide a cost-effective solution.
@@ -107,21 +106,20 @@ const diagrams = [
         of data at a lower cost without sacrificing access speed or reliability.
       </p>
     ),
-    image: require("@site/static/img/solutions/cloud/blob-storage.webp")
-      .default,
+    image: require("@site/static/img/solutions/cloud/lowest-cost.png").default,
     isImageLeft: false,
   },
   {
-    title: "Easy to Scale",
+    title: "Scale to Petabytes",
     description: (
       <p>
-        ReductStore grows with your data. Whether you're managing petabytes of
-        data or billions of time-series records, the platform automatically
-        scales to meet your needs without complex configuration, ensuring that
-        your data infrastructure is always ready to grow.
+        Whether you're managing petabytes of data or billions of time-series
+        records, the platform automatically scales to meet your needs without
+        complex configuration, ensuring that your data infrastructure is always
+        ready to grow.
       </p>
     ),
-    image: require("@site/static/img/solutions/cloud/scalable-data.webp")
+    image: require("@site/static/img/solutions/cloud/scale-to-petabytes.png")
       .default,
     isImageLeft: true,
   },
@@ -136,7 +134,7 @@ const cloudFaqs = [
   {
     question: "What makes ReductStore secure in the cloud?",
     answer:
-      "ReductStore's cloud solution is built on Google infrastructure with deep security controls and SOC2 certification to ensure robust protection. Deploy on our account or yours and manage access with granular permissions.",
+      "ReductStore's cloud solution is built on Google's infrastructure, but you can deploy it in your own account for full control over data access and security.",
   },
   {
     question: "How does ReductStore handle edge-to-cloud data synchronization?",
