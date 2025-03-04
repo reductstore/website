@@ -76,13 +76,13 @@ export default function ReductAI(): JSX.Element {
                   onClick={() => setModalOpen(true)}
                   className="button button--lg button--primary"
                 >
-                  Read Now →
+                  Download White Paper (PDF)
                 </button>
               </div>
             </div>
 
             {/* Image column */}
-            <div className="col col--6 hideOnMobile">
+            <div className="col col--6 ">
               <div className={styles.imageWrapper}>
                 <img
                   src={WhitePaperImg}
@@ -92,11 +92,10 @@ export default function ReductAI(): JSX.Element {
               </div>
             </div>
           </div>
-
           {/* Download Modal*/}
           <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
             <div className={styles.formWrapper}>
-              <h2 className={styles.formTitle}>Read White Paper</h2>
+              <h2 className={styles.formTitle}>Download White Paper (PDF)</h2>
               <WhitePaperForm />
             </div>
           </Modal>
