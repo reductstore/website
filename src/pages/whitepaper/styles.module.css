@@ -3,22 +3,6 @@
   margin-bottom: var(--reduct-bottom-page-margin);
 }
 
-.downloadBlock {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 4rem;
-  margin-top: 4rem;
-  padding: 2rem 1rem;
-  border: 2px solid #dddddd;
-  background-color: var(--reduct-background-gray-light);
-  border-radius: 15px;
-}
-
-.downloadBlock button {
-  white-space: normal;
-}
-
 /* Bullet Points */
 .bulletTitle {
   font-size: 1.5rem;
@@ -47,6 +31,14 @@
 
 .subBulletPoints .bulletIcon {
   margin-right: 0.5rem;
+}
+
+/* button */
+.readNowBtn {
+  width: 100%;
+  height: 7.5rem;
+  display: flex;
+  align-items: center;
 }
 
 /* form */
