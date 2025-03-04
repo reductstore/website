@@ -56,7 +56,7 @@ export default function CloudSolution(): JSX.Element {
               className="button button--primary button--lg"
               to="https://cloud.reduct.store/signup"
             >
-              Try It for Free
+              Start Your Free 10GB Sandbox →
             </Link>
             <p>No credit card required.</p>
             <ThemedImage
