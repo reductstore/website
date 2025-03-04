@@ -32,7 +32,7 @@ function HomepageStats() {
           ))}
         </div>
         <Link
-          className={clsx("button button--outline button--lg", styles.btn)}
+          className={clsx("button button--secondary button--lg", styles.btn)}
           to="/docs/getting-started"
         >
           Try ReductStore →
