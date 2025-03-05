@@ -113,10 +113,12 @@ const diagrams = [
     title: "Scale to Petabytes",
     description: (
       <p>
-        Whether you're managing petabytes of data or billions of time-series
-        records, the platform automatically scales to meet your needs without
-        complex configuration, ensuring that your data infrastructure is always
-        ready to grow.
+        ReductStore integrates tightly with cloud storage to provide efficient
+        access to billions of time series records. Its iterator-based approach
+        minimizes storage usage while intelligently caching unnecessary cloud
+        synchronization. By synchronizing data in blocks rather than individual
+        records, ReductStore significantly reduces I/O costs, making large-scale
+        data management both fast and cost-effective.
       </p>
     ),
     image: require("@site/static/img/solutions/cloud/scale-to-petabytes.png")
