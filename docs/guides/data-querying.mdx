@@ -126,6 +126,20 @@ import TimeRangeQueryCurl from "!!raw-loader!../examples/curl/data_querying_time
   <TabItem value="CLI">
     <CodeBlock language="bash">{TimeRangeQueryCLI}</CodeBlock>
   </TabItem>
+  <TabItem value="Web Console">
+
+    1. Open the Web Console at [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
+    2. Enter the API token if the authorization is enabled.
+    3. Select the bucket that contains the data you want to query:
+    ![Browse buckets with Web Console](./img/buckets_browse_all.webp)
+    4. You will see a list of all the entries in the bucket
+    5. Click on the entry you want to query
+    6. On the entry page you will see the query panel:
+    ![Query panel in Web Console](./img/data_query_panel.webp)
+    7. Enter the time range in the date picker or manually in the input fields
+    8. Click the "Fetch Records" button to execute the query
+
+  </TabItem>
   <TabItem value="cURL">
     <CodeBlock language="bash">{TimeRangeQueryCurl}</CodeBlock>
   </TabItem>
@@ -185,6 +199,20 @@ import FilterQueryCurl from "!!raw-loader!../examples/curl/data_querying_filter.
   </TabItem>
   <TabItem value="C++">
     <CodeBlock language="cpp">{FilterQueryCpp}</CodeBlock>
+  </TabItem>
+  <TabItem value="Web Console">
+
+    1. Open the Web Console at [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
+    2. Enter the API token if the authorization is enabled.
+    3. Select the bucket that contains the data you want to query:
+    ![Browse buckets with Web Console](./img/buckets_browse_all.webp)
+    4. You will see a list of all the entries in the bucket
+    5. Click on the entry you want to query
+    6. On the entry page you will see the query panel:
+    ![Query panel in Web Console](./img/data_query_panel.webp)
+    7. Enter the query condition in the "Filter Records (JSON)" input field
+    8. Click the "Fetch Records" button to execute the query
+
   </TabItem>
   <TabItem value="CLI">
     <CodeBlock language="bash">{FilterQueryCLI}</CodeBlock>
