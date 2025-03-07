@@ -38,7 +38,6 @@ export default function PricingTable() {
             { title: "Architecture Review", description: "-" },
             { title: "Proof of Concept (PoC)", description: "-" },
             { title: "Fully Managed", description: "-" },
-            { title: "Autoscaling", description: "-" },
             { title: "No-Code Provisioning", description: "-" },
           ]}
           buttonUrl="/docs/getting-started"
@@ -65,7 +64,6 @@ export default function PricingTable() {
               description: checkedIcon,
             },
             { title: "Fully Managed", description: "-" },
-            { title: "Autoscaling", description: "-" },
             { title: "No-Code Provisioning", description: "-" },
           ]}
           onClick={() => setOpenModal(true)}
@@ -89,7 +87,6 @@ export default function PricingTable() {
             { title: "Architecture Review", description: checkedIcon },
             { title: "Proof of Concept (PoC)", description: checkedIcon },
             { title: "Fully Managed", description: checkedIcon },
-            { title: "Autoscaling", description: checkedIcon },
             { title: "No-Code Provisioning", description: checkedIcon },
           ]}
           buttonUrl="/solutions/cloud"

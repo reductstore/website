@@ -7,14 +7,14 @@ function HomepageCTA() {
   return (
     <section className={styles.section}>
       <Heading as="h2">
-        The Fastest Time Series Object Store for AI Infrastructure
+        Efficient Time-Series Storage for AI & Edge Computing
       </Heading>
       <p>
-        Discover why ReductStore is the top choice for AI and edge computing
-        applications.
+        Learn how ReductStore outperforms traditional databases for AI and edge
+        workloads.
       </p>
       <Link className="button button--primary button--lg" to="/whitepaper">
-        Download our White Paper
+        Download White Paper (PDF)
       </Link>
     </section>
   );

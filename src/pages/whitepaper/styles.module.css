@@ -3,22 +3,6 @@
   margin-bottom: var(--reduct-bottom-page-margin);
 }
 
-.downloadBlock {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 4rem;
-  margin-top: 4rem;
-  padding: 2rem 1rem;
-  border: 2px solid #dddddd;
-  background-color: var(--reduct-background-gray-light);
-  border-radius: 15px;
-}
-
-.downloadBlock button {
-  white-space: normal;
-}
-
 /* Bullet Points */
 .bulletTitle {
   font-size: 1.5rem;
@@ -49,6 +33,15 @@
   margin-right: 0.5rem;
 }
 
+/* button */
+.readNowBtn {
+  width: 100%;
+  margin: 2rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* form */
 .formWrapper {
   display: flex;
@@ -66,7 +59,8 @@
 }
 
 .image {
-  width: 100%;
+  background-color: red;
+  width: 95%;
   height: auto;
   border: 3px solid #dddddd;
   border-radius: 15px;

@@ -130,14 +130,13 @@ export default function WhitePaperForm() {
         >
           Download
         </button>
-        <div className={clsx("row", styles.privacyPolicy)}>
-          <p>
-            We'll never share your email with anyone else. See our&nbsp;
-            <Link to="/privacy" target="_blank">
-              Privacy Policy
-            </Link>
-          </p>
-        </div>
+        <Link
+          className={clsx("row", styles.privacyPolicy)}
+          to="/privacy"
+          target="_blank"
+        >
+          We don't share your information with anyone.
+        </Link>
       </div>
     </form>
   );

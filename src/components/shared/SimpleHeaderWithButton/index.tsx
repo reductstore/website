@@ -31,11 +31,10 @@ function SimpleHeaderWithButton({
               className="button button--primary button--lg"
               to="https://cloud.reduct.store/signup"
             >
-              Start for Free
+              Start for Free →
             </Link>
             <p>No credit card required.</p>
           </div>
-
           <ul className={styles.BenefitsList}>
             {benefits.map((benefit, index) => (
               <li key={index} className={styles.BenefitItem}>
