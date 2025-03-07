@@ -126,7 +126,7 @@ const landingFaqs = [
         page. For community-driven assistance and sharing of insights, you can
         join us on{" "}
         <strong>
-          <Link to="https://discord.com/invite/BWrCncF5EP">Discord</Link>
+          <Link to="https://community.reduct.store/signup">Discourse</Link>
         </strong>{" "}
         or engage in discussions on{" "}
         <strong>

@@ -13,7 +13,7 @@ export default function HomepageUseCase() {
         Typical Use Cases
       </Heading>
       <div className={clsx("container", styles.useCasesContainer)}>
-        <UseCaseCards useCases={useCases.slice(0, 6)} />
+        <UseCaseCards useCases={useCases.slice(0, 3)} />
       </div>
       <div className={styles.buttonContainer}>
         <Link

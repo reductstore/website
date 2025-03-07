@@ -6,11 +6,14 @@
 }
 
 .statsSubheader {
-  margin-bottom: 2rem;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
+}
+
+.btn {
+  margin-top: 2rem;
 }
 
 .statsGrid {

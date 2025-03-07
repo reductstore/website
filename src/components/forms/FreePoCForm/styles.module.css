@@ -74,6 +74,27 @@
   width: 100%;
 }
 
+.description {
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.benefitsList {
+  margin-top: 1rem;
+  list-style-type: none;
+  padding: 0;
+}
+
+.benefitsList li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+.benefitsList li svg {
+  margin-right: 0.5em;
+}
+
 @media (max-width: 600px) {
   .helpForm {
     padding: 10px;

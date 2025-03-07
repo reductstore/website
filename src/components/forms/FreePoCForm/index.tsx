@@ -5,6 +5,7 @@ import { useLocation } from "@docusaurus/router";
 import Link from "@docusaurus/Link";
 import clsx from "clsx";
 import CountdownTimer from "../../promotional/CountdownTimer";
+import { FaCheckCircle } from "react-icons/fa";
 
 interface FreePoCFormProps {
   elementId: string;
@@ -18,6 +19,7 @@ const FreePoCForm = ({
   startDate,
 }: FreePoCFormProps) => {
   const location = useLocation();
+  const checkedIcon = <FaCheckCircle color="green" size="1em" />;
 
   const [state, handleSubmit] = useForm("myyraooa");
   const [email, setEmail] = useState("");
@@ -61,7 +63,7 @@ const FreePoCForm = ({
 
   return (
     <form id={elementId} className={styles.form} onSubmit={handleSubmit}>
-      <h2>Request a Proof of Concept</h2>
+      <h2>Start Free with ReductStore</h2>
       {targetDate && startDate && (
         <div className={styles.countdown}>
           <CountdownTimer
@@ -71,10 +73,17 @@ const FreePoCForm = ({
           />
         </div>
       )}
-      <p>
-        Our team will reach out to you and we will create a custom software
-        integration for your project.
-      </p>
+      <div className={styles.description}>
+        <p>
+          Get your own ReductStore environment - deploy privately for free and
+          enjoy 10GB of free cloud storage. We'll set it up for you!
+        </p>
+        <ul className={styles.benefitsList}>
+          <li>{checkedIcon} 10GB free cloud storage</li>
+          <li>{checkedIcon} No credit card required</li>
+          <li>{checkedIcon} Expert setup assistance</li>
+        </ul>
+      </div>
       <div className={styles.inputGroup}>
         <label htmlFor="name">Your Name</label>
         <input
@@ -128,11 +137,11 @@ const FreePoCForm = ({
       <input type="hidden" name="utm_id" value={utmParams.utm_id} />
       <div className={styles.buttonGroup}>
         <button
-          className={"button button--primary"}
+          className={"button button--primary button--lg"}
           type="submit"
           disabled={state.submitting}
         >
-          Request a Proof of Concept
+          Claim Free Tier →
         </button>
       </div>
       <Link

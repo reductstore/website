@@ -34,17 +34,9 @@ function HomepageHeader() {
           <div className={styles.buttonLeft}>
             <Link
               className="button button--secondary button--block button--lg"
-              to="/solutions/cloud"
-            >
-              Cloud Solution
-            </Link>
-          </div>
-          <div className={styles.buttonRight}>
-            <Link
-              className="button button--outline button--secondary button--block button--lg"
               to="/docs/getting-started"
             >
-              On-Premise
+              Try ReductStore →
             </Link>
           </div>
         </div>
