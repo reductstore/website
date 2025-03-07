@@ -68,21 +68,33 @@ import DeleteDataCli from "!!raw-loader!../examples/cli/data_management_delete_d
 import DeleteDataCurl from "!!raw-loader!../examples/curl/data_management_delete_data.sh";
 
 <Tabs>
-  <TabItem value="Python">
-    <CodeBlock language="python">{DeleteDataPy}</CodeBlock>
-  </TabItem>
-  <TabItem value="JavaScript">
-    <CodeBlock language="javascript">{DeleteDataJs}</CodeBlock>
-  </TabItem>
-  <TabItem value="Rust">
-    <CodeBlock language="rust">{DeleteDataRs}</CodeBlock>
-  </TabItem>
-  <TabItem value="C++">
-    <CodeBlock language="cpp">{DeleteDataCpp}</CodeBlock>
-  </TabItem>
   <TabItem value="CLI">
     <CodeBlock language="bash">{DeleteDataCli}</CodeBlock>
   </TabItem>
+  <TabItem value="Web Console">
+
+    1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
+    2. Enter the API token if the authorization is enabled.
+    3. Select a bucket that you want to delete or that contains an entry to be deleted:
+    ![Browse buckets with Web Console](./img/entry_rename_select_bucket.webp)
+    4. You will see a list of all the entries in the bucket
+    5. To delete the entire bucket, click on the red **bin** icon in the bucket panel. If you want to delete an entry, click on the red **bin** icon in the entry row:
+    ![Remove entry with Web Console](./img/entry_remove.webp)
+    6. Then confirm the deletion by typing the bucket or entry name and clicking on the **Remove** button:
+
+  </TabItem>
+    <TabItem value="Python">
+      <CodeBlock language="python">{DeleteDataPy}</CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+      <CodeBlock language="javascript">{DeleteDataJs}</CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+      <CodeBlock language="rust">{DeleteDataRs}</CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+      <CodeBlock language="cpp">{DeleteDataCpp}</CodeBlock>
+    </TabItem>
   <TabItem value="cURL">
     <CodeBlock language="bash">{DeleteDataCurl}</CodeBlock>
   </TabItem>
@@ -100,6 +112,9 @@ import DeleteRecordsCurl from "!!raw-loader!../examples/curl/data_management_del
 import DeleteRecordsCli from "!!raw-loader!../examples/cli/data_management_delete_records.sh";
 
 <Tabs>
+  <TabItem value="CLI">
+    <CodeBlock language="bash">{DeleteRecordsCli}</CodeBlock>
+  </TabItem>
   <TabItem value="Python">
     <CodeBlock language="python">{DeleteRecordsPy}</CodeBlock>
   </TabItem>
@@ -111,9 +126,6 @@ import DeleteRecordsCli from "!!raw-loader!../examples/cli/data_management_delet
   </TabItem>
   <TabItem value="C++">
     <CodeBlock language="cpp">{DeleteRecordsCpp}</CodeBlock>
-  </TabItem>
-  <TabItem value="CLI">
-    <CodeBlock language="bash">{DeleteRecordsCli}</CodeBlock>
   </TabItem>
   <TabItem value="cURL">
     <CodeBlock language="bash">{DeleteRecordsCurl}</CodeBlock>
@@ -147,6 +159,9 @@ import DeleteRecordsRangeCli from "!!raw-loader!../examples/cli/data_management_
   <TabItem value="Python">
     <CodeBlock language="python">{DeleteRecordsRangePy}</CodeBlock>
   </TabItem>
+  <TabItem value="CLI">
+    <CodeBlock language="bash">{DeleteRecordsRangeCli}</CodeBlock>
+  </TabItem>
   <TabItem value="JavaScript">
     <CodeBlock language="javascript">{DeleteRecordsRangeJs}</CodeBlock>
   </TabItem>
@@ -155,9 +170,6 @@ import DeleteRecordsRangeCli from "!!raw-loader!../examples/cli/data_management_
   </TabItem>
   <TabItem value="C++">
     <CodeBlock language="cpp">{DeleteRecordsRangeCpp}</CodeBlock>
-  </TabItem>
-  <TabItem value="CLI">
-    <CodeBlock language="bash">{DeleteRecordsRangeCli}</CodeBlock>
   </TabItem>
   <TabItem value="cURL">
     <CodeBlock language="bash">{DeleteRecordsRangeCurl}</CodeBlock>
@@ -186,7 +198,7 @@ import RenameEntryCurl from "!!raw-loader!../examples/curl/data_management_renam
 
   <TabItem value="Web Console">
 
-    1. Open the Web Console at [http://127.0.0.1:8383](http://127.0.0.1:8383) in your browser.
+    1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
     2. Enter the API token if the authorization is enabled.
     3. Select the bucket that contains the entry you want to rename:
     ![Browse buckets with Web Console](./img/entry_rename_select_bucket.webp)
