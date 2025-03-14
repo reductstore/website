@@ -1,0 +1,58 @@
+---
+title: "Building a Data Acquisition System for Manufacturing"
+description: Learn how to build a data acquisition system for manufacturing using ReductStore
+authors: alexey
+tags: [daq, iot]
+slug: daq-manufacture-system
+date: 2025-03-18
+image: ./img/daq.png
+---
+
+![DAQ System based on ReductStore](./img/daq.png)
+
+{/* truncate */}
+
+## Shop Floor Data Acquisition System
+
+1. Edge device close to the machine and sensors
+2. Connectors to collect data and ingest it into ReductStore
+
+Advantages of using ReductStore for DAQ:
+
+1. FIFO quota for data storage
+2. Fast data ingestion
+3. Data labeling and annotation
+
+Replicating data:
+
+1. Append-only replication works like streaming
+2. Data reduction based on the label
+3. Resilient to network failures
+
+## Factory Data Acquisition System
+
+Factory instancee:
+
+1. Collect data from multiple machines
+2. Sends data to the cloud
+3. Provide access to the raw data for the data scientists and engineers
+
+Advantages of using ReductStore:
+
+1. Quick data access
+2. Data management based on the label
+
+## Cloud Data Acquisition System
+
+1. Data ingestion from multiple factories
+2. Fully managed data storage
+3. Using cloud blob storage for long-term storage
+4. Subscription-based data access for ETL
+
+## Conclusion
+
+ReductStore is useful on each level of the data acquistion. You can use it only on the edge device, or on the factory level, or on the cloud level. It provides a fast and reliable way to collect and store data from the shop floor.
+
+---
+
+If you have any questions or comments, feel free to use the [**ReductStore Community Forum**](https://community.reduct.store/signup).
