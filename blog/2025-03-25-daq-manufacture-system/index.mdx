@@ -24,23 +24,19 @@ support **ELT (Extract, Load, Transform) workflows** for advanced analytics and 
 
 {/* truncate */}
 
-In the 21st century, manufacturing is becoming increasingly data-driven. While many factories are already equipped with automation systems, SCADA systems, and historians that collect data from machines and sensors, these solutions have limitations when it comes to modern data needs.
+## The Role of DAQ Systems in Manufacturing
 
-Key challenges include:
+In the 21st century, manufacturing is becoming increasingly data-driven. While many factories are already equipped with automation systems, SCADA systems, and historians that collect data from machines and sensors, these solutions are limited when it comes to today's data needs.
 
-- **Capturing high-frequency data** – Traditional systems struggle with data-intensive sources like vibration analysis and video monitoring.
-- **Enabling easy access** – Data scientists and engineers need standardized, open access to raw and processed data for advanced analytics and AI applications.
-- **Supporting cloud-based storage and processing** – Legacy systems are not designed for seamless integration with cloud platforms, limiting scalability and accessibility.
+Traditional systems struggle with data-intensive sources such as vibration analysis and video surveillance, which generate **large volumes of unstructured data**.
+They don't have interfaces to efficiently access the **history of the raw data**, which is essential for building advanced analytics and AI models.
+In addition, they often lack the flexibility to integrate with modern **cloud-based storage** and analytics platforms.
 
-This is where a dedicated Data Acquisition (DAQ) system comes in.
-A DAQ system efficiently collects, processes, and stores manufacturing data, providing real-time access for **optimization and predictive analytics**.
-It consists of:
+This is where a dedicated data acquisition (DAQ) system comes in.
+A DAQ system efficiently collects, processes, and stores manufacturing data, providing real-time access for optimization and predictive analytics.
+They are more flexible and scalable than traditional automation solutions and can handle multiple data sources, from sensors and PLCs to cameras and vision systems.
 
-- **Edge devices** that gather real-time data from machines and sensors.
-- **Central servers** and cloud storage that manage and store data securely.
-- **Software** that processes, analyzes, and makes the data accessible for further insights.
-
-Importantly, implementing a DAQ system does not mean replacing existing automation infrastructure. In many cases, DAQ systems are deployed alongside SCADA and historians, complementing them rather than replacing them.
+Importantly, implementing a DAQ system does not mean replacing the existing automation infrastructure. In many cases, DAQ systems are deployed alongside SCADA and historians, complementing rather than replacing them.
 
 ## Challenges of Building a DAQ System
 
@@ -54,7 +50,7 @@ DAQ systems are often perceived as simpler and more cost-effective than full-sca
 With these challenges in mind, let’s explore how ReductStore can simplify the process of building a DAQ system for manufacturing.
 
 A DAQ system can range from a single edge device near a machine to a complex infrastructure spanning multiple factories and cloud instances.
-Below is a high-level overview of its structure:
+Below is a high-level overview of its structure.
 
 ## Shop Floor
 
@@ -69,18 +65,16 @@ Their role depends on system requirements, but their primary function is to ensu
 ### Data Ingestion
 
 Industrial data comes in a variety of formats and frequencies.
-A DAQ system must support ingestion from multiple sources such as **sensors, PLCs, and cameras**.
-Since manufacturing environments rely on diverse industrial protocols, custom connectors are often required to collect data efficiently:
+A DAQ system must support acquisition from multiple sources such as **sensors, PLCs, and cameras**.
+As manufacturing environments rely on various industrial protocols such as OPCUA, IO-Link, and GenICam, the DAQ system must be able to collect data from these sources.
+For this purpose, edge devices are equipped with **data connectors** that collect data from different sources and convert it into standardized formats e.g. JSON, CSV, WAV and JPEG.
 
-- **OPC-UA** – A widely used standard for industrial automation that allows seamless data retrieval from automation systems.
-- **IO-Link** – A point-to-point communication protocol for sensors and actuators, commonly used for smart and vibration sensors.
-- **GenICam** – A standard for machine vision, enabling data collection from cameras and vision systems.
+By using standard protocols, a DAQ system remains flexible and scalable, allowing integration with a variety of industrial devices.
+However, the raw data collected from these sources is often **unstructured and storage-intensive**, requiring effective processing and storage strategies.
 
-By leveraging standard protocols, a DAQ system remains flexible and scalable, allowing integration with various industrial devices.
+ReductStore enables the storage of a history of unstructured data and provides an HTTP API and SDKs for multiple programming languages, allowing data connectors to write data in various formats directly to storage.
 
-However, raw data collected from these sources is often **unstructured and storage-intensive**, requiring effective processing and retention strategies.
-
-### Efficient Data Storage with ReductStore
+### Data Storage
 
 Data storage in a DAQ system must handle diverse data types and support real-time ingestion.
 Additionally, edge devices have **limited storage**, meaning the system cannot afford to stop data collection when storage is full.
@@ -95,42 +89,71 @@ Data labeling is particularly useful for structuring information. For instance, 
 
 ### Data Replication
 
-In most cases, **edge devices serve as temporary storage** before data is transferred to a **central server or cloud storage** for long-term retention and further analysis. However, manufacturing environments introduce several connectivity challenges:
+In most cases, edge devices serve as temporary storage before data is transferred to a central server or cloud storage for long-term retention and further analysis.
 
-- **Unstable or slow networks** – Many edge devices rely on Wi-Fi or LTE, where connections can be unreliable.
-- **Limited bandwidth** – Efficient data transfer must be prioritized to avoid network congestion.
-- **Remote locations** – Some edge devices may not always have direct internet access.
+However, manufacturing environments present several connectivity challenges that must be addressed.
+One of the most common issues is network reliability.
+Edge devices may operate in remote locations with unstable or slow networks, making it difficult to maintain a continuous connection to the central server.
+In addition, **limited bandwidth** and **firewall restrictions** can further complicate data transfer.
+Security concerns often restrict direct access to edge devices, requiring a more sophisticated replication mechanism.
 
-Unlike traditional **IoT protocols like MQTT**, using a **database for streaming data** ensures persistence and reliability—data is stored on disk and can be replicated even after extended connection losses.
+:::info
+Although **IoT protocols such as MQTT** can address many of connectivity issues, using a **database for streaming data** ensures persistence and reliability - data is stored on disk and can be replicated even after prolonged loss of connectivity.
+:::
 
-### ReductStore’s Reliable Replication Model
+ReductStore is designed to meet these industrial constraints with robust replication capabilities:
 
-ReductStore is designed to handle these industrial constraints with robust replication capabilities:
+- **Push Replication** - Edge devices push data to the central server/cloud only when a connection is available, eliminating the need for a permanent connection and direct access to the edge device.
+- **HTTP/HTTPS Support** - Ensures compatibility with firewalls and industrial network configurations.
+- **Batch Replication** - Sends multiple records in a single request, optimizing bandwidth usage and reducing network overhead.
+- **Conditional Replication** - Replicates only necessary data based on labels, timestamps, or other conditions, optimizing network traffic and storage costs.
 
-- **Push Replication** – Edge devices push data to the central server/cloud only when a connection is available, eliminating the need for a permanent connection.
-- **HTTP/HTTPS Support** – Ensures compatibility with firewalls and industrial network configurations.
-- **Batch Replication** – Sends multiple records in a single request, optimizing bandwidth usage and reducing network overhead.
-- **Selective Replication** – Replicates only necessary data based on labels, timestamps, or other conditions, optimizing network traffic and storage costs.
+With ReductStore, setting up replication requires no custom logic - simply label your data, define replication conditions, and the system does the rest. This approach ensures efficient, cost-effective, and scalable data collection for manufacturing environments.
 
-With ReductStore, setting up replication requires no custom logic—simply label your data, define replication conditions, and the system handles the rest. This approach ensures efficient, cost-effective, and scalable data acquisition for manufacturing environments.
+## Factory Data Store
 
-## Factory Storage System
+The **factory storage system** is the next level of the DAQ architecture, responsible for aggregating data from multiple edge devices and providing structured access for data scientists and engineers.
 
-The next level of the DAQ system is the factory storage system. It receives data from multiple edge devices and provides access to the raw data for data scientists and engineers.
-In the contrast to the edge device, here we can have more powerful hardware and storage, and we can store the data for a longer period of time.
-The factory storage system can be a server, NAS or SAN storage.
-
-The data engineers can access the data, process it, and prepare it for further analysis they can also manage the data retention policies and access control.
+Unlike edge devices, which have limited **processing power and storage**, the factory storage system can leverage more powerful hardware and larger storage capacity, allowing for **longer data retention** and more advanced processing.
 
 ![Factory Data Acquisition System](./img/factory_daq.png)
 
-On this level, we can use ReductStore as a data storage solution that provides fast and reliable access to the raw data:
+### Massive Data Volumes
 
-- **Fast Data Retrieval** – ReductStore is optimized for fast data retrieval, enabling data engineers to access and process raw data efficiently.
-- **Data Labeling and Filtering** – ReductStore allows to label data based on the source, type, or timestamp, making it easy to filter and retrieve data for analysis.
-- **SDKs and APIs** – ReductStore provides SDKs and APIs for popular programming languages enabling data engineers to integrate data processing workflows with their preferred tools and frameworks.
+The factory storage can be a **dedicated server**, **NAS**, or **SAN** optimized for high-throughput data storage.
+But independent of the implementation, the storage system must be capable to store **TBs or even PBs** of data because of the high-frequency data generated by manufacturing processes.
+
+:::info
+Usually, large amount of unstructured data is stored just in a file system or object storage, which is not optimized for **historical data access**.
+:::
+
+ReductStore provides a scalable and efficient storage solution for manufacturing data, designed to handle massive amounts of data.
+and ensure fast access to manufacturing data:
+
+- **Indexing by time** - ReductStore indexes data by time, enabling fast retrieval of data over time intervals.
+- **Separate storage for metadata** - ReductStore stores and manages metadata separately from data, allowing it to scale and handle more data.
+- **Batching** - ReductStore batches data at the communication and file system level, optimizing data storage and access.
+
+### Data Management
+
+When we talked about the need for factory storage to handle massive amounts of data, we meant not only storing the data, but also providing efficient data management.
+with access control, data retention policies, and data labeling.
+
+The data engineers and data scientists need to be able to manage the data for the following tasks:
+
+- **Retrieve data** - Efficiently search and retrieve data based on timestamps, labels. This is important for building analytics and AI models.
+- **Data Labeling** - Label data based on source, type, or timestamps, enabling efficient search and conditional data retrieval.
+- **Data Access Control** - Restrict access to sensitive data based on user roles and privileges.
+
+With ReductStore, you can manage data efficiently and securely, ensuring that only authorized users have access to sensitive data.
+ReductStore provides a RESTful API and SDKs for multiple programming languages, enabling data engineers and data scientists to programmatically interact with the data store.
+
+The factory storage can be the last level of the DAQ system, or it stream data to the cloud for further processing and analytics.
 
 ## Cloud Data Acquisition System
+
+The factory storage can be further extended to a **cloud-based data acquisition system**, providing additional scalability, redundancy, and advanced analytics capabilities.
+It allows data to be accessed from anywhere, enabling remote monitoring, predictive maintenance, and AI-driven insights.
 
 1. Data ingestion from multiple factories
 2. Fully managed data storage
