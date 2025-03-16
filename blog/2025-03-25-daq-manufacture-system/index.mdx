@@ -8,13 +8,17 @@ date: 2025-03-18
 image: ./img/daq.png
 ---
 
-![DAQ System based on ReductStore](./img/daq.png)
-
 Large manufacturing plants generate vast amounts of data from machines and sensors.
 This data is valuable for monitoring machine health, predicting failures, and optimizing production. It also serves as a foundation for building industrial AI models for predictive maintenance, quality control, and process optimization.
 
 A **Data Acquisition (DAQ)** system collects this data, processes it, and stores it for further analysis.
 It typically consists of edge devices that gather real-time data, central servers or cloud storage for retention, and software that enables analytics and AI-driven insights.
+
+![DAQ System based on ReductStore](./img/daq.png)
+
+<small style={{ textAlign: "right" }}>
+  An example of a 3 tier DAQ system based on ReductStore.
+</small>
 
 Traditional automation solutions like SCADA and historians are complex, expensive, and not optimized for modern cloud-based AI applications.
 They often limit access to data, making it difficult for engineers and data scientists to develop machine learning models and gain actionable insights.
@@ -60,7 +64,11 @@ Due to the real-time nature of manufacturing data, it is crucial to have edge de
 Edge devices can either process data locally or act as **FIFO buffers**, temporarily storing data before sending it to the next level of the system.
 Their role depends on system requirements, but their primary function is to ensure seamless data acquisition without overloading the network or losing critical information.
 
-![Shop Floor Data Acquisition System](./img/shop_floor_daq.png)
+![Shop Floor Edge Device](./img/shop_floor_daq.png)
+
+<small style={{ textAlign: "right" }}>
+  An example of a DAQ edge device based on ReductStore.
+</small>
 
 ### Data Ingestion
 
@@ -116,7 +124,11 @@ The **factory storage system** is the next level of the DAQ architecture, respon
 
 Unlike edge devices, which have limited **processing power and storage**, the factory storage system can leverage more powerful hardware and larger storage capacity, allowing for **longer data retention** and more advanced processing.
 
-![Factory Data Acquisition System](./img/factory_daq.png)
+![Factory Storage based on ReductStore](./img/factory_daq.png)
+
+<small style={{ textAlign: "right" }}>
+  An example of a DAQ factory storage based on ReductStore.
+</small>
 
 ### Massive Data Volumes
 
@@ -164,6 +176,10 @@ There are several key components to consider when designing a cloud-based data a
 Let's discuss these parts in more detail.
 
 ![Cloud Data Acquisition System](./img/cloud_daq.png)
+
+<small style={{ textAlign: "right" }}>
+  An example of a cloud-based DAQ storage based on ReductStore.
+</small>
 
 ### Data Ingestion
 
