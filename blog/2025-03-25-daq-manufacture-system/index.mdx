@@ -1,6 +1,6 @@
 ---
 title: "Building a Data Acquisition System for Manufacturing"
-description: Learn how to build a data acquisition system for manufacturing using ReductStore
+description: Learn how to build a data acquisition system for manufacturing using ReductStore and ELT workflows for advanced analytics and AI applications.
 authors: alexey
 tags: [daq, iot]
 slug: daq-manufacture-system
@@ -17,7 +17,7 @@ It typically consists of edge devices that gather real-time data, central server
 Traditional automation solutions like SCADA and historians are complex, expensive, and not optimized for modern cloud-based AI applications.
 They often limit access to data, making it difficult for engineers and data scientists to develop machine learning models and gain actionable insights.
 
-In this article, we’ll explore the challenges of building a modern DAQ system for manufacturing and how ReductStore can simplify the process and
+In this article, we’ll explore the challenges of building a modern DAQ system for manufacturing and how **[ReductStore](/)** can simplify the process and
 support **ELT (Extract, Load, Transform) workflows** for advanced analytics and **AI application**s.
 
 ![DAQ System based on ReductStore](./img/daq.png)
@@ -36,7 +36,8 @@ This is where a dedicated data acquisition (DAQ) system comes in.
 A DAQ system efficiently collects, processes, and stores manufacturing data, providing real-time access for optimization and predictive analytics.
 They are more flexible and scalable than traditional automation solutions and can handle multiple data sources, from sensors and PLCs to cameras and vision systems.
 
-Importantly, implementing a DAQ system does not mean replacing the existing automation infrastructure. In many cases, DAQ systems are deployed alongside SCADA and historians, complementing rather than replacing them.
+Importantly, implementing a DAQ system does not mean replacing the existing automation infrastructure.
+In many cases, DAQ systems are deployed alongside automation systems, complementing rather than replacing them.
 
 ## Challenges of Building a DAQ System
 
@@ -44,7 +45,6 @@ DAQ systems are often perceived as simpler and more cost-effective than full-sca
 
 - **Handling Massive Data Volume and Velocity** – Manufacturing plants generate vast amounts of high-frequency data from machines and sensors. Efficiently collecting, processing, and storing this data in real-time requires a scalable architecture.
 - **Ensuring Reliable Connectivity with Low Latency** – Edge devices must transmit data to central servers or cloud storage with minimal latency and high reliability, even in industrial environments with network constraints.
-- **Maintaining Data Security and Privacy** – Manufacturing data is often sensitive, requiring strong encryption, access controls, and compliance with industry regulations to prevent unauthorized access or breaches.
 - **Balancing Cost and Scalability** – As data volume grows, the DAQ system must scale efficiently without excessive costs, requiring optimized storage, compression techniques, and cloud integration.
 
 With these challenges in mind, let’s explore how ReductStore can simplify the process of building a DAQ system for manufacturing.
@@ -148,22 +148,79 @@ The data engineers and data scientists need to be able to manage the data for th
 With ReductStore, you can manage data efficiently and securely, ensuring that only authorized users have access to sensitive data.
 ReductStore provides a RESTful API and SDKs for multiple programming languages, enabling data engineers and data scientists to programmatically interact with the data store.
 
-The factory storage can be the last level of the DAQ system, or it stream data to the cloud for further processing and analytics.
+## Cloud Storage and Processing
 
-## Cloud Data Acquisition System
-
-The factory storage can be further extended to a **cloud-based data acquisition system**, providing additional scalability, redundancy, and advanced analytics capabilities.
+Factory storage can be further extended to a **cloud-based data acquisition system**, providing additional scalability, redundancy, and advanced analytics capabilities.
 It allows data to be accessed from anywhere, enabling remote monitoring, predictive maintenance, and AI-driven insights.
 
-1. Data ingestion from multiple factories
-2. Fully managed data storage
-3. Using cloud blob storage for long-term storage
-4. Subscription-based data access for ETL
+Building a cloud component of the DAQ system that can handle data from multiple plants requires a robust architecture that can scale horizontally and vertically.
+There are several key components to consider when designing a cloud-based data acquisition system:
+
+- **Data Ingestion** - The cloud component must be able to ingest data from multiple factories and edge devices, handling different data types and formats.
+- **Cost-Effective Storage** - Cloud storage costs can escalate quickly with large volumes of data. The system must be optimized for cost-effective storage and retrieval.
+- **Data Transformation** - Data from multiple sources must be transformed and aggregated for analytics, visualization, and AI applications.
+- **Automated workflows** - The cloud component should support automated workflows to efficiently scale and manage the cloud infrastructure.
+
+Let's discuss these parts in more detail.
+
+![Cloud Data Acquisition System](./img/cloud_daq.png)
+
+### Data Ingestion
+
+Many cloud platforms offer services for data ingestion, with many of them leveraging the Pub/Sub pattern using message brokers such as Kafka, MQTT, or AMQP.
+The general concept is to have a **message broker** that receives data from edge devices and then transmits it to the cloud storage.
+Subsequently, data is transformed with AWS Lambda or Google Cloud Functions, and the aggregated data is stored in a database.
+This approach is referred to as **ETL (Extract, Transform, Load)**.
+
+While this approach is widely used and highly scalable, it has some drawbacks:
+
+- **Loss of raw data** - The raw data is transformed during the ETL process, resulting in the loss of the source of truth.
+- **Complexity** - Establishing and maintaining a message broker, data transformation, and cloud storage can be complex and time-consuming.
+- **Costs** - cloud services can be costly, particularly when dealing with substantial data volumes.
+
+:::warning
+It is important to understand that during the ETL process, the raw data is transformed, making it irrecoverable.
+This limitation precludes the ability to revert to the raw data or apply a different transformation to historical data.
+:::
+
+ReductStore uses the **ELT (Extract, Load, Transform)** approach, where data is extracted from edge devices and loaded directly into cloud storage.
+This approach greatly simplifies the ingestion process by leveraging ReductStore's replication mechanism.
+
+### Scalable Storage
+
+The most common cloud storage solutions are **object storage** such as Amazon S3, Google Cloud Storage, and Azure Blob Storage.
+It is many times cheaper than persistent disk and provides a scalable and durable storage solution for large volumes of data.
+Unfortunately, as mentioned earlier, object storage is not optimized for historical data access.
+
+ReductStore can use object storage as backend storage using **FUSE drivers**.
+This allows you to store data in a scalable and cost-effective manner while maintaining fast access to historical data.
+
+### Data Transformation
+
+Data transformation is a critical step in the cloud data acquisition system. It involves aggregating data from multiple sources, cleaning and normalizing data, and preparing it for analytics, visualization, and AI applications.
+Cloud platforms provide services such as AWS Lambda, Google Cloud Functions, and Azure Functions for data transformation; they are elastically scalable, but can be expensive.
+
+ReductStore provides a **subscription mechanism** that allows you to subscribe to data changes and apply **transformations on the fly**,
+With the ReductStore SDKs, you can write your own transformation functions in Python, JavaScript, or any other language.
+
+### Automated Workflows
+
+The cloud data acquisition system must support automated workflows to efficiently manage the cloud infrastructure.
+This includes scaling resources on demand, monitoring system health, and handling failures gracefully.
+
+ReductStore provides a **[SaaS solution](/solutions/cloud)** that takes care of the storage infrastructure management, monitoring, and scaling so you can focus on building analytics and AI applications.
 
 ## Conclusion
 
-ReductStore is useful on each level of the data acquistion. You can use it only on the edge device, or on the factory level, or on the cloud level. It provides a fast and reliable way to collect and store data from the shop floor.
+In this article, we have explored the challenges of building a modern data acquisition system for manufacturing.
+Every DAQ system is unique and depends on the specific requirements of the manufacturing environment. It may include all of the components described or only a subset of them.
+The data transformation can be done on the edge devices, factory storage, or cloud storage, depending on the use case.
+What can change the scale and complexity of the system.
+However, the key principles of efficient data acquisition, processing, and storage remain the same, and your DAQ system should be designed to handle massive amounts of data and ensure reliable connectivity.
+
+With ReductStore, you can adopt the **ETL approach**, simplify the process of building a manufacturing DAQ system, replicate data from edge devices to central servers or cloud storage, and provide efficient data storage and management.
 
 ---
 
+We hope this article has provided you with valuable insights into building a modern data acquisition system for manufacturing.
 If you have any questions or comments, feel free to use the [**ReductStore Community Forum**](https://community.reduct.store/signup).
