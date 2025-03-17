@@ -1,11 +1,12 @@
 cff-version: 1.2.0
 message: "If you want to use the content of the website for publication purposes, please, cite it as bellow"
+preferred-citation: generic
 authors:
-- family-names: "Cavin"
-  given-names: "Anthony"
-  orcid: "https://orcid.org/0009-0002-4329-7812"
-- family-names: "Timin"
-  given-names: "Alexey"
-  orcid: "https://orcid.org/0009-0009-1191-0564"
+  - family-names: "Cavin"
+    given-names: "Anthony"
+    orcid: "https://orcid.org/0009-0002-4329-7812"
+  - family-names: "Timin"
+    given-names: "Alexey"
+    orcid: "https://orcid.org/0009-0009-1191-0564"
 title: "ReductStore Official Website"
 url: "www.reduct.store"
