@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you want to use the content of the website for publication purposes, please, cite it as bellow"
-preferred-citation: generic
+preferred-citation: "generic"
 authors:
   - family-names: "Cavin"
     given-names: "Anthony"
