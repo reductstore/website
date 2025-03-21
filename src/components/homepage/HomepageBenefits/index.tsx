@@ -41,7 +41,7 @@ export default function HomepageBenefits() {
       <div className="row">
         <Benefits
           path_light="/img/benefits/get_the_best_performance.webp"
-          path_dark="/img/benefits/get_the_best_performance.webp"
+          path_dark="/img/benefits/get_the_best_performance_black.webp"
           title="Best Performance"
           description="Outperform any other time series databases by 10-100x for time series object data."
         />
