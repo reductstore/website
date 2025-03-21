@@ -238,6 +238,10 @@ const config = {
             position: "left",
             items: [
               {
+                label: "How Does It Work",
+                to: "/docs/how-does-it-work",
+              },
+              {
                 label: "White Paper",
                 to: "/whitepaper",
               },
