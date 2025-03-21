@@ -9,7 +9,7 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import Modal from "@site/src/components/shared/Modal";
 
 const WhitePaperImg =
-  require("@site/static/img/whitepaper/whitepaper.webp").default;
+  require("@site/static/img/whitepaper/whitepaper.png").default;
 const subBulletIcon = faArrowRight;
 
 export default function ReductAI(): JSX.Element {
