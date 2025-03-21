@@ -25,10 +25,11 @@ function HomepageHeader() {
           {siteConfig.tagline}
         </h1>
         <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
-          High-performance time series object storage, written in Rust, designed
-          for speed, simplicity and robustness. Handle data of any size -
-          images, files, text, vibration data, robot logs, and more. Store
-          billions of blobs with time indexing and AI labels.
+          An ELT-based solution for robotics and industrial IoT applications
+          designed for speed, simplicity, and reliability. Capture data in its
+          raw form, ingest and stream data of any size-images, sensor readings,
+          logs, files, ROS bags-and store it with time indexing and labels for
+          ultra-fast retrieval and management.
         </p>
         <div className={styles.buttonContainer}>
           <div className={styles.buttonLeft}>
@@ -36,7 +37,15 @@ function HomepageHeader() {
               className="button button--secondary button--block button--lg"
               to="/docs/getting-started"
             >
-              Try ReductStore →
+              Get Started
+            </Link>
+          </div>
+          <div className={styles.buttonRight}>
+            <Link
+              className="button button--secondary button--block button--lg"
+              to="/whitepaper"
+            >
+              White Paper
             </Link>
           </div>
         </div>
