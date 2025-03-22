@@ -25,11 +25,10 @@ function HomepageHeader() {
           {siteConfig.tagline}
         </h1>
         <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
-          An ELT-based solution for robotics and industrial IoT applications
-          designed for speed, simplicity, and reliability. Capture data in its
-          raw form, ingest and stream data of any size-images, sensor readings,
-          logs, files, ROS bags-and store it with time indexing and labels for
-          ultra-fast retrieval and management.
+          An ELT-based solution for robotics and industrial IoT data acquisition
+          systems. Capture data in its raw form, ingest and stream data of any
+          size-images, sensor readings, logs, files, ROS bags-and store it with
+          time indexing and labels for ultra-fast retrieval and management.
         </p>
         <div className={styles.buttonContainer}>
           <div className={styles.buttonLeft}>
