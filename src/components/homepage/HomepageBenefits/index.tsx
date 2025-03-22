@@ -41,21 +41,21 @@ export default function HomepageBenefits() {
       <div className="row">
         <Benefits
           path_light="/img/benefits/get_the_best_performance.webp"
-          path_dark="/img/benefits/get_the_best_performance.webp"
-          title="Best Performance"
-          description="Outperform any other time series databases by 10-100x for time series object data."
+          path_dark="/img/benefits/get_the_best_performance_black.webp"
+          title="⚡ Ultra-Fast Ingestion & Access"
+          description="Capture and retrieve raw sensor data, images, LiDAR, logs, and more—10x faster than traditional time series databases. Designed for high-throughput robotics and IIoT workloads."
         />
         <Benefits
           path_light="/img/benefits/simplify_your_infrastructure.webp"
           path_dark="/img/benefits/simplify_your_infrastructure_black.webp"
-          title="Lowest Cost"
-          description="Store billions of time-stamped blobs with AI labels at the cost of blob storage."
+          title="💰 Built for Scale, Not Cost"
+          description="Store billions of time-indexed records at the edge and in the cloud, and automatically offload cold data to reduce infrastructure costs by up to 90%."
         />
         <Benefits
           path_light="/img/benefits/stay_in_control_of_your_data.webp"
           path_dark="/img/benefits/stay_in_control_of_your_data_black.webp"
-          title="Robust and Reliable"
-          description="Tailored for edge computing, computer vision, and IoT applications."
+          title="🔒 Reliable by Design - Edge to Cloud"
+          description="Stream, store, and replicate critical data even with poor connectivity. Avoid data loss, disk overflow, and sync only what matters with label-based filtering and automated retention."
         />
       </div>
     </section>

@@ -10,9 +10,19 @@ description: ReductStore basic concepts like buckets, entries, blocks, records, 
 
 # 💡 Basic Concepts Behind ReductStore
 
-## What Is Time Series Blob Storage?
+:::info
+To work efficiently with robotics and industrial systems, you need to store and access large amounts of data quickly. This data is often unstructured: images, sensor readings, logs, video, ROS bags, and more. And it's generated continuously over time, often at high frequency.
 
-ReductStore is a time series database designed specifically for storing and managing large amounts of unstructured data. It uses an **[HTTP API](./http-api)** and stores the data as blobs. This means:
+Traditional time-series databases aren't built to handle this kind of high-throughput, multimodal data. Object storage is scalable, but too slow for real-time access and analysis.
+
+**ReductStore fills this gap with a new category: Time Series Object Storage**.
+
+[Read the White Paper (PDF) →](/whitepaper)
+:::
+
+## What Is Time Series Object Storage?
+
+ReductStore is designed specifically for storing and managing large amounts of unstructured time-series data. It uses an **[HTTP API](./http-api)** and stores the data as blobs. This means:
 
 - ReductStore has no information about the format of the stored data. So, you can write whatever you want, but the storage can't aggregate your data. You have to read the same data, what you have written.
 - The **[HTTP API](./http-api)** provides a simple and portable way to communicate with the storage engine, but the engine doesn't provide any query language to access the data. However, you can use labels for filtering data in requests.

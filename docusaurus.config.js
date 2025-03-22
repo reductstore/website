@@ -10,7 +10,7 @@ import rehypeKatex from "rehype-katex";
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "ReductStore",
-  tagline: "The Fastest Time Series Object Storage for AI Infrastructure",
+  tagline: "High Performance Storage and Streaming Solution",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
@@ -237,6 +237,10 @@ const config = {
             position: "left",
             items: [
               {
+                label: "How Does It Work",
+                to: "/docs/how-does-it-work",
+              },
+              {
                 label: "White Paper",
                 to: "/whitepaper",
               },
@@ -280,12 +284,12 @@ const config = {
                 to: "/use-cases/computer-vision",
               },
               {
-                label: "IoT (MQTT)",
+                label: "IIoT (MQTT)",
                 to: "/blog/tags/mqtt",
               },
               {
-                label: "Robotics (ROS)",
-                to: "/blog/tags/ros",
+                label: "Robotics",
+                to: "/blog/tags/robotics",
               },
               {
                 label: "Explore More",

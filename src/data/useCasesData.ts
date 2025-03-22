@@ -32,8 +32,8 @@ const useCases: UseCase[] = [
   {
     title: "Robotics Data",
     description:
-      "Learn how to store and manage image data for ROS-based computer vision applications.",
-    link: "/blog/tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision",
+      "Learn how to store and manage robot logs, images, and sensor data.",
+    link: "/blog/store-robotic-data",
     image: require("@site/static/img/use-cases/robot.webp").default,
   },
   {

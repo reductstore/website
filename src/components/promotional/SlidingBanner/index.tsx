@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 import useBannertStore from "@site/src/store/useBannertStore";
 
 const whitePaperImage =
-  require("@site/static/img/whitepaper/whitepaper.webp").default;
+  require("@site/static/img/whitepaper/whitepaper.png").default;
 
 const SlidingBanner: React.FC = () => {
   const [visible, setVisible] = useState(false);

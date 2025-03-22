@@ -18,9 +18,9 @@ function HomepageStats() {
       <div className="container">
         <h2 className="hero__title">Developers choose ReductStore</h2>
         <p className={clsx("hero__subtitle", styles.statsSubheader)}>
-          Trusted by developers to process unstructured time series data at
-          10-100x the speed and 1/10th the cost of any other time series
-          database.
+          Trusted by robotics and IIoT engineers to process billions of
+          time-indexed records 10x faster at 1/10 the cost of traditional
+          storage solutions.
         </p>
         <div className={styles.statsGrid}>
           {stats.map((stat, index) => (
