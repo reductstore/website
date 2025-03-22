@@ -26,18 +26,12 @@
   gap: 2rem;
 }
 
-.buttonLeft {
-  /* width: 200px; */
+.buttonLeft * {
+  width: 200px;
 }
 
 .buttonRight * {
   width: 200px;
-  color: white !important;
-}
-
-.buttonRight :hover {
-  color: white !important;
-  background-color: var(--ifm-color-primary-lighter);
 }
 
 @media screen and (max-width: 600px) {

@@ -9,47 +9,48 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import Modal from "@site/src/components/shared/Modal";
 
 const WhitePaperImg =
-  require("@site/static/img/whitepaper/whitepaper.webp").default;
+  require("@site/static/img/whitepaper/whitepaper.png").default;
 const subBulletIcon = faArrowRight;
 
 export default function ReductAI(): JSX.Element {
   const [isModalOpen, setModalOpen] = useState(false);
   return (
     <Layout
-      title="Efficient Time-Series Storage for AI & Edge Computing"
-      description="Learn how ReductStore outperforms traditional databases for AI and edge workloads."
+      title="Efficient Storage & Streaming for Robotics and Industrial IoT"
+      description="Learn how ReductStore manages petabytes of multimodal data across edge and cloud with 10x speed, 90% cost savings, and zero data loss."
     >
       <main>
-        <SimpleHeader pageTitle="Efficient Time-Series Storage for AI & Edge Computing" />
+        <SimpleHeader pageTitle="Efficient Storage & Streaming for Robotics and Industrial IoT" />
         <div className={clsx("container", styles.whitePaperContainer)}>
           <div className="row">
-            {/* Description Column*/}
+            {/* Description Column */}
             <div className="col col--6">
               <p className={styles.bulletTitle}>What you'll learn:</p>
               <ul className={styles.bulletPoints}>
                 <BulletPointItem>
-                  Challenges in managing massive IoT and Industry 4.0 data
+                  Challenges in handling petabytes of robotics and IIoT data
                 </BulletPointItem>
                 <BulletPointItem>
-                  Why traditional databases fail for unstructured time-series
-                  data
+                  Why traditional databases fail for time-indexed blob data with
+                  metadata labels
                 </BulletPointItem>
                 <BulletPointItem>
                   How ReductStore compares to InfluxDB, TimescaleDB, MongoDB,
                   and MinIO
                 </BulletPointItem>
                 <BulletPointItem>
-                  Key features for edge computing:
+                  Key features for edge-first, cloud-smart storage:
                 </BulletPointItem>
                 <ul className={styles.subBulletPoints}>
                   <BulletPointItem icon={subBulletIcon} size="xs">
-                    Real-time FIFO quota system
+                    Real-time FIFO quota system to prevent disk overflow
                   </BulletPointItem>
                   <BulletPointItem icon={subBulletIcon} size="xs">
-                    Label-based metadata and filtering
+                    Metadata labeling and filtering for selective cloud sync
                   </BulletPointItem>
                   <BulletPointItem icon={subBulletIcon} size="xs">
-                    Optimized batching for high-latency environments
+                    Optimized for poor connectivity and high-latency
+                    environments
                   </BulletPointItem>
                 </ul>
               </ul>
@@ -67,7 +68,7 @@ export default function ReductAI(): JSX.Element {
                 <BulletPointItem>Cost savings:</BulletPointItem>
                 <ul className={styles.subBulletPoints}>
                   <BulletPointItem icon={subBulletIcon} size="xs">
-                    Save up to $273,000 per year
+                    Save $273,000 per year vs. TimescaleDB
                   </BulletPointItem>
                 </ul>
               </ul>
@@ -81,8 +82,8 @@ export default function ReductAI(): JSX.Element {
               </div>
             </div>
 
-            {/* Image column */}
-            <div className="col col--6 ">
+            {/* Image Column */}
+            <div className="col col--6">
               <div className={styles.imageWrapper}>
                 <img
                   src={WhitePaperImg}
@@ -92,7 +93,8 @@ export default function ReductAI(): JSX.Element {
               </div>
             </div>
           </div>
-          {/* Download Modal*/}
+
+          {/* Download Modal */}
           <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
             <div className={styles.formWrapper}>
               <h2 className={styles.formTitle}>Download White Paper (PDF)</h2>
