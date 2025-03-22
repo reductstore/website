@@ -56,11 +56,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  max-width: 470px;
 }
 
 .image {
   background-color: red;
   height: auto;
-  border: 3px solid #dddddd;
-  border-radius: 15px;
+  border: 2px solid #dddddd;
+  border-radius: 10px;
 }
