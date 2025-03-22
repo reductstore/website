@@ -284,12 +284,12 @@ const config = {
                 to: "/use-cases/computer-vision",
               },
               {
-                label: "IoT (MQTT)",
+                label: "IIoT (MQTT)",
                 to: "/blog/tags/mqtt",
               },
               {
-                label: "Robotics (ROS)",
-                to: "/blog/tags/ros",
+                label: "Robotics",
+                to: "/blog/tags/robotics",
               },
               {
                 label: "Explore More",
