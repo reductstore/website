@@ -33,7 +33,9 @@ sudo apt update && sudo apt upgrade -y
 
 ### 2. Install ROS 2 Humble on Raspberry Pi
 
-Follow the steps below to set up ROS 2 on the Raspberry Pi. This guide assumes you are using ROS 2 Humble. If you are using a different version, adjust the package names and instructions accordingly and build from source if needed by following the [**official ROS 2 installation guide (humble)**](https://docs.ros.org/en/humble/Installation/Alternatives/Ubuntu-Development-Setup.html).
+Follow the steps below to set up ROS 2 on the Raspberry Pi. This guide assumes you are using ROS 2 Humble. The reason for using Humble is that it's the latest LTS release at the time of writing, and it's well-supported.
+
+If you are using a different version, adjust the package names and instructions accordingly and build from source if needed by following the [**official ROS 2 installation guide (humble)**](https://docs.ros.org/en/humble/Installation/Alternatives/Ubuntu-Development-Setup.html).
 
 1. **Setup Locale:**
 
@@ -426,11 +428,15 @@ Now we have a camera streaming images and a detector outputting metadata. Next, 
 
 Our `rosbag2reduct` package will be a Python-based ROS 2 node that does the following:
 
-- Subscribe to the relevant topics (e.g. `/image_raw/compressed`, `object_detected`, `confidence_score`).
+- Subscribe to the relevant topics (e.g. `/image_raw`, `object_detected`, `confidence_score`).
 - Record those topics into a bag file using the rosbag2 Python API (with MCAP format).
 - Label each bag file with the latest detection metadata.
 - After a fixed time interval (bag rotation period), close the current bag, then **upload it to ReductStore** with Python client SDK, including the metadata as labels, and delete the local bag file.
 - Start a new bag file and repeat.
+
+::: warning
+This is not optimal (writing to disk then uploading) and is done for simplicity. In a real scenario, you might stream directly to ReductStore or separate storage topics by type. More on this in the [**Best Practices and Further Improvements**](#best-practices-and-further-improvements) section.
+:::
 
 ### 1. Create the Package Structure
 
@@ -836,18 +842,42 @@ At this point, we have a robust pipeline:
 - ReductStore on Pi retains recent data and automatically forwards critical data to the laptop's ReductStore based on labels.
 - The laptop accumulates the forwarded data in its own ReductStore bucket, which you can browse or integrate with other systems.
 
+## Best Practices and Further Improvements
+
+When building data pipelines for robotics and AI systems, consider the following best practices to improve performance, security, and maintainability.
+
+### 🔁 Separate Storage Topics by Type
+
+Separate storage streams for different topic categories (e.g., telemetry vs. raw sensor data) to allow fine-grained control over retention, access, and replication policies.
+
+- 📖 See [**3 Ways to Store ROS Topics**](https://www.reduct.store/blog/store-ros-topics)
+- 📘 Example: [**How to Store Images in ROS 2**](/blog/tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision)
+
+### 🔐 Use Token-Based Authentication
+
+Always enable token-based authentication on your ReductStore instances—especially when exposing endpoints to external networks. This ensures only authorized devices and users can access or replicate your data.
+
+### ⚙️ Use Non-Blocking Operations
+
+When uploading large files or performing storage operations, use non-blocking (asynchronous) methods to avoid freezing your ROS 2 nodes. This keeps your system responsive and prevents dropped messages or missed frames.
+
+### 📊 Categorize Robotics Data by Value and Frequency
+
+Classifying data types helps determine how, when, and where to store them. Here's a commonly used schema:
+
+| Category                    | Examples                                        | Characteristics                                                        |
+| --------------------------- | ----------------------------------------------- | ---------------------------------------------------------------------- |
+| **Lightweight telemetry**   | GPS, IMU, joint states, system status           | Low bandwidth, near real-time, useful for business analytics           |
+| **Downsampled sensor data** | Lower framerate/resolution camera or lidar data | Mid-size, great for monitoring and incident triage                     |
+| **Full-resolution data**    | Raw camera frames, high-fps lidar, depth maps   | High volume (up to 1TB/hour), needed for debugging or model retraining |
+
 ## Conclusion
 
-In this tutorial, we set up a complete pipeline on a Raspberry Pi 3 running ROS 2 Humble that captures camera data and AI metadata, records them into MCAP bag files with a custom Python node, and automatically offloads those files to a ReductStore time-series database. We added metadata labels to each record (object detected and confidence), enabling powerful selective replication. We configured ReductStore's replication to forward labeled data to a central instance on a laptop, filtering by labels to reduce bandwidth - for example, only forwarding “interesting” events.
+In this tutorial, we set up a complete pipeline on a Raspberry Pi 3 running ROS 2 Humble that captures camera data and AI output, records it to MCAP bag files with a custom Python node, and automatically offloads those files to a ReductStore time-series object store. We added labels to each record (object ID detected and YOLO's confidence level). We configured ReductStore's replication to forward labeled data to a central instance on a laptop, filtering by labels to reduce bandwidth - for example, forwarding only "interesting" events (excluding "none" or low confidence detections).
 
-Learnings and takeaways:
+The end-to-end system demonstrates how to build a robust data logging and centralized storage solution for robotics. The tutorial as it is **must** be adapted to your specific use case and environment.
 
-- ROS 2 provides the flexibility to interface with hardware (camera) and run AI models (YOLOv5) even on a modest Raspberry Pi, while keeping data in a standard format (mcap).
-- ReductStore acts as an efficient local data logger with FIFO retention (you could set quotas) and as a bridge to the central server with minimal configuration, leveraging labels for conditional replication.
-- The use of MCAP ensures the bag files are efficient and self-contained, and the `rosbag2_py` API allowed us to programmatically record without needing external processes.
-- The entire solution is container-friendly and can be extended (for example, you could spin up multiple such Pi nodes, each forwarding to the central store with labels identifying their location or ID).
-
-Feel free to adjust parameters like the bag rotation interval, detection thresholds, or label filtering conditions to suit your application's needs. You can also extend the `rosbag2reduct` node to record additional topics or metadata (e.g., GPS data, IMU data, etc., labeling those accordingly in ReductStore). The ReductStore web console or HTTP API can be used to query data by labels later (for example, fetch all records where object = “person” and confidence > 0.9, etc.).
+The thing to remember is that the pipeline is highly customizable and can be adapted to different scenarios (separating topics by type, using specific filters, adding more metadata, etc.).
 
 We hope this end-to-end tutorial helps you build your own ROS 2 data logging and cloud integration solution. Happy hacking!
 
