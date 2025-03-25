@@ -850,7 +850,7 @@ When building data pipelines for robotics and AI systems, consider the following
 
 Separate storage streams for different topic categories (e.g., telemetry vs. raw sensor data) to allow fine-grained control over retention, access, and replication policies.
 
-- 📖 See [**3 Ways to Store ROS Topics**](https://www.reduct.store/blog/store-ros-topics)
+- 📖 See [**3 Ways to Store ROS Topics**](/blog/store-ros-topics)
 - 📘 Example: [**How to Store Images in ROS 2**](/blog/tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision)
 
 ### 🔐 Use Token-Based Authentication
@@ -875,9 +875,7 @@ Classifying data types helps determine how, when, and where to store them. Here'
 
 In this tutorial, we set up a complete pipeline on a Raspberry Pi 3 running ROS 2 Humble that captures camera data and AI output, records it to MCAP bag files with a custom Python node, and automatically offloads those files to a ReductStore time-series object store. We added labels to each record (object ID detected and YOLO's confidence level). We configured ReductStore's replication to forward labeled data to a central instance on a laptop, filtering by labels to reduce bandwidth - for example, forwarding only "interesting" events (excluding "none" or low confidence detections).
 
-The end-to-end system demonstrates how to build a robust data logging and centralized storage solution for robotics. The tutorial as it is **must** be adapted to your specific use case and environment.
-
-The thing to remember is that the pipeline is highly customizable and can be adapted to different scenarios (separating topics by type, using specific filters, adding more metadata, etc.).
+The end-to-end system demonstrates how to build a robust data logging and centralized storage solution for robotics. Of course, this tutorial must be adapted to your specific use case and environment. Keep in mind that the pipeline is highly customizable and can be adapted to different scenarios (separating topics by type, using specific filters, adding more metadata, etc.).
 
 We hope this end-to-end tutorial helps you build your own ROS 2 data logging and cloud integration solution. Happy hacking!
 
