@@ -10,8 +10,7 @@ date: 2025-04-02
 
 {/* ![ROS Data Storage](./img/ros-data-storage.png) */}
 
-
-In this tutorial, we will create a custom ROS 2 Humble package called **`rosbag2reduct`** that records incoming ROS 2 topics into MCAP bag files on a Raspberry Pi and automatically uploads those files to a ReductStore instance with metadata labels. We'll walk through setting up ROS 2 Humble on the Pi, interfacing a USB camera using the `v4l2_camera` driver, deploying a lightweight YOLOv5 (nano) object detection node (using ONNX Runtime) to produce detection metadata, and implementing the `rosbag2reduct` node to capture data and offload it. We will also cover installing ReductStore on the Pi, configuring replication of labeled data to a central ReductStore on your laptop (using label-based filters via the web console), and finally mounting Azure Blob Storage on the laptop with BlobFuse2 for cloud backup. This end-to-end guide is structured with clear steps, code examples, and configuration snippets to help you build and deploy the system.
+In this tutorial, we will create a custom ROS 2 Humble package called **`rosbag2reduct`** that records incoming ROS 2 topics into MCAP bag files on a Raspberry Pi and automatically uploads those files to a ReductStore instance with metadata labels. We'll walk through setting up ROS 2 Humble on the Pi, interfacing a USB camera using the `v4l2_camera` driver, deploying a lightweight YOLOv5 (nano) object detection node (using ONNX Runtime) to produce detection metadata, and implementing the `rosbag2reduct` node to capture data and offload it. We will also cover installing ReductStore on the Pi, configuring replication of labeled data to a central ReductStore on your laptop (using label-based filters via the web console). This end-to-end guide is structured with clear steps, code examples, and configuration snippets to help you build and deploy the system.
 
 {/* truncate */}
 
@@ -21,7 +20,7 @@ Before beginning, ensure you have the following:
 
 - **Hardware:** Raspberry Pi, a USB camera, and an internet connection.
 - **OS:** Ubuntu or Desktop Server (22.04 LTS or later) on the Raspberry Pi.
-- **Laptop/PC:** A separate machine on the same network, to serve as a central data store and for Azure storage integration.
+- **Laptop/PC:** A separate machine on the same network, to serve as a central data store.
 
 ### 1. Install Ubuntu on Raspberry Pi
 
@@ -36,14 +35,16 @@ sudo apt update && sudo apt upgrade -y
 
 Follow the steps below to set up ROS 2 on the Raspberry Pi. This guide assumes you are using ROS 2 Humble. If you are using a different version, adjust the package names and instructions accordingly and build from source if needed by following the [**official ROS 2 installation guide (humble)**](https://docs.ros.org/en/humble/Installation/Alternatives/Ubuntu-Development-Setup.html).
 
-1. **Setup Locale:**  
+1. **Setup Locale:**
+
    ```bash
    sudo locale-gen en_US en_US.UTF-8
    sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
    export LANG=en_US.UTF-8
    ```
 
-2. **Add ROS 2 apt Repository:**  
+2. **Add ROS 2 apt Repository:**
+
    ```bash
    sudo apt install software-properties-common
    sudo add-apt-repository universe
@@ -54,10 +55,13 @@ Follow the steps below to set up ROS 2 on the Raspberry Pi. This guide assumes y
    ```
 
 3. **Install ROS 2 Packages:** For a baseline, install ROS 2 base packages (or `ros-humble-desktop` if you need GUI tools):
+
    ```bash
    sudo apt install ros-humble-ros-base -y
    ```
+
    This will install core ROS 2 packages including `rosbag2`. You may verify the installation by sourcing the setup script:
+
    ```bash
    source /opt/ros/humble/setup.bash
    ros2 -h    # Should show ROS 2 commands
@@ -85,7 +89,7 @@ Add `source ~/ros2_ws/install/setup.bash` to your `~/.bashrc` so that the worksp
 
 ## Setting up the USB Camera with `v4l2_camera`
 
-We'll use the `v4l2_camera` ROS 2 package to interface with the USB camera via Video4Linux2. This package publishes images from any V4L2-compatible camera (most USB webcams) as ROS 2 image topics ([v4l2_camera — v4l2_camera 0.7.1 documentation](https://docs.ros.org/en/jazzy/p/v4l2_camera/#:~:text=Supported%20Cameras%EF%83%81)) ([v4l2_camera — v4l2_camera 0.7.1 documentation](https://docs.ros.org/en/jazzy/p/v4l2_camera/#:~:text=)).
+We'll use the `v4l2_camera` ROS 2 package to interface with the USB camera via Video4Linux2. This package publishes images from any V4L2-compatible camera (most USB webcams) as ROS 2 image topics.
 
 ### 1. Install the `v4l2_camera` Package
 
@@ -129,9 +133,11 @@ ros2 run rqt_image_view rqt_image_view
 In `rqt_image_view`, select `/image_raw` to view the camera feed. This confirms the camera setup is working.
 
 **Note:** You can adjust parameters by remapping or via ROS 2 parameters, e.g., to change resolution or device:
+
 ```bash
 ros2 run v4l2_camera v4l2_camera_node --ros-args -p image_size:="[1280,720]" -p video_device:="/dev/video0"
-``` 
+```
+
 This would set the camera to 1280x720 resolution if supported.
 
 ## Deploying a Lightweight YOLOv5 Object Detection Node
@@ -146,11 +152,12 @@ On the Raspberry Pi, install the ONNX Runtime Python package and OpenCV (for ima
 pip install onnxruntime opencv-python
 ```
 
-*(If `pip` isn't available, use `sudo apt install python3-pip` to install it. You may also install `numpy` if not already present, as ONNX Runtime will likely need it.)*
+_(If `pip` isn't available, use `sudo apt install python3-pip` to install it. You may also install `numpy` if not already present, as ONNX Runtime will likely need it.)_
 
 ### 2. Obtain the YOLOv5n ONNX Model
 
 We need the YOLOv5n model in ONNX format. To do that, we can clone the YOLOv5 repository on a more powerful machine than the Pi and export the model:
+
 ```bash
 # On a PC or via Colab:
 git clone https://github.com/ultralytics/yolov5.git
@@ -158,6 +165,7 @@ cd yolov5
 pip install -r requirements.txt  # includes PyTorch
 python export.py --weights yolov5n.pt --include onnx
 ```
+
 This will produce `yolov5n.onnx`. Transfer that file to your Raspberry Pi (e.g., via SCP).
 
 For this tutorial, assume `yolov5n.onnx` is now on the Raspberry Pi (e.g., placed in `~/ros2_ws/src`).
@@ -174,6 +182,7 @@ ros2 pkg create --build-type ament_python yolo_detector --dependencies rclpy sen
 ```
 
 This will create a `yolo_detector` folder with a Python package structure. Edit `yolo_detector/package.xml` to add dependencies for `opencv-python` and `onnxruntime` (since these are non-ROS dependencies, we list them for documentation; you might use `pip` in the installation step rather than rosdep). For example, inside `<exec_depend>` tags, add:
+
 ```xml
 <exec_depend>onnxruntime</exec_depend>
 <exec_depend>opencv-python</exec_depend>
@@ -181,7 +190,7 @@ This will create a `yolo_detector` folder with a Python package structure. Edit 
 
 ### 4. Implement the YOLO Detection Node
 
-Create a file `yolo_detector/yolo_detector/yolo_node.py` with the following content: 
+Create a file `yolo_detector/yolo_detector/yolo_node.py` with the following content:
 
 <details>
 
@@ -267,9 +276,11 @@ def main(args=None):
     node.destroy_node()
     rclpy.shutdown()
 ```
+
 </details>
 
 **Explanation:** This node subscribes to the camera images (`/image_raw`), processes each frame through the YOLOv5n model, and publishes two topics:
+
 - `object_detected` (std_msgs/String): the class label (or ID) of the primary detected object (or `"none"` if none above threshold).
 - `confidence_score` (std_msgs/Float32): the confidence score of that detection.
 
@@ -278,6 +289,7 @@ For simplicity, we took the detection with highest confidence above a threshold.
 Make sure to adjust the `model_path` to the actual location of your `yolov5n.onnx`. Also note that without class name mapping, `best_label` is currently the class index (as string). You could map this index to an actual label (e.g., using the COCO class list if using COCO-trained YOLO).
 
 Also, update `setup.py` entry points to include our node script:
+
 ```python
 setup(
     ...
@@ -310,10 +322,12 @@ ros2 run yolo_detector yolo_node.py
 You should see log output from the node whenever it processes an image (every frame or at least when something is detected, depending on your logging). The node will publish messages on `object_detected` and `confidence_score` topics.
 
 You can echo these topics in another terminal to verify:
+
 ```bash
 ros2 topic echo /object_detected
 ros2 topic echo /confidence_score
 ```
+
 For example, you might see `data: "0"` and `data: 0.85` if a person is detected with 85% confidence. The data is the ID of the class (0 for person) (see below for class mapping).
 
 <details>
@@ -403,6 +417,7 @@ names:
   78: hair drier
   79: toothbrush
 ```
+
 </details>
 
 Now we have a camera streaming images and a detector outputting metadata. Next, we'll create the `rosbag2reduct` package to record these data and handle file rotation and uploading to ReductStore.
@@ -461,7 +476,6 @@ sudo apt install ros-humble-rosbag2-storage-mcap`
 ### 3. Implementing the `rosbag2reduct` Node
 
 Open a new file `rosbag2reduct/recorder_node.py` and add the following code from the snippet below. This code defines the `Rosbag2ReductNode` class, which is a ROS 2 node that subscribes to the camera images and metadata topics, records them into bag files, and uploads the bag files to ReductStore with metadata labels.
-
 
 <details>
 
@@ -615,18 +629,16 @@ def main(args=None):
     except Exception:
         pass
 ```
+
 </details>
 
 Let's break down key parts of this implementation:
 
-- We use **rosbag2's Python API**: `SequentialWriter` to record messages. We specify MCAP as the storage format when opening the bag ([Recording a bag from a node (Python) — ROS 2 Documentation: Rolling  documentation](https://docs.ros.org/en/rolling/Tutorials/Advanced/Recording-A-Bag-From-Your-Own-Node-Py.html#:~:text=storage_options%20%3D%20rosbag2_py,open%28storage_options%2C%20converter_options)) ([Recording a bag from a node (Python) — ROS 2 Documentation: Rolling  documentation](https://docs.ros.org/en/rolling/Tutorials/Advanced/Recording-A-Bag-From-Your-Own-Node-Py.html#:~:text=Now%20that%20we%20have%20a,format%20they%20are%20received%20in)). We explicitly register three topics (`/image_raw`, `object_detected`, `confidence_score`) with their message types ([Recording a bag from a node (Python) — ROS 2 Documentation: Rolling  documentation](https://docs.ros.org/en/rolling/Tutorials/Advanced/Recording-A-Bag-From-Your-Own-Node-Py.html#:~:text=topic_info%20%3D%20rosbag2_py,create_topic%28topic_info)), so we can write to them. In each subscription callback, we call `self.writer.write(topic_name, serialize_message(msg), timestamp)` to append to the bag ([Recording a bag from a node (Python) — ROS 2 Documentation: Rolling  documentation](https://docs.ros.org/en/rolling/Tutorials/Advanced/Recording-A-Bag-From-Your-Own-Node-Py.html#:~:text=def%20topic_callback%28self%2C%20msg%29%3A%20self,nanoseconds)).
+- We use **rosbag2's Python API**: `SequentialWriter` to record messages. We specify MCAP as the storage format when opening the bag. We explicitly register three topics (`/image_raw`, `object_detected`, `confidence_score`) with their message types, so we can write to them. In each subscription callback, we call `self.writer.write(topic_name, serialize_message(msg), timestamp)` to append to the bag.
 - We maintain `last_object_detected` and `last_confidence` variables to store the most recent detection metadata. The `_metadata_callback` updates these whenever a message on those topics arrives, and writes the message to the bag as well.
 - A ROS timer triggers `_rotate_bag_timer()` every `self.bag_duration` seconds (e.g., every 60 seconds). This function closes the current bag and opens a new one (by calling `_open_new_bag()` which increments a bag index and starts a new file). We then proceed to upload the just-closed bag file to ReductStore.
-- **ReductStore upload:** Using `reduct-py`, we ensure a bucket named `"rosbags"` exists on the ReductStore server (which we assume is running locally on the Pi at `127.0.0.1:8383`). We then read the bag file (e.g., `rosbag_20230325_103000_0.mcap`) into memory and use `bucket.write()` to store it as a record. We label each record with the detection metadata (e.g., `labels={"object": "person", "confidence": "0.85"}`) ([reduct-py/README.md at main · reductstore/reduct-py · GitHub](https://github.com/reductstore/reduct-py/blob/main/README.md#:~:text=,01T10%3A00%3A01Z%22%2C%20labels%3D%7B%22score%22%3A%2020)). We use the bag file name as the entry name for uniqueness, and a timestamp (here we use the current UTC time in ISO format for simplicity) as the record timestamp.
-- After a successful upload, we delete the local `.mcap` file to save space on the Pi (this is optional; you could keep files locally as well).
-- We run the upload in the same thread for simplicity, using `asyncio.get_event_loop().run_until_complete(...)` because `reduct-py` is async. In a production system, you might offload uploading to a separate thread or handle backpressure if an upload takes longer than the bag rotation interval, but for now we assume the interval is large enough or the data small enough.
-
-Finally, we have a `main()` that initializes the node and spins it.
+- **ReductStore upload:** Using `reduct-py`, we ensure a bucket named `"rosbags"` exists on the ReductStore server (which we assume is running locally on the Pi at `127.0.0.1:8383`). We then read the bag file (e.g., `rosbag_20230325_103000_0.mcap`) into memory and use `bucket.write()` to store it as a record. We label each record with the detection metadata (e.g., `labels={"object": "person", "confidence": "0.85"}`).
+- After a successful upload, we delete the local `.mcap` file to save space on the Pi (since it's now stored in ReductStore).
 
 ### 4. Build the `rosbag2reduct` Package
 
@@ -652,7 +664,7 @@ If everything compiles (installs) without errors, we're ready to run the system.
 
 ## Installing and Configuring ReductStore on the Raspberry Pi
 
-Before running the `rosbag2reduct` node, we need a ReductStore server running on the Pi to accept uploads. ReductStore is a lightweight time-series blob storage database, perfect for edge devices ([Kafka Integration Tutorial for Blob Data | ReductStore](https://www.reduct.store/blog/tutorial/datastreaming/kafka/easy-kafka-reductstore-integration-guide#:~:text=Setup%20ReductStore)) ([Kafka Integration Tutorial for Blob Data | ReductStore](https://www.reduct.store/blog/tutorial/datastreaming/kafka/easy-kafka-reductstore-integration-guide#:~:text=Furthermore%2C%20it%20provides%20functionalities%20for,generated%20outcomes%2C%20for%20each%20record)). We will install it on the Pi and create a bucket for our bag files.
+Before running the `rosbag2reduct` node, we need a ReductStore server running on the Pi to accept uploads. ReductStore is a lightweight time-series blob storage database, perfect for edge devices. We will install it on the Pi and create a bucket for our bag files.
 
 ### 1. Install ReductStore on Raspberry Pi
 
@@ -665,7 +677,7 @@ sudo apt install snapd -y   # if snapd is not already installed
 sudo snap install reductstore
 ```
 
-This will install ReductStore from the Snap Store ([Install ReductStore on Raspberry Pi using the Snap Store | Snapcraft](https://snapcraft.io/install/reductstore/raspbian#:~:text=Enable%20snapd)) ([Install ReductStore on Raspberry Pi using the Snap Store | Snapcraft](https://snapcraft.io/install/reductstore/raspbian#:~:text=Install%20ReductStore)). The snap should set up ReductStore as a service listening on port 8383 by default. (If using a different OS or if snap isn't desired, you can use Docker: e.g., `docker run -d -p 8383:8383 -v ~/reduct_data:/data reduct/store:latest` to run ReductStore in a container ([Kafka Integration Tutorial for Blob Data | ReductStore](https://www.reduct.store/blog/tutorial/datastreaming/kafka/easy-kafka-reductstore-integration-guide#:~:text=reduct,.%2Fdata%3A%2Fdata)) ([Kafka Integration Tutorial for Blob Data | ReductStore](https://www.reduct.store/blog/tutorial/datastreaming/kafka/easy-kafka-reductstore-integration-guide#:~:text=local%20directory%20%28,directory%20inside%20the%20container)).)
+This will install ReductStore from the Snap Store. The snap should set up ReductStore as a service listening on port 8383 by default. (If using a different OS or if snap isn't desired, you can use Docker: e.g., `docker run -d -p 8383:8383 -v ~/reduct_data:/data reduct/store:latest` to run ReductStore in a container.)
 
 > **Note:** The database will listen on `http://0.0.0.0:8383` (accessible to the LAN). Ensure this port is allowed through any firewall if you want external access.
 
@@ -676,19 +688,20 @@ sudo snap services reductstore  # should show active
 curl http://127.0.0.1:8383/api/v1/info
 ```
 
-The `curl` command should return some JSON info about the ReductStore instance (like version, uptime, etc.) if it's running properly ([ Getting Started | ReductStore](https://www.reduct.store/docs/getting-started#:~:text=docker%20run%20,data%3A%2Fdata%20reduct%2Fstore%3Alatest)).
+The `curl` command should return some JSON info about the ReductStore instance (like version, uptime, etc.).
 
 ### 2. (Optional) Configure ReductStore
 
-By default, ReductStore doesn't require authentication for local use (anonymous access is allowed). This is fine for our edge scenario on a local network. If you want to set up access tokens or adjust storage quotas, you can do so via config or the web console. For now, we'll use defaults. 
+By default, ReductStore doesn't require authentication for local use (anonymous access is allowed). This is fine for our edge scenario on a local network. If you want to set up access tokens or adjust storage quotas, you can do so via config or the web console. For now, we'll use defaults.
 
-We will use the **Web Console** provided by ReductStore to verify data and to set up replication later. The web console is accessible from a browser at the server's address (it's the same as the API endpoint). For example, on the Pi, open `http://<raspberrypi_ip>:8383` in a browser - you should see the ReductStore Web Console interface (a simple GUI) ([Glossary | ReductStore](https://www.reduct.store/docs/glossary#web-console#:~:text=Web%20Console)), which allows managing buckets and replication tasks.
+We will use the **Web Console** provided by ReductStore to verify data and to set up replication later. The web console is accessible from a browser at the server's address (it's the same as the API endpoint). For example, on the Pi, open `http://<raspberrypi_ip>:8383` in a browser - you should see the ReductStore Web Console interface (a simple GUI), which allows managing buckets and replication tasks.
 
 ### 3. Create a Bucket for ROS bag data
 
 Our `rosbag2reduct` code will attempt to create a bucket named `"rosbags"`. We called `create_bucket("rosbags", exist_ok=True)` in the code, so the bucket will be created on first run if it doesn't exist. You can also create it manually via the web console or the HTTP API.
 
 To double-check, you can use the web console:
+
 - Navigate to **Buckets** and create a new bucket named “rosbags”. (You can set a quota if desired, e.g., a FIFO quota of a certain size to limit storage, but it's optional.)
 
 Now, ReductStore is set up on the Pi and ready to accept data.
@@ -696,37 +709,43 @@ Now, ReductStore is set up on the Pi and ready to accept data.
 ## Running the Complete System
 
 We have three ROS 2 nodes to run on the Raspberry Pi:
+
 - The camera driver (`v4l2_camera_node`)
 - The YOLO detection node (`YoloDetectorNode`)
 - The rosbag2reduct recorder/uploader node (`Rosbag2ReductNode`)
 
 It's best to run each in its own terminal (or use a launch file to launch them together). For clarity, we'll do it step-by-step:
 
-**Terminal 1:** Camera node  
+**Terminal 1:** Camera node
+
 ```bash
 # Terminal 1 on Pi (source ROS 2 and workspace)
 ros2 run v4l2_camera v4l2_camera_node
 ```
 
-**Terminal 2:** YOLO detection node  
+**Terminal 2:** YOLO detection node
+
 ```bash
 # Terminal 2 on Pi (source ROS 2 and workspace)
 ros2 run yolo_detector yolo_node.py
-```  
+```
+
 (If you set up the entry point, you could do `ros2 run yolo_detector yolo_detector` or similar, but here we assume running the script directly.)
 
-**Terminal 3:** rosbag2reduct recorder node  
+**Terminal 3:** rosbag2reduct recorder node
+
 ```bash
 # Terminal 3 on Pi (source ROS 2 and workspace)
 ros2 run rosbag2reduct rosbag2reduct
-```  
+```
+
 (This uses the console script entry point we defined. Alternatively `ros2 run rosbag2reduct recorder_node.py` if not configured as an entry point.)
 
 Now monitor the outputs:
 
 - The camera node should just stream (no text output unless error).
 - The YOLO node will log detections (as we coded with `get_logger().info` on each detection).
-- The rosbag2reduct node will log bag rotations and uploads. For example, you should see logs like “Opened new bag: rosbag_20230325_101500_0” and later “Uploading bag 0 with metadata: object=person, confidence=0.85” then “Uploaded rosbag_... to ReductStore with labels ...” etc.
+- The rosbag2reduct node will log bag rotations and uploads. For example, you should see logs like “Opened new bag: rosbag*20230325_101500_0” and later “Uploading bag 0 with metadata: object=person, confidence=0.85” then “Uploaded rosbag*... to ReductStore with labels ...” etc.
 
 Let this run for a while. By default, every 60 seconds it will finalize a bag and upload it. If you want to trigger a rotation sooner (for testing), you could reduce `bag_duration` or even manually call the rotation function (not easily via ROS, unless you expose a service - not implemented here for brevity).
 
@@ -734,13 +753,13 @@ Let this run for a while. By default, every 60 seconds it will finalize a bag an
 
 On the Pi (or from any machine that can access the Pi's port 8383), open the ReductStore Web Console in a browser: **`http://<raspberrypi_ip>:8383`**. You should see the bucket “rosbags”. Click it to see the list of entries/records.
 
-Each uploaded bag file appears as a **record** in ReductStore. The entry name is the bag file name (as we used bag_name for the entry in `bucket.write()`), and if you click on a record, you should see its labels, e.g., `object: person` and `confidence: 0.85` (values will vary) attached to that record ([reduct-py/README.md at main · reductstore/reduct-py · GitHub](https://github.com/reductstore/reduct-py/blob/main/README.md#:~:text=,01T10%3A00%3A01Z%22%2C%20labels%3D%7B%22score%22%3A%2020)). You can also see the timestamp of each record (when it was uploaded).
+Each uploaded bag file appears as a **record** in ReductStore. The entry name is the bag file name (as we used bag_name for the entry in `bucket.write()`), and if you click on a record, you should see its labels, e.g., `object: 1` and `confidence: 0.85` (values will vary) attached to that record.. You can also see the timestamp of each record (when it was uploaded).
 
 You have successfully set up the edge device to capture ROS data and push it to ReductStore with metadata tags!
 
 ## Setting up Replication to a Central ReductStore (Laptop)
 
-With data being collected on the Pi's ReductStore, we likely want to aggregate it on a central server (e.g., your laptop or a cloud instance) for analysis or long-term storage. ReductStore's replication feature allows the Pi (source) to **push** new records to another ReductStore instance (destination) in real-time, filtering by labels so that, for example, only important events (e.g., specific objects or high-confidence detections) are sent upstream ([Release v1.8.0: Introducing Data Replication | ReductStore](https://www.reduct.store/blog/news/reductstore-8-released#:~:text=ReductStore%20does%20more%20than%20just,records%20to%20a%20remote%20instance)).
+With data being collected on the Pi's ReductStore, we likely want to aggregate it on a central server (e.g., your laptop or a cloud instance) for analysis or long-term storage. ReductStore's replication feature allows the Pi (source) to **push** new records to another ReductStore instance (destination) in real-time, filtering by labels so that, for example, only important events (e.g., specific objects or high-confidence detections) are sent for long-term storage.
 
 In this section, we'll:
 
@@ -753,20 +772,24 @@ In this section, we'll:
 On your laptop (assuming Ubuntu 22.04 or any system with Docker or Snap):
 
 - **Option A: Docker** - run ReductStore in a container:
+
   ```bash
   docker run -d -p 8383:8383 -v ~/reduct_data:/data reduct/store:latest
   ```
-  This runs ReductStore locally on port 8383 and stores data in `~/reduct_data` on your laptop ([Kafka Integration Tutorial for Blob Data | ReductStore](https://www.reduct.store/blog/tutorial/datastreaming/kafka/easy-kafka-reductstore-integration-guide#:~:text=container_name%3A%20reduct,.%2Fdata%3A%2Fdata)) ([Kafka Integration Tutorial for Blob Data | ReductStore](https://www.reduct.store/blog/tutorial/datastreaming/kafka/easy-kafka-reductstore-integration-guide#:~:text=local%20directory%20%28,directory%20inside%20the%20container)).
+
+  This runs ReductStore locally on port 8383 and stores data in `~/reduct_data` on your laptop.
 
 - **Option B: Native** - you could similarly install via Snap (`sudo snap install reductstore`) or use a binary. Docker is quick and easy.
 
 After starting it, ensure you can access it:
+
 ```bash
 curl http://127.0.0.1:8383/api/v1/info
 ```
+
 should return info as before (but for the laptop's instance).
 
-Open the web console on the laptop: http://localhost:8383 and keep it open for monitoring. Create a bucket named “rosbags” on the laptop as well (our replication target will create it if not, but we can pre-create to be sure). 
+Open the web console on the laptop: http://localhost:8383 and keep it open for monitoring. Create a bucket named “rosbags” on the laptop as well (our replication target will create it if not, but we can pre-create to be sure).
 
 **Networking:** Make sure your laptop is accessible from the Pi. If both are on the same LAN, you might use the laptop's IP (e.g., 192.168.x.x). If the laptop's ReductStore is in Docker, ensure the port 8383 is open (it is published in the run command above). For testing, you might temporarily disable firewall or ensure port 8383 is allowed.
 
@@ -783,6 +806,7 @@ Fill in the replication settings roughly as:
 - **Destination Bucket:** rosbags (on laptop)
 - **Replication Name:** (give it a name like “to_laptop”)
 - **Filter (When):** Here you can specify a label filter. For example, if you only want to replicate records where an object was detected (not “none”) or of a certain type:
+
   - Example 1: replicate only if object_detected is not "none":  
     Condition: `{"&object": {"$ne": "none"}}`  
     This uses ReductStore's conditional filter syntax to say label “object” not equal to “none”.
@@ -790,8 +814,8 @@ Fill in the replication settings roughly as:
     Condition: `{"&confidence": {"$gt": "0.8"}}`
   - Example 3: replicate only if object == "person":  
     Condition: `{"&object": {"$eq": "person"}}`
-  
-  You can decide what's important. If you want everything to replicate, you can leave the filter empty or set entries to `*` and no conditions (but typically you'd filter to reduce bandwidth/storage, which is the point of labeling ([Release v1.8.0: Introducing Data Replication | ReductStore](https://www.reduct.store/blog/news/reductstore-8-released#:~:text=ReductStore%20does%20more%20than%20just,records%20to%20a%20remote%20instance))).
+
+  You can decide what's important. If you want everything to replicate, you can leave the filter empty or set entries to `*` and no conditions, but typically you'd filter to reduce bandwidth/storage, which is the point of labeling.
 
 - **Filter (Entries):** We used dynamic entry names (bag file names) which vary, so to replicate all entries, just put `*` (wildcard for all entries) or leave blank for “all”.
 
@@ -806,6 +830,7 @@ On the **laptop's web console**, open the “rosbags” bucket. You should start
 You can also check the replication status on the Pi's web console; it may show last replicated record timestamp etc., indicating it's working.
 
 At this point, we have a robust pipeline:
+
 - Raspberry Pi captures camera data and detection metadata.
 - `rosbag2reduct` segments the data into time-based bags, labels them, and pushes to local storage.
 - ReductStore on Pi retains recent data and automatically forwards critical data to the laptop's ReductStore based on labels.
@@ -813,10 +838,11 @@ At this point, we have a robust pipeline:
 
 ## Conclusion
 
-In this tutorial, we set up a complete pipeline on a Raspberry Pi 3 running ROS 2 Humble that captures camera data and AI metadata, records them into MCAP bag files with a custom Python node, and automatically offloads those files to a ReductStore time-series database. We added metadata labels to each record (object detected and confidence), enabling powerful selective replication. We configured ReductStore's replication to forward labeled data to a central instance on a laptop, filtering by labels to reduce bandwidth - for example, only forwarding “interesting” events ([Release v1.8.0: Introducing Data Replication | ReductStore](https://www.reduct.store/blog/news/reductstore-8-released#:~:text=ReductStore%20does%20more%20than%20just,records%20to%20a%20remote%20instance)).
+In this tutorial, we set up a complete pipeline on a Raspberry Pi 3 running ROS 2 Humble that captures camera data and AI metadata, records them into MCAP bag files with a custom Python node, and automatically offloads those files to a ReductStore time-series database. We added metadata labels to each record (object detected and confidence), enabling powerful selective replication. We configured ReductStore's replication to forward labeled data to a central instance on a laptop, filtering by labels to reduce bandwidth - for example, only forwarding “interesting” events.
 
-This architecture provides a robust solution for edge data collection and cloud integration:
-- ROS 2 provides the flexibility to interface with hardware (camera) and run AI models (YOLOv5) even on a modest Raspberry Pi, while keeping data in a standard format (rosbag2).
+Learnings and takeaways:
+
+- ROS 2 provides the flexibility to interface with hardware (camera) and run AI models (YOLOv5) even on a modest Raspberry Pi, while keeping data in a standard format (mcap).
 - ReductStore acts as an efficient local data logger with FIFO retention (you could set quotas) and as a bridge to the central server with minimal configuration, leveraging labels for conditional replication.
 - The use of MCAP ensures the bag files are efficient and self-contained, and the `rosbag2_py` API allowed us to programmatically record without needing external processes.
 - The entire solution is container-friendly and can be extended (for example, you could spin up multiple such Pi nodes, each forwarding to the central store with labels identifying their location or ID).
@@ -824,13 +850,6 @@ This architecture provides a robust solution for edge data collection and cloud 
 Feel free to adjust parameters like the bag rotation interval, detection thresholds, or label filtering conditions to suit your application's needs. You can also extend the `rosbag2reduct` node to record additional topics or metadata (e.g., GPS data, IMU data, etc., labeling those accordingly in ReductStore). The ReductStore web console or HTTP API can be used to query data by labels later (for example, fetch all records where object = “person” and confidence > 0.9, etc.).
 
 We hope this end-to-end tutorial helps you build your own ROS 2 data logging and cloud integration solution. Happy hacking!
-
-**Sources:**
-
-- ROS 2 Documentation - rosbag2 Python API (Recording from a Node) ([Recording a bag from a node (Python) — ROS 2 Documentation: Rolling  documentation](https://docs.ros.org/en/rolling/Tutorials/Advanced/Recording-A-Bag-From-Your-Own-Node-Py.html#:~:text=Now%20that%20we%20have%20a,format%20they%20are%20received%20in)) ([Recording a bag from a node (Python) — ROS 2 Documentation: Rolling  documentation](https://docs.ros.org/en/rolling/Tutorials/Advanced/Recording-A-Bag-From-Your-Own-Node-Py.html#:~:text=topic_info%20%3D%20rosbag2_py,create_topic%28topic_info))  
-- ROS 2 `v4l2_camera` package documentation (usage of the camera node) ([v4l2_camera — v4l2_camera 0.7.1 documentation](https://docs.ros.org/en/jazzy/p/v4l2_camera/#:~:text=Run%20the%20camera%20node%20to,images%2C%20using%20the%20default%20parameters)) ([v4l2_camera — v4l2_camera 0.7.1 documentation](https://docs.ros.org/en/jazzy/p/v4l2_camera/#:~:text=))  
-- Ultralytics YOLOv5 Release Notes (YOLOv5n model details) ([Releases · ultralytics/yolov5 · GitHub](https://github.com/ultralytics/yolov5/releases#:~:text=%28,6613%20%20by%20%2063))  
-- ReductStore Official Docs and Blog (Edge data storage and replication) ([Release v1.8.0: Introducing Data Replication | ReductStore](https://www.reduct.store/blog/news/reductstore-8-released#:~:text=ReductStore%20does%20more%20than%20just,records%20to%20a%20remote%20instance)) ([Release v1.8.0: Introducing Data Replication | ReductStore](https://www.reduct.store/blog/news/reductstore-8-released#:~:text=For%20example%2C%20you%20can%20label,records%20to%20a%20remote%20instance))  
 
 ---
 
