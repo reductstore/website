@@ -10,11 +10,97 @@ image: ./img/minio_vs_reductstore.webp
 
 ![MinIO vs ReductStore](./img/minio_vs_reductstore.webp)
 
-TODO
+As data-driven applications evolve, the need for efficient storage solutions continues to grow. ReductStore and MinIO are two powerful solutions designed to handle massive amounts of unstructured data, but they serve different purposes.
+
+While ReductStore is optimized for time-series object storage with a focus on unstructured data such as sensor logs, images, and machine-generated data for robotics and IIoT, MinIO is a high-performance object storage system built for scalable, cloud-native applications with a focus on S3 compatibility and enterprise-wide storage needs.
+
+In this article, we'll explore the differences between ReductStore and MinIO, examine where each excels, and discuss how they can be used together to build a more comprehensive data storage solution.
 
 {/* truncate */}
 
-TODO
+## Understanding MinIO: The Scalable Cloud-Native Object Storage
+
+MinIO is an **open-source object storage system** that provides a high-performance, S3-compatible API for storing and managing unstructured data. Designed to be lightweight yet highly scalable, it is often deployed in cloud-native environments, acting as a drop-in replacement for **Amazon S3** or integrated into private and hybrid cloud infrastructures.
+
+### Key Features of MinIO
+
+- **Amazon S3 API Compatibility**: Provides a smooth integration with existing cloud storage applications.
+- **High-Performance Object Storage**: Designed for fast throughput and large-scale workloads.
+- **Enterprise Security & Compliance**: Provides encryption, access controls, and security measures.
+- **Scalability & Redundancy**: Supports multi-node clusters with erasure coding and replication.
+- **Multi-Cloud Deployment**: Works across private, hybrid, and public cloud infrastructures.
+
+MinIO is particularly suited for cloud-native storage, providing an efficient way to manage large datasets across distributed environments. It is commonly used in AI/ML pipelines, backup and disaster recovery, and data lakes where scalability and reliability are critical.
+
+Amazon S3 compatibility allows MinIO to integrate with existing cloud applications, reducing migration and operational challenges. Security and compliance measures, such as encryption and access controls, ensure that corporate data is protected.
+
+> The platform's ability to operate across multiple cloud environments makes it a preferred choice for organizations adopting hybrid and multi-cloud strategies.
+
+## ReductStore: Purpose-Built for Storage and Streaming in Data Acquisition Systems
+
+In a recent article we showed the performance benefits of ReductStore for time-series data, [**out-performing MinIO for multiple file sizes**](/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio). ReductStore excels with unstructured time series data, where MinIO serves as a more general purpose object storage solution.
+
+MinIO is highly optimized for AI/ML, but not specifically towards data acquisition systems (DAQ) where time series data is key, particularly time-series data with large records such as vibrational and acoustic data for industrial applications, camera and sensor logs (telemetry) for robotics. AI/ML often relies on unstructured time-series data as well, and when this data is the primary focus, ReductStore outperforms MinIO by a significant margin.
+
+### Key Features of ReductStore
+
+- **Optimized for Time-Series Data:** Stores unstructured, sequential data efficiently.
+- **FIFO (First-In, First-Out) Quota System:** Automatically manages storage volume by replacing older data.
+- **Low-Latency Retrieval:** Ensures fast access to historical data.
+- **Batch Processing for High-Speed Ingestion**: Reduces network overhead and speeds up data acquisition.
+- **Lightweight and HTTP(s) API Integration:** Designed for portability and easy connectivity in robotics and IIoT infrastructures.
+
+ReductStore is particularly useful for automated industrial systems, robotics, or any autonomous system (such as self-driving cars) that require fast storage and retrieval of large volumes of sensor data, video streams, and device logs.
+
+In distributed setups - such as those with high latency or remote nodes - the tool supports data streaming (replication) from one node to another. This is ideal when edge devices need immediate access to information locally, while simultaneously [**replicating that data to centralized servers or cloud storage**](/solutions/cloud) for broader analysis or backup.
+
+## Key Differences: ReductStore vs. MinIO
+
+|     **Feature**      |                                  **ReductStore**                                  |                                           **MinIO**                                           |
+| :------------------: | :-------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------: |
+| **Primary Use Case** | Time-series object storage for high-frequency, unstructured data (robotics/IIoT). |              Cloud-native object storage for scalable, S3-compatible workloads.               |
+|    **Data Type**     |    Sequential, time-indexed blobs (sensor streams, logs, images, event data).     |            General-purpose unstructured data (files, backups, training datasets).             |
+|   **Performance**    |   Optimized for low-latency writes/reads of time-series data; batch ingestion.    |                      High-throughput for large-scale parallel workloads.                      |
+| **Deployment Focus** |   Edge devices, lightweight data acquisition, and central time-series storage.    |            Enterprise data centers, multi-cloud clusters, and hybrid environments.            |
+|  **Key Use Cases**   |     Data acquisition systems, robotics telemetry, industrial monitoring, ELT.     |            Data lakes, AI/ML pipelines, backup/archival, multi-cloud file storage.            |
+|     Scalability      |      Vertical/horizontal scaling via hypertables and distributed hypertables      |                  Optimized for edge computing and centralized cloud storage                   |
+|     Performance      |    High ingest rates for structured data; optimized compression for analytics     |                   High-speed ingestion and retrieval for large binary data                    |
+|   Ideal Use Cases    |  Real-time analytics, monitoring, IoT with structured data, financial workloads   | Industrial IoT, vibration/acoustic sensors, predictive maintenance, robotics, computer vision |
+
+## When to Use ReductStore
+
+ReductStore is ideal for applications that require real-time, high-speed data capture and retrieval. It works particularly well in applications such as manufacturing and autonomous systems (autonomous cars/robotics). Especially when raw, time-stamped sensor data (such as logs, LiDAR scans, or event streams) is collected for later processing or AI training via an extract-load-transform (ELT) approach.
+
+It's ideal for deploying robust data collection systems on edge devices with limited memory. For example, a computer vision module with AI predictions can locally store images along with AI-generated labels. When memory runs low, the system automatically removes older data to make room for new information (FIFO quota). At the same time, it can stream selected records - filtered by AI labels - to centralized storage, providing efficient and reliable data flow from the edge to the cloud.
+
+## When to Use MinIO
+
+MinIO is the better choice for organizations requiring high-performance, scalable storage for enterprise applications. It is widely used in AI and machine learning workflows, where large datasets must be stored and processed across distributed cloud environments. Enterprises looking to build private or hybrid cloud storage solutions will benefit from MinIO's S3-compatible API and multi-cloud deployment capabilities.
+
+MinIO also excels in long-term storage and disaster recovery, making it a preferred option for organizations that need to store a lot of data while ensuring redundancy and resilience. Businesses in industries such as media, healthcare and financial services can rely on MinIO's ability to securely store large files, backups and archives while maintaining fast retrieval speeds.
+
+## Combining ReductStore and MinIO for a Complete Solution
+
+> ReductStore and MinIO can be combined to create an efficient hybrid storage architecture.
+
+ReductStore is designed to store and manage high-frequency blob data - such as images, video frames, or sensor logs - using the local file system. This makes it easy to integrate with any backend that supports FUSE (Filesystem in Userspace).
+
+MinIO provides scalable, S3-compliant object storage that can be mounted using MinFS, a FUSE driver for MinIO. By mounting a MinIO bucket via MinFS, ReductStore can write and read data directly from MinIO, just like a regular filesystem.
+
+This setup allows:
+
+- ReductStore to run at the edge or in the cloud
+- MinIO to handle long-term blob storage
+
+Together, they provide a flexible solution: ReductStore manages real-time ingestion and fast access, while MinIO provides persistent, scalable storage in the background.
+
+## Conclusion
+
+ReductStore is a strong choice for workloads that require real-time access to time-series blob data, whether at the edge or in the cloud. It provides low-latency ingestion, flexible organization, and efficient storage for use cases in robotics and IIoT.
+
+MinIO is best suited for general purpose, cloud-native object storage. It works well for long-term archiving, backups, and applications that require S3-compliant access across distributed environments.
+
+In many cases, using both systems together is a practical solution: ReductStore handles the active, high-frequency data stream, while MinIO provides scalable and resilient storage for long-term retention. This approach supports modern edge-to-cloud workflows without locking you into a single system.
 
 ---
 
