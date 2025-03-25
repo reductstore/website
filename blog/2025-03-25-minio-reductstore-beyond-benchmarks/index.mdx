@@ -56,16 +56,13 @@ In distributed setups - such as those with high latency or remote nodes - the to
 
 ## Key Differences: ReductStore vs. MinIO
 
-|     **Feature**      |                                  **ReductStore**                                  |                                           **MinIO**                                           |
-| :------------------: | :-------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------: |
-| **Primary Use Case** | Time-series object storage for high-frequency, unstructured data (robotics/IIoT). |              Cloud-native object storage for scalable, S3-compatible workloads.               |
-|    **Data Type**     |    Sequential, time-indexed blobs (sensor streams, logs, images, event data).     |            General-purpose unstructured data (files, backups, training datasets).             |
-|   **Performance**    |   Optimized for low-latency writes/reads of time-series data; batch ingestion.    |                      High-throughput for large-scale parallel workloads.                      |
-| **Deployment Focus** |   Edge devices, lightweight data acquisition, and central time-series storage.    |            Enterprise data centers, multi-cloud clusters, and hybrid environments.            |
-|  **Key Use Cases**   |     Data acquisition systems, robotics telemetry, industrial monitoring, ELT.     |            Data lakes, AI/ML pipelines, backup/archival, multi-cloud file storage.            |
-|   **Scalability**    |      Vertical/horizontal scaling via hypertables and distributed hypertables      |                  Optimized for edge computing and centralized cloud storage                   |
-|   **Performance**    |    High ingest rates for structured data; optimized compression for analytics     |                   High-speed ingestion and retrieval for large binary data                    |
-| **Ideal Use Cases**  |  Real-time analytics, monitoring, IoT with structured data, financial workloads   | Industrial IoT, vibration/acoustic sensors, predictive maintenance, robotics, computer vision |
+|     **Feature**      |                                  **ReductStore**                                  |                                **MinIO**                                |
+| :------------------: | :-------------------------------------------------------------------------------: | :---------------------------------------------------------------------: |
+| **Primary Use Case** | Time-series object storage for high-frequency, unstructured data (robotics/IIoT). |   Cloud-native object storage for scalable, S3-compatible workloads.    |
+|    **Data Type**     |    Sequential, time-indexed blobs (sensor streams, logs, images, event data).     | General-purpose unstructured data (files, backups, training datasets).  |
+|   **Performance**    |   Optimized for low-latency writes/reads of time-series data; batch ingestion.    |           High-throughput for large-scale parallel workloads.           |
+| **Deployment Focus** |   Edge devices, lightweight data acquisition, and central time-series storage.    | Enterprise data centers, multi-cloud clusters, and hybrid environments. |
+|  **Key Use Cases**   |     Data acquisition systems, robotics telemetry, industrial monitoring, ELT.     | Data lakes, AI/ML pipelines, backup/archival, multi-cloud file storage. |
 
 ## When to Use ReductStore
 
