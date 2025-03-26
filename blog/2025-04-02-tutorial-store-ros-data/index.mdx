@@ -656,7 +656,7 @@ Let's break down key parts of this implementation:
 - We use **rosbag2's Python API**: `SequentialWriter` to record messages. We specify MCAP as the storage format when opening the bag. We explicitly register three topics (`/image_raw`, `object_detected`, `confidence_score`) with their message types, so we can write to them. In each subscription callback, we call `self.writer.write(topic_name, serialize_message(msg), timestamp)` to append to the bag.
 - We maintain `last_object_detected` and `last_confidence` variables to store the most recent detection metadata. The `_metadata_callback` updates these whenever a message on those topics arrives, and writes the message to the bag as well.
 - A ROS timer triggers `_rotate_bag_timer()` every `self.bag_duration` seconds (e.g., every 60 seconds). This function closes the current bag and opens a new one (by calling `_open_new_bag()` which increments a bag index and starts a new file). We then proceed to upload the just-closed bag file to ReductStore.
-- **ReductStore upload:** Using `reduct-py`, we ensure a bucket named `"rosbags"` exists on the ReductStore server (which we assume is running locally on the Pi at `127.0.0.1:8383`). We then read the bag file (e.g., `rosbag_20230325_103000_0.mcap`) into memory and use `bucket.write()` to store it as a record. We label each record with the detection metadata (e.g., `labels={"object": "person", "confidence": "0.85"}`).
+- **ReductStore upload:** Using `reduct-py`, we ensure a bucket named `"pi_robot"` exists on the ReductStore server (which we assume is running locally on the Pi at `127.0.0.1:8383`). We then read the bag file (e.g., `rosbag_20230325_103000_0.mcap`) into memory and use `bucket.write()` to store it as a record. We label each record with the detection metadata (e.g., `labels={"object": "person", "confidence": "0.85"}`).
 - After a successful upload, we delete the local `.mcap` file to save space on the Pi (since it's now stored in ReductStore).
 
 ### 4. Build the `rosbag2reduct` Package
@@ -717,7 +717,7 @@ We will use the **Web Console** provided by ReductStore to verify data and to se
 
 ### 3. Create a Bucket for ROS bag data
 
-Our `rosbag2reduct` code will attempt to create a bucket named `"rosbags"`. We called `create_bucket("rosbags", exist_ok=True)` in the code, so the bucket will be created on first run if it doesn't exist. You can also create it manually via the web console.
+Our `rosbag2reduct` code will attempt to create a bucket named `"pi_robot"`. We called `create_bucket("pi_robot", exist_ok=True)` in the code, so the bucket will be created on first run if it doesn't exist. You can also create it manually via the web console.
 
 To double-check, you can use the web console:
 
@@ -827,20 +827,13 @@ On the Pi's ReductStore web console (**`http://<raspberrypi_ip>:8383`**), go to 
 
 Fill in the replication settings roughly as:
 
-- **Source Bucket:** rosbags (on Pi)
+- **Source Bucket:** pi_robot (on Pi)
 - **Destination URL:** `http://<laptop_ip>:8383` (e.g., `http://192.168.1.100:8383`)
-- **Destination Bucket:** rosbags (on laptop)
+- **Destination Bucket:** pi_robot (on laptop)
 - **Replication Name:** (give it a name like “to_laptop”)
-- **Filter (When):** Here you can specify a label filter. For example, if you only want to replicate records where an object was detected (not “none”) or of a certain type:
-  - Example 1: replicate only if object_detected is not "none":  
-    Condition: `{"&object": {"$ne": "none"}}`  
-    This uses ReductStore's conditional filter syntax to say label “object” not equal to “none”.
-  - Example 2: replicate only if confidence > 0.8:  
-    Condition: `{"&confidence": {"$gt": "0.8"}}`
-  - Example 3: replicate only if object == "person":  
-     Condition: `{"&object": {"$eq": "person"}}`
-    You can decide what's important. If you want everything to replicate, you can leave the filter empty or set entries to `*` and no conditions, but typically you'd filter to reduce bandwidth/storage, which is the point of labeling.
-- **Filter (Entries):** We used dynamic entry names (bag file names) which vary, so to replicate all entries, just put `*` (wildcard for all entries) or leave blank for “all”.
+- **Entries:** `rosbags` (or whatever entry name you used in `bucket.write()`), or leave blank to replicate all entries.
+- **Filter Records**: add a filter "Exclude" rule for `object` equals `"none"` (or whatever you want to filter by, e.g., confidence > 0.8).
+
 
 Start the replication task. The Pi's ReductStore will now start forwarding new records that meet the criteria to the laptop's ReductStore, in real-time. It's a push model from Pi to laptop, so the laptop doesn't need to know about the Pi or poll it - the Pi will push as long as it can reach the laptop.
 
@@ -868,32 +861,50 @@ At this point, we have a robust pipeline:
 
 ## Best Practices and Further Improvements
 
-When building data pipelines for robotics and AI systems, consider the following best practices to improve performance, security, and maintainability.
+This tutorial only scratches the surface of building a robust data acquisition and storage pipeline for robotics. Here are some best practices and further improvements to consider:
 
-### 🔁 Separate Storage Topics by Type
+### 📊 Separate Storage Topics by Types
 
-Separate storage streams for different topic categories (e.g., telemetry vs. raw sensor data) to allow fine-grained control over retention, access, and replication policies.
+Separate storage streams for different topic categories (e.g., telemetry vs. raw sensor data) to optimise storage and retrieval. This allows you to apply different retention policies, access controls, or replication rules to each category.
 
 - 📖 See [**3 Ways to Store ROS Topics**](/blog/store-ros-topics)
 - 📘 Example: [**How to Store Images in ROS 2**](/blog/tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision)
 
-### 🔐 Use Token-Based Authentication
-
-Always enable token-based authentication on your ReductStore instances—especially when exposing endpoints to external networks. This ensures only authorized devices and users can access or replicate your data.
-
-### ⚙️ Use Non-Blocking Operations
-
-When uploading large files or performing storage operations, use non-blocking (asynchronous) methods to avoid freezing your ROS 2 nodes. This keeps your system responsive and prevents dropped messages or missed frames.
-
-### 📊 Categorize Robotics Data by Value and Frequency
-
-Classifying data types helps determine how, when, and where to store them. Here's a commonly used schema:
+Here are some common data categories and their characteristics to consider:
 
 | Category                    | Examples                                        | Characteristics                                                        |
 | --------------------------- | ----------------------------------------------- | ---------------------------------------------------------------------- |
 | **Lightweight telemetry**   | GPS, IMU, joint states, system status           | Low bandwidth, near real-time, useful for business analytics           |
 | **Downsampled sensor data** | Lower framerate/resolution camera or lidar data | Mid-size, great for monitoring and incident triage                     |
 | **Full-resolution data**    | Raw camera frames, high-fps lidar, depth maps   | High volume (up to 1TB/hour), needed for debugging or model retraining |
+
+### 🗜️ Compress High-Bandwidth Topics
+
+We can se ROS 2's built-in compression mechanisms for image topics and large messages to reduce bandwidth and storage costs.
+
+- 🖼️ Example: Use `/image_raw/compressed` instead of raw image streams
+
+### 🔐 Use Token-Based Authentication
+
+This is especially relevant for cloud storage or remote ReductStore instances. Use access tokens or API keys to secure data transfers and prevent unauthorized access.
+
+### ⚙️ Use Non-Blocking Operations
+
+When uploading large files or performing storage operations, use non-blocking (asynchronous) methods to avoid freezing your ROS 2 nodes. This keeps your system responsive and prevents dropped messages or missed frames.
+
+### 📉 Combine Downsampling with Replication
+
+This is typical in ELT (Extract-Load-Transform) pipelines. The idea is to save everything locally (on the robot) at high resolution and framerate, then stream part of the data to the cloud or a central server at a lower resolution or lower frequency.
+
+- ➡️ Example: Store 1 FPS video in cloud, keep 30 FPS original on robot SSD
+- 🔄 See example in: [**Building a Data Acquisition System for Manufacturing**](/blog/daq-manufacture-system)
+
+### ❄️ Offload Data to Cold Storage
+
+For long-term archiving, consider offloading data to cold storage to reduce costs while keeping data accessible.
+
+- ⚖️ Example: Keep 7 days of data locally, archive to cold storage after 30 days
+- 📖 Guide: [**Deploy on ReductStore Cloud**](/docs/guides/cloud/saas)
 
 ## Conclusion
 
