@@ -834,7 +834,6 @@ Fill in the replication settings roughly as:
 - **Entries:** `rosbags` (or whatever entry name you used in `bucket.write()`), or leave blank to replicate all entries.
 - **Filter Records**: add a filter "Exclude" rule for `object` equals `"none"` (or whatever you want to filter by, e.g., confidence > 0.8).
 
-
 Start the replication task. The Pi's ReductStore will now start forwarding new records that meet the criteria to the laptop's ReductStore, in real-time. It's a push model from Pi to laptop, so the laptop doesn't need to know about the Pi or poll it - the Pi will push as long as it can reach the laptop.
 
 ![ReductStore Web Console Replication](./img/replication_webconsole.png)
