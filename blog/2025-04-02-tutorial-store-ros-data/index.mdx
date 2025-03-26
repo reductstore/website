@@ -5,22 +5,35 @@ authors: anthony
 tags: [tutorial, ros, robotics]
 slug: tutorial-store-ros-data
 date: 2025-04-02
-# image: ./img/ros-data-storage.png
+image: ./img/tutorial-store-ros-data.png
 ---
 
-{/* ![ROS Data Storage](./img/ros-data-storage.png) */}
+![ROS 2 Data Storage Tutorial](./img/tutorial-store-ros-data.png)
 
 In this tutorial, we will create a custom ROS 2 Humble package called **`rosbag2reduct`** that records incoming ROS 2 topics into MCAP bag files on a Raspberry Pi and automatically uploads those files to a ReductStore instance with metadata labels. We'll walk through setting up ROS 2 Humble on the Pi, interfacing a USB camera using the `v4l2_camera` driver, deploying a lightweight YOLOv5 (nano) object detection node (using ONNX Runtime) to produce detection metadata, and implementing the `rosbag2reduct` node to capture data and offload it. We will also cover installing ReductStore on the Pi, configuring replication of labeled data to a central ReductStore on your laptop (using label-based filters via the web console). This end-to-end guide is structured with clear steps, code examples, and configuration snippets to help you build and deploy the system.
 
 {/* truncate */}
 
-## Prerequisites and Raspberry Pi Setup
+## Prerequisites and Architecture
 
 Before beginning, ensure you have the following:
 
 - **Hardware:** Raspberry Pi, a USB camera, and an internet connection.
 - **OS:** Ubuntu or Desktop Server (22.04 LTS or later) on the Raspberry Pi.
 - **Laptop/PC:** A separate machine on the same network, to serve as a central data store.
+
+In this tutorial, we will set up the following architecture:
+
+![Tutorial Architecture](./img/tutorial_architecture.tiny.png)
+
+<small style={{ display: "block", marginTop: "-20px" }}>
+  Architecture: Raspberry Pi with ROS 2, USB camera, YOLOv5n, and ReductStore;
+  Laptop with ReductStore Web Console.
+</small>
+
+- **Raspberry Pi:** Running ROS 2 Humble, interfacing with a USB camera, and running a YOLOv5n object detection node with ONNX Runtime.
+- **Laptop/PC:** Running a ReductStore instance (acting as a central data store) and ReductStore's Web Console for managing data.
+- **Network:** The Pi and the laptop are on the same network, allowing data transfer between them.
 
 ### 1. Install Ubuntu on Raspberry Pi
 
@@ -434,7 +447,7 @@ Our `rosbag2reduct` package will be a Python-based ROS 2 node that does the foll
 - After a fixed time interval (bag rotation period), close the current bag, then **upload it to ReductStore** with Python client SDK, including the metadata as labels, and delete the local bag file.
 - Start a new bag file and repeat.
 
-::: warning
+:::warning
 This is not optimal (writing to disk then uploading) and is done for simplicity. In a real scenario, you might stream directly to ReductStore or separate storage topics by type. More on this in the [**Best Practices and Further Improvements**](#best-practices-and-further-improvements) section.
 :::
 
@@ -704,13 +717,20 @@ We will use the **Web Console** provided by ReductStore to verify data and to se
 
 ### 3. Create a Bucket for ROS bag data
 
-Our `rosbag2reduct` code will attempt to create a bucket named `"rosbags"`. We called `create_bucket("rosbags", exist_ok=True)` in the code, so the bucket will be created on first run if it doesn't exist. You can also create it manually via the web console or the HTTP API.
+Our `rosbag2reduct` code will attempt to create a bucket named `"rosbags"`. We called `create_bucket("rosbags", exist_ok=True)` in the code, so the bucket will be created on first run if it doesn't exist. You can also create it manually via the web console.
 
 To double-check, you can use the web console:
 
-- Navigate to **Buckets** and create a new bucket named “rosbags”. (You can set a quota if desired, e.g., a FIFO quota of a certain size to limit storage, but it's optional.)
+- Navigate to **Buckets** and create a new bucket named “pi_robot”. (You can set a quota if desired, e.g., a FIFO quota of a certain size to limit storage, but it's optional.)
 
 Now, ReductStore is set up on the Pi and ready to accept data.
+
+![ReductStore Web Console Bucket](./img/create_bucket_webconsole.png)
+
+<small style={{ display: "block", marginTop: "-20px" }}>
+  ReductStore Web Console: Creating a bucket named "pi_robot" for storing ROS
+  bags.
+</small>
 
 ## Running the Complete System
 
@@ -757,7 +777,7 @@ Let this run for a while. By default, every 60 seconds it will finalize a bag an
 
 ### 1. Verify Data in ReductStore
 
-On the Pi (or from any machine that can access the Pi's port 8383), open the ReductStore Web Console in a browser: **`http://<raspberrypi_ip>:8383`**. You should see the bucket “rosbags”. Click it to see the list of entries/records.
+On the Pi (or from any machine that can access the Pi's port 8383), open the ReductStore Web Console in a browser: **`http://<raspberrypi_ip>:8383`**. You should see the bucket “pi_robot”. Click it to see the list of entries/records.
 
 Each uploaded bag file appears as a **record** in ReductStore. The entry name is the bag file name (as we used bag_name for the entry in `bucket.write()`), and if you click on a record, you should see its labels, e.g., `object: 1` and `confidence: 0.85` (values will vary) attached to that record.. You can also see the timestamp of each record (when it was uploaded).
 
@@ -795,7 +815,7 @@ curl http://127.0.0.1:8383/api/v1/info
 
 should return info as before (but for the laptop's instance).
 
-Open the web console on the laptop: http://localhost:8383 and keep it open for monitoring. Create a bucket named “rosbags” on the laptop as well (our replication target will create it if not, but we can pre-create to be sure).
+Open the web console on the laptop: http://localhost:8383 and keep it open for monitoring. Create a bucket named “pi_robot” on the laptop as well (our replication target will create it if not, but we can pre-create to be sure).
 
 **Networking:** Make sure your laptop is accessible from the Pi. If both are on the same LAN, you might use the laptop's IP (e.g., 192.168.x.x). If the laptop's ReductStore is in Docker, ensure the port 8383 is open (it is published in the run command above). For testing, you might temporarily disable firewall or ensure port 8383 is allowed.
 
@@ -803,7 +823,7 @@ Find your laptop's IP address (e.g., `hostname -I` on Linux) - let's say it's `1
 
 ### 2. Configure Replication on the Pi via Web Console
 
-On the Pi's ReductStore web console (**`http://<raspberrypi_ip>:8383`**), go to the “rosbags” bucket and find an option to set up replication (exact UI steps might vary by version; look for “Replication” or a “+” to add replication). We want to create a replication task that sends data to the laptop.
+On the Pi's ReductStore web console (**`http://<raspberrypi_ip>:8383`**), go to the “pi_robot” bucket and find an option to set up replication (exact UI steps might vary by version; look for “Replication” or a “+” to add replication). We want to create a replication task that sends data to the laptop.
 
 Fill in the replication settings roughly as:
 
@@ -812,26 +832,30 @@ Fill in the replication settings roughly as:
 - **Destination Bucket:** rosbags (on laptop)
 - **Replication Name:** (give it a name like “to_laptop”)
 - **Filter (When):** Here you can specify a label filter. For example, if you only want to replicate records where an object was detected (not “none”) or of a certain type:
-
   - Example 1: replicate only if object_detected is not "none":  
     Condition: `{"&object": {"$ne": "none"}}`  
     This uses ReductStore's conditional filter syntax to say label “object” not equal to “none”.
   - Example 2: replicate only if confidence > 0.8:  
     Condition: `{"&confidence": {"$gt": "0.8"}}`
   - Example 3: replicate only if object == "person":  
-    Condition: `{"&object": {"$eq": "person"}}`
-
-  You can decide what's important. If you want everything to replicate, you can leave the filter empty or set entries to `*` and no conditions, but typically you'd filter to reduce bandwidth/storage, which is the point of labeling.
-
+     Condition: `{"&object": {"$eq": "person"}}`
+    You can decide what's important. If you want everything to replicate, you can leave the filter empty or set entries to `*` and no conditions, but typically you'd filter to reduce bandwidth/storage, which is the point of labeling.
 - **Filter (Entries):** We used dynamic entry names (bag file names) which vary, so to replicate all entries, just put `*` (wildcard for all entries) or leave blank for “all”.
 
 Start the replication task. The Pi's ReductStore will now start forwarding new records that meet the criteria to the laptop's ReductStore, in real-time. It's a push model from Pi to laptop, so the laptop doesn't need to know about the Pi or poll it - the Pi will push as long as it can reach the laptop.
+
+![ReductStore Web Console Replication](./img/replication_webconsole.png)
+
+<small style={{ display: "block", marginTop: "-20px" }}>
+  ReductStore Web Console: Setting up a replication task to forward data to a
+  central ReductStore instance.
+</small>
 
 ### 3. Test Replication
 
 Back on the Pi, ensure the `rosbag2reduct` node is still running and creating new records (or restart it if needed). When the next bag file is uploaded on the Pi, if it meets the replication filter conditions, the Pi's ReductStore replication task will immediately send it to the laptop's ReductStore.
 
-On the **laptop's web console**, open the “rosbags” bucket. You should start seeing records appear that correspond to those on the Pi (with a slight delay for transfer). The labels should also be present. If you configured a filter (e.g., confidence > 0.8), try to produce a detection above that confidence on the Pi (point the camera at an easily recognized object or adjust threshold on the Pi code for testing). Records not meeting the condition will stay only on the Pi and eventually be overwritten if Pi's storage quota is limited, whereas important ones are replicated and safe on the laptop.
+On the **laptop's web console**, open the “pi_robot” bucket. You should start seeing records appear that correspond to those on the Pi (with a slight delay for transfer). The labels should also be present. If you configured a filter (e.g., confidence > 0.8), try to produce a detection above that confidence on the Pi (point the camera at an easily recognized object or adjust threshold on the Pi code for testing). Records not meeting the condition will stay only on the Pi and eventually be overwritten if Pi's storage quota is limited, whereas important ones are replicated and safe on the laptop.
 
 You can also check the replication status on the Pi's web console; it may show last replicated record timestamp etc., indicating it's working.
 
