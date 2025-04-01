@@ -868,7 +868,7 @@ Fill in the replication settings as:
 - **Destination Bucket:** pi_robot (on laptop)
 - **Replication Name:** (give it a name like “to_laptop”)
 - **Entries:** `rosbags` (or whatever entry name you used in `bucket.write()`), or leave blank to replicate all entries.
-- **Filter Records**: add the "Exclude" filter rule for `object` equals `"none"` (or whatever you want to filter by, e.g., confidence > 0.8).
+- **Filter Records**: add the "Exclude" filter rule for `object` equals `"none"`.
 
 Start the replication task. The Pi's ReductStore will now start forwarding new records that meet the criteria to the laptop, in real-time. It's a push model from Pi to laptop, so the laptop doesn't need to know about the Pi or poll it - the Pi will push new records as they arrive.
 
