@@ -113,6 +113,13 @@ The request body should be a JSON object with the following parameters:
     // Optional. A conditional query to filter records.
     when?: "object"
 
+    // Optional. Additional parameters for extensions.
+    // A user can pass any JSON object to an extension to activate it and configure its behavior.
+    // {
+    //   "ext-name": { "ext-parameter": "value" }
+    // }
+    ext?: "object"
+
     // Optional. If true, the query will be strict and return an error
     // if any of the conditions cannot be evaluated during query execution.
     // If false or unset, the query will consider the incomplete condition to be false.
