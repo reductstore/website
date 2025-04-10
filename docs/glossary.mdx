@@ -98,3 +98,15 @@ _Related entries:_ [**HTTP API**](#http-api)
 A key-value pair associated with a record in ReductStore. Labels are used for filtering, replicating, and querying data, providing metadata for records and enabling efficient data retrieval.
 
 _Related entries:_ [**record**](#record), [**conditional query**](#conditional-query)
+
+## extension
+
+A plugin or module that extends the functionality of ReductStore. Extensions can be used to add additional functionality based on the data stored in ReductStore and known data formats, e.g. selecting data from columnar formats, image processing, etc.
+
+_Related entries:_ [**computed label**](#computed-label), [**conditional query**](#conditional-query)
+
+## computed label
+
+A label that wasn't assigned to a record during ingestion but is calculated by an extension. Computed labels are used for filtering and querying data, providing additional metadata for records.
+
+_Related entries:_ [**label**](#label), [**conditional query**](#conditional-query), [**extension**](#extension)
