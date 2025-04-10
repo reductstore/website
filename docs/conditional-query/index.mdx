@@ -76,15 +76,31 @@ This is the same as:
 }
 ```
 
+The conditions are evaluated in the order they are defined, and the result is true only if all conditions are true.
+By default, a condition is evaluated at the stage of data retrieval, so the storage engine will not read the record if the condition is false.
+
+However, if a condition has a [**computed label**](./glossary#computed-label), the engine will check the condition after the record has been read and processed by [**extensions**](./glossary#computed-label).
+For example, if you have a condition like this:
+
+```javascript
+{
+  "&object_number": { "$gt": 10 },
+  "@anomaly_score": { "$gt": 0.5 }
+}
+```
+
+The engine will read the record that matches the first condition, but it will not check the second condition until the record is processed by the extension that computes the `@anomaly_score` label.
+
 ### JSON Extension
 
 The queries use a special naming convention for labels and operators to extend the JSON syntax with additional functionality:
 
-| Type     | Convention    | Description                                                                   |
-| -------- | ------------- | ----------------------------------------------------------------------------- |
-| Label    | "&label_name" | Reference to a label in the **[record](./glossary#record)** starting with `&` |
-| Operator | "$operator"   | Reference to an operator starting with `$`                                    |
-| Constant | JSON types    | A constant value in the query, e.g. `10`, `"string"`                          |
+| Type           | Convention    | Description                                                                      |
+| -------------- | ------------- | -------------------------------------------------------------------------------- |
+| Label          | "&label_name" | Reference to a label in the **[record](./glossary#record)** starting with `&`    |
+| Computed Label | "@label_name" | Reference to a **[computed label](./glossary#computed-label)** starting with `@` |
+| Operator       | "$operator"   | Reference to an operator starting with `$`                                       |
+| Constant       | JSON types    | A constant value in the query, e.g. `10`, `"string"`                             |
 
 ## Type System
 
