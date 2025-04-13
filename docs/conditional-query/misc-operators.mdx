@@ -5,15 +5,15 @@ description: Learn how to use miscellaneous operators to filter data in ReductSt
 
 Besides the main categories of operators, ReductStore supports a few miscellaneous operators that provide additional functionality:
 
-| Operator  | Description                                         |
-| --------- | --------------------------------------------------- |
-| `$exists` | Checks if a label exists in a record.               |
-| `$cast`   | Casts a label value to a different type explicitly. |
-| `$ref`    | References a label value in a record explicitly.    |
+| Operator            | Description                                         |
+| ------------------- | --------------------------------------------------- |
+| `$has` \| `$exists` | Checks if a record has specific labels.             |
+| `$cast`             | Casts a label value to a different type explicitly. |
+| `$ref`              | References a label value in a record explicitly.    |
 
-## $exists
+## $has | $exists
 
-The `$exists` operator is used to check if a [**label**](../glossary#label) exists in a [**record**](../glossary#record).
+The `$has` or `$exists` operator is used to check if a [**record**](../glossary#record) has specific [**labels**](../glossary#label).
 
 The operator is useful when you want to filter records based on the presence of a label, regardless of its value.
 
@@ -21,18 +21,19 @@ The operator is useful when you want to filter records based on the presence of 
 
 ```
 {
-  "$exists": [ <expression as label reference> ]
+  "$has" | "$exists" : [ <expression as label reference>, ... ]
 }
 ```
 
 ### Behavior
 
-The operator evaluates the first expression as a string and checks if the label exists in the record.
+The operator evaluates expressions as strings and checks if the record has all the specified labels.
 
 Additional rules:
 
 - If the expression is not a string, it is cast to a string.
 - The operator is case-sensitive.
+- The evaluation stops as soon as one of the labels is not found.
 
 ### Examples
 
@@ -40,7 +41,7 @@ Array notation:
 
 ```json
 {
-  "$exists": ["label_name"]
+  "$has": ["label_1", "label_2"]
 }
 ```
 
@@ -75,8 +76,8 @@ Object notation:
 
 ```json
 {
-  "$cast": {
-    "&label_name": "int"
+  "$label_name": {
+    "$cast": "int"
   }
 }
 ```
