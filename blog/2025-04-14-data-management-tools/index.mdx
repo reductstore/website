@@ -92,7 +92,14 @@ Heex's UI offers interactive dashboards where users can view and analyze data fr
 
 To help visualize the differences between the various data management tools discussed, here's a comparison table that summarizes their key differences:
 
-TODO - Table
+| **Tool**                   | **ReductStore**                                                            | **Foxglove**                                         | **Rerun**                                                      | **Heex**                                                        |
+| -------------------------- | -------------------------------------------------------------------------- | ---------------------------------------------------- | -------------------------------------------------------------- | --------------------------------------------------------------- |
+| **Primary Focus**          | High-frequency unstructured time-series robotics data, large-scale storage | Real-time data streaming and visualization           | Real-time 3D multimodal data visualization and XR applications | Real-time, event-driven data capture and fleet management       |
+| **Data Types**             | High-frequency sensor data, telemetry, complex data streams                | Telemetry, camera feeds, lidar, depth maps, ROS data | Images, point clouds, tensors, text, multimodal data           | Logs, images, sensor data                                       |
+| **Storage System**         | Cloud-based (Azure Blob Storage)                                           | Cloud storage (AWS, Azure, Google Cloud)             | Local storage                                                  | Cloud storage (with real-time capture)                          |
+| **Performance Advantages** | Batch processing, optimized query language                                 | Selective data streaming                             | Fast ECS data model with optimized memory usage                | Lightweight capturing of only relevant data, based on set rules |
+| **ROS Integration**        | Supports ROS (via custom setups)                                           | Native ROS1 and ROS2 support                         | No native ROS support (custom integration possible)            | Native ROS1 and ROS2 support                                    |
+| **UI**                     | Web-based UI and CLI tools                                                 | Web-based (browser UI with timeline, 2D/3D viewers)  | App-based (cross-platform native app; browser UI in dev)       | Web-based dashboard with filters, events, alerts                |
 
 ## Conclusion
 
