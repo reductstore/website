@@ -74,7 +74,8 @@
         "conditional-query/comparison-operators",
         "conditional-query/arithmetic-operators",
         "conditional-query/string-operators",
-        "conditional-query/misc-operators"
+        "conditional-query/misc-operators",
+        "conditional-query/aggregation-operators"
       ]
     },
     {

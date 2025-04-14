@@ -1,0 +1,48 @@
+---
+title: Aggregation Operators
+description: Learn how to use aggregation operators to aggregate data in ReductStore.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/conditional-query/aggregation-operators"
+  />
+</head>
+
+The aggregation operators are used to aggregate data in a **[conditional query](../glossary#conditional-query)**.
+
+The following aggregation operators are supported:
+
+| Operator  | Description                                     |
+| --------- | ----------------------------------------------- |
+| `$each_n` | Keeps each N-th record after previous condition |
+
+## $each_n
+
+The `$each_n` operator is used to keep each N-th record after the previous condition.
+
+### Syntax
+
+```
+{
+  "$each_n": [
+    { <expression as integer> }
+  ]
+}
+```
+
+### Behavior
+
+The operator evaluates the first expression as an integer and uses it to determine the step size for keeping records.
+
+### Examples
+
+Array notation:
+
+```json
+{
+  "&score": { "$gt": 10 },
+  "$each_n": [5] // Keep every 5th record whose score is greater than 10
+}
+```
