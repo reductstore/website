@@ -18,6 +18,7 @@ The following aggregation operators are supported:
 | --------- | ------------------------------------------------------------------- |
 | `$each_n` | Keeps each N-th record after previous condition                     |
 | `$each_t` | Keeps a record after the previous condition once in every N seconds |
+| `$limit`  | Limits the number of records to be processed in the query           |
 
 ## $each_n
 
@@ -39,12 +40,21 @@ The operator evaluates the first expression as an integer and uses it to determi
 
 ### Examples
 
-Array notation:
+Find records with a score greater than 10 and return every 5th record:
 
 ```json
 {
   "&score": { "$gt": 10 },
-  "$each_n": [5] // Keep every 5th record whose score is greater than 10
+  "$each_n": [5]
+}
+```
+
+Filter out records that are not every 5th record and then return records with a score greater than 10:
+
+```json
+{
+  "$each_n": [5],
+  "&score": { "$gt": 10 }
 }
 ```
 
@@ -68,11 +78,59 @@ The operator evaluates the first expression as a float and uses it to determine 
 
 ### Examples
 
-Array notation:
+Find records with a score greater than 10 and return ones that are 5 seconds apart:
 
 ```json
 {
-  "&timestamp": { "$gt": 10 },
-  "$each_t": [5] // Keep a record once in every 5 seconds whose score is greater than 10
+  "&score": { "$gt": 10 },
+  "$each_t": [5]
+}
+```
+
+Filter out records that are less than 5 seconds apart and then return records with a score greater than 10:
+
+```json
+{
+  "$each_t": [5],
+  "&score": { "$gt": 10 }
+}
+```
+
+## $limit
+
+The `$limit` operator is used to limit the number of records to be processed in the query.
+
+### Syntax
+
+```
+{
+  "$limit": [
+    { <expression as integer> }
+  ]
+}
+```
+
+### Behavior
+
+The operator evaluates the first expression as an integer and uses it to limit the number of records to be processed in the query.
+The operator is applied after the previous condition, so it limits the number of records that match the previous condition.
+
+### Examples
+
+Limit the number of records whose score is greater than 10 to 5:
+
+```json
+{
+  "&score": { "$gt": 10 },
+  "$limit": [5]
+}
+```
+
+Find records with a score greater than 10 in the first 5 records:
+
+```json
+{
+  "$limit": [5],
+  "&score": { "$gt": 10 }
 }
 ```
