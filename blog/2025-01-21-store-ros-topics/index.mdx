@@ -5,10 +5,10 @@ authors: gracija
 tags: [robotics, ros]
 slug: store-ros-topics
 date: 2025-01-21
-image: ./img/introduction_diagram.drawio.png
+image: ./img/introduction_diagram.png
 ---
 
-![Introduction Diagram](./img/introduction_diagram.drawio.png)
+![Introduction Diagram](./img/introduction_diagram.png)
 
 The **Robot Operating System (ROS)** is a powerful framework for developing and managing robotic systems. It simplifies integration, communication, and development through various tools and libraries. ROS is built around a communication system that uses a _publish-subscribe model_ to connect components, where some, like sensors or cameras, act as _publishers_, and others, like motors or processors, are _subscribers_. The data shared between these components is organized into _topics_.
 
@@ -29,7 +29,7 @@ Each method of storing ROS topics has its strengths, so let’s dive into the th
 
 ## Method 1: Store ROS Topics to File System Using Rosbag
 
-![Method 1 Diagram](./img/method1.drawio.png)
+![Method 1 Diagram](./img/method1.png)
 
 **Rosbag** is the default and most commonly used tool in ROS for handling recorded data. It works by capturing the messages being published on ROS topics and saving them into a _.bag file_. Since rosbag supports recording multiple topics at once, it is a great tool for scenarios where you need to capture many different data streams, such as sensor readings, images, or even logs. However, in case you don’t need the data from all the topics that exist on the system, there is an option to record only a subset of them.
 
@@ -48,7 +48,7 @@ Each method of storing ROS topics has its strengths, so let’s dive into the th
 
 ## Method 2: Store Rosbag Data in Time-Series Object Storage
 
-![Method 2 Diagram](./img/method2.drawio.png)
+![Method 2 Diagram](./img/method2.png)
 
 Another option is to store compressed Rosbag files in a _time-series object storage solution_ like [**ReductStore**](/). Time-series storage works really well for ROS data because it sorts and retrieves information by time, which fits naturally with how robots process and use data. This approach also lets you add helpful labels to the files, like AI labels, sensor types, or recording locations, making it easier to manage and access your data.
 
@@ -64,7 +64,7 @@ Another option is to store compressed Rosbag files in a _time-series object stor
 
 ## Method 3: Store Topics in Separate ReductStore Records for Granular Control
 
-![Method 3 Diagram](./img/method3.drawio.png)
+![Method 3 Diagram](./img/method3.png)
 
 This method involves _storing each ROS topic as a separate record in ReductStore_, giving you great flexibility over how your data is managed. By grouping data by topic, you gain way better control over filtering, searching, and replicating the data. Each record can be configured with its own compression settings depending on the type of the data that’s being sent over that topic. Moreover, having specific metadata labels for each topic makes it easier to create useful and efficient queries.
 
