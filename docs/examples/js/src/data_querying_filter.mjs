@@ -6,10 +6,10 @@ const bucket = await client.getBucket("example-bucket");
 
 // Query 10 photos from "imdb" entry which taken after 2006 with the face score less than 4
 for await (const record of bucket.query("imdb", undefined, undefined, {
-  limit: 10,
   when: {
     "&photo_taken": { $gt: 2006 },
     "&face_score": { $lt: 4 },
+    $limit: [10],
   },
 })) {
   console.log("Name", record.labels.name);

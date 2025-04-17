@@ -20,9 +20,9 @@ async fn main() -> Result<(), ReductError> {
         .query("imdb")
         .when(condition!({
             "&photo_taken": {"$gt": 2006},
-            "&face_score": {"$gt": 4}
+            "&face_score": {"$gt": 4},
+            "$limit": [10]
         }))
-        .limit(10)
         .send()
         .await?;
 
