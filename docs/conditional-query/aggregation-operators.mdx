@@ -14,9 +14,10 @@ The aggregation operators are used to aggregate data in a **[conditional query](
 
 The following aggregation operators are supported:
 
-| Operator  | Description                                     |
-| --------- | ----------------------------------------------- |
-| `$each_n` | Keeps each N-th record after previous condition |
+| Operator  | Description                                                         |
+| --------- | ------------------------------------------------------------------- |
+| `$each_n` | Keeps each N-th record after previous condition                     |
+| `$each_t` | Keeps a record after the previous condition once in every N seconds |
 
 ## $each_n
 
@@ -44,5 +45,34 @@ Array notation:
 {
   "&score": { "$gt": 10 },
   "$each_n": [5] // Keep every 5th record whose score is greater than 10
+}
+```
+
+## $each_t
+
+The `$each_t` operator is used to keep a record if its timestamp is greater than the previous condition in the given time in seconds.
+
+### Syntax
+
+```
+{
+  "$each_t": [
+    { <expression as float> }
+  ]
+}
+```
+
+### Behavior
+
+The operator evaluates the first expression as a float and uses it to determine the time in seconds for keeping records.
+
+### Examples
+
+Array notation:
+
+```json
+{
+  "&timestamp": { "$gt": 10 },
+  "$each_t": [5] // Keep a record once in every 5 seconds whose score is greater than 10
 }
 ```
