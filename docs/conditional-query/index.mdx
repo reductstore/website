@@ -79,7 +79,7 @@ This is the same as:
 The conditions are evaluated in the order they are defined, and the result is true only if all conditions are true.
 By default, a condition is evaluated at the stage of data retrieval, so the storage engine will not read the record if the condition is false.
 
-However, if a condition has a [**computed label**](./glossary#computed-label), the engine will check the condition after the record has been read and processed by [**extensions**](./glossary#computed-label).
+However, if a condition has a [**computed label**](./glossary#computed-label), the engine will check the condition after the record has been read and processed by [**extensions**](./glossary#extensions).
 For example, if you have a condition like this:
 
 ```javascript
