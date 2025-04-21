@@ -43,7 +43,7 @@ Filter records with a score greater than 10, then return every 5th record from t
 ```json
 {
   "&score": { "$gt": 10 },
-  "$each_n": [5]
+  "$each_n": 5
 }
 ```
 
@@ -51,7 +51,7 @@ Select every 5th record, then return those with a score greater than 10:
 
 ```json
 {
-  "$each_n": [5],
+  "$each_n": 5,
   "&score": { "$gt": 10 }
 }
 ```
@@ -79,7 +79,7 @@ Filter records with a score greater than 10, then return only those that are at 
 ```json
 {
   "&score": { "$gt": 10 },
-  "$each_t": [5]
+  "$each_t": 5
 }
 ```
 
@@ -87,7 +87,7 @@ Keep only records at least 5 seconds apart, then filter for scores greater than 
 
 ```json
 {
-  "$each_t": [5],
+  "$each_t": 5,
   "&score": { "$gt": 10 }
 }
 ```
@@ -116,7 +116,7 @@ Limit the number of records whose score is greater than 10 to 5:
 ```json
 {
   "&score": { "$gt": 10 },
-  "$limit": [5]
+  "$limit": 5
 }
 ```
 
@@ -124,7 +124,7 @@ Find records with a score greater than 10 in the first 5 records:
 
 ```json
 {
-  "$limit": [5],
+  "$limit": 5,
   "&score": { "$gt": 10 }
 }
 ```

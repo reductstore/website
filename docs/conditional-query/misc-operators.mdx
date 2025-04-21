@@ -5,11 +5,12 @@ description: Learn how to use miscellaneous operators to filter data in ReductSt
 
 Besides the main categories of operators, ReductStore supports a few miscellaneous operators that provide additional functionality:
 
-| Operator            | Description                                         |
-| ------------------- | --------------------------------------------------- |
-| `$has` \| `$exists` | Checks if a record has specific labels.             |
-| `$cast`             | Casts a label value to a different type explicitly. |
-| `$ref`              | References a label value in a record explicitly.    |
+| Operator              | Description                                                         |
+| --------------------- | ------------------------------------------------------------------- |
+| `$has` \| `$exists`   | Checks if a record has specific labels.                             |
+| `$cast`               | Casts a label value to a different type explicitly.                 |
+| `$ref`                | References a label value in a record explicitly.                    |
+| `$timestamp` \| `$id` | Retrieves the timestamp of a record as a UNIX time in microseconds. |
 
 ## $has | $exists
 
@@ -123,5 +124,40 @@ Using an expression to reference a label:
 ```json
 {
   "$ref": [{ "$add": ["label_", "name"] }]
+}
+```
+
+## $timestamp | $id
+
+The `$timestamp` operator is used to retrieve the timestamp of a record as a UNIX time in microseconds.
+The operator is useful when you want to filter records based on their timestamp or when you want to use the timestamp in calculations.
+
+### Syntax
+
+```
+{
+  "$timestamp": []
+}
+```
+
+### Behavior
+
+The operator is a nullary operator that returns the timestamp of the record as a UNIX time in microseconds.
+
+### Examples
+
+Retrieve a certain record by its timestamp:
+
+```json
+{
+  "$timestamp": { "$eq": 1672531199000 }
+}
+```
+
+Retrieve multiple records by their timestamps:
+
+```json
+{
+  "$in": ["$timestamp", 1672531199000, 1672531200000]
 }
 ```
