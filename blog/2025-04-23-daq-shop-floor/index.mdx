@@ -5,19 +5,21 @@ authors: alexey
 tags: [daq, iot, tutorials]
 slug: daq-shop-floor
 date: 2025-04-22
-image: ./img/shop_floor_daq.png
+image: ./img/demo_setup.png
 ---
+
+![ReductStore on DAQ edge device](./img/shop_floor_daq.png)
 
 As modern manufacturing becomes increasingly data-driven, the need for efficient data acquisition systems is more critical than ever.
 In my previous article, [**Building a Data Acquisition System for Manufacturing**](blog/2025-03-17-daq-manufacture-system/index.mdx), we discussed the challenges of data acquisition in manufacturing and how [**ReductStore**](/) can help solve them.
 Here we will learn how to use ReductStore at the edge of the shop floor and stream data to the cloud.
 
+{/* truncate */}
+
 ## DAQ Edge Device
 
 The shop floor is the place where data is generated, and it is essential to have a reliable **data acquisition (DAQ)** device that can collect and process this data.
 The DAQ device can process data locally or act as a FIFO buffer, sending data to long-term storage on premises or in the cloud.
-
-![ReductStore on DAQ edge device](./img/shop_floor_daq.png)
 
 The DAQ device can be a Raspberry Pi with a USB stick or a powerful industrial computer with a 1TB or larger NVMe SSD.
 Despite the differences in hardware, your DAQ device should have the following capabilities:
@@ -25,8 +27,6 @@ Despite the differences in hardware, your DAQ device should have the following c
 - **Data ingestion**: The DAQ device must be able to ingest data from various sources, such as sensors, PLCs, and other devices, with minimal latency and high throughput.
 - **Data storage**: The DAQ device must be able to store data locally and provide data retention policies to manage the amount of data.
 - **Data replication**: The DAQ device must be able to replicate data to the cloud or local storage for long-term retention and analysis.
-
-{/* truncate */}
 
 These features don't look like much, but the devil is in the detail. If you have very intensive data acquisition, **you can't store and replicate everything**.
 You need an intelligent data collection system that can filter and process data before sending it to long-term storage.
@@ -40,19 +40,15 @@ For demonstration purposes, we will build a simple data acquisition system that 
 
 - **Data Source**: A simple data source that generates random data and writes it to ReductStore.
 - **ReductStore**: A ReductStore instance running on the DAQ device that replicates data to a cloud instance.
-- **Cloud Storage**: A cloud instance of ReductStore at [**play.reduct.store**](https://play.reduct.store) that stores the replicated data.
+- **Cloud Storage**: A cloud instance of ReductStore at [**play.reduct.store**](https://play.reduct.store) (API token: `reductstore`) that stores the replicated data.
 
 ![ReductStore Demo DAQ Setup](./img/demo_setup.png)
 
 ### Provisioning ReductStore
 
-In this example we will create a bucket called `data` with a [**FIFO quota**](/docs/glossary#fifo-quota) of 1GB and a replication task called `repl-task`
-which will replicate data from the `data` bucket to the `demo` bucket on [**our demo server**](https://play.reduct.store).
-Note the `RS_REPLICATION_1_WHEN` environment variable, which is a filter that allows you to replicate only data with a score greater than 0.8.
-
-This is a simple example, but you can use more complex filters to replicate data according to your needs.
-
-You are now ready to start ReductStore using Docker Compose:
+For this demo, we need to create a bucket where we will ingest data and a replication task that will replicate data to the cloud.
+You can do this using the Web console, CLI or SDKs, but let's provision the resources we need using environment variables.
+Here is a simple `docker-compose.yml` file that creates a ReductStore instance with a bucket and a replication task:
 
 ```yaml
 services:
@@ -79,8 +75,9 @@ services:
       - 8383:8383
 ```
 
-In this example, we create a bucket named `data` with a [**FIFO quota**](/docs/glossary#fifo-quota) of 1GB and a replication task named `repl-task` that replicates data from the `data` bucket to the `demo` bucket on [**our demo server**](https://play.reduct.store).
-Pay attention to the `RS_REPLICATION_1_WHEN` environment variable, which is a filter that allows you to replicate only data with a score greater than 0.8.
+In this example we will create a bucket called `data` with a [**FIFO quota**](/docs/glossary#fifo-quota) of 1GB and a replication task called `repl-task`
+which will replicate data from the `data` bucket to the `demo` bucket on [**our demo server**](https://play.reduct.store).
+The `RS_REPLICATION_1_WHEN` environment variable contains a filter that allows you to replicate only data with a score greater than 0.8.
 
 This is a simple example, but you can use more complex filters to replicate data based on your needs.
 
@@ -173,7 +170,7 @@ Here are some best practices to consider when building your own system based on 
 
 - Security: Use secure connections (HTTPS) and authentication tokens to protect your data. Read more about access control in the [**Access Control**](/docs/guides/access-control) guide.
 - Data retention: Use the [**FIFO quota**](/docs/glossary#fifo-quota) to limit the amount of data stored in ReductStore. This will help you avoid running out of disk space and keep your data fresh.
-- Store data in the cloud: Use the [**ReductStore Cloud**](https://cloud.reduct.store) to store your data in the cloud. It uses a cloud object storage as a backend and reduces the cost of storing data.
+- Store data in the cloud: Use the [**ReductStore Cloud**](/solutions/cloud) to store your data in the cloud. It uses a cloud object storage as a backend and reduces the cost of storing data.
 
 ## Conclusion
 
@@ -182,7 +179,7 @@ In this article, we have shown you how ReductStore can help you build a data acq
 
 ## Resources
 
-- [**ReductStore Documentation**](https://docs.reduct.store)
+- [**ReductStore Documentation**](https://reduct.store/docs)
 - [**Building a Data Acquisition System for Manufacturing**](blog/2025-03-17-daq-manufacture-system/index.mdx)
 - [**ReductStore GitHub**](https://github.com/reductstore/reductstore)
 - [**Example On GitHub**](https://github.com/reductstore/daq-edge-example)
