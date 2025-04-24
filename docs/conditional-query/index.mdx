@@ -57,6 +57,14 @@ The array notation is more flexible and allows you to have more than two operand
 }
 ```
 
+For unary operators the array can be replaced with a single value:
+
+```json
+{
+  "$not": "&label_name"
+}
+```
+
 ### Multiple conditions
 
 The query object can contain multiple conditions that are linked using the AND operator:
@@ -79,10 +87,10 @@ This is the same as:
 The conditions are evaluated in the order they are defined, and the result is true only if all conditions are true.
 By default, a condition is evaluated at the stage of data retrieval, so the storage engine will not read the record if the condition is false.
 
-However, if a condition has a [**computed label**](./glossary#computed-label), the engine will check the condition after the record has been read and processed by [**extensions**](./glossary#computed-label).
+However, if a condition has a [**computed label**](./glossary#computed-label), the engine will check the condition after the record has been read and processed by [**extensions**](./glossary#extension).
 For example, if you have a condition like this:
 
-```javascript
+```json
 {
   "&object_number": { "$gt": 10 },
   "@anomaly_score": { "$gt": 0.5 }
