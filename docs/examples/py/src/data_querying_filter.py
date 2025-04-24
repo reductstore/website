@@ -11,10 +11,10 @@ async def main():
         # Query 10 photos from "imdb" entry which taken after 2006 with the face score less than 4
         async for record in bucket.query(
                 "imdb",
-                limit=10,
                 when={
                     "&photo_taken": {"$gt": 2006},
                     "&face_score": {"$lt": 4},
+                    "$limit": [10],
                 },
         ):
             print("Name", record.labels["name"])

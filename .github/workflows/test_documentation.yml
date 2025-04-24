@@ -16,8 +16,8 @@ jobs:
     strategy:
       max-parallel: 8
       matrix:
-        doc_version: [next, 1.14.x, 1.13.x, 1.12.x, 1.11.x, 1.10.x]
         example: [python, node, curl, cpp, rust, cli]
+        doc_version: [next, 1.14.x, 1.13.x, 1.12.x]
         include:
           - doc_version: next
             reduct_version: main
@@ -34,14 +34,6 @@ jobs:
           - doc_version: 1.12.x
             reduct_version: v1.12.0
             example_root: versioned_docs/version-1.12.x/examples/
-
-          - doc_version: 1.11.x
-            reduct_version: v1.11.2
-            example_root: versioned_docs/version-1.11.x/examples/
-
-          - doc_version: 1.10.x
-            reduct_version: v1.10.1
-            example_root: versioned_docs/version-1.10.x/examples/
 
           - language: python
             cmd: python3

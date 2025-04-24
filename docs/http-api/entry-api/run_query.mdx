@@ -126,12 +126,15 @@ The request body should be a JSON object with the following parameters:
     strict?: "boolean"
 
     // Optional. Return a record every S seconds
+    // DEPRECATED: Use "$each_t" in "when" condition instead.
     each_s?: "float"
 
     // Optional. Return only every N record
+    // DEPRECATED: Use "$each_n" in "when" condition instead.
     each_n?: "integer"
 
     // Optional. The maximum number of records to return.
+    // DEPRECATED: Use "$limit" instead in "when" condition
     limit?: "integer"
 
     // Optional. If true, the query will remain open
