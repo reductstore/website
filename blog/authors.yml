@@ -41,3 +41,14 @@ gracija:
   socials:
     linkedin: gracija-nikolovska
     github: gracija
+
+ekaterina:
+  name: TODO
+  title: TODO
+  url: https://github.com/EkaterinaMarova
+  image_url: https://github.com/EkaterinaMarova.png
+  description: TODO
+  page: true
+  socials:
+    linkedin: TODO
+    github: EkaterinaMarova
