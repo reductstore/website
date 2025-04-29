@@ -14,9 +14,9 @@ In this tutorial, we'll focus on the most common format: .bag files recorded wit
 
 You’ll learn how to:
 
-- extract motion data from `.bag` files
-- create basic velocity features
-- train a classification model to recognize different types of robot movements
+- Extract motion data from `.bag` files
+- Create basic velocity features
+- Train a classification model to recognize different types of robot movements
 
 We'll use the `bagpy` library to process `.bag` files and apply basic machine learning techniques for classification.
 
@@ -255,6 +255,26 @@ plot_feature_importance(best_model, X_columns)
 ```
 
 ![Feature Importance](./img/feature_importance.png)
+
+### Best practices
+
+When working with ROS bag files and training machine learning models, these best practices can help you manage data more effectively and build better-performing models:
+
+- **Split large bag files:** If your .bag files are too large, divide them into smaller episodes of about 1–5 minutes. This helps avoid memory issues and makes the files easier to process.
+
+- **Separate topics by type:** If your .bag file includes both lightweight messages (like status updates) and large data streams (like images or LiDAR), store them in separate bag files. This separation can optimize performance and make your workflow simpler.
+
+- **Use Randomized Search for tuning:** If your model’s accuracy isn’t good enough, try using RandomizedSearchCV instead of grid search. It can find the best hyperparameters faster and more efficiently.
+
+- **Try different algorithms:** Experiment with different algorithms to find what works best for your specific data.
+
+- **Consider ensemble methods:** Techniques like bagging or boosting can improve accuracy by combining multiple models and leveraging their strengths.
+
+- **Explore deep learning:** If you have a large dataset and enough computing power, deep learning models can capture complex patterns that simpler models may miss.
+
+- **Prevent overfitting:** Make sure that your model generalizes well by splitting your dataset into **training**, **validation**, and **test** sets. Use **cross-validation** to evaluate your model’s performance more reliably.
+
+Following these tips will help you organize your ROS data more easily and build better machine learning models for classifying robot movements.
 
 # Conclusion
 
