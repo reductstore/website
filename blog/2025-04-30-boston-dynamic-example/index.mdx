@@ -12,7 +12,7 @@ image: ./img/velocities.png
 
 Working with real-world robot data depends on how ROS (Robot Operating System) messages are stored. In the article [**3 Ways to Store ROS Topics**](https://www.reduct.store/blog/store-ros-topics#method-2-store-rosbag-data-in-time-series-object-storage), we explored several approaches — including storing compressed Rosbag files in time-series storage and storing topics as separate records.
 
-In this tutorial, we'll focus on the most common format: .bag files recorded with Rosbag. These files contain valuable data on how a robot interacts with the world — such as odometry, camera frames, LiDAR, or IMU readings — and provide the foundation for analyzing the robot's behavior.
+In this tutorial, we'll focus on the most common format: `.bag` files recorded with Rosbag. These files contain valuable data on how a robot interacts with the world — such as odometry, camera frames, LiDAR, or IMU readings — and provide the foundation for analyzing the robot's behavior.
 
 You’ll learn how to:
 
@@ -22,7 +22,7 @@ You’ll learn how to:
 
 We'll use the `bagpy` library to process `.bag` files and apply basic machine learning techniques for classification.
 
-Although the examples in this tutorial use [**data from a Boston Dynamics Spot robot**](http://ptak.felk.cvut.cz/darpa-subt/qualification_videos/spot/) (performing movements like moving forward, sideways, and rotating), you can adapt the code for your own recordings.
+Although the examples in this tutorial use [**data from a Boston Dynamics Spot robot**](http://ptak.felk.cvut.cz/darpa-subt/qualification_videos/spot/) (performing movements like moving forward, sideways, and rotating), you can adapt the code for your recordings.
 
 {/* truncate */}
 
@@ -32,11 +32,11 @@ Although the examples in this tutorial use [**data from a Boston Dynamics Spot r
 !pip install numpy pandas matplotlib seaborn scikit-learn bagpy
 ```
 
-# Loading and Preprocessing Bag Files
+## Loading and Preprocessing Bag Files
 
 Let's create a function to load a `.bag` file and extract velocity features.
 
-In our example, odometry data is published under the `/spot/odometry` topic. Make sure to specify the correct topic where your robot's motion data is recorded. Depending on your specific use case, you might find other features, such as accelerations or additional sensor data, more relevant for recognizing your robot's movements. For our task, we focus primarily on linear and angular velocities.
+In our example, the odometry data is published under the `/spot/odometry` topic. Make sure to specify the correct topic where your robot's motion data is recorded. Depending on your use case, you might find other features, such as accelerations or additional sensor data, more relevant for recognizing your robot's movements. For this task, we'll primarily focus on linear and angular velocities.
 
 ```python
 import numpy as np
@@ -45,7 +45,7 @@ from bagpy import bagreader
 
 def process_bag_to_dataframe(bag_path, topic='/spot/odometry', target_label=0):
 
-    # Load a ROS bag file and generate a DataFrame with velocity features and a target label.
+    # Load a .bag file and generate a DataFrame with velocity features and a target label
 
     bag = bagreader(bag_path)
     df = pd.read_csv(bag.message_by_topic(topic))
@@ -70,7 +70,7 @@ def process_bag_to_dataframe(bag_path, topic='/spot/odometry', target_label=0):
 
 ### Processing three different movement types
 
-Let's apply the `process_bag_to_dataframe` function to load and process the data for each of the three movement types. Each movement was recorded in a separate `.bag` file.
+Let's use the `process_bag_to_dataframe` function to load and process the data for each of the three movement types. Each movement type was recorded in a separate `.bag` file, so we'll apply the function to each file individually, and then merge the results into a single DataFrame.
 
 ```python
 df_forward = process_bag_to_dataframe('linear_x.bag', target_label=1)   # moving forward
@@ -83,7 +83,7 @@ df_all = pd.concat([df_forward, df_sideways, df_rotation], ignore_index=True)
 
 ### Visualizing velocities
 
-We can plot linear and angular velocities over time for each kind of motion, such as the forward movement.
+We can visualize the linear and angular velocities over time for each type of motion, as shown in the example for the forward movement. This will help us better understand how the velocities change during each specific motion.
 
 ```python
 import matplotlib.pyplot as plt
@@ -111,26 +111,30 @@ plot_velocities(df_forward, 'Forward Movement')
 
 ![Forward Movement](./img/forward_movement.png)
 
-# Training and Evaluating Classification Models
+## Training and Evaluating Classification Models
 
-We will test several popular models: Logistic Regression, Decision Tree, Random Forest, and Support Vector Machine.
+We'll test several popular models, including Logistic Regression, Decision Tree, Random Forest, and Support Vector Machine, and tune their hyperparameters using `GridSearchCV`. You can also experiment with other hyperparameters to optimize the models based on your specific data and requirements.
 
-We'll also use `GridSearchCV` for hyperparameter tuning. You can experiment with other hyperparameters to fine-tune the models based on your specific data and requirements.
+To evaluate the classifier, we'll use the **F1 Score** metric, which balances precision and recall and is especially useful for imbalanced datasets. However, you can also choose to evaluate using Accuracy, Precision, or Recall, depending on your needs.
 
-We evaluate the classifier using **F1 Score**, as it balances precision and recall. This is particularly useful for imbalanced datasets. However, you can also use Accuracy, Precision, and Recall.
-
-Let's prepare the data for training.
+Now, let's prepare the data for training.
 
 ```python
 X = df_all.drop('target', axis=1)
 y = df_all['target']
 ```
 
-The features `X` consist of the velocity data, while the labels `y` represent the movement types.
+The features `X` consist of the velocity data, and the labels `y` represent the different movement types.
 
-Let’s define the scalers, models and hyperparameters.
+Next, let’s define the scalers, models, and their respective hyperparameters.
 
 ```python
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+
 # Scalers
 scalers = {
     'Standard Scaler': StandardScaler(),
@@ -155,23 +159,18 @@ parameters = {
 }
 ```
 
-Next, let’s train and test the models.
+Let's train and test the models using the defined scalers, models, and hyperparameters.
 
 ```python
 from sklearn.model_selection import train_test_split, GridSearchCV, StratifiedKFold
-from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 from sklearn.metrics import f1_score, confusion_matrix
-from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
 
 def run_classification(model_name, scaler_name, X, y):
 
     # Split data into train and test sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, test_size=0.2)
 
-    # Apply chosen scaler to the data
+    # Apply the chosen scaler to the data
     scaler = scalers[scaler_name]
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
@@ -182,10 +181,10 @@ def run_classification(model_name, scaler_name, X, y):
     grid = GridSearchCV(models[model_name], param_grid, cv=cv, scoring='f1_weighted')
     grid.fit(X_train, y_train)
 
-    # Get best model from grid search
+    # Get the best model from the grid search
     best_model = grid.best_estimator_
 
-    # Make predictions on test set
+    # Make predictions on the test set
     y_pred = best_model.predict(X_test)
 
     print(f'Best parameters: {grid.best_params_}')
@@ -194,7 +193,7 @@ def run_classification(model_name, scaler_name, X, y):
     return y_test, y_pred, best_model, X.columns
 ```
 
-We'll plot the confusion matrix to visualize how well our model is performing by comparing the predicted values with the actual labels.
+After training and testing the models, we'll plot the confusion matrix to visualize how well our model is performing by comparing the predicted labels with the actual labels.
 
 ```python
 import seaborn as sns
@@ -211,7 +210,7 @@ def plot_confusion_matrix(y_test, y_pred):
     plt.show()
 ```
 
-We’ll visualize the feature importance for Decision Tree and Random Forest models to understand which features contribute the most to the model’s predictions.
+After evaluating the model's performance, we’ll visualize the feature importance for the Decision Tree and Random Forest models to understand which features contribute the most to the model’s predictions.
 
 ```python
 
@@ -230,17 +229,15 @@ def plot_feature_importance(best_model, X_columns):
 
 ### Training a Random Forest classifier
 
-Finally, let's apply the Random Forest classifier to our data and see how well it performs.
+Finally, let's apply the Random Forest classifier to our data and evaluate its performance.
 
 ```python
 y_test, y_pred, best_model, X_columns = run_classification('Random Forest', 'MinMax Scaler', X, y)
 ```
 
-**Best parameters**: {`{'n_estimators': 100}`}
+The optimal parameter for **n_estimators** is **100**, and the model achieved an **F1 score** of **0.976**.
 
-**F1 Score**: 0.976
-
-The confusion matrix provides a breakdown of how the classifier performed on each movement type. The diagonal elements represent the correctly classified instances, while the off-diagonal elements indicate misclassifications.
+We’ll plot the **confusion matrix** to assess the classifier's performance across different movement types. The diagonal elements represent the correctly classified instances, while the off-diagonal elements indicate the misclassifications.
 
 ```python
 plot_confusion_matrix(y_test, y_pred)
@@ -248,9 +245,7 @@ plot_confusion_matrix(y_test, y_pred)
 
 ![Confusion Matrix](./img/confusion_matrix.png)
 
-With an F1 score of 0.976, this classifier performs well, but you can always experiment to optimize the model based on your own data.
-
-After evaluating the Random Forest model, we can look at **Feature Importance** to see velocity components contributed most to distinguishing the movement types. This is useful for Decision Tree and Random Forest models, which automatically rank features based on their importance.
+After evaluating the Random Forest model, we can check the **Feature Importance** to see which velocity components were most important in distinguishing the movement types. This is especially useful for Decision Tree and Random Forest models, as they automatically rank features by their importance.
 
 ```python
 plot_feature_importance(best_model, X_columns)
@@ -260,13 +255,13 @@ plot_feature_importance(best_model, X_columns)
 
 ### Best practices
 
-When working with ROS bag files and training machine learning models, these best practices can help you manage data more effectively and build better-performing models:
+When working with `.bag` files and training machine learning models, these best practices can help you manage data more effectively and build better-performing models:
 
-- **Split large bag files:** If your .bag files are too large, divide them into smaller episodes of about 1–5 minutes. This helps avoid memory issues and makes the files easier to process.
+- **Split large files:** If your `.bag` files are too large, divide them into smaller episodes. This helps avoid memory issues and makes the files easier to process.
 
-- **Separate topics by type:** If your .bag file includes both lightweight messages (like status updates) and large data streams (like images or LiDAR), store them in separate bag files. This separation can optimize performance and make your workflow simpler.
+- **Separate topics by type:** If your `.bag` file includes both lightweight messages (like battery level) and large data streams (like images or LiDAR), store them in separate `.bag` files. This separation can optimize performance and make your workflow simpler.
 
-- **Use Randomized Search for tuning:** If your model’s accuracy isn’t good enough, try using RandomizedSearchCV instead of grid search. It can find the best hyperparameters faster and more efficiently.
+- **Use Randomized Search for tuning:** If your model’s accuracy isn’t good enough, try using RandomizedSearchCV instead of GridSearchCV. It can find the best hyperparameters faster and more efficiently.
 
 - **Try different algorithms:** Experiment with different algorithms to find what works best for your specific data.
 
@@ -274,17 +269,14 @@ When working with ROS bag files and training machine learning models, these best
 
 - **Explore deep learning:** If you have a large dataset and enough computing power, deep learning models can capture complex patterns that simpler models may miss.
 
-- **Prevent overfitting:** Make sure that your model generalizes well by splitting your dataset into **training**, **validation**, and **test** sets. Use **cross-validation** to evaluate your model’s performance more reliably.
-
-Following these tips will help you organize your ROS data more easily and build better machine learning models for classifying robot movements.
+- **Prevent overfitting:** Make sure that your model generalizes well by splitting your dataset into training, validation, and test sets. Use cross-validation to evaluate your model’s performance more reliably.
 
 # Conclusion
 
-In this tutorial, we demonstrated how to process robot movement data from `.bag` files, extract key velocity features, and train machine learning models to classify different movement types.
+In this tutorial, we walked through the process of handling robot movement data stored in `.bag` files. We extracted key velocity features and used them to train machine learning models for classifying different types of robot movements.
 
-Next, you can experiment with different models, hyperparameters, or additional features to further improve classification performance. You can also explore more advanced techniques such as deep learning for more complex tasks.
+As a next step, you can experiment with various models, hyperparameters, or additional features to improve classification performance. You can also explore advanced techniques such as deep learning for more complex tasks.
 
 ---
 
-We hope this tutorial has given you a clear starting point for processing robot data and building simple movement classification models.
-If you have any questions or comments, feel free to use the [**ReductStore Community Forum**](https://community.reduct.store/signup).
+We hope this tutorial provided a clear starting point for processing robot data and building basic movement classification models. If you have any questions or comments, feel free to use the [**ReductStore Community Forum**](https://community.reduct.store/signup).
