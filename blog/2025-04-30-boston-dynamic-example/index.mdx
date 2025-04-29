@@ -30,7 +30,7 @@ Although the examples use a Boston Dynamics Spot robot (moving forward, sideways
 
 # Loading and Preprocessing Bag Files
 
-Let's create a function to load a `.bag` file and extract velocity features. 
+Let's create a function to load a `.bag` file and extract velocity features.
 
 In our example, odometry data is published under the `/spot/odometry` topic. Make sure to specify the correct topic where your robot's motion data is recorded. Depending on your specific use case, you might find other features, such as accelerations or additional sensor data, more relevant for recognizing your robot's movements. For our task, we focus primarily on linear and angular velocities.
 
@@ -40,19 +40,19 @@ import pandas as pd
 from bagpy import bagreader
 
 def process_bag_to_dataframe(bag_path, topic='/spot/odometry', target_label=0):
-   
+
     # Load a ROS bag file and generate a DataFrame with velocity features and a target label.
-    
+
     bag = bagreader(bag_path)
     df = pd.read_csv(bag.message_by_topic(topic))
 
     # Calculate linear and angular velocities
-    df['linear_velocity'] = np.sqrt(df['twist.twist.linear.x']**2 + 
-                                    df['twist.twist.linear.y']**2 + 
+    df['linear_velocity'] = np.sqrt(df['twist.twist.linear.x']**2 +
+                                    df['twist.twist.linear.y']**2 +
                                     df['twist.twist.linear.z']**2)
 
-    df['angular_velocity'] = np.sqrt(df['twist.twist.angular.x']**2 + 
-                                     df['twist.twist.angular.y']**2 + 
+    df['angular_velocity'] = np.sqrt(df['twist.twist.angular.x']**2 +
+                                     df['twist.twist.angular.y']**2 +
                                      df['twist.twist.angular.z']**2)
 
     # Assign target label
@@ -166,27 +166,27 @@ def run_classification(model_name, scaler_name, X, y):
 
     # Split data into train and test sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, test_size=0.2)
-    
+
     # Apply chosen scaler to the data
     scaler = scalers[scaler_name]
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
-    
+
     # Set up hyperparameter grid and cross-validation
     param_grid = parameters[model_name]
     cv = StratifiedKFold(n_splits=5, shuffle=True)
     grid = GridSearchCV(models[model_name], param_grid, cv=cv, scoring='f1_weighted')
     grid.fit(X_train, y_train)
-    
+
     # Get best model from grid search
     best_model = grid.best_estimator_
-    
+
     # Make predictions on test set
     y_pred = best_model.predict(X_test)
-    
+
     print(f'Best parameters: {grid.best_params_}')
     print(f'F1 Score: {f1_score(y_test, y_pred, average="weighted"):.3f}')
-    
+
     return y_test, y_pred, best_model, X.columns
 ```
 
@@ -232,11 +232,11 @@ Finally, let's apply the Random Forest classifier to our data and see how well i
 y_test, y_pred, best_model, X_columns = run_classification('Random Forest', 'MinMax Scaler', X, y)
 ```
 
-**Best parameters**: {'n_estimators': 100}
+**Best parameters**: {`{'n_estimators': 100}`}
 
 **F1 Score**: 0.976
 
-The confusion matrix provides a breakdown of how the classifier performed on each movement type. The diagonal elements represent the correctly classified instances, while the off-diagonal elements indicate misclassifications. 
+The confusion matrix provides a breakdown of how the classifier performed on each movement type. The diagonal elements represent the correctly classified instances, while the off-diagonal elements indicate misclassifications.
 
 ```python
 plot_confusion_matrix(y_test, y_pred)
@@ -246,7 +246,7 @@ plot_confusion_matrix(y_test, y_pred)
 
 With an F1 score of 0.976, this classifier performs well, but you can always experiment to optimize the model based on your own data.
 
-After evaluating the Random Forest model, we can look at **Feature Importance** to see velocity components contributed most to distinguishing the movement types. This is useful for Decision Tree and Random Forest models, which automatically rank features based on their importance. 
+After evaluating the Random Forest model, we can look at **Feature Importance** to see velocity components contributed most to distinguishing the movement types. This is useful for Decision Tree and Random Forest models, which automatically rank features based on their importance.
 
 ```python
 plot_feature_importance(best_model, X_columns)
@@ -256,7 +256,7 @@ plot_feature_importance(best_model, X_columns)
 
 # Conclusion
 
-In this tutorial, we demonstrated how to process robot movement data from `.bag` files, extract key velocity features, and train machine learning models to classify different movement types. 
+In this tutorial, we demonstrated how to process robot movement data from `.bag` files, extract key velocity features, and train machine learning models to classify different movement types.
 
 Next, you can experiment with different models, hyperparameters, or additional features to further improve classification performance. You can also explore more advanced techniques such as deep learning for more complex tasks.
 
