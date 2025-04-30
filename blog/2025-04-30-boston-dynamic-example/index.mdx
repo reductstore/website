@@ -257,17 +257,11 @@ plot_feature_importance(best_model, X_columns)
 When working with `.bag` files and training machine learning models, these best practices can help you manage data more effectively and build better-performing models:
 
 - **Split large files:** If your `.bag` files are too large, divide them into smaller episodes. This helps avoid memory issues and makes the files easier to process.
-
 - **Separate topics by type:** If your `.bag` file includes both lightweight messages (like battery level) and large data streams (like images or LiDAR), store them in separate `.bag` files. This separation can optimize performance and make your workflow simpler.
-
 - **Use Randomized Search for tuning:** If your model’s accuracy isn’t good enough, try using RandomizedSearchCV instead of GridSearchCV. It can find the best hyperparameters faster and more efficiently.
-
 - **Try different algorithms:** Experiment with different algorithms to find what works best for your specific data.
-
 - **Consider ensemble methods:** Techniques like bagging or boosting can improve accuracy by combining multiple models and leveraging their strengths.
-
 - **Explore deep learning:** If you have a large dataset and enough computing power, deep learning models can capture complex patterns that simpler models may miss.
-
 - **Prevent overfitting:** Make sure that your model generalizes well by splitting your dataset into training, validation, and test sets. Use cross-validation to evaluate your model’s performance more reliably.
 
 ## Conclusion
