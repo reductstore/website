@@ -41,3 +41,14 @@ gracija:
   socials:
     linkedin: gracija-nikolovska
     github: gracija
+
+ekaterina:
+  name: Ekaterina Marova
+  title: Data Scientist - ML, Python
+  url: https://github.com/EkaterinaMarova
+  image_url: https://github.com/EkaterinaMarova.png
+  description: An aspiring data scientist with a mathematical and research background.
+  page: true
+  socials:
+    linkedin: ekaterina-marova
+    github: EkaterinaMarova
