@@ -1,0 +1,257 @@
+---
+title: "MetriCal Sensor Calibration Guide"
+description: ""
+authors: ekaterina
+tags: [tutorials]
+slug: how-to-calibrate-camera-and-lidar
+date: 2025-05-09
+# image:
+---
+
+This tutorial provides an overview of sensor calibration using MetriCal, including the fundamentals of calibration, supported sensor models, installation, input data requirements, and a step-by-step workflow with practical best practices.
+
+{/* truncate */}
+
+## What Is Sensor Calibration?
+
+Sensor calibration is the process of determining the precise mathematical parameters that govern how a sensor measures the physical world. By comparing sensor outputs against known references, we estimate two key parameter groups:
+
+- **Intrinsic Parameters (Intrinsics):** Define the internal behavior of a sensor, e.g., how a camera projects 3D rays onto a 2D pixel grid, or how an IMU converts motion into electrical signals. Correct intrinsics remove systematic measurement biases such as lens distortion or sensor bias.
+
+- **Extrinsic Parameters (Extrinsics):** Specify the rigid-body pose (translation and rotation) of one sensor relative to another or to a global frame. Extrinsics allow fusing data across multiple sensors by mapping measurements into a common coordinate system.
+
+Accurate calibration ensures reliable sensor fusion, metric measurements (distance, orientation), and high-performance perception and mapping.
+
+## Supported Sensor Models
+
+### Camera Models
+
+MetriCal supports [**10 distinct camera types**](https://docs.tangramvision.com/metrical/calibration_models/cameras), from standard pinhole to wide-angle and panoramic models.
+
+**Intrinsics**: Focal length, optical center (the principal point), and distortion coefficients define how the camera projects the 3D scene onto a 2D image. 
+
+**Extrinsics**: Position and orientation of the camera relative to other cameras in a system
+
+### IMU Models
+
+[**5 IMU intrinsic models**](https://docs.tangramvision.com/metrical/calibration_models/imu) are supported, ranging from simple scale-and-bias to full accelerometer-gyro misalignment and G-sensitivity.
+
+**Intrinsics**: Scale factors, biases, rotation between accelerometer and gyroscope frames, G-sensitivity.
+
+**Extrinsics**: Rigid-body pose relative to other sensors (e.g., camera).
+
+### LiDAR Models
+
+Single [**No Offset model**](https://docs.tangramvision.com/metrical/calibration_models/lidar).
+
+MetriCal doesn't currently calibrate LiDAR intrinsics.
+
+**Extrinsics**: Precise LiDAR-to-rig pose.
+
+**Features**: Advanced motion filtering to reject poor-quality scans.
+
+### Radar (In development)
+
+Radar calibration support is currently under development and will be released in a future MetriCal update.
+
+## Installation
+
+MetriCal can be [**installed**](https://docs.tangramvision.com/metrical/configuration/installation) in two ways:
+
+- **Ubuntu** (supported releases):
+    - Focal Fossa (20.04)
+    - Jammy Jellyfish (22.04)
+    - Noble Numbat (24.04)
+
+- **Docker Image**: Deploy MetriCal in a containerized environment.
+
+## Input Data Formats
+
+MetriCal ingests sensor data in the following format:
+
+* **MCAP files** (recommended)
+* **ROS1 v2.0 Bags**
+* **Structured folders** of images, point clouds, and IMU logs
+
+For exact directory layouts and naming conventions, see the [**data format specification**](https://docs.tangramvision.com/metrical/input_data/data_formats).
+
+## Calibration Workflow
+
+### 1. [Choosing and Constructing Calibration Targets](https://docs.tangramvision.com/metrical/first_steps/choosing_targets)
+
+Before calibration can begin, your system needs to observe something known and reliable — that's where calibration targets come in. These are printed patterns or physical objects with precisely known shapes and dimensions that help MetriCal understand how your sensors perceive the world.
+
+MetriCal supports a variety of [**targets types**](https://docs.tangramvision.com/metrical/configuration/targets), both flat and 3D, depending on the accuracy and complexity your setup requires.
+
+To make setup easier, MetriCal includes a library of ready-made targets, complete with accurate object-space descriptions. You can use the Target Selection Wizard, a Python tool, to help choose a compatible target based on your sensors and automatically generate printable PDFs and configuration files.
+
+### 2. [Capturing Calibration Data](https://docs.tangramvision.com/metrical/first_steps/data_capture)
+
+Once your targets are ready and placed in your environment, the next step is to record data from your sensors as they observe the target. The goal is to collect rich, varied information that will help MetriCal precisely determine how each sensor behaves and where it's located relative to others.
+
+**Best Practices:**
+
+- **Sensor Preparation**: Make sure your data is saved in a supported format, and that all sensors are time-synchronized. Inaccurate timestamps are one of the most common causes of poor calibration.
+- **Motion Planning**: Move your rig smoothly and strategically to ensure that each sensor sees the target from multiple distances and directions. Avoid jerky movements or sudden stops.
+- **Data Review**: Check the recordings before calibration to catch any issues (e.g. target not visible, poor lighting, motion blur).
+
+[**Camera Capture Tips:**](https://docs.tangramvision.com/metrical/input_data/camera_data_capture)
+
+- Keep the target visible and in focus throughout.
+- Move the target across the entire field of view, especially to the edges and corners.
+- Change depth to help estimate camera intrinsics accurately.
+- Use overlapping views if you're calibrating a multi-camera setup.
+
+[**LiDAR Capture Tips:**](https://docs.tangramvision.com/metrical/input_data/lidar_data_capture)
+
+- Record from various angles and distances to see the target in 3D.
+- Avoid excessive speed to reduce motion blur or scan distortion.
+- Make sure the target is clearly visible in each scan.
+
+[**IMU Capture Tips:**](https://docs.tangramvision.com/metrical/input_data/imu_data_capture)
+
+- Apply deliberate motions in all three axes — rotate, tilt, and shift the rig.
+- Keep the calibration target visible to align IMU and camera data.
+- If possible, use a global shutter camera to reduce timing errors.
+
+### 3. [Generating the Calibration](https://docs.tangramvision.com/metrical/first_steps/intro_workflow)
+Once you've chosen your calibration targets and captured the data, it's time to generate the actual calibration. This step is where MetriCal estimates how your sensors behave and how they relate to one another in space.
+
+The process includes a few steps, but they follow a natural flow:
+
+**Step 1: Initialize the Setup**
+
+First, MetriCal scans your data and builds an initial idea of your sensor setup — which sensors are involved, what types they are (e.g. camera, LiDAR, IMU), and how they might be connected. This step prepares the system for calibration.
+
+**Step 2: Run the Calibration**
+
+Next, MetriCal processes the data and optimizes the calibration parameters. It estimates things like camera lens distortion, IMU scale and bias, and the exact position and orientation of each sensor. The result is a detailed calibration file that captures how your system sees the world.
+
+**Step 3: Visual Check** (Optional but Recommended)
+
+After calibration, you can visually inspect the results using a tool like Rerun. This lets you confirm that the sensors are correctly aligned and that the calibration looks accurate across the dataset.
+
+**Step 4: Export the Results**
+
+Finally, you can convert the calibrated setup into useful formats for your application — for example, stereo camera lookup tables, ROS files, or simplified layouts for deployment.
+
+This step is the heart of the process: turning raw recordings into precise measurements of how your sensors are built and where they sit in space. Good data and careful preparation in the earlier steps will pay off here.
+## Modes Overview
+MetriCal operates in several modes, each tailored to a specific stage of the calibration pipeline. 
+
+### [Init Mode](https://docs.tangramvision.com/metrical/modes/init)
+
+Start a new calibration process by generating a configuration ([**plex**](https://docs.tangramvision.com/metrical/core_concepts/plex/overview)) from raw data, including components and inferred spatial/temporal constraints. Optionally, you can use prior calibrations (from plex, URDF, or result JSON) as initial estimates.
+
+**Typical Usage:**
+
+- Begin a new calibration pipeline with raw sensor data (e.g., .bag, .mcap files).
+
+- Assign appropriate sensor models to relevant data topics using --topic-to-model.
+
+- Optionally use existing intrinsics/extrinsics to improve initialization.
+
+This is the "getting to know your sensor setup" step. MetriCal looks at the raw data, figures out what sensors you have, what models fit them, and builds a rough initial sketch of how everything might be connected.
+
+### [Calibrate Mode](https://docs.tangramvision.com/metrical/modes/calibrate)
+
+Calibrate a multi-sensor system using prepared data, such as a dataset, plex, and object space. This mode optimizes sensor and target parameters to achieve the best calibration.
+
+**Typical Usage:**
+
+- Perform bundle adjustment to fine-tune the parameters of your sensors and targets.
+
+- Filter out motion-affected data like blurry or jittery frames.
+
+- Reuse detection caches to speed up calibration.
+
+This is the core optimization stage. MetriCal fine-tunes the positions and internal characteristics of your sensors so that all of them agree on what they’re seeing. If Init builds a draft map, Calibrate rewrites it with precise measurements.
+
+### [Consolidate Object Spaces Mode](https://docs.tangramvision.com/metrical/modes/consolidate-object-spaces)
+
+Combine multiple object spaces into one unified space using Object Relative Extrinsics (OREs) from a previous calibration.
+
+**Typical Usage:**
+- Run after an initial calibration to estimate the relative positions of sensors or targets (OREs).
+
+- Useful when working with sparse sensor setups or large-scale environments.
+
+- Output a consolidated object space JSON that can be used in future calibrations.
+
+If you’ve used multiple calibration targets or recorded in different places, each one has its own “local map.” This mode stitches them together into one coherent world.
+
+### [Display Mode](https://docs.tangramvision.com/metrical/modes/display)
+
+Visualize the results of a calibration by applying them to a dataset and displaying the output in Rerun for quick validation.
+
+**Typical Usage:**
+- Perform an ocular check to verify calibration quality.
+
+- Requires an active Rerun server for displaying the results.
+
+- Supports both original calibration datasets and compatible test data (must match the topic/component structure in the plex).
+
+You’re previewing how well the calibration worked. The system overlays sensor data using the computed parameters.
+
+### [Shape Mode](https://docs.tangramvision.com/metrical/modes/shape/shape_overview)
+
+Transform a calibrated plex into a variety of practical formats that can be used for integration, visualization, or deployment.
+
+**Typical Usage:**  
+- Convert calibrated data into formats required by downstream systems (e.g., ROS, stereo vision, embedded deployment).
+
+- Simplify the spatial graph for more efficient use (e.g., via MST or hub-and-spoke layout).
+
+**Sub-commands:**
+
+- [**focus**](https://docs.tangramvision.com/metrical/modes/shape/shape_focus) – Create a hub-and-spoke graph centered on a specified component.  
+- [**mst**](https://docs.tangramvision.com/metrical/modes/shape/shape_mst) – Extract the Minimum Spanning Tree of the plex based on constraint certainty.  
+- [**urdf**](https://docs.tangramvision.com/metrical/modes/shape/shape_urdf) – Export a ROS-compatible URDF, with optional optical frames.  
+- [**lut**](https://docs.tangramvision.com/metrical/modes/shape/shape_lut) – Generate a per-pixel remap table (lookup table) for a single camera.  
+- [**stereo-lut**](https://docs.tangramvision.com/metrical/modes/shape/shape_lut_stereo) – Generate stereo rectification LUTs and depth parameters.  
+- [**tabular**](https://docs.tangramvision.com/metrical/modes/shape/shape_tabular) – Export intrinsics/extrinsics into a flat, compact JSON or MsgPack format.
+
+This is the “packaging” step. After calibration, you often need to integrate the results elsewhere. Shape lets you export or reformat the calibrated model so that other systems — like ROS, stereo pipelines, or embedded apps — can use it.
+
+### [Pretty Print Mode](https://docs.tangramvision.com/metrical/modes/pretty_print)
+
+Print the calibration results or plex in a human-readable format for easy inspection and analysis.
+
+**Typical Usage:**  
+- Quickly view and verify the contents of a plex or calibration results.
+
+- Get an overview of calibration parameters and constraints.
+
+- Extract and compare specific constraints between components for validation.
+
+This mode shows you, in a clear format, how the sensors are configured, how confident the system is about those relationships, and what’s connected to what.
+
+### [Pipeline Mode](https://docs.tangramvision.com/metrical/modes/pipeline)
+
+Chain multiple MetriCal modes into a sequence, storing common workflows in version-controlled configuration files for repeatable execution.
+
+**Typical Usage:**  
+- Automate calibration processes for continuous integration (CI) environments.
+
+- Combine multiple modes (e.g., init, calibrate) into a single pipeline for consistent execution.
+
+- Store workflows as configuration files for easy maintenance and version control.
+
+It’s a scriptable blueprint. Instead of running modes one by one, you define a step-by-step recipe and let MetriCal follow it. Ideal for scaling up, reducing manual work, and keeping results consistent.
+
+### [Completion Mode](https://docs.tangramvision.com/metrical/modes/completion)
+
+Generate shell autocompletions for MetriCal commands in various shell environments such as bash, zsh, fish, elvish, and powershell.
+
+**Typical Usage:**  
+- Improve usability by adding autocompletion for MetriCal commands, making it faster and more efficient to work in the terminal.
+
+- Configure autocompletions when MetriCal is invoked via aliases or shell functions.
+
+- Generate completion files for different shell types (bash, zsh, fish, etc.) to streamline CLI usage.
+
+This one doesn’t do calibration — it just makes your life easier at the terminal. It creates scripts that let your shell auto-complete MetriCal commands, helping you type faster and with fewer errors.
+
+---
+
+We hope this tutorial provided a ... If you have any questions or comments, feel free to use the [**ReductStore Community Forum**](https://community.reduct.store/signup).
