@@ -46,6 +46,24 @@ import ChangeLabelsCurl from "!!raw-loader!../examples/curl/data_management_upda
   <TabItem value="C++">
     <CodeBlock language="cpp">{ChangeLabelsCpp}</CodeBlock>
   </TabItem>
+    <TabItem value="Web Console">
+
+    1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
+    2. Enter the API token if the authorization is enabled.
+    3. Select the bucket that contains the data you want to query:
+    ![Browse buckets with Web Console](./img/buckets_browse_all.webp)
+    4. You will see a list of all the entries in the bucket
+    5. Click on the entry you want to query
+    6. On the entry page you will see the query panel:
+    ![Query panel in Web Console](./img/data_query_panel_update.webp)
+    7. Enter the time range in the date picker or manually in the input fields
+    8. Click the "Fetch Records" button to execute the query
+    9. You will see the meta information about the records in the entry that match the time range.
+    10. Click on the **Edit** icon in the record row to open the edit panel: ![Edit record with Web Console](./img/data_management_update_label.webp)
+    11. In the edit panel you can add, remove or update labels for the record.
+    12. Click on the "Update Labels" button to save the changes.
+
+  </TabItem>
   <TabItem value="cURL">
     <CodeBlock language="bash">{ChangeLabelsCurl}</CodeBlock>
   </TabItem>
@@ -136,13 +154,11 @@ import DeleteRecordsCli from "!!raw-loader!../examples/cli/data_management_delet
 
 You can delete records in a specific time range by specifying the start and end timestamps, and you can use query parameters to filter the records:
 
-| Parameter | Description                     | Type             | Default                                        |
-| --------- | ------------------------------- | ---------------- | ---------------------------------------------- |
-| `start`   | Remove records from             | Timestamp        | The timestamp of the first record in the entry |
-| `end`     | Remove records until            | Timestamp        | The timestamp of the last record in the entry  |
-| `when`    | Conditional query               | JSON-like object | No condition                                   |
-| `each_s`  | Remove a record every S seconds | Float            | Disabled                                       |
-| `each_n`  | Remove only every N record      | Integer          | Disabled                                       |
+| Parameter | Description                                | Type             | Default                                        |
+| --------- | ------------------------------------------ | ---------------- | ---------------------------------------------- |
+| `start`   | Remove records from                        | Timestamp        | The timestamp of the first record in the entry |
+| `end`     | Remove records until                       | Timestamp        | The timestamp of the last record in the entry  |
+| `when`    | Condition, remove a record when it is true | JSON-like object | No condition                                   |
 
 All the listed parameters are the same as the query parameters for the `query` method. Read more about the querying data in the **[Querying Data](data-querying.mdx#filter-parameters)** guide.
 
@@ -156,11 +172,11 @@ import DeleteRecordsRangeCurl from "!!raw-loader!../examples/curl/data_managemen
 import DeleteRecordsRangeCli from "!!raw-loader!../examples/cli/data_management_delete_query.sh";
 
 <Tabs>
-  <TabItem value="Python">
-    <CodeBlock language="python">{DeleteRecordsRangePy}</CodeBlock>
-  </TabItem>
   <TabItem value="CLI">
     <CodeBlock language="bash">{DeleteRecordsRangeCli}</CodeBlock>
+  </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">{DeleteRecordsRangePy}</CodeBlock>
   </TabItem>
   <TabItem value="JavaScript">
     <CodeBlock language="javascript">{DeleteRecordsRangeJs}</CodeBlock>

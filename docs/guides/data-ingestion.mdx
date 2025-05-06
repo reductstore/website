@@ -75,6 +75,23 @@ import SimpleCurl from "!!raw-loader!../examples/curl/data_ingestion_simple.sh";
   <TabItem value="C++">
     <CodeBlock language="cpp">{SimpleCpp}</CodeBlock>
   </TabItem>
+  <TabItem value="Web Console">
+
+    1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
+    2. Enter the API token if the authorization is enabled.
+    3. Click on the **"Buckets"** tab in the left sidebar.
+    4. You will see a list of all buckets in the store.
+    5. Click on a specific bucket in the list:
+    ![Browse buckets with Web Console](./img/buckets_browse_all.webp)
+    6. Open the upload file modal by clicking on **Upload Icon** in the bucket panel:
+    ![Browse a bucket with Web Console](./img/buckets_upload_file_icon.webp)
+    7. In the upload file modal, select select the entry nane or create a new one and select the file to upload:
+    ![Change bucket settings with Web Console](./img/buckets_upload_file.webp)
+    8. Click on the **Upload File** button to upload the file.
+    9. Optionally, you can set timestamp and content type for the record.
+      If the timestamp is not set, the current time will be used. If the content type is not set, the Web Console will try to detect it automatically.
+
+  </TabItem>
   <TabItem value="cURL">
     <CodeBlock language="bash">{SimpleCurl}</CodeBlock>
   </TabItem>
@@ -130,6 +147,24 @@ import AnnotatingCurl from "!!raw-loader!../examples/curl/data_ingestion_annotat
   </TabItem>
   <TabItem value="C++">
     <CodeBlock language="cpp">{AnnotatingCpp}</CodeBlock>
+  </TabItem>
+  <TabItem value="Web Console">
+
+    1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
+    2. Enter the API token if the authorization is enabled.
+    3. Click on the **"Buckets"** tab in the left sidebar.
+    4. You will see a list of all buckets in the store.
+    5. Click on a specific bucket in the list:
+    ![Browse buckets with Web Console](./img/buckets_browse_all.webp)
+    6. Open the upload file modal by clicking on **Upload Icon** in the bucket panel:
+    ![Browse a bucket with Web Console](./img/buckets_upload_file_icon.webp)
+    7. In the upload file modal, select select the entry nane or create a new one and select the file to upload:
+    ![Change bucket settings with Web Console](./img/buckets_upload_file.webp)
+    8. Click on the **Add Label** button to add a label and its value to the record. You can add multiple labels by clicking the button multiple times.
+    9. Click on the **Upload File** button to upload the file.
+    10. Optionally, you can set timestamp and content type for the record.
+      If the timestamp is not set, the current time will be used. If the content type is not set, the Web Console will try to detect it automatically.
+
   </TabItem>
   <TabItem value="cURL">
     <CodeBlock language="bash">{AnnotatingCurl}</CodeBlock>
