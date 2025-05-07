@@ -147,7 +147,7 @@ They provide built-in functions and query capabilities that are well-suited for 
 
 Some popular time-series databases that are commonly used for storing MQTT data include:
 
-- **ReductStore**: a high-performance storage and streaming tool for unstructured time-series data. It stores blobs with timestamps, making it ideal for MQTT payloads like images, audio, vibration data or logs.
+- **ReductStore**: a high-performance storage and streaming solution for unstructured time-series data. It stores blobs with timestamps and labels (key-value pairs) making it ideal for MQTT payloads like images, audio, vibration data or logs.
 - **QuestDB**: a high-performance time-series database with fast ingestion and SQL support. Best for structured, high-frequency sensor data. It has strict limitations on blob size and isn't suitable for storing images or other large binary payloads.
 - **InfluxDB**: an open-source database that provides high-performance storage and retrieval of time-stamped data with a SQL-like query language. You can store numbers (integer or floating point values), boolean values, or text strings-with a limit of 64KB-that's 4000 times less than MQTT's payload capacity.
 - **TimescaleDB**: an extension of PostgreSQL that adds time-series capabilities to the relational database model. It provides scalability and performance optimizations for handling large volumes of time-stamped data while maintaining the flexibility of a relational database. If you are interested in learning more about the differences between ReductStore and TimescaleDB, you can check out our article [**ReductStore vs. TimescaleDB**](/blog/comparisons/iot/reductstore-vs-timescaledb).
@@ -155,11 +155,7 @@ Some popular time-series databases that are commonly used for storing MQTT data 
 
 ### NoSQL databases
 
-NoSQL (which stands for _not only SQL_) encompasses a broader category of databases that are not limited to traditional SQL (Structured Query Language) databases.
-
-NoSQL databases are often famous for storing MQTT data due to their flexibility and scalability. These databases can handle large volumes of structured, semi-structured, and unstructured data, making them ideal for storing diverse information.
-
-Some popular NoSQL databases commonly used for storing MQTT data include:
+NoSQL (which stands for _not only SQL_) represents a broad category of databases that are not limited to traditional [**Relational databases**](#relational-databases). Those databases are often used for storing MQTT data due to their flexibility and scalability. Some popular NoSQL databases commonly used for storing MQTT data include:
 
 - **MongoDB**: a document-oriented database with high scalability and flexibility for handling unstructured or semi-structured data. It offers rich querying capabilities, indexing options, and support for distributed data storage with a technique called _sharding_. Some of the differences between ReductStore and MongoDB are discussed in our article [**ReductStore vs. MongoDB**](/blog/comparisons/iot/reductstore-vs-mongodb).
 - **Apache Cassandra**: a highly scalable and fault-tolerant database that can handle large volumes of data across multiple nodes or clusters. It provides fast read and write operations, making it suitable for real-time analytics or applications with high throughput requirements.
