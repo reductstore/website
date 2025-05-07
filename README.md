@@ -1,12 +1,15 @@
-# Website
+# Official ReductStore Website and Documentation
 
 This website is built using [**Docusaurus**](https://docusaurus.io/), a modern static website generator.
 
 ### Installation
 
 ```
+$ pip3 install uv
+$ uv venv
+$ uv pip install pydoc-markdown --no-config
 $ yarn
-$ pipx install pydoc-markdown
+
 ```
 
 ### Local Development
