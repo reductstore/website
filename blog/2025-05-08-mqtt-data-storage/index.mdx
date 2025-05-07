@@ -36,17 +36,17 @@ Let's get started!
 
 | Project Requirement                                   | Recommended Database Types | Examples                                                   |
 | ----------------------------------------------------- | -------------------------- | ---------------------------------------------------------- |
-| Real-time sensor data with limited record size        | Time-series                | InfluxDB, TimescaleDB, Prometheus                          |
-| High frequency sensor, MQTT payload, or camera data   | Time-series object store   | [**ReductStore**](/)                                       |
+| Real-time sensor data with limited record size        | Time-series                | InfluxDB, TimescaleDB, Prometheus, QuestDB                 |
+| High frequency sensor, MQTT payload, or camera data   | Time-series object storage | ReductStore                                                |
 | Large volumes of unstructured or semi-structured data | NoSQL                      | MongoDB, Amazon DynamoDB, Apache Cassandra                 |
-| Large amounts of blob data (multimedia files)         | Blob Storage               | Azure Blob Storage, Google Cloud Storage, Amazon, MinIO S3 |
+| Large amounts of blob data (multimedia files)         | Blob storage               | Azure Blob Storage, Google Cloud Storage, Amazon, MinIO S3 |
 | Strong data consistency and complex relationships     | Relational                 | MySQL, PostgreSQL, Oracle Database                         |
 
 ## Brief explanation of MQTT and its use in IoT projects
 
 MQTT is a publish-subscribe messaging protocol that allows devices to send and receive messages over a network. It is not a database, but a transport mechanism. MQTT does not store data itself. It is particularly well-suited for IoT projects due to its lightweight nature, low power consumption, and support for unreliable networks. Because MQTT is just a protocol, it can be used with any programming language that has a client library (e.g. Python, JavaScript, Java, C/C++, and so on).
 
-If you are new to MQTT, you can check out our tutorials [**How to Keep MQTT Data in Node.js**](/blog/tutorials/iot/how-to-keep-mqtt-data-node) and [**How to Keep MQTT Data in Python**](/blog/tutorials/iot/how-to-keep-mqtt-data-python) to get started with MQTT and learn how to subscribe to, publish, and store MQTT data in Node.js and Python.
+If you are new to MQTT, you can check out our tutorials [**Keeping MQTT Data in Node.js**](/blog/tutorials/iot/how-to-keep-mqtt-data-node), [**Keeping MQTT Data in Python**](/blog/tutorials/iot/how-to-keep-mqtt-data-python), or [**Keeping MQTT Data History with Rust**](/blog/tutorials/iot/how-to-keep-mqtt-data-rust) to get started with MQTT and learn how to subscribe to, publish, and store MQTT data.
 
 In an MQTT-based system, devices (known as publishers) publish messages to a central broker, which then distributes these messages to other devices (known as subscribers) that have subscribed to specific topics. The subscriber can then process the message and take appropriate action. For example, a sensor may publish a message containing its current temperature, which is then received by a subscriber that has subscribed to the topic `temperature`.
 
@@ -60,7 +60,7 @@ An important aspect to consider is the real-time aspect of IoT projects. Note th
 
 > A time-series database is an obvious choice to store data in chronological order as it allows for efficient storage and retrieval of messages indexed by time.
 
-Another aspect to consider is the type of data that can be transmitted via MQTT (which is pretty much anything). The MQTT protocol is format-agnostic, meaning that it does not specify how data should be formatted. This allows for a wide variety of data types to be transmitted via MQTT, including text, images, or audio. The only requirements are that the data must be formatted either as a string (UTF-8 encoded) or as a byte stream, and that the payload size does not exceed 256MB–which is pretty large, like a 2K video for 35 seconds.
+Another aspect to consider is the type of data that can be transmitted via MQTT (which is pretty much anything). The MQTT protocol is format-agnostic, meaning that it does not specify how data should be formatted. This allows for a wide variety of data types to be transmitted via MQTT, including text, images, or audio. The only requirements are that the data must be formatted either as a string (UTF-8 encoded) or as a byte stream, and that the payload size does not exceed 256MB-which is pretty large, like a 2K video for 35 seconds.
 
 In the context of computer vision, MQTT can be used to transmit images captured by cameras. This is particularly useful in surveillance systems, smart homes, or industrial applications where cameras are used to monitor and analyze visual data. The images can be transmitted as binary streams and stored in a database for further processing, analysis, or review.
 If you are interested in learning more about storing data for computer vision applications, you can check out our tutorial [**3 Ways to Store Data for Computer Vision Applications**](/blog/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications).
@@ -102,6 +102,8 @@ A scalable system should also include considerations such as handling increasing
 To guarantee the reliability and accessibility of the stored data without any loss or damage, it is crucial to select a storage solution that incorporates appropriate measures. These measures should be capable of addressing possible failures, such as power outages or network interruptions, and safeguarding against data loss or compromise.
 
 One popular solution is to replicate data. Replication involves creating duplicate copies of the data and storing them in multiple locations or servers. This redundancy ensures that even if one server fails the data can still be accessed from another one, minimizing the risk of data loss or corruption.
+
+MQTT brokers like Mosquitto support persistence by writing session data and queued messages to disk. This allows recovery after a restart but isn't suitable for long-term storage or querying. For that, you'll need to forward the data to an external database.
 
 You can check out our guide about [**Data Replication**](/docs/guides/data-replication) to learn more about the technique used by ReductStore to replicate data across multiple nodes and ensure high availability and data integrity.
 
@@ -149,8 +151,9 @@ They provide built-in functions and query capabilities that are well-suited for 
 
 Some popular time-series databases that are commonly used for storing MQTT data include:
 
-- [**ReductStore**](/): a specialized time-series database designed for storing MQTT data in the form of time-series blob data. It allows for storing unstructured data (blobs) along with their associated timestamps, making it suitable for scenarios where MQTT data includes large textual information, images, audio, videos, or other types of binary files.
-- **InfluxDB**: an open-source database that provides high-performance storage and retrieval of time-stamped data with a SQL-like query language. You can store numbers (integer or floating point values), boolean values, or text strings–with a limit of 64KB–that's 4000 times less than MQTT's payload capacity.
+- **ReductStore**: a high-performance storage and streaming tool for unstructured time-series data. It stores blobs with timestamps, making it ideal for MQTT payloads like images, audio, vibration data or logs.
+- **QuestDB**: a high-performance time-series database with fast ingestion and SQL support. Best for structured, high-frequency sensor data. It has strict limitations on blob size and isn't suitable for storing images or other large binary payloads.
+- **InfluxDB**: an open-source database that provides high-performance storage and retrieval of time-stamped data with a SQL-like query language. You can store numbers (integer or floating point values), boolean values, or text strings-with a limit of 64KB-that's 4000 times less than MQTT's payload capacity.
 - **TimescaleDB**: an extension of PostgreSQL that adds time-series capabilities to the relational database model. It provides scalability and performance optimizations for handling large volumes of time-stamped data while maintaining the flexibility of a relational database. If you are interested in learning more about the differences between ReductStore and TimescaleDB, you can check out our article [**ReductStore vs. TimescaleDB**](/blog/comparisons/iot/reductstore-vs-timescaledb).
 - **Prometheus**: another widely used open-source monitoring system and time-series database designed for collecting metrics from various sources. It offers powerful querying capabilities, alerting functionalities, and easy integration with Grafana (an open-source visualization and monitoring tool).
 
