@@ -46,6 +46,8 @@ jobs:
           ###### End of Repository/Build Configurations ######
         env:
           APP_ENV: ${{ env.APP_ENV }}
+          ENABLE_MULTIPLATFORM_BUILD: true
+          PYTHON_VERSION: 3.12
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
