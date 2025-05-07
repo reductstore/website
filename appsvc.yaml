@@ -6,5 +6,5 @@ pre-build: |
   pip3 install uv
   uv python install 3.12
   uv python pin 3.12
+  uv venv
   uv pip install pydoc-markdown --no-config
-  source $HOME/.bashrc
