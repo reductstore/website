@@ -115,11 +115,11 @@ After cloning the [**repository**](https://gitlab.com/tangram-vision/platform/me
 
 ![folders](./img/folders.png)
 
-Before doing so, ensure that you have configured your `LICENSE` variable in the `metrical_alias.sh` file located in `$PATH/metrical/examples`.
+We configured a `LICENSE` variable in the `metrical_alias.sh` file located in `$PATH/metrical/examples`.
 
 ![folders2](./img/folders2.png)
 
-Once everything is configured, you can run the full pipeline by executing the provided shell script:
+Once everything is ready, we can run the full pipeline by executing the provided shell script:
 
 ```bash
 $PATH/metrical/examples/camera_lidar/camera_lidar_runner.sh
@@ -149,6 +149,8 @@ The Data Inputs section gives an overview of the dataset used during calibration
 
 - **Processed Observation Count (DI-3):** Indicates how many features were detected, how many passed quality filters, and how many passed the motion filter. A significant drop in these values can suggest issues with your dataset quality or configuration.
 
+  If you observe that many detections were filtered out, verify the quality of your input data (e.g., sensor noise, improper lighting, or misconfigured thresholds).
+
 ```text
 █ DI-3 █ Processed Observation Count
 +----------------------------------+--------+-------------------+------------------------+-----------------------+
@@ -163,12 +165,10 @@ The Data Inputs section gives an overview of the dataset used during calibration
 ```
 
 - **Camera FOV Coverage (DI-4):** Displays the coverage of detected features across the camera’s field of view (FOV). Ideal coverage is characterized by minimal red cells, which represent areas with no detected features.
+  
+  For FOV coverage, ensure that the cameras are capturing data from all parts of the scene. Gaps in coverage can lead to poor calibration, especially for intrinsic parameters.
 
 ![DI-4](./img/DI-4.png)
-
-If you observe that many detections were filtered out, verify the quality of your input data (e.g., sensor noise, improper lighting, or misconfigured thresholds).
-
-For FOV coverage, ensure that the cameras are capturing data from all parts of the scene. Gaps in coverage can lead to poor calibration, especially for intrinsic parameters.
 
 #### Camera Modeling (CM Section)
 
@@ -177,10 +177,14 @@ The Camera Modeling section evaluates how well the camera models fit the actual 
 **Key Metrics:**
 
 - **Binned Reprojection Errors (CM-1):** This heatmap shows the reprojection errors across the camera’s FOV. Color coding indicates error magnitude, with cyan/green representing low error and red/orange indicating significant inaccuracies.
+  
+  Ideally, most of the reprojection error should fall in the cyan or green range. If certain areas have high error (orange or red), consider improving the camera model, increasing data coverage, or using better calibration targets.
 
 ![CM-1](./img/CM-1.png)
 
 - **Stereo Pair Rectification Error (CM-2):** For multi-camera setups, this shows the stereo rectification error between camera pairs, indicating how well the cameras are aligned for stereo vision.
+  
+  For multi-camera setups, ensure that the stereo pairs have minimal rectification error, which is crucial for accurate depth perception.
 
 ```text
 █ CM-2 █ Stereo Pair Rectification Error
@@ -199,10 +203,6 @@ The Camera Modeling section evaluates how well the camera models fit the actual 
 +---------------------------------------+--------------+-------+-------------------------------------------------------------------------------------+
 ```
 
-Ideally, most of the reprojection error should fall in the cyan or green range. If certain areas have high error (orange or red), consider improving the camera model, increasing data coverage, or using better calibration targets.
-
-For multi-camera setups, ensure that the stereo pairs have minimal rectification error, which is crucial for accurate depth perception.
-
 #### Extrinsics Info (EI Section)
 
 The Extrinsics Information section focuses on the spatial relationships between components in the calibration setup. Accurate extrinsic calibration ensures that the relative positions and orientations of your sensors are well understood.
@@ -210,6 +210,8 @@ The Extrinsics Information section focuses on the spatial relationships between 
 **Key Metrics:**
 
 - **Component Extrinsics Errors (EI-1):** Displays the RMSE of translation and rotation errors between pairs of components. Smaller values indicate better alignment.
+  
+  If extrinsics errors are large, investigate whether all components are positioned and oriented correctly.
 
 ```text
 █ EI-1 █ Component Extrinsics Errors
@@ -223,6 +225,8 @@ The Extrinsics Information section focuses on the spatial relationships between 
 ```
 
 - **Observed Camera Range of Motion (EI-3):** Shows how much motion was observed for each camera during the data collection. Sufficient motion is required for an accurate calibration, especially for depth and orientation.
+  
+  A limited range of motion (especially in the Z-axis, or depth) can lead to poor calibration of camera intrinsics and extrinsics. Ensure that cameras and sensors are moved sufficiently during data collection to cover a wide range of positions and angles.
 
 ```text
 █ EI-3 █ Observed Camera Range of Motion
@@ -235,10 +239,6 @@ The Extrinsics Information section focuses on the spatial relationships between 
 +----------------------------------+--------+----------------------+--------------------+
 ```
 
-If extrinsics errors are large, investigate whether all components are positioned and oriented correctly.
-
-A limited range of motion (especially in the Z-axis, or depth) can lead to poor calibration of camera intrinsics and extrinsics. Ensure that cameras and sensors are moved sufficiently during data collection to cover a wide range of positions and angles.
-
 #### Calibrated Plex (CP Section)
 
 The Calibrated Plex section displays the final results of your calibration, including the intrinsic and extrinsic parameters that can be used for your system.
@@ -246,6 +246,8 @@ The Calibrated Plex section displays the final results of your calibration, incl
 **Key Metrics:**
 
 - **Camera Metrics (CP-1):** Contains the intrinsic parameters of each camera, including focal length, principal point, and distortion coefficients. The standard deviations (±) indicate the uncertainty of each parameter.
+  
+  These values should be used to update your system configuration, ensuring that your cameras, IMUs, and other sensors are aligned according to the calibrated results.
 
 ```text
 █ CP-1 █ Camera Metrics
@@ -272,6 +274,8 @@ The Calibrated Plex section displays the final results of your calibration, incl
 
 - **Calibrated Extrinsics (CP-3):** Shows the final relative positions and orientations of all components in the system.
 
+  Significant differences between initial and final values may indicate that your initial guesses for positions or orientations were incorrect, and that the calibration process significantly adjusted these values.
+
 ```text
 █ CP-3 █  Calibrated Extrinsics
 +---------------------------+------------+-----------------+----------------------+---------------+---------------------+
@@ -290,9 +294,6 @@ The Calibrated Plex section displays the final results of your calibration, incl
 |     38140838, Unknown     |            |                 |                      |               |                     |
 +---------------------------+------------+-----------------+----------------------+---------------+---------------------+
 ```
-These values should be used to update your system configuration, ensuring that your cameras, IMUs, and other sensors are aligned according to the calibrated results.
-
-Significant differences between initial and final values may indicate that your initial guesses for positions or orientations were incorrect, and that the calibration process significantly adjusted these values.
 
 #### Summary Statistics (SS Section)
 
@@ -311,6 +312,8 @@ The Summary Statistics section provides a high-level overview of the optimizatio
 ```
 
 - **Camera Summary Statistics (SS-2):** Summarizes the reprojection errors for each camera. An RMSE under 0.5 pixels is typically acceptable; under 0.2 pixels is excellent.
+  
+  Ensure that the overall reprojection error (RMSE) is within acceptable limits. If it's too high, revisit the dataset to improve the quality and coverage of the input data.
 
 ```text
 █ SS-2 █ Camera Summary Statistics
@@ -324,6 +327,8 @@ The Summary Statistics section provides a high-level overview of the optimizatio
 ```
 
 - **LiDAR Summary Statistics (SS-3):** If LiDAR is included, these metrics show the calibration error for various LiDAR-camera and LiDAR-LiDAR pairs.
+  
+  Use the LiDAR RMSE to assess the alignment between LiDAR and camera sensors. Significant errors here may require revisiting the LiDAR calibration or the way LiDAR and camera data are synchronized.
 
 ```text
 █ SS-3 █ LiDAR Summary Statistics
@@ -336,10 +341,6 @@ The Summary Statistics section provides a high-level overview of the optimizatio
 +-----------------------------+-------------------------------+------------------------------------+--------------------------+--------------------------+
 ```
 
-Ensure that the overall reprojection error (RMSE) is within acceptable limits. If it's too high, revisit the dataset to improve the quality and coverage of the input data.
-
-Use the LiDAR RMSE to assess the alignment between LiDAR and camera sensors. Significant errors here may require revisiting the LiDAR calibration or the way LiDAR and camera data are synchronized.
-
 #### Diagnostics
 
 The Diagnostics section highlights potential issues with your calibration setup, data, or process.
@@ -348,25 +349,45 @@ The Diagnostics section highlights potential issues with your calibration setup,
 
 **High-Risk Diagnostics:** Issues such as insufficient camera motion, missing components, or poor feature detections that require immediate attention.
 
-**Medium and Low-Risk Diagnostics:** Less critical issues, but still worth addressing for improved calibration quality.
-
 Address any high-risk issues immediately to ensure the integrity of your calibration. For example, if the system flags "Poor Camera Range of Motion," capture additional data with more diverse camera movements.
+
+**Medium and Low-Risk Diagnostics:** Less critical issues, but still worth addressing for improved calibration quality.
 
 Medium- and low-risk issues, while not critical, should still be monitored and corrected when possible to improve the overall quality of the calibration.
 
-```text
-+------------------------+------------------------------------------------------------+
-| Results JSON           | /datasets/camera_lidar/results.json                        |
-+------------------------+------------------------------------------------------------+
-| Calibrated Plex        | Run `jq .plex [results.json] > optimized_plex.json`        |
-+------------------------+------------------------------------------------------------+
-| Optimized Object Space | Run `jq .object_space [results.json] > optimized_obj.json` |
-+------------------------+------------------------------------------------------------+
-| Cached Detections JSON | /datasets/camera_lidar/observations.detections.json        |
-+------------------------+------------------------------------------------------------+
-| Report Path            | /datasets/camera_lidar/report.html                         |
-+------------------------+------------------------------------------------------------+
-```
+#### [Output files](https://docs.tangramvision.com/metrical/results/output_file)
+
+Each calibration generates a set of output files located in the `$PATH/metrical/examples/camera_lidar` directory.
+
+- **results.json**
+
+  This main output file contains key calibration data, including:
+  
+  - **Optimized Plex**
+
+    ```text
+    jq .plex $PATH/metrical/examples/camera_lidar/results.json > $PATH/metrical/examples/camera_lidar/optimized_plex.json
+    ```
+  
+  - **Optimized object space**
+
+    ```text
+    jq .object_space $PATH/metrical/examples/camera_lidar/results.json > $PATH/metrical/examples/camera_lidar/optimized_obj.json
+    ```
+  
+  - **Summary statistics**
+  
+  - **Optimized object space features**
+  
+  - [**Residual metrics**](https://docs.tangramvision.com/metrical/results/residual_metrics/circle_misalignment)
+
+- **detections.json**
+  
+  Stores all feature detections used during calibration
+
+- **report.html**
+
+  Calibration Report with visual overview of results.
 
 ---
 
