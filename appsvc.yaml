@@ -6,3 +6,4 @@ pre-build: |
   pip3 install pipx
   pipx install pydoc-markdown==4.8.2
   pipx ensurepath
+  source $HOME/.bashrc
