@@ -146,7 +146,7 @@ export default async function (context, opts) {
           for (const module of opts.modules) {
             const title = getTitleFromModuleName(module) + " Module";
             exec(
-              `pydoc-markdown -I ${tmpDir} -m reduct.${module} '${renderCfg()}'`,
+              `uv run pydoc-markdown -I ${tmpDir} -m reduct.${module} '${renderCfg()}' --no-config`,
               (err, stdout, stderr) => {
                 if (err) {
                   console.error(err);
