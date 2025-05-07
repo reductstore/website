@@ -1,6 +1,6 @@
 ---
 title: How to Choose the Right MQTT Database
-description: Discover a range of database options for your IoT projects. This article provides a look at the importance of choosing the right data store, the factors that influence that choice, and the various solutions available.
+description: A guide to select the most suitable database for IoT or IIoT projects using MQTT. This article explores the factors to consider when choosing a database and the solutions available for storing MQTT data.
 authors: anthony
 tags: [advice, database, mqtt]
 slug: advice/database/mqtt-data-storage
@@ -14,9 +14,9 @@ image: ./img/social-card.jpg
   Photo by Jan Antonin Kolar on Unsplash.
 </small>
 
-Since joining [**ReductStore's project**](/), I've been exploring alternative solutions to get a better understanding about how the project fits into current echosystem.
+At a previous company, we used MQTT to send industrial data, such as vibration readings, images and log files. However, maintaining a history of this data proved challenging. Initially, we used a combination of a time-series database and an object store, but we struggled to ingest blob data quickly enough, and the system was difficult to maintain.
 
-To give you some context, we will look at solutions to store data from IoT devices (e.g. sensors, cameras, etc.) that commonly use MQTT to communicate with each other.
+To help you avoid a similar experience, this article will recommend the most suitable database for your IoT or Industrial IoT (IIoT) project. We will look at different ways of storing data from IoT devices that communicate with each other via MQTT.
 
 MQTT stands for _Message Queuing Telemetry Transport_ and is a lightweight messaging protocol designed to be efficient, reliable, and scalable, making it ideal for collecting and transmitting data from sensors in real time.
 
@@ -27,10 +27,6 @@ Well, MQTT is format-agnostic, but it works in a specific way. We should therefo
 Let's get started!
 
 {/* truncate */}
-
-1. [**Brief explanation of MQTT and its use in IoT projects**](#brief-explanation-of-mqtt-and-its-use-in-iot-projects)
-2. [**Factors to consider when choosing a MQTT data store**](#factors-to-consider-when-choosing-a-mqtt-data-store)
-3. [**Types of database options available for MQTT data storage**](#types-of-database-options-available-for-mqtt-data-storage)
 
 ## TL;DR
 
