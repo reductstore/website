@@ -8,14 +8,14 @@ export default function MacOSInstall(props) {
 
   const binaryInstallAmd64 = `
 wget https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.x86_64-apple-darwin.tar.gz
-tar -xvf reduct-cli.linux-amd64.tar.gz
+tar -xvf reduct-cli.x86_64-apple-darwin.tar.gz
 chmod +x reduct-cli
 sudo mv reduct-cli /usr/local/bin
 `.trim();
 
   const binaryInstallArm64 = `
 wget https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.aarch64-apple-darwin.tar.gz
-tar -xvf reduct-cli.linux-amd64.tar.gz
+tar -xvf reduct-cli.aarch64-apple-darwin.tar.gz
 chmod +x reduct-cli
 sudo mv reduct-cli /usr/local/bin
 `.trim();

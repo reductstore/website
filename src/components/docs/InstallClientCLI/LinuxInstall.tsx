@@ -8,14 +8,14 @@ export default function LinuxInstall(props) {
 
   const binaryInstallAmd64 = `
 wget https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.x86_64-unknown-linux-gnu.tar.gz
-tar -xvf reduct-cli.linux-amd64.tar.gz
+tar -xvf reduct-cli.x86_64-unknown-linux-gnu.tar.gz
 chmod +x reduct-cli
 sudo mv reduct-cli /usr/local/bin
 `.trim();
 
   const binaryInstallArm64 = `
 wget https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.aarch64-unknown-linux-gnu.tar.gz
-tar -xvf reduct-cli.linux-amd64.tar.gz
+tar -xvf reduct-cli.aarch64-unknown-linux-gnu.tar.gz
 chmod +x reduct-cli
 sudo mv reduct-cli /usr/local/bin
 `.trim();

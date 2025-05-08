@@ -8,14 +8,14 @@ export default function LinuxInstall(props) {
 
   const binaryInstallAmd64 = `
 wget https://github.com/reductstore/reductstore/releases/latest/download/reductstore.x86_64-unknown-linux-gnu.tar.gz
-tar xfv reductstore.linux-amd64.tar.gz
+tar xfv reductstore.x86_64-unknown-linux-gnu.tar.gz
 chmod +x reductstore
 RS_DATA_PATH=./data ./reductstore
 `.trim();
 
   const binaryInstallArm64 = `
 wget https://github.com/reductstore/reductstore/releases/latest/download/reductstore.aarch64-unknown-linux-gnu.tar.gz
-tar xfv reductstore.linux-amd64.tar.gz
+tar xfv reductstore.aarch64-unknown-linux-gnu.tar.gz
 chmod +x reductstore
 RS_DATA_PATH=./data ./reductstore
 `.trim();
