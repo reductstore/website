@@ -17,23 +17,23 @@ jobs:
       max-parallel: 8
       matrix:
         example: [python, node, curl, cpp, rust, cli]
-        doc_version: [next, 1.14.x, 1.13.x, 1.12.x]
+        doc_version: [next, 1.15.x, 1.14.x, 1.13.x]
         include:
           - doc_version: next
             reduct_version: main
             example_root: docs/examples/
 
+          - doc_version: 1.15.x
+            reduct_version: v1.15.0
+            example_root: versioned_docs/version-1.15.x/examples/
+
           - doc_version: 1.14.x
-            reduct_version: v1.14.0
+            reduct_version: v1.14.8
             example_root: versioned_docs/version-1.14.x/examples/
 
           - doc_version: 1.13.x
             reduct_version: v1.13.5
             example_root: versioned_docs/version-1.13.x/examples/
-
-          - doc_version: 1.12.x
-            reduct_version: v1.12.0
-            example_root: versioned_docs/version-1.12.x/examples/
 
           - language: python
             cmd: python3
@@ -68,8 +68,8 @@ jobs:
         run: |
           docker run -d --name reductstore -p 8383:8383 --env RS_API_TOKEN="my-token" --name reductstore reduct/store:${{ matrix.reduct_version }}
           sleep 3
-          wget https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.linux-amd64.tar.gz
-          tar -xvf reduct-cli.linux-amd64.tar.gz
+          wget https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.x86_64-unknown-linux-gnu.tar.gz
+          tar -xvf reduct-cli.x86_64-unknown-linux-gnu.tar.gz
           chmod +x reduct-cli
           sudo mv reduct-cli /usr/local/bin
           reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-remove

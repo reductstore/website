@@ -3,7 +3,7 @@ import CodeBlock from "@theme/CodeBlock";
 
 export default function WindowsInstall(props) {
   const binaryInstall = `
-Invoke-WebRequest -Uri  https://github.com/reductstore/reductstore/releases/latest/download/reductstore.win-amd64.zip -OutFile reductstore.zip
+Invoke-WebRequest -Uri  https://github.com/reductstore/reductstore/releases/latest/download/reductstore.x86_64-pc-windows-gnu.zip -OutFile reductstore.zip
 Expand-Archive -LiteralPath reductstore.zip -DestinationPath .
 $env:RS_DATA_PATH = 'C:\\DataFolder'
 .\\reductstore.exe
