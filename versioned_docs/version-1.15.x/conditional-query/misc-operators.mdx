@@ -1,0 +1,163 @@
+---
+title: Misc Operators
+description: Learn how to use miscellaneous operators to filter data in ReductStore.
+---
+
+Besides the main categories of operators, ReductStore supports a few miscellaneous operators that provide additional functionality:
+
+| Operator              | Description                                                         |
+| --------------------- | ------------------------------------------------------------------- |
+| `$has` \| `$exists`   | Checks if a record has specific labels.                             |
+| `$cast`               | Casts a label value to a different type explicitly.                 |
+| `$ref`                | References a label value in a record explicitly.                    |
+| `$timestamp` \| `$id` | Retrieves the timestamp of a record as a UNIX time in microseconds. |
+
+## $has | $exists
+
+The `$has` or `$exists` operator is used to check if a [**record**](../glossary#record) has specific [**labels**](../glossary#label).
+
+The operator is useful when you want to filter records based on the presence of a label, regardless of its value.
+
+### Syntax
+
+```
+{
+  "$has" | "$exists" : [ <expression as label reference>, ... ]
+}
+```
+
+### Behavior
+
+The operator evaluates expressions as strings and checks if the record has all the specified labels.
+
+Additional rules:
+
+- If the expression is not a string, it is cast to a string.
+- The operator is case-sensitive.
+- The evaluation stops as soon as one of the labels is not found.
+
+### Examples
+
+Check if a record has labels `label_1` and `label_2`:
+
+```json
+{
+  "$has": ["label_1", "label_2"]
+}
+```
+
+## $cast
+
+The `$cast` operator is used to cast a label value to a different type explicitly.
+
+The condition query engine automatically casts values to the correct type when comparing them, but sometimes you may want to cast a value explicitly.
+
+### Syntax
+
+```
+{
+  "$cast": [ <expression as label reference>, <"bool" | "int" | "float" | "string"> ]
+}
+```
+
+### Behavior
+
+The operator evaluates the first expression then casts the value to the specified type in the second argument.
+
+Supported types:
+
+- `bool`: Casts the value to a boolean.
+- `int`: Casts the value to an integer.
+- `float`: Casts the value to a float.
+- `string`: Casts the value to a string.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "$label_name": {
+    "$cast": "int"
+  }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$cast": ["&label_name", "int"]
+}
+```
+
+## $ref
+
+The `$ref` operator is used to reference a label value in a record explicitly.
+
+This is equivalent to using the label reference "&" in the query object, however, it allows you to use expressions to reference labels.
+
+### Syntax
+
+```
+{
+  "$ref": [ <expression as label reference> ]
+}
+```
+
+### Behavior
+
+The operator evaluates the first expression as a string and references the label value in the record.
+
+### Examples
+
+Simple reference to a label:
+
+```json
+{
+  "$ref": ["label_name"]
+}
+```
+
+Using an expression to reference a label:
+
+```json
+{
+  "$ref": [{ "$add": ["label_", "name"] }]
+}
+```
+
+## $timestamp | $id
+
+The `$timestamp` operator is used to retrieve the timestamp of a record as a UNIX time in microseconds.
+The operator is useful when you want to filter records based on their timestamp or when you want to use the timestamp in calculations.
+
+### Syntax
+
+```
+{
+  "$timestamp": []
+}
+```
+
+### Behavior
+
+The operator is a nullary operator that returns the timestamp of the record as a UNIX time in microseconds.
+
+### Examples
+
+Retrieve a certain record by its timestamp:
+
+```json
+{
+  "$timestamp": { "$eq": 1672531199000 }
+}
+```
+
+Retrieve multiple records by their timestamps:
+
+```json
+{
+  "$in": ["$timestamp", 1672531199000, 1672531200000]
+}
+```

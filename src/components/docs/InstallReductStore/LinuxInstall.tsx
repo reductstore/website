@@ -4,21 +4,28 @@ import styles from "./styles.module.css";
 import clsx from "clsx";
 
 export default function LinuxInstall(props) {
-  const [activeTab, setActiveTab] = useState("binary");
+  const [activeTab, setActiveTab] = useState("binary (amd64)");
 
-  const bynaryInstall = `
-wget https://github.com/reductstore/reductstore/releases/latest/download/reductstore.linux-amd64.tar.gz
-tar xfv reductstore.linux-amd64.tar.gz
+  const binaryInstallAmd64 = `
+wget https://github.com/reductstore/reductstore/releases/latest/download/reductstore.x86_64-unknown-linux-gnu.tar.gz
+tar xfv reductstore.x86_64-unknown-linux-gnu.tar.gz
+chmod +x reductstore
+RS_DATA_PATH=./data ./reductstore
+`.trim();
+
+  const binaryInstallArm64 = `
+wget https://github.com/reductstore/reductstore/releases/latest/download/reductstore.aarch64-unknown-linux-gnu.tar.gz
+tar xfv reductstore.aarch64-unknown-linux-gnu.tar.gz
 chmod +x reductstore
 RS_DATA_PATH=./data ./reductstore
 `.trim();
 
   return (
     <>
-      <p>Compatible with the amd64 architecture.</p>
+      <p>Compatible with the amd64 and arm64 architectures.</p>
 
       <ul className={clsx("tabs", styles.tabs)}>
-        {["binary", "snap"].map((tab) => (
+        {["binary (amd64)", "binary (arm64)", "snap"].map((tab) => (
           <li
             key={tab}
             className={clsx(
@@ -33,8 +40,11 @@ RS_DATA_PATH=./data ./reductstore
       </ul>
 
       <div className={styles.tabContent}>
-        {activeTab === "binary" && (
-          <CodeBlock className="language-bash">{bynaryInstall}</CodeBlock>
+        {activeTab === "binary (amd64)" && (
+          <CodeBlock className="language-bash">{binaryInstallAmd64}</CodeBlock>
+        )}
+        {activeTab === "binary (arm64)" && (
+          <CodeBlock className="language-bash">{binaryInstallArm64}</CodeBlock>
         )}
         {activeTab === "snap" && (
           <CodeBlock className="language-bash">
