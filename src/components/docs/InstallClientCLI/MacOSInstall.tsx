@@ -4,7 +4,7 @@ import styles from "./styles.module.css";
 import clsx from "clsx";
 
 export default function MacOSInstall(props) {
-  const [activeTab, setActiveTab] = useState("binary (amd64)");
+  const [activeTab, setActiveTab] = useState("binary (Intel)");
 
   const binaryInstallAmd64 = `
 wget https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.x86_64-apple-darwin.tar.gz
@@ -25,7 +25,7 @@ sudo mv reduct-cli /usr/local/bin
       <p>Compatible with the amd64 and arm64 architectures.</p>
 
       <ul className={clsx("tabs", styles.tabs)}>
-        {["binary (amd64)", "binary (arm64)"].map((tab) => (
+        {["binary (Intel)", "binary (Apple Silicon)"].map((tab) => (
           <li
             key={tab}
             className={clsx(
@@ -40,10 +40,10 @@ sudo mv reduct-cli /usr/local/bin
       </ul>
 
       <div className={styles.tabContent}>
-        {activeTab === "binary (amd64)" && (
+        {activeTab === "binary (Intel)" && (
           <CodeBlock className="language-bash">{binaryInstallAmd64}</CodeBlock>
         )}
-        {activeTab === "binary (arm64)" && (
+        {activeTab === "binary (Apple Silicon)" && (
           <CodeBlock className="language-bash">{binaryInstallArm64}</CodeBlock>
         )}
       </div>
