@@ -22,12 +22,15 @@ This release includes several new features and enhancements. These are the exten
 
 ### Extension API
 
-ReductStore is blob storage. It doesn't know anything about the data it stores. We are determined to maintain this because it enables us to ingest and query data in any format with optimal performance. We know for certain that you sometimes need to carry out processing and special queries based on the original data format.
+ReductStore is blob storage. It doesn't know anything about the data it stores.
+We are determined to maintain this because it enables us to ingest and query data in any format with optimal performance.
+We know that you sometimes need to perform processing and special queries based on the original data format.
 
-For example, if you ingest data in JSON format, you should query only some fields of the JSON object or use it in the query condition for filtering.
+For example, if you ingest data in the JSON format, you should be able to query only some fields of the JSON object or use it in the query condition for filtering.
 The new extension API makes it possible.
 
-The extension API is experimental and not yet documented. We are developing extensions for columnar data, CSV and mcap formats. Once we have enough experience, we will document the API and publish the extensions so that you can build your own extensions for your data formats.
+The extension API is experimental and not yet documented. We are developing extensions for columnar data, CSV and mcap formats.
+Once we have enough experience, we will document the API and publish the extensions so that you can build your own extensions for your data formats.
 
 For most curious users, a demo extension that scales JPEG images on the fly can be found on GitHub: https://github.com/reductstore/img-ext
 
@@ -80,9 +83,9 @@ In the next few releases we plan to add new features and improvements, including
 ### Integration with ROS
 
 ReductStore is a great solution for storing and managing large amounts of data in robotic applications.
-We are working on integrating ReductStore with ROS to provide a seamless experience for storing and retrieving data in ROS applications.
+Currently, we are working on integrating ReductStore with ROS to provide a seamless experience for storing and retrieving data in ROS applications.
 We have started a new [**ROS2 Agent**](https://github.com/reductstore/ros2-reduct-agent) that allows you to store and retrieve data in ReductStore from ROS2 applications. The agent is designed to be easy to use and integrate with existing ROS2 applications.
-We are also working on support for the mcap format with the new Extension API, which will allow you to retrieve data in the original format from mcap files, filter topics and many other features.
+We are also going to add support for the mcap format with the new Extension API, which will allow you to retrieve data in the original format from mcap files, filter topics and many other features.
 
 ### Golang SDK
 
