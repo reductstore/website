@@ -34,7 +34,7 @@ Accurate calibration is key to getting reliable, consistent data, which is criti
 
 - **Broad target support:** Works with a range of 2D and 3D [**targets**](https://docs.tangramvision.com/metrical/first_steps/choosing_targets), with [**premade targets**](https://gitlab.com/tangram-vision/platform/metrical_premade_targets)(recommended); support [**multiple targets**](https://docs.tangramvision.com/metrical/core_concepts/object_space/multiple_fiducials) at once
 
-- **Modular calibration workflow:** Supports splitting calibration into multiple datasets and stages 
+- **Modular calibration workflow:** Supports splitting calibration into multiple datasets and stages
 
 - **Detailed diagnostics:** Visual and numerical feedback on data quality and calibration performance
 
@@ -62,7 +62,7 @@ Once the dataset and configuration files are prepared, MetriCal’s [**init mode
 
 **3. Calibration**
 
-In [**calibrate mode**](https://docs.tangramvision.com/metrical/modes/calibrate) MetriCal uses a full [**bundle adjustment**](https://www.cs.jhu.edu/~misha/ReadingSeminar/Papers/Triggs00.pdf) to refine the initial plex and the object space. 
+In [**calibrate mode**](https://docs.tangramvision.com/metrical/modes/calibrate) MetriCal uses a full [**bundle adjustment**](https://www.cs.jhu.edu/~misha/ReadingSeminar/Papers/Triggs00.pdf) to refine the initial plex and the object space.
 It applies a motion filter to images and point clouds in the input dataset to eliminate features affected by motion blur, rolling shutter, false detections, and other artifacts.
 
 At this step, will be created a cache `.json` file in the directory with the input data. This file stores the detected objects, so future runs can skip the detection process and run faster.
@@ -118,7 +118,8 @@ metrical() {
     "$@";
 }
 ```
-You can also install MetriCal on Ubuntu or Pop!_OS.
+
+You can also install MetriCal on Ubuntu or Pop!\_OS.
 
 > Attention! MetriCal requires a [**license key**](https://docs.tangramvision.com/metrical/configuration/licensing).
 
@@ -220,7 +221,7 @@ The Data Inputs section gives an overview of the input data. It ensures that the
 ```
 
 - **Camera FOV Coverage (DI-4):** Displays how well the calibration data covers the field of view (FOV) of each camera. Ideal coverage is characterized by minimal red cells, which represent areas with no detected features.
-  
+
   For FOV coverage, we need to ensure that the cameras are capturing data from all parts of the scene. Gaps in coverage can lead to poor calibration, especially for intrinsic parameters.
 
 ![DI-4](./img/DI-4.png)
@@ -294,7 +295,7 @@ This section focuses on the spatial relationships between components in the cali
 ```
 
 - **IMU Preintegration Errors (EI-2):** Shows the summary of all [**IMU Preintegration errors**](https://docs.tangramvision.com/metrical/results/residual_metrics/imu_preintegration_error) from the system.
-  
+
   In the example we don't calibrated IMUs.
 
 - **Observed Camera Range of Motion (EI-3):** Shows how much motion was observed for each camera during the data collection. Sufficient motion is needed to avoid projective compensation errors.
@@ -341,8 +342,8 @@ This section displays the final results of the calibration, including the intrin
 +----------------------------------+-------------------------+-----------------------------------------+--------------------------------------+
 ```
 
-- **Optimized IMU Metrics (CP-2)** 
-  
+- **Optimized IMU Metrics (CP-2)**
+
   In the example we don't calibrated IMUs.
 
 - **Calibrated Extrinsics (CP-3):** Shows the [**Minimum Spanning Tree**](https://docs.tangramvision.com/metrical/modes/shape/shape_mst) of spatial constraints in the Plex, highlighting only the best ones needed to keep the structure intact.
@@ -398,6 +399,7 @@ This section provides a high-level overview of the optimization process and the 
 | infra2_image_rect_raw (34ed8934) | 0.204 px                                 |
 +----------------------------------+------------------------------------------+
 ```
+
 - **LiDAR Summary Statistics (SS-3):** Show the RMSE of various residual metrics: [**Circle Misalignment**](https://docs.tangramvision.com/metrical/results/residual_metrics/circle_misalignment), [**Interior Points to Plane Error**](https://docs.tangramvision.com/metrical/results/residual_metrics/interior_points_to_plane_error), [**Paired 3D Point Error**](https://docs.tangramvision.com/metrical/results/residual_metrics/paired_3d_point_error), [**Paired Plane Normal Error**](https://docs.tangramvision.com/metrical/results/residual_metrics/paired_plane_normal_error).
 
 ```text
@@ -444,13 +446,13 @@ A calibration generated a set of output files located in the `$PATH/metrical/exa
 - **observations.detections.json:** A cache of the detected objects in the Calibrate Mode.
 
 - **results.json:** The main output file that contains key calibration data. Use jq to extract the optimized plex and the optimized object space as a separate files:
-  
+
   - **Optimized Plex**
 
     ```text
     jq .plex $PATH/metrical/examples/camera_lidar/results.json > $PATH/metrical/examples/camera_lidar/optimized_plex.json
     ```
-  
+
   - **Optimized object space**
 
     ```text
