@@ -2,43 +2,43 @@
 title: "Getting Started with MetriCal"
 description: ""
 authors: ekaterina
-tags: [tutorials]
-slug: how-to-calibrate-camera-and-lidar
-date: 2025-05-09
+tags: [tutorials, robotics, ROS]
+slug: metrical-calibrate-camera-and-lidar
+date: 2025-05-13
 # image:
 ---
 
 **Sensor calibration** is the process of determining the exact mathematical settings that describe how a sensor perceives or measures the physical world. By comparing sensor data to known reference values, we can fix measurement errors and make sure data from different sensors lines up properly.
 
-There are two main types of calibration:
+There are two main types of parameters that can be calibrated:
 
-- **Intrinsic Parameters (Intrinsics):** These describe how a sensor works internally, such as lens distortion in cameras or bias and scaling errors in IMUs. Correcting intrinsics helps eliminate built-in measurement errors.
+- **Intrinsic parameters (Intrinsics):** These describe how a sensor works internally, such as lens distortion in cameras or bias and scaling errors in IMUs. Correcting intrinsics helps eliminate built-in measurement errors.
 
-- **Extrinsic Parameters (Extrinsics):** These define the position and orientation of one sensor relative to another or to the environment. Understanding extrinsics lets us combine data from different sensors into the same coordinate system.
+- **Extrinsic parameters (Extrinsics):** These define the position and orientation of one sensor relative to another or to the environment. Understanding extrinsics lets us combine data from different sensors into the same coordinate system.
 
-Accurate calibration is key to getting reliable, consistent data, which is critical for mapping, perception, and decision-making in robotics and autonomous systems.
+Accurate calibration is key to getting reliable, consistent data, which is critical for mapping, perception, and decision-making in robotics and autonomous systems. Recognizing this need, **ReductStore** is developing an extension to integrate with **MetriCal**, a powerful tool that streamlines the process of calibrating multimodal sensor data.
 
 {/* truncate */}
 
-## What is MetriCal?
+## [What is MetriCal?](https://www.tangramvision.com/products/calibration/metrical) 
 
-[**MetriCal**](https://www.tangramvision.com/products/calibration/metrical) is a calibration tool developed by Tangram Vision for working with systems that include different types of sensors. It’s designed to handle practical calibration scenarios and supports simultaneous processing of data from cameras, LiDARs, and IMUs. MetriCal can be used in both small-scale setups and larger, production-level environments, offering tools for precise and consistent multi-sensor calibration.
+MetriCal is a calibration tool developed by [**Tangram Vision**](https://www.tangramvision.com/) for working with systems that include different types of sensors. It’s designed to handle practical calibration scenarios and supports simultaneous processing of data from cameras, LiDARs, and IMUs. MetriCal can be used in both small-scale setups and larger, production-level environments, offering tools for precise and consistent multi-sensor calibration.
 
 ### Key Features
 
-- [**Flexible data input:**](https://docs.tangramvision.com/metrical/input_data/data_formats) Supports ROSbags, MCAP files (highly recommended), and folder-based datasets (only until July 2025)
+- **ROS data input:** Supports `.bag` and `.mcap` files (recommended)
 
 - **Automatic extrinsics estimation:** Computes sensor and target poses without CAD models or manual setup
 
 - **Unlimited sensor streams:** No restrictions on the number of input streams
 
-- **Broad target support:** Works with a range of 2D and 3D [**targets**](https://docs.tangramvision.com/metrical/first_steps/choosing_targets), with [**premade targets**](https://gitlab.com/tangram-vision/platform/metrical_premade_targets)(recommended); support [**multiple targets**](https://docs.tangramvision.com/metrical/core_concepts/object_space/multiple_fiducials) at once
+- **Broad target support:** Supports both 2D and 3D targets, has a library of premade ones, and allows using multiple targets at once
 
 - **Modular calibration workflow:** Supports splitting calibration into multiple datasets and stages
 
 - **Detailed diagnostics:** Visual and numerical feedback on data quality and calibration performance
 
-- **ROS integration:** Outputs can be exported as [**URDF**](https://docs.tangramvision.com/metrical/modes/shape/shape_urdf) files
+- **ROS integration:** Outputs can be exported as URDF files
 
 - **Pixel-level corrections:** Generate lookup tables for single-camera undistortion and stereo rectification
 
@@ -459,7 +459,7 @@ A calibration generated a set of output files located in the `$PATH/metrical/exa
     jq .object_space $PATH/metrical/examples/camera_lidar/results.json > $PATH/metrical/examples/camera_lidar/optimized_obj.json
     ```
 
-- **report.html:** A calibration report with visual overview of resultsю
+- **report.html:** A calibration report with visual overview of results.
 
 - **results_urdf.xml:** This [**URDF**](https://docs.tangramvision.com/metrical/modes/shape/shape_urdf) is compatible with common ROS operations and defines the fixed spatial relationships between the two calibrated cameras and the LiDAR. It allows ROS to interpret these relationships accurately and publish real-time TF transforms, enabling precise sensor fusion in a shared coordinate frame. This is essential for projecting LiDAR points onto rectified camera images, performing depth-aware perception, and supporting tasks like object localization and 3D scene understanding. Tools like [**Rviz**](https://wiki.ros.org/rviz) and [**robot_state_publisher**](https://wiki.ros.org/robot_state_publisher) can then visualize and manage these transforms for real-time multi-sensor integration.
 
