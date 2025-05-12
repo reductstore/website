@@ -5,8 +5,10 @@ authors: ekaterina
 tags: [tutorials, robotics, ROS]
 slug: metrical-calibrate-camera-and-lidar
 date: 2025-05-13
-# image:
+image: ./img/intro_metrical.png
 ---
+
+![Intro image](./img/intro_metrical.png)
 
 **Sensor calibration** is the process of determining the precise mathematical parameters that describe how a sensor perceives or measures the physical world. By comparing sensor outputs to known reference values, we can correct measurement errors and ensure data from different sensors align accurately.
 
@@ -16,13 +18,13 @@ There are two main categories of calibration parameters:
 
 - **Extrinsic parameters (Extrinsics):** These define a sensor's position and orientation relative to another sensor or the environment. Accurate extrinsics are essential for transforming and combining data from multiple sensors into a shared coordinate system.
 
-High-quality calibration is key to getting reliable, consistent data, which is critical for mapping, perception, and decision-making in robotics and autonomous systems. Recognizing this need, **ReductStore** is developing an extension to integrate with **MetriCal**, a powerful tool that streamlines the calibration of multimodal sensor data.
+High-quality calibration is key to getting reliable, consistent data, which is critical for mapping, perception, and decision-making in robotics and autonomous systems. Recognizing this need, [**ReductStore**](/) is developing an extension to integrate with [**MetriCal**](https://www.tangramvision.com/products/calibration/metrical), a powerful tool that streamlines the calibration of multimodal sensor data. This integration makes it easy to collect, store, and calibrate sensor data directly at the edge, enabling scalable, automated workflows across distributed systems. Calibration results can then be saved back to ReductStore for persistent access and reuse.
 
 {/* truncate */}
 
-## [What is MetriCal?](https://www.tangramvision.com/products/calibration/metrical)
+## What is MetriCal?
 
-MetriCal is a calibration tool developed by Tangram Vision for systems that include diverse types of sensors. It’s designed to handle real-world calibration scenarios and supports the simultaneous processing of data from cameras, LiDARs, and IMUs. MetriCal is suitable for both small-scale setups and larger, production-level environments, providing tools for precise and consistent multi-sensor calibration.
+[**MetriCal is a calibration tool developed by Tangram Vision**](https://docs.tangramvision.com/metrical/intro/) for systems that include diverse types of sensors. It’s designed to handle real-world calibration scenarios and supports the simultaneous processing of data from cameras, LiDARs, and IMUs. MetriCal is suitable for both small-scale setups and larger, production-level environments, providing tools for precise and consistent multi-sensor calibration.
 
 ### Key Features
 
@@ -44,7 +46,7 @@ MetriCal is a calibration tool developed by Tangram Vision for systems that incl
 
 - **Lightweight Deployment:** CPU-only operation; runs efficiently on compact devices like Intel NUCs or in the cloud
 
-## [How MetriCal Works](https://docs.tangramvision.com/metrical/intro/)
+## How MetriCal Works
 
 MetriCal is structured as a CLI-based, fully scriptable pipeline designed to support reproducible workflows and automation. The core calibration process can be divided into the following stages:
 
@@ -52,11 +54,11 @@ MetriCal is structured as a CLI-based, fully scriptable pipeline designed to sup
 
 The quality of calibration strongly depends on the choice of targets and the quality of the input data. It's important to select or build targets suited to your use case and follow MetriCal’s data capture guidelines to ensure the collected data meets the required quality standards.
 
-At this stage, you'll also prepare an object space file, which describes all calibration targets and their properties.
+At this stage, you'll also prepare an **object space file**, which describes all calibration targets and their properties.
 
 **2. Initialization**
 
-Once the dataset and configuration files are ready, MetriCal’s `init mode` analyzes sensor observations to infer a raw input plex — a representation of the physical system that you are calibrating. This plex is the starting point for all further calibration steps.
+Once the dataset and configuration files are ready, MetriCal’s `init mode` analyzes sensor observations to infer a raw input **plex** — a description of the spatial, temporal, and semantic relationships within your perception system. It represents the physical system being calibrated and serves as the starting point for all further calibration steps.
 
 > If you already have a plex with existing calibration results that you want to preserve, it can be used as a seed for an init plex.
 
@@ -462,7 +464,7 @@ The calibration process generates several output files, located in the `$PATH/me
 
 ## Conclusion
 
-MetriCal simplifies multimodal sensor calibration by providing a fully scriptable, CLI-based workflow with detailed diagnostics and seamless ROS integration. Designed for reproducibility and automation, it supports everything from rapid prototyping to production-scale deployment, ensuring accurate and consistent calibration for sensor-driven robotic systems.
+MetriCal simplifies multimodal sensor calibration by offering a fully scriptable, CLI-based workflow with detailed diagnostics and seamless ROS integration. One of the key takeaways from working with this tool is that successful calibration depends heavily on the quality of the captured data. Carefully choosing calibration targets, ensuring sufficient sensor motion, and achieving full field-of-view coverage all have a major impact on the results. For those just starting out, prioritizing high-quality data capture and closely following the recommended guidelines is essential for obtaining reliable outcomes.
 
 ---
 
