@@ -8,91 +8,90 @@ date: 2025-05-13
 # image:
 ---
 
-**Sensor calibration** is the process of determining the exact mathematical settings that describe how a sensor perceives or measures the physical world. By comparing sensor data to known reference values, we can fix measurement errors and make sure data from different sensors lines up properly.
+**Sensor calibration** is the process of determining the precise mathematical parameters that describe how a sensor perceives or measures the physical world. By comparing sensor outputs to known reference values, we can correct measurement errors and ensure data from different sensors align accurately.
 
-There are two main types of parameters that can be calibrated:
+There are two main categories of calibration parameters:
 
-- **Intrinsic parameters (Intrinsics):** These describe how a sensor works internally, such as lens distortion in cameras or bias and scaling errors in IMUs. Correcting intrinsics helps eliminate built-in measurement errors.
+- **Intrinsic parameters (Intrinsics):** These capture the internal characteristics of a sensor, such as lens distortion in cameras or bias and scaling errors in IMUs. Calibrating intrinsics helps eliminate built-in measurement errors.
 
-- **Extrinsic parameters (Extrinsics):** These define the position and orientation of one sensor relative to another or to the environment. Understanding extrinsics lets us combine data from different sensors into the same coordinate system.
+- **Extrinsic parameters (Extrinsics):** These define a sensor's position and orientation relative to another sensor or the environment. Accurate extrinsics are essential for transforming and combining data from multiple sensors into a shared coordinate system.
 
-Accurate calibration is key to getting reliable, consistent data, which is critical for mapping, perception, and decision-making in robotics and autonomous systems. Recognizing this need, **ReductStore** is developing an extension to integrate with **MetriCal**, a powerful tool that streamlines the process of calibrating multimodal sensor data.
+High-quality calibration is key to getting reliable, consistent data, which is critical for mapping, perception, and decision-making in robotics and autonomous systems. Recognizing this need, **ReductStore** is developing an extension to integrate with **MetriCal**, a powerful tool that streamlines the calibration of multimodal sensor data.
 
 {/* truncate */}
 
 ## [What is MetriCal?](https://www.tangramvision.com/products/calibration/metrical)
 
-MetriCal is a calibration tool developed by [**Tangram Vision**](https://www.tangramvision.com/) for working with systems that include different types of sensors. It’s designed to handle practical calibration scenarios and supports simultaneous processing of data from cameras, LiDARs, and IMUs. MetriCal can be used in both small-scale setups and larger, production-level environments, offering tools for precise and consistent multi-sensor calibration.
+MetriCal is a calibration tool developed by Tangram Vision for systems that include diverse types of sensors. It’s designed to handle real-world calibration scenarios and supports the simultaneous processing of data from cameras, LiDARs, and IMUs. MetriCal is suitable for both small-scale setups and larger, production-level environments, providing tools for precise and consistent multi-sensor calibration.
 
 ### Key Features
 
-- **ROS data input:** Supports `.bag` and `.mcap` files (recommended)
+- **ROS Data Input:** Supports `.bag` and `.mcap` files (recommended)
 
-- **Automatic extrinsics estimation:** Computes sensor and target poses without CAD models or manual setup
+- **Automatic Extrinsics Estimation:** Computes sensor and target poses without requiring CAD models or manual setup
 
-- **Unlimited sensor streams:** No restrictions on the number of input streams
+- **Unlimited Sensor Streams:** Supports an arbitrary number of input streams
 
-- **Broad target support:** Supports both 2D and 3D targets, has a library of premade ones, and allows using multiple targets at once
+- **Broad Target Support:** Compatible with both 2D and 3D targets; includes a library of premade targets and supports multiple targets at once
 
-- **Modular calibration workflow:** Supports splitting calibration into multiple datasets and stages
+- **Modular Calibration Workflow:** Allows splitting the calibration process into multiple datasets and stages
 
-- **Detailed diagnostics:** Visual and numerical feedback on data quality and calibration performance
+- **Detailed Diagnostics:** Provides visual and numerical feedback on data quality and calibration performance
 
-- **ROS integration:** Outputs can be exported as URDF files
+- **ROS Integration:** Outputs calibration results as an URDF file
 
-- **Pixel-level corrections:** Generate lookup tables for single-camera undistortion and stereo rectification
+- **Pixel-Level Corrections:** Generates lookup tables for single-camera undistortion and stereo rectification
 
-- **Lightweight deployment:** CPU-only operation; runs on compact devices like Intel NUCs or in the cloud
+- **Lightweight Deployment:** CPU-only operation; runs efficiently on compact devices like Intel NUCs or in the cloud
 
-## How MetriCal Works?
+## [How MetriCal Works](https://docs.tangramvision.com/metrical/intro/)
 
-MetriCal is structured as a CLI-based, fully scriptable pipeline designed to support reproducible workflows and automation. The core calibration process can be divided into stages:
+MetriCal is structured as a CLI-based, fully scriptable pipeline designed to support reproducible workflows and automation. The core calibration process can be divided into the following stages:
 
 **1. Preparation**
 
-The quality of calibration strongly depends on the choice of [**targets**](https://docs.tangramvision.com/metrical/first_steps/choosing_targets) and the data captured. It's important to carefully select and build suitable calibration targets specifically for your use case, and to follow the detailed [**guidelines**](https://docs.tangramvision.com/metrical/first_steps/data_capture) to collect high-quality data.
+The quality of calibration strongly depends on the choice of targets and the quality of the input data. It's important to select or build targets suited to your use case and follow MetriCal’s data capture guidelines to ensure the collected data meets the required quality standards.
 
-MetriCal also requires an [**object space**](https://docs.tangramvision.com/metrical/core_concepts/object_space/overview) file (which describes all targets and their properties) that should be prepared at this stage.
+At this stage, you'll also prepare an object space file, which describes all calibration targets and their properties.
 
 **2. Initialization**
 
-Once the dataset and configuration files are prepared, MetriCal’s [**init mode**](https://docs.tangramvision.com/metrical/modes/init) analyzes the observations and interactions in the data to infer a raw input [**plex**](https://docs.tangramvision.com/metrical/core_concepts/plex/overview) — a representation of the physical system that you are calibrating. This plex serves as the structured starting point for all further calibration operations.
+Once the dataset and configuration files are ready, MetriCal’s `init mode` analyzes sensor observations to infer a raw input plex — a representation of the physical system that you are calibrating. This plex is the starting point for all further calibration steps.
 
-> If you already have a plex with existing calibration results that you want to keep, you can use it as a seed for an init plex.
+> If you already have a plex with existing calibration results that you want to preserve, it can be used as a seed for an init plex.
 
 **3. Calibration**
 
-In [**calibrate mode**](https://docs.tangramvision.com/metrical/modes/calibrate) MetriCal uses a full [**bundle adjustment**](https://www.cs.jhu.edu/~misha/ReadingSeminar/Papers/Triggs00.pdf) to refine the initial plex and the object space.
-It applies a motion filter to images and point clouds in the input dataset to eliminate features affected by motion blur, rolling shutter, false detections, and other artifacts.
+In `calibrate mode`, MetriCal performs a full bundle adjustment to refine both the initial plex and the object space. It applies motion filtering to remove features affected by motion blur, rolling shutter, false detections, and other artifacts in images or point clouds.
 
-At this step, will be created a cache `.json` file in the directory with the input data. This file stores the detected objects, so future runs can skip the detection process and run faster.
+A `.json` cache file is created at this step. This file stores detected objects, allowing future runs to skip the detection process and complete faster.
 
-> In calibrate mode we can also visualize the calibration data capture and detection process.
+> The calibration data capture and detection process can also be visualized during this step.
 
 **4. Diagnostics**
 
-MetriCal generates a detailed diagnostic [**report**](https://docs.tangramvision.com/metrical/results/report) with color-coded charts that summarize calibration quality:
+MetriCal generates a detailed diagnostic report with color-coded charts summarizing calibration quality:
 
-- **Cyan:** spectacular
-- **Green:** good
-- **Orange:** okay, but generally poor
-- **Red:** bad
+- **Cyan** – spectacular
+- **Green** – good
+- **Orange** – okay, but generally poor
+- **Red** – bad
 
 **5. Visualization**
 
-In [**display mode**](https://docs.tangramvision.com/metrical/modes/display) we visualize the applied results of a calibration in [**Rerun**](https://docs.tangramvision.com/metrical/configuration/visualization). It allows us quickly check the calibration quality visually before exporting.
+In `display mode`, calibration results are visualized using [**Rerun, an open-source tool for multimodal data visualization**](https://rerun.io/). It allows you to quickly verify the calibration quality before exporting.
 
-> We usually use the same dataset, but we can also use a different one if it has the same topic names.
+> Typically, the same dataset is used for visualization, but you can also use a different one if it has the same topic names.
 
 **6. Export**
 
-In [**shape mode**](https://docs.tangramvision.com/metrical/modes/shape/shape_overview), we can modify the optimized plex into different configurations for using calibration data in a deployed system, such as ROS URDFs or pixel-wise lookup tables.
+In `shape mode`, the optimized plex can be transformed into various configurations for use in deployed systems, for example, ROS URDFs or pixel-wise lookup tables.
 
-> MetriCal has several additional modes to expand your experience: [**completion mode**](https://docs.tangramvision.com/metrical/modes/completion), [**consolidate object spaces mode**](https://docs.tangramvision.com/metrical/modes/consolidate_object_spaces), [**pipeline mode**](https://docs.tangramvision.com/metrical/modes/pipeline), [**pretty print mode**](https://docs.tangramvision.com/metrical/modes/pretty_print).
+> MetriCal also includes several additional modes to support advanced workflows: `completion mode`, `consolidate object spaces mode`, `pipeline mode`, and `pretty print mode`.
 
 ## MetriCal Example
 
-To test MetriCal’s multi-sensor capabilities, we use the official [**example**](https://gitlab.com/tangram-vision/platform/metrical/-/tree/main/examples/camera_lidar) with two cameras and a LiDAR. The dataset has synchronized observations from all three sensors, capturing a [**LiDAR circle target**](https://docs.tangramvision.com/metrical/configuration/targets?target-type=circle) from different angles. This allows MetriCal to calculate:
+To test MetriCal’s multi-sensor capabilities, we use the [**official example featuring two cameras and a LiDAR**](https://gitlab.com/tangram-vision/platform/metrical/-/tree/main/examples/camera_lidar). The dataset contains synchronized observations from all three sensors, capturing a LiDAR circle target from different angles. This allows MetriCal to calculate:
 
 - Intrinsics and poses for both cameras
 
@@ -102,7 +101,7 @@ To test MetriCal’s multi-sensor capabilities, we use the official [**example**
 
 **Installation**
 
-We [**installed**](https://docs.tangramvision.com/metrical/configuration/installation?install-method=docker) MetriCal via Docker. Make sure you have set up an alias during the installation:
+We installed MetriCal via Docker. Make sure to set up an alias for convenient access during installation:
 
 ```bash #zsh, using bash for highlighting only
 ~/.zshrc
@@ -119,31 +118,31 @@ metrical() {
 }
 ```
 
-You can also install MetriCal on Ubuntu or Pop!\_OS.
+> MetriCal requires a license key.
 
-> Attention! MetriCal requires a [**license key**](https://docs.tangramvision.com/metrical/configuration/licensing).
+You can also install MetriCal natively on `Ubuntu` or `Pop!_OS`.
 
-**Running Calibration**
+**Calibration**
 
-After cloning the [**repository**](https://gitlab.com/tangram-vision/platform/metrical), we downloaded and unpacked the `.zip` [**file**](https://drive.google.com/file/d/1UFKpVXNI1IZPRiupODyhU0tMedXabKEn/view?usp=drive_link), then placed the `observations` folder into `$PATH/metrical/examples/camera_lidar`.
+After cloning the repository, download and unzip the `.zip` file. Place the observations folder into:
 
-![folders](./img/folders.png)
+```zsh
+$PATH/metrical/examples/camera_lidar
+```
 
-We configured a `LICENSE` variable in the `metrical_alias.sh` file located in `$PATH/metrical/examples`.
+Next, set the `LICENSE` variable inside `metrical_alias.sh`, located in the same directory.
 
-![folders2](./img/folders2.png)
+Once everything is configured, you can run the full calibration pipeline using the provided shell script:
 
-Once everything is ready, we can run the full pipeline by executing the provided shell script:
-
-```bash
+```zsh
 $PATH/metrical/examples/camera_lidar/camera_lidar_runner.sh
 ```
 
-**[**Visualization**](https://docs.tangramvision.com/metrical/modes/display) of Results**
+**Visualization**
 
-We installed [**Rerun**](https://docs.tangramvision.com/metrical/configuration/visualization#installing-rerun) using `pip` and started the Rerun server on a separate terminal tab.
+To visualize the results, install Rerun via `pip` and launch the Rerun server in a separate terminal tab.
 
-Running the following command in the terminal visualizes the calibration results in [**display mode**](https://docs.tangramvision.com/metrical/modes/display) and shows the data in real-time:
+Then, run the following command to display calibration results in `display mode` and view the data in real time:
 
 ```zsh
 metrical display /datasets/examples/camera_lidar/observations /datasets/examples/camera_lidar/results.json
@@ -151,17 +150,17 @@ metrical display /datasets/examples/camera_lidar/observations /datasets/examples
 
 ![correction](./img/correction.png)
 
-### [Understanding Results](https://docs.tangramvision.com/metrical/results/report)
+### Understanding Results
 
-During calibration, MetriCal produces charts and diagnostics that show the quality of the process and highlight what may need improvement.
+During calibration, MetriCal produces charts and diagnostics that show the quality of the process and highlight areas that may need improvement.
 
 #### Data Inputs (DI Section)
 
-The Data Inputs section gives an overview of the input data. It ensures that the dataset was appropriate for a successful calibration.
+The Data Inputs section provides an overview of the input data and ensures that the dataset is appropriate for a successful calibration.
 
 **Key Metrics:**
 
-- **Calibration Inputs (DI-1):** Shows the basic configuration parameters.
+- **Calibration Inputs (DI-1):** Displays basic configuration parameters.
 
 ```text█ DI-1 █ Calibration Inputs
 +--------------------------------------+----------+
@@ -203,9 +202,9 @@ The Data Inputs section gives an overview of the input data. It ensures that the
 +-------------+-------------------------+---------------------------------------+------------------------+
 ```
 
-- **Processed Observation Count (DI-3):** Indicates how many observations were processed from the dataset.
+- **Processed Observation Count (DI-3):** Shows how many observations were processed from the dataset.
 
-  If we observe that many detections were filtered out, we need to verify the quality of the input data or settings (e.g., sensor noise).
+  If you observe that a significant number of detections were filtered out, verify the quality of the input data or settings (e.g., sensor noise).
 
 ```text
 █ DI-3 █ Processed Observation Count
@@ -220,13 +219,13 @@ The Data Inputs section gives an overview of the input data. It ensures that the
 +----------------------------------+--------+-------------------+------------------------+-----------------------+
 ```
 
-- **Camera FOV Coverage (DI-4):** Displays how well the calibration data covers the field of view (FOV) of each camera. Ideal coverage is characterized by minimal red cells, which represent areas with no detected features.
+- **Camera FOV Coverage (DI-4):** Displays how well the calibration data covers the field of view (FOV) of each camera. Ideal coverage is characterized by minimal red cells, which represent areas without detected features.
 
-  For FOV coverage, we need to ensure that the cameras are capturing data from all parts of the scene. Gaps in coverage can lead to poor calibration, especially for intrinsic parameters.
+  For FOV coverage, ensure that the cameras are capturing data from all parts of the scene. Gaps in coverage can lead to poor calibration, especially for intrinsic parameters.
 
 ![DI-4](./img/DI-4.png)
 
-- **Detection Timeline(DI-5):** Shows when detections happened across the dataset timeline. Each row is a different sensor, helping to see if the data is synchronized.
+- **Detection Timeline(DI-5):** Displays when detections occurred across the dataset timeline. Each row corresponds to a different sensor, making it easier to check synchronization.
 
 ```text█ DI-5 █ Detection Timeline
 +----------------------------------+-------------------------------------------------------------------------------------------------+
@@ -248,11 +247,11 @@ The Data Inputs section gives an overview of the input data. It ensures that the
 
 #### Camera Modeling (CM Section)
 
-This section shows how well the camera models fit the actual calibration data — in other words, how accurately the system understood the camera’s behavior based on the collected data.
+This section shows how well the camera models fit the actual calibration data — that is, how accurately the system understood the camera’s behavior based on the collected data.
 
 **Key Metrics:**
 
-- **Binned Reprojection Errors (CM-1):** This heatmap shows the reprojection errors across the camera’s FOV. If certain areas show high error (orange or red), it may indicate problems with the camera model or lens distortion that isn't being captured correctly.
+- **Binned Reprojection Errors (CM-1):** A heatmap showing reprojection errors across the camera’s FOV. If certain areas show high error (orange or red), it could indicate problems with the camera model or lens distortion that isn't being captured correctly.
 
 ![CM-1](./img/CM-1.png)
 
@@ -281,7 +280,7 @@ This section focuses on the spatial relationships between components in the cali
 
 **Key Metrics:**
 
-- **Component Extrinsics Errors (EI-1):** Displays the [**extrinsics errors**](https://docs.tangramvision.com/metrical/results/residual_metrics/composed_relative_extrinsics) between each pair of components. If extrinsics errors are large, we need to investigate whether all components are positioned and oriented correctly.
+- **Component Extrinsics Errors (EI-1):** Displays the extrinsic errors between each pair of components. If the errors are large, check whether all components are positioned and oriented correctly.
 
 ```text
 █ EI-1 █ Component Extrinsics Errors
@@ -294,11 +293,9 @@ This section focuses on the spatial relationships between components in the cali
 +--------------------------------------------+----------+----------+----------+----------+-----------+---------+
 ```
 
-- **IMU Preintegration Errors (EI-2):** Shows the summary of all [**IMU Preintegration errors**](https://docs.tangramvision.com/metrical/results/residual_metrics/imu_preintegration_error) from the system.
+- **IMU Preintegration Errors (EI-2):** Displays a summary of all IMU preintegration errors from the system. In this example, IMUs were not calibrated.
 
-  In the example we don't calibrated IMUs.
-
-- **Observed Camera Range of Motion (EI-3):** Shows how much motion was observed for each camera during the data collection. Sufficient motion is needed to avoid projective compensation errors.
+- **Observed Camera Range of Motion (EI-3):** Shows how much motion was observed for each camera during the data collection. Sufficient motion is necessary to avoid projective compensation errors.
 
 ```text
 █ EI-3 █ Observed Camera Range of Motion
@@ -317,7 +314,7 @@ This section displays the final results of the calibration, including the intrin
 
 **Key Metrics:**
 
-- **Camera Metrics (CP-1):** Contains the intrinsic parameters of each camera, including focal length, principal point, and distortion parameters. The standard deviations indicate the uncertainty of each parameter.
+- **Camera Metrics (CP-1):** Contains the intrinsic parameters of each camera, such as focal length, principal point, and distortion parameters. Standard deviations indicate the uncertainty of each parameter.
 
 ```text
 █ CP-1 █ Camera Metrics
@@ -342,13 +339,11 @@ This section displays the final results of the calibration, including the intrin
 +----------------------------------+-------------------------+-----------------------------------------+--------------------------------------+
 ```
 
-- **Optimized IMU Metrics (CP-2)**
+- **Optimized IMU Metrics (CP-2):** In this example, IMUs were not calibrated.
 
-  In the example we don't calibrated IMUs.
+- **Calibrated Extrinsics (CP-3):** Shows the minimum spanning tree of spatial constraints in the plex, highlighting only the most critical constraints needed to keep the structure intact.
 
-- **Calibrated Extrinsics (CP-3):** Shows the [**Minimum Spanning Tree**](https://docs.tangramvision.com/metrical/modes/shape/shape_mst) of spatial constraints in the Plex, highlighting only the best ones needed to keep the structure intact.
-
-  Large differences between initial and final values may mean that our starting guesses for positions or orientations were incorrect, and calibration had to make major corrections.
+  Large differences between the initial and final values may indicate that the starting guesses for positions or orientations were incorrect, highlighting the extent of corrections made during the calibration process.
 
 ```text
 █ CP-3 █  Calibrated Extrinsics
@@ -373,7 +368,7 @@ This section displays the final results of the calibration, including the intrin
 
 This section provides a high-level overview of the optimization process and the overall calibration quality.
 
-- **Optimization Summary Statistics (SS-1):** Includes the overall reprojection error and the posterior variance, which indicates the calibration’s uncertainty.
+- **Optimization Summary Statistics (SS-1):** Includes overall reprojection error and posterior variance, which indicates the calibration’s uncertainty.
 
 ```text
 █ SS-1 █ Optimization Summary Statistics
@@ -385,9 +380,9 @@ This section provides a high-level overview of the optimization process and the 
 +------------------------+----------+
 ```
 
-- **Camera Summary Statistics (SS-2):** Summarizes the reprojection errors for each camera. An RMSE under 0.5 pixels is typically acceptable and under 0.2 pixels is excellent.
+- **Camera Summary Statistics (SS-2):** Summarizes the reprojection errors for each camera. An RMSE under 0.5 pixels is typically acceptable, and under 0.2 pixels is excellent.
 
-  > Use `pixel_pitch` in the [**Plex API**](https://docs.tangramvision.com/metrical/core_concepts/plex/components#camera) to fairly compare RMSEs if your cameras have different pixel sizes.
+  > Use `pixel_pitch` in the `Plex API` to fairly compare RMSEs if your cameras have different pixel sizes.
 
 ```text
 █ SS-2 █ Camera Summary Statistics
@@ -400,7 +395,7 @@ This section provides a high-level overview of the optimization process and the 
 +----------------------------------+------------------------------------------+
 ```
 
-- **LiDAR Summary Statistics (SS-3):** Show the RMSE of various residual metrics: [**Circle Misalignment**](https://docs.tangramvision.com/metrical/results/residual_metrics/circle_misalignment), [**Interior Points to Plane Error**](https://docs.tangramvision.com/metrical/results/residual_metrics/interior_points_to_plane_error), [**Paired 3D Point Error**](https://docs.tangramvision.com/metrical/results/residual_metrics/paired_3d_point_error), [**Paired Plane Normal Error**](https://docs.tangramvision.com/metrical/results/residual_metrics/paired_plane_normal_error).
+- **LiDAR Summary Statistics (SS-3):** Shows the RMSE of various residual metrics: circle misalignment, interior points to plane error, paired 3D point error, and paired plane normal error.
 
 ```text
 █ SS-3 █ LiDAR Summary Statistics
@@ -413,17 +408,17 @@ This section provides a high-level overview of the optimization process and the 
 +-----------------------------+-------------------------------+------------------------------------+--------------------------+--------------------------+
 ```
 
-#### [Data Diagnostics](https://docs.tangramvision.com/metrical/results/report#data-diagnostics)
+#### Data Diagnostics
 
 This section highlights potential issues with the calibration setup, data, or process.
 
 ![diagnostics](./img/diagnostics.png)
 
-**High-Risk Diagnostics:** Critical issues such as insufficient camera motion or missing required components, that must be fixed for successful calibration.
+**High-Risk Diagnostics:** Critical issues such as insufficient camera motion or missing required components must be addressed for successful calibration.
 
-**Medium and Low-Risk Diagnostics:** Less critical issues such as poor feature coverage, should still be monitored and corrected when possible to improve the overall quality of the calibration.
+**Medium and Low-Risk Diagnostics:** Less critical issues, such as poor feature coverage, should still be monitored and corrected when possible to improve calibration quality.
 
-#### [Output Summary](https://docs.tangramvision.com/metrical/results/output_file)
+#### Output Summary
 
 ```text
 +------------------------+------------------------------------------------------------+
@@ -439,34 +434,36 @@ This section highlights potential issues with the calibration setup, data, or pr
 +------------------------+------------------------------------------------------------+
 ```
 
-A calibration generated a set of output files located in the `$PATH/metrical/examples/camera_lidar` directory.
+The calibration process generates several output files, located in the `$PATH/metrical/examples/camera_lidar` directory.
 
-- **init_plex.json:** A raw input plex in the Init Mode.
+- **init_plex.json:** A raw input plex from the `init mode`.
 
-- **observations.detections.json:** A cache of the detected objects in the Calibrate Mode.
+- **observations.detections.json:** Cached detections for faster reruns in `calibrate mode`.
 
-- **results.json:** The main output file that contains key calibration data. Use jq to extract the optimized plex and the optimized object space as a separate files:
+- **results.json:** The main output file, containing calibrated plex and object space.
 
-  - **Optimized Plex**
+  - Extract the optimized plex:
 
     ```text
     jq .plex $PATH/metrical/examples/camera_lidar/results.json > $PATH/metrical/examples/camera_lidar/optimized_plex.json
     ```
 
-  - **Optimized object space**
+  - Extract the optimized object space:
 
     ```text
     jq .object_space $PATH/metrical/examples/camera_lidar/results.json > $PATH/metrical/examples/camera_lidar/optimized_obj.json
     ```
 
-- **report.html:** A calibration report with visual overview of results.
+- **report.html:** An HTML report summarizing calibration performance visually.
 
-- **results_urdf.xml:** This [**URDF**](https://docs.tangramvision.com/metrical/modes/shape/shape_urdf) is compatible with common ROS operations and defines the fixed spatial relationships between the two calibrated cameras and the LiDAR. It allows ROS to interpret these relationships accurately and publish real-time TF transforms, enabling precise sensor fusion in a shared coordinate frame. This is essential for projecting LiDAR points onto rectified camera images, performing depth-aware perception, and supporting tasks like object localization and 3D scene understanding. Tools like [**Rviz**](https://wiki.ros.org/rviz) and [**robot_state_publisher**](https://wiki.ros.org/robot_state_publisher) can then visualize and manage these transforms for real-time multi-sensor integration.
+- **results_urdf.xml:** A ROS-compatible URDF file that describes the spatial relationships between the two calibrated cameras and the LiDAR, enabling tools like `robot_state_publisher` to publish real-time TF transforms based on these relationships.
 
----
+  This is especially useful when multiple sensors are calibrated together, as the URDF allows you to see the pose of one sensor relative to another within a unified coordinate frame. Such a structure is essential for precise sensor fusion, including depth-aware perception and advanced tasks like object localization and 3D scene understanding.
 
 ## Conclusion
 
+MetriCal simplifies multimodal sensor calibration by providing a fully scriptable, CLI-based workflow with detailed diagnostics and seamless ROS integration. Designed for reproducibility and automation, it supports everything from rapid prototyping to production-scale deployment, ensuring accurate and consistent calibration for sensor-driven robotic systems.
+
 ---
 
-We hope this tutorial provided a ... If you have any questions or comments, feel free to use the [**ReductStore Community Forum**](https://community.reduct.store/signup).
+We hope this tutorial provided a clear and practical introduction to using MetriCal for multi-sensor calibration. If you have any questions or comments, feel free to use the [**ReductStore Community Forum**](https://community.reduct.store/signup).
