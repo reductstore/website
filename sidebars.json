@@ -80,6 +80,15 @@
     },
     {
       "type": "category",
+      "label": "Extensions",
+      "link": {
+        "type": "doc",
+        "id": "extensions/index"
+      },
+      "items": ["extensions/select-ext"]
+    },
+    {
+      "type": "category",
       "label": "HTTP API Reference",
       "link": {
         "type": "doc",
