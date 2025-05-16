@@ -139,7 +139,7 @@ jobs:
 
       - name: Run examples
         run: |
-          set -e
+          set -e -x
           cd ${{ matrix.example_root }}
           for example in $(find ./${{ matrix.path_prefix }} -type f );
           do
@@ -148,7 +148,7 @@ jobs:
                 --name reductstore -p 8383:8383 \
                 --env RS_API_TOKEN="my-token"  \
                 --env RS_LICENSE_PATH=/misc/license.lic reduct/store:${{ matrix.reduct_version }}
-
+            sleep 1
             reduct-cli cp http://my-token@127.0.0.1:8384/example-bucket  http://my-token@127.0.0.1:8383/example-bucket --limit 100
             reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-remove
             reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-rename
