@@ -7,15 +7,15 @@ description: Documentation for Official ReductStore extensions.
   <link rel="canonical" href="https://www.reduct.store/docs/extensions" />
 </head>
 
-ReductStore has an [**extension**](./glossary#extension) system that allows you to extend the functionality of ReductStore with custom plugins that
-can process data during querying on the storage side. For example, you can use extensions to manipulate data in columnar formats such as CSV, scale images, search for text in blobs, and more.
+The ReductStore [**extension**](./glossary#extension) system allows you to extend its functionality with custom plugins.
+These can process data during querying on the storage side. For instance, extensions can be used to manipulate data in columnar formats such as CSV, scale images, search for text in blobs and perform other actions.
 
-In this documentation, we will cover basic concepts of the extension system and how to interact with it using query parameters.
+This documentation covers the basic concepts of the extension system and explains how to interact with it using query parameters.
 
 ## Querying with Extensions
 
-A use can interact with the extension system using the `ext` query parameter and the name of the extension in JSON format
-when querying the data. The `ext` paramater is avialable in all the official ReductStore SDKs but for learning purposes, we will use JSON request body in this example.
+Users can interact with the extension system by using the `ext` query parameter and the name of the extension in JSON format when querying the data.
+The `ext` parameter is available in all official ReductStore SDKs, but for the purposes of this example, we will use a JSON request body.
 
 ```json
 {
@@ -27,9 +27,10 @@ when querying the data. The `ext` paramater is avialable in all the official Red
 }
 ```
 
-This request will use the `select` extension to select the first column of the CSV data and return each [**record**](./glossary#record) only with the first column.
+This request uses the `select` extension to select the first column of the CSV data and return each [**record**](./glossary#record) with only the first column.
 
-The processing of the data isn't the only thing that the extension can do. It can return [**computed labels**](./glossary#computed-label), that can have results of the processing or any other data that can be used in the query condition.
+However, the processing of the data is not the only thing that the extension can do.
+It can also return [**computed labels**](./glossary#computed-label), which can contain the results of the processing or any other data that can be used in the query condition.
 
 ```json
 {
@@ -44,25 +45,29 @@ The processing of the data isn't the only thing that the extension can do. It ca
 }
 ```
 
-This request will use the `select` extension to select the first column of the CSV data and return each record only with the first column.
-The `when` condition will filter the records by the value of the first column, which is now available as a label `@speed`.
+This request uses the `select` extension to select the first column of the CSV data and return only the first column for each record.
+The `when` condition will then filter the records by the value of this column, which is now labelled `@speed`.
 
 :::info
-You should use the `@` prefix for the computed labels in the `when` condition. The `@` prefix is used to distinguish between the computed labels and the regular labels
-that are stored in the database.
+You should use the `@` prefix for the computed labels in the `when` condition.
+This distinguishes the computed labels from the regular labels that are stored in the database.
 :::
 
 ## Data Pipeline with Extensions
 
-As you can see in the previous example, the extension can return computed labels that can be used in the query condition.
+As you can see from the previous example, the extension can return computed labels that can be used in the query condition.
 However, we also use the `when` condition to filter records based on their labels before reading their content.
 It would be inefficient to read all the records and pass them to the extension for processing, so the storage engine
-have two stages of filtering: the first stage is the filtering the records based on their labels to read and pass them to the extension for processing,
-and the second stage is the filtering the records based on the computed labels after they are processed by the extension.
+has two filtering stages: the first stage filters the records based on their labels before passing them to the extension for processing.
+The second stage involves filtering the records based on the computed labels after they have been processed by the extension.
 
 ![ReductStore Extension Data Pipeline](./img/extension_pipeline.png)
 
-The diagram above shows the data pipeline of the extension system for the following query:
+<small style={{ textAlign: "right" }}>
+  Data pipeline with data processing stage for the extension system.
+</small>
+
+The above diagram shows the data pipeline for the extension system in response to the following query:
 
 ```json
 {
@@ -78,12 +83,13 @@ The diagram above shows the data pipeline of the extension system for the follow
 }
 ```
 
-The query engine detects that the `when` contains a condition with a computed label `@speed` and ignores it on the data retrieval stage.
-The engine filter data based on the `&color` label and only then reads the record content from the disk and passes it to the extension for processing.
-The extension processes the data and assigns the computed label `@speed` to the record so that the engine can use it in the second stage of filtering.
+The query engine detects that the `when` clause contains a condition with a computed label, `@speed`, and ignores it during the data retrieval stage.
+The engine filters the data based on the `&color` label, and only then reads the record content from the disk and passes it to the extension for processing.
+The extension then processes the data and assigns the computed label `@speed` to the record, allowing the engine to use it in the second filtering stage.
 
-The output of the pipeline is the records that match the both conditions based on the labels and the computed labels.
+The pipeline's output is records that match both conditions based on labels and computed labels.
 
 :::info
-The detection of the computed labels happens recursively in the nested queries. If a nested condition contains a computed label, the engine will ignore the whole tree.
+The detection of computed labels occurs recursively within nested conditions.
+If a nested condition contains a computed label, the entire tree is ignored.
 :::
