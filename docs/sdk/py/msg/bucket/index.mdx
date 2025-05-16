@@ -7,3 +7,289 @@ description: API reference for the Bucket Module Module of the ReductStore Clien
 </head>
 
 # Bucket Module
+
+<a id="reduct.msg.bucket"></a>
+
+
+
+Message types for the Bucket API
+
+<a id="reduct.msg.bucket.QuotaType"></a>
+
+## QuotaType
+
+```python
+class QuotaType(Enum)
+```
+
+determines if database has a fixed size
+
+<a id="reduct.msg.bucket.BucketSettings"></a>
+
+## BucketSettings
+
+```python
+class BucketSettings(BaseModel)
+```
+
+Configuration for a bucket
+
+<a id="reduct.msg.bucket.BucketSettings.max_block_size"></a>
+
+#### max\_block\_size
+
+max block size in bytes
+
+<a id="reduct.msg.bucket.BucketSettings.max_block_records"></a>
+
+#### max\_block\_records
+
+max number of records in a block
+
+<a id="reduct.msg.bucket.BucketSettings.quota_type"></a>
+
+#### quota\_type
+
+quota type
+
+<a id="reduct.msg.bucket.BucketSettings.quota_size"></a>
+
+#### quota\_size
+
+quota size in bytes
+
+<a id="reduct.msg.bucket.BucketInfo"></a>
+
+## BucketInfo
+
+```python
+class BucketInfo(BaseModel)
+```
+
+Information about each bucket
+
+<a id="reduct.msg.bucket.BucketInfo.name"></a>
+
+#### name
+
+name of bucket
+
+<a id="reduct.msg.bucket.BucketInfo.entry_count"></a>
+
+#### entry\_count
+
+number of entries in the bucket
+
+<a id="reduct.msg.bucket.BucketInfo.size"></a>
+
+#### size
+
+size of bucket data in bytes
+
+<a id="reduct.msg.bucket.BucketInfo.oldest_record"></a>
+
+#### oldest\_record
+
+UNIX timestamp of the oldest record in microseconds
+
+<a id="reduct.msg.bucket.BucketInfo.latest_record"></a>
+
+#### latest\_record
+
+UNIX timestamp of the latest record in microseconds
+
+<a id="reduct.msg.bucket.BucketInfo.is_provisioned"></a>
+
+#### is\_provisioned
+
+bucket is provisioned amd you can't remove it or change its settings
+
+<a id="reduct.msg.bucket.EntryInfo"></a>
+
+## EntryInfo
+
+```python
+class EntryInfo(BaseModel)
+```
+
+Entry of bucket
+
+<a id="reduct.msg.bucket.EntryInfo.name"></a>
+
+#### name
+
+name of entry
+
+<a id="reduct.msg.bucket.EntryInfo.size"></a>
+
+#### size
+
+size of stored data in bytes
+
+<a id="reduct.msg.bucket.EntryInfo.block_count"></a>
+
+#### block\_count
+
+number of blocks
+
+<a id="reduct.msg.bucket.EntryInfo.record_count"></a>
+
+#### record\_count
+
+number of records
+
+<a id="reduct.msg.bucket.EntryInfo.oldest_record"></a>
+
+#### oldest\_record
+
+UNIX timestamp of the oldest record in microseconds
+
+<a id="reduct.msg.bucket.EntryInfo.latest_record"></a>
+
+#### latest\_record
+
+UNIX timestamp of the latest record in microseconds
+
+<a id="reduct.msg.bucket.BucketFullInfo"></a>
+
+## BucketFullInfo
+
+```python
+class BucketFullInfo(BaseModel)
+```
+
+Information about bucket and contained entries
+
+<a id="reduct.msg.bucket.BucketFullInfo.info"></a>
+
+#### info
+
+statistics about bucket
+
+<a id="reduct.msg.bucket.BucketFullInfo.settings"></a>
+
+#### settings
+
+settings of bucket
+
+<a id="reduct.msg.bucket.BucketFullInfo.entries"></a>
+
+#### entries
+
+information about entries of bucket
+
+<a id="reduct.msg.bucket.QueryType"></a>
+
+## QueryType
+
+```python
+class QueryType(Enum)
+```
+
+Query types
+
+<a id="reduct.msg.bucket.QueryType.QUERY"></a>
+
+#### QUERY
+
+query entries
+
+<a id="reduct.msg.bucket.QueryType.REMOVE"></a>
+
+#### REMOVE
+
+remove entries
+
+<a id="reduct.msg.bucket.QueryEntry"></a>
+
+## QueryEntry
+
+```python
+class QueryEntry(BaseModel)
+```
+
+Query entry
+
+<a id="reduct.msg.bucket.QueryEntry.query_type"></a>
+
+#### query\_type
+
+query type
+
+<a id="reduct.msg.bucket.QueryEntry.start"></a>
+
+#### start
+
+start time in microseconds
+
+<a id="reduct.msg.bucket.QueryEntry.stop"></a>
+
+#### stop
+
+end time in microseconds
+
+<a id="reduct.msg.bucket.QueryEntry.include"></a>
+
+#### include
+
+include labels. Added for backward compatibility
+
+<a id="reduct.msg.bucket.QueryEntry.exclude"></a>
+
+#### exclude
+
+exclude labels. Added for backward compatibility
+
+<a id="reduct.msg.bucket.QueryEntry.each_s"></a>
+
+#### each\_s
+
+return a record every S seconds
+
+<a id="reduct.msg.bucket.QueryEntry.each_n"></a>
+
+#### each\_n
+
+return every Nth record
+
+<a id="reduct.msg.bucket.QueryEntry.limit"></a>
+
+#### limit
+
+limit the number of records returned
+
+<a id="reduct.msg.bucket.QueryEntry.ttl"></a>
+
+#### ttl
+
+time to live of the query in seconds
+
+<a id="reduct.msg.bucket.QueryEntry.only_meatadata"></a>
+
+#### only\_meatadata
+
+return only metadata
+
+<a id="reduct.msg.bucket.QueryEntry.continuous"></a>
+
+#### continuous
+
+continuous query, it doesn't stop until the TTL is reached
+
+<a id="reduct.msg.bucket.QueryEntry.when"></a>
+
+#### when
+
+conditional query to filter records
+
+<a id="reduct.msg.bucket.QueryEntry.strict"></a>
+
+#### strict
+
+strict mode for when clause
+
+<a id="reduct.msg.bucket.QueryEntry.ext"></a>
+
+#### ext
+
+additional parameters for extensions

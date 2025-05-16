@@ -80,6 +80,28 @@
     },
     {
       "type": "category",
+      "label": "Extensions",
+      "link": {
+        "type": "doc",
+        "id": "extensions/index"
+      },
+      "items": [
+        {
+          "type": "category",
+          "label": "Official Extensions",
+          "collapsed": false,
+          "collapsible": false,
+          "link": {
+            "type": "doc",
+            "id": "extensions/official/index"
+          },
+          "items": ["extensions/official/select-ext"]
+        },
+        "extensions/development"
+      ]
+    },
+    {
+      "type": "category",
       "label": "HTTP API Reference",
       "link": {
         "type": "doc",
