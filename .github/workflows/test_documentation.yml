@@ -170,7 +170,7 @@ jobs:
             docker rm reductstore
           done
       - name: Print Docker logs
-        if: always()
+        if: failure()
         run: |
           docker logs reductstore
 
