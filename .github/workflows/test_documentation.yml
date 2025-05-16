@@ -64,6 +64,14 @@ jobs:
         with:
           submodules: true
           lfs: false
+
+      - name: Install reduct-cli
+        run: |
+          wget https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.x86_64-unknown-linux-gnu.tar.gz
+          tar -xvf reduct-cli.x86_64-unknown-linux-gnu.tar.gz
+          chmod +x reduct-cli
+          sudo mv reduct-cli /usr/local/bin
+
       - name: Prepare ReductStore instance with data
         run: |
           docker run -d --name reductstore -p 8384:8383  reduct/store:${{ matrix.reduct_version }}
