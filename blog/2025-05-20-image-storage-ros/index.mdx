@@ -1,11 +1,11 @@
 ---
-title: "How to Store Images in ROS2"
-description: "This blog post will guide you through setting up ROS2 with ReductStore—a time-series database optimized for unstructured data. More specifically, we'll go through a practical example to show how to capture and store raw camera images from a ROS topic in ReductStore."
+title: How to Store Images in ROS2
+description: "Learn how to capture and store images from ROS2 using ReductStore, a high-performance storage and streaming solution for unstructured, time-series data."
 authors: anthony
 tags: [tutorials, ros, computer vision, robotics]
 slug: tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision
 date: 2025-05-20
-image: ./img/social-card.jpg
+image: ./img/ros-reductstore-example.png
 ---
 
 import YouTube from "@site/src/components/shared/VideoPlayer/YouTube";
@@ -14,13 +14,15 @@ import YouTube from "@site/src/components/shared/VideoPlayer/YouTube";
 
 &nbsp;
 
-ROS2 is widely used for building robotic systems with sensors like cameras. While it's great for communication, it doesn't handle storage of large image data streams.
+ROS2 is widely used for building robotic systems with sensors like cameras, LiDAR, or IMUs. While it's great for communication (e.g., publishing and subscribing to topics), it lacks a built-in solution for storing large amounts of unstructured data, such as images.
+
+ROS2 bag files are a common way to store data, but they are not ideal for long-term storage or real-time streaming. They are designed for short-term use and can be difficult to manage when dealing with large datasets.
 
 Addressing this challenge, this blog post will guide you through setting up ROS2 with ReductStore a high-performance storage and streaming solution optimized for unstructured, time-series data.
 
-This blog post will focus specifically on image data, but if you are interested in a more general overview you can read [**How to Store and Manage Robotic Data**](/blog/store-robotic-data).
+We will focus specifically on image data, but if you are interested in a more general overview you can read [**How to Store and Manage Robotic Data**](/blog/store-robotic-data) which covers the challenges and strategies for storing and managing robotic data in general.
 
-For the full code example, we will be using the [**reduct-ros-example repository**](https://github.com/reductstore/reduct-ros-example), which provides a complete implementation of the concepts discussed in this blog post.
+For the full code example, we will be using the [**reduct-ros-example repository**](https://github.com/reductstore/reduct-ros-example), which provides a complete implementation of the concepts discussed in this article.
 
 {/* truncate */}
 
@@ -39,20 +41,20 @@ If you are starting today, the `jazzy` distribution is recommended for its long-
 
 To install the Jazzy Jalisco distribution, you can follow the instructions provided in [**Jazzy's installation guide**](https://docs.ros.org/en/jazzy/Installation.html).
 
-## Understanding the advantages of using ReductStore with ROS
+## Understanding the advantages of using ReductStore with ROS2
 
 Integrating ReductStore with ROS provides many benefits for robotic applications:
 
 - **Best performance**: ReductStore's time-series design is tailored to the sequential nature of robotic applications and optimized for unstructured data, such as images, audio, and sensor readings.
 - **Real-time data management**: ReductStore provides real-time First In First Out (FIFO) quota management, which is critical for maintaining a balance between storage space and continuous data flow on edge devices.
 - **Metadata association**: It supports the association of labels or AI-generated analytics results directly with each stored record, enriching the dataset and facilitating subsequent processing or machine learning tasks.
-- **Replication**: ReductStore offers the ability to replicate data across a distributed network based on user-defined filters. For instance, to copy important data to a central server or cloud storage for further analysis.
+- **Replication**: ReductStore offers the ability to replicate data across a distributed network based on user-defined filters. For instance, to stream important data to a central server or cloud storage.
 
 ## Example to capture and store raw camera images
 
-![ROS with ReductStore](./img/ros-reductstore-example.webp)
+![ROS with ReductStore](./img/ros-reductstore-example.png)
 
-To capture and store raw camera images with ROS2, you need to create a node that subscribes to an image topic, processes the image, and stores it in ReductStore.
+To capture and store raw camera images with ROS2, you need to create a node that subscribes to an image topic, serialize the image, and stores it in ReductStore.
 
 You can use the [**reduct-ros-example**](https://github.com/reductstore/reduct-ros-example) as a guideline. This example demonstrates how to subscribe to a ROS topic, such as `/image_raw/compressed`, serialize the message in binary format, and store it in a bucket called `ros-bucket` under the entry `images`.
 
@@ -163,7 +165,11 @@ class ImageListener(Node):
         asyncio.run_coroutine_threadsafe(self.store_data(timestamp, binary_data, "image/jpeg"), self.loop)
 ```
 
-In this context, `serialize_message` is used to convert the `Image` message object into a byte stream that can subsequently be passed along for storage.
+In this context, `serialize_message` is used to convert the `CompressedImage` message object to bytes that can then be passed along for storage.
+
+:::info
+The serialization format determines how data is stored and retrieved, so it should be cross-platform to be usable on different operating systems. In this example, we use the JPEG format, which is widely supported and easy to handle in ROS2.
+:::
 
 Following serialization, an asynchronous coroutine (`store_data`) is scheduled on the event loop (`self.loop`) using `asyncio.run_coroutine_threadsafe`.
 
