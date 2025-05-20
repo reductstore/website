@@ -4,12 +4,12 @@ import clsx from "clsx";
 
 const stats = [
   { value: "+40K", description: "downloads" },
-  {
-    value: "+20",
-    description: "instances installed in production environment",
-  },
-  { value: "+1 PT", description: "of data managed" },
-  { value: "+5", description: "happy customers" },
+  { value: "+20", description: "production deployments" },
+  { value: "+1 PT", description: "of time-series data managed" },
+  { value: "+603%", description: "faster read operations than Timescale for 100KB records" },
+  { value: "+924%", description: "faster write operations than Timescale for 100KB records" },
+  { value: "~90%", description: "reduction in cloud storage costs compared to Timescale" },
+  { value: "99.99%", description: "uptime across all deployments" },
 ];
 
 function HomepageStats() {
