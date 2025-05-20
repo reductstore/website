@@ -12,26 +12,30 @@ import YouTube from "@site/src/components/shared/VideoPlayer/YouTube";
 
 <YouTube id="R61cp0mzmrk" />
 
-The Robot Operating System (ROS) stands as a versatile framework for developing sophisticated robotic applications with various sensors, including cameras. These cameras are relatively inexpensive and widely used as they can provide a wealth of information about the robot's environment.
+&nbsp;
 
-Processing camera output with computer vision requires efficient solutions to handle massive amounts of data in real time. ROS 2 is designed with this in mind, but it is a communication middleware and does not provide a built-in solution for storing and managing large volumes of image data.
+ROS 2 is widely used for building robotic systems with sensors like cameras. While it's great for communication, it doesn't handle storage of large image data streams.
 
-Addressing this challenge, this blog post will guide you through setting up ROS 2 with ReductStore—a time-series database for unstructured data optimized for edge computing, ensuring your robotic applications can process and store camera outputs effectively.
+Addressing this challenge, this blog post will guide you through setting up ROS2 with ReductStore a high-performance storage and streaming solution optimized for unstructured, time-series data. 
 
-This blog post will focus specifically on image data, but if you are interested in a more general overview you can read [**How to Store and Manage Robotic Data**](/blog/store-robotic-data).
+This blog post will focus specifically on image data, but if you are interested in a more general overview you can read [**How to Store and Manage Robotic Data**](/blog/store-robotic-data). 
+
+For the full code example, we will be using the [**reduct-ros-example repository**](https://github.com/reductstore/reduct-ros-example), which provides a complete implementation of the concepts discussed in this blog post.
 
 {/* truncate */}
 
 ## ROS 2 distributions
 
-To install ROS 2, you'll need to select a distribution that aligns with your project requirements and system compatibility. As of now, multiple distributions are available for ROS 2 [**here**](https://docs.ros.org/en/foxy/Releases.html).
+To install ROS 2, you'll need to select a distribution that aligns with your project requirements and system compatibility. As of May 2025, two distributions are currently supported:
 
-Among them, two distributions are currently actively maintained :
-
-- **Iron Irwini** (`iron`) (Release date: May 23rd, 2023; End of life: November 2024)
+- **Jazzy Jalisco** (`jazzy`) (Release date: May 23rd, 2024; End of life: May 2029)
 - **Humble Hawksbill** (`humble`) (Release date: May 23rd, 2022; End of life: May 2027)
 
-We recommend the `humble` distribution for its long-term support until May 2027. This is the eighth release of ROS 2 and caters to various platforms including Ubuntu Linux, Windows, RHEL (Red Hat Enterprise Linux), or macOS.
+If you are starting today, the `jazzy` distribution is recommended for its long-term support until May 2029. This is the thenth release of ROS 2 and supports the following platforms:
+
+- Tier 1: Ubuntu 24.04, Windows 10
+- Tier 2: RHEL 9 (Red Hat Enterprise Linux)
+- Tier 3: macOS and Debian Bookworm
 
 To install the Humble Hawksbill distribution on your preferred operating system, follow the instructions provided in their [**installation guide**](https://docs.ros.org/en/humble/Installation.html). The installation process involves a series of commands specific to each platform and may require certain prerequisites like Python or C++ dependencies depending on your OS.
 
@@ -50,7 +54,7 @@ Integrating ReductStore with ROS provides many benefits for robotic applications
 
 To capture and store raw camera images with ROS 2, you need to create a node that subscribes to an image topic, processes the image, and stores it in ReductStore.
 
-You can use the [**reduct-ros-example**](https://github.com/reductstore/reduct-ros-example) as a guideline. This example demonstrates how to subscribe to a ROS topic, such as `/image_raw`, serialize the message in binary format, and store it in a bucket called `ros-bucket` under the entry `image`.
+You can use the [**reduct-ros-example**](https://github.com/reductstore/reduct-ros-example) as a guideline. This example demonstrates how to subscribe to a ROS topic, such as `/image_raw/compressed`, serialize the message in binary format, and store it in a bucket called `ros-bucket` under the entry `images`.
 
 ### Create a custom ROS 2 Node
 
@@ -82,7 +86,7 @@ class ImageListener(Node):
         )
 ```
 
-In this example `ImageListener` is a subclass of `Node`, which is part of ROS 2's client library (`rclpy`). It sets up a subscription to listen for incoming images from the `/image_raw` topic. When an image message is received by the node via `self.subscription`, it triggers `image_callback`.
+In this example `ImageListener` is a subclass of `Node`, which is part of ROS 2's client library (`rclpy`). It sets up a subscription to listen for incoming images from the `/image_raw/compressed` topic. When an image message is received by the node via `self.subscription`, it triggers `image_callback`.
 
 In this callback function, each received frame is stored in the designated bucket in ReductStore using Python's built-in `asyncio` module, more on this later.
 
@@ -204,9 +208,9 @@ As you can see, the `store_data` method is designed to be non-blocking, ensuring
 
 ## Testing the image storage system
 
-To test the image storage system, you can run the ROS 2 node and publish image messages to the `/image_raw` topic.
+To test the image storage system, you can run the ROS 2 node and publish image messages to the `/image_raw/compressed` topic.
 
-For example, we can use the `usb_cam` package to capture images from a USB camera (such as a web camera) and publish them to the `/image_raw` topic.
+For example, we can use the `usb_cam` package to capture images from a USB camera (such as a web camera) and publish them to the `/image_raw/compressed` topic.
 
 To install the `usb_cam` package, you can use the following command:
 
@@ -214,9 +218,9 @@ To install the `usb_cam` package, you can use the following command:
 sudo apt-get install ros-<ros2-distro>-usb-cam
 ```
 
-Replace `<ros2-distro>` with the ROS 2 distribution you are using, such as `humble` or `iron`.
+Replace `<ros2-distro>` with the ROS 2 distribution you are using, such as `jazzy` or `iron`.
 
-Our custom ROS 2 node directly stores the binary data from the `Image` message to ReductStore. This means that we can control the format of the images we store by configuring the `usb_cam` package to publish images in the desired format.
+Our custom ROS 2 node directly stores the binary data from the `ImageCompressed` message to ReductStore. This means that we can control the format of the images we store by configuring the `usb_cam` package to publish images in the desired format.
 
 MotionJPEG (MJPEG) is a common format for video compression and is often used for video streaming. This format compresses each frame of video as a separate JPEG image, which can be useful for easily storing and processing images.
 
@@ -231,19 +235,19 @@ usb_cam:
     pixel_format: "raw_mjpeg"
 ```
 
-We can run the `usb_cam` node to start capturing images and publishing them to the `/image_raw` topic using the following command:
+We can run the `usb_cam` node to start capturing images and publishing them to the `/image_raw/compressed` topic using the following command:
 
 ```bash
 ros2 run usb_cam usb_cam_node_exe --ros-args --params-file ./usb_cam_params.yaml
 ```
 
-Once the `usb_cam` node is running, we can start the custom ROS 2 node that listens to the `/image_raw` topic and stores the images in ReductStore.
+Once the `usb_cam` node is running, we can start the custom ROS 2 node that listens to the `/image_raw/compressed` topic and stores the images in ReductStore.
 
 ```bash
 ros2 run reduct_camera capture_and_store
 ```
 
-The `capture_and_store` node will start listening to the `/image_raw` topic and store the images in ReductStore as they are received.
+The `capture_and_store` node will start listening to the `/image_raw/compressed` topic and store the images in ReductStore as they are received.
 
 ### Use ReductStore CLI to inspect stored images
 
