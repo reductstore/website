@@ -8,7 +8,9 @@ date: 2025-05-20
 image: ./img/social-card.jpg
 ---
 
-![ROS with ReductStore](./img/ros-reductstore-example.webp)
+import YouTube from "@site/src/components/shared/VideoPlayer/YouTube";
+
+<YouTube id="R61cp0mzmrk" />
 
 The Robot Operating System (ROS) stands as a versatile framework for developing sophisticated robotic applications with various sensors, including cameras. These cameras are relatively inexpensive and widely used as they can provide a wealth of information about the robot's environment.
 
@@ -44,6 +46,8 @@ Integrating ReductStore with ROS provides many benefits for robotic applications
 
 ## Example to capture and store raw camera images
 
+![ROS with ReductStore](./img/ros-reductstore-example.webp)
+
 To capture and store raw camera images with ROS 2, you need to create a node that subscribes to an image topic, processes the image, and stores it in ReductStore.
 
 You can use the [**reduct-ros-example**](https://github.com/reductstore/reduct-ros-example) as a guideline. This example demonstrates how to subscribe to a ROS topic, such as `/image_raw`, serialize the message in binary format, and store it in a bucket called `ros-bucket` under the entry `image`.
@@ -56,9 +60,9 @@ Below is an example demonstrating this integration within a Python class:
 
 ```python
 import asyncio
-from reduct import Client, Bucket
-from sensor_msgs.msg import Image
 from rclpy.node import Node
+from reduct import Client, Bucket
+from sensor_msgs.msg import CompressedImage
 
 class ImageListener(Node):
     """Node for listening to image messages and storing them in ReductStore."""
@@ -74,7 +78,7 @@ class ImageListener(Node):
         self.loop: asyncio.AbstractEventLoop = loop
         self.bucket: Bucket = None
         self.subscription = self.create_subscription(
-            Image, "/image_raw", self.image_callback, 10
+            CompressedImage, "/image_raw/compressed", self.image_callback, 10
         )
 ```
 
@@ -133,7 +137,7 @@ class ImageListener(Node):
         return int(msg.header.stamp.sec * 1e6 + msg.header.stamp.nanosec / 1e3)
 
     @staticmethod
-    def serialize_message(msg: Image) -> bytes:
+    def serialize_message(msg: CompressedImage) -> bytes:
         """
         Serialize a ROS message to bytes.
 
@@ -142,7 +146,7 @@ class ImageListener(Node):
         """
         return bytes(msg.data)
 
-    def image_callback(self, msg: Image) -> None:
+    def image_callback(self, msg: CompressedImage) -> None:
         """
         Handle incoming image messages by scheduling storage.
 
@@ -152,7 +156,7 @@ class ImageListener(Node):
         self.get_logger().info(f'Received image, storing to database')
         timestamp = self.get_timestamp(msg)
         binary_data = self.serialize_message(msg)
-        asyncio.run_coroutine_threadsafe(self.store_data(timestamp, binary_data), self.loop)
+        asyncio.run_coroutine_threadsafe(self.store_data(timestamp, binary_data, "image/jpeg"), self.loop)
 ```
 
 In this context, `serialize_message` is used to convert the `Image` message object into a byte stream that can subsequently be passed along for storage.
@@ -176,7 +180,7 @@ With these considerations in mind, here's how you can define the `store_data` me
 class ImageListener(Node):
     # ... [previous parts of ImageListener class] ...
 
-    async def store_data(self, timestamp: int, data: bytes) -> None:
+    async def store_data(self, timestamp: int, data: bytes, content_type: str) -> None:
         """
         Store unstructured data in the Reduct bucket.
 
@@ -186,7 +190,12 @@ class ImageListener(Node):
         if not self.bucket:
             await self.init_bucket()
 
-        await self.bucket.write("image", data, timestamp)
+        # Example of a label (key-value pair) to associate with the data record
+        labels = {"random_value": random.uniform(0, 1)}
+
+        self.get_logger().info(f"Storing data at {self.display_timestamp(timestamp)}")
+        await self.bucket.write("images", data, timestamp, labels=labels, content_type=content_type)
+
 ```
 
 When the `store_data` method is called, it first checks if the bucket has been initialized. If not, it calls the `init_bucket` method to create the bucket. Then, it writes the serialized data to the bucket entry `image` with the provided timestamp.
