@@ -12,16 +12,16 @@ description: HTTP API documentation for interacting with the database.
 
 ReductStore provides an HTTP API for interacting with the database. In order to use the API, you must first authenticate using a token, which you can be provisioned one with the `RS_API_TOKEN` **[environment variable](./configuration)** or created with [**the Token API**](./http-api/token-authentication).
 
-Once you have obtained a token, you can use it to authenticate your requests by including it in the `authorsization` header of your HTTP request, like this:
+Once you have obtained a token, you can use it to authenticate your requests by including it in the `authorization` header of your HTTP request, like this:
 
 ```
-authorsization: Bearer <your-token-here>
+authorization: Bearer <your-token-here>
 ```
 
 An example of a request with CURL:
 
 ```shell
- curl   --header "authorsization: Bearer ${ACCESS_TOKEN}" -a http://127.0.0.1:8383/api/v1/info
+ curl   --header "authorization: Bearer ${ACCESS_TOKEN}" -a http://127.0.0.1:8383/api/v1/info
 ```
 
 :::info
