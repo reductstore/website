@@ -3,8 +3,8 @@ import styles from "./styles.module.css";
 import clsx from "clsx";
 
 const stats = [
-  { value: "+40K", description: "downloads" },
-  { value: "+20", description: "production deployments" },
+  { value: "+60K", description: "downloads" },
+  { value: "+100", description: "production deployments" },
   { value: "+1 PT", description: "of time-series data managed" },
   { value: "99.99%", description: "uptime across all deployments" },
   {
