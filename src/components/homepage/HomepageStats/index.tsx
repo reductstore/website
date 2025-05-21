@@ -9,15 +9,15 @@ const stats = [
   { value: "99.99%", description: "uptime across all deployments" },
   {
     value: "+603%",
-    description: "faster read operations than Timescale for 100KB records",
+    description: "faster read operations for 100 KB records",
   },
   {
     value: "+924%",
-    description: "faster write operations than Timescale for 100KB records",
+    description: "faster write operations for 100 KB records",
   },
   {
     value: "~90%",
-    description: "reduction in cloud storage costs compared to Timescale",
+    description: "reduction in cloud storage costs",
   },
 ];
 
