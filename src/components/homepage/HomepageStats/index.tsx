@@ -3,13 +3,22 @@ import styles from "./styles.module.css";
 import clsx from "clsx";
 
 const stats = [
-  { value: "+40K", description: "downloads" },
+  { value: "+60K", description: "downloads" },
+  { value: "+100", description: "production deployments" },
+  { value: "+1 PT", description: "of time-series data managed" },
+  { value: "99.99%", description: "uptime across all deployments" },
   {
-    value: "+20",
-    description: "instances installed in production environment",
+    value: "+603%",
+    description: "faster read operations for 100 KB records",
   },
-  { value: "+1 PT", description: "of data managed" },
-  { value: "+5", description: "happy customers" },
+  {
+    value: "+924%",
+    description: "faster write operations for 100 KB records",
+  },
+  {
+    value: "~90%",
+    description: "reduction in cloud storage costs",
+  },
 ];
 
 function HomepageStats() {
@@ -19,8 +28,7 @@ function HomepageStats() {
         <h2 className="hero__title">Developers choose ReductStore</h2>
         <p className={clsx("hero__subtitle", styles.statsSubheader)}>
           Trusted by robotics and IIoT engineers to process billions of
-          time-indexed records 10x faster at 1/10 the cost of traditional
-          storage solutions.
+          time-indexed records
         </p>
         <div className={styles.statsGrid}>
           {stats.map((stat, index) => (

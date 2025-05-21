@@ -44,7 +44,7 @@ function HomepageHeader() {
               className="button button--secondary button--block button--lg"
               to="/whitepaper"
             >
-              White Paper
+              White Paper →
             </Link>
           </div>
         </div>

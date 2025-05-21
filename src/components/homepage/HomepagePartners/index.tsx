@@ -11,6 +11,10 @@ const partners = [
     image: require("@site/static/img/partners/Microsoft_Partner.webp").default,
     alt: "Microsoft Solutions Partner Logo",
   },
+  {
+    image: require("@site/static/img/partners/Innofounder.webp").default,
+    alt: "Innofounder Logo",
+  },
 ];
 
 function HomepagePartners() {
