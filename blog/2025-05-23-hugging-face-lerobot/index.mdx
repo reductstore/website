@@ -2,7 +2,7 @@
 title: "Getting Started with LeRobot"
 description: "A beginner’s guide to exploring robotics with LeRobot in Google Colab, covering setup, running models, training, and managing data."
 authors: ekaterina
-tags: [robotics, lerobot]
+tags: [tutorials, robotics, lerobot]
 slug: hugging-face-lerobot
 date: 2025-05-27
 image: ./img/lerobot.png
@@ -10,19 +10,19 @@ image: ./img/lerobot.png
 
 ![Intro image](./img/lerobot.png)
 
-[**LeRobot is an open-source project by Hugging Face**](https://huggingface.co/lerobot) that makes it easy to explore the world of robotics using machine learning, even if you’ve never done anything like this before. It gives you pre-trained models, real-world data, and simple tools built with PyTorch, a popular machine learning framework. Whether you're just curious or ready to try your first robotics project, LeRobot is a great place to start.
+[**LeRobot is an open-source project by Hugging Face**](https://huggingface.co/lerobot) that makes it easy to explore the world of robotics with machine learning, even if you’ve never done anything like this before. It gives you pre-trained models, real-world data, and simple tools built with PyTorch, a popular machine learning framework. Whether you're just curious or ready to try your first robotics project, LeRobot is a great place to start.
 
 {/* truncate */}
 
 ## What You Need to Get Started
 
-You can run everything in simulation, right from your browser — no robot, no installations, and no powerful computer needed. We’ll be using Google Colab, a free cloud-based coding environment.
+You can run everything in a simulation right from your browser — no robot, no installations, and no powerful computer needed. We’ll be using Google Colab, a free cloud-based coding environment.
 
 Here’s what you’ll need:
 
 1. **Google Account:** To use Colab, you need a Google account. If you use Gmail, you already have one. If not, you can [**create a Google account**](https://colab.research.google.com/).
 
-2. **Hugging Face Account:** LeRobot uses models and datasets hosted on Hugging Face. To access them, you'll need to [**create a Hugging Face account**](https://huggingface.co/).
+2. **Hugging Face Account:** LeRobot uses models and datasets hosted on Hugging Face. To access all features, you'll need to [**create a Hugging Face account**](https://huggingface.co/).
 
 ### Preparation
 
@@ -32,17 +32,18 @@ To get started with LeRobot in Google Colab, first open Google Colab and sign in
 
 LeRobot can use a GPU (Graphics Processing Unit), which makes things run faster, especially for simulation and machine learning tasks:
 
-- In the Colab menu, click `Runtime > Change runtime type`.
+- In the Colab menu, click `Runtime` > `Change runtime type`.
 
-- Under `Hardware accelerator`, select `GPU`.
+- Under the `Hardware accelerator`, select `GPU`.
 
 - Click `Save`.
 
-Now your notebook is using a free GPU provided by Google.
+Now your notebook is using a free GPU provided by Google. Note that GPU access in Colab is limited in time and resources, depending on whether you’re using the free or PRO version.
+
 
 #### Step 2: Clone the LeRobot Repository
 
-Run this command in a Colab code cell to download LeRobot from GitHub. This repository is public, so you don’t need a GitHub account to download it.
+Run this command in a Colab code cell to download LeRobot from GitHub. This repository is public, so you don’t need a GitHub account to clone it.
 
 ```python
 !git clone https://github.com/huggingface/lerobot.git
@@ -72,7 +73,7 @@ After cloning the repository and switching to the `lerobot` folder, the next ste
 !pip install -e ".[pusht]"
 ```
 
-After running it LeRobot will be ready to use in your notebook. All necessary tools and libraries will be installed automatically.
+After running it, LeRobot will be ready to use in your notebook. All necessary tools and libraries will be installed automatically.
 
 > **Note:** If you see any errors during installation, you may just need to install a missing libraries.
 
@@ -88,23 +89,25 @@ This tool helps speed up access to models and datasets, especially when loading 
 
 LeRobot includes several pre-trained models, so you can try robot tasks without needing to train anything yourself. These models are already trained on specific tasks and ready to go.
 
-- **π<sub>0</sub>:** A powerful model that combines vision, language, and action. It’s designed for general robot tasks, for example, following instructions or reacting to what it 'sees'.
+- **π<sub>0</sub>:** A powerful model that combines vision, language, and action. It’s designed for general robot tasks, for example, following instructions or reacting to what it sees.
 
 - **π<sub>0</sub> FAST:** A faster, optimized version of the π<sub>0</sub> model.
 
-- **Diffusion Policy:** A model trained on the `Push-T` dataset, where a robot learns to push a T-shaped object toward a target.
+- **Diffusion Policy:** A model trained on the Push-T dataset, where a robot learns to push a T-shaped object toward a target.
 
-- **VQ-BeT:** Another model trained on the same `Push-T` task, but it uses a different architecture. You can run both and compare how they perform.
+- **VQ-BeT:** Another model trained on the same Push-T task, but it uses a different architecture. You can run both and compare how they perform.
 
 - **ACT:** A model trained for fine manipulation tasks that require high precision, like inserting objects or handling small parts.
 
-By default, the example script runs the Diffusion Policy model on the `Push-T` task. To try it out, run this command in a code cell:
+By default, the example script runs the Diffusion Policy model on the Push-T task. To try it out, run this command in a code cell:
 
 ```python
 !python examples/2_evaluate_pretrained_policy.py
 ```
 
 When you run the command, LeRobot will automatically download the pre-trained model, set up a simulation environment, and run the robot as it tries to complete the task. Throughout the process, you’ll see messages showing what’s happening step-by-step. A short video will also be saved so you can see how the robot performed.
+
+> Hugging Face access limits: When running dataset downloads or model loading multiple times in a row, you might occasionally encounter temporary access restrictions from Hugging Face. This is normal and part of their rate limiting to prevent abuse.
 
 **What You’ll See in the Output**
 
@@ -144,13 +147,13 @@ You may also see a **warning** about video resizing. It’s normal and doesn’t
 
 The video is saved in `lerobot/outputs/eval/example_pusht_diffusion/rollout.mp4`.
 
-It shows the robot pushing the T-shaped object in simulation, using the actions generated by the model. To download it, find the file in the file browser, click the three dots to the right of the filename, and select `Download`. Then you can watch it with any video player.
+It shows the robot pushing the T-shaped object in simulation using the actions generated by the model. To download it, find the file in the file browser, click the three dots to the right of the filename, and select `Download`. Then you can watch it with any video player.
 
 ![GIF](./img/rollout.gif)
 
 ### Want to Try a Different Model?
 
-You can switch from Diffusion Policy to VQ-BeT, which is trained on the same task. It’s a good way to explore how different models perform. Here’s how to do it:
+You can switch from Diffusion Policy to VQ-BeT, which is trained on the same task. It’s a good way to explore how different models perform. Here’s how you can do it:
 
 1. In the file browser, open the file `lerobot/examples/2_evaluate_pretrained_policy.py`.
 
@@ -160,6 +163,7 @@ You can switch from Diffusion Policy to VQ-BeT, which is trained on the same tas
 
 ```python
 33 from lerobot.common.policies.vqbet.modeling_vqbet import VQBeTPolicy
+# Optional: change output path to avoid overwriting results
 36 output_directory = Path("outputs/eval/example_vqbet_pusht")
 43 pretrained_policy_path = "lerobot/vqbet_pusht"
 47 policy = VQBeTPolicy.from_pretrained(pretrained_policy_path)
@@ -177,11 +181,11 @@ This will now evaluate the VQ-BeT model instead of the Diffusion Policy.
 
 ## Training a Model
 
-LeRobot isn’t just for running pre-trained models, it also lets you try training one yourself. You can train the same type of model used by the official LeRobot team: the Diffusion Policy on the `Push-T` task.
+LeRobot isn’t just for running pre-trained models, it also lets you try training one yourself. You can train the same type of model used by the official LeRobot team: the Diffusion Policy on the Push-T task.
 
-Since we’re using Google Colab, you have access to a free GPU, which is important because training on other systems without such a GPU can be very slow. For example, in our tests on a Mac with Apple Silicon (using the MPS device), training took two hours just to complete 20 steps.
+Since we’re using Google Colab, you have access to a free GPU, which is important because training on other systems without a CUDA-enabled GPU can be very slow. For example, in our tests on a Mac with Apple Silicon (using the MPS backend), training took significantly longer — in one case, up to two hours just to complete just 20 steps.
 
-By default, the training script runs for 5000 steps, which typically takes about an hour on Colab’s GPU. If you want to try it faster, you can reduce the steps to, say, 100. This will still give you a good idea of how training works.
+By default, the training script runs for 5000 steps, which takes some time. In our case, the run took about an hour on Colab’s GPU. If you want to try it faster, you can reduce the steps to, say, 100. This will still give you a good idea of how training works.
 
 In the file `lerobot/examples/3_train_policy.py`, find and change these line:
 
@@ -195,7 +199,7 @@ Now run the training script:
 !python examples/3_train_policy.py
 ```
 
-This will start training the Diffusion Policy model on the `Push-T` task using the `lerobot/pusht` dataset.
+This will start training the Diffusion Policy model on the Push-T task using the `lerobot/pusht` dataset.
 
 As the script runs, you’ll see lines like this in the terminal:
 
@@ -222,8 +226,9 @@ Open the file `lerobot/examples/2_evaluate_pretrained_policy.py` and change the 
 ```python
 33 from lerobot.common.policies.diffusion.modeling_diffusion import DiffusionPolicy
 36 output_directory = Path("outputs/eval/example_pusht_diffusion")
+# Comment out the old pretrained model path
 43 # pretrained_policy_path = "lerobot/diffusion_pusht"
-# Use your newly trained model path
+# Use your newly trained model path instead
 45 pretrained_policy_path = Path("outputs/train/example_pusht_diffusion")
 47 policy = DiffusionPolicy.from_pretrained(pretrained_policy_path)
 ```
@@ -278,7 +283,7 @@ But you’re not limited to just one. If you’d like to try the dataset used by
 50 repo_id = "lerobot/pusht"
 ```
 
-Then re-run the script. This will download the [**`Push-T` dataset**](https://huggingface.co/datasets/lerobot/pusht), the same one used to train both models you just ran earlier. You’ll now have access to the raw data they were trained on.
+Then re-run the script. This will download the [**Push-T dataset**](https://huggingface.co/datasets/lerobot/pusht), the same one used to train both models you just ran earlier. You’ll now have access to the raw data they were trained on.
 
 **Tip: Clean Up the Output**
 
@@ -341,11 +346,11 @@ This folder contains all the data files — observations, actions, metadata, and
 
 - Click the eye icon at the top of the file browser to show hidden folders like `.cache.`
 
-- Click the folder icon with two dots just above the lerobot folder.
+- Click the folder icon with two dots just above the `lerobot` folder.
 
 ![Folders](./img/lerobot_folder.png)
 
-- Now navigate through the folders like this: `root > .cache > huggingface > lerobot > lerobot > pusht`.
+- Now navigate through the folders like this: `root` > `.cache` > `huggingface` > `lerobot` > `lerobot` > `pusht`.
 
 To go back to the `lerobot` folder, look for the `content` folder, it's at the same level as the `root`, and go inside.
 
@@ -406,13 +411,13 @@ You’ve just taken your first steps into robotics and machine learning with LeR
 
 - **Run your own experiment.** Once you’re familiar with the basic workflow, you can try a simple experiment: change the dataset slightly or load a new one. Even a small change, such as selecting a different set of episodes, will help you see how data affects the model’s behavior.
 
-- **Grow your projects further.** As you work more with LeRobot and collect larger amounts of data, organizing and managing that data becomes important. This can feel overwhelming at first, but understanding the basics of data management will save you time and frustration later. We recommend checking out this beginner-friendly guide, [**How to Store and Manage Robotics Data**](https://www.reduct.store/blog/store-robotic-data). It explains simple strategies for handling robot data efficiently. You don’t need to master this now, but keeping these ideas in mind will help you scale your experiments smoothly when you’re ready.
+- **Grow your projects further.** As you work more with LeRobot and collect larger amounts of data, organizing and managing that data becomes important. This can feel overwhelming at first, but understanding the basics of data management will save you time and frustration later. We recommend checking out this beginner-friendly guide, [**How to Store and Manage Robotics Data**](/blog/store-robotic-data). It explains simple strategies for handling robot data efficiently. You don’t need to master this now, but keeping these ideas in mind will help you scale your experiments smoothly when you’re ready.
 
 ## Conclusion
 
 In this tutorial, we saw how LeRobot lets you explore robotics and machine learning without needing a physical robot. You ran pre-trained models in simulation, worked with real robot data, and even trained a simple model — all within Colab.
 
-What many find surprising is how accessible this has become. Tasks that once needed expensive hardware and deep skills can now be done with just a browser and a few lines of code. Seeing a robot act based on what it sees is exciting, and you can go further by modifying, training, and evaluating models yourself. LeRobot is a great way to start new projects and dive into robotics.
+What many find surprising is how accessible this has become. Tasks that once required expensive hardware and deep skills can now be done with just a browser and a few lines of code. Seeing a robot act based on what it sees is exciting, and you can go further by modifying, training, and evaluating models yourself. LeRobot is a great way to start new projects and dive into robotics.
 
 ---
 
