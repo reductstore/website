@@ -10,9 +10,7 @@ async def main():
         )
         # Write some CSV data with timestamps
         now = time_ns() // 1000
-        await bucket.write("csv", "1,2,3,4,5", timestamp=now, content_type="text/csv")
-        await bucket.write("csv", "6,7,8,9,10", timestamp=now+1, content_type="text/csv")
-        await bucket.write("csv", "11,12,13,14,15", timestamp=now+2, content_type="text/csv")
+        await bucket.write("csv", "1,2,3,4,5\n6,7,8,9,10\n11,12,13,14,15\n", timestamp=now, content_type="text/csv")
 
         # Prepare the query with the 'select' extension
         ext = {
@@ -31,7 +29,9 @@ async def main():
         async for record in bucket.query("csv", start=now, when={"@col1": {"$lt": 10}}, ext=ext):
             print(f"Record timestamp: {record.timestamp}")
             print(f"Record labels: {record.labels}")
-            print(await record.read_all())
+
+            csv = await record.read_all()
+            print(csv.decode("utf-8").strip())
 
 
 # 5. Run the main function
