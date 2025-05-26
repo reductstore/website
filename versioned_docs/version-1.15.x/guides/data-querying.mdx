@@ -38,12 +38,16 @@ Filter parameters are used to select records based on specific criteria. You can
 | Parameter | Description             | Type             | Default                                                                 |
 | --------- | ----------------------- | ---------------- | ----------------------------------------------------------------------- |
 | `start`   | Start time of the query | Timestamp        | The timestamp of the first record in the **[entry](../glossary#entry)** |
-| `end`     | End time of the query   | Timestamp        | The timestamp of the last record in the entry                           |
+| `stop`    | Stop time of the query  | Timestamp        | The timestamp of the last record in the entry                           |
 | `when`    | Conditional query       | JSON-like object | No condition                                                            |
 
 **Time Range**
 
-The time range is defined by the `start` and `end` parameters. Records with a timestamp equal to or greater than `start` and less than `end` are included in the result. If the `start` parameter is not set, the query starts from the begging of the entry. If the `end` parameter is not set, the query continues to the end of the entry. If both `start` and `end` are not set, the query returns the entire entry.
+The time range is defined by the `start` and `stop` parameters.
+Records with a timestamp equal to or greater than `start` and less than `stop` are included in the result.
+If the `start` parameter is not set, the query starts from the begging of the entry.
+If the `stop` parameter is not set, the query continues to the end of the entry.
+If both `start` and `stop` are not set, the query returns the entire entry.
 
 ### Control Parameters
 
@@ -208,6 +212,6 @@ import FilterQueryCurl from "!!raw-loader!../examples/curl/data_querying_filter.
 </Tabs>
 
 :::info
-The `when` condition filters data in the time range defined by the `start` and `end` parameters. If the `start` and `end` parameters are not set, the condition is applied to all records in the entry.
+The `when` condition filters data in the time range defined by the `start` and `stop` parameters. If the `start` and `stop` parameters are not set, the condition is applied to all records in the entry.
 Limit your queries to a specific time range to improve performance.
 :::
