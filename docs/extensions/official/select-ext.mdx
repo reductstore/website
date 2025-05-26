@@ -1,6 +1,7 @@
 ---
 title: ReductSelect
 description: Extension for ReductStore that allows you to manipulate data in columnar formats on the storage side.
+hide_table_of_contents: true
 ---
 
 <head>
@@ -12,25 +13,28 @@ description: Extension for ReductStore that allows you to manipulate data in col
 
 # ReductSelect Extension
 
-The **ReductSelect** extension is a powerful tool that enables you to manipulate columnar data on the storage side.
-It enables you to select specific columns, filter data and perform various operations before returning it to the client.
+The **ReductSelect** [**extension**](../../glossary#extension) is a powerful tool that enables you to manipulate columnar data on the storage side.
+It allows you to select specific columns, filter data and perform various operations before returning it to the client.
 
 :::info
 The extension is only available under a commercial licence. If you wish to use it for non-commercial purposes, please [**contact us**](/contact).
 :::
 
-## Description
-
-The [**extension**](../../glossary#extension) addresses the need for efficient data manipulation in columnar formats. It does this without the overhead of transferring large datasets to the client for processing, and enables users to perform operations such as selecting specific columns, filtering data and applying transformations directly in storage.
-
 ## Data Format
 
-Currently, the extension only supports single-line CSV records without headers.
-Data is expected to be in columnar format, with each [**record**](../../glossary#extension) represented as a single line in the CSV file, separated by commas.
+Currently, the extension only supports comma-separated CSV data without headers. Stored CSV data can be single- or multi-line and can contain any number of columns.
 
-## Query Syntax
+The CSV format example:
 
-The extension expects a JSON object with the following structure:
+```
+100,true,message string
+200,false,another message
+300,true,yet another message
+```
+
+## Query Format
+
+A user can use the `ext` query parameter to specify the `select` extension and define the columns to select from the CSV data in the following format:
 
 ```python
 {
@@ -51,23 +55,84 @@ The extension expects a JSON object with the following structure:
 
 ### Column Selection
 
-The `columns` array contains objects that specify the columns to select from the CSV data.
+The `columns` array contains objects that specify the columns to select from the columnar data.
 
-| Parameter  | Type   | Mandatory | Description                                                                                                             |
-| ---------- | ------ | --------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `index`    | number | No\*      | The index of the column to select. It can be used with `as_label` to map the selected column to a label.                |
-| `from`     | number | No\*      | The starting index of the range of columns to select. It can be used with `to` to specify the end of the range.         |
-| `to`       | number | No\*      | The ending index of the range of columns to select. It can be used with `from` to specify the start of the range.       |
-| `as_label` | string | No        | The name of the label to use in the query condition. It can be used with `index` to map the selected column to a label. |
+| Parameter  | Type   | Mandatory | Description                                                                                                                      |
+| ---------- | ------ | --------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `index`    | number | No\*      | The index of the column to select. It can be used with `as_label` to map the selected column to a computed label.                |
+| `from`     | number | No\*      | The starting index of the range of columns to select. It can be used with `to` to specify the end of the range.                  |
+| `to`       | number | No\*      | The ending index of the range of columns to select. It can be used with `from` to specify the start of the range.                |
+| `as_label` | string | No        | The name of the label to use in the query condition. It can be used with `index` to map the selected column to a computed label. |
 
 :::info
 \*Each column object must have an index or a range of columns to select.
 :::
 
+### Filtering
+
+If a column is specified with the `as_label` property, the extension will return the selected column as a [**computed label**](../../glossary#computed-label) that can be used in the query condition.
+The extension will apply the `when` condition on each row of the columnar data, filtering the records based on the specified labels.
+
+For example, for the following query:
+
+<div>
+<div style={{ width: '50%', float: 'left' }}>
+
+```python
+{
+    "ext": {
+        "select": {
+            "columns": [
+                {
+                    "index": 0,
+                    "as_label": "col1"
+                }
+            ]
+        }
+    },
+
+    "when": {
+        "@col1": {
+            "$gt": 10
+        }
+    }
+}
+
+```
+
+</div>
+<div style={{ width: '50%', float: 'right', padding: '0 20px' }}>
+
+The following CSV record:
+
+|     |       |                     |
+| --- | ----- | ------------------- |
+| 20  | false | another message     |
+| 0   | false | message string      |
+| 30  | true  | yet another message |
+
+will be transformed to:
+
+|     |
+| --- |
+| 20  |
+| 30  |
+
+</div>
+
+</div>
+<div style={{ clear: 'both' }}></div>
+
+You can find more information about the conditional queries in the [**Conditional Query Reference**](../../conditional-query) documentation.
+
+:::info
+When the extension merges the rows back into the output document, the computed labels retain the values from the first row of the columnar data.
+:::
+
 ## Example
 
-The following example shows how to use the **ReductSelect** extension to select specific columns from a CSV file and filter the data based on these columns.
-Although the example is written in Python, you can use any of the official SDKs to run it.
+The following example demonstrates how to use the **ReductSelect** extension to select specific columns from a CSV file and filter its rows based on these columns.
+Although this example is written in Python, it can be run using any of the official SDKs.
 
 import CodeBlock from "@theme/CodeBlock";
 import Tabs from "@theme/Tabs";
@@ -84,10 +149,9 @@ import SelectQueryPy from "!!raw-loader!../../examples/py/src/ext_select_query.p
 The expected output of the above code is as follows:
 
 ```
-Record timestamp: 1747389597415517
+Record timestamp: 1748244162087416
 Record labels: {'@col1': '1'}
-b'1,3,4\n'
-Record timestamp: 1747389597415518
-Record labels: {'@col1': '6'}
-b'6,8,9\n'
+1,3,4
+6,8,9
+
 ```
