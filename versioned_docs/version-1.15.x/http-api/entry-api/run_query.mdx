@@ -56,11 +56,6 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
       ),
     },
     {
-      status: "204",
-      message: "No Content",
-      summary: "If there is no record available for the given query",
-    },
-    {
       status: "401",
       message: "Unauthorized",
       summary: "Access token is invalid or empty",
@@ -100,6 +95,31 @@ The request body should be a JSON object with the following parameters:
     // If not set, the query continues to the end of the entry.
     end?: "integer"
 
+    // Optional. A conditional query to filter records.
+    when?: "object"
+
+    // Optional. If true, the query will be strict and return an error
+    // if any of the conditions cannot be evaluated during query execution.
+    // If false or unset, the query will consider the incomplete condition to be false.
+    strict?: "boolean"
+
+    // Optional. Additional parameters for extensions.
+    // A user can pass any JSON object to an extension to activate it and configure its behavior.
+    // {
+    //   "ext-name": { "ext-parameter": "value" }
+    // }
+    ext?: "object"
+
+    // Optional. TTL (Time To Live) in seconds for the query.
+    ttl?: "integer"
+
+    // Optional. If true, the query will remain open
+    // for continuous data retrieval until TTL is reached.
+    continuous?: "boolean"
+
+    // Optional. Return only metadata without the actual records.
+    only_metadata?: "boolean"
+
     // Optional. A list of labels to include in the query.
     // Only records with all the specified labels are included.
     // DEPRECATED: Use "when" instead.
@@ -109,21 +129,6 @@ The request body should be a JSON object with the following parameters:
     // Records with any of the specified labels are excluded.
     // DEPRECATED: Use "when" instead.
     exclude?: "Dict[string, string]"
-
-    // Optional. A conditional query to filter records.
-    when?: "object"
-
-    // Optional. Additional parameters for extensions.
-    // A user can pass any JSON object to an extension to activate it and configure its behavior.
-    // {
-    //   "ext-name": { "ext-parameter": "value" }
-    // }
-    ext?: "object"
-
-    // Optional. If true, the query will be strict and return an error
-    // if any of the conditions cannot be evaluated during query execution.
-    // If false or unset, the query will consider the incomplete condition to be false.
-    strict?: "boolean"
 
     // Optional. Return a record every S seconds
     // DEPRECATED: Use "$each_t" in "when" condition instead.
@@ -137,9 +142,6 @@ The request body should be a JSON object with the following parameters:
     // DEPRECATED: Use "$limit" instead in "when" condition
     limit?: "integer"
 
-    // Optional. If true, the query will remain open
-    // for continuous data retrieval until TTL is reached.
-    continuous?: "boolean"
 }
 ```
 
@@ -174,7 +176,7 @@ The query ID must be used to retrieve the query results. See the [**Get a Record
 
 ## Delete Records
 
-If the query type is `DELETE`, the API returns a JSON object with the number of records deleted:
+If the query type is `REMOVE`, the API returns a JSON object with the number of records deleted:
 
 ```typescript
 {
