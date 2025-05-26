@@ -40,7 +40,6 @@ LeRobot can use a GPU (Graphics Processing Unit), which makes things run faster,
 
 Now your notebook is using a free GPU provided by Google. Note that GPU access in Colab is limited in time and resources, depending on whether you’re using the free or PRO version.
 
-
 #### Step 2: Clone the LeRobot Repository
 
 Run this command in a Colab code cell to download LeRobot from GitHub. This repository is public, so you don’t need a GitHub account to clone it.
@@ -70,7 +69,7 @@ This changes the current working directory to the `lerobot` folder, where all th
 After cloning the repository and switching to the `lerobot` folder, the next step is to install everything LeRobot needs to work. Run this command in a new cell:
 
 ```python
-!pip install -e ".[pusht]"
+!pip install ".[pusht]"
 ```
 
 After running it, LeRobot will be ready to use in your notebook. All necessary tools and libraries will be installed automatically.
