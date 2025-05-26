@@ -20,9 +20,9 @@ You can run everything in a simulation right from your browser — no robot, no 
 
 Here’s what you’ll need:
 
-1. **Google Account:** To use Colab, you need a Google account. If you use Gmail, you already have one. If not, you can [**create a Google account**](https://colab.research.google.com/).
+- **Google Account:** To use Colab, you need a Google account. If you use Gmail, you already have one. If not, you can [**create a Google account**](https://colab.research.google.com/).
 
-2. **Hugging Face Account:** LeRobot uses models and datasets hosted on Hugging Face. To access all features, you'll need to [**create a Hugging Face account**](https://huggingface.co/).
+- **Hugging Face Account:** LeRobot uses models and datasets hosted on Hugging Face. To access all features, you'll need to [**create a Hugging Face account**](https://huggingface.co/).
 
 ### Preparation
 
@@ -152,7 +152,9 @@ It shows the robot pushing the T-shaped object in simulation using the actions g
 
 ### Want to Try a Different Model?
 
-You can switch from Diffusion Policy to VQ-BeT, which is trained on the same task. It’s a good way to explore how different models perform. Here’s how you can do it:
+You can switch from Diffusion Policy to VQ-BeT, which is trained on the same task. It’s a good way to explore how different models perform. 
+
+Here’s how you can do it:
 
 1. In the file browser, open the file `lerobot/examples/2_evaluate_pretrained_policy.py`.
 
@@ -315,11 +317,11 @@ Suggested lines to comment out include:
 111 # pprint(dataset.features[camera_key])
 113 # pprint(dataset.features[camera_key])
 119 # delta_timestamps = {
-#... all rows
+#... all lines
 148 # break
 ```
 
-You can always un-comment them later if you want a deeper look into the dataset structure.
+You can always uncomment them later if you want a deeper look into the dataset structure.
 
 **What’s Inside the Push-T Dataset?**
 
@@ -331,7 +333,7 @@ Once downloaded, you’ll see a summary like this:
 
 - **Recording speed:** 10 FPS. These images were recorded at 10 frames per second, like a slow-motion video. It lets you see how the robot moved step by step.
 
-- **Camera views:** observation.image. Each frame is taken from the robot’s camera, and labeled as `observation.image` in the data. It’s what the robot sees.
+- **Camera views:** `observation.image`. Each frame is taken from the robot’s camera, and labeled as `observation.image` in the data. It’s what the robot sees.
 
 - **Task description:** Push the T-shaped block onto the T-shaped target.
 
@@ -341,17 +343,17 @@ Once downloaded, you’ll see a summary like this:
 
 LeRobot downloads the dataset into a special hidden cache folder inside the Colab environment `/root/.cache/huggingface/lerobot/lerobot/pusht/`.
 
-This folder contains all the data files — observations, actions, metadata, and even video recordings. Since it’s hidden by default, follow these steps to access it:
+This folder contains all the data files: observations, actions, metadata, and even video recordings. Since it’s hidden by default, follow these steps to access it:
 
-- Click the eye icon at the top of the file browser to show hidden folders like `.cache.`
+1. Click the eye icon at the top of the file browser to show hidden folders like `.cache.`
 
-- Click the folder icon with two dots just above the `lerobot` folder.
+2. Click the folder icon with two dots just above the `lerobot` folder.
 
 ![Folders](./img/lerobot_folder.png)
 
-- Now navigate through the folders like this: `root` > `.cache` > `huggingface` > `lerobot` > `lerobot` > `pusht`.
+3. Now navigate through the folders like this: `root` > `.cache` > `huggingface` > `lerobot` > `lerobot` > `pusht`.
 
-To go back to the `lerobot` folder, look for the `content` folder, it's at the same level as the `root`, and go inside.
+4. To go back to the `lerobot` folder, look for the `content` folder, it's at the same level as the `root`, and go inside.
 
 **Dataset Folder Structure**
 
@@ -383,7 +385,7 @@ lerobot/pusht
 
 - `.cache/`: A hidden folder used by LeRobot internally.
 
-## Visualize the Dataset
+## Visualize a Dataset
 
 Once your dataset is loaded, it’s super helpful to see what the robot actually experienced. LeRobot comes with an easy-to-use, interactive visualization tool that runs right in your browser.
 
@@ -397,8 +399,7 @@ In the viewer, just enter the name of a dataset, like `lerobot/pusht`.
 
 - Watch each episode like a video from the robot’s point of view.
 
-- Explore graphs showing how the robot moved and what actions it took. Motor 0 and Motor 1, both state and action, are shown as 4 curves over time.
-  These curves are plotted over time, so you can see how the robot's decisions changed from frame to frame.
+- Explore graphs showing how the robot moved and what actions it took. For example, in the `lerobot/pusht` dataset, the viewer displays Motor 0 and Motor 1 — both state and action — as four curves plotted over time. This allows you to see how the robot's decisions changed from frame to frame during each episode.
 
 ![Motors](./img/motors.png)
 
@@ -406,11 +407,11 @@ In the viewer, just enter the name of a dataset, like `lerobot/pusht`.
 
 You’ve just taken your first steps into robotics and machine learning with LeRobot, so what can you do next?
 
-- **Try different models and tasks.** LeRobot supports several models and scenarios. For more challenging examples, check out the `lerobot/examples/advanced` folder.
+- **Try different models and tasks:** LeRobot supports several models and scenarios. For more challenging examples, check out the `lerobot/examples/advanced` folder.
 
-- **Run your own experiment.** Once you’re familiar with the basic workflow, you can try a simple experiment: change the dataset slightly or load a new one. Even a small change, such as selecting a different set of episodes, will help you see how data affects the model’s behavior.
+- **Run your own experiment:** Once you’re familiar with the basic workflow, you can try a simple experiment: change the dataset slightly or load a new one. Even a small change, such as selecting a different set of episodes, will help you see how data affects the model’s behavior.
 
-- **Grow your projects further.** As you work more with LeRobot and collect larger amounts of data, organizing and managing that data becomes important. This can feel overwhelming at first, but understanding the basics of data management will save you time and frustration later. We recommend checking out this beginner-friendly guide, [**How to Store and Manage Robotics Data**](/blog/store-robotic-data). It explains simple strategies for handling robot data efficiently. You don’t need to master this now, but keeping these ideas in mind will help you scale your experiments smoothly when you’re ready.
+- **Grow your projects further:** As you work more with LeRobot and collect larger amounts of data, organizing and managing that data becomes important. This can feel overwhelming at first, but understanding the basics of data management will save you time and frustration later. We recommend checking out this beginner-friendly guide, [**How to Store and Manage Robotics Data**](/blog/store-robotic-data). It explains simple strategies for handling robot data efficiently. You don’t need to master this now, but keeping these ideas in mind will help you scale your experiments smoothly when you’re ready.
 
 ## Conclusion
 
