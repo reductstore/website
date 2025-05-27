@@ -8,4 +8,105 @@ sidebar_position: 1
   <link rel="canonical" href="https://www.reduct.store/docs/integrations" />
 </head>
 
-# ROS 2 Agent
+The **ros2-reduct-agent** is a ROS 2 node that records selected topics as MCAP files and stores them in [**ReductStore**](/).
+
+Key features:
+
+- Continuous recording of ROS 2 topics as MCAP files into ReductStore
+- File rotation by duration or size to avoid large, hard-to-use files
+- Topic grouping into separate pipelines, each writing its own file sequence
+- Per-pipeline topic selection, compression, and chunking
+
+## System Requirements
+
+| Component | Version              |
+| --------- | -------------------- |
+| ROS 2     | Jazzy Jalisco        |
+| OS        | Ubuntu 24.04 (Noble) |
+| Python    | ≥ 3.12               |
+
+Start a local ReductStore instance:
+
+```bash
+docker run -p 8383:8383 -v ${PWD}/data:/data reduct/store:latest
+```
+
+For more details on running ReductStore, see the [**Getting Started**](/docs/getting-started) guide.
+
+## Quick Start
+
+```bash
+# Clone into your ROS 2 workspace
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws/src
+git clone https://github.com/reductstore/ros2-reduct-agent.git
+cd ..
+
+# Install dependencies and build
+rosdep install --from-paths src --ignore-src -r -y
+colcon build --packages-select ros2_reduct_agent
+
+# Run with your config
+source install/local_setup.bash
+ros2 run ros2_reduct_agent recorder --ros-args --params-file ./config.yaml
+```
+
+## Configuration Reference
+
+The agent is configured using a standard ROS 2 YAML file with two sections: `storage` and `pipelines`. For example:
+
+```yaml
+/***:
+  ros__parameters:
+    storage:
+      url: "http://localhost:8383"
+      api_token: "my_token"
+      bucket: "robot_01"
+    pipelines:
+      camera_front:
+        include_topics:
+          - /stereo/left/image_raw
+          - /stereo/right/image_raw
+        compression: lz4
+        chunk_size_bytes: "10MB"
+        filename_mode: incremental
+        split:
+          max_duration_s: 60
+      telemetry:
+        include_topics:
+          - /odom
+          - /tf
+        filename_mode: incremental
+        split:
+          max_duration_s: 120
+          max_size_bytes: "10MB"
+      rosout:
+        include_topics:
+          - /rosout
+        filename_mode: timestamp
+```
+
+### Storage Section
+
+The `storage` section configures the connection to ReductStore.
+
+| Parameter   | Type   | Description                                                         |
+| ----------- | ------ | ------------------------------------------------------------------- |
+| `url`       | string | ReductStore endpoint (e.g., `http://localhost:8383`) **(required)** |
+| `bucket`    | string | Target bucket (auto-created if missing) **(required)**              |
+| `api_token` | string | API token with write permission                                     |
+
+### Pipeline Section
+
+Each key under `pipelines` defines a separate recording pipeline, which results in a distinct [**entry**](../glossary#entry) in ReductStore. Each pipeline can be configured independently with its own topic filters, compression settings, and file-splitting behavior.
+
+| Parameter              | Type      | Default     | Description                                                             |
+| ---------------------- | --------- | ----------- | ----------------------------------------------------------------------- |
+| `include_topics`       | string\[] |             | List of ROS 2 topic names to record, must start with `/` **(required)** |
+| `filename_mode`        | enum      | `timestamp` | File naming strategy: `timestamp` or `incremental`                      |
+| `compression`          | enum      | `zstd`      | Compression algorithm: `none`, `lz4`, or `zstd`                         |
+| `chunk_size_bytes`     | int       | 1MB         | Size of each chunk in bytes (1KB-10MB)                                  |
+| `enable_crcs`          | bool      | `true`      | Append CRC to each chunk for data integrity                             |
+| `spool_max_size_bytes` | int       | 10MB        | Max in-memory buffer size before writing to storage (1KB-10GB)          |
+| `split.max_duration_s` | int       |             | Split file after N seconds of wall-clock time (1-3600) **(required)**   |
+| `split.max_size_bytes` | int       |             | Split file if size exceeds this byte limit (1KB-1GB)                    |
