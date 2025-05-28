@@ -102,6 +102,15 @@
     },
     {
       "type": "category",
+      "label": "Integrations",
+      "link": {
+        "type": "doc",
+        "id": "integrations/index"
+      },
+      "items": ["integrations/ros2-agent"]
+    },
+    {
+      "type": "category",
       "label": "HTTP API Reference",
       "link": {
         "type": "doc",
