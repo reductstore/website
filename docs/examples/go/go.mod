@@ -1,3 +1,5 @@
-module go
+module examples
 
-go 1.24
+go 1.24.1
+
+require github.com/reductstore/reduct-go v0.0.1 // indirect
