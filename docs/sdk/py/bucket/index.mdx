@@ -206,7 +206,9 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
 - `exclude` _dict_ - remove records which doesn't have all labels
   from this (DEPRECATED use when)
   each_s(Union[int, float]): remove a record for each S seconds
+  (DEPRECATED use $each_t in when)
 - `each_n(int)` - remove each N-th record
+  (DEPRECATED use $each_n in when)
 - `strict(bool)` - if True: strict query
 - `ext` _dict_ - extended query parameters
 
@@ -319,16 +321,16 @@ Write a record to entry
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-  
+
 
 **Example**:
 ```python
       await bucket.write("entry-1", b"some_data",
          timestamp="2021-09-10T10:30:00")
-     
+
       # You can write data chunk-wise using an asynchronous iterator and the
       # size of the content:
-     
+
       async def sender():
           for chunk in [b"part1", b"part2", b"part3"]:
               yield chunk
@@ -381,7 +383,7 @@ If a label is empty, it will be removed.
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-  
+
 
 **Example**:
 ```python
@@ -415,7 +417,7 @@ If a label is empty, it will be removed.
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-  
+
 
 **Example**:
 ```python
@@ -459,14 +461,15 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
   from this (DEPRECATED use when)
 - `head` _bool_ - if True: get only the header of a recod with metadata
   each_s(Union[int, float]): return a record for each S seconds
-- `each_n(int)` - return each N-th record
-- `limit` _int_ - limit the number of records
+  (DEPRECATED use $each_t in when)
+- `each_n(int)` - return each N-th record (DEPRECATED use $each_n in when)
+- `limit` _int_ - limit the number of records (DEPRECATED use $limit in when)
 - `strict(bool)` - if True: strict query
 
 **Returns**:
 
 - `AsyncIterator[Record]` - iterator to the records
-  
+
 
 **Example**:
 ```python
@@ -528,7 +531,7 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
 **Returns**:
 
 - `AsyncIterator[Record]` - iterator to the records
-  
+
 
 **Example**:
 ```python
@@ -538,5 +541,3 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
           async for chunk in record.read(n=1024):
               print(chunk)
    ```
-
-
