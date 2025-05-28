@@ -71,7 +71,7 @@ The `columns` array contains objects that specify the columns to select from the
 ### Filtering
 
 If a column is specified with the `as_label` property, the extension will return the selected column as a [**computed label**](../../glossary#computed-label) that can be used in the query condition.
-The extension will apply the `when` condition on each row of the columnar data, filtering the records based on the specified labels.
+The extension will apply the extension `when` condition on each row of the columnar data, filtering the records based on the specified labels.
 
 For example, for the following query:
 
@@ -88,12 +88,11 @@ For example, for the following query:
                     "as_label": "col1"
                 }
             ]
-        }
-    },
-
-    "when": {
-        "@col1": {
-            "$gt": 10
+        },
+        "when": {
+            "@col1": {
+                "$gt": 10
+            }
         }
     }
 }
@@ -153,5 +152,4 @@ Record timestamp: 1748244162087416
 Record labels: {'@col1': '1'}
 1,3,4
 6,8,9
-
 ```
