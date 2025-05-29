@@ -141,7 +141,16 @@ export default async function (context, opts) {
             console.error(stderr);
             process.exit(1);
           }
-
+          
+          // Create a symlink to make imports work correctly
+          if (!fs.existsSync(`${tmpDir}/reduct`)) {
+            try {
+              fs.symlinkSync(`${tmpDir}/pkg/reduct`, `${tmpDir}/reduct`, 'dir');
+            } catch (e) {
+              console.error(`Failed to create symlink: ${e.message}`);
+            }
+          }
+          
           // generate markdown
           for (const module of opts.modules) {
             const title = getTitleFromModuleName(module) + " Module";

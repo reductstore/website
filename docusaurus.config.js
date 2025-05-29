@@ -63,6 +63,28 @@ const config = {
         ],
       },
     ],
+    [
+      require.resolve("./src/plugins/docusaurus-plugin-js-sdk-gen"),
+      {
+        sdkRepo: "https://github.com/reductstore/reduct-js.git",
+        sdkBranch: "main",
+        destination: "docs/sdk/js",
+        modules: [
+          "client",
+          "bucket",
+          "record",
+          "apierror"
+        ],
+        additionalModules: {
+          "msg": [
+            "server",
+            "bucket", 
+            "replication",
+            "token"
+          ]
+        }
+      },
+    ],
   ],
 
   // LaTex support
@@ -162,6 +184,12 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      docs: {
+        sidebar: {
+          hideable: false,
+          autoCollapseCategories: false
+        }
+      },
       // Algolia search integration
       algolia: {
         appId: "PRYY64U3U1",

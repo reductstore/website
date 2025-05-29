@@ -52,14 +52,19 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.27.3",
+    "@babel/preset-env": "^7.27.2",
+    "@babel/preset-typescript": "^7.27.1",
     "@docusaurus/module-type-aliases": "^3.0.1",
     "@docusaurus/tsconfig": "^3.0.1",
     "@docusaurus/types": "^3.0.1",
     "eslint": "^8.13.0",
     "eslint-config-prettier": "^9.1.0",
+    "jsdoc-babel": "^0.5.0",
+    "jsdoc-to-markdown": "^9.1.1",
     "prettier": "^3.2.5",
     "remark-code-snippets": "^1.1.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.8.3"
   },
   "browserslist": {
     "production": [
