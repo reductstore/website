@@ -64,6 +64,19 @@ jobs:
             doc_version: next
             path_prefix: go/src
             cmd: go run
+        exclude:
+          - example: golang
+            doc_version: 1.15.x
+            path_prefix: go/src
+            cmd: go run
+          - example: golang
+            doc_version: 1.14.x
+            path_prefix: go/src
+            cmd: go run
+          - example: golang
+            doc_version: 1.13.x
+            path_prefix: go/src
+            cmd: go run
 
     steps:
       - uses: actions/checkout@v4
