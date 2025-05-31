@@ -8,7 +8,8 @@ description: Documentation for Official ReductStore extensions.
 </head>
 
 The ReductStore [**extension**](./glossary#extension) system allows you to extend its functionality with custom plugins.
-These can process data during querying on the storage side. For instance, extensions can be used to manipulate data in columnar formats such as CSV, scale images, search for text in blobs and perform other actions.
+These can process data during querying on the storage side.
+For instance, extensions can be used to manipulate data in columnar formats such as CSV, scale images, search for text in blobs and perform other actions.
 
 This documentation covers the basic concepts of the extension system and explains how to interact with it using query parameters.
 
@@ -17,7 +18,7 @@ This documentation covers the basic concepts of the extension system and explain
 Users can interact with the extension system by using the `ext` query parameter and the name of the extension in JSON format when querying the data.
 The `ext` parameter is available in all official ReductStore SDKs, but for the purposes of this example, we will use a JSON request body.
 
-```json
+```python
 {
   "ext": {
     "select": {
@@ -27,26 +28,27 @@ The `ext` parameter is available in all official ReductStore SDKs, but for the p
 }
 ```
 
-This request uses the `select` extension to select the first column of the CSV data and return each [**record**](./glossary#record) with only the first column.
+This request uses the `select` extension to select the first column of CSV [**records**](./glossary#record) and return each one with only the first column.
 
 However, the processing of the data is not the only thing that the extension can do.
 It can also return [**computed labels**](./glossary#computed-label), which can contain the results of the processing or any other data that can be used in the query condition.
 
-```json
+```python
 {
   "ext": {
     "select": {
       "columns": [{ "index": 0, "as_label": "speed" }]
+    },
+    "when": {
+      "@speed": { "$gt": 10 }
     }
-  },
-  "when": {
-    "@speed": { "$gt": 10 }
   }
 }
 ```
 
-This request uses the `select` extension to select the first column of the CSV data and return only the first column for each record.
-The `when` condition will then filter the records by the value of this column, which is now labelled `@speed`.
+This request uses the `select` extension to select the first column of the CSV data and return only the first column for each row.
+The `when` condition will then filter the rows by the value of this column, which is now labeled `@speed`.
+In the end the query returns the records with filtered rows and only one column.
 
 :::info
 You should use the `@` prefix for the computed labels in the `when` condition.
@@ -69,27 +71,22 @@ The second stage involves filtering the records based on the computed labels aft
 
 The above diagram shows the data pipeline for the extension system in response to the following query:
 
-```json
+```python
 {
   "ext": {
     "select": {
       "columns": [{ "index": 0, "as_label": "speed" }]
+    },
+    "when": {
+      "@speed": { "$gt": 10 }       # filter rows after the data processing (here it's CSV rows)
     }
   },
   "when": {
-    "&color": { "$eq": "green" },
-    "@speed": { "$gt": 10 }
+    "&color": { "$eq": "green" }    # filter records on the retrieval stage
   }
 }
 ```
 
-The query engine detects that the `when` clause contains a condition with a computed label, `@speed`, and ignores it during the data retrieval stage.
-The engine filters the data based on the `&color` label, and only then reads the record content from the disk and passes it to the extension for processing.
-The extension then processes the data and assigns the computed label `@speed` to the record, allowing the engine to use it in the second filtering stage.
-
-The pipeline's output is records that match both conditions based on labels and computed labels.
-
-:::info
-The detection of computed labels occurs recursively within nested conditions.
-If a nested condition contains a computed label, the entire tree is ignored.
-:::
+The query engine uses the `when` condition in the query to retrieve records based on the `&color` label.
+First, the engine filters the data based on the label. Then, it reads the record content from the disk and passes it to the extension for processing.
+The extension then processes the data and assigns the computed label `@speed` to each row, enabling the engine to use the `@speed` label to filter the data.
