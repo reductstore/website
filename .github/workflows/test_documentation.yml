@@ -22,19 +22,19 @@ jobs:
         include:
           - doc_version: next
             reduct_version: main
-            example_root: docs/examples/
+            example_root: docs/examples
 
           - doc_version: 1.15.x
             reduct_version: v1.15.0
-            example_root: versioned_docs/version-1.15.x/examples/
+            example_root: versioned_docs/version-1.15.x/examples
 
           - doc_version: 1.14.x
             reduct_version: v1.14.8
-            example_root: versioned_docs/version-1.14.x/examples/
+            example_root: versioned_docs/version-1.14.x/examples
 
           - doc_version: 1.13.x
             reduct_version: v1.13.5
-            example_root: versioned_docs/version-1.13.x/examples/
+            example_root: versioned_docs/version-1.13.x/examples
 
           #          - language: python
           #            cmd: python3
