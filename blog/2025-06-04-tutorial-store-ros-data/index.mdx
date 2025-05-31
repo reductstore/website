@@ -1,6 +1,6 @@
 ---
 title: How to Store and Manage ROS Data
-description: Learn how to create a custom ROS 2 package to record and upload ROS data to ReductStore with metadata labels. This tutorial covers setting up a Raspberry Pi with ROS 2, interfacing a USB camera, deploying a YOLO object detection node, and implementing a data recorder to store and offload data to ReductStore.
+description: This tutorial shows how to set up a Raspberry Pi with ROS 2, a USB camera, and YOLOv5 for object detection, and use a recorder node to upload data to ReductStore. From setting up the camera and YOLOv5 to configuring the `ros2_reduct_agent` for data recording and replication, this guide provides step-by-step instructions.
 authors: anthony
 tags: [tutorials, ros, robotics]
 slug: tutorial-store-ros-data
@@ -10,7 +10,7 @@ image: ./img/tutorial-store-ros-data.png
 
 ![ROS 2 Data Storage Tutorial](./img/tutorial-store-ros-data.png)
 
-In this tutorial, we will use the `ros2_reduct_agent` package to record ROS 2 topics in MCAP files on a Raspberry Pi and automatically upload them to ReductStore. We will set up ROS 2 on the Pi, connect a USB camera using the `v4l2_camera` driver, and deploy a lightweight YOLOv5 (Nano) object detection node using ONNX Runtime. We will configure the `ros2_reduct_agent` to capture and offload data, install ReductStore on the Pi, and set up replication to a laptop using the web console. This guide includes step-by-step instructions, code examples, and configuration snippets to help you build and deploy the system.
+In this tutorial, we will use the [**ros2_reduct_agent**](https://github.com/reductstore/ros2_reduct_agent) package to record ROS 2 topics in MCAP files on a Raspberry Pi and automatically upload them to ReductStore. We will set up ROS 2 on the Pi, connect a USB camera using the `v4l2_camera` driver, and deploy a lightweight YOLOv5 (Nano) object detection node using ONNX Runtime. We will also configure the `ros2_reduct_agent` to capture and offload data, install ReductStore on the Pi, and set up replication to a central storage using the web console. This guide includes step-by-step instructions, code examples, and configuration snippets to help you build and deploy a similar system.
 
 {/* truncate */}
 
@@ -28,12 +28,12 @@ In this tutorial, we will set up the following architecture:
 
 <small style={{ display: "block", marginTop: "-20px" }}>
   Architecture: Raspberry Pi with ROS 2, USB camera, YOLOv5n, and ReductStore;
-  Laptop with ReductStore Web Console.
+  Laptop with another ReductStore instance and Web Console.
 </small>
 
 - **Raspberry Pi:** Running ROS 2, interfacing with a USB camera, and running a YOLOv5n object detection node with ONNX Runtime.
 - **Laptop/PC:** Running a ReductStore instance (acting as a central data store) and ReductStore's Web Console for managing data.
-- **Network:** The Pi and the laptop are on the same network. The Pi will upload data to the ReductStore instance on the laptop automatically.
+- **Network:** For simplicity, both the Raspberry Pi and the laptop are assumed to be on the same local network.
 
 ### 1.1. Install Ubuntu on Raspberry Pi
 
@@ -438,75 +438,13 @@ object: "0"
 confidence: 0.85
 ```
 
-Now we have a camera streaming images and a detector outputting metadata. Next, we'll use the `ros2_reduct_agent` package to record these data and handle file rotation and uploading to ReductStore.
+Now we have a camera streaming images and a detector publishing YOLOv5 detections as ROS 2 topics. The next step is to record this data and upload it to ReductStore.
 
-## 4. Recording and Uploading Data with `ros2_reduct_agent`
-
-`ros2_reduct_agent` is a ROS 2 node that records selected topics, splits them into MCAP segments, compresses the data, and uploads each segment to ReductStore. It is configured through a single YAML file and requires no custom code.
-
-### 4.1. Clone, install dependencies, and build
-
-```bash
-mkdir -p ~/ros2_ws/src
-cd ~/ros2_ws/src
-git clone https://github.com/reductstore/ros2-reduct-agent.git
-cd ..
-
-rosdep install --from-paths src --ignore-src -r -y
-colcon build --packages-select ros2_reduct_agent
-source install/local_setup.bash
-```
-
-### 4.2. Create `config.yaml`
-
-This configuration defines how `ros2_reduct_agent` records topics and uploads them to ReductStore.
-
-- `url`: ReductStore endpoint.
-- `api_token`: Access token (can be empty if anonymous access is allowed).
-- `bucket`: Target bucket in ReductStore.
-- `include_topics`: List of ROS 2 topics to record.
-- `split.max_duration_s`: Maximum duration of each MCAP file in seconds.
-- `chunk_size_bytes`: Size of MCAP chunks.
-- `compression`: Compression algorithm (`none`, `lz4`, or `zstd`).
-- `filename_mode`: Naming mode for output files.
-
-```yaml
-/**/*:
-  ros__parameters:
-    storage:
-      url: "http://127.0.0.1:8383"
-      api_token: "ACCESS_TOKEN"
-      bucket: "pi_robot"
-    pipelines:
-      camera_stream:
-        include_topics:
-          - /image_raw
-          - /object_detected
-          - /confidence_score
-          - /rosout
-        split:
-          max_duration_s: 60
-        chunk_size_bytes: 1048576
-        compression: "zstd"
-        filename_mode: "timestamp"
-```
-
-### 4.3. Run the agent
-
-Make sure the ReductStore instance is running locally on port 8383, then run:
-
-```bash
-ros2 run ros2_reduct_agent recorder \
-  --ros-args --params-file ~/ros2_ws/config.yaml
-```
-
-Every 60 seconds, the agent creates a new MCAP file, uploads it to the `pi_robot` bucket in ReductStore, and deletes the local copy after a successful upload.
-
-## 5. Installing and Configuring ReductStore on the Raspberry Pi
+## 4. Installing and Configuring ReductStore on the Raspberry Pi
 
 Before running the `ros2_reduct_agent` node, we need a ReductStore server running on the Pi to accept uploads. ReductStore is a lightweight time-series object storage, perfect for edge devices. We will install it on the Pi and create a bucket for our MCAP files.
 
-### 5.1. Install ReductStore on Raspberry Pi
+### 4.1. Install ReductStore on Raspberry Pi
 
 The easiest way on Ubuntu is to use **snap** or **Docker**. We'll use snap for simplicity:
 
@@ -530,13 +468,13 @@ curl http://127.0.0.1:8383/api/v1/info
 
 The `curl` command should return JSON info about the instance (like version, uptime, etc.).
 
-### 5.2. (Optional) Configure ReductStore
+### 4.2. Configure ReductStore
 
 By default, ReductStore doesn't require authentication for local use (anonymous access is allowed). This is fine for our edge scenario on a local network. If you want to set up access tokens or adjust storage quotas, you can do so by following the [**Access Control documentation**](/docs/guides/access-control). For now, we'll use defaults.
 
 We will use the **Web Console** to verify data and to set up replication later. The web console is accessible from a browser at the server's address (it's the same as the API endpoint). For example, on the Pi, open `http://<raspberrypi_ip>:8383` in a browser - you should see the ReductStore Web Console interface (a simple GUI).
 
-### 5.3. Create a Bucket for ROS bag data
+### 4.3. Create a Bucket for ROS bag data
 
 The `ros2_reduct_agent` will upload to a bucket named `"pi_robot"` (as specified in the config). If the bucket does not exist, you can create it manually via the web console:
 
@@ -550,6 +488,57 @@ The `ros2_reduct_agent` will upload to a bucket named `"pi_robot"` (as specified
 </small>
 
 Now, ReductStore is set up on the Pi and ready to accept data. We can run the complete system to record ROS data, detect objects, and upload to ReductStore.
+
+## 4. Recording and Uploading Data with `ros2_reduct_agent`
+
+`ros2_reduct_agent` is a ROS 2 node that records selected topics, splits them into MCAP segments and uploads each segment to ReductStore. It is configured through a YAML file and can be run on the Raspberry Pi to capture data from the camera and YOLO detection nodes.
+
+### 4.1. Clone, install dependencies, and build
+
+```bash
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws/src
+git clone https://github.com/reductstore/ros2-reduct-agent.git
+cd ..
+
+rosdep install --from-paths src --ignore-src -r -y
+colcon build --packages-select ros2_reduct_agent
+source install/local_setup.bash
+```
+
+### 4.2. Create `config.yaml`
+
+This configuration defines how `ros2_reduct_agent` records topics and uploads them to ReductStore.
+
+- `url`: ReductStore endpoint.
+- `api_token`: Access token (can be empty if anonymous access is allowed).
+- `bucket`: Target bucket in ReductStore.
+- `include_topics`: List of ROS 2 topics to record.
+- `split.max_duration_s`: Maximum duration of each MCAP file in seconds.
+- `max_size_bytes`: Maximum size of each MCAP file (e.g., "1MB" or "10MB").
+- `compression`: Compression algorithm (`none`, `lz4`, or `zstd`).
+- `filename_mode`: Naming mode for output files. `timestamp` will name the MCAP files with the timestamp of the first message in the segment, and `incremental` will use a counter (0, 1, 2, ...).
+
+```yaml
+/**/*:
+  ros__parameters:
+    storage:
+      url: "http://127.0.0.1:8383"
+      api_token: "ACCESS_TOKEN"
+      bucket: "pi_robot"
+    pipelines:
+      camera_stream:
+        include_topics:
+          - /image_raw
+          - /object_detected
+          - /confidence_score
+          - /rosout
+        split:
+          max_duration_s: 60
+          max_size_bytes: "1MB"
+        compression: "zstd"
+        filename_mode: "timestamp"
+```
 
 ## 6. Running the Complete System
 
@@ -589,15 +578,13 @@ Now monitor the outputs:
 
 - The camera node should just stream (no text output unless error or warning).
 - The YOLO node will log detections (as we coded with `get_logger().info` on each detection).
-- The `ros2_reduct_agent` node will log bag rotations and uploads. For example, you should see logs about MCAP file creation and uploading to ReductStore.
+- The `ros2_reduct_agent` node will log MCAP into the specified bucket in ReductStore.
 
 Let this run for a while. By default, every 60 seconds it will finalize a bag and upload it. If you want to trigger a rotation sooner (for testing), you could reduce `max_duration_s` in the config.
 
 ### 6.1. Verify Data in ReductStore
 
-On the Pi (or from any machine that can access the Pi's port 8383), open the ReductStore Web Console in a browser: **`http://<raspberrypi_ip>:8383`**. You should see the bucket “pi_robot”. Click it to see the list of entries.
-
-Each uploaded bag file appears as a **record** in the `rosbags` entry of the `pi_robot` bucket. The record name is the bag file name, and you should be able to see its labels, e.g., `object: 1` and `confidence: 0.85` attached to that record.. You can also see the timestamp of each record (when it was uploaded).
+On the Pi (or from any machine that can access the Pi's port 8383), open the ReductStore Web Console in a browser: **`http://<raspberrypi_ip>:8383`**. You should see the bucket `pi_robot`. Naviguate to it, and you should see the uploaded MCAP files listed under the `camera_stream` entry.
 
 You have successfully set up the edge device to capture ROS data and push it to ReductStore with metadata labels!
 
@@ -661,8 +648,7 @@ Fill in the replication settings as:
 - **Destination URL:** `http://<laptop_ip>:8383` (e.g., `http://192.168.1.100:8383`)
 - **Destination Bucket:** pi_robot (on laptop)
 - **Replication Name:** (give it a name like “to_laptop”)
-- **Entries:** `rosbags` (or whatever entry name you used in `bucket.write()`), or leave blank to replicate all entries.
-- **Filter Records**: add the "Exclude" filter rule for `object` equals `"none"`.
+- **Entries:** `camera_stream` (name of the pipeline we set up in `ros2_reduct_agent` config)
 
 Start the replication task. The Pi's ReductStore will now start forwarding new records that meet the criteria to the laptop, in real-time. It's a push model from Pi to laptop, so the laptop doesn't need to know about the Pi or poll it - the Pi will push new records as they arrive.
 
@@ -677,18 +663,16 @@ Start the replication task. The Pi's ReductStore will now start forwarding new r
 
 Back on the Pi, ensure the `ros2_reduct_agent` node is still running and creating new records. When the next bag file is uploaded on the Pi, if it meets the replication filter conditions, the Pi's ReductStore replication task will immediately send it to the laptop.
 
-On the **laptop's web console**, open the “pi_robot” bucket. You should start seeing records appear that correspond to those on the Pi (with a slight delay for transfer). The labels should also be present. If you configured a filter (e.g., confidence > 0.8), try to produce a detection above that confidence on the Pi (point the camera at an easily recognized object or adjust threshold on the Pi code for testing).
-
-Records not meeting the condition will stay only on the Pi and eventually be overwritten if Pi's FIFO quota is set.
+On the **laptop's web console**, open the `pi_robot` bucket. You should start seeing records appear that correspond to those on the Pi (with a slight delay for transfer).
 
 You can also check the replication status on the Pi's web console; it may show last replicated record timestamp etc., indicating it's working.
 
-At this point, we have a robust pipeline:
+At this point, we have a full end-to-end pipeline:
 
-- Raspberry Pi captures camera data and detection metadata.
-- `ros2_reduct_agent` segments the data into time-based bags, labels them, and pushes to local storage.
-- ReductStore on Pi retains recent data and automatically forwards critical data to the laptop's ReductStore based on labels.
-- The laptop accumulates the forwarded data in its own ReductStore bucket, which you can browse or integrate with other systems.
+- Raspberry Pi captures images and detects objects with YOLOv5.
+- `ros2_reduct_agent` continuously records this data into MCAP files.
+- ReductStore on Pi replicates the files to another ReductStore instance on the laptop (could be a cloud instance or a central server).
+- The laptop accumulates the replicated files in its own ReductStore bucket.
 
 ## 8. Best Practices and Further Improvements
 
