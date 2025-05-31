@@ -440,272 +440,67 @@ confidence: 0.85
 
 Now we have a camera streaming images and a detector outputting metadata. Next, we'll create the `rosbag2reduct` package to record these data and handle file rotation and uploading to ReductStore.
 
-## Creating the `rosbag2reduct` Package
+## Recording and Uploading Data with `ros2_reduct_agent`
 
-Our `rosbag2reduct` package will be a ROS 2 node that does the following:
+`ros2_reduct_agent` is a ROS 2 node that records selected topics, splits them into MCAP segments, compresses the data, and uploads each segment to ReductStore. It is configured through a single YAML file and requires no custom code.
 
-- Subscribe to the relevant topics (e.g. `/image_raw`, `object_detected`, `confidence_score`).
-- Record those topics into a bag file using the rosbag2 Python API (in MCAP format).
-- Label each bag file with the latest detection metadata.
-- After a fixed time interval (bag rotation period), close the current bag, then **upload it to ReductStore** with Python client SDK, including the metadata as labels, and delete the local bag file.
-- Start a new bag file and repeat.
-
-:::warning
-This is not optimal (writing to disk then uploading) and is done for simplicity. In a real scenario, you should stream directly to ReductStore or separate storage topics by type. More on this in the [**Best Practices and Further Improvements**](#best-practices-and-further-improvements) section.
-:::
-
-### 1. Create the Package Structure
-
-Run the ROS 2 package creation command:
+### 1. Clone, install dependencies, and build
 
 ```bash
+mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
-ros2 pkg create --build-type ament_python rosbag2reduct --dependencies rclpy rosbag2_py sensor_msgs std_msgs
-```
+git clone https://github.com/reductstore/ros2-reduct-agent.git
+cd ..
 
-This creates a new folder `rosbag2reduct` with a basic Python package setup. Update `rosbag2reduct/package.xml` to include `<exec_depend>reduct-py</exec_depend>` (ReductStore's Python SDK) since we'll use that. Also make sure `rosbag2_py` is listed as a dependency (the above command included it). In `setup.py`, add an entry point for our main node if desired (though we can also run the Python file directly with ros2 run as long as it's installed).
-
-After creation, the structure should look like:
-
-```
-ros2_ws/src/rosbag2reduct/
-├── package.xml
-├── setup.cfg
-├── setup.py
-├── resource/
-│   └── rosbag2reduct
-└── rosbag2reduct
-    ├── __init__.py
-    └── recorder_node.py   # (we will create this)
-```
-
-### 2. Install ReductStore Python SDK and MCAP Support
-
-Before coding, install the ReductStore client library (`reduct-py`) in your Python environment:
-
-```bash
-pip install reduct-py
-```
-
-This gives us the `reduct` module for interacting with a ReductStore server. (We will set up the actual ReductStore server on the Pi soon, but we can write the code first.)
-
-Also, install the MCAP storage format support for rosbag2:
-
-```bash
-sudo apt install ros-${ROS_DISTRO}-rosbag2-storage-mcap
-```
-
-### 3. Implementing the `rosbag2reduct` Node
-
-Open a new file `rosbag2reduct/recorder_node.py` and add the following code from the snippet below. This code defines the `Rosbag2ReductNode` class, which is a ROS 2 node that subscribes to the camera images and metadata topics, records them into bag files, and uploads the bag files to ReductStore with metadata labels.
-
-<details>
-
-<summary>**Rosbag2ReductNode (Python code)**</summary>
-
-```python
-import rclpy
-from rclpy.node import Node
-from std_msgs.msg import String, Float32
-from sensor_msgs.msg import Image
-
-from rclpy.serialization import serialize_message
-from rosbag2_py import SequentialWriter, StorageOptions, ConverterOptions, TopicMetadata
-
-import os
-import shutil
-import datetime
-import asyncio
-from reduct import Client, Bucket
-
-
-class Rosbag2ReductNode(Node):
-    def __init__(self):
-        super().__init__('rosbag2reduct')
-        self.bag_duration = 60.0
-        self.storage_id = 'mcap'  # Or 'sqlite3'
-
-        self.current_bag_index = 0
-        self.writer = None
-        self.current_bag_name = self._open_new_bag()
-
-        self.create_subscription(Image, '/image_raw', self._image_callback, 10)
-        self.create_subscription(String, 'object_detected', lambda msg: self._metadata_callback(msg, 'object_detected'), 10)
-        self.create_subscription(Float32, 'confidence_score', lambda msg: self._metadata_callback(msg, 'confidence_score'), 10)
-
-        self.last_object_detected = "none"
-        self.last_confidence = 0.0
-
-        self.create_timer(self.bag_duration, self._rotate_bag_timer)
-
-        self.reduct_url = "http://127.0.0.1:8383"
-        self.bucket_name = "pi_robot"
-        self.entry_name = "rosbags"
-        self.reduct_client = Client(self.reduct_url)
-        asyncio.get_event_loop().run_until_complete(self._ensure_bucket())
-        self.get_logger().info(
-            f"rosbag2reduct node initialized, writing to {self.storage_id} bags and uploading to ReductStore bucket '{self.bucket_name}'.")
-
-    def _open_new_bag(self):
-        self.writer = SequentialWriter()
-        bag_name = f"rosbag_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}_{self.current_bag_index}"
-        storage_options = StorageOptions(uri=bag_name, storage_id=self.storage_id)
-        converter_options = ConverterOptions('', '')
-        self.writer.open(storage_options, converter_options)
-
-        self.writer.create_topic(TopicMetadata(
-            name='/image_raw',
-            type='sensor_msgs/msg/Image',
-            serialization_format='cdr'))
-        self.writer.create_topic(TopicMetadata(
-            name='object_detected',
-            type='std_msgs/msg/String',
-            serialization_format='cdr'))
-        self.writer.create_topic(TopicMetadata(
-            name='confidence_score',
-            type='std_msgs/msg/Float32',
-            serialization_format='cdr'))
-
-        self.writer.create_topic(TopicMetadata(
-            0,
-            '/image_raw',
-            'sensor_msgs/msg/Image',
-            'cdr'
-        ))
-        self.writer.create_topic(TopicMetadata(
-            0,
-            'object_detected',
-            'std_msgs/msg/String',
-            'cdr'
-        ))
-        self.writer.create_topic(TopicMetadata(
-            0,
-            'confidence_score',
-            'std_msgs/msg/Float32',
-            'cdr'
-        ))
-
-        self.get_logger().info(f"Opened new bag: {bag_name}")
-        return bag_name
-
-    def _image_callback(self, msg: Image):
-        self.writer.write('/image_raw', serialize_message(msg), self.get_clock().now().nanoseconds)
-
-    def _metadata_callback(self, msg, topic_name):
-        if topic_name == 'object_detected':
-            self.last_object_detected = msg.data
-            self.writer.write('object_detected', serialize_message(msg), self.get_clock().now().nanoseconds)
-        elif topic_name == 'confidence_score':
-            self.last_confidence = msg.data
-            self.writer.write('confidence_score', serialize_message(msg), self.get_clock().now().nanoseconds)
-
-    def _rotate_bag_timer(self):
-        object_label = self.last_object_detected
-        confidence_val = float(self.last_confidence)
-        old_bag_name = self.current_bag_name
-
-        self.current_bag_index += 1
-        self.current_bag_name = self._open_new_bag()
-
-        self.get_logger().info(f"Uploading bag {old_bag_name} with metadata: object={object_label}, confidence={confidence_val:.2f}")
-        asyncio.get_event_loop().run_until_complete(
-            self._upload_bag_file(old_bag_name, object_label, confidence_val))
-
-        # Clean up the bag directory if a file was uploaded
-        bag_dir = old_bag_name
-        if os.path.isdir(bag_dir):
-            try:
-                shutil.rmtree(bag_dir)
-                self.get_logger().info(f"Deleted bag directory {bag_dir} after upload.")
-            except Exception as e:
-                self.get_logger().warn(f"Could not delete directory {bag_dir}: {e}")
-        else:
-            self.get_logger().warn(f"Bag directory {bag_dir} not found.")
-
-    async def _ensure_bucket(self):
-        await self.reduct_client.create_bucket(self.bucket_name, exist_ok=True)
-
-    async def _upload_bag_file(self, bag_name, object_label, confidence_val):
-        bag_dir = bag_name
-        mcap_file = None
-
-        # Find the first .mcap file in the bag directory
-        try:
-            for filename in os.listdir(bag_dir):
-                if filename.endswith(".mcap"):
-                    mcap_file = os.path.join(bag_dir, filename)
-                    break
-        except FileNotFoundError:
-            self.get_logger().error(f"Bag directory {bag_dir} does not exist.")
-            return
-
-        if not mcap_file:
-            self.get_logger().warn(f"No .mcap file found in {bag_dir} — skipping upload.")
-            return
-
-        try:
-            with open(mcap_file, 'rb') as f:
-                data = f.read()
-        except Exception as e:
-            self.get_logger().error(f"Error reading {mcap_file}: {e}")
-            return
-
-        bucket: Bucket = await self.reduct_client.get_bucket(self.bucket_name)
-        timestamp = datetime.datetime.utcnow().isoformat() + "Z"
-        labels = {"object": object_label, "confidence": str(confidence_val)}
-        await bucket.write(self.entry_name, data, timestamp=timestamp, labels=labels)
-        self.get_logger().info(f"Uploaded {mcap_file} to ReductStore with labels {labels}.")
-
-
-def main(args=None):
-    rclpy.init(args=args)
-    node = Rosbag2ReductNode()
-    try:
-        rclpy.spin(node)
-    except KeyboardInterrupt:
-        pass
-    node.destroy_node()
-    try:
-        rclpy.shutdown()
-    except Exception:
-        pass
-```
-
-</details>
-
-Let's break down key parts of this implementation:
-
-- We use **rosbag2's Python API**: `SequentialWriter` to record messages. We specify MCAP as the storage format when opening the bag. We explicitly register three topics (`/image_raw`, `object_detected`, `confidence_score`) with their message types, so we can write to them. In each subscription callback, we call `self.writer.write(topic_name, serialize_message(msg), timestamp)` to append to the bag.
-- We maintain `last_object_detected` and `last_confidence` variables to store the most recent detection metadata. The `_metadata_callback` updates these whenever a message on those topics arrives, and writes the message to the bag as well.
-- A ROS timer triggers `_rotate_bag_timer()` every `self.bag_duration` seconds (e.g., every 60 seconds). This function closes the current bag and opens a new one (by calling `_open_new_bag()` which increments a bag index and starts a new file). We then proceed to upload the bag file (that we just closed) to ReductStore.
-- **ReductStore upload:** Using `reduct-py`, we ensure a bucket named `pi_robot` exists in ReductStore (which we assume is running locally on the Pi at `127.0.0.1:8383`). We then read the bag file into memory and use `bucket.write()` to store it in the bucket under the `rosbags` entry. We label each record with the detection metadata (e.g., `labels={"object": "1", "confidence": "0.85"}`).
-- After a successful upload, we delete the local `.mcap` file to save space on the Pi (since it's now stored in ReductStore).
-
-:::info
-This is a basic implementation. In a real-world scenario, you will likely want to handle prediction and timestamping differently, add more metadata, and of course use a more efficient way to upload data directly to ReductStore.
-:::
-
-### 4. Build the `rosbag2reduct` Package
-
-Ensure that in `setup.py` of `rosbag2reduct` you have an entry point if needed, e.g.:
-
-```python
-entry_points={
-    'console_scripts': [
-        'rosbag2reduct = rosbag2reduct.recorder_node:main'
-    ],
-},
-```
-
-This will allow us to run `ros2 run rosbag2reduct rosbag2reduct` to launch the node. Now build the package:
-
-```bash
-cd ~/ros2_ws
-colcon build --packages-select rosbag2reduct
+rosdep install --from-paths src --ignore-src -r -y
+colcon build --packages-select ros2_reduct_agent
 source install/local_setup.bash
 ```
 
-If everything compiles (installs) without errors, we're ready to run the system.
+### 2. Create `config.yaml`
+
+This configuration defines how `ros2_reduct_agent` records topics and uploads them to ReductStore.
+
+- `url`: ReductStore endpoint.
+- `api_token`: Access token (can be empty if anonymous access is allowed).
+- `bucket`: Target bucket in ReductStore.
+- `include_topics`: List of ROS 2 topics to record.
+- `split.max_duration_s`: Maximum duration of each MCAP file in seconds.
+- `chunk_size_bytes`: Size of MCAP chunks.
+- `compression`: Compression algorithm (`none`, `lz4`, or `zstd`).
+- `filename_mode`: Naming mode for output files.
+
+```yaml
+/**/*:
+  ros__parameters:
+    storage:
+      url: "http://127.0.0.1:8383"
+      api_token: "ACCESS_TOKEN"
+      bucket: "pi_robot"
+    pipelines:
+      camera_stream:
+        include_topics:
+          - /image_raw
+          - /object_detected
+          - /confidence_score
+          - /rosout
+        split:
+          max_duration_s: 60
+        chunk_size_bytes: 1048576
+        compression: "zstd"
+        filename_mode: "timestamp"
+```
+
+### 3. Run the agent
+
+Make sure the ReductStore instance is running locally on port 8383, then run:
+
+```bash
+ros2 run ros2_reduct_agent recorder \
+  --ros-args --params-file ~/ros2_ws/config.yaml
+```
+
+Every 60 seconds, the agent creates a new MCAP file, uploads it to the `pi_robot` bucket in ReductStore, and deletes the local copy after a successful upload.
 
 ## Installing and Configuring ReductStore on the Raspberry Pi
 
