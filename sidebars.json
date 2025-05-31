@@ -23,6 +23,11 @@
         },
         {
           "type": "doc",
+          "label": "With Go",
+          "id": "getting-started/with-go"
+        },
+        {
+          "type": "doc",
           "label": "With Rust",
           "id": "getting-started/with-rust"
         },

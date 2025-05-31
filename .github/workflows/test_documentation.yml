@@ -16,24 +16,24 @@ jobs:
     strategy:
       max-parallel: 8
       matrix:
-        example: [python, node, curl, cpp, rust, cli]
+        example: [python, node, curl, cpp, rust, cli, golang]
         doc_version: [next, 1.15.x, 1.14.x, 1.13.x]
         include:
           - doc_version: next
             reduct_version: main
-            example_root: docs/examples/
+            example_root: docs/examples
 
           - doc_version: 1.15.x
             reduct_version: v1.15.0
-            example_root: versioned_docs/version-1.15.x/examples/
+            example_root: versioned_docs/version-1.15.x/examples
 
           - doc_version: 1.14.x
             reduct_version: v1.14.8
-            example_root: versioned_docs/version-1.14.x/examples/
+            example_root: versioned_docs/version-1.14.x/examples
 
           - doc_version: 1.13.x
             reduct_version: v1.13.5
-            example_root: versioned_docs/version-1.13.x/examples/
+            example_root: versioned_docs/version-1.13.x/examples
 
           - language: python
             cmd: python3
@@ -58,6 +58,10 @@ jobs:
           - example: cli
             path_prefix: cli
             cmd: sh
+
+          - example: golang
+            path_prefix: go/src
+            cmd: go run
 
     steps:
       - uses: actions/checkout@v4
@@ -96,6 +100,13 @@ jobs:
         with:
           toolchain: 1.85.0
 
+      - name: Install Go
+        if: matrix.example == 'golang'
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.24
+          check-latest: true
+
       - name: Install Python dependencies
         if: matrix.example == 'python'
         run: |
@@ -110,6 +121,12 @@ jobs:
           yarn run tsc
           cd ..
           yarn add ./reduct-js # install reduct-js as a package
+
+      - name: Install Go dependencies
+        if: matrix.example == 'golang'
+        run: |
+          cd ${{ matrix.example_root }}/${{ matrix.path_prefix }}/..
+          go get -u all
 
       - name: Build C++ examples
         if: matrix.example == 'cpp'
@@ -141,7 +158,7 @@ jobs:
         run: |
           set -e -x
           cd ${{ matrix.example_root }}
-          for example in $(find ./${{ matrix.path_prefix }} -type f );
+          for example in $(find ${PWD}/${{ matrix.path_prefix }} -type f -not -path "*/.*");
           do
             echo '${{secrets.LICENSE_KEY}}' > ./license.lic
             docker run -d  -v ${PWD}:/misc \
@@ -159,7 +176,7 @@ jobs:
             curl -X POST -H "Authorization: Bearer my-token" -d "" http://127.0.0.1:8383/api/v1/b/example-bucket/entry_1?ts=1
 
             echo "Run $example"
-            ${{ matrix.cmd }} "$example"
+            (cd ${{ matrix.path_prefix }}/.. && ${{ matrix.cmd }} "$example")
             sleep 1
             # remove alias if it is cli example
             if [ "${{ matrix.example }}" == "cli" ]; then
