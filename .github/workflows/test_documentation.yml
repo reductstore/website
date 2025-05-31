@@ -61,7 +61,6 @@ jobs:
           #            cmd: sh
 
           - example: golang
-            doc_version: next
             path_prefix: go/src
             cmd: go run
 
