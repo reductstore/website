@@ -179,7 +179,7 @@ jobs:
             curl -X POST -H "Authorization: Bearer my-token" -d "" http://127.0.0.1:8383/api/v1/b/example-bucket/entry_1?ts=1
 
             echo "Run $example"
-            ${{ matrix.cmd }} "$example"
+            (cd ${{ matrix.path_prefix }}/.. && ${{ matrix.cmd }} "$example")
             sleep 1
             # remove alias if it is cli example
             if [ "${{ matrix.example }}" == "cli" ]; then
