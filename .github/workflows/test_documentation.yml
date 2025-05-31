@@ -19,6 +19,14 @@ jobs:
         #        example: [python, node, curl, cpp, rust, cli, golang]
         example: [golang]
         doc_version: [next, 1.15.x, 1.14.x, 1.13.x]
+        exclude:
+          - example: golang
+            doc_version: 1.15.x
+          - example: golang
+            doc_version: 1.14.x
+          - example: golang
+            doc_version: 1.13.x
+
         include:
           - doc_version: next
             reduct_version: main
@@ -62,19 +70,6 @@ jobs:
 
           - example: golang
             doc_version: next
-            path_prefix: go/src
-            cmd: go run
-        exclude:
-          - example: golang
-            doc_version: 1.15.x
-            path_prefix: go/src
-            cmd: go run
-          - example: golang
-            doc_version: 1.14.x
-            path_prefix: go/src
-            cmd: go run
-          - example: golang
-            doc_version: 1.13.x
             path_prefix: go/src
             cmd: go run
 
