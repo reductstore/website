@@ -1,12 +1,12 @@
 ---
-title: Quick Start With Rust
+title: Quick Start With Golang
 description: Getting started with the ReductStore Go Client SDK.
 ---
 
 import Intro from "./common/intro.tsx";
 import InstallSdk from "./common/install_sdk";
 import RunReductStore from "./common/run_reductstore.mdx";
-import QuickStart from "!!raw-loader!../examples/rs/examples/quick_start.rs";
+import QuickStart from "!!raw-loader!../examples/go/src/quick_start.go";
 import UsingSdkSection from "./common/using_sdk";
 import CreateClientSection from "./common/create_client";
 import CreateBucketSection from "./common/create_bucket";
@@ -47,11 +47,10 @@ import NextStep from "./common/next_steps.mdx";
 ## Creating a Client
 
 <CreateClientSection>
-    To create a ReductStore client, you can use the `ReductClient::builder()` method from the `reduct_rs` crate to create a builder
-    instance. You must pass the URL of the ReductStore server as an argument to the `ClientBuilder::new()` method.
-    Then, call the `build()` method on the builder instance to create a `Client` instance:
+    To create a ReductStore client, you should use the `reduct.NewClient` method from the `reduct_go` package.
+    You must pass the URL of the ReductStore server as an argument and specify the client options using the `reduct.ClientOptions` struct:
 
-    ```rust file=../examples/rs/examples/quick_start.rs start=1. end=2.
+    ```go file=../examples/go/src/quick_start.go start=1. end=2.
     ```
 
 </CreateClientSection>
@@ -59,11 +58,10 @@ import NextStep from "./common/next_steps.mdx";
 ## Creating a Bucket
 
 <CreateBucketSection>
-    To create a **[bucket](../glossary#bucket)**, you should use the `create_bucket` method on a `Client` instance. The method takes the name of
-    the bucket you want to create as an argument and returns a `BucketBuilder` instance to configure the bucket settings.
-    Call the `send` method on the `BucketBuilder` to send the request to the ReductStore server and create the bucket:
+    To create a **[bucket](../glossary#bucket)**, you can use the `CreateOrGetBucket` or `CreateBucket` methods on a `Client` instance. The method takes the name of
+    the bucket you want to create as an argument and setting. The settings are optional, and you can customize them using the `BucketSettingBuilder` struct as shown below:
 
-    ```rust file=../examples/rs/examples/quick_start.rs start=2. end=3.
+    ```go file=../examples/go/src/quick_start.go start=2. end=3.
     ```
 
 </CreateBucketSection>
@@ -71,13 +69,11 @@ import NextStep from "./common/next_steps.mdx";
 ## Data Ingestion
 
 <DataIngestionSection>
-    To write a timestamped **[record](../glossary#record)** to an **[entry](../glossary#entry)** in a bucket, you should use the `write_record` method on a `Bucket` instance.
-    Pass the name of the entry you want to write to as an argument. The method will return a `RecordBuilder` instance to
-    pass the data and timestamp you want to write. Additionally, you can provide labels to the record to make it easier to query later.
+    To write a timestamped **[record](../glossary#record)** to an **[entry](../glossary#entry)** in a bucket, you should use the `BeginWrite` method on a `Bucket` instance.
+    Pass the name of the entry you want to write to as an argument and options to specify the timestamp and labels for the record.
+    The method returns a `WritableRecord` instance to write record content to the entry:
 
-    Call the `send` method on the `RecordBuilder` to send the request to the ReductStore server and write the record:
-
-    ```rust file=../examples/rs/examples/quick_start.rs start=3. end=4.
+    ```go file=../examples/go/src/quick_start.go start=3. end=4.
     ```
 
 </DataIngestionSection>
@@ -93,7 +89,7 @@ import NextStep from "./common/next_steps.mdx";
     Call the `send` method on the `QueryBuilder` to send the request to the ReductStore server and return a stream of
     records:
 
-    ```rust file=../examples/rs/examples/quick_start.rs start=4. end=5.
+    ```go file=../examples/go/src/quick_start.go start=4.
     ```
 
 </DataQueryingSection>

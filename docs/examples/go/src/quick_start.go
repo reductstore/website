@@ -27,12 +27,15 @@ func main() {
 
 	// 3. Write some data with timestamps in the 'entry-1' entry
 	ts := time.Now().UnixMicro()
-	writer := bucket.BeginWrite(ctx, "entry-1", &reduct.WriteOptions{Timestamp: ts, Labels: map[string]any{"score": 10}})
+	writer := bucket.BeginWrite(ctx, "entry-1",
+	    &reduct.WriteOptions{Timestamp: ts, Labels: map[string]any{"score": 10}})
 	err = writer.Write("<Blob data>")
 	if err != nil {
 		panic(err)
 	}
-	writer = bucket.BeginWrite(ctx, "entry-1", &reduct.WriteOptions{Timestamp: ts + 1, Labels: map[string]any{"score": 20}})
+
+	writer = bucket.BeginWrite(ctx, "entry-1",
+	    &reduct.WriteOptions{Timestamp: ts + 1, Labels: map[string]any{"score": 20}})
 	err = writer.Write("<Blob data 2>")
 	if err != nil {
 		panic(err)
