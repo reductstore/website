@@ -62,7 +62,7 @@ jobs:
 
           - example: golang
             doc_version: next
-            path_prefix: go/src
+            path_prefix: go
             cmd: go run
 
     steps:
