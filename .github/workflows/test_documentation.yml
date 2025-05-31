@@ -22,10 +22,16 @@ jobs:
         exclude:
           - example: golang
             doc_version: 1.15.x
+            reduct_version: v1.15.0
+            example_root: versioned_docs/version-1.15.x/examples/
           - example: golang
             doc_version: 1.14.x
+            reduct_version: v1.14.8
+            example_root: versioned_docs/version-1.14.x/examples/
           - example: golang
             doc_version: 1.13.x
+            reduct_version: v1.13.5
+            example_root: versioned_docs/version-1.13.x/examples/
 
         include:
           - doc_version: next
