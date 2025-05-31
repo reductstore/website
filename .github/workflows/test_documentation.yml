@@ -62,7 +62,7 @@ jobs:
 
           - example: golang
             doc_version: next
-            path_prefix: go
+            path_prefix: go/src
             cmd: go run
 
     steps:
@@ -125,7 +125,7 @@ jobs:
           yarn add ./reduct-js # install reduct-js as a package
 
       - name: Install Go dependencies
-        if: matrix.example == 'golang' && hashFiles('${{ matrix.example_root }}/${{ matrix.path_prefix }}/go.mod') != ''
+        if: matrix.example == 'golang'
         run: |
           cd ${{ matrix.example_root }}/${{ matrix.path_prefix }}
           go get -u all
