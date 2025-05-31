@@ -694,7 +694,7 @@ At this point, we have a robust pipeline:
 
 This tutorial only scratches the surface of building a robust data acquisition and storage pipeline for robotics. Here are some best practices and further improvements to consider:
 
-### 📊 Separate Storage Topics by Types
+### 8.1 Separate Storage Topics by Types
 
 Separate storage streams for different topic categories (e.g., telemetry vs. raw sensor data) to optimise storage and retrieval. This allows you to apply different retention policies, access controls, or replication rules to each category.
 
@@ -709,24 +709,24 @@ Here are some common data categories and their characteristics to consider:
 | **Downsampled sensor data** | Lower framerate/resolution camera or lidar data | Mid-size, great for monitoring and incident triage                     |
 | **Full-resolution data**    | Raw camera frames, high-fps lidar, depth maps   | High volume (up to 1TB/hour), needed for debugging or model retraining |
 
-### 🗜️ Compress High-Bandwidth Topics
+### 8.2 Compress High-Bandwidth Topics
 
 We can se ROS 2's built-in compression mechanisms for image topics and large messages to reduce bandwidth and storage costs.
 
 - 🖼️ Example: Use `/image_raw/compressed` instead of raw image streams
 
-### 🔐 Use Token-Based Authentication
+### 8.3 Use Token-Based Authentication
 
 This is especially relevant for cloud storage or remote ReductStore instances. Use access tokens to secure data transfers and prevent unauthorized access.
 
-### 📉 Combine Downsampling with Replication
+### 8.4 Combine Downsampling with Replication
 
 This is typical in ELT (Extract-Load-Transform) pipelines. The idea is to save everything locally (on the robot) at high resolution and framerate, then stream part of the data to the cloud or a central server at a lower resolution or lower frequency.
 
 - ➡️ Example: Store 1 FPS video in cloud, keep 30 FPS original on robot SSD
 - 🔄 See example in: [**Building a Data Acquisition System for Manufacturing**](/blog/daq-manufacture-system)
 
-### ❄️ Offload Data to Cold Storage
+### 8.5 Offload Data to Cold Storage
 
 For long-term archiving, consider offloading data to cold storage to reduce costs while keeping data accessible.
 
