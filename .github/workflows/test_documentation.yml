@@ -160,7 +160,7 @@ jobs:
         run: |
           set -e -x
           cd ${{ matrix.example_root }}
-          for example in $(find ${PWD}/${{ matrix.path_prefix }} -type f );
+          for example in $(find ${PWD}/${{ matrix.path_prefix }} -type f -not -path "*/.*");
           do
             echo '${{secrets.LICENSE_KEY}}' > ./license.lic
             docker run -d  -v ${PWD}:/misc \
