@@ -128,7 +128,7 @@ jobs:
       - name: Install Go dependencies
         if: matrix.example == 'golang'
         run: |
-          cd ${{ matrix.example_root }}/${{ matrix.path_prefix }}
+          cd ${{ matrix.example_root }}/${{ matrix.path_prefix }}/..
           go get -u all
 
       - name: Build C++ examples
