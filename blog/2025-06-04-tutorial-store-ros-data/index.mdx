@@ -719,10 +719,6 @@ We can se ROS 2's built-in compression mechanisms for image topics and large mes
 
 This is especially relevant for cloud storage or remote ReductStore instances. Use access tokens to secure data transfers and prevent unauthorized access.
 
-### ⚙️ Use Non-Blocking Operations
-
-When uploading large files or performing storage operations, use non-blocking (asynchronous) methods to avoid freezing your ROS 2 nodes. This keeps your system responsive and prevents dropped messages or missed frames.
-
 ### 📉 Combine Downsampling with Replication
 
 This is typical in ELT (Extract-Load-Transform) pipelines. The idea is to save everything locally (on the robot) at high resolution and framerate, then stream part of the data to the cloud or a central server at a lower resolution or lower frequency.
