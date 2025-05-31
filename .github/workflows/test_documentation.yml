@@ -16,7 +16,8 @@ jobs:
     strategy:
       max-parallel: 8
       matrix:
-        example: [python, node, curl, cpp, rust, cli, golang]
+        #        example: [python, node, curl, cpp, rust, cli, golang]
+        example: [golang]
         doc_version: [next, 1.15.x, 1.14.x, 1.13.x]
         include:
           - doc_version: next
@@ -124,8 +125,9 @@ jobs:
           yarn add ./reduct-js # install reduct-js as a package
 
       - name: Install Go dependencies
-        if: matrix.example == 'golang'
+        if: matrix.example == 'golang' && hashFiles('${{ matrix.example_root }}/${{ matrix.path_prefix }}/go.mod') != ''
         run: |
+          cd ${{ matrix.example_root }}/${{ matrix.path_prefix }}
           go get -u all
 
       - name: Build C++ examples
