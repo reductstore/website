@@ -37,7 +37,6 @@ main()
     .catch((err) => console.error("oops: ", err));
 `.trim();
 
-
 export const GoCodeExample = `
 package main
 

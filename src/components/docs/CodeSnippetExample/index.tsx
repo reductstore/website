@@ -3,20 +3,19 @@ import clsx from "clsx";
 import styles from "./styles.module.css";
 import CodeBlock from "@theme/CodeBlock";
 
-
 import {
   pythonCodeExample,
   JavascriptCodeExample,
   CplusPlusCodeExample,
   rustCodeExample,
   CurlCodeExample,
-    GoCodeExample,
+  GoCodeExample,
 } from "./CodeExamples";
 
 const codeSnippets = {
   python: pythonCodeExample,
   javascript: JavascriptCodeExample,
-    go: GoCodeExample,
+  go: GoCodeExample,
   cplusplus: CplusPlusCodeExample,
   rust: rustCodeExample,
   curl: CurlCodeExample,

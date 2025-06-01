@@ -58,10 +58,7 @@
         {
           "type": "category",
           "label": "Cloud",
-          "items": [
-            "guides/cloud/saas",
-            "guides/cloud/azure-vm"
-          ]
+          "items": ["guides/cloud/saas", "guides/cloud/azure-vm"]
         }
       ]
     },
@@ -150,12 +147,12 @@
           "label": "JavaScript Client",
           "href": "https://github.com/reductstore/reduct-js"
         },
-                {
+        {
           "type": "link",
           "label": "Go Client",
           "href": "https://github.com/reductstore/reduct-go"
         },
-                {
+        {
           "type": "link",
           "label": "Rust Client",
           "href": "https://github.com/reductstore/reduct-rs"

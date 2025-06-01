@@ -178,12 +178,12 @@
           "label": "JavaScript Client",
           "href": "https://github.com/reductstore/reduct-js"
         },
-                        {
+        {
           "type": "link",
           "label": "Go Client",
           "href": "https://github.com/reductstore/reduct-go"
         },
-                {
+        {
           "type": "link",
           "label": "Rust Client",
           "href": "https://github.com/reductstore/reduct-rs"
