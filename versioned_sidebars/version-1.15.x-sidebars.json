@@ -23,6 +23,11 @@
         },
         {
           "type": "doc",
+          "label": "With Go",
+          "id": "getting-started/with-go"
+        },
+        {
+          "type": "doc",
           "label": "With Rust",
           "id": "getting-started/with-rust"
         },
@@ -53,7 +58,10 @@
         {
           "type": "category",
           "label": "Cloud",
-          "items": ["guides/cloud/saas", "guides/cloud/azure-vm"]
+          "items": [
+            "guides/cloud/saas",
+            "guides/cloud/azure-vm"
+          ]
         }
       ]
     },
@@ -136,15 +144,21 @@
             }
           ]
         },
-        {
-          "type": "link",
-          "label": "Rust Client",
-          "href": "https://github.com/reductstore/reduct-rs"
-        },
+
         {
           "type": "link",
           "label": "JavaScript Client",
           "href": "https://github.com/reductstore/reduct-js"
+        },
+                {
+          "type": "link",
+          "label": "Go Client",
+          "href": "https://github.com/reductstore/reduct-go"
+        },
+                {
+          "type": "link",
+          "label": "Rust Client",
+          "href": "https://github.com/reductstore/reduct-rs"
         },
         {
           "type": "link",
