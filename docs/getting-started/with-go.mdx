@@ -34,6 +34,10 @@ import NextStep from "./common/next_steps.mdx";
 
     Then, import the `reduct-go` package in your Go code:
 
+    ```go
+    import reduct "github.com/reductstore/reduct-go"
+    ```
+
 </InstallSdk>
 
 ## Running ReductStore
@@ -81,12 +85,12 @@ import NextStep from "./common/next_steps.mdx";
 ## Data Querying
 
 <DataQueryingSection>
-    To iterate over all records in a given time range, you should use the `Query` method on a bucket instance. Pass the
+    To iterate over all records within a specified time range, you should use the `Query` method on a bucket instance. Pass the
     name of the entry to iterate over and query options to specify the time range. Use the `QueryBuilder` to build the query options.
-    You can also provide a `when` condition to filter records based on labels using the `WithWhen` method.
+    You can also provide a condition to filter records based on labels using the `WithWhen` method.
     Read more about the query syntax in the [**Conditional Query Reference**](../conditional-query/index.mdx).
 
-    When the query is executed, it returns a `QueryResult` instance that you can iterate over to access the records:
+    When the query is executed, it returns a `QueryResult` object that you can iterate over to access the records:
 
     ```go file=../examples/go/src/quick_start.go start=4.
     ```
