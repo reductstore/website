@@ -81,13 +81,12 @@ import NextStep from "./common/next_steps.mdx";
 ## Data Querying
 
 <DataQueryingSection>
-    To iterate over all records in a given time range, you should use the `query` method on a bucket instance. Pass the
-    name of the entry to iterate over. The method will return a `QueryBuilder` instance to specify the time interval.
-    You can also provide a `when` condition to filter records based on labels using the `when` method. Read more about the query syntax in
-    the [**Conditional Query Reference**](../conditional-query/index.mdx).
+    To iterate over all records in a given time range, you should use the `Query` method on a bucket instance. Pass the
+    name of the entry to iterate over and query options to specify the time range. Use the `QueryBuilder` to build the query options.
+    You can also provide a `when` condition to filter records based on labels using the `WithWhen` method.
+    Read more about the query syntax in the [**Conditional Query Reference**](../conditional-query/index.mdx).
 
-    Call the `send` method on the `QueryBuilder` to send the request to the ReductStore server and return a stream of
-    records:
+    When the query is executed, it returns a `QueryResult` instance that you can iterate over to access the records:
 
     ```go file=../examples/go/src/quick_start.go start=4.
     ```
