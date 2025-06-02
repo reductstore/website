@@ -2,17 +2,20 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 import CodeBlock from "@theme/CodeBlock";
+
 import {
   pythonCodeExample,
   JavascriptCodeExample,
   CplusPlusCodeExample,
   rustCodeExample,
   CurlCodeExample,
+  GoCodeExample,
 } from "./CodeExamples";
 
 const codeSnippets = {
   python: pythonCodeExample,
   javascript: JavascriptCodeExample,
+  go: GoCodeExample,
   cplusplus: CplusPlusCodeExample,
   rust: rustCodeExample,
   curl: CurlCodeExample,
@@ -22,6 +25,7 @@ const getLanguageClass = (languageKey) => {
   const languageClassMap = {
     python: "language-python",
     javascript: "language-javascript",
+    go: "language-go",
     cplusplus: "language-cpp",
     rust: "language-rust",
     curl: "language-bash",
@@ -34,6 +38,7 @@ const getLanguageName = (languageKey) => {
   const languageNameMap = {
     python: "Python",
     javascript: "JavaScript",
+    go: "Go",
     cplusplus: "C++",
     rust: "Rust",
     curl: "cURL",
