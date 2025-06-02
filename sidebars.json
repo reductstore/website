@@ -23,6 +23,11 @@
         },
         {
           "type": "doc",
+          "label": "With Go",
+          "id": "getting-started/with-go"
+        },
+        {
+          "type": "doc",
           "label": "With Rust",
           "id": "getting-started/with-rust"
         },
@@ -167,15 +172,21 @@
             }
           ]
         },
-        {
-          "type": "link",
-          "label": "Rust Client",
-          "href": "https://github.com/reductstore/reduct-rs"
-        },
+
         {
           "type": "link",
           "label": "JavaScript Client",
           "href": "https://github.com/reductstore/reduct-js"
+        },
+        {
+          "type": "link",
+          "label": "Go Client",
+          "href": "https://github.com/reductstore/reduct-go"
+        },
+        {
+          "type": "link",
+          "label": "Rust Client",
+          "href": "https://github.com/reductstore/reduct-rs"
         },
         {
           "type": "link",
