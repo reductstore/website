@@ -36,7 +36,7 @@ are divided into two categories: filter and control parameters.
 Filter parameters are used to select records based on specific criteria. You can combine multiple filter parameters to create complex queries. This is the list of filter parameters, sorted by priority:
 
 | Parameter | Description             | Type             | Default                                                                 |
-|-----------|-------------------------|------------------|-------------------------------------------------------------------------|
+| --------- | ----------------------- | ---------------- | ----------------------------------------------------------------------- |
 | `start`   | Start time of the query | Timestamp        | The timestamp of the first record in the **[entry](../glossary#entry)** |
 | `stop`    | Stop time of the query  | Timestamp        | The timestamp of the last record in the entry                           |
 | `when`    | Conditional query       | JSON-like object | No condition                                                            |
@@ -154,9 +154,9 @@ import ReadRecordCurl from "!!raw-loader!../examples/curl/data_querying_timestam
   <TabItem value="JavaScript">
     <CodeBlock language="javascript">{ReadRecordJs}</CodeBlock>
   </TabItem>
-    <TabItem value="Go">
-        <CodeBlock language="go">{ReadRecordGo}</CodeBlock>
-    </TabItem>
+  <TabItem value="Go">
+    <CodeBlock language="go">{ReadRecordGo}</CodeBlock>
+  </TabItem>
   <TabItem value="Rust">
     <CodeBlock language="rust">{ReadRecordRs}</CodeBlock>
   </TabItem>
