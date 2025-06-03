@@ -8,10 +8,10 @@ import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
 <head>
-  <link
-    rel="canonical"
-    href="https://www.reduct.store/docs/guides/data-ingestion"
-  />
+    <link
+        rel="canonical"
+        href="https://www.reduct.store/docs/guides/data-ingestion"
+    />
 </head>
 
 # Data Ingestion With ReductStore
@@ -58,48 +58,53 @@ The simplest way to write data into ReductStore is by sending an entire single r
 
 import SimplePy from "!!raw-loader!../examples/py/src/data_ingestion_simple.py";
 import SimpleJs from "!!raw-loader!../examples/js/src/data_ingestion_simple.mjs";
+import SimpleGo from "!!raw-loader!../examples/go/src/data_ingestion_simple.go";
 import SimpleRs from "!!raw-loader!../examples/rs/examples/data_ingestion_simple.rs";
 import SimpleCpp from "!!raw-loader!../examples/cpp/src/data_ingestion_simple.cc";
 import SimpleCurl from "!!raw-loader!../examples/curl/data_ingestion_simple.sh";
 
 <Tabs>
-  <TabItem value="Python">
-    <CodeBlock language="python">{SimplePy}</CodeBlock>
-  </TabItem>
-  <TabItem value="JavaScript">
-    <CodeBlock language="javascript">{SimpleJs}</CodeBlock>
-  </TabItem>
-  <TabItem value="Rust">
-    <CodeBlock language="rust">{SimpleRs}</CodeBlock>
-  </TabItem>
-  <TabItem value="C++">
-    <CodeBlock language="cpp">{SimpleCpp}</CodeBlock>
-  </TabItem>
-  <TabItem value="Web Console">
+    <TabItem value="Python">
+        <CodeBlock language="python">{SimplePy}</CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">{SimpleJs}</CodeBlock>
+    </TabItem>
+    <TabItem value="Go">
+        <CodeBlock language="go">{SimpleGo}</CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">{SimpleRs}</CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">{SimpleCpp}</CodeBlock>
+    </TabItem>
+    <TabItem value="Web Console">
 
-    1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
-    2. Enter the API token if the authorization is enabled.
-    3. Click on the **"Buckets"** tab in the left sidebar.
-    4. You will see a list of all buckets in the store.
-    5. Click on a specific bucket in the list:
-    ![Browse buckets with Web Console](./img/buckets_browse_all.webp)
-    6. Open the upload file modal by clicking on **Upload Icon** in the bucket panel:
-    ![Browse a bucket with Web Console](./img/buckets_upload_file_icon.webp)
-    7. In the upload file modal, select the entry name or create a new one and select the file to upload:{" "}<img
-      src={
-        require("@site/docs/guides/img/buckets_upload_file.webp").default
-      }
-      alt="Upload a file with Web Console"
-      width="400"
+        1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
+        2. Enter the API token if the authorization is enabled.
+        3. Click on the **"Buckets"** tab in the left sidebar.
+        4. You will see a list of all buckets in the store.
+        5. Click on a specific bucket in the list:
+        ![Browse buckets with Web Console](./img/buckets_browse_all.webp)
+        6. Open the upload file modal by clicking on **Upload Icon** in the bucket panel:
+        ![Browse a bucket with Web Console](./img/buckets_upload_file_icon.webp)
+        7. In the upload file modal, select the entry name or create a new one and select the file to upload:{" "}<img
+        src={
+            require("@site/docs/guides/img/buckets_upload_file.webp").default
+        }
+        alt="Upload a file with Web Console"
+        width="400"
     />
-    8. Click on the **Upload File** button to upload the file.
-    9. Optionally, you can set timestamp and content type for the record.
-      If the timestamp is not set, the current time will be used. If the content type is not set, the Web Console will try to detect it automatically.
+        8. Click on the **Upload File** button to upload the file.
+        9. Optionally, you can set timestamp and content type for the record.
+        If the timestamp is not set, the current time will be used. If the content type is not set, the Web Console will
+        try to detect it automatically.
 
-  </TabItem>
-  <TabItem value="cURL">
-    <CodeBlock language="bash">{SimpleCurl}</CodeBlock>
-  </TabItem>
+    </TabItem>
+    <TabItem value="cURL">
+        <CodeBlock language="bash">{SimpleCurl}</CodeBlock>
+    </TabItem>
 </Tabs>
 
 ### Streaming Data
@@ -112,22 +117,26 @@ Despite sending the record in chunks, the size of the record must be known befor
 
 import StreamingPy from "!!raw-loader!../examples/py/src/data_ingestion_streaming.py";
 import StreamingJs from "!!raw-loader!../examples/js/src/data_ingestion_streaming.mjs";
+import StreamingGo from "!!raw-loader!../examples/go/src/data_ingestion_streaming.go";
 import StreamingRs from "!!raw-loader!../examples/rs/examples/data_ingestion_streaming.rs";
 import StreamingCpp from "!!raw-loader!../examples/cpp/src/data_ingestion_streaming.cc";
 
 <Tabs>
-  <TabItem value="Python">
-    <CodeBlock language="python">{StreamingPy}</CodeBlock>
-  </TabItem>
-  <TabItem value="JavaScript">
-    <CodeBlock language="javascript">{StreamingJs}</CodeBlock>
-  </TabItem>
-  <TabItem value="Rust">
-    <CodeBlock language="rust">{StreamingRs}J</CodeBlock>
-  </TabItem>
-  <TabItem value="C++">
-    <CodeBlock language="cpp">{StreamingCpp}</CodeBlock>
-  </TabItem>
+    <TabItem value="Python">
+        <CodeBlock language="python">{StreamingPy}</CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">{StreamingJs}</CodeBlock>
+    </TabItem>
+    <TabItem value="Go">
+        <CodeBlock language="go">{StreamingGo}</CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">{StreamingRs}J</CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">{StreamingCpp}</CodeBlock>
+    </TabItem>
 </Tabs>
 
 ### Annotating Data
@@ -136,50 +145,56 @@ ReductStore allows you to annotate records by adding labels. Labels, which are k
 
 import AnnotatingPy from "!!raw-loader!../examples/py/src/data_ingestion_annotating.py";
 import AnnotatingJs from "!!raw-loader!../examples/js/src/data_ingestion_annotating.mjs";
+import AnnotatingGo from "!!raw-loader!../examples/go/src/data_ingestion_annotating.go";
 import AnnotatingRs from "!!raw-loader!../examples/rs/examples/data_ingestion_annotating.rs";
 import AnnotatingCpp from "!!raw-loader!../examples/cpp/src/data_ingestion_annotating.cc";
 import AnnotatingCurl from "!!raw-loader!../examples/curl/data_ingestion_annotating.sh";
 
 <Tabs>
-  <TabItem value="Python">
-    <CodeBlock language="python">{AnnotatingPy}</CodeBlock>
-  </TabItem>
-  <TabItem value="JavaScript">
-    <CodeBlock language="javascript">{AnnotatingJs}</CodeBlock>
-  </TabItem>
-  <TabItem value="Rust">
-    <CodeBlock language="rust">{AnnotatingRs}</CodeBlock>
-  </TabItem>
-  <TabItem value="C++">
-    <CodeBlock language="cpp">{AnnotatingCpp}</CodeBlock>
-  </TabItem>
-  <TabItem value="Web Console">
+    <TabItem value="Python">
+        <CodeBlock language="python">{AnnotatingPy}</CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">{AnnotatingJs}</CodeBlock>
+    </TabItem>
+    <TabItem value="Go">
+        <CodeBlock language="go">{AnnotatingGo}</CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">{AnnotatingRs}</CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">{AnnotatingCpp}</CodeBlock>
+    </TabItem>
+    <TabItem value="Web Console">
 
-    1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
-    2. Enter the API token if the authorization is enabled.
-    3. Click on the **"Buckets"** tab in the left sidebar.
-    4. You will see a list of all buckets in the store.
-    5. Click on a specific bucket in the list:
-    ![Browse buckets with Web Console](./img/buckets_browse_all.webp)
-    6. Open the upload file modal by clicking on **Upload Icon** in the bucket panel:
-    ![Browse a bucket with Web Console](./img/buckets_upload_file_icon.webp)
-    7. In the upload file modal, select the entry name or create a new one and select the file to upload:{" "}<img
-      src={
-        require("@site/docs/guides/img/buckets_upload_file.webp").default
-      }
-      alt="Upload a file with Web Console"
-      width="400"
+        1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
+        2. Enter the API token if the authorization is enabled.
+        3. Click on the **"Buckets"** tab in the left sidebar.
+        4. You will see a list of all buckets in the store.
+        5. Click on a specific bucket in the list:
+        ![Browse buckets with Web Console](./img/buckets_browse_all.webp)
+        6. Open the upload file modal by clicking on **Upload Icon** in the bucket panel:
+        ![Browse a bucket with Web Console](./img/buckets_upload_file_icon.webp)
+        7. In the upload file modal, select the entry name or create a new one and select the file to upload:{" "}<img
+        src={
+            require("@site/docs/guides/img/buckets_upload_file.webp").default
+        }
+        alt="Upload a file with Web Console"
+        width="400"
     />
 
-    8. Click on the **Add Label** button to add a label and its value to the record. You can add multiple labels by clicking the button multiple times.
-    9. Click on the **Upload File** button to upload the file.
-    10. Optionally, you can set timestamp and content type for the record.
-      If the timestamp is not set, the upload time will be used. If the content type is not set, the Web Console will try to detect it automatically.
+        8. Click on the **Add Label** button to add a label and its value to the record. You can add multiple labels by
+        clicking the button multiple times.
+        9. Click on the **Upload File** button to upload the file.
+        10. Optionally, you can set timestamp and content type for the record.
+        If the timestamp is not set, the upload time will be used. If the content type is not set, the Web Console will
+        try to detect it automatically.
 
-  </TabItem>
-  <TabItem value="cURL">
-    <CodeBlock language="bash">{AnnotatingCurl}</CodeBlock>
-  </TabItem>
+    </TabItem>
+    <TabItem value="cURL">
+        <CodeBlock language="bash">{AnnotatingCurl}</CodeBlock>
+    </TabItem>
 </Tabs>
 
 ### Batching Data
@@ -190,20 +205,24 @@ If the request is valid but one or more records contain errors, the server does 
 
 import BatchPy from "!!raw-loader!../examples/py/src/data_ingestion_batch.py";
 import BatchJs from "!!raw-loader!../examples/js/src/data_ingestion_batch.mjs";
+import BatchGo from "!!raw-loader!../examples/go/src/data_ingestion_batch.go";
 import BatchRs from "!!raw-loader!../examples/rs/examples/data_ingestion_batch.rs";
 import BatchCpp from "!!raw-loader!../examples/cpp/src/data_ingestion_batch.cc";
 
 <Tabs>
-  <TabItem value="Python">
-    <CodeBlock language="python">{BatchPy}</CodeBlock>
-  </TabItem>
-  <TabItem value="JavaScript">
-    <CodeBlock language="javascript">{BatchJs}</CodeBlock>
-  </TabItem>
-  <TabItem value="Rust">
-    <CodeBlock language="rust">{BatchRs}</CodeBlock>
-  </TabItem>
-  <TabItem value="C++">
-    <CodeBlock language="cpp">{BatchCpp}</CodeBlock>
-  </TabItem>
+    <TabItem value="Python">
+        <CodeBlock language="python">{BatchPy}</CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">{BatchJs}</CodeBlock>
+    </TabItem>
+    <TabItem value="Go">
+        <CodeBlock language="go">{BatchGo}</CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">{BatchRs}</CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">{BatchCpp}</CodeBlock>
+    </TabItem>
 </Tabs>
