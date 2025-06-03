@@ -9,7 +9,7 @@ for await (const record of bucket.query("imdb", undefined, undefined, {
   when: {
     "&photo_taken": { $gt: 2006 },
     "&face_score": { $lt: 4 },
-    $limit: [10],
+    $limit: 10,
   },
 })) {
   console.log("Name", record.labels.name);

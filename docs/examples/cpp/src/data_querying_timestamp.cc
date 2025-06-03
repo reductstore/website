@@ -21,7 +21,7 @@ int main() {
     });
     assert(err == Error::kOk);
 
-    // Query records in a time range
+    // Read the record by timestamp
     err = bucket->Read("cpp-example", ts, [](auto rec) {
         // Print metadata
         std::cout << "Timestamp: " <<  rec.timestamp.time_since_epoch().count() << std::endl;

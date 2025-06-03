@@ -42,13 +42,13 @@ func main() {
 	}
 
 	// 4. Query the data by time range and condition
-	queryOptions := reduct.NewQueryOptionsBuilder().
+	queryRequest := reduct.NewQueryOptionsBuilder().
 		WithStart(ts).
 		WithStop(ts + 2).
 		WithWhen(map[string]any{"&score": map[string]any{"$gt": 15}}).
 		Build()
 
-	query, err := bucket.Query(ctx, "entry-1", &queryOptions)
+	query, err := bucket.Query(ctx, "entry-1", &queryRequest)
 	if err != nil {
 		panic(err)
 	}

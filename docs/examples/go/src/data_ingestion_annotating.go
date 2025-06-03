@@ -19,7 +19,7 @@ func main() {
 	}
 
 	// Send a record with labels and content type
-	err = bucket.BeginWrite(context.Background(), "py-example", &reduct.WriteOptions{
+	err = bucket.BeginWrite(context.Background(), "go-example", &reduct.WriteOptions{
 		Timestamp:   time.Now().UnixMicro(),
 		Labels:      map[string]any{"name": "example", "score": 0.9},
 		ContentType: "text/plain",

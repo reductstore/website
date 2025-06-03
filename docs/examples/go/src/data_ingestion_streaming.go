@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	reduct "github.com/reductstore/reduct-go"
+	"io"
 	"time"
 )
 
@@ -18,10 +20,17 @@ func main() {
 		panic(err)
 	}
 
-	// Send a record to the "go-example" entry with the current timestamp
+	// Create a data reader
+	data := []byte("This is some example data that will be streamed in chunks.")
+	size := len(data)
+	var reader io.Reader = bytes.NewReader(data)
+
+	// Stream the buffer to the "go-example" entry with the current timestamp
 	err = bucket.BeginWrite(context.Background(), "go-example", &reduct.WriteOptions{
-		Timestamp: time.Now().UnixMicro(),
-	}).Write("Some binary data")
+		Timestamp:   time.Now().UnixMicro(),
+		ContentType: "application/octet-stream",
+		Size:        int64(size),
+	}).Write(reader)
 
 	if err != nil {
 		panic(err)

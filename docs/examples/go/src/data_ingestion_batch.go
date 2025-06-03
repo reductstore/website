@@ -26,8 +26,8 @@ func main() {
 		panic(err)
 	}
 
-	// Send a record to the "py-example" entry with the current timestamp
-	batch := bucket.BeginWriteBatch(context.Background(), "py-example")
+	// Send a record to the "go-example" entry with the current timestamp
+	batch := bucket.BeginWriteBatch(context.Background(), "go-example")
 
 	batch.Add(toTimestamp("2024-02-02T10:00:00Z"), []byte("Records #1"), "application/octet-stream", nil)
 	batch.Add(toTimestamp("2024-02-02T10:00:01Z"), []byte("Records #2"), "application/octet-stream", nil)
