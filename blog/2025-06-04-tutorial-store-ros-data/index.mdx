@@ -414,7 +414,7 @@ Build the workspace:
 ```bash
 cd ~/ros2_ws
 colcon build --packages-select yolo_detector
-source install/local_setup.bash
+source install/setup.bash
 ```
 
 Run the YOLO detection node in a new terminal on the Pi:
@@ -504,7 +504,7 @@ cd ..
 
 rosdep install --from-paths src --ignore-src -r -y
 colcon build --packages-select ros2_reduct_agent
-source install/local_setup.bash
+source install/setup.bash
 ```
 
 ### 4.2. Create `config.yaml`
