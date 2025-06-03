@@ -200,12 +200,7 @@ cd ~/ros2_ws/src
 ros2 pkg create --build-type ament_python yolo_detector --dependencies rclpy sensor_msgs std_msgs
 ```
 
-This will create a `yolo_detector` folder with a Python package structure. Edit `yolo_detector/package.xml` to add dependencies for `opencv-python` and `onnxruntime` (since these are non-ROS dependencies, we list them for documentation; you might use `pip` in the installation step rather than rosdep). For example, inside `<exec_depend>` tags, add:
-
-```xml
-<exec_depend>onnxruntime</exec_depend>
-<exec_depend>opencv-python</exec_depend>
-```
+This will create a `yolo_detector` folder with a Python package structure.
 
 ### 3.4. Implement the YOLO Detection Node
 
