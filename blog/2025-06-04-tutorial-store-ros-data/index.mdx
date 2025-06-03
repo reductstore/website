@@ -140,7 +140,7 @@ Launch the camera driver to start publishing images:
 ros2 run v4l2_camera v4l2_camera_node
 ```
 
-By default, this node will open `/dev/video0` and start publishing images to the `~/image` topic (type `sensor_msgs/Image`) at a default resolution of 640x480 and pixel format YUYV converted to `rgb8` (see [**ROS 2 camera driver for Video4Linux2 Documentation**](https://docs.ros.org/en/jazzy/p/v4l2_camera/)). You should see console output from the node indicating it opened the device and is streaming.
+By default, this node will open `/dev/video0` and start publishing images to the `~/image_raw` topic (type `sensor_msgs/Image`) at a default resolution of 640x480 and pixel format YUYV converted to `rgb8` (see [**ROS 2 camera driver for Video4Linux2 Documentation**](https://docs.ros.org/en/jazzy/p/v4l2_camera/)). You should see console output from the node indicating it opened the device and is streaming.
 
 Open a new terminal (with ROS sourced) on the Pi (or from a laptop connected to the ROS 2 network) and verify images are coming through, e.g., by running `rqt_image_view`:
 
@@ -149,7 +149,7 @@ sudo apt install ros-${ROS_DISTRO}-rqt-image-view -y  # if not installed
 ros2 run rqt_image_view rqt_image_view
 ```
 
-In `rqt_image_view`, select `/image` to view the camera feed. This confirms the camera setup is working.
+In `rqt_image_view`, select `/image_raw` to view the camera feed. This confirms the camera setup is working.
 
 **Note:** You can adjust parameters by remapping or via ROS 2 parameters, e.g., to change resolution or device:
 
@@ -235,7 +235,7 @@ class YoloDetectorNode(Node):
         self.img_width = self.input_shape[3]
 
         # Subscribers and publishers
-        self.subscription = self.create_subscription(Image, '/image', self.image_callback, 10)
+        self.subscription = self.create_subscription(Image, '/image_raw', self.image_callback, 10)
         self.pub_object = self.create_publisher(String, 'object_detected', 10)
         self.pub_conf = self.create_publisher(Float32, 'confidence_score', 10)
 
@@ -293,7 +293,7 @@ def main(args=None):
 
 </details>
 
-**Explanation:** This node subscribes to the camera images (`/image`), processes each frame through the YOLOv5n model, and publishes two topics:
+**Explanation:** This node subscribes to the camera images (`/image_raw`), processes each frame through the YOLOv5n model, and publishes two topics:
 
 - `object_detected` (std_msgs/String): the class label (or ID) of the primary detected object (or `"none"` if none above threshold).
 - `confidence_score` (std_msgs/Float32): the confidence score of that detection.
@@ -530,7 +530,7 @@ This configuration defines how `ros2_reduct_agent` records topics and uploads th
     pipelines:
       camera_stream:
         include_topics:
-          - /image
+          - /image_raw
           - /object_detected
           - /confidence_score
           - /rosout
