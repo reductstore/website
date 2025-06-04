@@ -45,7 +45,8 @@ async fn main() -> Result<(), ReductError> {
         .send()
         .await?;
 
-    // Or each N-th record
-    bucket.remove_query("rs-example").each_n(2).send().await?;
-    Ok(())
+    // Or each second record
+    bucket.remove_query("rs-example").when(condition!({
+        "$each_n": 2
+    })).send().await?;
 }

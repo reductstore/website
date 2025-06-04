@@ -26,5 +26,5 @@ await bucket.removeQuery("entry-1", undefined, undefined, {
   when: { "&key1": { $eq: "value1" } },
 });
 
-// Or each N-th record
-await bucket.removeQuery("entry-1", undefined, undefined, { eachN: 2 });
+// Or each second record
+await bucket.removeQuery("entry-1", undefined, undefined, { when: { $each_n: 2 } });
