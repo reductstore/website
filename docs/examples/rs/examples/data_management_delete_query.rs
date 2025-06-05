@@ -49,4 +49,6 @@ async fn main() -> Result<(), ReductError> {
     bucket.remove_query("rs-example").when(condition!({
         "$each_n": 2
     })).send().await?;
+    
+    Ok(())
 }
