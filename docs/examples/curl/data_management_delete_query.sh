@@ -22,7 +22,7 @@ curl -H "${AUTH_HEADER}" \
   -d '{"query_type": "DELETE", "when": {"&key1": {"$eq": "value1"}}' \
   -X POST -a ${API_PATH}/b/example-bucket/entry_1/q
 
-# Or each N-th record
+# Or each second record
 curl -H "${AUTH_HEADER}" \
-  -d '{"query_type": "DELETE", "each_n": 2}' \
+  -d '{"query_type": "DELETE", "when": {"$each_n: 2"}}' \
   -X POST -a ${API_PATH}/b/example-bucket/entry_1/q
