@@ -28,8 +28,8 @@ async def main():
         # You can also delete all records with a specific label
         await bucket.remove_query("py-example", ts, ts + 2, when={"&key1": {"$eq": "value1"}})
 
-        # Or each N-th record
-        await bucket.remove_query("py-example", ts, ts + 2, each_n=2)
+        # Or each second record in a time range
+        await bucket.remove_query("py-example", ts, ts + 2, when={"$each_n": 2})
 
 if __name__ == "__main__":
     import asyncio

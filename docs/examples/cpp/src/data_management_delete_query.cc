@@ -35,8 +35,8 @@ int main() {
         .when = R"({"&key1": {"$eq": "value1"}}))"
     });
 
-    // Or each N-th record
+    // Or each second record
     bucket->RemoveQuery("cpp-example", {}, {},{
-        .each_n = 2
+        .when = R"({"$each_n": 2})"
     });
 }

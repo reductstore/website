@@ -10,7 +10,7 @@ const timestamp = BigInt(Date.now()) * 1000n;
 let record = await bucket.beginWrite("js-example", timestamp);
 await record.write("Some binary data");
 
-// Query records in the "js-example" entry of the bucket
+// Read the record in the "js-example" entry of the bucket
 record = await bucket.beginRead("js-example", timestamp);
 
 // Print meta information

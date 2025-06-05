@@ -19,7 +19,7 @@ int main() {
             .when=R"({
                 "&photo_taken": {"$gt": 2006},
                 "&face_score": {"$lt": 4},
-                "$limit": [10]
+                "$limit": 10
             })",
     }, [](auto rec) {
         std::cout << "Name: " << rec.labels["name"] << std::endl;

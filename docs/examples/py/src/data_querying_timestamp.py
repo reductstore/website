@@ -15,7 +15,7 @@ async def main():
             ts,
         )
 
-        # Query records in the "py-example" entry of the bucket
+        # Read the record in the "py-example" entry of the bucket
         async with bucket.read("py-example", ts) as record:
             # Print  meta information
             print(f"Timestamp: {record.timestamp}")
