@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	// Create a client and use the base URL and API token
+	// Create a client using the server URL and API token
 	client := reduct.NewClient("http://localhost:8383", reduct.ClientOptions{
 		APIToken: "my-token",
 	})
