@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	reduct "github.com/reductstore/reduct-go"
-	"time"
 )
 
 func main() {
