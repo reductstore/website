@@ -43,8 +43,6 @@ A replication task can filter records before replicating them to the target buck
 | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `entries` | A list of entries that the replication task will use to filter records. Only records with these entries will be replicated. If the list is empty, all records will be replicated. You can use the `*` wildcard to match any **[entry](../glossary#entry)**. | List of strings  |
 | `when`    | A set of conditions that the record must meet to be replicated. The conditions are based on the record labels. For more information on conditional queries, see the **[Conditional Query Reference](/docs/conditional-query/index.mdx)**                    | JSON-like object |
-| `each_s`  | Replicate a record every S seconds                                                                                                                                                                                                                          | Float            |
-| `each_n`  | Replicate only every N record                                                                                                                                                                                                                               | Integer          |
 
 ### Usage Example
 
@@ -92,6 +90,7 @@ However, you can manually replicate existing records using the **[Manual Data Re
 import CreateReplicaCli from "!!raw-loader!../examples/cli/data_replication_create.sh";
 import CreateReplicaPy from "!!raw-loader!../examples/py/src/data_replication_create.py";
 import CreateReplicaJs from "!!raw-loader!../examples/js/src/data_replication_create.mjs";
+import CreateReplicaGo from "!!raw-loader!../examples/go/src/data_replication_create.go";
 import CreateReplicaRs from "!!raw-loader!../examples/rs/examples/data_replication_create.rs";
 import CreateReplicaCpp from "!!raw-loader!../examples/cpp/src/data_replication_create.cc";
 import CreateReplicaCurl from "!!raw-loader!../examples/curl/data_replication_create.sh";
@@ -127,6 +126,9 @@ import CreateReplicaProvision from "!!raw-loader!../examples/provisioning/data_r
   <TabItem value="JavaScript">
     <CodeBlock language="javascript">{CreateReplicaJs}</CodeBlock>
   </TabItem>
+    <TabItem value="Go">
+    <CodeBlock language="go">{CreateReplicaGo}</CodeBlock>
+    </TabItem>
   <TabItem value="Rust">
     <CodeBlock language="rust">{CreateReplicaRs}</CodeBlock>
   </TabItem>
@@ -160,6 +162,7 @@ For the first hour, the `Number of Failed Records` and `Number of Replicated Rec
 import BrowseReplicaCLI from "!!raw-loader!../examples/cli/data_replication_browse.sh";
 import BrowseReplicaPy from "!!raw-loader!../examples/py/src/data_replication_browse.py";
 import BrowseReplicaJs from "!!raw-loader!../examples/js/src/data_replication_browse.mjs";
+import BrowseReplicaGo from "!!raw-loader!../examples/go/src/data_replication_browse.go";
 import BrowseReplicaRs from "!!raw-loader!../examples/rs/examples/data_replication_browse.rs";
 import BrowseReplicaCpp from "!!raw-loader!../examples/cpp/src/data_replication_browse.cc";
 import BrowseReplicaCurl from "!!raw-loader!../examples/curl/data_replication_browse.sh";
@@ -185,6 +188,9 @@ import BrowseReplicaCurl from "!!raw-loader!../examples/curl/data_replication_br
   <TabItem value="JavaScript">
     <CodeBlock language="javascript">{BrowseReplicaJs}</CodeBlock>
   </TabItem>
+    <TabItem value="Go">
+        <CodeBlock language="go">{BrowseReplicaGo}</CodeBlock>
+    </TabItem>
   <TabItem value="Rust">
     <CodeBlock language="rust">{BrowseReplicaRs}</CodeBlock>
   </TabItem>
@@ -208,6 +214,7 @@ unset the corresponding environment variables and restart the ReductStore instan
 import RemoveReplicaCli from "!!raw-loader!../examples/cli/data_replication_remove.sh";
 import RemoveReplicaPy from "!!raw-loader!../examples/py/src/data_replication_remove.py";
 import RemoveReplicaJs from "!!raw-loader!../examples/js/src/data_replication_remove.mjs";
+import RemoveReplicaGo from "!!raw-loader!../examples/go/src/data_replication_remove.go";
 import RemoveReplicaRs from "!!raw-loader!../examples/rs/examples/data_replication_remove.rs";
 import RemoveReplicaCpp from "!!raw-loader!../examples/cpp/src/data_replication_remove.cc";
 import RemoveReplicaCurl from "!!raw-loader!../examples/curl/data_replication_remove.sh";
@@ -233,6 +240,9 @@ import RemoveReplicaCurl from "!!raw-loader!../examples/curl/data_replication_re
   <TabItem value="JavaScript">
     <CodeBlock language="javascript">{RemoveReplicaJs}</CodeBlock>
   </TabItem>
+    <TabItem value="Go">
+        <CodeBlock language="go">{RemoveReplicaGo}</CodeBlock>
+    </TabItem>
   <TabItem value="Rust">
     <CodeBlock language="rust">{RemoveReplicaRs}</CodeBlock>
   </TabItem>
