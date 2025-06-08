@@ -25,3 +25,7 @@ yarn-error.log*
 target
 Cargo.lock
 private/
+
+
+# Go
+go.sum
