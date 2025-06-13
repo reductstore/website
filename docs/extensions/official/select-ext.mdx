@@ -93,25 +93,27 @@ For example, for the following query:
 <div>
     <div style={{width: '50%', float: 'left'}}>
 
-        ```python
+        ```json
         {
+            "csv": {
+                "has_headers": true
+            },
             "ext": {
-            "select": {
-            "columns": [
-        {
-            "index": 0,
-            "as_label": "col1"
+                "select": {
+                    "columns": [
+                        {
+                            "name": "col1",
+                            "as_label": "col1"
+                        }
+                    ]
+                },
+                "when": {
+                    "@col1": {
+                        "$gt": 10
+                    }
+                }
+            }
         }
-            ]
-        },
-            "when": {
-            "@col1": {
-            "$gt": 10
-        }
-        }
-        }
-        }
-
         ```
 
     </div>
@@ -119,7 +121,7 @@ For example, for the following query:
 
         The following CSV record:
 
-        | | | |
+        | col1 | col2 | col3 |
         | --- | ----- | ------------------- |
         | 20 | false | another message |
         | 0 | false | message string |
@@ -127,7 +129,7 @@ For example, for the following query:
 
         will be transformed to:
 
-        | |
+        | col1 |
         | --- |
         | 20 |
         | 30 |
