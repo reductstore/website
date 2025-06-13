@@ -1,14 +1,13 @@
 ---
 title: ReductSelect
 description: Extension for ReductStore that allows you to manipulate data in columnar formats on the storage side.
-hide_table_of_contents: true
 ---
 
 <head>
-  <link
-    rel="canonical"
-    href="https://www.reduct.store/docs/extensions/official/select-ext"
-  />
+    <link
+        rel="canonical"
+        href="https://www.reduct.store/docs/extensions/official/select-ext"
+    />
 </head>
 
 # ReductSelect Extension
@@ -22,11 +21,12 @@ The extension is only available under a commercial licence. If you wish to use i
 
 ## Data Format
 
-Currently, the extension only supports comma-separated CSV data without headers. Stored CSV data can be single- or multi-line and can contain any number of columns.
+Currently, the extension only supports comma-separated CSV data with and without headers. Stored CSV data can be single- or multi-line and can contain any number of columns.
 
 The CSV format example:
 
 ```
+[header1,header2,header3]
 100,true,message string
 200,false,another message
 300,true,yet another message
@@ -38,10 +38,16 @@ A user can use the `ext` query parameter to specify the `select` extension and d
 
 ```python
 {
+    # CSV specific parameters
+    "csv": {
+        "has_headers": "boolean"  # Indicates if the CSV data has headers, default is false
+    },
     "columns": [
         {
             # Column index to select
             "index": "number",
+            # Name of the column to select, it can be used only if the CSV data has headers
+            "name": "string",
             # Select a range of columns starting from this index until the end or `to` index
             "from": "number",
             # Select a range of columns starting from this index until the end or `from` index
@@ -53,6 +59,14 @@ A user can use the `ext` query parameter to specify the `select` extension and d
 }
 ```
 
+### CSV Parameters
+
+The `csv` object contains parameters that specify how to handle the CSV data. If it is not specified, the extension will use the default values.
+
+| Parameter     | Type    | Mandatory | Default | Description                                                                                                                   |
+|---------------|---------|-----------|---------|-------------------------------------------------------------------------------------------------------------------------------|
+| `has_headers` | boolean | No        | false   | Indicates if the CSV data has headers. If set to `true`, the extension will use the first row as headers. Default is `false`. |
+
 ### Column Selection
 
 The `columns` array contains objects that specify the columns to select from the columnar data.
@@ -60,12 +74,13 @@ The `columns` array contains objects that specify the columns to select from the
 | Parameter  | Type   | Mandatory | Description                                                                                                                      |
 | ---------- | ------ | --------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `index`    | number | No\*      | The index of the column to select. It can be used with `as_label` to map the selected column to a computed label.                |
+| `name`     | string | No\*      | The name of the column to select. It can be used only if the CSV data has headers. |
 | `from`     | number | No\*      | The starting index of the range of columns to select. It can be used with `to` to specify the end of the range.                  |
 | `to`       | number | No\*      | The ending index of the range of columns to select. It can be used with `from` to specify the start of the range.                |
 | `as_label` | string | No        | The name of the label to use in the query condition. It can be used with `index` to map the selected column to a computed label. |
 
 :::info
-\*Each column object must have an index or a range of columns to select.
+\*Each column object must have an index, name or a range of columns to select.
 :::
 
 ### Filtering
@@ -76,51 +91,51 @@ The extension will apply the extension `when` condition on each row of the colum
 For example, for the following query:
 
 <div>
-<div style={{ width: '50%', float: 'left' }}>
+    <div style={{width: '50%', float: 'left'}}>
 
-```python
-{
-    "ext": {
-        "select": {
+        ```python
+        {
+            "ext": {
+            "select": {
             "columns": [
-                {
-                    "index": 0,
-                    "as_label": "col1"
-                }
+        {
+            "index": 0,
+            "as_label": "col1"
+        }
             ]
         },
-        "when": {
+            "when": {
             "@col1": {
-                "$gt": 10
-            }
+            "$gt": 10
         }
-    }
-}
+        }
+        }
+        }
 
-```
+        ```
+
+    </div>
+    <div style={{width: '50%', float: 'right', padding: '0 20px'}}>
+
+        The following CSV record:
+
+        | | | |
+        | --- | ----- | ------------------- |
+        | 20 | false | another message |
+        | 0 | false | message string |
+        | 30 | true | yet another message |
+
+        will be transformed to:
+
+        | |
+        | --- |
+        | 20 |
+        | 30 |
+
+    </div>
 
 </div>
-<div style={{ width: '50%', float: 'right', padding: '0 20px' }}>
-
-The following CSV record:
-
-|     |       |                     |
-| --- | ----- | ------------------- |
-| 20  | false | another message     |
-| 0   | false | message string      |
-| 30  | true  | yet another message |
-
-will be transformed to:
-
-|     |
-| --- |
-| 20  |
-| 30  |
-
-</div>
-
-</div>
-<div style={{ clear: 'both' }}></div>
+<div style={{clear: 'both'}}></div>
 
 You can find more information about the conditional queries in the [**Conditional Query Reference**](../../conditional-query) documentation.
 
@@ -128,7 +143,7 @@ You can find more information about the conditional queries in the [**Conditiona
 When the extension merges the rows back into the output document, the computed labels retain the values from the first row of the columnar data.
 :::
 
-## Example
+## Examples
 
 The following example demonstrates how to use the **ReductSelect** extension to select specific columns from a CSV file and filter its rows based on these columns.
 Although this example is written in Python, it can be run using any of the official SDKs.
@@ -137,19 +152,77 @@ import CodeBlock from "@theme/CodeBlock";
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-import SelectQueryPy from "!!raw-loader!../../examples/py/src/ext_select_query.py";
+### Selecting Columns from CSV Data
+
+This example demonstrates how to use the select extension to extract specific columns from CSV data stored in ReductStore, apply filtering based on column values, and return a transformed dataset.
+
+import SelectQueryPy from "!!raw-loader!../../examples/py/src/ext_select_csv_query.py";
 
 <Tabs>
-  <TabItem value="Python">
-    <CodeBlock language="python">{SelectQueryPy}</CodeBlock>
-  </TabItem>
+    <TabItem value="Python">
+        <CodeBlock language="python">{SelectQueryPy}</CodeBlock>
+    </TabItem>
 </Tabs>
+
+#### Expected Output
 
 The expected output of the above code is as follows:
 
 ```
-Record timestamp: 1748244162087416
+Record timestamp: 1749797653273752
+Record labels: {'@col1': '1'}
+1,3,4
+6,8,9
+Record timestamp: 1749797653273753
 Record labels: {'@col1': '1'}
 1,3,4
 6,8,9
 ```
+
+#### Explanation
+
+* The extension extracts:
+  - Column 0 (1, 6, 11) as @col1, which becomes a label.
+  - Columns 2 to 4 (3rd to 5th values) to include in the result rows.
+* The when clause filters out rows where @col1 >= 10 — removing the row 11,12,13,14,15.
+* The result includes only the selected columns of the remaining rows:
+  - From 1,2,3,4,5: → 1 as label, 3,4 as data → becomes 1,3,4
+  - From 6,7,8,9,10: → 6 as label, 8,9 as data → becomes 6,8,9
+* Each record corresponds to one of the two writes, and both match the filter (@col1 = 1 from the first row of each block).
+
+### Selecting Columns with Headers
+
+This example demonstrates how to use the select extension to work with CSV data that includes a header row.
+You can extract specific columns by their header names and apply filters based on their values.
+
+
+import SelectQueryHeadersPy from "!!raw-loader!../../examples/py/src/ext_select_csv_query_with_headers.py";
+
+<Tabs>
+    <TabItem value="Python">
+        <CodeBlock language="python">{SelectQueryHeadersPy}</CodeBlock>
+    </TabItem>
+</Tabs>
+
+#### Expected Output
+The expected output of the above code is as follows:
+
+```
+Record timestamp: 1749797694120873
+Record labels: {'@col_e': '5'}
+e
+5
+Record timestamp: 1749797694120874
+Record labels: {'@col_e': '5'}
+e
+5
+```
+
+#### Explanation
+
+* The input CSV includes a header row: a,b,c,d,e.
+* The `csv.has_headers=true` option tells the extension to use the first row as column headers.
+* The query selects only the column named "e" and exposes it as label @col_e.
+* The when clause filters out any row where column "e" is 10 or more — so the rows with e=10 and e=15 are excluded.
+* Only the row 1,2,3,4,5 remains, where e=5.
+* The query runs over two records, so the same filtered output appears twice, once per record timestamp.
