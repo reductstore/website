@@ -20,7 +20,7 @@ async def main():
                     "has_headers": True,  # Indicate that the CSV data has headers
                 },
                 "columns": [
-                    # Select columns corresponding to the "e" header and map it to a label "col_e"'
+                    # Select columns corresponding to the "e" header and map it to a label "col_e"
                     {"name": "e", "as_label": "col_e"},
                 ],
             },
