@@ -29,7 +29,6 @@ async def main():
         }
 
         # Query the data with the 'select' extension
-        # and filter out records where the first column is less than 10
         async for record in bucket.query("csv", start=now, ext=ext):
             print(f"Record timestamp: {record.timestamp}")
             print(f"Record labels: {record.labels}")
