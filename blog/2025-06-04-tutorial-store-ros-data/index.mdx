@@ -496,6 +496,8 @@ Now, ReductStore is set up on the Pi and ready to accept data. We can run the co
 
 ### 4.1. Clone, install dependencies, and build
 
+To install `reductstore_agent`, we will clone the repository and build it in our ROS 2 workspace. 
+
 ```bash
 mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
@@ -505,6 +507,12 @@ cd ..
 rosdep install --from-paths src --ignore-src -r -y
 colcon build --packages-select reductstore_agent
 source install/setup.bash
+```
+
+You also need to install additional dependencies like `mcap`, `mcap-ros2-support`, and `reduct-py` for MCAP support and ReductStore integration. You can do this with pip:
+
+```bash
+pip install mcap mcap-ros2-support reduct-py
 ```
 
 ### 4.2. Create `config.yaml`
