@@ -4,14 +4,13 @@ description: Extension for ReductStore to extract and transform data in ROS form
 ---
 
 <head>
-    <link
-        rel="canonical"
-        href="https://www.reduct.store/docs/extensions/official/ros-ext"
-    />
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/extensions/official/ros-ext"
+  />
 </head>
 
 # ReductRos
-
 
 The ReductROS [**extension**](../../glossary#extension) provides tools that can be used to extract and transform data stored in ReductStore into formats that are compatible with the Robot Operating System (ROS).
 It allows users to query and convert historical data, such as sensor readings and camera images, into text-based formats like CSV or JSON, which can then be easily used for analysis, visualisation or integration with other systems.
@@ -42,7 +41,6 @@ These `.mcap` files typically originate from ROS 2 logging tools and encapsulate
 
 This output format is ideal for analysis, visualization, integration with external systems, or further transformation to other formats.
 
-
 ### Limitations
 
 - Doesn't support transformation trees `tf2_msgs/msg/TFMessage`
@@ -70,9 +68,8 @@ The `extract` property allows you to specify the ROS topic from which to extract
 The extension will read the MCAP file, decode the messages from the specified topic, and return each message as a JSON record with
 the timestamp from the message header.
 
-
 | Parameter | Type     | Mandatory | Description                                                                                                  |
-|-----------|----------|-----------|--------------------------------------------------------------------------------------------------------------|
+| --------- | -------- | --------- | ------------------------------------------------------------------------------------------------------------ |
 | `topic`   | `string` | Yes       | The name of the ROS topic to extract messages from. This should match the topic names used in the MCAP file. |
 
 ## Example
@@ -92,9 +89,9 @@ convert it to JSON format.
 import RosQeryPy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_extract.py";
 
 <Tabs>
-    <TabItem value="Python">
-        <CodeBlock language="python">{RosQeryPy}</CodeBlock>
-    </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">{RosQeryPy}</CodeBlock>
+  </TabItem>
 </Tabs>
 
 #### Expected Output
@@ -122,4 +119,3 @@ Record labels: {'encoding': 'cdr', 'schema': 'std_msgs/String', 'topic': '/test'
     - `topic`: `/test`
     - `schema`: `std_msgs/String`
     - `encoding`: `cdr`
-
