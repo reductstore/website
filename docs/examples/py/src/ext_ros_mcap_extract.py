@@ -1,7 +1,9 @@
 from time import time_ns
+from pathlib import Path
 
 from reduct import Client
 
+HERE = Path(__file__).parent
 
 async def main():
     async with Client("http://localhost:8383", api_token="my-token") as client:
@@ -13,7 +15,7 @@ async def main():
         now = time_ns() // 1000
 
         data = b""
-        with open("../data/file.mcap", "rb") as f:
+        with open(f"{HERE}/../data/file.mcap", "rb") as f:
             data = f.read()
 
         await bucket.write("mcap", data, content_length=len(data), timestamp=now, content_type="application/mcap")
