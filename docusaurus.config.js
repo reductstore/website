@@ -478,6 +478,10 @@ const config = {
                 href: "https://www.linkedin.com/company/reductstore",
               },
               {
+                label: "YouTube",
+                href: "https://www.youtube.com/@ReductStore",
+              },
+              {
                 label: "GitHub",
                 href: "https://github.com/reductstore/reductstore",
               },

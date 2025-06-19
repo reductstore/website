@@ -10,6 +10,7 @@ import {
   faLinkedin,
   faDiscord,
   faDiscourse,
+  faYoutube,
 } from "@fortawesome/free-brands-svg-icons";
 
 const IconSize = { height: "1rem" };
@@ -31,6 +32,8 @@ export default function FooterLinkItem({ item }) {
         return <FontAwesomeIcon icon={faDiscord} style={IconSize} />;
       case "Discourse":
         return <FontAwesomeIcon icon={faDiscourse} style={IconSize} />;
+      case "YouTube":
+        return <FontAwesomeIcon icon={faYoutube} style={IconSize} />;
       default:
         return null;
     }
