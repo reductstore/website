@@ -100,7 +100,7 @@
             "type": "doc",
             "id": "extensions/official/index"
           },
-          "items": ["extensions/official/select-ext"]
+          "items": ["extensions/official/select-ext", "extensions/official/ros-ext"]
         },
         "extensions/development"
       ]
