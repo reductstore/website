@@ -1,0 +1,121 @@
+---
+title: ReductROS
+description: Extension for ReductStore to extract and transform data in ROS formats.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/extensions/official/ros-ext"
+  />
+</head>
+
+# ReductRos
+
+The ReductROS [**extension**](../../glossary#extension) provides tools that can be used to extract and transform data stored in ReductStore into formats that are compatible with the Robot Operating System (ROS).
+It allows users to query and convert historical data, such as sensor readings and camera images, into text-based formats like CSV or JSON, which can then be easily used for analysis, visualisation or integration with other systems.
+
+:::info
+The extension is only available under a commercial licence. If you wish to use it for non-commercial purposes, please [**contact us**](/contact).
+:::
+
+## Supported File and Message Formats
+
+The ReductROS extension supports parsing and extracting data exclusively from [MCAP](https://mcap.dev/) files containing messages encoded in the [CDR (Common Data Representation)](https://design.ros2.org/articles/serialization.html) format—used as the default serialization method in ROS 2.
+
+These `.mcap` files typically originate from ROS 2 logging tools and encapsulate serialized messages across multiple topics, along with metadata such as timestamps and message types. ReductROS provides functionality to:
+
+- **Decode CDR-encoded ROS 2 messages** embedded in MCAP files.
+- **Convert message payloads to structured JSON**, preserving field names and types.
+- **Expose metadata**, including topic names, timestamps, and message types alongside message content.
+
+### Input
+
+- `.mcap` files containing ROS 2 messages in binary CDR format
+
+### Output
+
+- `JSON` representations of ROS 2 messages
+- `timestamp` from the message header
+- `labels` containing metadata such as topic name, message type, and encoding
+
+This output format is ideal for analysis, visualization, integration with external systems, or further transformation to other formats.
+
+### Limitations
+
+- Doesn't support transformation trees `tf2_msgs/msg/TFMessage`
+- The extension maps byte arrays to JSON lists, e.g. images or other binary data will be represented as lists of integers in the JSON output.
+
+## Query Format
+
+A user can use the `ext` query parameter to activate the `ros` extension and define the parameters for extracting and transforming ROS data in the following format:
+
+```python
+{
+    "ext": {
+        "ros": {
+            "extract": {
+               "topic": "string",  # The name of the ROS topic to extract messages from
+            }
+        }
+    }
+}
+```
+
+### Data Extraction
+
+The `extract` property allows you to specify the ROS topic from which to extract message and convert it to JSON format.
+The extension will read the MCAP file, decode the messages from the specified topic, and return each message as a JSON record with
+the timestamp from the message header.
+
+| Parameter | Type     | Mandatory | Description                                                                                                  |
+| --------- | -------- | --------- | ------------------------------------------------------------------------------------------------------------ |
+| `topic`   | `string` | Yes       | The name of the ROS topic to extract messages from. This should match the topic names used in the MCAP file. |
+
+## Example
+
+The following examples demonstrate how to use the **ReductROS** extension to extract and transform ROS messages.
+Although this example is written in Python, it can be run using any of the official SDKs.
+
+import CodeBlock from "@theme/CodeBlock";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+### Extracting ROS 2 Messages from MCAP Files
+
+This example demonstrates how to use the ROS extension to extract topic from an MCAP file stored in ReductStore and
+convert it to JSON format.
+
+import RosExtractTopicPy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_extract.py";
+
+<Tabs>
+  <TabItem value="Python">
+    <CodeBlock language="python">{RosExtractTopicPy}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+#### Expected Output
+
+The expected output of the above code is as follows:
+
+```
+Record timestamp: 24
+Record labels: {'encoding': 'cdr', 'schema': 'std_msgs/String', 'topic': '/test'}
+{"data":"hello"}
+Record timestamp: 25
+Record labels: {'encoding': 'cdr', 'schema': 'std_msgs/String', 'topic': '/test'}
+{"data":"world"}
+```
+
+#### Explanation
+
+- The extension extracts ROS 2 messages from an `.mcap` file stored in ReductStore.
+- Only messages from the topic `/test` are selected using the `topic` filter in the `ros.extract` configuration.
+- The content of each message is CDR-encoded and decoded by the extension.
+- The decoded message is returned as JSON with the field `data`, matching the `std_msgs/String` schema.
+- Each record corresponds to one ROS 2 message and includes:
+  - The decoded JSON payload, e.g., `{"data":"hello"}`
+  - Message metadata as labels, including:
+    - `topic`: `/test`
+    - `schema`: `std_msgs/String`
+    - `encoding`: `cdr`
