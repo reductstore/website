@@ -85,7 +85,7 @@ This is the same as:
 ```
 
 The conditions are evaluated in the order they are defined, and the result is true only if all conditions are true.
-By default, a condition is evaluated at the stage of data retrieval, so the storage engine will not read the record if the condition is false.
+By default, a condition is evaluated at the stage of data retrieval, so the query engine will not read the record if the condition is false.
 
 However, if a condition has a [**computed label**](./glossary#computed-label), the engine will check the condition after the record has been read and processed by [**extensions**](./glossary#extension).
 For example, if you have a condition like this:
@@ -114,23 +114,63 @@ The queries use a special naming convention for labels and operators to extend t
 
 ### Supported Types
 
-The **[conditional query](./glossary#conditional-query)** language supports a simple type system with four types: **boolean**, **integer**, **float**, and **string**:
+The **[conditional query](./glossary#conditional-query)** language supports a simple type system with five types: **boolean**, **integer**, **float**, **string**, and **duration**:
 
-| Type    | Size   | Description                                     |
-| ------- | ------ | ----------------------------------------------- |
-| boolean | 1      | Boolean value can be `true` or `false`          |
-| integer | 8      | Signed 64-bit integer                           |
-| float   | 8      | IEEE-754 double-precision floating-point number |
-| string  | 1-2^16 | UTF-8 encoded string                            |
+| Type     | Size (bytes) | Description                                                              |
+| -------- | ------------ | ------------------------------------------------------------------------ |
+| boolean  | 1            | Represents logical values `true` or `false`                              |
+| integer  | 8            | 64-bit signed integer                                                    |
+| float    | 8            | 64-bit IEEE-754 double-precision floating-point number                   |
+| string   | 1–65,536     | UTF-8 encoded string                                                     |
+| duration | 8            | 64-bit signed integer representing microseconds (e.g., `1s = 1,000,000`) |
+
+#### Boolean
+
+The boolean type represents logical values and can be either `true` or `false`.
+Used in logical conditions and operators like `$and` and `$not`.
+
+- **Literals:** `true`, `false`
+
+#### Integer
+
+The integer type is a signed 64-bit integer, used for numeric operations and conditions that require whole numbers.
+
+- **Literals:** `10`, `-5`, `0`
+
+#### Float
+
+The float type is a double-precision floating-point number, used for numeric operations and conditions that require decimal values.
+
+- **Literals:** `3.14`, `-0.001`, `2.71828`
+
+#### String
+
+The string type is a UTF-8 encoded sequence of characters, used for text operations and conditions.
+
+- **Literals:** `"hello"`, `"ReductStore"`, `"123"`
+
+#### Duration
+
+The duration type represents a time interval in microseconds and is stored as a signed 64-bit integer.
+It is used in time-based operations such as `$each_t` or arithmetic comparisons.
+
+- **Literals:** `-1s`, `1.5s`, `1d 2h`
+- **Units:** `us` (microseconds), `ms` (milliseconds), `s` (seconds), `m` (minutes), `h` (hours), `d` (days)
+
+Multiple units can be combined (e.g., 1h 30m).
 
 ### Type Inference
 
-The storage engine stores a label as a string without any type information, so the query engine tries to infer the type of the label based on its value:
+The query engine stores label values as strings without any type information. The query engine attempts to infer the type of a label value as follows:
 
-1. If a label has a value of true or false, it is converted to a boolean.
-2. If a label has a number without a decimal point, it is converted to an integer.
-3. If a label has a number with a decimal point, it is converted to a float.
-4. If all other conversions fail, it is converted to a string.
+1. If the value is `true` or `false`, it is interpreted as a boolean.
+2. If the value is a number without a decimal point, it is interpreted as an integer.
+3. If the value is a number with a decimal point, it is interpreted as a float.
+4. If none of the above apply, the value is interpreted as a string.
+
+:::info
+The `duration` type is **not** inferred from label values. It must be used as a constant literal.
+:::
 
 ### Type Casting
 
@@ -138,14 +178,17 @@ During the execution of the query, the engine will try to cast types of operands
 Logical operators like `$and`, `$or`, `$not` will cast the result to a boolean.
 Comparison and arithmetic operators will cast the operands to the most precise type in the following order:
 
-|             | boolean | integer                         | float                             | string |
-| ----------- | ------- | ------------------------------- | --------------------------------- | ------ |
-| **boolean** | boolean | integer (false -> 0, true -> 1) | float (false -> 0.0, true -> 1.0) | -      |
-| **integer** | integer | integer                         | float                             | -      |
-| **float**   | float   | float                           | float                             | -      |
-| **string**  | -       | -                               | -                                 | string |
+|              | boolean               | integer          | duration              | float               | string |
+| ------------ | --------------------- | ---------------- | --------------------- | ------------------- | ------ |
+| **boolean**  | boolean               | integer (0 or 1) | duration (0us or 1us) | float ( 0.0 or 1.0) | -      |
+| **integer**  | integer (0 or 1)      | integer          | integer               | float               | -      |
+| **duration** | duration (0us or 1us) | integer          | duration              | float               | -      |
+| **float**    | float (0.0 or 1.0)    | float            | float                 | float               | -      |
+| **string**   | -                     | -                | -                     | -                   | string |
 
-There are some exceptions to this rule, read **[the arithmetic operator documentation](./arithmetic-operators.mdx)** for more information.
+:::info
+For edge cases and exceptions (e.g., mixed-type arithmetic), refer to **[the arithmetic operator documentation](./arithmetic-operators.mdx)**.
+:::
 
 ## Operators
 
