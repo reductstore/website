@@ -16,11 +16,10 @@ They can be combined with other logical and comparison operators.
 The following aggregation operators are supported:
 
 | Operator  | Description                                                       |
-|-----------|-------------------------------------------------------------------|
+| --------- | ----------------------------------------------------------------- |
 | `$each_n` | Keeps each N-th record after previous condition                   |
 | `$each_t` | Keeps a record after the previous condition once in time interval |
 | `$limit`  | Limits the number of records to be processed in the query         |
-
 
 :::info
 The order of operators affects the result. Conditions are applied sequentially, so placing an aggregation operator before or after a filter changes the outcome.

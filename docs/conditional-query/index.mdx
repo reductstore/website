@@ -4,10 +4,10 @@ description: Learn how to use conditional queries to filter data in ReductStore.
 ---
 
 <head>
-    <link
-        rel="canonical"
-        href="https://www.reduct.store/docs/conditional-query"
-    />
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/conditional-query"
+  />
 </head>
 
 Conditional Query is a query language based on JSON syntax that allows you to filter records in ReductStore using labels and their values.
@@ -117,46 +117,45 @@ The queries use a special naming convention for labels and operators to extend t
 The **[conditional query](./glossary#conditional-query)** language supports a simple type system with five types: **boolean**, **integer**, **float**, **string**, and **duration**:
 
 | Type     | Size (bytes) | Description                                                              |
-|----------|--------------|--------------------------------------------------------------------------|
+| -------- | ------------ | ------------------------------------------------------------------------ |
 | boolean  | 1            | Represents logical values `true` or `false`                              |
 | integer  | 8            | 64-bit signed integer                                                    |
 | float    | 8            | 64-bit IEEE-754 double-precision floating-point number                   |
 | string   | 1–65,536     | UTF-8 encoded string                                                     |
 | duration | 8            | 64-bit signed integer representing microseconds (e.g., `1s = 1,000,000`) |
 
-
 #### Boolean
 
 The boolean type represents logical values and can be either `true` or `false`.
 Used in logical conditions and operators like `$and` and `$not`.
 
-* **Literals:** `true`, `false`
+- **Literals:** `true`, `false`
 
 #### Integer
 
 The integer type is a signed 64-bit integer, used for numeric operations and conditions that require whole numbers.
 
-* **Literals:** `10`, `-5`, `0`
+- **Literals:** `10`, `-5`, `0`
 
 #### Float
 
 The float type is a double-precision floating-point number, used for numeric operations and conditions that require decimal values.
 
-* **Literals:** `3.14`, `-0.001`, `2.71828`
+- **Literals:** `3.14`, `-0.001`, `2.71828`
 
 #### String
 
 The string type is a UTF-8 encoded sequence of characters, used for text operations and conditions.
 
-* **Literals:** `"hello"`, `"ReductStore"`, `"123"`
+- **Literals:** `"hello"`, `"ReductStore"`, `"123"`
 
 #### Duration
 
 The duration type represents a time interval in microseconds and is stored as a signed 64-bit integer.
 It is used in time-based operations such as `$each_t` or arithmetic comparisons.
 
-* **Literals:** `-1s`, `1.5s`, `1d 2h`
-* **Units:** `us` (microseconds), `ms` (milliseconds), `s` (seconds), `m` (minutes), `h` (hours), `d` (days)
+- **Literals:** `-1s`, `1.5s`, `1d 2h`
+- **Units:** `us` (microseconds), `ms` (milliseconds), `s` (seconds), `m` (minutes), `h` (hours), `d` (days)
 
 Multiple units can be combined (e.g., 1h 30m).
 
@@ -180,7 +179,7 @@ Logical operators like `$and`, `$or`, `$not` will cast the result to a boolean.
 Comparison and arithmetic operators will cast the operands to the most precise type in the following order:
 
 |              | boolean               | integer          | duration              | float               | string |
-|--------------|-----------------------|------------------|-----------------------|---------------------|--------|
+| ------------ | --------------------- | ---------------- | --------------------- | ------------------- | ------ |
 | **boolean**  | boolean               | integer (0 or 1) | duration (0us or 1us) | float ( 0.0 or 1.0) | -      |
 | **integer**  | integer (0 or 1)      | integer          | integer               | float               | -      |
 | **duration** | duration (0us or 1us) | integer          | duration              | float               | -      |
