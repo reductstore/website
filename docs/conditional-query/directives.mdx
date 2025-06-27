@@ -1,0 +1,95 @@
+---
+title: Directives
+description: Learn how to use directives in conditional queries to change the behavior of the query in ReductStore.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/conditional-query/directives"
+  />
+</head>
+
+# Directives
+
+**[Directives](../glossary#directive)** are special instructions in conditional queries that modify how the query engine processes results.
+They are prefixed with `#` and can be used to control aspects such as including additional records before or after those that match a given condition.
+
+The following directives are supported:
+
+| Operator      | Description                                                                                    |
+| ------------- | ---------------------------------------------------------------------------------------------- |
+| `#ctx_before` | Add additional records before each matching record as context, either by count or time window. |
+| `#ctx_after`  | Add additional records after each matching record as context, either by count or time window.  |
+
+## `#ctx_before`
+
+The `#ctx_before` directive allows you to include extra records that occurred **before** each matching record.
+This is useful when you want context around a matched condition, such as to see what led up to it.
+
+### Syntax
+
+```
+{
+  "#ctx_before": <expression as int> | <duration literal>
+}
+```
+
+### Behavior
+
+- If the expression is an **integer**, it is interpreted as the number of records to include before each match.
+- If the expression is a **duration literal** (e.g. `"1s"`, `"10m"`, `"500ms"`), it is interpreted as a time window to include records within that period before each match.
+
+### Examples
+
+By number of records:
+
+```json
+{
+  "#ctx_before": 10
+}
+```
+
+By time duration:
+
+```json
+{
+  "#ctx_before": "1h"
+}
+```
+
+## `#ctx_after`
+
+The `#ctx_after` directive allows you to include extra records that occur **after** each matching record.
+This is useful when you want to examine consequences or outcomes following a detected condition.
+
+### Syntax
+
+```
+{
+  "#ctx_after": <expression as int> | <duration literal>
+}
+```
+
+### Behavior
+
+- If the expression is an **integer**, it is interpreted as the number of records to include after each match.
+- If the expression is a **duration literal**, it is interpreted as a time window to include records within that period after each match.
+
+### Examples
+
+By number of records:
+
+```json
+{
+  "#ctx_after": 5
+}
+```
+
+By time duration:
+
+```json
+{
+  "#ctx_after": "30s"
+}
+```
