@@ -80,7 +80,8 @@
         "conditional-query/arithmetic-operators",
         "conditional-query/aggregation-operators",
         "conditional-query/string-operators",
-        "conditional-query/misc-operators"
+        "conditional-query/misc-operators",
+        "conditional-query/directives"
       ]
     },
     {
