@@ -8,7 +8,6 @@ date: 2025-07-08
 image: ./img/reductStore-usage.png
 ---
 
-
 When building computer vision systems, efficient data storage is a fundamental requirement. Whether you're capturing images for training, storing inference results for validation, or archiving sensor data for future analysis, your storage solution must be both reliable and high-performance.
 
 Ingestion speed is especially critical. If your system can’t write data fast enough — whether it’s high-frequency frames or accompanying metadata — you risk losing valuable information or creating bottlenecks in the pipeline.
@@ -132,7 +131,6 @@ In most CV pipelines, you deal with large volumes of **unstructured binary data*
   CV systems often need to query image data by time intervals — e.g., “give me all frames from the past 10 minutes.”
   Relational databases can support this, but performance degrades with large datasets unless you implement table partitioning and maintain complex indexes.
   This adds operational overhead and still may not scale well for high-ingestion workloads like real-time image capture.
-
 
 ## Conclusion
 
