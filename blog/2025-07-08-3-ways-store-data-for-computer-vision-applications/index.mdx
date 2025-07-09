@@ -16,7 +16,7 @@ In this post, we’ll look at three common approaches to storing data in compute
 
 ## A Simple Computer Vision Application
 
-For demonstration purposes, we’ll use a simple computer vision application which is connected to a CV camera and runs on an edge device:
+For demonstration purposes, we’ll use a simple computer vision (CV) application which is connected to a CV camera and runs on an edge device:
 
 ![Computer Vision Application](./img/computer-vision-application.png)
 
@@ -28,7 +28,7 @@ Your images and results need to be stored for training and validation purposes. 
 
 ## File System
 
-One of the most straightforward ways to store images from a computer vision (CV) camera is to write them directly to a local file system. Each image can be saved using a timestamp as a unique identifier, and the directory structure can be organized by time intervals for easier access.
+One of the most straightforward ways to store images from a (CV) camera is to write them directly to a local file system. Each image can be saved using a timestamp as a unique identifier, and the directory structure can be organized by time intervals for easier access.
 
 ![File System Usage](./img/file-system-usage.png)
 
@@ -91,7 +91,8 @@ Once stored locally, the data can be selectively replicated to central storage o
 ![ReductStore Usage](./img/reductStore-usage.png)
 
 As you can see, instead of a tree-like structure, it has a flat structure of entries where data is batched and partitioned into blocks.
-This approach is more efficient for writing because we can pre-allocate a block for future records, and it's also better for querying data over time intervals because we don't need to look up records in time order.
+This approach is more efficient for writing, since blocks can be pre-allocated for incoming records.
+It also improves time-based querying: because data typically arrives in time order, records for a given time interval are physically located close to each other — making scans faster and more predictable.
 
 Another very important feature of ReductStore is its support for data labeling. This allows you to store the image and the corresponding model output together in a single entry.
 Labels not only help organize and filter data during queries — they can also be used for conditional replication, so only relevant data is streamed to central storage or other nodes,
@@ -125,7 +126,7 @@ Relational databases are great for structured data, but they’re not designed f
 In most CV pipelines, you deal with large volumes of **unstructured binary data**: raw images, video frames, model outputs, and metadata. Trying to store this data in a relational database quickly becomes inefficient for several reasons:
 
 - **Inefficient for Large Binary Data**
-  Relational databases can store images as BLOBs, but they aren’t optimized for high-throughput write operations. Ingesting large numbers of images per second puts significant strain on the database engine.
+  Relational databases can store images as blobs, but they aren’t optimized for high-throughput write operations. Ingesting large numbers of images per second puts significant strain on the database engine.
 
 - **Poor Time-Series Access**
   CV systems often need to query image data by time intervals — e.g., “give me all frames from the past 10 minutes.”
