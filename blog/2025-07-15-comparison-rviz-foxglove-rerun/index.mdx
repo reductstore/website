@@ -108,7 +108,7 @@ These architectural decisions position Rerun as a promising tool for demanding r
 
 **Limitations**:
 
-- **???Limited Analysis**. RViz and RViz 2 primarily serve visualization purposes and lack detailed message inspection, conditional logging, or advanced playback controls like pause, step, or speed adjustment. External tools such as rqt_bag or ROS command-line utilities are needed to fill these gaps. Additionally, RViz does not consistently warn about invalid data (e.g., NaNs or infinities), which can cause missing or inaccurate visuals. The tools are not designed for deep offline data analysis.
+- **Limited Analysis**. RViz and RViz 2 primarily serve visualization purposes and lack built-in tools for detailed message inspection, conditional logging, or advanced playback controls like pause, step, or speed adjustment. These capabilities typically require external tools such as `rqt_bag`, ROS command-line utilities, or third-party RViz plugins (e.g., `rosbag_panel`). Additionally, RViz does not consistently warn about invalid data (e.g., NaNs or infinities), which can result in missing or misleading visuals. These tools are not designed for deep offline data analysis and are best used alongside more specialized logging or analysis solutions.
 
 - **No Time-Series Analysis**: RViz and RViz 2 do not support time-series plotting or statistical analysis. For these tasks, dedicated tools like `rqt_plot`, `PlotJuggler` (with ROS 2 support), or external environments like Jupyter with Python are more appropriate.
 
@@ -128,7 +128,11 @@ These architectural decisions position Rerun as a promising tool for demanding r
 
 - **Topic Synchronization & Playback Timeline**: Foxglove offers a unified, timestamp-based timeline that synchronizes data from multiple topics. This ensures time-aligned playback of sensor streams like RGB images, depth, point clouds, IMU, and TFs, useful both in real time and with recorded data. The timeline includes playback controls such as pause, frame-by-frame stepping, variable speed, and bookmarks for quickly navigating to key events. This tight time synchronization is a major advantage over RViz, enabling clearer insights into system behavior.
 
-- **???Advanced Analysis & Time-Series Tools**. Foxglove offers powerful tools for offline analysis of recorded data. Users can inspect messages in detail, set up conditional logging, and control playback with options like pause, step-by-step viewing, and speed adjustment via the integrated timeline. For analyzing numeric data over time, Foxglove includes flexible plotting tools similar to `rqt_plot` or `PlotJuggler`. Users can visualize numeric fields from any message type, overlay multiple signals for comparison, and zoom or select specific time ranges for focused analysis. This makes it easy to examine sensor outputs, control signals, or algorithm behavior. Interactive graphs support dynamic switching between data sets, and built-in validation alerts users to invalid values such as NaNs or infinities, helping ensure the accuracy of the analysis.
+- **Advanced Analysis & Time-Series Tools**. Foxglove offers a capable set of tools for offline analysis of recorded data. Users can inspect messages in detail, filter them by topic or namespace, and control playback through an integrated timeline with pause, step-by-step navigation, and adjustable speed. To view custom ROS 2 message types with full support, messages are best recorded in or converted to the MCAP format, although Foxglove can open other formats with some limitations.
+
+  For analyzing numeric data over time, Foxglove provides flexible plotting tools broadly comparable to `rqt_plot` or `PlotJuggler`. Users can visualize numeric fields from any message type, overlay multiple signals, zoom in on specific time ranges, and interactively adjust what’s displayed.
+
+  These tools make it easy to explore sensor outputs, control signals, and algorithm behavior. Interactive graphs support switching between message series dynamically.
 
 - **Modular & Configurable Interface**: The Foxglove UI is fully modular, letting users add, remove, duplicate, and rearrange panels such as 3D views, image feeds, message viewers, plots, diagnostics, and consoles. Each panel is highly configurable, supporting settings for color, scale, transparency, update rate, and filtering. Users can save layouts as `JSON` files, enabling reproducible setups, role-based dashboards, and fast task switching (e.g., from SLAM debugging to perception analysis). These layouts can be shared across teams or versioned over time.
 
@@ -141,6 +145,10 @@ These architectural decisions position Rerun as a promising tool for demanding r
 **Limitations**:
 
 - **Limited Real-Time 3D Interactivity**: Foxglove does not natively support interactive 3D markers like RViz. Users cannot directly manipulate objects in the 3D scene (e.g., setting goals, editing poses, or dragging elements) without building custom extensions. This limits Foxglove’s out-of-the-box usability for real-time tasks such as motion planning, teleoperation, or interactive environment setup.
+
+- **No some advanced features** Foxglove currently lack some advanced features found in `PlotJuggler`. For example, Foxglove does not yet support strict axis ratio locking — a critical feature when accurately visualizing spatial data where maintaining proportional relationships between axes matters. Additionally, Foxglove’s built-in data transformation capabilities are limited compared to PlotJuggler’s comprehensive suite of statistical and signal-processing tools, such as moving averages, derivatives, filtering, and custom mathematical expressions. These advanced features make PlotJuggler especially useful for detailed signal analysis and fine-grained data manipulation, which is often essential when debugging sensor data or control signals.
+
+- **No automated anomaly detection**: Foxglove Studio does not include built-in automated validation or anomaly detection features. It does not use ML models or rule-based systems to automatically flag issues. Instead, it offers detailed message introspection and customizable visualizations that enable users to manually identify irregularities such as NaNs, infinities, or out-of-range values. This hands-on approach requires user expertise but provides flexible, in-depth analysis without automated alerts.
 
 ### **Rerun**
 
@@ -160,11 +168,9 @@ These architectural decisions position Rerun as a promising tool for demanding r
 
 - **Flexible Time-Series and Event Logging**: Rerun features synchronized timeline playback for multiple streams, supporting both explicit (user-defined) and implicit (auto-derived) timestamps. It manages multiple time domains (logical/log time and timeline time) to synchronize heterogeneous data sources accurately. Timeline controls include zooming, scrubbing, filtering by entity path or timeline, and detailed event inspection with rich metadata. Conditional filtering and selective visibility help isolate anomalies or relevant events in complex multi-agent or multi-sensor deployments.
 
-- **???Programmable Data Access and Web Integration**. Beyond its interactive Viewer, Rerun provides structured data access through Apache Arrow, enabling programmatic analysis in tools like Pandas or Jupyter. This facilitates seamless integration of visual and quantitative workflows.
+- **Programmable Data Access and Web Integration**. The Rerun SDK provides semantic logging primitives (e.g., `log_scalar`, `log_image`, `log_point_cloud`, `log_text_entry`, `log_tensor`) that automatically render in the Viewer. Rerun uses Apache Arrow for efficient data handling, supporting advanced analysis with tools like Pandas and Jupyter, direct export to formats like `Parquet` is supported via the API, enabling both streaming visualization and offline batch analysis. The Viewer is also available as a React component, enabling seamless embedding within React applications and custom web dashboards, though integration with other JavaScript frameworks may require additional adaptation.
 
-  The Viewer is also available as a React-compatible web component, making it easy to embed within custom dashboards or cloud platforms.
-
-  Under the hood, Rerun uses an Entity-Component-System (ECS) data model that allows for flexible and scalable logging. Data is stored as time-stamped components attached to hierarchical entities, making it easy to extend logging semantics while preserving performance and clarity.
+  Underneath these features, Rerun’s flexible and scalable logging is powered by an Entity-Component-System (ECS) data model, which organizes time-stamped components attached to hierarchical entities to maintain performance and extensibility.
 
 - **Emerging Features**: Experimental capabilities include graph-based views for visualizing system architectures, connectivity, and agent interactions, extending Rerun’s utility beyond traditional sensor data visualization into system design and research workflows.
 
