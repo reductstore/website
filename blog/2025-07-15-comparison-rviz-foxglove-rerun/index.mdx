@@ -10,9 +10,9 @@ date: 2025-07-15
 
 In robotics development, effective visualization and analysis tools are essential for monitoring, debugging, and interpreting complex sensor data. RViz, Foxglove, and Rerun are three widely used tools that serve this purpose, each with a distinct approach and feature set.
 
-[**RViz (ROS Visualization)** is the classic 3D visualization tool in the ROS ecosystem](https://wiki.ros.org/rviz). It's designed to help developers and engineers monitor and debug ROS-based robots in real time.
+[**RViz (ROS Visualization)** is the classic 3D visualization tool built for the ROS ecosystem](https://wiki.ros.org/rviz). It's designed to help developers and engineers monitor and debug ROS-based robots in real time.
 
-[**Foxglove** is an integrated platform that supports the entire development lifecycle of robotics and physical AI systems](https://foxglove.dev/about), aiming to simplify how teams collect, visualize, analyze, and manage large volumes of diverse sensor data.
+[**Foxglove** is a modern data visualization and inspection platform for robotics and physical AI systems](https://foxglove.dev/about), aiming to simplify how teams collect, visualize, analyze, and manage large volumes of diverse sensor data.
 
 [**Rerun** is a lightweight, native desktop application focused on fast and efficient visualization of robotics data](https://rerun.io), enabling developers to quickly explore and debug both live and recorded sensor streams with minimal setup.
 
@@ -156,9 +156,7 @@ These architectural decisions position Rerun as a promising tool for demanding r
 
 - **Real-time and Recorded Data Visualization**: Rerun supports both live-streamed and recorded sensor data visualization with minimal latency. It ingests data via Rust- or Python-based logging SDKs, handling a wide range of robotics sensor modalities including 3D spatial data, camera imagery, numeric time-series, semantic segmentation maps, depth maps, annotations (bounding boxes, keypoints), and textual or categorical event data. Recorded datasets can be replayed with full timeline control for stepwise inspection or smooth playback, aiding in bug reproduction and model validation.
 
-- **???Collaboration and Sharing Features**. Rerun streamlines collaborative workflows by offering data export, session sharing, and annotation tools. Teams can share recorded `.rrd` files for offline inspection, annotate data using Annotation Context (which supports labeling, segmentation, class IDs, and color mapping), and use shared Recording IDs to combine streams from multiple processes or machines into a single session. Additionally, users can export screenshots or structured logs, such as Apache Arrow or Pandas DataFrames, for inclusion in reports or dashboards.
-
-  Rerun also comes with convenient command-line utilities (CLI) for managing recorded sessions (.rrd), enabling operations such as file merging, filtering, and subsampling. These tools facilitate handling large datasets and simplify integration into CI/CD pipelines, making it easier for teams to automate workflows and manage data efficiently.
+- **Collaboration and Sharing Features**. Rerun streamlines collaborative workflows by offering data export and session sharing via `.rrd` files. Teams can share recorded `.rrd` files for offline inspection, annotate data using Annotation Context (which supports labeling via class IDs and color mapping), and use shared Recording IDs to log streams from multiple processes or machines into a unified session, provided the Recording ID is set consistently at the time of logging, enabling live, unified logging. It is important to note that merging previously recorded `.rrd` files with different Recording IDs offline is currently not supported. Additionally, users can export screenshots for inclusion in reports or dashboards via CLI or viewer options, depending on the version and available commands.
 
 - **Customizable and Extensible UI**: The Rerun Viewer offers a modular, layout-aware interface designed for workflows such as SLAM debugging, multi-sensor calibration, and performance profiling. Users can save and reload “Blueprints” — serialized UI configurations that preserve panel layouts, timelines, selected entities, and styling (color, transparency, size). The Viewer exposes a full styling hierarchy (override → store → default → fallback), allowing easy customization of visuals without altering source data. Multiple synchronized views (3D scenes, timelines, 2D plots, raw data inspectors) support comprehensive analysis.
 
