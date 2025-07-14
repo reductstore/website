@@ -1,0 +1,90 @@
+---
+title: Disaster Recovery
+description: Learn how to set up disaster recovery for ReductStore to ensure data resilience and availability.
+---
+
+import CodeBlock from "@theme/CodeBlock";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/guides/disaster-recovery"
+  />
+</head>
+
+
+# Disaster Recovery
+
+This guide explains how to set up disaster recovery for ReductStore to ensure data resilience and availability.
+It covers the following types of disasters:
+
+1. **Hardware Failure**: Physical damage to the server or storage devices.
+2. **Data Corruption**: Logical errors that lead to data being unreadable or inconsistent.
+3. **Network Outage**: Loss of connectivity that prevents access to the ReductStore instance.
+4. **Operational Errors**: Mistakes made by users or administrators that lead to data loss or corruption.
+
+## Data Loss Detection And Automated Recovery
+
+ReductStore’s disaster recovery strategy begins with detecting data loss. The core principle is: whatever happens, detect and isolate the problem as early as possible, and continue operating with unaffected data.
+
+Detection and isolation are based on the internal storage structure and format, which you can learn more about in the **[How Does It Work](../how-does-it-work#blocks)** section.
+These mechanisms operate during both instance startup and I/O operations.
+
+### Startup Detection
+
+When a ReductStore instance starts, the storage engine performs the following checks:
+
+- Verifies and replays Write-Ahead Logs (WALs)
+- Updates indexes
+- Validates data integrity
+
+This process helps recover from the following scenarios:
+
+1. **Power Failure or Crash**:
+   - If ReductStore was not shut down properly, the engine detects incomplete WALs and restores the data to the last consistent state.
+
+2. **File System Corruption**:
+   - Each index file has a CRC to verify its integrity. If corrupted, the engine will detect this and recreate it from block descriptors.
+   - If the number or size of data blocks doesn’t match the index file, it will be rebuilt using the block descriptors.
+   - If the storage engine detects a corrupted block descriptor during the index rebuild, it will remove the corrupted block and continue with the rest of the data.
+
+### Runtime Detection
+
+During I/O operations, ReductStore checks the integrity of block descriptors.
+If corruption is detected:
+
+- The storage engine aborts the current I/O operation.
+- A `500 Internal Server Error` is returned.
+- The issue is logged for administrative review.
+
+An administrator can inspect the logs and take corrective actions such as removing the corrupted block or restoring it from a backup.
+
+:::note
+Not every I/O operation will trigger a check. The checks are preformed when a block descriptor is read from disk to an in-memory cache.
+:::
+
+### Content Integrity
+
+The detection mechanisms described above ensure the integrity of metadata and block descriptors—essential for the reliable functioning of the storage engine.
+
+However, they **do not verify the actual content** of stored records, to avoid performance penalties.
+To ensure content-level integrity, users can implement their own checksum or hash validation and attach them as labels to records:
+
+```python
+md5_hash = md5(data).hexdigest()
+ts = time.time()
+await bucket.write(
+    "entry_name",
+    data,
+    timestamp=ts,
+    labels={
+        "md5": md5_hash,
+    },
+)
+```
+
+## Backup/Restore Strategy
+
+Next
