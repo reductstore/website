@@ -14,6 +14,8 @@ Each visualization platform serves a unique role in the development workflow. [R
 
 This article compares RViz, Foxglove, and Rerun across key practical criteria: pricing, cross-platform, remote work and multi-user support, user interface, extensibility, ROS integration, performance with large data, and visualization and analysis capabilities. The goal is to help robotics developers choose the right tool for their specific needs.
 
+![Intro image](./img/intro_image.png)
+
 {/* truncate */}
 
 ## **Pricing**
@@ -102,6 +104,13 @@ These architectural decisions position Rerun as a promising tool for demanding r
 
 - **Plugin-Based Architecture**: Developers can extend RViz by creating custom visualizations and tools through C++ plugins. RViz 2 supports plugins too, built on a more modern and modular architecture.
 
+![RViz](./img/rviz.png)
+
+<small style={{ display: "block", marginTop: "-20px" }}>
+  [Data from Mobile Robot
+  Example](https://app.foxglove.dev/187d8797/view?ds=foxglove-sample-stream&ds.recordingId=rec_0dLj2kpbuAv0ri0m&ds.overrideLayoutId=bd38e764-ac21-49a2-b854-abfaa20af6bc&layoutId=bd38e764-ac21-49a2-b854-abfaa20af6bc&time=2024-03-22T03%3A59%3A50.316857842Z)
+</small>
+
 **Limitations**:
 
 - **Limited Analysis**. RViz and RViz 2 primarily serve visualization purposes and lack built-in tools for detailed message inspection, conditional logging, or advanced playback controls like pause, step, or speed adjustment. These capabilities typically require external tools such as `rqt_bag`, ROS command-line utilities, or third-party RViz plugins (e.g., `rosbag_panel`). Additionally, RViz does not consistently warn about invalid data (e.g., NaNs or infinities), which can result in missing or misleading visuals. These tools are not designed for deep offline data analysis and are best used alongside more specialized logging or analysis solutions.
@@ -138,6 +147,13 @@ These architectural decisions position Rerun as a promising tool for demanding r
 
 - **Cloud & Collaboration**: Foxglove can be run locally or in the cloud. Its cloud features include shared dashboards, timeline comments, and real-time collaboration, enabling teams to jointly review logs or live data remotely. This makes it particularly useful for distributed development, remote testing, or asynchronous data reviews.
 
+![Foxglove](./img/foxglove.png)
+
+<small style={{ display: "block", marginTop: "-20px" }}>
+  [Autonomous Robotic Manipulation
+  Example](https://app.foxglove.dev/187d8797/view?ds=foxglove-sample-stream&ds.recordingId=rec_0dHYxsgeF50Cu5Ln&ds.overrideLayoutId=f1366b1a-0e21-4c96-95f8-570a7325cb1f&layoutId=f1366b1a-0e21-4c96-95f8-570a7325cb1f&time=2023-05-31T04%3A16%3A55.239000104Z)
+</small>
+
 **Limitations**:
 
 - **Limited Real-Time 3D Interactivity**: Foxglove does not natively support interactive 3D markers like RViz. Users cannot directly manipulate objects in the 3D scene (e.g., setting goals, editing poses, or dragging elements) without building custom extensions. This limits Foxglove’s out-of-the-box usability for real-time tasks such as motion planning, teleoperation, or interactive environment setup.
@@ -167,6 +183,13 @@ These architectural decisions position Rerun as a promising tool for demanding r
   Underneath these features, Rerun’s flexible and scalable logging is powered by an Entity-Component-System (ECS) data model, which organizes time-stamped components attached to hierarchical entities to maintain performance and extensibility.
 
 - **Emerging Features**: Experimental capabilities include graph-based views for visualizing system architectures, connectivity, and agent interactions, extending Rerun’s utility beyond traditional sensor data visualization into system design and research workflows.
+
+![Rerun](./img/rerun.png)
+
+<small style={{ display: "block", marginTop: "-20px" }}>
+  [nuScenes
+  Example](https://rerun.io/viewer?url=https%3A%2F%2Fapp.rerun.io%2Fversion%2F0.23.4%2Fexamples%2Fnuscenes_dataset.rrd)
+</small>
 
 **Limitations**:
 
