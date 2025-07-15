@@ -5,24 +5,24 @@ authors: ekaterina
 tags: [robotics, rviz, foxglove, rerun]
 slug: comparison-rviz-foxglove-rerun
 date: 2025-07-15
-# image:
+image: ./img/intro_image.png
 ---
-
-In robotics development, effective visualization and analysis tools are essential for monitoring, debugging, and interpreting complex sensor data. Platforms like RViz, Foxglove, and Rerun play a key role at the visualization layer of the observability stack. They help developers interact with both live and recorded data. These tools rely on timely, well-structured access to the underlying data streams. That’s where [**ReductStore**](/) comes in. It handles the data logging, storage, and processing, with a focus on capturing high-volume time-series data efficiently. ReductStore aims to integrate with tools like RViz, Foxglove, and Rerun, supporting a complete observability pipeline: from raw data ingestion to actionable insights.
-
-Each visualization platform has its unique role in the development workflow. [RViz (ROS Visualization) is the classic 3D visualization tool built for the ROS ecosystem](https://wiki.ros.org/rviz), widely used for real-time robot monitoring and debugging. [Foxglove is a modern data visualization and inspection platform for robotics and physical AI systems](https://foxglove.dev/about), aiming to simplify how teams collect, visualize, analyze, and manage large volumes of diverse sensor data. [Rerun is a lightweight, native desktop application focused on fast and efficient visualization of robotics data](https://rerun.io), enabling developers to quickly explore and debug both live and recorded sensor streams with minimal setup.
-
-This article compares RViz, Foxglove, and Rerun across key criteria: pricing, cross-platform support, remote collaboration, user interface, extensibility, ROS integration, performance with large datasets, and visualization and analysis features. The goal is to help robotics developers choose the right tool for their specific needs.
 
 ![Intro image](./img/intro_image.png)
 
+In robotics development, effective visualization and analysis tools are essential for monitoring, debugging, and interpreting complex sensor data. Platforms like RViz, Foxglove, and Rerun play a key role at the visualization layer of the observability stack. They help developers interact with both live and recorded data. These tools rely on timely, well-structured access to the underlying data streams. That's where [**ReductStore**](/) comes in. It handles the data logging, storage, and processing, with a focus on capturing high-volume time-series data efficiently. ReductStore aims to integrate with tools like RViz, Foxglove, and Rerun, supporting a complete observability pipeline: from raw data ingestion to actionable insights.
+
 {/* truncate */}
+
+Each visualization platform has its unique role in the development workflow. [**RViz (ROS Visualization) is the classic 3D visualization tool built for the ROS ecosystem**](https://wiki.ros.org/rviz), widely used for real-time robot monitoring and debugging. [**Foxglove is a modern data visualization and inspection platform for robotics and physical AI systems**](https://foxglove.dev/about), aiming to simplify how teams collect, visualize, analyze, and manage large volumes of diverse sensor data. [**Rerun is a lightweight, native desktop application focused on fast and efficient visualization of robotics data**](https://rerun.io), enabling developers to quickly explore and debug both live and recorded sensor streams with minimal setup.
+
+This article compares RViz, Foxglove, and Rerun across key criteria: pricing, cross-platform support, remote collaboration, user interface, extensibility, ROS integration, performance with large datasets, and visualization and analysis features. The goal is to help robotics developers choose the right tool for their specific needs.
 
 ## **Pricing**
 
 **RViz** and **RViz 2** are part of the ROS ecosystem and released under the BSD 3-Clause License. This permissive open-source license allows free use, modification, and redistribution (including for commercial purposes), as long as the original copyright and license notices are preserved.
 
-**Foxglove** offers a free tier that includes core features for up to 3 users, 10 devices, and 10 GB of cloud storage. For larger teams or needs (e.g., extra users, storage, private extensions, enterprise integrations), paid subscriptions are available. Pricing depends on usage and support level. There is also a free academic plan for qualified institutions, which includes more users and storage. Foxglove itself is proprietary software, though it is built on open protocols like MCAP and integrates with open-source ROS tools.
+**Foxglove** offers a free tier that includes core features for up to 3 users, 10 devices, and 10 GB of cloud storage. For larger teams or needs (e.g., extra users, storage, private extensions, enterprise integrations), paid subscriptions are available. Pricing is based on the number of users and storage volume, as well as usage and support level. There is also a free academic plan for qualified institutions, which includes more users and storage. Foxglove itself is proprietary software, though it is built on open protocols like MCAP and integrates with open-source ROS tools.
 
 **Rerun** is fully open-source under both the MIT and Apache 2.0 licenses. There are no current paid plans for the open-source core. The project follows an open-core model: the core visualizer and SDK are free, while a commercial platform is in early access for teams needing cloud-based storage, collaboration tools, advanced analytics, and scalable CI/CD workflows. This commercial layer is designed to build on top of the open-source foundation.
 
@@ -36,9 +36,9 @@ To address these limitations, early tools like `ROS3D.js` offered browser-based 
 
 **Foxglove** runs on Windows, macOS, and Linux, available both as a native desktop app and in a web browser. This gives users the flexibility to work locally or remotely without installing software. The browser version supports multi-user collaboration, allowing teams to share layouts and stream live data securely in real time from any internet-connected device.
 
-**Rerun** is a lightweight native desktop application for Windows, macOS, and Linux. It requires minimal setup and enables developers to quickly visualize and debug live or recorded sensor data without needing a browser or complex configuration. Although Rerun does not support multi-user or collaborative features, teams often share `.rrd` log files for offline review. This method is usually more practical than using remote desktop tools.
+**Rerun** is a lightweight native desktop application for Windows, macOS, and Linux. It requires minimal setup and enables developers to quickly visualize and debug live or recorded sensor data without needing a browser or complex configuration. Although Rerun does not support multi-user or collaborative features, teams often share log files for offline review. This approach is usually more practical than using remote desktop tools. Rerun also integrates well into development workflows, such as Python environments, which typically require installing Rerun's SDKs and dependencies.
 
-Rerun integrates into development workflows, such as Python environments, which typically require installing Rerun’s SDKs and dependencies.
+> **Note**: All three tools support sharing of recorded data, such as rosbag files for RViz & Rviz 2 (`.bag` for ROS 1 and `.db3`, `.mcap` for ROS 2), `.mcap` files for Foxglove, and `.rrd` for Rerun. To support these workflows at scale, you can use [**ReductStore**](/) solutions to manage continuous recording, indexing, and long-term storage of these file types across teams and infrastructure.
 
 ## **User Interface**
 
@@ -52,13 +52,13 @@ Rerun integrates into development workflows, such as Python environments, which 
 
 **RViz** (both ROS 1 and ROS 2) supports extensibility through C++ plugins, allowing users to develop and integrate custom visualizations, tools, and panels. This plugin architecture makes RViz highly adaptable across robotics domains such as perception, navigation, and manipulation. Many ROS packages include their own RViz plugins by default. However, developing and using plugins requires tight integration with the specific ROS environment. Plugins made for RViz in ROS 1 are not directly compatible with RViz 2; they often require modification or a complete rewrite.
 
-**Foxglove** offers extensibility through an Extensions SDK, which allows developers to build React-based visualizations using TypeScript. Extensions can be shared via an online registry and do not require recompilation. Foxglove also provides APIs and libraries in C++, Python, and Rust, primarily for working with the MCAP file format, enabling integration with ROS (both versions), WebSocket streams, and recorded sensor data. Foxglove’s ecosystem also supports integration with popular robotics and simulation tools such as NVIDIA Isaac Sim, Velodyne LiDAR, and Jupyter Notebooks, either directly or via external bridges.
+**Foxglove** offers extensibility through an Extensions SDK, which allows developers to build React-based visualizations using TypeScript. Extensions can be shared via an online registry and do not require recompilation. Foxglove also provides APIs and libraries in C++, Python, and Rust, primarily for working with the MCAP file format, enabling integration with ROS (both versions), WebSocket streams, and recorded sensor data. Foxglove's ecosystem also supports integration with popular robotics and simulation tools such as NVIDIA Isaac Sim, Velodyne LiDAR, and Jupyter Notebooks, either directly or via external bridges.
 
 **Rerun** focuses on extensibility through SDKs and APIs, especially for Python and other programming environments. It does not support plugin-based customization or drag-and-drop extensions like RViz or Foxglove. Instead, it prioritizes programmatic data embedding and visualization, making it well-suited for users who prefer scripting and code-driven workflows.
 
 Rerun offers strong Python support, but its core is built with Rust and the egui GUI framework — technologies less familiar to many robotics developers. This can introduce a learning curve and limit low-level customization unless users are comfortable with Rust.
 
-Rerun does not offer a simple or dynamic plugin system or scripting layer similar to RViz’s C++ plugins or Foxglove’s TypeScript extensions. This limits rapid prototyping or quick third-party integration.
+Rerun does not offer a simple or dynamic plugin system or scripting layer similar to RViz's C++ plugins or Foxglove's TypeScript extensions. This limits rapid prototyping or quick third-party integration.
 
 Still, its APIs offer robust integration with diverse data sources, including ROS topics, sensor streams, and machine learning frameworks like TensorFlow and PyTorch. This makes Rerun a flexible tool for logging, visualizing, and debugging complex data pipelines.
 
@@ -66,7 +66,7 @@ Rerun is best suited for developers who prefer programming-driven customization 
 
 ## **ROS Integration**
 
-**RViz** is tightly integrated with ROS and supports direct interaction with live ROS topics. Originally developed for ROS 1, it was succeeded by **RViz 2** for ROS 2, and it remains a core visualization tool in many robotics workflows. However, this deep integration limits RViz’s usability outside the ROS ecosystem. Both versions depend on a fully functioning ROS environment and are not designed to run independently or handle non-ROS data without conversion.
+**RViz** is tightly integrated with ROS and supports direct interaction with live ROS topics. Originally developed for ROS 1, it was succeeded by **RViz 2** for ROS 2, and it remains a core visualization tool in many robotics workflows. However, this deep integration limits RViz's usability outside the ROS ecosystem. Both versions depend on a fully functioning ROS environment and are not designed to run independently or handle non-ROS data without conversion.
 
 **Foxglove** connects to live ROS systems using `foxglove_bridge`, a WebSocket-based bridge designed for this purpose. It runs on the same network as the ROS system and streams real-time ROS messages to Foxglove over WebSocket. This architecture allows remote monitoring and interaction with installing ROS locally. Unlike RViz, Foxglove can be used without a full ROS setup.
 
@@ -84,13 +84,15 @@ Rerun also cannot currently open ROS bag files directly (`.bag` for ROS 1 or `
 
 **RViz 2** improves on this with better multithreading and more efficient message transport via DDS. These changes help boost performance and scalability in ROS 2 environments. However, RViz 2 still struggles with very dense or high-rate data streams, especially when rendering complex 3D data in real time, and these improvements do not fully solve the challenges of high-density visualization. To improve performance, users often reduce message history length, filter or downsample data, and disable non-essential displays.
 
-**Foxglove**, particularly its web version, can underperform RViz in high-data scenarios. Because it runs in a web browser, it’s constrained by browser memory limits, single-threaded JavaScript execution, and limited access to hardware acceleration. As a result, visualizing large point clouds or streaming high-frequency topics may lead to lag, dropped frames, or browser instability. These limitations are especially evident when handling continuous 3D data or large bag files.
+**Foxglove**, particularly its web version, can underperform RViz in high-data scenarios. Because it runs in a web browser, it's constrained by browser memory limits, single-threaded JavaScript execution, and limited access to hardware acceleration. As a result, visualizing large point clouds or streaming high-frequency topics may lead to lag, dropped frames, or browser instability. These limitations are especially evident when handling continuous 3D data or large bag files.
 
 Performance can vary depending on the use case and browser environment. The desktop application bypasses some browser limitations and can perform better. However, since it is built on Electron, it still has overhead related to memory usage and resource management common to Electron-based apps. Though these issues are generally less severe than in the web version. For lighter workloads, such as 2D plots or moderate-frequency telemetry, Foxglove often performs well and benefits from its accessible UI and cross-platform support.
 
 **Rerun** is designed with high performance in mind for large-scale, multimodal data workflows. It is a native desktop application written in Rust and uses the modern WGPU rendering backend. This gives it direct access to system resources, helping it efficiently handle dense point clouds, long message histories, and high-frequency data streams. Behind the scenes, Rerun uses techniques such as memory-mapped I/O, zero-copy data handling, and intelligent batching to reduce latency and resource use.
 
 Although there are only few formal benchmarks comparing Rerun with RViz or Foxglove, early community feedback and its architecture suggest that Rerun scales effectively with complex datasets. Performance can be further improved by filtering or downsampling data streams according to specific needs. Rerun is currently under active development to expand its capabilities for robotics visualization and analysis.
+
+> **Note**: Best practices for handling large datasets include splitting data files by time or size (e.g., every 1–5 minutes), using separate files for different topic groups, and automatically deleting old files when disk space is low. Chunk compression can also save disk space more efficiently than whole-file compression, but this approach consumes more CPU and memory resources, representing a trade-off between storage and performance.
 
 ## **Analysis & Visualization**
 
@@ -111,8 +113,7 @@ Although there are only few formal benchmarks comparing Rerun with RViz or Foxgl
 ![RViz](./img/rviz.png)
 
 <small style={{ display: "block", marginTop: "-20px" }}>
-  [Data from Mobile Robot
-  Example](https://app.foxglove.dev/187d8797/view?ds=foxglove-sample-stream&ds.recordingId=rec_0dLj2kpbuAv0ri0m&ds.overrideLayoutId=bd38e764-ac21-49a2-b854-abfaa20af6bc&layoutId=bd38e764-ac21-49a2-b854-abfaa20af6bc&time=2024-03-22T03%3A59%3A50.316857842Z)
+  [Data from Mobile Robot Example](https://foxglove.dev/examples)
 </small>
 
 **Limitations**:
@@ -139,7 +140,7 @@ Although there are only few formal benchmarks comparing Rerun with RViz or Foxgl
 
 - **Advanced Analysis & Time-Series Tools**: Foxglove offers a capable set of tools for offline analysis of recorded data. Users can inspect messages in detail, filter them by topic or namespace, and control playback through an integrated timeline with pause, step-by-step navigation, and adjustable speed. To view custom ROS 2 message types with full support, messages are best recorded in or converted to the MCAP format, although Foxglove can open other formats with some limitations.
 
-  For analyzing numeric data over time, Foxglove provides flexible plotting tools broadly comparable to `rqt_plot` or PlotJuggler. Users can visualize numeric fields from any message type, overlay multiple signals, zoom in on specific time ranges, and interactively adjust what’s displayed.
+  For analyzing numeric data over time, Foxglove provides flexible plotting tools broadly comparable to `rqt_plot` or PlotJuggler. Users can visualize numeric fields from any message type, overlay multiple signals, zoom in on specific time ranges, and interactively adjust what's displayed.
 
   These tools make it easy to explore sensor outputs, control signals, and algorithm behavior. Interactive graphs support dynamic switching between message series.
 
@@ -154,15 +155,18 @@ Although there are only few formal benchmarks comparing Rerun with RViz or Foxgl
 ![Foxglove](./img/foxglove.png)
 
 <small style={{ display: "block", marginTop: "-20px" }}>
-  [Autonomous Robotic Manipulation
-  Example](https://app.foxglove.dev/187d8797/view?ds=foxglove-sample-stream&ds.recordingId=rec_0dHYxsgeF50Cu5Ln&ds.overrideLayoutId=f1366b1a-0e21-4c96-95f8-570a7325cb1f&layoutId=f1366b1a-0e21-4c96-95f8-570a7325cb1f&time=2023-05-31T04%3A16%3A55.239000104Z)
+  [Autonomous Robotic Manipulation Example](https://foxglove.dev/examples)
 </small>
 
 **Limitations**:
 
-- **Limited Real-Time 3D Interactivity**: Foxglove does not natively support interactive 3D markers like RViz. Users cannot directly manipulate objects in the 3D scene (e.g., setting goals, editing poses, or dragging elements) without building custom extensions. This limits Foxglove’s out-of-the-box usability for real-time tasks such as motion planning, teleoperation, or interactive environment setup.
+- **Limited Real-Time 3D Interactivity**: Foxglove does not natively support interactive 3D markers like RViz. Users cannot directly manipulate objects in the 3D scene (e.g., setting goals, editing poses, or dragging elements) without building custom extensions. This limits Foxglove's out-of-the-box usability for real-time tasks such as motion planning, teleoperation, or interactive environment setup.
 
+<<<<<<< HEAD
 - **Limited Advanced Features**: Foxglove currently lacks certain advanced features found in tools like PlotJuggler. For example, Foxglove does not yet support strict axis ratio locking — a critical feature for accurately visualizing spatial data where maintaining proportional relationships between axes is important. Additionally, Foxglove’s built-in data transformation capabilities are limited compared to PlotJuggler’s comprehensive suite of statistical and signal-processing tools, such as moving averages, derivatives, filtering, and custom mathematical expressions. These advanced features make PlotJuggler especially useful for detailed signal analysis and fine-grained data manipulation, often essential when debugging sensor data or control signals.
+=======
+- **Limited Advanced Features**: Foxglove currently lacks certain advanced features found in tools like PlotJuggler. For example, Foxglove does not yet support strict axis ratio locking — a critical feature for accurately visualizing spatial data where maintaining proportional relationships between axes is important. Additionally, Foxglove's built-in data transformation capabilities are limited compared to PlotJuggler's comprehensive suite of statistical and signal-processing tools, such as moving averages, derivatives, filtering, and custom mathematical expressions. These advanced features make PlotJuggler especially useful for detailed signal analysis and fine-grained data manipulation, often essential when debugging sensor data or control signals.
+>>>>>>> 137c4cf (update based on feedback)
 
 - **No Automated Anomaly Detection**: Foxglove does not include built-in automated validation or anomaly detection. It does not use ML models or rule-based systems to automatically flag issues. Instead, it offers detailed message introspection and customizable visualizations that enable users to manually identify irregularities such as NaNs, infinities, or out-of-range values. This hands-on approach requires user expertise but provides flexible, in-depth analysis without automated alerts.
 
@@ -178,21 +182,20 @@ Although there are only few formal benchmarks comparing Rerun with RViz or Foxgl
 
   Developers can extend functionality by adding custom egui-based panels, entity-aware views, or by embedding the Viewer into Rust applications via the `re_viewer` crate. Custom data loaders and visualization types can be created for proprietary or specialized formats. Interactive tools such as selection, pinning, and hover highlighting assist detailed exploration. The Viewer also supports interactive callbacks for events like hover, selection, and context menu actions, enabling highly tailored, real-time data interactions.
 
-- **Rich 3D Visualization with Spatial Context**: Built on egui and WGPU, Rerun’s 3D viewer efficiently renders large-scale scenes on consumer hardware. It uses an entity-path-based scene graph that reflects the hierarchical kinematic tree, allowing intuitive navigation and inspection of components, sensor frames, trajectories, bounding boxes, segmentation masks, dense point clouds, annotated images, 3D meshes, and time-series plots. Users can customize visual parameters (e.g., color maps, visibility, annotations, rendering modes) and navigate using orbit, zoom, and pan controls.
+- **Rich 3D Visualization with Spatial Context**: Built on egui and WGPU, Rerun's 3D viewer efficiently renders large-scale scenes on consumer hardware. It uses an entity-path-based scene graph that reflects the hierarchical kinematic tree, allowing intuitive navigation and inspection of components, sensor frames, trajectories, bounding boxes, segmentation masks, dense point clouds, annotated images, 3D meshes, and time-series plots. Users can customize visual parameters (e.g., color maps, visibility, annotations, rendering modes) and navigate using orbit, zoom, and pan controls.
 
 - **Flexible Time-Series & Event Logging**: Rerun supports synchronized timeline playback of multiple data streams, using both explicit (user-defined) and implicit (auto-derived) timestamps. It manages multiple time domains (logical/log time and timeline time) to accurately align heterogeneous data sources. Timeline controls include zooming, scrubbing, filtering by entity path or timeline, and detailed event inspection with metadata. Conditional filtering and selective visibility help isolate anomalies or relevant events in complex multi-agent or multi-sensor deployments.
 
 - **Programmable Data Access & Web Integration**: The Rerun SDK provides semantic logging primitives (e.g., `log_scalar`, `log_image`, `log_point_cloud`, `log_text_entry`, `log_tensor`) that render automatically in the Viewer. Rerun uses Apache Arrow for efficient data handling, supporting advanced analysis with tools like Pandas and Jupyter. Direct export to formats like Parquet is supported via the API, making it suitable for both streaming visualization and offline batch analysis. The Viewer is also available as a React component, enabling seamless embedding within React applications and custom web dashboards, though integration with other JavaScript frameworks may require additional adaptation.
 
-  Underneath these features, Rerun’s flexible and scalable logging is powered by an Entity-Component-System (ECS) data model, which organizes time-stamped components attached to hierarchical entities to maintain performance and extensibility.
+  Underneath these features, Rerun's flexible and scalable logging is powered by an Entity-Component-System (ECS) data model, which organizes time-stamped components attached to hierarchical entities to maintain performance and extensibility.
 
-- **Emerging Features**: Experimental capabilities include graph-based views for visualizing system architectures, connectivity, and agent interactions, extending Rerun’s utility beyond traditional sensor data visualization into system design and research workflows.
+- **Emerging Features**: Experimental capabilities include graph-based views for visualizing system architectures, connectivity, and agent interactions, extending Rerun's utility beyond traditional sensor data visualization into system design and research workflows.
 
 ![Rerun](./img/rerun.png)
 
 <small style={{ display: "block", marginTop: "-20px" }}>
-  [nuScenes
-  Example](https://rerun.io/viewer?url=https%3A%2F%2Fapp.rerun.io%2Fversion%2F0.23.4%2Fexamples%2Fnuscenes_dataset.rrd)
+  [nuScenes Example](https://rerun.io/examples)
 </small>
 
 **Limitations**:
@@ -205,7 +208,7 @@ Although there are only few formal benchmarks comparing Rerun with RViz or Foxgl
 
 - **Limited Real-Time Collaboration**: While Rerun supports offline session sharing, it lacks live multi-user collaboration features such as synchronized remote views or cloud-hosted live sessions, which are available in Foxglove.
 
-- **Limited Visualization of Large-Scale System Architectures**: Rerun’s entity-based model focuses on spatial and temporal data but does not yet offer comprehensive tools for exploring complex system communication graphs or architecture diagrams interactively.
+- **Limited Visualization of Large-Scale System Architectures**: Rerun's entity-based model focuses on spatial and temporal data but does not yet offer comprehensive tools for exploring complex system communication graphs or architecture diagrams interactively.
 
 ## **Conclusion**
 
