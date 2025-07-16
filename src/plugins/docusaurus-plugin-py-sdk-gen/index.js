@@ -151,7 +151,7 @@ export default async function (context, opts) {
                 if (err) {
                   console.error(err);
                   console.error(stderr);
-                  process.exit(1);
+                  // process.exit(err.code);
                 }
                 let md = convertExamplesToMarkdown(stdout);
                 md = addHeader(module, title, md);

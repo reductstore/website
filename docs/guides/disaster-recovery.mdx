@@ -14,7 +14,6 @@ import TabItem from "@theme/TabItem";
   />
 </head>
 
-
 # Disaster Recovery
 
 This guide explains how to set up disaster recovery for ReductStore to ensure data resilience and availability.
@@ -25,6 +24,12 @@ It covers the following types of disasters:
 3. **Network Outage**: Loss of connectivity that prevents access to the ReductStore instance.
 4. **Operational Errors**: Mistakes made by users or administrators that lead to data loss or corruption.
 
+| Disaster Recovery Strategy                 | Description                                                                                   | Recovery Speed | Hardware Failure | Data Corruption | Network Outage | Operational Errors |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------- | -------------- | ---------------- | --------------- | -------------- | ------------------ |
+| Data Loss Detection and Automated Recovery | Mechanisms to detect data loss and recover automatically to keep an instance working          | seconds        | ✅ (limited)     | ✅ (limited)    | ❌             | ❌                 |
+| Backup/Restore Strategy                    | Regular backups and restore processes to recover from data loss or corruption                 | minutes/hours  | ✅               | ✅              | ❌             | ✅                 |
+| Pilot light Instance                       | Prepared second instance to switch the HTTP traffic when the primary instance is not availble | minutes        | ✅               | ❌              | ✅             | ❌                 |
+
 ## Data Loss Detection And Automated Recovery
 
 ReductStore’s disaster recovery strategy begins with detecting data loss. The core principle is: whatever happens, detect and isolate the problem as early as possible, and continue operating with unaffected data.
@@ -32,7 +37,7 @@ ReductStore’s disaster recovery strategy begins with detecting data loss. The 
 Detection and isolation are based on the internal storage structure and format, which you can learn more about in the **[How Does It Work](../how-does-it-work#blocks)** section.
 These mechanisms operate during both instance startup and I/O operations.
 
-### Startup Detection
+### Startup Data Loss Detection
 
 When a ReductStore instance starts, the storage engine performs the following checks:
 
@@ -43,14 +48,16 @@ When a ReductStore instance starts, the storage engine performs the following ch
 This process helps recover from the following scenarios:
 
 1. **Power Failure or Crash**:
-   - If ReductStore was not shut down properly, the engine detects incomplete WALs and restores the data to the last consistent state.
+
+- If ReductStore was not shut down properly, the engine detects incomplete WALs and restores the data to the last consistent state.
 
 2. **File System Corruption**:
-   - Each index file has a CRC to verify its integrity. If corrupted, the engine will detect this and recreate it from block descriptors.
-   - If the number or size of data blocks doesn’t match the index file, it will be rebuilt using the block descriptors.
-   - If the storage engine detects a corrupted block descriptor during the index rebuild, it will remove the corrupted block and continue with the rest of the data.
 
-### Runtime Detection
+- Each index file has a CRC to verify its integrity. If corrupted, the engine will detect this and recreate it from block descriptors.
+- If the number or size of data blocks doesn’t match the index file, it will be rebuilt using the block descriptors.
+- If the storage engine detects a corrupted block descriptor during the index rebuild, it will remove the corrupted block and continue with the rest of the data.
+
+### Runtime Data Loss Detection
 
 During I/O operations, ReductStore checks the integrity of block descriptors.
 If corruption is detected:
@@ -87,4 +94,64 @@ await bucket.write(
 
 ## Backup/Restore Strategy
 
-Next
+The backup/restore strategy is crucial for disaster recovery, especially for scenarios where data corruption or loss occurs.
+The strategy involves creating regular backups of the ReductStore instance and restoring data from these backups when necessary.
+
+### Backup Process
+
+A backup can be created by copying the entire ReductStore data directory (RS_DATA_PATH variable), which contains all the necessary files for recovery
+configuration and data.
+
+To make the backup process more efficient, you should do the following:
+
+1. Shutdown the ReductStore instance to ensure data consistency.
+2. Create a backup of the entire data directory.
+3. Restart the ReductStore instance.
+
+A backup must be tested after creation to ensure it can be restored successfully. To test a backup, you need to restore it to a separate instance and verify that the data is intact and accessible.
+
+1. Copy the backup to a new directory.
+2. Run a new ReductStore instance with the copied data directory `RS_DATA_PATH=/path/to/backup reductstore`
+3. Verify logs for any errors during startup.
+4. Verify that all expected data is recovered and accessible: `curl http://127.0.0.1:8383/api/v1/list`
+
+### Restore Process
+
+Buckups can be restored by copying the backup data directory to the original ReductStore data directory.
+You can restore buckups fully or partially, depending on your needs:
+
+1. **Full Restore**: Restores all data and configuration from the backup.
+2. **Bucket Restore**: Restores data and configuration for a specific bucket.
+3. **Entry Restore**: Restores data for a specific entry within a bucket.
+
+#### Full Restore
+
+To perform a full restore, follow these steps:
+
+1. Stop the ReductStore instance.
+2. Remove the current data directory or rename it for backup.
+3. Copy the backup data directory to the original ReductStore data directory.
+4. Start the ReductStore instance.
+
+#### Bucket Restore
+
+To restore a specific bucket, follow these steps:
+
+1. Stop the ReductStore instance.
+2. Remove the bucket directory from the current data directory. It is located at `RS_DATA_PATH/<bucket_name>`.
+3. Copy the backup bucket directory to the original ReductStore data directory.
+4. Start the ReductStore instance.
+
+#### Entry Restore
+
+To restore a specific entry within a bucket, follow these steps:
+
+1. Stop the ReductStore instance.
+2. Remove the entry file from the current bucket directory. It is located at `RS_DATA_PATH/<bucket_name>/<entry_name>`.
+3. Copy the backup entry file to the original bucket directory.
+4. Start the ReductStore instance.
+
+## Pilot Light Instance
+
+A pilot light instance is a secondary ReductStore instance that is prepared to take over HTTP traffic when the primary instance is unavailable.
+This strategy ensures minimal downtime and quick recovery in case of a network outage or hardware failure.
