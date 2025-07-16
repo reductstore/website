@@ -24,11 +24,13 @@ It covers the following types of disasters:
 3. **Network Outage**: Loss of connectivity that prevents access to the ReductStore instance.
 4. **Operational Errors**: Mistakes made by users or administrators that lead to data loss or corruption.
 
-| Disaster Recovery Strategy                 | Description                                                                                   | Recovery Speed | Hardware Failure | Data Corruption | Network Outage | Operational Errors |
-| ------------------------------------------ | --------------------------------------------------------------------------------------------- | -------------- | ---------------- | --------------- | -------------- | ------------------ |
-| Data Loss Detection and Automated Recovery | Mechanisms to detect data loss and recover automatically to keep an instance working          | seconds        | ✅ (limited)     | ✅ (limited)    | ❌             | ❌                 |
-| Backup/Restore Strategy                    | Regular backups and restore processes to recover from data loss or corruption                 | minutes/hours  | ✅               | ✅              | ❌             | ✅                 |
-| Pilot light Instance                       | Prepared second instance to switch the HTTP traffic when the primary instance is not availble | minutes        | ✅               | ❌              | ✅             | ❌                 |
+| Disaster Recovery Strategy                 | Description                                                                                      | Downtime      | Hardware Failure | Data Corruption | Network Outage | Operational Errors |
+|--------------------------------------------|--------------------------------------------------------------------------------------------------|---------------|------------------|-----------------|----------------|--------------------|
+| Data Loss Detection and Automated Recovery | Mechanisms to detect data loss and recover automatically to keep an instance working             | seconds       | ✅ (limited)      | ✅ (limited)     | ❌              | ❌                  |
+| Backup/Restore Strategy                    | Regular backups and restore processes to recover from data loss or corruption                    | minutes/hours | ✅                | ✅               | ❌              | ✅                  |
+| Pilot light Instance                       | Prepared second instance to switch the HTTP traffic when the primary instance is not available    | minutes       | ✅                | ❌               | ✅              | ❌                  |
+| Multi-site Active-Active Setup             | Multiple ReductStore instances in different locations to ensure high availability and redundancy | zero          | ✅                | ✅               | ✅              | ✅                    |
+
 
 ## Data Loss Detection And Automated Recovery
 
@@ -151,7 +153,86 @@ To restore a specific entry within a bucket, follow these steps:
 3. Copy the backup entry file to the original bucket directory.
 4. Start the ReductStore instance.
 
-## Pilot Light Instance
+## Pilot Light
 
 A pilot light instance is a secondary ReductStore instance that is prepared to take over HTTP traffic when the primary instance is unavailable.
 This strategy ensures minimal downtime and quick recovery in case of a network outage or hardware failure.
+
+![Pilot Light Instance](./img/disaster_recovery_pilot_light.png)
+
+
+To implement this strategy, you will need additional componets:
+
+1. **Load Balancer**: A load balancer to route HTTP traffic between the primary and pilot light instances.
+2. **Monitoring System**: A monitoring system to detect when the primary instance is down
+3. **Data Replication Tool**: A tool to replicate data between the primary and pilot light instances.
+
+### Load Balancer
+
+A load balancer is used to distribute HTTP traffic between the primary and pilot light instances.
+It should be configured to route traffic to the pilot light instance when the primary instance is down.
+
+### Monitoring System
+
+A monitoring system is essential to detect when the primary instance is down and to trigger the switch to the pilot light instance.
+It should monitor HTTP traffic for 5xx errors and connectivity and notify when the primary instance is unavailable.
+
+### Data Replication
+
+A data replication tool is used to keep the pilot light instance up-to-date with the primary instance.
+The tool must be chosen based on the type of storage used by the ReductStore instance.
+
+
+### Switching to Pilot Light
+
+The switch to the pilot light instance can be manual or automatic, depending on the monitoring system and load balancer configuration.
+When the primary instance is detected as unavailable, the load balancer should route traffic to the pilot light instance.
+
+Independently of the switch is made manually or automatically, it must be done in the following order:
+
+1. Ensure that the primary instance is stopped to prevent data corruption. (if it is still running)
+2. Make sure that data replication is up-to-date and the pilot light instance has the latest data.
+3. Launch the pilot light instance and ensure it is running.
+
+
+## Active-Active Setup
+
+An ctive-active setup involves deploying multiple ReductStore instances and replicating data between them.
+This strategy ensures high availability, redundancy, and quick disaster recovery however it requires more resources and supporting infrastructure.
+
+![Active-Active Setup](./img/disaster_recovery_active_active.png)
+
+The active-active setup consists of two layers:
+
+1. **Ingress Layer**: A load balancer and ReductStore instances with high performance but small storage capacity to ingest data and predicate it to the egress layer.
+2. **Egress Layer**: A load balancer and ReductStore instances with high storage capacity to store data and serve queries.
+
+Each layer has its own endpoints and users must use ingress endpoints to write data and egress endpoints to read data.
+
+### Ingress Layer
+
+The ingress layer is responsible for ingesting data and replicating it to the egress layer.
+Each ingress instance has the same configuration and replication tasks to copy data to each egress instance.
+It has a small storage capacity only for buffering incoming data before it is replicated to the egress layer.
+
+When a client writes data, the load balancer routes the request to one of the ingress instances. Because all ingress instances have the same configuration, the data is replicated to all egress instances and
+each egress instance has the same data.
+
+### Egress Layer
+
+The egress layer is responsible for storing data and serving queries. Each egress instance has the same configuration and data.
+
+When a client queries data, the load balancer routes the request to one of the egress instances.
+
+### Configuration
+
+ReductStore replicates data between instances but doesn't sync their configurations. Due to the multi-site setup needs the same configuration for all instances,
+you should provision each bucket and replication task with IaC tools like Terraform or Ansible, or use ReductStore CLI or SDK to automate the configuration process.
+
+### Load Balancing Requirements
+
+The load balancing must be configured to route traffic from a client to the same instance for both write and read operations.
+This necessary for the following reasons:
+
+1. HTTP Query API works as an iterator and needs multiple requests to read all data. The load balancer must route all requests to the same instance to ensure that the iterator works correctly.
+2. ReductStore offers the best performance when the client writer records in time order. If the load balancer routes requests to different instances, the data may be written out of order, which can lead to performance degradation.

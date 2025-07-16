@@ -7,3 +7,115 @@ description: API reference for the Token Module Module of the ReductStore Client
 </head>
 
 # Token Module
+
+<a id="reduct.msg.token"></a>
+
+
+
+Message types for the Token API
+
+<a id="reduct.msg.token.Permissions"></a>
+
+## Permissions
+
+```python
+class Permissions(BaseModel)
+```
+
+Token permission
+
+<a id="reduct.msg.token.Permissions.full_access"></a>
+
+#### full\_access
+
+full access to manage buckets and tokens
+
+<a id="reduct.msg.token.Permissions.read"></a>
+
+#### read
+
+list of buckets with read access
+
+<a id="reduct.msg.token.Permissions.write"></a>
+
+#### write
+
+list of buckets with write access
+
+<a id="reduct.msg.token.Token"></a>
+
+## Token
+
+```python
+class Token(BaseModel)
+```
+
+Token for authentication
+
+<a id="reduct.msg.token.Token.name"></a>
+
+#### name
+
+name of token
+
+<a id="reduct.msg.token.Token.created_at"></a>
+
+#### created\_at
+
+creation time of token
+
+<a id="reduct.msg.token.Token.is_provisioned"></a>
+
+#### is\_provisioned
+
+token is provisioned and can't be deleted or changed
+
+<a id="reduct.msg.token.FullTokenInfo"></a>
+
+## FullTokenInfo
+
+```python
+class FullTokenInfo(Token)
+```
+
+Full information about token with permissions
+
+<a id="reduct.msg.token.FullTokenInfo.permissions"></a>
+
+#### permissions
+
+permissions of token
+
+<a id="reduct.msg.token.TokenList"></a>
+
+## TokenList
+
+```python
+class TokenList(BaseModel)
+```
+
+List of tokens
+
+<a id="reduct.msg.token.TokenList.tokens"></a>
+
+#### tokens
+
+list of tokens
+
+<a id="reduct.msg.token.TokenCreateResponse"></a>
+
+## TokenCreateResponse
+
+```python
+class TokenCreateResponse(BaseModel)
+```
+
+Response from creating a token
+
+<a id="reduct.msg.token.TokenCreateResponse.value"></a>
+
+#### value
+
+token for authentication
+
+

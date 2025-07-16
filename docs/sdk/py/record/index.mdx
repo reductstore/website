@@ -7,3 +7,171 @@ description: API reference for the Record Module Module of the ReductStore Clien
 </head>
 
 # Record Module
+
+<a id="reduct.record"></a>
+
+
+
+Record module
+
+<a id="reduct.record.Record"></a>
+
+## Record
+
+```python
+@dataclass
+class Record()
+```
+
+Record in a query
+
+<a id="reduct.record.Record.timestamp"></a>
+
+#### timestamp
+
+UNIX timestamp in microseconds
+
+<a id="reduct.record.Record.size"></a>
+
+#### size
+
+size of data
+
+<a id="reduct.record.Record.last"></a>
+
+#### last
+
+last record in the query. Deprecated: doesn't work for some cases
+
+<a id="reduct.record.Record.content_type"></a>
+
+#### content\_type
+
+content type of data
+
+<a id="reduct.record.Record.read_all"></a>
+
+#### read\_all
+
+read all data
+
+<a id="reduct.record.Record.read"></a>
+
+#### read
+
+read data in chunks where each chunk has size less than or equal to n
+
+<a id="reduct.record.Record.labels"></a>
+
+#### labels
+
+labels of record
+
+<a id="reduct.record.Record.get_datetime"></a>
+
+#### get\_datetime
+
+```python
+def get_datetime() -> datetime
+```
+
+Get timestamp of record as datetime
+
+**Returns**:
+
+- `datetime` - timestamp as datetime
+
+<a id="reduct.record.Batch"></a>
+
+## Batch
+
+```python
+class Batch()
+```
+
+Batch of records to write them in one request
+
+<a id="reduct.record.Batch.add"></a>
+
+#### add
+
+```python
+def add(timestamp: Union[int, datetime, float, str],
+        data: bytes = b"",
+        content_type: Optional[str] = None,
+        labels: Optional[Dict[str, str]] = None)
+```
+
+Add record to batch
+
+**Arguments**:
+
+- `timestamp` - timestamp of record. int (UNIX timestamp in microseconds),
+  datetime, float (UNIX timestamp in seconds), str (ISO 8601 string)
+- `data` - data to store
+- `content_type` - content type of data (default: application/octet-stream)
+- `labels` - labels of record (default: {})
+
+<a id="reduct.record.Batch.items"></a>
+
+#### items
+
+```python
+def items() -> List[Tuple[int, Record]]
+```
+
+Get records as dict items
+
+<a id="reduct.record.Batch.size"></a>
+
+#### size
+
+```python
+@property
+def size() -> int
+```
+
+Get size of data in batch
+
+<a id="reduct.record.Batch.last_access"></a>
+
+#### last\_access
+
+```python
+@property
+def last_access() -> float
+```
+
+Get last access time of batch. Can be used for sending by timeout
+
+<a id="reduct.record.Batch.clear"></a>
+
+#### clear
+
+```python
+def clear()
+```
+
+Clear batch
+
+<a id="reduct.record.parse_record"></a>
+
+#### parse\_record
+
+```python
+def parse_record(resp: ClientResponse, last=True) -> Record
+```
+
+Parse record from response
+
+<a id="reduct.record.parse_batched_records"></a>
+
+#### parse\_batched\_records
+
+```python
+async def parse_batched_records(resp: ClientResponse) -> AsyncIterator[Record]
+```
+
+Parse batched records from response
+
+
