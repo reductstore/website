@@ -55,6 +55,7 @@
         "guides/data-management",
         "guides/data-replication",
         "guides/access-control",
+        "guides/disaster-recovery",
         {
           "type": "category",
           "label": "Cloud",
