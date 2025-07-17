@@ -59,7 +59,7 @@ This process helps recover from the following scenarios:
 
 2. **File System Corruption**:
 
-- Each index file has a CRC to verify its integrity. If corrupted, the engine will detect this and recreate it from block descriptors.
+- Each index file has a CRC to verify its integrity. If corrupted, the engine will detect this and recreate it from **[block](../glossary#block)** descriptors.
 - If the number or size of data blocks doesn’t match the index file, it will be rebuilt using the block descriptors.
 - If the storage engine detects a corrupted block descriptor during the index rebuild, it will remove the corrupted block and continue with the rest of the data.
 
@@ -82,8 +82,8 @@ Not every I/O operation will trigger a check. The checks are preformed when a bl
 
 The detection mechanisms described above ensure the integrity of metadata and block descriptors—essential for the reliable functioning of the storage engine.
 
-However, they **do not verify the actual content** of stored records, to avoid performance penalties.
-To ensure content-level integrity, users can implement their own checksum or hash validation and attach them as labels to records:
+However, they **do not verify the actual content** of stored **[records](../glossary#record)**, to avoid performance penalties.
+To ensure content-level integrity, users can implement their own checksum or hash validation and attach them as **[labels](../glossary#label)** to records:
 
 ```python
 md5_hash = md5(data).hexdigest()
@@ -138,9 +138,9 @@ To test a backup:
 Restoring from a backup involves copying data from a backup directory into the ReductStore data directory.
 Restoration can be done fully or partially, depending on your recovery requirements:
 
-* **Full Restore:** Restores the entire instance, including all buckets, replication tasks, and configurations.
+* **Full Restore:** Restores the entire instance, including all **[buckets](../glossary#bucket)**, **[replication](../glossary#replication)** tasks, and configurations.
 * **Bucket Restore:** Restores a specific bucket.
-* **Entry Restore:** Restores a specific entry within a bucket.
+* **Entry Restore:** Restores a specific **[entry](../glossary#entry)** within a bucket.
 
 :::warning
  ReductStore must be stopped before performing any restore operation.
@@ -175,11 +175,10 @@ To restore a specific entry within a bucket, follow these steps:
 
 ## Hot Backup via CLI
 
-The **hot backup** strategy uses the ReductStore CLI to copy data from a live instance to a secondary (backup) instance.
+The **hot backup** strategy uses the ReductStore **[CLI](../glossary#CLI)** to copy data from a live instance to a secondary (backup) instance.
 This method allows you to back up data **without stopping** the ReductStore instance, minimizing downtime.
 
 While this approach offers more flexibility and control—such as specifying time ranges for incremental backups—it **does not copy instance configuration** (e.g., bucket definitions, replication rules, etc.).
-You will need to provision the backup instance with the same configuration using CLI, SDK, or infrastructure-as-code tools.
 
 ![Hot Backup via CLI](./img/disaster_recovery_hot_backup.png)
 
@@ -314,7 +313,7 @@ Because all instances in this setup must be configured identically, you should p
 - Replication tasks
 - Permissions (if applicable)
 
-Use tools such as **Terraform**, **Ansible**, **ReductStore CLI**, or SDKs to automate and enforce configuration consistency.
+Use tools such as **Terraform**, **Ansible**, **ReductStore CLI**, or **[SDKs](../glossary#sdk)** to automate and enforce configuration consistency.
 
 ### Load Balancing Requirements
 
