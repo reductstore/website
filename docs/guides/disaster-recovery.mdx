@@ -30,8 +30,8 @@ In the table below, you can see the available strategies and their effectiveness
 | Disaster Recovery Strategy                 | Description                                                                                    | Downtime      | Hardware Failure | Data Corruption | Network Outage | Operational Errors |
 | ------------------------------------------ | ---------------------------------------------------------------------------------------------- | ------------- | ---------------- | --------------- | -------------- | ------------------ |
 | Data Loss Detection and Automated Recovery | Mechanisms to detect data loss and recover automatically to keep an instance working           | seconds       | ✅ (limited)     | ✅ (limited)    | ❌             | ❌                 |
-| Cold Backup via File System                | Coping data as files                                                                           | minutes/hours | ✅               | ✅              | ❌             | ✅                 |
-| Hot Backup via CLI                         | Coping data with ReductStore CLI to a buckup instance                                          | zero          | ✅               | ✅              | ❌             | ✅                 |
+| Cold Backup via File System                | Copying data as files                                                                          | minutes/hours | ✅               | ✅              | ❌             | ✅                 |
+| Hot Backup via CLI                         | Copying data with ReductStore CLI to a backup instance                                         | zero          | ✅               | ✅              | ❌             | ✅                 |
 | Pilot light Instance                       | Prepared second instance to switch the HTTP traffic when the primary instance is not available | minutes       | ✅               | ❌              | ✅             | ❌                 |
 | Active-Active Setup                        | Multiple active ReductStore instances to ensure high availability and redundancy               | zero          | ✅               | ✅              | ✅             | ✅                 |
 
