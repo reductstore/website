@@ -28,13 +28,12 @@ ReductStore provides several strategies to mitigate these risks which will be de
 In the table below, you can see the available strategies and their effectiveness against different types of disasters.
 
 | Disaster Recovery Strategy                 | Description                                                                                    | Downtime      | Hardware Failure | Data Corruption | Network Outage | Operational Errors |
-|--------------------------------------------|------------------------------------------------------------------------------------------------|---------------|------------------|-----------------|----------------|--------------------|
-| Data Loss Detection and Automated Recovery | Mechanisms to detect data loss and recover automatically to keep an instance working           | seconds       | ✅ (limited)      | ✅ (limited)     | ❌              | ❌                  |
-| Cold Backup via File System                | Coping data as files                                                                           | minutes/hours | ✅                | ✅               | ❌              | ✅                  |
-| Hot Backup via CLI                        | Coping data with ReductStore CLI to a buckup instance                                          | zero          | ✅                | ✅               | ❌              | ✅                  |
-| Pilot light Instance                       | Prepared second instance to switch the HTTP traffic when the primary instance is not available | minutes       | ✅                | ❌               | ✅              | ❌                  |
-| Active-Active Setup                        | Multiple active ReductStore instances to ensure high availability and redundancy               | zero          | ✅                | ✅               | ✅              | ✅                  |
-
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------- | ------------- | ---------------- | --------------- | -------------- | ------------------ |
+| Data Loss Detection and Automated Recovery | Mechanisms to detect data loss and recover automatically to keep an instance working           | seconds       | ✅ (limited)     | ✅ (limited)    | ❌             | ❌                 |
+| Cold Backup via File System                | Coping data as files                                                                           | minutes/hours | ✅               | ✅              | ❌             | ✅                 |
+| Hot Backup via CLI                         | Coping data with ReductStore CLI to a buckup instance                                          | zero          | ✅               | ✅              | ❌             | ✅                 |
+| Pilot light Instance                       | Prepared second instance to switch the HTTP traffic when the primary instance is not available | minutes       | ✅               | ❌              | ✅             | ❌                 |
+| Active-Active Setup                        | Multiple active ReductStore instances to ensure high availability and redundancy               | zero          | ✅               | ✅              | ✅             | ✅                 |
 
 ## Data Loss Detection And Automated Recovery
 
@@ -106,7 +105,6 @@ This strategy includes creating regular file backups of the ReductStore instance
 Due to architectural constraints of the ReductStore storage engine, **file backups can only be created or restored when the instance is stopped**.
 This ensures data consistency by preventing write operations during the process but also introduces downtime.
 
-
 ### Backup Process
 
 Backups are performed by copying the entire ReductStore data directory (`RS_DATA_PATH`), which contains all data and configuration files necessary for recovery.
@@ -138,12 +136,12 @@ To test a backup:
 Restoring from a backup involves copying data from a backup directory into the ReductStore data directory.
 Restoration can be done fully or partially, depending on your recovery requirements:
 
-* **Full Restore:** Restores the entire instance, including all **[buckets](../glossary#bucket)**, **[replication](../glossary#replication)** tasks, and configurations.
-* **Bucket Restore:** Restores a specific bucket.
-* **Entry Restore:** Restores a specific **[entry](../glossary#entry)** within a bucket.
+- **Full Restore:** Restores the entire instance, including all **[buckets](../glossary#bucket)**, **[replication](../glossary#replication)** tasks, and configurations.
+- **Bucket Restore:** Restores a specific bucket.
+- **Entry Restore:** Restores a specific **[entry](../glossary#entry)** within a bucket.
 
 :::warning
- ReductStore must be stopped before performing any restore operation.
+ReductStore must be stopped before performing any restore operation.
 :::
 
 #### Full Restore
@@ -326,4 +324,3 @@ This is important for two reasons:
 
 2. **Write Performance**
    ReductStore is optimized for time-ordered writes. If a client sends data to different ingress nodes out of order, it may degrade performance and efficiency.
-
