@@ -93,7 +93,7 @@ The request body should be a JSON object with the following parameters:
 
     // Optional. The end UNIX timestamp of the query in microseconds.
     // If not set, the query continues to the end of the entry.
-    end?: "integer"
+    stop?: "integer"
 
     // Optional. A conditional query to filter records.
     when?: "object"
@@ -151,7 +151,7 @@ The request body should be a JSON object with the following parameters:
 {
   "query_type": "QUERY",
   "start": 1630000000000000,
-  "end": 1630000001000000,
+  "stop": 1630000001000000,
   "when": {
     "&label_name": { "$gt": 10 }
   },
