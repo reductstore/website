@@ -13,7 +13,6 @@ The method finds a record for the given timestamp or query ID and sends its cont
 the HTTP response body. It also sends meta information in headers:
 
 - `x-reduct-time` - UNIX timestamp of the record in microseconds
-- `x-reduct-last` - 1 - if a record is the last record in the query (deprecated since version 1.4, use NoContent response)
 - `x-reduct-label-<name>` - a value of the `<name>` label
 
 If authentication is enabled, the method needs a valid API token with read
@@ -24,6 +23,7 @@ access to the entry's **[bucket](../../glossary#bucket)**.
 - Version 1.3: the database supports labels. If a record has some
   labels, the method sends them as headers that start with `x-reduct-label`.
 - Version 1.4: the `x-reduct-last` header is deprecated. Use the NoContent response instead.
+- Version 1.16: the `x-reduct-last` header is removed.
 
 <head>
   <link
