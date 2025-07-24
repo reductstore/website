@@ -4,10 +4,10 @@ description: Extension for ReductStore to extract and transform data in ROS form
 ---
 
 <head>
-  <link
-    rel="canonical"
-    href="https://www.reduct.store/docs/extensions/official/ros-ext"
-  />
+    <link
+        rel="canonical"
+        href="https://www.reduct.store/docs/extensions/official/ros-ext"
+    />
 </head>
 
 # ReductRos
@@ -26,7 +26,8 @@ The ReductROS extension supports parsing and extracting data exclusively from [M
 These `.mcap` files typically originate from ROS 2 logging tools and encapsulate serialized messages across multiple topics, along with metadata such as timestamps and message types. ReductROS provides functionality to:
 
 - **Decode CDR-encoded ROS 2 messages** embedded in MCAP files.
-- **Convert message payloads to structured JSON**, preserving field names and types.
+- **Extract specific topics** from the MCAP file based on user-defined parameters and convert them into JSON format.
+- **Encode binary data** (e.g., images, point clouds) into base64 strings or JPEG format for easier handling and analysis.
 - **Expose metadata**, including topic names, timestamps, and message types alongside message content.
 
 ### Input
@@ -37,14 +38,13 @@ These `.mcap` files typically originate from ROS 2 logging tools and encapsulate
 
 - `JSON` representations of ROS 2 messages
 - `timestamp` from the message header
-- `labels` containing metadata such as topic name, message type, and encoding
+- `computed_labels` containing metadata such as topic name, message type, and encoding
 
 This output format is ideal for analysis, visualization, integration with external systems, or further transformation to other formats.
 
 ### Limitations
 
 - Doesn't support transformation trees `tf2_msgs/msg/TFMessage`
-- The extension maps byte arrays to JSON lists, e.g. images or other binary data will be represented as lists of integers in the JSON output.
 
 ## Query Format
 
@@ -56,6 +56,7 @@ A user can use the `ext` query parameter to activate the `ros` extension and def
         "ros": {
             "extract": {
                "topic": "string",  # The name of the ROS topic to extract messages from
+               "encode": "object"  # Dictionary of binary files to encode, e.g., {"data": "jpeg"} for JPEG encoding
             }
         }
     }
@@ -68,11 +69,28 @@ The `extract` property allows you to specify the ROS topic from which to extract
 The extension will read the MCAP file, decode the messages from the specified topic, and return each message as a JSON record with
 the timestamp from the message header.
 
-| Parameter | Type     | Mandatory | Description                                                                                                  |
-| --------- | -------- | --------- | ------------------------------------------------------------------------------------------------------------ |
-| `topic`   | `string` | Yes       | The name of the ROS topic to extract messages from. This should match the topic names used in the MCAP file. |
+| Parameter        | Type     | Mandatory | Description                                                                                                                                                  |
+|------------------|----------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `topic`          | `string` | Yes       | The name of the ROS topic to extract messages from. This should match the topic names used in the MCAP file.                                                 |
+| `encode`         | `object` | No        | A dictionary specifying how to encode binary data in the messages. For example, `{"data": "jpeg"}` for JPEG encoding.                                        |
+| `encode.<field>` | `sting`  | No        | The encoding format for binary fields in the message. Supported values are `base64` and `jpeg`. If not specified, the field will be returned as a JSON list. |
 
-## Example
+### Encoding Binary Data
+
+The `encode` property allows you to specify how to handle binary data in the extracted messages.
+You can choose to encode binary fields in the following formats:
+
+| Format   | Description                                                                              |
+|----------|------------------------------------------------------------------------------------------|
+| `base64` | Encodes binary data as a base64 string, suitable for text-based formats like JSON.       |
+| `jpeg`   | Encodes binary data as a JPEG image encoded to a base64 string, suitable for image data. |
+
+
+:::info
+Currently, the extension supports encoding only **[sensor_msgs/msg/Image](http://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Image.html)** messages with `encoding` set to `rgb8`, `bgr8`, or `mono8`.
+:::
+
+## Examples
 
 The following examples demonstrate how to use the **ReductROS** extension to extract and transform ROS messages.
 Although this example is written in Python, it can be run using any of the official SDKs.
@@ -81,7 +99,7 @@ import CodeBlock from "@theme/CodeBlock";
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-### Extracting ROS 2 Messages from MCAP Files
+### Extracting Messages as JSON
 
 This example demonstrates how to use the ROS extension to extract topic from an MCAP file stored in ReductStore and
 convert it to JSON format.
@@ -89,9 +107,9 @@ convert it to JSON format.
 import RosExtractTopicPy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_extract.py";
 
 <Tabs>
-  <TabItem value="Python">
-    <CodeBlock language="python">{RosExtractTopicPy}</CodeBlock>
-  </TabItem>
+    <TabItem value="Python">
+        <CodeBlock language="python">{RosExtractTopicPy}</CodeBlock>
+    </TabItem>
 </Tabs>
 
 #### Expected Output
@@ -100,10 +118,10 @@ The expected output of the above code is as follows:
 
 ```
 Record timestamp: 24
-Record labels: {'encoding': 'cdr', 'schema': 'std_msgs/String', 'topic': '/test'}
+Record labels: {'@encoding': 'cdr', '@schema': 'std_msgs/String', '@topic': '/test'}
 {"data":"hello"}
 Record timestamp: 25
-Record labels: {'encoding': 'cdr', 'schema': 'std_msgs/String', 'topic': '/test'}
+Record labels: {'@encoding': 'cdr', '@schema': 'std_msgs/String', '@topic': '/test'}
 {"data":"world"}
 ```
 
@@ -114,8 +132,46 @@ Record labels: {'encoding': 'cdr', 'schema': 'std_msgs/String', 'topic': '/test'
 - The content of each message is CDR-encoded and decoded by the extension.
 - The decoded message is returned as JSON with the field `data`, matching the `std_msgs/String` schema.
 - Each record corresponds to one ROS 2 message and includes:
-  - The decoded JSON payload, e.g., `{"data":"hello"}`
+    - The decoded JSON payload, e.g., `{"data":"hello"}`
+    - Message metadata as labels, including:
+        - `topic`: `/test`
+        - `schema`: `std_msgs/String`
+        - `encoding`: `cdr`
+
+
+### Extracting Messages as JSON with JPEG Encoding
+
+This example demonstrates how to use the ROS extension to extract topic from an MCAP file stored in ReductStore and
+convert it to JSON format, while also encoding binary image data into JPEG format.
+
+import RosExtractImagePy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_extract_jpeg.py";
+
+<Tabs>
+    <TabItem value="Python">
+        <CodeBlock language="python">{RosExtractImagePy}</CodeBlock>
+    </TabItem>
+</Tabs>
+
+#### Expected Output
+
+The expected output of the above code is as follows:
+
+```
+Record timestamp: 1753341400522732
+Record labels: {'@encoding': 'cdr', '@schema': 'sensor_msgs/Image', '@topic': '/image_raw'}
+Image parameters: {'height': 720, 'width': 1280, 'is_bigendian': 0, 'encoding': 'rgb8', 'step': 3840, 'header': {'frame_id': 'camera', 'stamp': {'sec': 1753341400, 'nanosec': 522732248}}}
+```
+
+#### Explanation
+
+- The extension extracts ROS 2 messages from an `.mcap` file stored in ReductStore.
+- Only messages from the topic `/image_raw` are selected using the `topic` filter in the `ros.extract` configuration.
+- The content of each message is CDR-encoded and decoded by the extension.
+- The decoded message is returned as JSON with the field `data`, which contains the image data encoded in JPEG format.
+- Each record corresponds to one ROS 2 message and includes:
+  - The decoded image parameters, such as height, width, encoding, and step.
+  - The timestamp from the message header.
   - Message metadata as labels, including:
-    - `topic`: `/test`
-    - `schema`: `std_msgs/String`
+    - `topic`: `/image_raw`
+    - `schema`: `sensor_msgs/Image`
     - `encoding`: `cdr`
