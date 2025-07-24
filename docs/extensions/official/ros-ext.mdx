@@ -4,10 +4,10 @@ description: Extension for ReductStore to extract and transform data in ROS form
 ---
 
 <head>
-    <link
-        rel="canonical"
-        href="https://www.reduct.store/docs/extensions/official/ros-ext"
-    />
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/extensions/official/ros-ext"
+  />
 </head>
 
 # ReductRos
@@ -70,7 +70,7 @@ The extension will read the MCAP file, decode the messages from the specified to
 the timestamp from the message header.
 
 | Parameter        | Type     | Mandatory | Description                                                                                                                                                  |
-|------------------|----------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ---------------- | -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `topic`          | `string` | Yes       | The name of the ROS topic to extract messages from. This should match the topic names used in the MCAP file.                                                 |
 | `encode`         | `object` | No        | A dictionary specifying how to encode binary data in the messages. For example, `{"data": "jpeg"}` for JPEG encoding.                                        |
 | `encode.<field>` | `string` | No        | The encoding format for binary fields in the message. Supported values are `base64` and `jpeg`. If not specified, the field will be returned as a JSON list. |
@@ -81,10 +81,9 @@ The `encode` property allows you to specify how to handle binary data in the ext
 You can choose to encode binary fields in the following formats:
 
 | Format   | Description                                                                              |
-|----------|------------------------------------------------------------------------------------------|
+| -------- | ---------------------------------------------------------------------------------------- |
 | `base64` | Encodes binary data as a base64 string, suitable for text-based formats like JSON.       |
 | `jpeg`   | Encodes binary data as a JPEG image encoded to a base64 string, suitable for image data. |
-
 
 :::info
 Currently, the extension supports encoding only **[sensor_msgs/msg/Image](http://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Image.html)** messages with `encoding` set to `rgb8`, `bgr8`, or `mono8`.
@@ -107,9 +106,9 @@ convert it to JSON format.
 import RosExtractTopicPy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_extract.py";
 
 <Tabs>
-    <TabItem value="Python">
-        <CodeBlock language="python">{RosExtractTopicPy}</CodeBlock>
-    </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">{RosExtractTopicPy}</CodeBlock>
+  </TabItem>
 </Tabs>
 
 #### Expected Output
@@ -132,12 +131,11 @@ Record labels: {'@encoding': 'cdr', '@schema': 'std_msgs/String', '@topic': '/te
 - The content of each message is CDR-encoded and decoded by the extension.
 - The decoded message is returned as JSON with the field `data`, matching the `std_msgs/String` schema.
 - Each record corresponds to one ROS 2 message and includes:
-    - The decoded JSON payload, e.g., `{"data":"hello"}`
-    - Message metadata as labels, including:
-        - `topic`: `/test`
-        - `schema`: `std_msgs/String`
-        - `encoding`: `cdr`
-
+  - The decoded JSON payload, e.g., `{"data":"hello"}`
+  - Message metadata as labels, including:
+    - `topic`: `/test`
+    - `schema`: `std_msgs/String`
+    - `encoding`: `cdr`
 
 ### Extracting Messages as JSON with JPEG Encoding
 
@@ -147,9 +145,9 @@ convert it to JSON format, while also encoding binary image data into JPEG forma
 import RosExtractImagePy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_extract_jpeg.py";
 
 <Tabs>
-    <TabItem value="Python">
-        <CodeBlock language="python">{RosExtractImagePy}</CodeBlock>
-    </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">{RosExtractImagePy}</CodeBlock>
+  </TabItem>
 </Tabs>
 
 #### Expected Output
