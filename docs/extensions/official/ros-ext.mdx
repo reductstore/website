@@ -73,7 +73,7 @@ the timestamp from the message header.
 |------------------|----------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `topic`          | `string` | Yes       | The name of the ROS topic to extract messages from. This should match the topic names used in the MCAP file.                                                 |
 | `encode`         | `object` | No        | A dictionary specifying how to encode binary data in the messages. For example, `{"data": "jpeg"}` for JPEG encoding.                                        |
-| `encode.<field>` | `sting`  | No        | The encoding format for binary fields in the message. Supported values are `base64` and `jpeg`. If not specified, the field will be returned as a JSON list. |
+| `encode.<field>` | `string` | No        | The encoding format for binary fields in the message. Supported values are `base64` and `jpeg`. If not specified, the field will be returned as a JSON list. |
 
 ### Encoding Binary Data
 
