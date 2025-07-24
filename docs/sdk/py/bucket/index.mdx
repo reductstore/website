@@ -201,10 +201,6 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
 
 **Arguments**:
 
-- `include` _dict_ - remove records which have all labels
-  from this dict (DEPRECATED use when)
-- `exclude` _dict_ - remove records which doesn't have all labels
-  from this (DEPRECATED use when)
   each_s(Union[int, float]): remove a record for each S seconds
   (DEPRECATED use $each_t in when)
 - `each_n(int)` - remove each N-th record
@@ -455,10 +451,6 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
 
 **Arguments**:
 
-- `include` _dict_ - query records which have all labels
-  from this dict (DEPRECATED use when)
-- `exclude` _dict_ - query records which doesn't have all labels
-  from this (DEPRECATED use when)
 - `head` _bool_ - if True: get only the header of a recod with metadata
   each_s(Union[int, float]): return a record for each S seconds
   (DEPRECATED use $each_t in when)
