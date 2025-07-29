@@ -148,6 +148,22 @@ import DeleteRecordsCli from "!!raw-loader!../examples/cli/data_management_delet
   <TabItem value="CLI">
     <CodeBlock language="bash">{DeleteRecordsCli}</CodeBlock>
   </TabItem>
+    <TabItem value="Web Console">
+
+    1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
+    2. Enter the API token if the authorization is enabled.
+    3. Select the bucket that contains the data you want to query:
+    ![Browse buckets with Web Console](./img/buckets_browse_all.png)
+    4. You will see a list of all the entries in the bucket
+    5. Click on the entry you want to query
+    6. On the entry page you will see the query panel:
+    ![Query panel in Web Console](./img/data_query_panel_update.png)
+    7. Enter the time range in the date picker or manually in the input fields
+    8. Click the **Fetch Records** button to execute the query
+    9. Click on the **Delete** icon next to the record you want to delete:
+    ![Delete record with Web Console](./img/data_management_delete_record.png)
+
+  </TabItem>
   <TabItem value="Python">
     <CodeBlock language="python">{DeleteRecordsPy}</CodeBlock>
   </TabItem>
