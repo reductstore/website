@@ -130,7 +130,7 @@ export default async function (context, opts) {
       );
 
       if (fs.existsSync(tmpDir)) {
-        fs.rmdirSync(tmpDir, { recursive: true });
+        fs.rmSync(tmpDir, { recursive: true });
       }
 
       exec(
@@ -146,12 +146,12 @@ export default async function (context, opts) {
           for (const module of opts.modules) {
             const title = getTitleFromModuleName(module) + " Module";
             exec(
-              `uv run pydoc-markdown -I ${tmpDir}/pkg -m reduct.${module} '${renderCfg()}'`,
+              `pydoc-markdown -I ${tmpDir}/pkg -m reduct.${module} '${renderCfg()}'`,
               (err, stdout, stderr) => {
                 if (err) {
                   console.error(err);
                   console.error(stderr);
-                  // process.exit(err.code);
+                  process.exit(err.code);
                 }
                 let md = convertExamplesToMarkdown(stdout);
                 md = addHeader(module, title, md);
