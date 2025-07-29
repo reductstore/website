@@ -103,7 +103,7 @@ The `columns` array contains objects that specify the fields to select from the 
 {
   "columns": [
     {
-      "name": "field1/field2",
+      "name": "field1.field2",
       "as_label": "computed_label"
     }
   ]
@@ -112,7 +112,7 @@ The `columns` array contains objects that specify the fields to select from the 
 
 | Parameter  | Type   | Mandatory | Description                                                                                                                                                                        |
 | ---------- | ------ | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`     | string | Yes       | The name of the field to select. It can be used with `as_label` to map the selected field to a computed label. It can also contain a path to a nested field, e.g. `field1/field2`. |
+| `name`     | string | Yes       | The name of the field to select. It can be used with `as_label` to map the selected field to a computed label. It can also contain a path to a nested field, e.g. `field1.field2`. |
 | `as_label` | string | No        | The name of the label to use in the query condition. It can be used with `name` to map the selected field to a computed label.                                                     |
 
 :::info
