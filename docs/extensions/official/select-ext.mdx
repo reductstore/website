@@ -34,13 +34,17 @@ The CSV format example:
 
 ## Query Format
 
-A user can use the `ext` query parameter to specify the `select` extension and define the columns to select from the CSV data in the following format:
+Currently, the extension supports JSON and comma-separated CSV data with and without headers. Stored CSV data can be single- or multi-line and can contain any number of columns.
+By default, the extension will use the CSV format, but you can specify the `json` format in the query to use JSON data.
 
 ```python
 {
     # CSV specific parameters
     "csv": {
         "has_headers": "boolean"  # Indicates if the CSV data has headers, default is false
+    },
+    # Switch to JSON format
+    "json": {
     },
     "columns": [
         {
@@ -59,7 +63,9 @@ A user can use the `ext` query parameter to specify the `select` extension and d
 }
 ```
 
-### CSV Parameters
+### CSV Support
+
+#### Parameters
 
 The `csv` object contains parameters that specify how to handle the CSV data. If it is not specified, the extension will use the default values.
 
@@ -67,7 +73,7 @@ The `csv` object contains parameters that specify how to handle the CSV data. If
 | ------------- | ------- | --------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | `has_headers` | boolean | No        | false   | Indicates if the CSV data has headers. If set to `true`, the extension will use the first row as headers. Default is `false`. |
 
-### Column Selection
+#### Column Selection
 
 The `columns` array contains objects that specify the columns to select from the columnar data.
 
@@ -81,6 +87,36 @@ The `columns` array contains objects that specify the columns to select from the
 
 :::info
 \*Each column object must have an index, name or a range of columns to select.
+:::
+
+### JSON Support
+
+#### Parameters
+
+The `json` object is used to specify that the data is in JSON format. If it is not specified, the extension will use the default CSV format.
+
+#### Field Selection
+
+The `columns` array contains objects that specify the fields to select from the JSON data. Each object can contain a `name` property to specify the field to select.
+
+```json
+{
+  "columns": [
+    {
+      "name": "field1/field2",
+      "as_label": "computed_label"
+    }
+  ]
+}
+```
+
+| Parameter  | Type   | Mandatory | Description                                                                                                                                                                        |
+| ---------- | ------ | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`     | string | Yes       | The name of the field to select. It can be used with `as_label` to map the selected field to a computed label. It can also contain a path to a nested field, e.g. `field1/field2`. |
+| `as_label` | string | No        | The name of the label to use in the query condition. It can be used with `name` to map the selected field to a computed label.                                                     |
+
+:::info
+Only primitives like strings, numbers, and booleans can be mapped to computed labels.
 :::
 
 ### Filtering
@@ -192,7 +228,7 @@ Record labels: {'@col1': '1'}
   - From 6,7,8,9,10: → 6 as label, 8,9 as data → becomes 6,8,9
 - Each record corresponds to one of the two writes, and both match the filter (@col1 = 1 from the first row of each block).
 
-### Selecting Columns with Headers
+### Selecting Columns from CSV Data with Headers
 
 This example demonstrates how to use the select extension to work with CSV data that includes a header row.
 You can extract specific columns by their header names and apply filters based on their values.
@@ -228,3 +264,35 @@ e
 - The when clause filters out any row where column "e" is 10 or more — so the rows with e=10 and e=15 are excluded.
 - Only the row 1,2,3,4,5 remains, where e=5.
 - The query runs over two records, so the same filtered output appears twice, once per record timestamp.
+
+### Selecting Fields from JSON Data
+
+This example demonstrates how to use the select extension to extract specific fields from JSON data stored in ReductStore, apply filtering based on field values, and return a transformed dataset.
+
+import SelectQueryJsonPy from "!!raw-loader!../../examples/py/src/ext_select_json_query.py";
+
+<Tabs>
+  <TabItem value="Python">
+    <CodeBlock language="python">{SelectQueryJsonPy}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+#### Expected Output
+
+The expected output of the above code is as follows:
+
+```
+Record timestamp: 1753776773034850
+Record labels: {'@status': 'ok'}
+JSON data: [{'temp': {'status': 'ok'}}]
+```
+
+#### Explanation
+
+- The `json` object specifies that the data is in JSON format.
+- The extension extracts the field `temp.status` from the JSON data
+- The `as_label` property is used to map the extracted field to a computed label `@status`.
+- The `when` clause filters out any record where `@status` is not equal to `ok`.
+- The result includes only the selected field of the remaining records:
+  - The record with `temp.status` equal to `ok` is returned as a JSON object with the field `temp`
+  - The computed label `@status` is set to `ok` based on the value of the extracted field.
