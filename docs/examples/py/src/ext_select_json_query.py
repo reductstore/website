@@ -9,7 +9,7 @@ async def main():
             "my-bucket",
             exist_ok=True,
         )
-        # Write some CSV data with timestamps
+        # Write some JSON data with timestamps
         now = time_ns() // 1000
         await bucket.write("data", json.dumps({"temp": {"value": 10.0, "status": "ok"}, "src": "#1"}), timestamp=now, content_type="application/json")
         await bucket.write("data", json.dumps({"temp": {"value": -4.0, "status": "bad"}, "src": "#1"}), timestamp=now + 1000, content_type="application/json")
