@@ -108,11 +108,11 @@ import CreateReplicaProvision from "!!raw-loader!../examples/provisioning/data_r
     the **"Replication"** tab in the left sidebar.
       4. Click on the plus icon in
     the top right corner to create a new replication task: ![Create Replication
-    Task](./img/data_replication_create.webp)
+    Task](./img/data_replication_create.png)
       5. In the **"Create a new
-    replication"** dialog, entre the name of the replication name and settings:{" "}<img
+    replication"** dialog, entre the name of the replication name and settings:<br /><img
       src={
-        require("@site/docs/guides/img/data_replication_settings.webp").default
+        require("./img/data_replication_settings.png").default
       }
       alt="Create Replication Task Dialog"
       width="350"
@@ -177,8 +177,8 @@ import BrowseReplicaCurl from "!!raw-loader!../examples/curl/data_replication_br
       2. Enter the API token if the authorization is enabled.
       3. Click on the **"Replication"** tab in the left sidebar.
       4. You will see a list of all replication tasks with their status
-      5. Click on a specific replication task in the list: ![Browse Replication Task](./img/data_replication_list.webp)
-      6. You will see the details of the replication task: ![Browse Replication Task Details](./img/data_replication_details.webp)
+      5. Click on a specific replication task in the list: ![Browse Replication Task](./img/data_replication_list.png)
+      6. You will see the details of the replication task: ![Browse Replication Task Details](./img/data_replication_details.png)
       7. You can also see or update the replication task settings by clicking he **cog icon(⚙️)** in the replication task panel.
 
   </TabItem>
@@ -229,9 +229,15 @@ import RemoveReplicaCurl from "!!raw-loader!../examples/curl/data_replication_re
       2. Enter the API token if the authorization is enabled.
       3. Click on the **"Replication"** tab in the left sidebar.
       4. You will see a list of all replication tasks with their status
-      5. Click on a specific replication task in the list: ![Browse Replication Task](./img/data_replication_list.webp)
-      6. Click on the **"Remove"** button in the replication task panel. ![Remove Replication Task](./img/data_replication_remove.webp)
-      7. Confirm the deletion by typing the replication task name and clicking on the **Remove** button: ![Remove Replication Task Confirmation](./img/data_replication_remove_confirm.webp)
+      5. Click on a specific replication task in the list: ![Browse Replication Task](./img/data_replication_list.png)
+      6. Click on the **"Remove"** button in the replication task panel. ![Remove Replication Task](./img/data_replication_remove.png)
+      7. Confirm the deletion by typing the replication task name and clicking on the **Remove** button:<br /><img
+        src={
+            require("./img/data_replication_remove_confirm.png").default
+        }
+        alt="Remove Replication Task Confirmation"
+        width="400"
+    />
 
   </TabItem>
   <TabItem value="Python">

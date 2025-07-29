@@ -97,18 +97,17 @@ import CreateTokenProvisioned from "!!raw-loader!../examples/provisioning/access
         1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
         2. Click on the **"Security"** tab in the left sidebar.
         3. Click on the plus icon in the top right corner to create a new token:
-
-        ![Create Access Token](./img/access_control_create_token.webp)
-
+        ![Create Access Token](./img/access_control_create_token.png)
         4. Fill in the token name and select the permissions for the token:
-
-        ![Create Access Token Form](./img/access_control_create_token_settings.webp)
-
+        ![Create Access Token Form](./img/access_control_create_token_settings.png)
         5. Click on the **"Create"** button to create the token.
-
-        6. Copy the token value and save it in a secure place.
-
-        ![Access Token Created](./img/access_control_create_token_result.webp)
+        6. Copy the token value and save it in a secure place.<br /><img
+        src={
+            require("./img/access_control_create_token_result.png").default
+        }
+        alt="Access Token Created"
+        width="400"
+    />
     </TabItem>
     <TabItem value="Python">
         <CodeBlock language="python">
@@ -175,9 +174,7 @@ import BrowseTokensCurl from "!!raw-loader!../examples/curl/access_control_brows
         1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
         2. Click on the **"Security"** tab in the left sidebar.
         3. You will see the list of access tokens:
-
-        ![Browse Access Tokens](./img/access_control_browse_tokens.webp)
-
+        ![Browse Access Tokens](./img/access_control_browse_tokens.png)
         4. Click on the token name to view the token details
     </TabItem>
     <TabItem value="Python">
@@ -236,18 +233,17 @@ import RemoveTokenCurl from "!!raw-loader!../examples/curl/access_control_remove
         1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
         2. Click on the **"Security"** tab in the left sidebar.
         3. You will see the list of access tokens:
-
-        ![Browse Access Tokens](./img/access_control_browse_tokens.webp)
-
+        ![Browse Access Tokens](./img/access_control_browse_tokens.png)
         4. Click on the token name to view the token details:
-
-        ![Access Token Details](./img/access_control_remove_token.webp)
-
+        ![Access Token Details](./img/access_control_remove_token.png)
         5. Click on the **"Remove"** button to delete the token.
-
-        6. Confirm the action by typing the token name and clicking on the **"Remove"** button.
-
-        ![Remove Access Token](./img/access_control_remove_token_confirm.webp)
+        6. Confirm the action by typing the token name and clicking on the **"Remove"** button.<br /><img
+        src={
+            require("./img/access_control_remove_token_confirm.png").default
+        }
+        alt="Remove Access Token"
+        width="400"
+    />
 
     </TabItem>
     <TabItem value="Python">
