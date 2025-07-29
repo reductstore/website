@@ -124,6 +124,12 @@ export default async function (context, opts) {
     name: "docusaurus-plugin-py-sdk-gen",
 
     async loadContent() {
+      // check CI_ENV and do not generate content if it is set to true
+      if (process.env.CI_ENV) {
+        console.log("CI_ENV is set, skipping SDK generation");
+        return null;
+      }
+
       const tmpDir = os.tmpdir() + "/build/reduct-py";
       console.log(
         `fetch source code from ${opts.sdkRepo}#${opts.sdkBranch} to ${tmpDir}`,
