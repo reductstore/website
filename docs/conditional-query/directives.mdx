@@ -17,10 +17,11 @@ They are prefixed with `#` and can be used to control aspects such as including 
 
 The following directives are supported:
 
-| Operator      | Description                                                                                    |
-| ------------- | ---------------------------------------------------------------------------------------------- |
-| `#ctx_before` | Add additional records before each matching record as context, either by count or time window. |
-| `#ctx_after`  | Add additional records after each matching record as context, either by count or time window.  |
+| Operator         | Description                                                                                    |
+| ---------------- | ---------------------------------------------------------------------------------------------- |
+| `#ctx_before`    | Add additional records before each matching record as context, either by count or time window. |
+| `#ctx_after`     | Add additional records after each matching record as context, either by count or time window.  |
+| `#select_labels` | Retain only the specified labels in a record after filtering.                                  |
 
 ## `#ctx_before`
 
@@ -93,3 +94,23 @@ By time duration:
   "#ctx_after": "30s"
 }
 ```
+
+## `#select_labels`
+
+The `#select_labels` directive allows you to filter the labels retained in each record after applying the query.
+
+### Syntax
+
+```
+{
+  "#select_labels": [<label name 1>, <label name 2>, ...]
+}
+```
+
+### Behavior
+
+This directive is applied after all other query processing, including context inclusion and filtering.
+
+:::info
+The `#select_labels` directive is ignored in replication conditional queries.
+:::
