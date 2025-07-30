@@ -1,0 +1,108 @@
+---
+sidebar_position: 2
+title: 🚀 Getting Started
+description: Getting started with ReductStore database and how to integrate it into your infrastructure.
+---
+
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/getting-started" />
+</head>
+
+# 🚀 Getting Started with ReductStore
+
+ReductStore offers many ways to easily integrate into an existing infrastructure. Choose the one that suits you best.
+
+import SandboxOffer from "@site/src/components/promotional/SandboxOffer";
+
+<SandboxOffer />
+
+## Docker
+
+The easiest way to start using ReductStore is to run Docker image:
+
+```bash
+docker run -p 8383:8383 -v ${PWD}/data:/data reduct/store:latest
+```
+
+The database will be available on port `http://127.0.01:8383` and stores data in the `./data` directory. You may check if it's working with a simple HTTP request:
+
+```bash
+curl http://127.0.0.1:8383/api/v1/info
+```
+
+## Pre-built Binaries
+
+You can use pre-built binaries for Linux, macOS or Windows operating systems. Download a binary for your OS and platform from [**GitHub release page**](https://github.com/reductstore/reductstore/releases/latest). Extract the file and then type the commands:
+
+On Windows with PowerShell:
+
+```powershell
+$env:RS_DATA_PATH = 'C:\<PATH_TO_DATA>'
+.\reductstore
+```
+
+On Linux or macOS
+
+```bash
+RS_DATA_PATH=./data ./reductstore
+```
+
+## ReductStore Cloud
+
+You can access ReductStore as a service through the [**ReductStore Cloud platform**](https://cloud.reduct.store/signup).
+Simply create an account to start using the database immediately.
+For more details on deployment, check out the [**ReductStore Cloud guide**](../guides/cloud/saas.mdx).
+
+## Azure Virtual Machine
+
+ReductStore is available as an Azure Virtual Machine on the [**Azure Marketplace**](https://azuremarketplace.microsoft.com/en/marketplace/apps/reductsoftware.reductstore-server).
+The virtual machine is pre-configured with ReductStore and all the necessary dependencies to store data in Azure storage accounts.
+Read more about the deployment in the [**Azure Virtual Machine guide**](../guides/cloud/azure-vm.mdx).
+
+## Demo Server
+
+If you don't want to deal with the installation, but just want to play with the database, you can use our demo server:
+
+URL: [**https://play.reduct.store**](https://play.reduct.store)
+
+API Token: **reductstore**
+
+## Cargo
+
+If you familiar with Rust, you can build the database from the source code. The source code is available on [**GitHub**](https://github.com/reductstore/reductstore) or
+use Cargo to install the database.
+
+**Requirements:**
+
+- Rust 1.80.0 or later
+- Protobuf 3.17.3 or later
+
+For Ubuntu/Debian, you can install the dependencies and run the database:
+
+```bash
+sudo apt install protobuf-compiler
+cargo install reductstore
+RS_DATA_PATH=./data reductstore
+```
+
+You may need to install a newer Rust version. Read the **[official Rust installation guide](https://www.rust-lang.org/tools/install)** for more information.
+
+## Snap
+
+You can install the database with snap:
+
+```
+sudo snap install reductstore
+```
+
+ReductStore will be available on port http://127.0.01:8383 and store data in the `/var/snap/reductstore/common/data` directory.
+
+## What Is Next?
+
+Try to use the database with your favorite programming language:
+
+import DocCardList from "@theme/DocCardList";
+
+<DocCardList />
+
+If you can't find your programming language in the list, you can still use [**the ReductStore HTTP API**](http-api/) or ping us. If you are serious about using it, we can help you with integration.

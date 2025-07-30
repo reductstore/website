@@ -1,0 +1,286 @@
+---
+sidebar_position: 5
+title: Token API
+description: The API for managing access tokens and permissions for the database.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/token-authentication"
+  />
+</head>
+
+import SwaggerComponent from "@site/src/components/SwaggerComponent";
+
+# Token API Specification Reference
+
+The Token API provides HTTP methods for managing access tokens and permissions for the database.
+
+:::info
+The API is available only when the `RS_API_TOKEN` environment variable is set.
+:::
+
+## Get a List of Tokens
+
+The method returns a list of tokens with names and creation dates. To use
+this method, you need an **[access token](../glossary#access-token)** with full access.
+
+<SwaggerComponent
+  method="GET"
+  path="/api/v1/tokens"
+  summary="Get a list of tokens"
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      description: (
+        <pre>
+          <code>{`{
+  "tokens": [
+    {
+      "name": "string",
+      "created_at": "string"
+    }
+  ]
+}`}</code>
+        </pre>
+      ),
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is empty or invalid",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have enough permissions",
+    },
+  ]}
+/>
+
+## Show Information about a Token
+
+This method provides full information about a token except its values. The
+method requires an access token with full access.
+
+<SwaggerComponent
+  method="GET"
+  path="/api/v1/tokens/:token_name"
+  summary="Show information about a token"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: "token_name",
+        isRequired: true,
+        description: "Name of the token to show",
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "Information about token",
+      description: (
+        <pre>
+          <code>{`{
+  "name": "string",
+  "created_at": "string",
+  "permissions": {
+    "full_access": "bool",
+    "read": [],
+    "write": []
+  }
+}`}</code>
+        </pre>
+      ),
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Current access token is empty or invalid",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Current access token doesn't have enough permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Token with the given name does not exist",
+    },
+  ]}
+/>
+
+## Create a New Token
+
+The method creates a new access token with given permissions as a JSON
+document in the request body. To use this method, you need an access token
+with full access.
+
+<SwaggerComponent
+  method="POST"
+  path="/api/v1/tokens/:token_name"
+  summary="Create a new access token"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: "token_name",
+        isRequired: true,
+        description: "Name of new token",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "full_access",
+        dataType: "Boolean",
+        isRequired: false,
+        description: "Create a token with full access. Default: false",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "read",
+        dataType: "String[]",
+        isRequired: false,
+        description: "A list of bucket names for read access. Default: []",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "write",
+        dataType: "String[]",
+        isRequired: false,
+        description: "A list of bucket names for write access. Default: []",
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "Returns value and timestamp of token",
+      description: (
+        <pre>
+          <code>{`{
+  "value": "string",
+  "created_at": "string"
+}`}</code>
+        </pre>
+      ),
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is empty or invalid",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have enough permissions",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "Token with the same name already exists",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary:
+        "Specified bucket does not exist or another validation error occurred",
+    },
+  ]}
+/>
+
+## Remove a Token
+
+This method removes or revokes a token. To use it, a client should have an
+access token with full access.
+
+<SwaggerComponent
+  method="DELETE"
+  path="/api/v1/tokens/:token_name"
+  summary="Remove a token"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: "token_name",
+        isRequired: true,
+        description: "Name of the token to remove",
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "Token was removed",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is empty or invalid",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have enough permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Token with the given name doesn't exist",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "Token is provisioned",
+    },
+  ]}
+/>
+
+## Get Full Information about Current API Token
+
+This method takes a token from the Authentication header and returns its
+name, permissions, and additional information.
+
+<SwaggerComponent
+  method="GET"
+  path="/api/v1/me"
+  summary="Get full information about current API token"
+  responses={[
+    {
+      status: "200",
+      summary: "Returns JSON document",
+      message: "OK",
+      description: (
+        <pre>
+          <code>{`{
+  "name": "string",
+  "created_at": "string",
+  "permissions": {
+    "full_access": "bool",
+    "read": [],
+    "write": []
+  }
+}`}</code>
+        </pre>
+      ),
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "API token is invalid",
+    },
+  ]}
+/>

@@ -1,0 +1,445 @@
+---
+sidebar_position: 3
+title: Bucket API
+description: Bucket API allows users to create, modify, and delete buckets.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/bucket-api"
+  />
+</head>
+
+import SwaggerComponent from "@site/src/components/SwaggerComponent";
+
+# Bucket API Specification Reference
+
+The Bucket API allows users to create, modify, and delete buckets.
+
+Before starting to **[record](../glossary#record)** data, a user must first create a **[bucket](../glossary#bucket)** and specify settings such as:
+
+- Maximum **[block](../glossary#block)** size
+- Maximum number of records
+- Quota type
+- Quota size
+
+For more information about buckets, read the [**Bucket Guide**](../guides/buckets).
+
+## Get Information about a Bucket
+
+The method returns the current settings, stats, and **[entry](../glossary#entry)** list of the
+bucket in JSON format.
+
+If authentication is enabled, the method needs a valid API token.
+
+<SwaggerComponent
+  method="GET"
+  path="/api/v1/b/:bucket_name"
+  summary="Get information about a bucket"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: "bucket_name",
+        description: "Name of bucket",
+        isRequired: true,
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      description: (
+        <>
+          Information about the bucket in JSON format
+          <pre>
+            <code>{`{
+  "settings": {
+        "max_block_size": "integer",            // max block content_length in bytes
+        "max_block_records": "integer",         // max number of records in a block
+        "quota_type": Union["NONE", "FIFO"],    // quota type
+        "quota_size": "integer"                 // quota content_length in bytes
+    },
+    "info": {
+        "name": "string",                        // bucket name
+        "entry_count": "integer",                // number of entries
+        "size": "integer",                       // disk usage in bytes
+        "oldest_record": "integer",              // unix timestamp of oldest record in microseconds
+        "latest_record": "integer"               // unix timestamp of latest record in microseconds
+        "is_provisioned": "bool"                 // provisioned
+    },
+    "entries": [
+        {
+            "name": "string",                    // entry name             
+            "size": "integer",                   // disk usage in bytes
+            "block_count": "integer",            // number of blocks with data
+            "record_count": "integer",           // number of records
+            "oldest_record": "integer",          // unix timestamp of oldest record in microseconds
+            "latest_record": "integer"           // unix timestamp of latest record in microseconds
+        }
+    ]
+}`}</code>
+          </pre>
+        </>
+      ),
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "The bucket does not exist",
+    },
+  ]}
+/>
+
+## Check if a Bucket Exists
+
+If authentication is enabled, the method needs a valid API token.
+
+<SwaggerComponent
+  method="HEAD"
+  path="/api/v1/b/:bucket_name"
+  summary="Check if a bucket exists"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: "bucket_name",
+        description: "Name of bucket",
+        isRequired: true,
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "The bucket exists",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "The bucket does not exist",
+    },
+  ]}
+/>
+
+## Create a New Bucket
+
+To create a bucket, the request should contain a JSON document with some
+parameters or empty body. The new bucket uses default values if some
+parameters are empty.
+
+If authentication is enabled, the method needs a valid API token with full
+access.
+
+**Changes**:
+
+- v1.12: **[HARD quota](../glossary#hard-quota)** type was introduced.
+
+<SwaggerComponent
+  method="POST"
+  path="/api/v1/b/:bucket_name"
+  summary="Create a new bucket"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        description: "Name of new bucket",
+        isRequired: true,
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "max_block_size",
+        description: "Maximum size of a data block in bytes (default: 64Mb)",
+        dataType: "String/Integer",
+        isRequired: false,
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "max_block_records",
+        description: "Maximum number of records in a block (default: 64Mb)",
+        dataType: "String/Integer",
+        isRequired: false,
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "quota_type",
+        description:
+          "Type of quota. Can have values 'NONE', FIFO or HARD (default: NONE)",
+        dataType: "String",
+        isRequired: false,
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "quota_size",
+        description: "Size of quota in bytes (default: 0)",
+        dataType: "String/Integer",
+        isRequired: false,
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "The new bucket is created",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have enough permissions",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "A bucket with the same name already exists",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "JSON request is invalid",
+    },
+  ]}
+/>
+
+## Change Settings of a Bucket
+
+To update settings of a bucket, the request should have a JSON document
+with all the settings.
+
+If authentication is enabled, the method needs a valid API token with full access.
+
+**Changes**:
+
+- v1.12: HARD quota type was introduced.
+
+<SwaggerComponent
+  method="PUT"
+  path="/api/v1/b/:bucket_name"
+  summary="Change settings of a bucket"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        description: "Name of bucket",
+        isRequired: true,
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "max_block_size",
+        description: "Maximum content_length of a data block in bytes",
+        dataType: "String/Integer",
+        isRequired: false,
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "max_block_records",
+        description: "Maximum number of records in a block",
+        dataType: "String/Integer",
+        isRequired: false,
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "quota_type",
+        description: "Type of quota. Can have values 'NONE', 'FIFO' or 'HARD'",
+        dataType: "String",
+        isRequired: false,
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "quota_size",
+        description: "Size of quota in bytes",
+        dataType: "String/Integer",
+        isRequired: false,
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "The settings are updated",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have enough permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket doesn't exist",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "Bucket is provisioned",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "JSON request is invalid",
+    },
+  ]}
+/>
+
+## Rename a Bucket
+
+To rename a bucket, the request should have a JSON document with the new name.
+
+If authentication is enabled, the method needs a valid API token with full access.
+
+**Changes**:
+
+- v1.12: the endpoint was introduced.
+
+<SwaggerComponent
+  method="PUT"
+  path="/api/v1/b/:bucket_name/rename"
+  summary="Rename a bucket"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        description: "Name of bucket",
+        isRequired: true,
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "new_name",
+        description: "New name of the bucket",
+        dataType: "String",
+        isRequired: true,
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "The bucket is renamed",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have enough permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket doesn't exist",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "Bucket with the new name already exists",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "JSON request is invalid",
+    },
+  ]}
+/>
+
+## Remove a Bucket
+
+Remove a bucket with all its entries and stored data.
+
+If authentication is enabled, the method needs a valid API token with full
+access.
+
+:::danger
+This operation is irreversible. All data in the bucket will be lost.
+:::
+
+<SwaggerComponent
+  method="DELETE"
+  path="/api/v1/b/:bucket_name"
+  summary="Remove a bucket"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        description: "Name of bucket to remove",
+        isRequired: true,
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "The bucket is removed",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have enough permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket does not exists",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "Bucket is provisioned",
+    },
+  ]}
+/>
