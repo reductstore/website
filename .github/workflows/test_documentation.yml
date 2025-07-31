@@ -27,7 +27,7 @@ jobs:
             reduct_version: latest
             example_root: versioned_docs/version-1.16.x/examples
 
-          - doc_version: 1.15.6
+          - doc_version: 1.15.x
             reduct_version: v1.15.6
             example_root: versioned_docs/version-1.15.x/examples
 
