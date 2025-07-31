@@ -1,0 +1,203 @@
+---
+title: Conditional Query Reference
+description: Learn how to use conditional queries to filter data in ReductStore.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/conditional-query"
+  />
+</head>
+
+Conditional Query is a query language based on JSON syntax that allows you to filter records in ReductStore using labels and their values.
+
+The query language is used in the [**query endpoint**](../http-api/entry-api/run_query.mdx) of the **[HTTP API](./glossary#http-api)**.
+You can also find usage examples with many SDKs and tools in the [**Data Querying**](../guides/data-querying.mdx) and
+in the [**Data Management**](../guides/data-management.mdx) guides.
+
+## Query Syntax
+
+The query object is a JSON object containing one or more conditions, a condition can be nested and have a tree-like structure.
+Queries can be written in two main notations: object notation and array notation. Each has its own strengths and trade-offs.
+In addition, a special naming convention is used to extend the JSON syntax.
+
+### Object notation
+
+A condition is a key-value pair, where the key is the label reference and the value is an object with the operator and operand.
+For example, to filter records where the value of the `label_name` is greater than 10:
+
+```json
+{
+  "&label_name": { "$gt": 10 }
+}
+```
+
+The object notation is the most common and easiest to read and write, but it has the limitation that you can't have more than two operands in a condition, and the first must be the label reference.
+
+### Array notation
+
+A condition is a key-value pair where the key is the operator and the value is an array with its operands:
+
+```json
+{
+  "$gt": ["&label_name", 10]
+}
+```
+
+The array notation is more flexible and allows you to have more than two operands in a condition:
+
+```json
+{
+  "$and": [
+    { "&x": { "$gt": 10 } },
+    { "&y": { "$lt": 20 } },
+    { "&z": { "$eq": 30 } }
+  ]
+}
+```
+
+For unary operators the array can be replaced with a single value:
+
+```json
+{
+  "$not": "&label_name"
+}
+```
+
+### Multiple conditions
+
+The query object can contain multiple conditions that are linked using the AND operator:
+
+```json
+{
+  "&label_name": { "$gt": 10 },
+  "&label_name": { "$lt": 20 }
+}
+```
+
+This is the same as:
+
+```json
+{
+  "$and": [{ "&label_name": { "$gt": 10 } }, { "&label_name": { "$lt": 20 } }]
+}
+```
+
+The conditions are evaluated in the order they are defined, and the result is true only if all conditions are true.
+By default, a condition is evaluated at the stage of data retrieval, so the query engine will not read the record if the condition is false.
+
+However, if a condition has a [**computed label**](./glossary#computed-label), the engine will check the condition after the record has been read and processed by [**extensions**](./glossary#extension).
+For example, if you have a condition like this:
+
+```json
+{
+  "&object_number": { "$gt": 10 },
+  "@anomaly_score": { "$gt": 0.5 }
+}
+```
+
+The engine will read the record that matches the first condition, but it will not check the second condition until the record is processed by the extension that computes the `@anomaly_score` label.
+
+### JSON Extension
+
+The queries use a special naming convention for labels and operators to extend the JSON syntax with additional functionality:
+
+| Type           | Convention    | Description                                                                      |
+| -------------- | ------------- | -------------------------------------------------------------------------------- |
+| Label          | "&label_name" | Reference to a label in the **[record](./glossary#record)** starting with `&`    |
+| Computed Label | "@label_name" | Reference to a **[computed label](./glossary#computed-label)** starting with `@` |
+| Directive      | "#directive"  | Reference to a **[directive](./glossary#directive)** starting with `#`           |
+| Operator       | "$operator"   | Reference to an operator starting with `$`                                       |
+| Constant       | JSON types    | A constant value in the query, e.g. `10`, `"string"`                             |
+
+## Type System
+
+### Supported Types
+
+The **[conditional query](./glossary#conditional-query)** language supports a simple type system with five types: **boolean**, **integer**, **float**, **string**, and **duration**:
+
+| Type     | Size (bytes) | Description                                                              |
+| -------- | ------------ | ------------------------------------------------------------------------ |
+| boolean  | 1            | Represents logical values `true` or `false`                              |
+| integer  | 8            | 64-bit signed integer                                                    |
+| float    | 8            | 64-bit IEEE-754 double-precision floating-point number                   |
+| string   | 1–65,536     | UTF-8 encoded string                                                     |
+| duration | 8            | 64-bit signed integer representing microseconds (e.g., `1s = 1,000,000`) |
+
+#### Boolean
+
+The boolean type represents logical values and can be either `true` or `false`.
+Used in logical conditions and operators like `$and` and `$not`.
+
+- **Literals:** `true`, `false`
+
+#### Integer
+
+The integer type is a signed 64-bit integer, used for numeric operations and conditions that require whole numbers.
+
+- **Literals:** `10`, `-5`, `0`
+
+#### Float
+
+The float type is a double-precision floating-point number, used for numeric operations and conditions that require decimal values.
+
+- **Literals:** `3.14`, `-0.001`, `2.71828`
+
+#### String
+
+The string type is a UTF-8 encoded sequence of characters, used for text operations and conditions.
+
+- **Literals:** `"hello"`, `"ReductStore"`, `"123"`
+
+#### Duration
+
+The duration type represents a time interval in microseconds and is stored as a signed 64-bit integer.
+It is used in time-based operations such as `$each_t` or arithmetic comparisons.
+
+- **Literals:** `-1s`, `1.5s`, `1d 2h`
+- **Units:** `us` (microseconds), `ms` (milliseconds), `s` (seconds), `m` (minutes), `h` (hours), `d` (days)
+
+Multiple units can be combined (e.g., 1h 30m).
+
+### Type Inference
+
+The query engine stores label values as strings without any type information. The query engine attempts to infer the type of a label value as follows:
+
+1. If the value is `true` or `false`, it is interpreted as a boolean.
+2. If the value is a number without a decimal point, it is interpreted as an integer.
+3. If the value is a number with a decimal point, it is interpreted as a float.
+4. If none of the above apply, the value is interpreted as a string.
+
+:::info
+The `duration` type is **not** inferred from label values. It must be used as a constant literal.
+:::
+
+### Type Casting
+
+During the execution of the query, the engine will try to cast types of operands to the same type.
+Logical operators like `$and`, `$or`, `$not` will cast the result to a boolean.
+Comparison and arithmetic operators will cast the operands to the most precise type in the following order:
+
+|              | boolean               | integer          | duration              | float               | string |
+| ------------ | --------------------- | ---------------- | --------------------- | ------------------- | ------ |
+| **boolean**  | boolean               | integer (0 or 1) | duration (0us or 1us) | float ( 0.0 or 1.0) | -      |
+| **integer**  | integer (0 or 1)      | integer          | integer               | float               | -      |
+| **duration** | duration (0us or 1us) | integer          | duration              | float               | -      |
+| **float**    | float (0.0 or 1.0)    | float            | float                 | float               | -      |
+| **string**   | -                     | -                | -                     | -                   | string |
+
+:::info
+For edge cases and exceptions (e.g., mixed-type arithmetic), refer to **[the arithmetic operator documentation](./arithmetic-operators.mdx)**.
+:::
+
+## Operators
+
+The conditional query language supports many operators for comparison, arithmetic, and logical operations.
+See the following sections for more information:
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+
+<DocCardList />
+```

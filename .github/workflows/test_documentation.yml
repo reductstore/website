@@ -17,19 +17,19 @@ jobs:
       max-parallel: 8
       matrix:
         example: [python, rust, golang, curl, cpp, node, cli]
-        doc_version: [next, 1.15.x, 1.14.x]
+        doc_version: [next, 1.16.x, 1.15.x]
         include:
           - doc_version: next
             reduct_version: main
             example_root: docs/examples
 
-          - doc_version: 1.15.x
-            reduct_version: v1.15.0
-            example_root: versioned_docs/version-1.15.x/examples
+          - doc_version: 1.16.x
+            reduct_version: latest
+            example_root: versioned_docs/version-1.16.x/examples
 
-          - doc_version: 1.14.x
-            reduct_version: v1.14.8
-            example_root: versioned_docs/version-1.14.x/examples
+          - doc_version: 1.15.x
+            reduct_version: v1.15.6
+            example_root: versioned_docs/version-1.15.x/examples
 
           - language: python
             cmd: python3

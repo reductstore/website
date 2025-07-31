@@ -1,0 +1,13 @@
+[package]
+name = "rs"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+reduct-rs= { git = "https://github.com/reductstore/reduct-rs.git"}
+tokio =  { version = "1", features = ["rt-multi-thread"]}
+futures = "0.3.30"
+futures-util = "0.3.30"
+bytes = "1.9.0"

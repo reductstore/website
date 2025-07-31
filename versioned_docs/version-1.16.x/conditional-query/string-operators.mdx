@@ -1,0 +1,126 @@
+---
+title: String Operators
+description: Learn how to use string operators in conditional queries.
+---
+
+The string operators are used to filter records based on string values of their labels.
+
+The following string operators are supported:
+
+| Operator       | Description                                 |
+| -------------- | ------------------------------------------- |
+| `$contains`    | Checks if a string contains a substring.    |
+| `$starts_with` | Checks if a string starts with a substring. |
+| `$ends_with`   | Checks if a string ends with a substring.   |
+
+## $contains
+
+The `$contains` operator is used to check if a string contains a substring.
+
+### Syntax
+
+```
+{
+  "$contains": [ <expression as string>, <expression as substring> ]
+}
+```
+
+### Behavior
+
+The operator evaluates the first expression as a string and checks if it contains the second expression as a substring.
+
+Additional rules:
+
+- If the first expression is not a string, it is cast to a string.
+- If the second expression is not a string, it is cast to a string.
+- The operator is case-sensitive.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&name": { "$contains": "bottle" }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$contains": ["&name", "bottle"]
+}
+```
+
+## $starts_with
+
+The `$starts_with` operator is used to check if a string starts with a substring.
+
+### Syntax
+
+```
+{
+  "$starts_with": [ <expression as string>, <expression as substring> ]
+}
+```
+
+### Behavior
+
+The operator evaluates the first expression as a string and checks if it starts with the second expression as a substring.
+
+Additional rules:
+
+- If the first expression is not a string, it is cast to a string.
+- If the second expression is not a string, it is cast to a string.
+- The operator is case-sensitive.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&name": { "$starts_with": "red" }
+}
+```
+
+Array notation:
+
+```json
+{
+  "$starts_with": ["&name", "red"]
+}
+```
+
+## $ends_with
+
+The `$ends_with` operator is used to check if a string ends with a substring.
+
+### Syntax
+
+```
+{
+  "$ends_with": [ <expression as string>, <expression as substring> ]
+}
+```
+
+### Behavior
+
+The operator evaluates the first expression as a string and checks if it ends with the second expression as a substring.
+
+Additional rules:
+
+- If the first expression is not a string, it is cast to a string.
+- If the second expression is not a string, it is cast to a string.
+- The operator is case-sensitive.
+
+### Examples
+
+Object notation:
+
+```json
+{
+  "&name": { "$ends_with": "store" }
+}
+```

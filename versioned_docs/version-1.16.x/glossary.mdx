@@ -1,0 +1,116 @@
+---
+title: Glossary
+description: Glossary of key terms and concepts for ReductStore.
+---
+
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/glossary" />
+</head>
+
+# 🗒️ ReductStore Glossary
+
+## bucket
+
+A container for storing data in ReductStore. Buckets are uniquely named and can have configurable storage settings, such as quotas and replication policies. Buckets are used to separate data by source or purpose and support FIFO or HARD quotas for managing storage efficiently.
+
+_Related entries:_ [**entry**](#entry), [**record**](#record), [**replication**](#replication), [**FIFO quota**](#fifo-quota), [**HARD quota**](#hard-quota)
+
+## entry
+
+A uniquely named source of data within a bucket. Entries help organize and separate data sources or purposes. Each entry contains records, which are stored in batches for performance optimization.
+
+_Related entries:_ [**bucket**](#bucket), [**record**](#record), [**block**](#block)
+
+## record
+
+A piece of data stored in an entry, consisting of metadata (timestamp, content type, labels) and content (actual data). Records are the fundamental data units in ReductStore and are stored within blocks.
+
+_Related entries:_ [**entry**](#entry), [**block**](#block)
+
+## block
+
+A batch of records stored on disk. Blocks store records in fixed-size segments, optimizing data access by time ranges. Each block includes a descriptor file (metadata) and a data block (actual data).
+
+_Related entries:_ [**record**](#record), [**entry**](#entry), [**batching**](#batching)
+
+## batching
+
+A method of writing or reading multiple records at once to improve performance. Batching reduces HTTP overhead and optimizes data ingestion and retrieval in ReductStore. The storage engine stores records in blocks to minimize disk space usage.
+
+_Related entries:_ [**block**](#block), [**record**](#record)
+
+## FIFO quota
+
+A "First-In-First-Out" quota based on the volume of stored data in a bucket. When the storage volume in a bucket reaches its specified limit, the oldest blocks are removed automatically to make room for new data. This ensures efficient use of storage without manual intervention.
+
+_Related entries:_ [**bucket**](#bucket), [**block**](#block)
+
+## HARD Quota
+
+A strict limit on the total storage capacity allocated to a bucket. When the storage usage reaches the specified limit, no new records can be added until space is freed by deleting existing data. This ensures complete control over storage usage within predefined limits.
+
+_Related entries:_ [**bucket**](#bucket), [**block**](#block)
+
+## SDK
+
+Software Development Kits provided by ReductStore for popular programming languages. SDKs simplify interaction with the HTTP API by abstracting the need to write HTTP requests manually.
+
+_Related entries:_ [**HTTP API**](#http-api)
+
+## HTTP API
+
+The primary interface for interacting with ReductStore. It enables clients to write, read, filter, and manage data using HTTP requests. The API supports batching and label-based conditional querying.
+
+_Related entries:_ [**batching**](#batching), [**conditional query**](#conditional-query)
+
+## conditional query
+
+A query language based on JSON syntax used to filter records in ReductStore using labels and their values. It supports multiple conditions, nested queries, and two primary notations: object notation and array notation.
+
+_Related entries:_ [**HTTP API**](#http-api), [**record**](#record), [**replication**](#replication)
+
+## Web Console
+
+A graphical interface for managing ReductStore instances. The web console allows users to configure buckets, monitor data ingestion, and manage replication settings.
+
+_Related entries:_ [**bucket**](#bucket), [**replication**](#replication)
+
+## CLI
+
+The Command Line Interface for ReductStore. It provides a way to interact with the storage engine through terminal commands, enabling tasks such as copying records, configuring buckets, and managing replication.
+
+_Related entries:_ [**HTTP API**](#http-api), [**replication**](#replication)
+
+## replication
+
+The process of copying data from a source bucket to a destination bucket. ReductStore supports append-only replication, allowing filtered records to be replicated while maintaining write-ahead logs for reliability.
+
+_Related entries:_ [**bucket**](#bucket), [**conditional query**](#conditional-query)
+
+## access token
+
+A token-based authentication and authorization method in ReductStore. Access tokens ensure secure access to storage, with options to enable or disable authentication as required.
+
+_Related entries:_ [**HTTP API**](#http-api)
+
+## label
+
+A key-value pair associated with a record in ReductStore. Labels are used for filtering, replicating, and querying data, providing metadata for records and enabling efficient data retrieval.
+
+_Related entries:_ [**record**](#record), [**conditional query**](#conditional-query)
+
+## extension
+
+A plugin or module that extends the functionality of ReductStore. Extensions can be used to add additional functionality based on the data stored in ReductStore and known data formats, e.g. selecting data from columnar formats, image processing, etc.
+
+_Related entries:_ [**computed label**](#computed-label), [**conditional query**](#conditional-query)
+
+## computed label
+
+A label that wasn't assigned to a record during ingestion but is calculated by an extension. Computed labels are used for filtering and querying data, providing additional metadata for records.
+
+_Related entries:_ [**label**](#label), [**conditional query**](#conditional-query), [**extension**](#extension)
+
+## directive
+
+A special instruction in a conditional query that modifies how the query engine processes results. Directives can control query behavior, such as including additional context records before or after matching ones.
