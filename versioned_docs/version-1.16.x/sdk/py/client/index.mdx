@@ -2,15 +2,14 @@
 title: Client Module
 description: API reference for the Client Module Module of the ReductStore Client SDK for Python.
 ---
+
 <head>
-    <link rel="canonical" href="https://www.reduct.store/docs/sdk/py/client" />
+  <link rel="canonical" href="https://www.reduct.store/docs/sdk/py/client" />
 </head>
 
 # Client Module
 
 <a id="reduct.client"></a>
-
-
 
 Client module for ReductStore HTTP API
 
@@ -49,10 +48,11 @@ Constructor
 - `verify_ssl` - verify SSL certificates
 
 **Example**:
+
 ```python
       client = Client("http://127.0.0.1:8383")
       info = await client.info()
-   ```
+```
 
 <a id="reduct.client.Client.info"></a>
 
@@ -67,7 +67,6 @@ Get high level server info
 **Returns**:
 
 - `ServerInfo` - server information
-  
 
 **Raises**:
 
@@ -93,7 +92,7 @@ Get a list of all buckets on server
 
 <a id="reduct.client.Client.get_bucket"></a>
 
-#### get\_bucket
+#### get_bucket
 
 ```python
 async def get_bucket(name: str) -> Bucket
@@ -115,7 +114,7 @@ Load a bucket to work with
 
 <a id="reduct.client.Client.create_bucket"></a>
 
-#### create\_bucket
+#### create_bucket
 
 ```python
 async def create_bucket(name: str,
@@ -143,7 +142,7 @@ Create a new bucket
 
 <a id="reduct.client.Client.get_token_list"></a>
 
-#### get\_token\_list
+#### get_token_list
 
 ```python
 async def get_token_list() -> List[Token]
@@ -161,7 +160,7 @@ Get a list of all tokens
 
 <a id="reduct.client.Client.get_token"></a>
 
-#### get\_token
+#### get_token
 
 ```python
 async def get_token(name: str) -> FullTokenInfo
@@ -183,7 +182,7 @@ Get a token by name
 
 <a id="reduct.client.Client.create_token"></a>
 
-#### create\_token
+#### create_token
 
 ```python
 async def create_token(name: str, permissions: Permissions) -> str
@@ -206,7 +205,7 @@ Create a new token
 
 <a id="reduct.client.Client.remove_token"></a>
 
-#### remove\_token
+#### remove_token
 
 ```python
 async def remove_token(name: str) -> None
@@ -242,7 +241,7 @@ Get information about the current token
 
 <a id="reduct.client.Client.get_replications"></a>
 
-#### get\_replications
+#### get_replications
 
 ```python
 async def get_replications() -> List[ReplicationInfo]
@@ -260,7 +259,7 @@ Get a list of replications
 
 <a id="reduct.client.Client.get_replication_detail"></a>
 
-#### get\_replication\_detail
+#### get_replication_detail
 
 ```python
 async def get_replication_detail(
@@ -283,7 +282,7 @@ Get detailed information about a replication
 
 <a id="reduct.client.Client.create_replication"></a>
 
-#### create\_replication
+#### create_replication
 
 ```python
 async def create_replication(replication_name: str,
@@ -303,7 +302,7 @@ Create a new replication
 
 <a id="reduct.client.Client.update_replication"></a>
 
-#### update\_replication
+#### update_replication
 
 ```python
 async def update_replication(replication_name: str,
@@ -323,7 +322,7 @@ Update an existing replication
 
 <a id="reduct.client.Client.delete_replication"></a>
 
-#### delete\_replication
+#### delete_replication
 
 ```python
 async def delete_replication(replication_name: str) -> None
@@ -338,5 +337,3 @@ Delete a replication
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-
-

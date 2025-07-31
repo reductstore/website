@@ -31,8 +31,8 @@ Here’s an example of how to use the `#ctx_before` directive in a query:
 
 ```json
 {
-   "#ctx_before": "5s",
-   "&anomaly_score": { "$gt":  0.8 }
+  "#ctx_before": "5s",
+  "&anomaly_score": { "$gt": 0.8 }
 }
 ```
 
@@ -48,47 +48,46 @@ For example, the following query uses ReductSelect to extract specific columns f
 
 ```json
 {
-   "ext": {
-      "select": {
-         "csv": {
-             "has_headers": true
-         },
-         "columns": [
-            {"name": "temperature", "as_labels": "temp"},
-            {"name": "humidity"}
-         ]
-      }
-   },
-   "when": {
-      "&temperature": { "$gt": 30 }
-   }
+  "ext": {
+    "select": {
+      "csv": {
+        "has_headers": true
+      },
+      "columns": [
+        { "name": "temperature", "as_labels": "temp" },
+        { "name": "humidity" }
+      ]
+    }
+  },
+  "when": {
+    "&temperature": { "$gt": 30 }
+  }
 }
 ```
 
 This query selects the `temperature` and `humidity` columns from a CSV file, renames `temperature` to `temp`, and filters rows where the temperature is greater than 30°C.
 
-Our goal isn't to compete with full-featured time-series databases, but to offer a lightweight solution for simple data transformation and filtering tasks—directly within ReductStore. This reduces the need to install and maintain a separate database for such operations.
+These simple transformations enable you to ingest structured data very quickly and retrieve only subsets of it for further processing and analysis.
 
 ### New ReductROS Extension
 
 Another exciting addition is the [**ReductROS**](/docs/extensions/official/ros-ext) extension, which provides tools for extracting and transforming data stored in ReductStore into formats compatible with the Robot Operating System (ROS).
 
-This extension allows you to:
-- Extract data from MCAP files containing ROS 2 messages and convert it into JSON format for easier analysis and visualization.
-- Convert raw binary data, such as images, into more accessible formats like JPEG or base64 strings.
+With this extension, you can extract data from MCAP files containing ROS 2 messages and convert it into JSON format, making it easier to analyze and visualize.
+It also supports transforming raw binary data—such as images—into more accessible formats like JPEG or base64 strings.
 
 For example, the following query extracts data from a ROS 2 topic and encodes the image payload as a JPEG:
 
 ```json
 {
-   "ext": {
-      "ros": {
-         "extract": {
-            "topic": "/camera/image",
-            "encode": {"data": "jpeg"}
-         }
+  "ext": {
+    "ros": {
+      "extract": {
+        "topic": "/camera/image",
+        "encode": { "data": "jpeg" }
       }
-   }
+    }
+  }
 }
 ```
 
@@ -102,15 +101,16 @@ In the next release we plan to add new features and improvements, including:
 
 ### Shareable Query Links
 
-We are also working on a feature that allows users to generate and share links to specific queries in ReductStore.
+We are developing a feature that allows users to generate and share links to specific queries in ReductStore.
 
-This will simplify collaboration by enabling team members to access query results without needing direct access to the ReductStore instance. It will also allow users to download results directly via a link and support integration with external tools and platforms such as [Foxglove](https://foxglove.dev).
+This will simplify collaboration by enabling team members to access query results without needing direct access to the ReductStore instance. It will also allow users to download results directly via a link and support integration with external tools and platforms such as **[Foxglove](https://foxglove.dev)**.
 
 ### Integration with Grafana
 
-We’re developing a **[Grafana plugin](https://github.com/reductstore/reduct-grafana)** that enables users to visualize and analyze data stored in ReductStore directly within Grafana dashboards.
+We are also working on a **[Grafana plugin](https://github.com/reductstore/reduct-grafana)** that enables users to visualize and analyze data stored in ReductStore directly within Grafana dashboards.
 
 This integration will provide a seamless experience with Grafana’s powerful visualization tools, allowing you to:
+
 - Build custom dashboards using data from ReductStore.
 - Monitor your data streams and historical records in real time.
 - Visualize labels and data output in JSON or CSV formats.
