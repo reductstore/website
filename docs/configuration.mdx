@@ -159,9 +159,6 @@ You can provision replication tasks by setting environment variables. The follow
 | `RS_REPLICATION_<ID>_DST_HOST`      |         | URL of destination instance (required). For example, https://play.reduct.store or http://localhost:8383            |
 | `RS_REPLICATION_<ID>_DST_TOKEN`     |         | Token for destination instance                                                                                     |
 | `RS_REPLICATION_<ID>_ENTRIES`       |         | List of entries to replicate. Separate entries with a comma. If the list is empty, all entries will be replicated. |
-| `RS_REPLICATION_<ID>_INCLUDE_<KEY>` |         | Replicate only records with KEY equal to the value of the environment variable. Can be used multiple times.        |
-| `RS_REPLICATION_<ID>_EXCLUDE_<KEY>` |         | Do not replicate records with KEY equal to the value of the environment variable. Can be used multiple times.      |
-| `RS_REPLICATION_<ID>_EACH_S`        |         | Replicate a **[record](./glossary#record)** every S seconds. Can have a floating-point value.                      |
-| `RS_REPLICATION_<ID>_EACH_N`        |         | Replicate every N-th record.                                                                                       |
+| `RS_REPLICATION_<ID>_WHEN`          |         | Condition for replication. If not set, all entries will be replicated.                                             |
 
 For more information about the replication settings, see the **[Data Replication Guide](./guides/data-replication.mdx)**.
