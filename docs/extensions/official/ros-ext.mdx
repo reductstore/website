@@ -10,7 +10,7 @@ description: Extension for ReductStore to extract and transform data in ROS form
   />
 </head>
 
-# ReductRos
+# ReductROS
 
 The ReductROS [**extension**](../../glossary#extension) provides tools that can be used to extract and transform data stored in ReductStore into formats that are compatible with the Robot Operating System (ROS).
 It allows users to query and convert historical data, such as sensor readings and camera images, into text-based formats like CSV or JSON, which can then be easily used for analysis, visualisation or integration with other systems.
@@ -53,6 +53,16 @@ A user can use the `ext` query parameter to activate the `ros` extension and def
             "extract": {
                "topic": "string",  # The name of the ROS topic to extract messages from
                "encode": "object"  # Dictionary of binary files to encode, e.g., {"data": "jpeg"} for JPEG encoding
+            },
+            "transform": {
+              "split": {
+                "duration": "32h",  # Max episode duration
+                "size": "100MB"  # Max episode size
+              },
+              "topics": {
+                "include": [ "topic-1", "/topic-.*/" ],  # List of topics to include (regular expressions)
+                "exclude": [ "topic-b", "/ext-.*/" ]  # List of topics to exclude (regular expressions)
+              }
             }
         }
     }
