@@ -44,7 +44,7 @@ jobs:
             cmd: sh
 
           - example: cpp
-            path_prefix: cpp/build
+            path_prefix: cpp/build/bin
             cmd: sh -c
 
           - example: rust
@@ -129,17 +129,10 @@ jobs:
         run: |
           export EXAMPLE_DST_PATH="$PWD/${{ matrix.example_root }}/${{ matrix.path_prefix }}"
 
-          git clone https://github.com/reductstore/reduct-cpp.git
-          cd reduct-cpp
-          cmake -DCMAKE_BUILD_TYPE=Release .
-          sudo make install
-
           mkdir -p "$EXAMPLE_DST_PATH"
-          cd "$EXAMPLE_DST_PATH"
+          cd "$EXAMPLE_DST_PATH"/..
           cmake -DCMAKE_BUILD_TYPE=Debug ..
           make -j
-          # remove non-executable files from build directory
-          find "$EXAMPLE_DST_PATH" -type f ! -name "*.cxx" | xargs rm -rf
 
       - name: Build Rust examples
         if: matrix.example == 'rust'

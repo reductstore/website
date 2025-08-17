@@ -33,26 +33,7 @@ import NextStep from "./common/next_steps.mdx";
     * ZLib
     * OpenSSL >= 3.0
 
-    To install the ReductStore C++ SDK, follow these steps:
-
-    ```shell
-    git clone https://github.com/reductstore/reduct-cpp.git
-    cd reduct-cpp
-
-    # Run cmake configuration
-    cmake -S . -B build -DREDUCT_CPP_USE_STD_CHRONO=OFF # for linux
-    cmake -S . -B build -DREDUCT_CPP_USE_STD_CHRONO=ON # for windows
-
-    # Build
-    cmake --build build # for linux
-    cmake --build build --config Release # for windows
-
-    # Install
-    sudo cmake --install build
-    ```
-
-    After installing the SDK, you need to link the `ReductCpp` library to your project. The following example shows how
-    to do this using CMake:
+    The easiest way to start using the C++ SDK is to integrate it into your project using CMake:
 
     ```cmake
     cmake_minimum_required(VERSION 3.22)
@@ -60,14 +41,19 @@ import NextStep from "./common/next_steps.mdx";
     project(ReductCppExample)
     set(CMAKE_CXX_STANDARD 20)
 
-    find_package(ZLIB)
-    find_package(OpenSSL)
+    include(FetchContent)
 
-
-    find_package(ReductCpp)
+    # Enable using fetchcontent for reductcpp dependencies
+    set(REDUCT_CPP_USE_FETCHCONTENT ON CACHE BOOL "" FORCE)
+    FetchContent_Declare(
+            reductcpp
+            GIT_REPOSITORY https://github.com/reductstore/reduct-cpp
+            GIT_TAG main
+    )
+    FetchContent_MakeAvailable(reductcpp)
 
     add_executable(quick_start quick_start.cc)
-    target_link_libraries(quick_start ${REDUCT_CPP_LIBRARIES} ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
+    target_link_libraries(quick_start reductcpp::reductcpp)
     ```
 
 </InstallSdk>

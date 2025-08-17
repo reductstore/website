@@ -151,14 +151,14 @@ For more information about the token settings, see the **[Access Control Guide](
 
 You can provision replication tasks by setting environment variables. The following table lists the available settings:
 
-| Name                                | Default | Description                                                                                                        |
-| ----------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
-| `RS_REPLICATION_<ID>_NAME`          |         | Provisioned replication task name (required)                                                                       |
-| `RS_REPLICATION_<ID>_SRC_BUCKET`    |         | Source bucket name (required)                                                                                      |
-| `RS_REPLICATION_<ID>_DST_BUCKET`    |         | Remote bucket name (required). It must be created before replication                                               |
-| `RS_REPLICATION_<ID>_DST_HOST`      |         | URL of destination instance (required). For example, https://play.reduct.store or http://localhost:8383            |
-| `RS_REPLICATION_<ID>_DST_TOKEN`     |         | Token for destination instance                                                                                     |
-| `RS_REPLICATION_<ID>_ENTRIES`       |         | List of entries to replicate. Separate entries with a comma. If the list is empty, all entries will be replicated. |
-| `RS_REPLICATION_<ID>_WHEN`          |         | Condition for replication. If not set, all entries will be replicated.                                             |
+| Name                             | Default | Description                                                                                                        |
+| -------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
+| `RS_REPLICATION_<ID>_NAME`       |         | Provisioned replication task name (required)                                                                       |
+| `RS_REPLICATION_<ID>_SRC_BUCKET` |         | Source bucket name (required)                                                                                      |
+| `RS_REPLICATION_<ID>_DST_BUCKET` |         | Remote bucket name (required). It must be created before replication                                               |
+| `RS_REPLICATION_<ID>_DST_HOST`   |         | URL of destination instance (required). For example, https://play.reduct.store or http://localhost:8383            |
+| `RS_REPLICATION_<ID>_DST_TOKEN`  |         | Token for destination instance                                                                                     |
+| `RS_REPLICATION_<ID>_ENTRIES`    |         | List of entries to replicate. Separate entries with a comma. If the list is empty, all entries will be replicated. |
+| `RS_REPLICATION_<ID>_WHEN`       |         | Condition for replication. If not set, all entries will be replicated.                                             |
 
 For more information about the replication settings, see the **[Data Replication Guide](./guides/data-replication.mdx)**.
