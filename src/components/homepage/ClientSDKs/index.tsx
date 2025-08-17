@@ -10,7 +10,7 @@ export default function ClientSDKs(): JSX.Element {
     <>
       <h3>Client SDKs</h3>
       <ul className={clsx("tabs", styles.tabs)}>
-        {["Python", "Node.js", "C++ (cmake)", "Rust"].map((tab) => (
+        {["Python", "Node.js", "C++ (cmake)", "Rust", "Go"].map((tab) => (
           <li
             key={tab}
             className={clsx(
@@ -36,16 +36,10 @@ export default function ClientSDKs(): JSX.Element {
         {activeTab === "Rust" && (
           <>
             <CodeBlock className="language-bash">{rustSDK}</CodeBlock>
-            <p>
-              You may need to install the latest version of Rust. Read the{" "}
-              <b>
-                <a href="https://www.rust-lang.org/tools/install">
-                  official Rust installation guide
-                </a>
-              </b>{" "}
-              for more information.
-            </p>
           </>
+        )}
+        {activeTab === "Go" && (
+          <CodeBlock className="language-bash">{goSDK}</CodeBlock>
         )}
       </div>
     </>
@@ -63,15 +57,19 @@ npm i reduct-js
 const cppSDK = `
 include(FetchContent)
 
+set(REDUCT_CPP_USE_FETCHCONTENT ON CACHE BOOL "" FORCE)
 FetchContent_Declare(
-    ReductCpp
-    GIT_REPOSITORY https://github.com/reductstore/reduct-cpp.git
+    reductcpp
+    GIT_REPOSITORY https://github.com/reductstore/reduct-cpp
     GIT_TAG main
 )
-
-find_package(ReductCpp)
+FetchContent_MakeAvailable(reductcpp)
 `.trim();
 
 const rustSDK = `
 cargo install reduct-rs
+`.trim();
+
+const goSDK = `
+go get github.com/reductstore/reduct-go
 `.trim();
