@@ -52,7 +52,7 @@ export default function WhitePaperForm() {
   if (state.succeeded) {
     downloadWhitePaper();
     return (
-      <div className="alert alert--success">
+      <div id="whitepaper-form-success" className="alert alert--success">
         <h2>Thank you for your interest!</h2>
         <p>Your white paper download should start shortly.</p>
         <p>

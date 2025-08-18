@@ -49,7 +49,10 @@ const PriceListForm = ({
 
   if (state.succeeded) {
     return (
-      <div className={clsx(styles.form, "alert alert--success")}>
+      <div
+        id={`${elementId}-success`}
+        className={clsx(styles.form, "alert alert--success")}
+      >
         <h2>Thank You!</h2>
         <p>
           We've received your request and will send you the price list shortly.
