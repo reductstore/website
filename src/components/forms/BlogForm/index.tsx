@@ -40,6 +40,15 @@ const BlogForm = ({ elementId, frontMatter }: BlogFormProps) => {
   const pagePath = location.pathname;
   const title = frontMatter.title;
 
+  if (state.succeeded) {
+    return (
+      <div id={`${elementId}-success`} className="alert alert--success">
+        <h2>Thank you for subscribing!</h2>
+        <p>You will now receive updates about our blogs.</p>
+      </div>
+    );
+  }
+
   return (
     <form id={elementId} className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.formTitle}>Subscribe to our blogs</div>
