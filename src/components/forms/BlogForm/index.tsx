@@ -42,7 +42,7 @@ const BlogForm = ({ elementId, frontMatter }: BlogFormProps) => {
 
   if (state.succeeded) {
     return (
-      <div id={`${elementId}-success`} className="alert alert--success">
+      <div id="blog-form-success" className="alert alert--success">
         <h2>Thank you for subscribing!</h2>
         <p>You will now receive updates about our blogs.</p>
       </div>
