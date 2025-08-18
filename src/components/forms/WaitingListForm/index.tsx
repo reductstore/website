@@ -41,6 +41,7 @@ const WaitingListForm = ({ elementId }: WaitingListFormProps) => {
   if (state.succeeded) {
     return (
       <div
+        id={`${elementId}-success`}
         className={clsx(
           styles.form,
           styles.thankYouMessage,

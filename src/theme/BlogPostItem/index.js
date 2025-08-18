@@ -28,7 +28,7 @@ export default function BlogPostItemWrapper(props) {
       {isSpecificBlogPost && (
         <>
           <SocialShareBar frontMatter={frontMatter} />
-          <BlogForm elementId="subscribe-blog-form" frontMatter={frontMatter} />
+          <BlogForm elementId="blog-form" frontMatter={frontMatter} />
           <div className={styles.commentsContainer}>
             <div className={styles.discourseTitle}>
               Comments from the Community

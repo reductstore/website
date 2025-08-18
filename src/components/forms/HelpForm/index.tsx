@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "./styles.module.css"; // Ensure this path matches the location of your CSS module
+import styles from "./styles.module.css";
 import Link from "@docusaurus/Link";
 import clsx from "clsx";
 import { useForm, ValidationError } from "@formspree/react";
@@ -44,7 +44,10 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
 
   if (state.succeeded) {
     return (
-      <div className={clsx(styles.helpForm, "alert alert--success")}>
+      <div
+        id="contact-us-form-success"
+        className={clsx(styles.helpForm, "alert alert--success")}
+      >
         <h2>Thank You!</h2>
         <p>
           We've received your submission. A member of our team will get back to
