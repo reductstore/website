@@ -55,14 +55,10 @@ A user can use the `ext` query parameter to activate the `ros` extension and def
                "encode": "object"  # Dictionary of binary files to encode, e.g., {"data": "jpeg"} for JPEG encoding
             },
             "transform": {
-              "split": {
-                "duration": "32h",  # Max episode duration
+                "include": ["/topic-.*"], # List of topics to include
+                "exclude": ["/topic-b", "/ext-.*"], # List of topics to exclude
+                "duration": "1m", # Max episode duration
                 "size": "100MB"  # Max episode size
-              },
-              "topics": {
-                "include": [ "topic-1", "/topic-.*/" ],  # List of topics to include (regular expressions)
-                "exclude": [ "topic-b", "/ext-.*/" ]  # List of topics to exclude (regular expressions)
-              }
             }
         }
     }
@@ -99,16 +95,16 @@ Currently, the extension supports encoding only **[sensor_msgs/msg/Image](http:/
 
 The `transform` property allows you to generate new MCAP episodes with topic filtering and size/duration limits.
 
-| Field              | Type       | Mandatory | Description                                                                   |
-| ------------------ | ---------- | --------- | ----------------------------------------------------------------------------- |
-| `split.duration`   | `string`   | No        | Maximum duration per episode (e.g., `15m`, `2h`, `1d`).                       |
-| `split.size`       | `string`   | No        | Maximum file size per episode (e.g., `100MB`, `1GB`).                         |
-| `topics.include[]` | `string[]` | No        | Regular expressions to include topics. If omitted, all topics are considered. |
-| `topics.exclude[]` | `string[]` | No        | Regular expressions to exclude topics. Applied **after** `include`.           |
+| Field       | Type       | Mandatory | Description                                                                                    |
+| ----------- | ---------- | --------- | ---------------------------------------------------------------------------------------------- |
+| `include[]` | `string[]` | No        | List of topics to include. Support regular expressions. If omitted, all topics are considered. |
+| `exclude[]` | `string[]` | No        | List of topics to exclude. Applied **after** `include`.                                        |
+| `duration`  | `string`   | No        | Maximum duration per episode (e.g., `5m`, `2h`, `1d`).                                         |
+| `size`      | `string`   | No        | Maximum file size per episode (e.g., `100MB`, `1GB`).                                          |
 
 :::info
-If neither `split.duration` nor `split.size` is provided, the transform will output the original MCAP files with only topic filtering applied.  
-If both `split.duration` and `split.size` are provided, whichever limit is reached first triggers a new episode.
+If neither `duration` nor `size` is provided, the transform will output the original MCAP files with only topic filtering applied.  
+If both `duration` and `size` are provided, whichever limit is reached first triggers a new episode.
 :::
 
 #### Transforming MCAP
@@ -117,8 +113,8 @@ When `transform` is provided, the extension:
 
 1. Reads the source MCAP files.
 2. Applies topic filters (`include` first, then `exclude`).
-3. Streams matching messages into a new MCAP writer.
-4. Starts a new episode whenever `split.duration` or `split.size` is reached.
+3. Streams matching messages into a new MCAP file.
+4. Starts a new episode whenever `duration` or `size` is reached.
 
 **Example**
 
@@ -127,11 +123,10 @@ When `transform` is provided, the extension:
   "ext": {
     "ros": {
       "transform": {
-        "split": { "duration": "1m", "size": "500MB" },
-        "topics": {
-          "include": ["/camera/.*", "^/imu/data$"],
-          "exclude": ["/camera/debug"]
-        }
+        "include": ["/camera/.*", "^/imu/data$"],
+        "exclude": ["/camera/debug"],
+        "duration": "10m",
+        "size": "500MB"
       }
     }
   }
@@ -143,7 +138,7 @@ When `transform` is provided, the extension:
 - All topics starting with `/camera/` are included (because of `/camera/.*`).
 - The topic `/imu/data` is included exactly (because of `^/imu/data$`).
 - The topic `/camera/debug` is excluded, even though it matches the `/camera/.*` rule.
-- Output is a sequence of MCAP episodes, each ≤ 1 minute or ≤ 500 MB (whichever comes first).
+- Output is a sequence of MCAP episodes, each ≤ 10 minute or ≤ 500 MB (whichever comes first).
 
 ## Examples
 
@@ -247,15 +242,21 @@ import RosTransformMcapPy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_
 The expected output of the above code is as follows:
 
 ```
-Record timestamp: 1753341400522732
-Episode file size: 104857600 bytes
-Record timestamp: 1753345000123456
-Episode file size: 209715200 bytes
+Record timestamp: 1755592486439270
+Episode file size: 1602 bytes
+Record timestamp: 1755592546439270
+Episode file size: 1586 bytes
+Record timestamp: 1755592606439270
+Episode file size: 1582 bytes
+Record timestamp: 1755592666439270
+Episode file size: 1585 bytes
+Record timestamp: 1755592726439270
+Episode file size: 1558 bytes
 ```
 
 #### Explanation
 
 - The extension reads an `.mcap` file stored in ReductStore.
-- Only topics matching `topic-1` and `/topic-.*/` are included.
-- Topics matching `topic-b` and `/ext-.*/` are excluded.
+- Topics matching `/topic-.*` (aside from `/topic-b`) are included.
+- Topics matching `/ext-.*` are excluded.
 - The extension writes a sequence of new MCAP episodes capped at **1 minute** or **100 MB**, whichever comes first.
