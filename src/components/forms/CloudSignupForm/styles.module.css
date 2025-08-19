@@ -1,0 +1,45 @@
+.form {
+  width: 100%;
+  max-width: 840px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.25rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputGroup input,
+.inputGroup select,
+.inputGroup textarea {
+  width: 100%;
+}
+
+.checkboxGroup {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.checkboxLabel {
+  display: flex;
+  gap: 0.5rem;
+  line-height: 1.4;
+}
+
+.buttonRow {
+  margin-top: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 997px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
