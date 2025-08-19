@@ -8,6 +8,7 @@ interface SimpleHeaderWithButtonProps {
   subtitle: string;
   benefits: string[];
   imageSvg: React.ReactNode;
+  scrollToId: string;
   headerTag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 }
 
@@ -16,8 +17,19 @@ function SimpleHeaderWithButton({
   subtitle,
   benefits,
   imageSvg,
+  scrollToId,
   headerTag = "h1",
 }: SimpleHeaderWithButtonProps) {
+
+  const scrollToForm = () => {
+    const formElement = document.getElementById(scrollToId);
+    if (formElement) {
+      const yOffset = -100;
+      const y = formElement.getBoundingClientRect().top + window.scrollY + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
+
   return (
     <header className={styles.Banner}>
       <div className={`container ${styles.BannerContent}`}>
@@ -29,7 +41,11 @@ function SimpleHeaderWithButton({
           <div className={styles.ButtonWithText}>
             <Link
               className="button button--primary button--lg"
-              to="https://cloud.reduct.store/signup"
+              to="#"
+                onClick={(e) => {
+                e.preventDefault();
+                scrollToForm();
+              }}
             >
               Start for Free →
             </Link>
