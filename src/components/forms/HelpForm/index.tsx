@@ -132,6 +132,16 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
       <input type="hidden" name="utm_term" value={utmParams.utm_term} />
       <input type="hidden" name="utm_content" value={utmParams.utm_content} />
       <input type="hidden" name="utm_id" value={utmParams.utm_id} />
+
+      {/* Honeypot */}
+      <input
+        type="text"
+        name="_gotcha"
+        tabIndex={-1}
+        autoComplete="off"
+        style={{ display: "none" }}
+      />
+      
       <div className="col">
         <button
           className={"row button button--primary"}

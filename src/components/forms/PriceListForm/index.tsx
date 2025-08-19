@@ -125,6 +125,16 @@ const PriceListForm = ({
       <input type="hidden" name="utm_term" value={utmParams.utm_term} />
       <input type="hidden" name="utm_content" value={utmParams.utm_content} />
       <input type="hidden" name="utm_id" value={utmParams.utm_id} />
+
+      {/* Honeypot */}
+      <input
+        type="text"
+        name="_gotcha"
+        tabIndex={-1}
+        autoComplete="off"
+        style={{ display: "none" }}
+      />
+      
       <div className={styles.buttonGroup}>
         <button
           className={"button button--primary"}
