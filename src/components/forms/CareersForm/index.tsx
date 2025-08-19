@@ -81,8 +81,7 @@ const CareersForm: React.FC<CareersFormProps> = ({
     return (
       <div id="careers-form-success" className="alert alert--success">
         <h2>Thank you for your application!</h2>
-        <p>Your application has been submitted. We'll get back to you
-          soon.</p>
+        <p>Your application has been submitted. We'll get back to you soon.</p>
       </div>
     );
   }
