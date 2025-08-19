@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useForm, ValidationError } from "@formspree/react";
 import { useLocation } from "@docusaurus/router";
 import styles from "./styles.module.css";
+import Link from "@docusaurus/Link";
 
 interface CareersFormProps {
   elementId?: string;
@@ -197,8 +198,17 @@ const CareersForm: React.FC<CareersFormProps> = ({
               onChange={(e) => setConsent(e.target.checked)}
               required
             />
-            I agree that ReductStore may store my application data to evaluate
-            my candidacy and contact me.
+            <span>
+              I accept the{" "}
+              <Link
+                className={styles.privacyPolicy}
+                to="/privacy"
+                target="_blank"
+              >
+                Privacy Policy
+              </Link>
+              . My data will only be used for this request and never shared.
+            </span>
           </label>
           <ValidationError
             prefix="Consent"
