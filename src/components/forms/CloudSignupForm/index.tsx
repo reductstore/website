@@ -86,7 +86,7 @@ const CloudSignupForm: React.FC<CloudSignupFormProps> = ({
 
   if (state.succeeded) {
     return (
-      <div id="cloud-signup-success" className="alert alert--success">
+      <div id={`${elementId}-success`} className="alert alert--success">
         <h2>Thanks — you're on the list!</h2>
         <p>
           We'll review your use case and reach out with next steps for access.
