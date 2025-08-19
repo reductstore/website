@@ -31,3 +31,18 @@
 .privacyPolicy {
   margin-top: 20px;
 }
+
+.checkboxGroup {
+  width: 100%;
+  text-align: left;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.checkboxLabel {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
