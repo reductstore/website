@@ -67,11 +67,24 @@
   cursor: not-allowed;
 }
 
+.checkboxGroup {
+  width: 100%;
+  text-align: left;
+  margin-top: 0.5rem;
+  align-self: flex-start;
+}
+
+.checkboxLabel {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
 .privacyPolicy {
   color: var(--ifm-color-primary);
-  text-decoration: none;
-  text-align: left;
-  width: 100%;
+  text-decoration: underline;
 }
 
 .description {
