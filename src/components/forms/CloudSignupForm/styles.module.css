@@ -6,7 +6,7 @@
 
   width: 100%;
   max-width: 840px;
-  margin: 0 auto; /* keep it centered in its container */
+  margin: 0 auto;
 }
 
 .grid {
@@ -39,7 +39,7 @@
 .checkboxLabel {
   display: flex;
   gap: 0.5rem;
-  align-items: flex-start;
+  align-items: center;
   font-size: 0.9rem;
 }
 
