@@ -51,14 +51,14 @@ A user can use the `ext` query parameter to activate the `ros` extension and def
     "ext": {
         "ros": {
             "extract": {
-               "topic": "string",  # The name of the ROS topic to extract messages from
-               "encode": "object"  # Dictionary of binary files to encode, e.g., {"data": "jpeg"} for JPEG encoding
+               "topic": "string",  # ROS topic name to extract from
+               "encode": "object"  # e.g., {"data":"jpeg"} for JPEG encoding
             },
             "transform": {
-                "include": ["/topic-.*"], # List of topics to include
-                "exclude": ["/topic-b", "/ext-.*"], # List of topics to exclude
-                "duration": "1m", # Max episode duration
-                "size": "100MB"  # Max episode size
+              "include": "string[]",  # e.g., ["/topic-.*"]
+              "exclude": "string[]",  # e.g., ["/topic-b", "/ext-.*"]
+              "duration": "string",   # e.g., "1m" (max episode duration)
+              "size": "string"        # e.g., "100MB" (max episode size)
             }
         }
     }
@@ -95,12 +95,12 @@ Currently, the extension supports encoding only **[sensor_msgs/msg/Image](http:/
 
 The `transform` property allows you to generate new MCAP episodes with topic filtering and size/duration limits.
 
-| Field       | Type       | Mandatory | Description                                                                                    |
-| ----------- | ---------- | --------- | ---------------------------------------------------------------------------------------------- |
-| `include[]` | `string[]` | No        | List of topics to include. Support regular expressions. If omitted, all topics are considered. |
-| `exclude[]` | `string[]` | No        | List of topics to exclude. Applied **after** `include`.                                        |
-| `duration`  | `string`   | No        | Maximum duration per episode (e.g., `5m`, `2h`, `1d`).                                         |
-| `size`      | `string`   | No        | Maximum file size per episode (e.g., `100MB`, `1GB`).                                          |
+| Field      | Type       | Mandatory | Description                                                                                    |
+| ---------- | ---------- | --------- | ---------------------------------------------------------------------------------------------- |
+| `include`  | `string[]` | No        | List of topics to include. Support regular expressions. If omitted, all topics are considered. |
+| `exclude`  | `string[]` | No        | List of topics to exclude. Applied **after** `include`.                                        |
+| `duration` | `string`   | No        | Maximum duration per episode (e.g., `5m`, `2h`, `1d`).                                         |
+| `size`     | `string`   | No        | Maximum file size per episode (e.g., `100MB`, `1GB`).                                          |
 
 :::info
 If neither `duration` nor `size` is provided, the transform will output the original MCAP files with only topic filtering applied.  
