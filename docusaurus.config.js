@@ -449,12 +449,20 @@ const config = {
             title: "Company",
             items: [
               {
-                label: "Imprint",
-                to: "/imprint",
-              },
-              {
                 label: "Contact Us",
                 to: "/contact",
+              },
+              {
+                label: "Careers",
+                to: "/careers",
+              },
+              {
+                label: "About",
+                to: "/about",
+              },
+              {
+                label: "Imprint",
+                to: "/imprint",
               },
               {
                 label: "Privacy Policy",
