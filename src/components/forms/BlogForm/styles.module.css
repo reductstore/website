@@ -34,6 +34,7 @@
   justify-content: space-between;
   width: 100%;
   max-width: 400px;
+  margin-bottom: 0.5rem;
 }
 
 .inputGroup {
@@ -57,9 +58,38 @@
   margin-left: 20px;
 }
 
+.checkboxGroup {
+  width: 100%;
+  max-width: 400px;
+  text-align: left;
+}
+
+.checkboxLabel {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.privacyPolicy {
+  color: var(--ifm-color-primary);
+  text-decoration: underline;
+}
+
 .thankYouMessage {
   font-size: 0.8rem;
   font-weight: 600;
   height: 20px;
   color: green;
+}
+
+@media (max-width: 520px) {
+  .inputButtonContainer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .buttonGroup {
+    margin-left: 0;
+  }
 }
