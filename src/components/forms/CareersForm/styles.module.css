@@ -50,15 +50,6 @@
   margin-top: 0.3rem;
 }
 
-.successBox {
-  margin-top: 0.75rem;
-  padding: 0.75rem;
-  border-radius: 8px;
-  background: var(--ifm-color-success-contrast-background);
-  color: var(--ifm-color-success-contrast-foreground);
-  border: 1px solid var(--ifm-color-success);
-}
-
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr;

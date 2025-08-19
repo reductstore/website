@@ -77,16 +77,15 @@ const CareersForm: React.FC<CareersFormProps> = ({
     await handleSubmit(formData);
   };
 
-  const thankYou = useMemo(
-    () =>
-      state.succeeded ? (
-        <div className={styles.successBox}>
-          Thanks! Your application has been submitted. We’ll get back to you
-          soon.
-        </div>
-      ) : null,
-    [state.succeeded],
-  );
+  if (state.succeeded) {
+    return (
+      <div id="careers-form-success" className="alert alert--success">
+        <h2>Thank you for your application!</h2>
+        <p>Your application has been submitted. We'll get back to you
+          soon.</p>
+      </div>
+    );
+  }
 
   return (
     <form
@@ -229,8 +228,6 @@ const CareersForm: React.FC<CareersFormProps> = ({
           {state.submitting ? "Submitting…" : "Apply now →"}
         </button>
       </div>
-
-      {thankYou}
       <ValidationError errors={state.errors} />
     </form>
   );
