@@ -58,7 +58,7 @@ A user can use the `ext` query parameter to activate the `ros` extension and def
               "include": "string[]",  # e.g., ["/topic-.*"]
               "exclude": "string[]",  # e.g., ["/topic-b", "/ext-.*"]
               "duration": "string",   # e.g., "1m" (max episode duration)
-              "size": "string"        # e.g., "100MB" (max episode size)
+              "size": "string"        # e.g., "100MB" (max content length)
             }
         }
     }
@@ -100,11 +100,10 @@ The `transform` property allows you to generate new MCAP episodes with topic fil
 | `include`  | `string[]` | No        | List of topics to include. Support regular expressions. If omitted, all topics are considered. |
 | `exclude`  | `string[]` | No        | List of topics to exclude. Applied **after** `include`.                                        |
 | `duration` | `string`   | No        | Maximum duration per episode (e.g., `5m`, `2h`, `1d`).                                         |
-| `size`     | `string`   | No        | Maximum file size per episode (e.g., `100MB`, `1GB`).                                          |
+| `size`     | `string`   | No        | Maximum content length per episode (e.g., `100MB`, `1GB`).                                     |
 
 :::info
-If neither `duration` nor `size` is provided, the transform will output the original MCAP files with only topic filtering applied.  
-If both `duration` and `size` are provided, whichever limit is reached first triggers a new episode.
+The `size` parameter refers to the uncompressed size of the episode. The actual file size may be smaller due to MCAP's chunk compression.
 :::
 
 #### Transforming MCAP
