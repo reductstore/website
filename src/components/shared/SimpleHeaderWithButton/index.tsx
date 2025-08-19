@@ -20,12 +20,12 @@ function SimpleHeaderWithButton({
   scrollToId,
   headerTag = "h1",
 }: SimpleHeaderWithButtonProps) {
-
   const scrollToForm = () => {
     const formElement = document.getElementById(scrollToId);
     if (formElement) {
       const yOffset = -100;
-      const y = formElement.getBoundingClientRect().top + window.scrollY + yOffset;
+      const y =
+        formElement.getBoundingClientRect().top + window.scrollY + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
   };
@@ -42,7 +42,7 @@ function SimpleHeaderWithButton({
             <Link
               className="button button--primary button--lg"
               to="#"
-                onClick={(e) => {
+              onClick={(e) => {
                 e.preventDefault();
                 scrollToForm();
               }}

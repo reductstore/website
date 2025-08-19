@@ -36,7 +36,7 @@ const CloudSignupForm: React.FC<CloudSignupFormProps> = ({
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
   const [jobTitle, setJobTitle] = useState("");
-  const [plan, setPlan] = useState<typeof planOptions[number]>(defaultPlan);
+  const [plan, setPlan] = useState<(typeof planOptions)[number]>(defaultPlan);
   const [useCase, setUseCase] = useState("");
   const [dataVolume, setDataVolume] = useState(volumeOptions[0]);
   const [timeline, setTimeline] = useState(timelineOptions[1]);
@@ -68,7 +68,7 @@ const CloudSignupForm: React.FC<CloudSignupFormProps> = ({
 
     const planParam = urlParams.get("plan");
     if (planParam && planOptions.includes(planParam as any)) {
-      setPlan(planParam as typeof planOptions[number]);
+      setPlan(planParam as (typeof planOptions)[number]);
     }
   }, [location]);
 
@@ -173,7 +173,7 @@ const CloudSignupForm: React.FC<CloudSignupFormProps> = ({
             name="plan"
             value={plan}
             onChange={(e) =>
-              setPlan(e.target.value as typeof planOptions[number])
+              setPlan(e.target.value as (typeof planOptions)[number])
             }
             required
           >
