@@ -132,7 +132,7 @@ const BlogForm = ({ elementId, frontMatter }: BlogFormProps) => {
       <input type="hidden" name="utm_term" value={utmParams.utm_term} />
       <input type="hidden" name="utm_content" value={utmParams.utm_content} />
       <input type="hidden" name="utm_id" value={utmParams.utm_id} />
-      
+
       {/* Honeypot */}
       <input
         type="text"

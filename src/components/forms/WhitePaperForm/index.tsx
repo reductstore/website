@@ -131,7 +131,7 @@ export default function WhitePaperForm() {
         autoComplete="off"
         style={{ display: "none" }}
       />
-      
+
       <div className="col">
         <button
           className={"row button button--primary button--md"}

@@ -134,7 +134,7 @@ const PriceListForm = ({
         autoComplete="off"
         style={{ display: "none" }}
       />
-      
+
       <div className={styles.buttonGroup}>
         <button
           className={"button button--primary"}

@@ -141,7 +141,7 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
         autoComplete="off"
         style={{ display: "none" }}
       />
-      
+
       <div className="col">
         <button
           className={"row button button--primary"}
