@@ -5,6 +5,11 @@ from reduct import Client
 
 HERE = Path(__file__).parent
 
+from time import time_ns
+from pathlib import Path
+
+from reduct import Client
+
 async def main():
     async with Client("http://localhost:8383", api_token="my-token") as client:
         bucket = await client.create_bucket(
@@ -13,7 +18,7 @@ async def main():
         )
         # Write an MCAP file with timestamps
         now = time_ns() // 1000
-        with open(f"{HERE}/../data/file.mcap", "rb") as f:
+        with open(f"{HERE}/../data/multi_topic_5min.mcap", "rb") as f:
             data = f.read()
 
         await bucket.write(
@@ -28,12 +33,11 @@ async def main():
         ext = {
             "ros": {
                 "transform": {
-                    "split": {"duration": "1m", "size": "100MB"},
-                    "topics": {
-                        "include": ["topic-1", "/topic-.*/"],
-                        "exclude": ["topic-b", "/ext-.*/"],
-                    },
-                }
+                    "include": ["/topic-.*"],
+                    "exclude": ["/topic-b", "/ext-.*"],
+                    "duration": "1m",
+                    "size": "100MB"
+                },
             }
         }
 
