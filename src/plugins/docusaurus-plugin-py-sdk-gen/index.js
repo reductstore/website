@@ -124,13 +124,19 @@ export default async function (context, opts) {
     name: "docusaurus-plugin-py-sdk-gen",
 
     async loadContent() {
+      // check CI_ENV and do not generate content if it is set to true
+      if (process.env.CI_ENV) {
+        console.log("CI_ENV is set, skipping SDK generation");
+        return null;
+      }
+
       const tmpDir = os.tmpdir() + "/build/reduct-py";
       console.log(
         `fetch source code from ${opts.sdkRepo}#${opts.sdkBranch} to ${tmpDir}`,
       );
 
       if (fs.existsSync(tmpDir)) {
-        fs.rmdirSync(tmpDir, { recursive: true });
+        fs.rmSync(tmpDir, { recursive: true });
       }
 
       exec(
@@ -146,12 +152,12 @@ export default async function (context, opts) {
           for (const module of opts.modules) {
             const title = getTitleFromModuleName(module) + " Module";
             exec(
-              `uv run pydoc-markdown -I ${tmpDir}/pkg -m reduct.${module} '${renderCfg()}'`,
+              `pydoc-markdown -I ${tmpDir}/pkg -m reduct.${module} '${renderCfg()}'`,
               (err, stdout, stderr) => {
                 if (err) {
                   console.error(err);
                   console.error(stderr);
-                  // process.exit(err.code);
+                  process.exit(err.code);
                 }
                 let md = convertExamplesToMarkdown(stdout);
                 md = addHeader(module, title, md);
