@@ -137,7 +137,7 @@ const CloudSignupForm: React.FC<CloudSignupFormProps> = ({
             id="company"
             type="text"
             name="company"
-            placeholder="Acme Robotics"
+            placeholder="Tech Innovations"
             value={company}
             onChange={(e) => setCompany(e.target.value)}
             required
@@ -155,7 +155,7 @@ const CloudSignupForm: React.FC<CloudSignupFormProps> = ({
             id="jobTitle"
             type="text"
             name="jobTitle"
-            placeholder="Solutions Architect"
+            placeholder="Robotics Engineer"
             value={jobTitle}
             onChange={(e) => setJobTitle(e.target.value)}
           />
