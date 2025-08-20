@@ -24,7 +24,8 @@ const FreePoCForm = ({
   const [state, handleSubmit] = useForm("myyraooa");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [companyName, setcompanyName] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [consent, setConsent] = useState(false);
   const [utmParams, setUtmParams] = useState({
     utm_campaign: "",
     utm_source: "",
@@ -36,7 +37,6 @@ const FreePoCForm = ({
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
-
     setUtmParams({
       utm_campaign: urlParams.get("utm_campaign") || "",
       utm_source: urlParams.get("utm_source") || "",
@@ -48,6 +48,14 @@ const FreePoCForm = ({
   }, [location]);
 
   const pagePath = location.pathname;
+
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+    if (!consent) return;
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    await handleSubmit(formData);
+  };
 
   if (state.succeeded) {
     return (
@@ -65,7 +73,12 @@ const FreePoCForm = ({
   }
 
   return (
-    <form id={elementId} className={styles.form} onSubmit={handleSubmit}>
+    <form
+      id={elementId}
+      className={styles.form}
+      onSubmit={onSubmit}
+      method="POST"
+    >
       <h2>Start Free with ReductStore</h2>
       {targetDate && startDate && (
         <div className={styles.countdown}>
@@ -87,6 +100,7 @@ const FreePoCForm = ({
           <li>{checkedIcon} Expert setup assistance</li>
         </ul>
       </div>
+
       <div className={styles.inputGroup}>
         <label htmlFor="name">Your Name</label>
         <input
@@ -100,14 +114,15 @@ const FreePoCForm = ({
         />
         <ValidationError prefix="Name" field="name" errors={state.errors} />
       </div>
+
       <div className={styles.inputGroup}>
-        <label htmlFor="InputCompanyWhitePaper">Your Company</label>
+        <label htmlFor="companyName">Your Company</label>
         <input
           id="companyName"
           type="text"
           name="company"
           value={companyName}
-          onChange={(e) => setcompanyName(e.target.value)}
+          onChange={(e) => setCompanyName(e.target.value)}
           placeholder="Your Company"
           required
         />
@@ -117,6 +132,7 @@ const FreePoCForm = ({
           errors={state.errors}
         />
       </div>
+
       <div className={styles.inputGroup}>
         <label htmlFor="email">Your Email Address</label>
         <input
@@ -130,7 +146,35 @@ const FreePoCForm = ({
         />
         <ValidationError prefix="Email" field="email" errors={state.errors} />
       </div>
-      {/* Hidden fields for page path and UTM parameters */}
+
+      <div className={styles.checkboxGroup}>
+        <label className={styles.checkboxLabel}>
+          <input
+            type="checkbox"
+            name="consent"
+            checked={consent}
+            onChange={(e) => setConsent(e.target.checked)}
+            required
+          />
+          <span>
+            I accept the{" "}
+            <Link
+              className={styles.privacyPolicy}
+              to="/privacy"
+              target="_blank"
+            >
+              Privacy Policy
+            </Link>
+            . My data will only be used for this request and never shared.
+          </span>
+        </label>
+        <ValidationError
+          prefix="Consent"
+          field="consent"
+          errors={state.errors}
+        />
+      </div>
+
       <input type="hidden" name="pagePath" value={pagePath} />
       <input type="hidden" name="utm_campaign" value={utmParams.utm_campaign} />
       <input type="hidden" name="utm_source" value={utmParams.utm_source} />
@@ -138,22 +182,24 @@ const FreePoCForm = ({
       <input type="hidden" name="utm_term" value={utmParams.utm_term} />
       <input type="hidden" name="utm_content" value={utmParams.utm_content} />
       <input type="hidden" name="utm_id" value={utmParams.utm_id} />
+
+      <input
+        type="text"
+        name="_gotcha"
+        tabIndex={-1}
+        autoComplete="off"
+        style={{ display: "none" }}
+      />
+
       <div className={styles.buttonGroup}>
         <button
           className={"button button--primary button--lg"}
           type="submit"
-          disabled={state.submitting}
+          disabled={state.submitting || !consent}
         >
           Claim Free Tier →
         </button>
       </div>
-      <Link
-        className={clsx(styles.privacyPolicy)}
-        to="/privacy"
-        target="_blank"
-      >
-        We don't share your information with anyone.
-      </Link>
     </form>
   );
 };

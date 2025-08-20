@@ -14,6 +14,7 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
 
   const [state, handleSubmit] = useForm("xgejorqo");
   const [topic, setTopic] = useState(subject || "");
+  const [consent, setConsent] = useState(false);
   const [utmParams, setUtmParams] = useState({
     utm_campaign: "",
     utm_source: "",
@@ -42,6 +43,14 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
 
   const pagePath = location.pathname;
 
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+    if (!consent) return;
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    await handleSubmit(formData);
+  };
+
   if (state.succeeded) {
     return (
       <div
@@ -61,7 +70,8 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
     <form
       id="contact-us-form"
       className={styles.helpForm}
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
+      method="POST"
     >
       <div className={styles.inputGroup}>
         <label htmlFor="name">Your Name</label>
@@ -124,7 +134,35 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
           errors={state.errors}
         />
       </div>
-      {/* Hidden fields for page path and UTM parameters */}
+
+      <div className={styles.checkboxGroup}>
+        <label className={styles.checkboxLabel}>
+          <input
+            type="checkbox"
+            name="consent"
+            checked={consent}
+            onChange={(e) => setConsent(e.target.checked)}
+            required
+          />
+          <span>
+            I accept the{" "}
+            <Link
+              className={styles.privacyPolicy}
+              to="/privacy"
+              target="_blank"
+            >
+              Privacy Policy
+            </Link>
+            . My data will only be used for this request and never shared.
+          </span>
+        </label>
+        <ValidationError
+          prefix="Consent"
+          field="consent"
+          errors={state.errors}
+        />
+      </div>
+
       <input type="hidden" name="pagePath" value={pagePath} />
       <input type="hidden" name="utm_campaign" value={utmParams.utm_campaign} />
       <input type="hidden" name="utm_source" value={utmParams.utm_source} />
@@ -132,49 +170,33 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
       <input type="hidden" name="utm_term" value={utmParams.utm_term} />
       <input type="hidden" name="utm_content" value={utmParams.utm_content} />
       <input type="hidden" name="utm_id" value={utmParams.utm_id} />
+
+      <input
+        type="text"
+        name="_gotcha"
+        tabIndex={-1}
+        autoComplete="off"
+        style={{ display: "none" }}
+      />
+
       <div className="col">
         <button
           className={"row button button--primary"}
           type="submit"
-          disabled={state.submitting}
+          disabled={state.submitting || !consent}
         >
           Send
         </button>
-        <Link
-          className={clsx("row", styles.privacyPolicy)}
-          to="/privacy"
-          target="_blank"
-        >
-          We don't share your information with anyone.
-        </Link>
       </div>
     </form>
   );
 }
 
 const topics = [
-  {
-    key: "TechnicalReview",
-    label: "Schedule a Technical Review",
-  },
-  {
-    key: "GeneralInquiry",
-    label: "General Inquiry",
-  },
-  {
-    key: "LicenseQuestion",
-    label: "License Question",
-  },
-  {
-    key: "SupportRequest",
-    label: "Support Request",
-  },
-  {
-    key: "Feedback",
-    label: "Feedback",
-  },
-  {
-    key: "BillingIssue",
-    label: "Billing Issue",
-  },
+  { key: "TechnicalReview", label: "Schedule a Technical Review" },
+  { key: "GeneralInquiry", label: "General Inquiry" },
+  { key: "LicenseQuestion", label: "License Question" },
+  { key: "SupportRequest", label: "Support Request" },
+  { key: "Feedback", label: "Feedback" },
+  { key: "BillingIssue", label: "Billing Issue" },
 ];
