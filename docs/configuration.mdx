@@ -5,7 +5,7 @@ description: ReductStore configuration options and provisioning.
 ---
 
 <head>
-  <link rel="canonical" href="https://www.reduct.store/docs/configuration" />
+    <link rel="canonical" href="https://www.reduct.store/docs/configuration"/>
 </head>
 
 # ⚙ Server Configuration and Provisioning
@@ -66,6 +66,24 @@ snap set reductstore data-path=/mnt/data
 Removing the snap will remove all data stored in the default data path. If you want to keep the data, you need to move it to another location before removing the snap.
 Or use the `snap connect reductstore:removable-media` command to connect the snap to the `removable-media` interface and store the data in a folder outside the snap.
 :::
+
+
+### Remote Backend Settings
+
+ReductStore supports using a remote object storage as a backend to store data. You can configure the remote backend using the following environment variables:
+
+| Name                     | Default     | Description                                                                                 |
+|--------------------------|-------------|---------------------------------------------------------------------------------------------|
+| `RS_REMOTE_BACKEND_TYPE` | File system | If it is set to `S3`, the storage uses an S3-compatible object storage as a backend         |
+| `RS_REMOTE_ENDPOINT`     |             | URL of the S3-compatible object storage endpoint. It's ignored for the AWS S3 service.      |
+| `RS_REMOTE_REGION`       |             | Region of the S3-compatible object storage. It's ignored for on-premise storage like MinIO. |
+| `RS_REMOTE_ACCESS_KEY`   |             | Access key for the S3-compatible object storage.                                            |
+| `RS_REMOTE_SECRET_KEY`   |             | Secret key for the S3-compatible object storage.                                            |
+| `RS_REMOTE_BUCKET`       |             | Name of the bucket to store data. The bucket must be created before starting ReductStore.   |
+| `RS_REMOTE_CACHE_PATH`   |             | Path to a folder where the storage caches data before uploading it to the remote backend.   |
+| `RS_REMOTE_CACHE_SIZE`   | 1GB         | Maximum size of the cache folder. When the limit is reached, the oldest data is removed.    |
+
+By default, ReductStore uses the local file system to store data. If you want to use a remote backend, you need to set the `RS_REMOTE_BACKEND_TYPE` variable to `S3` and configure the other variables accordingly.
 
 ### I/O Settings
 
