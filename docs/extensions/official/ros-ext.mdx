@@ -4,10 +4,10 @@ description: Extension for ReductStore to extract and transform data in ROS form
 ---
 
 <head>
-    <link
-        rel="canonical"
-        href="https://www.reduct.store/docs/extensions/official/ros-ext"
-    />
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/extensions/official/ros-ext"
+  />
 </head>
 
 # ReductROS
@@ -36,7 +36,7 @@ These `.mcap` files typically originate from ROS 2 logging tools and encapsulate
 
 ### Output
 
--  Transformed `MCAP` files or `JSON` representations of ROS 2 messages
+- Transformed `MCAP` files or `JSON` representations of ROS 2 messages
 - `timestamp` from the message header
 - `computed_labels` containing metadata such as topic name, message type, and encoding
 
@@ -156,9 +156,9 @@ convert it to JSON format.
 import RosExtractTopicPy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_extract.py";
 
 <Tabs>
-    <TabItem value="Python">
-        <CodeBlock language="python">{RosExtractTopicPy}</CodeBlock>
-    </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">{RosExtractTopicPy}</CodeBlock>
+  </TabItem>
 </Tabs>
 
 #### Expected Output
@@ -183,9 +183,9 @@ Record labels: {'@encoding': 'cdr', '@schema': 'std_msgs/String', '@topic': '/te
 - Each record corresponds to one ROS 2 message and includes:
 - The decoded JSON payload, e.g., `{"data":"hello"}`
 - Message metadata as labels, including:
-    - `topic`: `/test`
-    - `schema`: `std_msgs/String`
-    - `encoding`: `cdr`
+  - `topic`: `/test`
+  - `schema`: `std_msgs/String`
+  - `encoding`: `cdr`
 
 ### Extracting Messages as JSON with JPEG Encoding
 
@@ -195,9 +195,9 @@ convert it to JSON format, while also encoding binary image data into JPEG forma
 import RosExtractImagePy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_extract_jpeg.py";
 
 <Tabs>
-    <TabItem value="Python">
-        <CodeBlock language="python">{RosExtractImagePy}</CodeBlock>
-    </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">{RosExtractImagePy}</CodeBlock>
+  </TabItem>
 </Tabs>
 
 #### Expected Output
@@ -220,9 +220,9 @@ Image parameters: {'height': 720, 'width': 1280, 'is_bigendian': 0, 'encoding': 
 - The decoded image parameters, such as height, width, encoding, and step.
 - The timestamp from the message header.
 - Message metadata as labels, including:
-    - `topic`: `/image_raw`
-    - `schema`: `sensor_msgs/Image`
-    - `encoding`: `cdr`
+  - `topic`: `/image_raw`
+  - `schema`: `sensor_msgs/Image`
+  - `encoding`: `cdr`
 
 ### Transforming MCAP with Splitting and Topic Filtering
 
@@ -231,9 +231,9 @@ This example demonstrates how to use the ROS extension to create new MCAP episod
 import RosTransformMcapPy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_transform.py";
 
 <Tabs>
-    <TabItem value="Python">
-        <CodeBlock language="python">{RosTransformMcapPy}</CodeBlock>
-    </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">{RosTransformMcapPy}</CodeBlock>
+  </TabItem>
 </Tabs>
 
 #### Expected Output
