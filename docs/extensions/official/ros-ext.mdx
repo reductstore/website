@@ -4,16 +4,16 @@ description: Extension for ReductStore to extract and transform data in ROS form
 ---
 
 <head>
-  <link
-    rel="canonical"
-    href="https://www.reduct.store/docs/extensions/official/ros-ext"
-  />
+    <link
+        rel="canonical"
+        href="https://www.reduct.store/docs/extensions/official/ros-ext"
+    />
 </head>
 
 # ReductROS
 
 The ReductROS [**extension**](../../glossary#extension) provides tools that can be used to extract and transform data stored in ReductStore into formats that are compatible with the Robot Operating System (ROS).
-It allows users to query and convert historical data, such as sensor readings and camera images, into text-based formats like CSV or JSON, which can then be easily used for analysis, visualisation or integration with other systems.
+It allows users to query and convert historical data, such as sensor readings and camera images, into the JSON format, which can then be easily used for analysis, visualisation or integration with other systems.
 
 :::info
 The extension is only available under a commercial licence. If you wish to use it for non-commercial purposes, please [**contact us**](/contact).
@@ -36,7 +36,7 @@ These `.mcap` files typically originate from ROS 2 logging tools and encapsulate
 
 ### Output
 
-- `JSON` representations of ROS 2 messages
+-  Transformed `MCAP` files or `JSON` representations of ROS 2 messages
 - `timestamp` from the message header
 - `computed_labels` containing metadata such as topic name, message type, and encoding
 
@@ -156,9 +156,9 @@ convert it to JSON format.
 import RosExtractTopicPy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_extract.py";
 
 <Tabs>
-  <TabItem value="Python">
-    <CodeBlock language="python">{RosExtractTopicPy}</CodeBlock>
-  </TabItem>
+    <TabItem value="Python">
+        <CodeBlock language="python">{RosExtractTopicPy}</CodeBlock>
+    </TabItem>
 </Tabs>
 
 #### Expected Output
@@ -181,8 +181,8 @@ Record labels: {'@encoding': 'cdr', '@schema': 'std_msgs/String', '@topic': '/te
 - The content of each message is CDR-encoded and decoded by the extension.
 - The decoded message is returned as JSON with the field `data`, matching the `std_msgs/String` schema.
 - Each record corresponds to one ROS 2 message and includes:
-  - The decoded JSON payload, e.g., `{"data":"hello"}`
-  - Message metadata as labels, including:
+- The decoded JSON payload, e.g., `{"data":"hello"}`
+- Message metadata as labels, including:
     - `topic`: `/test`
     - `schema`: `std_msgs/String`
     - `encoding`: `cdr`
@@ -195,9 +195,9 @@ convert it to JSON format, while also encoding binary image data into JPEG forma
 import RosExtractImagePy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_extract_jpeg.py";
 
 <Tabs>
-  <TabItem value="Python">
-    <CodeBlock language="python">{RosExtractImagePy}</CodeBlock>
-  </TabItem>
+    <TabItem value="Python">
+        <CodeBlock language="python">{RosExtractImagePy}</CodeBlock>
+    </TabItem>
 </Tabs>
 
 #### Expected Output
@@ -217,9 +217,9 @@ Image parameters: {'height': 720, 'width': 1280, 'is_bigendian': 0, 'encoding': 
 - The content of each message is CDR-encoded and decoded by the extension.
 - The decoded message is returned as JSON with the field `data`, which contains the image data encoded in JPEG format.
 - Each record corresponds to one ROS 2 message and includes:
-  - The decoded image parameters, such as height, width, encoding, and step.
-  - The timestamp from the message header.
-  - Message metadata as labels, including:
+- The decoded image parameters, such as height, width, encoding, and step.
+- The timestamp from the message header.
+- Message metadata as labels, including:
     - `topic`: `/image_raw`
     - `schema`: `sensor_msgs/Image`
     - `encoding`: `cdr`
@@ -231,9 +231,9 @@ This example demonstrates how to use the ROS extension to create new MCAP episod
 import RosTransformMcapPy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_transform.py";
 
 <Tabs>
-  <TabItem value="Python">
-    <CodeBlock language="python">{RosTransformMcapPy}</CodeBlock>
-  </TabItem>
+    <TabItem value="Python">
+        <CodeBlock language="python">{RosTransformMcapPy}</CodeBlock>
+    </TabItem>
 </Tabs>
 
 #### Expected Output
