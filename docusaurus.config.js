@@ -335,11 +335,6 @@ const config = {
             position: "left",
           },
           {
-            href: "https://cloud.reduct.store/",
-            label: "Sign In",
-            position: "right",
-          },
-          {
             type: "docsVersionDropdown",
             position: "right",
             dropdownActiveClassDisabled: true,
