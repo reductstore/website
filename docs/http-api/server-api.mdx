@@ -120,8 +120,20 @@ If authentication is enabled, the method needs a valid API token.
 
 ## Check if the Storage Engine is Alive
 
-You can use this method for health checks in Docker or Kubernetes
+You can use GET and HEAD methods for health checks in Docker or Kubernetes
 environment. The method has anonymous access.
+
+<SwaggerComponent
+  method="get"
+  path="/api/v1/alive"
+  summary="Check if the storage engine is working"
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+    },
+  ]}
+/>
 
 <SwaggerComponent
   method="head"
