@@ -10,10 +10,10 @@ description: Extension for ReductStore to extract and transform data in ROS form
   />
 </head>
 
-# ReductRos
+# ReductROS
 
 The ReductROS [**extension**](../../glossary#extension) provides tools that can be used to extract and transform data stored in ReductStore into formats that are compatible with the Robot Operating System (ROS).
-It allows users to query and convert historical data, such as sensor readings and camera images, into text-based formats like CSV or JSON, which can then be easily used for analysis, visualisation or integration with other systems.
+It allows users to query and convert historical data, such as sensor readings and camera images, into the JSON format, which can then be easily used for analysis, visualisation or integration with other systems.
 
 :::info
 The extension is only available under a commercial licence. If you wish to use it for non-commercial purposes, please [**contact us**](/contact).
@@ -36,7 +36,7 @@ These `.mcap` files typically originate from ROS 2 logging tools and encapsulate
 
 ### Output
 
-- `JSON` representations of ROS 2 messages
+- Transformed `MCAP` files or `JSON` representations of ROS 2 messages
 - `timestamp` from the message header
 - `computed_labels` containing metadata such as topic name, message type, and encoding
 
@@ -51,8 +51,14 @@ A user can use the `ext` query parameter to activate the `ros` extension and def
     "ext": {
         "ros": {
             "extract": {
-               "topic": "string",  # The name of the ROS topic to extract messages from
-               "encode": "object"  # Dictionary of binary files to encode, e.g., {"data": "jpeg"} for JPEG encoding
+               "topic": "string",  # ROS topic name to extract from
+               "encode": "object"  # e.g., {"data":"jpeg"} for JPEG encoding
+            },
+            "transform": {
+              "include": "string[]",  # e.g., ["/topic-.*"]
+              "exclude": "string[]",  # e.g., ["/topic-b", "/ext-.*"]
+              "duration": "string",   # e.g., "1m" (max episode duration)
+              "size": "string"        # e.g., "100MB" (max content length)
             }
         }
     }
@@ -71,7 +77,7 @@ the timestamp from the message header.
 | `encode`         | `object` | No        | A dictionary specifying how to encode binary data in the messages. For example, `{"data": "jpeg"}` for JPEG encoding.                                        |
 | `encode.<field>` | `string` | No        | The encoding format for binary fields in the message. Supported values are `base64` and `jpeg`. If not specified, the field will be returned as a JSON list. |
 
-### Encoding Binary Data
+#### Encoding Binary Data
 
 The `encode` property allows you to specify how to handle binary data in the extracted messages.
 You can choose to encode binary fields in the following formats:
@@ -84,6 +90,54 @@ You can choose to encode binary fields in the following formats:
 :::info
 Currently, the extension supports encoding only **[sensor_msgs/msg/Image](http://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Image.html)** messages with `encoding` set to `rgb8`, `bgr8`, or `mono8`.
 :::
+
+### Data Transformation
+
+The `transform` property allows you to generate new MCAP episodes with topic filtering and size/duration limits.
+
+| Field      | Type       | Mandatory | Description                                                                                    |
+| ---------- | ---------- | --------- | ---------------------------------------------------------------------------------------------- |
+| `include`  | `string[]` | No        | List of topics to include. Support regular expressions. If omitted, all topics are considered. |
+| `exclude`  | `string[]` | No        | List of topics to exclude. Applied **after** `include`.                                        |
+| `duration` | `string`   | No        | Maximum duration per episode (e.g., `5m`, `2h`, `1d`).                                         |
+| `size`     | `string`   | No        | Maximum content length per episode (e.g., `100MB`, `1GB`).                                     |
+
+:::info
+The `size` parameter refers to the uncompressed size of the episode. The actual file size may be smaller due to MCAP's chunk compression.
+:::
+
+#### Transforming MCAP
+
+When `transform` is provided, the extension:
+
+1. Reads the source MCAP files.
+2. Applies topic filters (`include` first, then `exclude`).
+3. Streams matching messages into a new MCAP file.
+4. Starts a new episode whenever `duration` or `size` is reached.
+
+**Example**
+
+```json
+{
+  "ext": {
+    "ros": {
+      "transform": {
+        "include": ["/camera/.*", "^/imu/data$"],
+        "exclude": ["/camera/debug"],
+        "duration": "10m",
+        "size": "500MB"
+      }
+    }
+  }
+}
+```
+
+**Result**
+
+- All topics starting with `/camera/` are included (because of `/camera/.*`).
+- The topic `/imu/data` is included exactly (because of `^/imu/data$`).
+- The topic `/camera/debug` is excluded, even though it matches the `/camera/.*` rule.
+- Output is a sequence of MCAP episodes, each ≤ 10 minute or ≤ 500 MB (whichever comes first).
 
 ## Examples
 
@@ -127,11 +181,11 @@ Record labels: {'@encoding': 'cdr', '@schema': 'std_msgs/String', '@topic': '/te
 - The content of each message is CDR-encoded and decoded by the extension.
 - The decoded message is returned as JSON with the field `data`, matching the `std_msgs/String` schema.
 - Each record corresponds to one ROS 2 message and includes:
-  - The decoded JSON payload, e.g., `{"data":"hello"}`
-  - Message metadata as labels, including:
-    - `topic`: `/test`
-    - `schema`: `std_msgs/String`
-    - `encoding`: `cdr`
+- The decoded JSON payload, e.g., `{"data":"hello"}`
+- Message metadata as labels, including:
+  - `topic`: `/test`
+  - `schema`: `std_msgs/String`
+  - `encoding`: `cdr`
 
 ### Extracting Messages as JSON with JPEG Encoding
 
@@ -163,9 +217,45 @@ Image parameters: {'height': 720, 'width': 1280, 'is_bigendian': 0, 'encoding': 
 - The content of each message is CDR-encoded and decoded by the extension.
 - The decoded message is returned as JSON with the field `data`, which contains the image data encoded in JPEG format.
 - Each record corresponds to one ROS 2 message and includes:
-  - The decoded image parameters, such as height, width, encoding, and step.
-  - The timestamp from the message header.
-  - Message metadata as labels, including:
-    - `topic`: `/image_raw`
-    - `schema`: `sensor_msgs/Image`
-    - `encoding`: `cdr`
+- The decoded image parameters, such as height, width, encoding, and step.
+- The timestamp from the message header.
+- Message metadata as labels, including:
+  - `topic`: `/image_raw`
+  - `schema`: `sensor_msgs/Image`
+  - `encoding`: `cdr`
+
+### Transforming MCAP with Splitting and Topic Filtering
+
+This example demonstrates how to use the ROS extension to create new MCAP episodes while including and excluding topics using regular expressions.
+
+import RosTransformMcapPy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_transform.py";
+
+<Tabs>
+  <TabItem value="Python">
+    <CodeBlock language="python">{RosTransformMcapPy}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+#### Expected Output
+
+The expected output of the above code is as follows:
+
+```
+Record timestamp: 1755592486439270
+Episode file size: 1602 bytes
+Record timestamp: 1755592546439270
+Episode file size: 1586 bytes
+Record timestamp: 1755592606439270
+Episode file size: 1582 bytes
+Record timestamp: 1755592666439270
+Episode file size: 1585 bytes
+Record timestamp: 1755592726439270
+Episode file size: 1558 bytes
+```
+
+#### Explanation
+
+- The extension reads an `.mcap` file stored in ReductStore.
+- Topics matching `/topic-.*` (aside from `/topic-b`) are included.
+- Topics matching `/ext-.*` are excluded.
+- The extension writes a sequence of new MCAP episodes capped at **1 minute** or **100 MB**, whichever comes first.
