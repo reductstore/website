@@ -39,6 +39,7 @@ The main advantage of this approach is its simplicity — no external dependenci
 
 - **Data lookup**
   While naming conventions and folder hierarchies can help, accessing data by time or context becomes inefficient as the dataset grows. In practice, this often requires a companion database to index and query files — adding complexity and undermining the simplicity of the original setup.
+y fronting ReductStore with NGINX and separating **ingress** and **egress** layers, you get a simple but powerful foundation for **fault-tolerant IIoT and robotics workloads**.
 
 - **Labeling and search**
   If you want to tag images with labels (e.g., object type, camera location, quality), or filter by those labels later, the file system alone doesn’t support it. You’ll need to implement a separate mechanism.

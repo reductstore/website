@@ -2,7 +2,7 @@
 title: Building a Resilient ReductStore Deployment with NGINX
 description: Learn how to deploy ReductStore behind NGINX with an active–active model for zero-downtime ingestion and querying.
 authors: alexey
-date: 2025-08-17
+date: 2025-90-13
 slug: nginx-resilient-deployment
 tags: [tutorials, nginx]
 ---
@@ -17,18 +17,21 @@ This tutorial walks you through the **[reference implementation](https://github.
 
 ## What We’ll Build
 
+
+We’ll set up a **ReductStore cluster** with NGINX as a reverse proxy, separating the **ingress** and **egress** layers.
+This architecture allows for independent scaling of write and read workloads, ensuring high availability and performance.
+
 ![NGINX Resilient Deployment](./img/disaster_recovery_active_active.png)
 
-We’ll set up a **ReductStore cluster** with NGINX as a reverse proxy, separating the **ingress** and **egress** layers:
 
 ### Ingress layer
 
-The **ingress** nodes may have limited storage capacity, while they need only to handle writes and replicate data to the **egress** nodes.
+The **ingress layer** handles all writes and replicates data to the egress layer. Its nodes may have limited storage capacity, while they need only to handle writes and replicate data to the **egress** nodes.
 It can use high-rate storage like NVMe SSDs or even RAM disks, depending on your data volume.
 
 ### Egress layer
 
-The **egress** nodes are optimized for read performance and can use larger, slower storage like HDDs or cloud object storage.
+The **egress layer** handles all reads and serves data to clients. Its nodes are optimized for read performance and can use larger, slower storage like HDDs or cloud object storage.
 Each egress node holds a complete copy of the dataset, allowing for high availability and load balancing.
 
 ### NGINX Load Balancer
@@ -82,6 +85,7 @@ Below is a distilled config you can adapt for open-source NGINX:
 
 ```nginx
 # Upstreams
+# Separate pools for ingress (writes) and egress (reads)
 upstream reduct_ingress {
     ip_hash;   # stickiness for writes
     server ingress-1:8383 max_fails=3 fail_timeout=10s;
@@ -121,28 +125,22 @@ server {
 }
 ```
 
-## Replication Keeps Data Consistent
+In the config above, we define two upstream blocks: `reduct_ingress` for handling write requests and `reduct_egress` for handling read requests.
+Each block uses `ip_hash` to ensure session affinity, which is crucial for maintaining consistent writes and reads.
 
-- Ingress nodes replicate to all egress nodes
-- Each egress node holds a complete dataset
-- Config (buckets, replication rules, permissions) must be provisioned identically across nodes
+## ReductStore Configuration Notes
 
-Use `reduct-cli` or SDKs to bootstrap configs at container startup.
+The configuration between nodes of each layer is identical. To reach the desired architecture, you need to provision buckets and replication tasks for
+ingress nodes and buckets only for egress nodes. See the configuration files in the example repo for details.
 
 ## Failure Drills
+
+When the setup is running, you can simulate failures to see how it behaves:
 
 1. **Kill an ingress node** → writes continue via other ingress nodes.
 2. **Kill an egress node** → reads continue via other egress nodes; replication resyncs when it’s back.
 3. **Simulate total ingress outage** → analysis continues on egress; for true ingestion continuity, pair with a pilot-light instance in another location.
 
-## Hardening for Production
-
-- Enable **TLS termination** at NGINX
-- Use **token-based auth** consistently across ingress and egress
-- Add **rate limiting** for noisy clients
-- Collect **NGINX and ReductStore logs/metrics**
-- Schedule **hot backups** with `reduct-cli cp` and test **cold restores** regularly
-- Keep a **pilot-light instance** for cross-site resilience
 
 ## Runbook
 
@@ -161,4 +159,4 @@ Use `reduct-cli` or SDKs to bootstrap configs at container startup.
 
 ---
 
-By fronting ReductStore with NGINX and separating **ingress** and **egress** layers, you get a simple but powerful foundation for **fault-tolerant IIoT and robotics workloads**.
+I hope you find this article interesting and useful. If you have any questions or feedback, don’t hesitate to use the [**ReductStore Community**](https://community.reduct.store/signup) forum.
