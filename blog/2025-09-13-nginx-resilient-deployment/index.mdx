@@ -17,12 +17,10 @@ This tutorial walks you through the **[reference implementation](https://github.
 
 ## What We’ll Build
 
-
 We’ll set up a **ReductStore cluster** with NGINX as a reverse proxy, separating the **ingress** and **egress** layers.
 This architecture allows for independent scaling of write and read workloads, ensuring high availability and performance.
 
 ![NGINX Resilient Deployment](./img/disaster_recovery_active_active.png)
-
 
 ### Ingress layer
 
@@ -140,7 +138,6 @@ When the setup is running, you can simulate failures to see how it behaves:
 1. **Kill an ingress node** → writes continue via other ingress nodes.
 2. **Kill an egress node** → reads continue via other egress nodes; replication resyncs when it’s back.
 3. **Simulate total ingress outage** → analysis continues on egress; for true ingestion continuity, pair with a pilot-light instance in another location.
-
 
 ## Runbook
 
