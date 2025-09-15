@@ -15,12 +15,11 @@ This documentation covers the basic concepts of the extension system and explain
 
 ## Querying with Extensions
 
-Users can interact with the extension system by using the `ext` query parameter and the name of the extension in JSON format when querying the data.
-The `ext` parameter is available in all official ReductStore SDKs, but for the purposes of this example, we will use a JSON request body.
+Users can interact with the extension system by using the `#ext` directive in the conditional query and the name of the extension in JSON format when querying the data.
 
 ```python
 {
-  "ext": {
+  "#ext": {
     "select": {
       "columns": [{ "index": 0 }]
     }
@@ -30,12 +29,13 @@ The `ext` parameter is available in all official ReductStore SDKs, but for the p
 
 This request uses the `select` extension to select the first column of CSV [**records**](./glossary#record) and return each one with only the first column.
 
-However, the processing of the data is not the only thing that the extension can do.
-It can also return [**computed labels**](./glossary#computed-label), which can contain the results of the processing or any other data that can be used in the query condition.
+However, processing the data is not the only capability of the extension.
+It can also return [**computed labels**](./glossary#computed-label), which may contain processing results or any other values useful for filtering entities within records (e.g., CSV rows, JSON objects).
+This makes it possible to filter data directly based on the processing outcomes.
 
 ```python
 {
-  "ext": {
+  "$ext": {
     "select": {
       "columns": [{ "index": 0, "as_label": "speed" }]
     },
@@ -58,7 +58,7 @@ This distinguishes the computed labels from the regular labels that are stored i
 ## Data Pipeline with Extensions
 
 As you can see from the previous example, the extension can return computed labels that can be used in the query condition.
-However, we also use the `when` condition to filter records based on their labels before reading their content.
+However, we also use the condition to filter records based on their labels before reading their content.
 It would be inefficient to read all the records and pass them to the extension for processing, so the storage engine
 has two filtering stages: the first stage filters the records based on their labels before passing them to the extension for processing.
 The second stage involves filtering the records based on the computed labels after they have been processed by the extension.
@@ -73,20 +73,18 @@ The above diagram shows the data pipeline for the extension system in response t
 
 ```python
 {
-  "ext": {
+  "&color": { "$eq": "green" },   # filter records on the retrieval stage
+  "#ext": {
     "select": {
       "columns": [{ "index": 0, "as_label": "speed" }]
     },
     "when": {
-      "@speed": { "$gt": 10 }       # filter rows after the data processing (here it's CSV rows)
+      "@speed": { "$gt": 10 }     # filter rows after the data processing (here it's CSV rows)
     }
-  },
-  "when": {
-    "&color": { "$eq": "green" }    # filter records on the retrieval stage
   }
 }
 ```
 
-The query engine uses the `when` condition in the query to retrieve records based on the `&color` label.
+The query engine uses this condition in the query to retrieve records based on the `&color` label.
 First, the engine filters the data based on the label. Then, it reads the record content from the disk and passes it to the extension for processing.
 The extension then processes the data and assigns the computed label `@speed` to each row, enabling the engine to use the `@speed` label to filter the data.
