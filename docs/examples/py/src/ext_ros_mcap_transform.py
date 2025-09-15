@@ -30,19 +30,21 @@ async def main():
         )
 
         # Prepare the query with the 'ros' extension (transform)
-        ext = {
-            "ros": {
-                "transform": {
-                    "include": ["/topic-.*"],
-                    "exclude": ["/topic-b", "/ext-.*"],
-                    "duration": "1m",
-                    "size": "100MB"
-                },
+        condition = {
+            "#ext": {
+                "ros": {  # name of the extension to use
+                    "transform": {
+                        "include": ["/topic-.*"],
+                        "exclude": ["/topic-b", "/ext-.*"],
+                        "duration": "1m",
+                        "size": "100MB"
+                    },
+                }
             }
         }
 
         # Query the data with the 'ros' extension
-        async for record in bucket.query("mcap", start=now, ext=ext):
+        async for record in bucket.query("mcap", start=now, when=condition):
             print(f"Record timestamp: {record.timestamp}")
 
             # Each record corresponds to a new MCAP episode

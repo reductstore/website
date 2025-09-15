@@ -7,6 +7,7 @@ from reduct import Client
 
 HERE = Path(__file__).parent
 
+
 async def main():
     async with Client("http://localhost:8383", api_token="my-token") as client:
         bucket = await client.create_bucket(
@@ -23,23 +24,25 @@ async def main():
         await bucket.write("mcap", data, content_length=len(data), timestamp=now, content_type="application/mcap")
 
         # Prepare the query with the 'ros' extension
-        ext = {
-            "ros": {     # name of the extension to use
-                "extract": {
-                    "topic": "/image_raw",
-                    # encode the data filed in http://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Image.html
-                    "encode": {
-                        "data": "jpeg",
+        condition = {
+            "#ext": {
+                "ros": {  # name of the extension to use
+                    "extract": {
+                        "topic": "/image_raw",
+                        # encode the data filed in http://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Image.html
+                        "encode": {
+                            "data": "jpeg",
+                        },
                     },
                 },
-            },
-            "when": {  # optional filter to apply
-                "$limit": 1, # return only one record
+                "when": {  # optional filter to apply
+                    "$limit": 1,  # return only one record
+                }
             }
         }
 
         # Query the data with the 'ros' extension
-        async for record in bucket.query("mcap", start=now, ext=ext):
+        async for record in bucket.query("mcap", start=now, when=condition):
             print(f"Record timestamp: {record.timestamp}")
             print(f"Record labels: {record.labels}")
             content = await record.read_all()
