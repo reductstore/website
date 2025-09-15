@@ -17,11 +17,12 @@ They are prefixed with `#` and can be used to control aspects such as including 
 
 The following directives are supported:
 
-| Operator         | Description                                                                                    |
-| ---------------- | ---------------------------------------------------------------------------------------------- |
-| `#ctx_before`    | Add additional records before each matching record as context, either by count or time window. |
-| `#ctx_after`     | Add additional records after each matching record as context, either by count or time window.  |
-| `#select_labels` | Retain only the specified labels in a record after filtering.                                  |
+| Operator         | ReductStore Version | Description                                                                                    |
+| ---------------- | ------------------- | ---------------------------------------------------------------------------------------------- |
+| `#ctx_before`    | v1.16               | Add additional records before each matching record as context, either by count or time window. |
+| `#ctx_after`     | v1.16               | Add additional records after each matching record as context, either by count or time window.  |
+| `#select_labels` | v1.16               | Retain only the specified labels in a record after filtering.                                  |
+| `#ext`           | v1.17               | Contains query parameters for extensions that process data during querying.                    |
 
 ## `#ctx_before`
 
@@ -114,3 +115,46 @@ This directive is applied after all other query processing, including context in
 :::info
 The `#select_labels` directive is ignored in replication conditional queries.
 :::
+
+### Example
+
+```json
+{
+  "#select_labels": ["temperature", "humidity"]
+}
+```
+
+## `#ext`
+
+The `#ext` directive is used to specify parameters for \*\*[extensions](../../glossary#extension) that process data during querying.
+
+### Syntax
+
+```
+{
+  "#ext": {
+    "<extension_name>": { <extension_parameters> }
+  }
+}
+```
+
+### Behavior
+
+The `#ext` directive allows you to pass configuration options to an extension that will process the data as part of the query.
+The specific parameters depend on the extension being used. Read more about the official extensions in the [**Extensions Documentation**](../extensions/index).
+
+:::info
+The `#ext` directive is ignored in replication conditional queries.
+:::
+
+### Example
+
+```json
+{
+  "#ext": {
+    "select": {
+      "columns": [{ "index": 0, "as_label": "speed" }]
+    }
+  }
+}
+```
