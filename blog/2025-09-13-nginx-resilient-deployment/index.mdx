@@ -14,14 +14,14 @@ If you’re collecting high-rate sensor or video data at the edge and need zero-
 
 This tutorial walks you through the **[reference implementation](https://github.com/reductstore/nginx-resilient-setup)**, explains the architecture, and shows production-grade NGINX snippets you can adapt.
 
-{/* truncate */}
-
 ## What We’ll Build
 
 We’ll set up a **ReductStore cluster** with NGINX as a reverse proxy, separating the **ingress** and **egress** layers.
 This architecture allows for independent scaling of write and read workloads, ensuring high availability and performance.
 
 ![NGINX Resilient Deployment](./img/disaster_recovery_active_active.png)
+
+{/* truncate */}
 
 ### Ingress layer
 
