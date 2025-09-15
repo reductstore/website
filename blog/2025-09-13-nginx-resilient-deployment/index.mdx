@@ -5,6 +5,7 @@ authors: alexey
 date: 2025-09-13
 slug: nginx-resilient-deployment
 tags: [tutorials, nginx]
+image: ./img/disaster_recovery_active_active.png
 ---
 
 # Building a Resilient ReductStore Deployment with NGINX
@@ -57,7 +58,7 @@ This will start two ingress nodes and two egress nodes with NGINX in front, all 
 Check the docker compose file for details on how the nodes are set up.
 
 Now we need to write some data and verify that we can read it back.
-[**Install**](/download) the `reduct-cli` tool if you haven't already, then run the following commands to set up aliases for the ingress and egress endpoints:
+[**Install the `reduct-cli` tool**](/download) if you haven't already, then run the following commands to set up aliases for the ingress and egress endpoints:
 
 ```bash
 reduct-cli alias add ingress -L http://localhost:80/ingress --token secret
@@ -141,13 +142,14 @@ When the setup is running, you can simulate failures to see how it behaves:
 
 ## Runbook
 
+Here’s a high-level runbook for deploying this architecture in production:
+
 1. Provision ingress + egress ReductStore nodes
 2. Create buckets and replication tasks
 3. Expose `/ingress` and `/egress` via NGINX with `ip_hash`
 4. Test with demo dataset
 5. Validate reads from egress
 6. Run failure drills
-7. Implement backups and pilot-light procedures
 
 ## References
 
