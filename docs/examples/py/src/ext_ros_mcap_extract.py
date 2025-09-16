@@ -5,6 +5,7 @@ from reduct import Client
 
 HERE = Path(__file__).parent
 
+
 async def main():
     async with Client("http://localhost:8383", api_token="my-token") as client:
         bucket = await client.create_bucket(
@@ -21,16 +22,18 @@ async def main():
         await bucket.write("mcap", data, content_length=len(data), timestamp=now, content_type="application/mcap")
 
         # Prepare the query with the 'ros' extension
-        ext = {
-            "ros": {     # name of the extension to use
-                "extract": {
-                    "topic": "/test"   # Specify the topic to extract from the mcap file
-                },
-            },
+        condition = {
+            "#ext": {
+                "ros": {  # name of the extension to use
+                    "extract": {
+                        "topic": "/test"  # Specify the topic to extract from the mcap file
+                    },
+                }
+            }
         }
 
         # Query the data with the 'ros' extension
-        async for record in bucket.query("mcap", start=now, ext=ext):
+        async for record in bucket.query("mcap", start=now, when=condition):
             print(f"Record timestamp: {record.timestamp}")
             print(f"Record labels: {record.labels}")
 

@@ -114,3 +114,13 @@ This directive is applied after all other query processing, including context in
 :::info
 The `#select_labels` directive is ignored in replication conditional queries.
 :::
+
+### Examples
+
+Retain only the `temperature` and `humidity` labels in each record:
+
+```json
+{
+  "#select_labels": ["temperature", "humidity"]
+}
+```
