@@ -63,7 +63,7 @@ The method receives a JSON object in the request body with the following fields:
 
 ```json5
 {
-  expires_at: "string", // Expiration date of the link in ISO 8601 format (UTC)
+  expire_at: "integer", // Expiration date in unix timestamp (seconds)
   bucket: "string", // Bucket name
   entry: "string", // Entry name
   query: "object", // Query object
