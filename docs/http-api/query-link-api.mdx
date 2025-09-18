@@ -14,9 +14,8 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
 # Query Link API Specification Reference
 
-Since version 1.17.0, ReductStore supports **Query Links** - a secure way to share data without access tokens. The Query Link API provides HTTP methods for creating and downloading query links.
-The query links can be created with specific permissions and expiration times, allowing for controlled access to the data.
-
+Since version 1.17.0, ReductStore supports **Query Links** - a secure way to share data without access tokens.
+These links can be created with the creator's read permissions and an expiration time, allowing controlled anonymous access to specific data.
 
 ## Create a Query Link
 
@@ -67,6 +66,7 @@ The method receives a JSON object in the request body with the following fields:
     "bucket": "string",     // Bucket name
     "entry": "string",      // Entry name
     "query": "object",      // Query object
+    "index": "integer",     // (Optional) Record index in the query result to be returned by default (r query parameter)
 }
 ```
 
