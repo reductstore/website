@@ -25,8 +25,18 @@ The given query will be applied to the data when accessed via the link.
 
 <SwaggerComponent
   method="post"
-  path="/api/v1/links"
+  path="/api/v1/links/:file_name"
   summary="Create a query link"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: "file_name",
+        isRequired: true,
+        description: "File name to be used when creating the link (e.g. data.jsonl)",
+      },
+    }
+  ]}
   responses={[
     {
       status: "200",
@@ -78,8 +88,18 @@ The method applies the query specified when creating the link to filter the data
 
 <SwaggerComponent
   method="get"
-  path="/api/v1/links/"
+  path="/api/v1/links/:file_name"
   summary="Download data using a query link"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: "file_name",
+        isRequired: true,
+        description: "File name to download (e.g. data.jsonl)",
+      },
+    }
+  ]}
   queryParams={[
     {
       name: "ct",
