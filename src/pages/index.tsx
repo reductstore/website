@@ -32,22 +32,18 @@ function HomepageHeader() {
           time indexing and labels for ultra-fast retrieval and management.
         </p>
         <div className={styles.buttonContainer}>
-          <div className={styles.buttonLeft}>
-            <Link
-              className="button button--secondary button--block button--lg"
-              to="/docs/getting-started"
-            >
-              Get Started
-            </Link>
-          </div>
-          <div className={styles.buttonRight}>
-            <Link
-              className="button button--secondary button--block button--lg"
-              to="/whitepaper"
-            >
-              White Paper →
-            </Link>
-          </div>
+          <Link
+            className={clsx("button button--lg", styles.buttonPrimary)}
+            to="/docs/getting-started"
+          >
+            Get Started
+          </Link>
+          <Link
+            className={clsx("button button--lg", styles.buttonSecondary)}
+            to="/whitepaper"
+          >
+            White Paper
+          </Link>
         </div>
       </div>
     </header>

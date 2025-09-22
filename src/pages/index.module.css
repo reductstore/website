@@ -26,12 +26,36 @@
   gap: 2rem;
 }
 
-.buttonLeft * {
+.buttonPrimary {
   width: 200px;
+  height: 50px;
+  background-color: var(--reduct-button-color-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-.buttonRight * {
+.buttonPrimary:hover {
+  background-color: var(--reduct-button-color-primary-hover);
+  color: white;
+}
+
+.buttonSecondary {
   width: 200px;
+  height: 50px;
+  border: 2px solid var(--reduct-button-border-secondary);
+  color: var(--reduct-button-border-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.buttonSecondary:hover {
+  color: var(--reduct-button-border-secondary-hover);
+  border-color: var(--reduct-button-border-secondary-hover);
 }
 
 @media screen and (max-width: 600px) {
