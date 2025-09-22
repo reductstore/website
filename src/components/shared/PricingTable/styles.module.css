@@ -10,6 +10,7 @@
 
 .plan {
   border: 3px solid #ccc;
+  border-color: #ccc;
   padding: 1em;
   border-radius: 20px;
   max-width: 350px;

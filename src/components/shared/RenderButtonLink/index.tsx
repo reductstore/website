@@ -22,8 +22,8 @@ const RenderButtonLink = ({
     (buttonUrl.startsWith("http://") || buttonUrl.startsWith("https://"));
 
   const buttonClass = clsx("button button--lg button--block button--primary", {
-    "button--primary": !isHighlight,
-    "button--secondary": isHighlight,
+    "button--primary": isHighlight,
+    "button--secondary": !isHighlight,
   });
 
   if (isExternalLink) {

@@ -8,7 +8,7 @@ const SandboxOffer = () => {
         <p>
           Get your own ReductStore environment with{" "}
           <strong>10GB free cloud storage</strong> or a{" "}
-          <strong>test license for on-premise</strong> deployment — no credit
+          <strong>demo license for on-premise</strong> deployment — no credit
           card required.
         </p>
         <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
@@ -17,14 +17,14 @@ const SandboxOffer = () => {
             to="/solutions/cloud#cloud-signup"
             style={{ textDecoration: "none" }}
           >
-            Get Test Server
+            Get Demo Server
           </Link>
           <Link
             className="button button--secondary"
-            to="/contact?subject=TestLicense"
+            to="/contact?subject=DemoLicense"
             style={{ textDecoration: "none" }}
           >
-            Request a Test License
+            Request Demo License
           </Link>
         </div>
       </Admonition>

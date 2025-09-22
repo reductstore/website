@@ -34,7 +34,7 @@ const testimonials = [
   {
     message:
       "ReductStore is a vital part of our infrastructure. It handles terabytes of unstructured data in a production environment.",
-    author: "Michael Welsh",
+    author: "Michael Welsch",
     position: "Founder",
     company: "Metric Space UG",
   },

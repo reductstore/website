@@ -53,9 +53,9 @@ export default function CloudSolution(): JSX.Element {
             ))}
           </>
           <div id="cloud-signup" className={styles.signUpSection}>
-            <h2>Get Started with ReductStore</h2>
+            <h2>Get Demo Server</h2>
             <p className={styles.signUpDescription}>
-              Submit the form and we'll provide you with a test server in the
+              Submit the form and we'll provide you with a demo server in the
               cloud (100% free). You can use it to explore ReductStore, stream
               data from your devices, and see its performance in action.
             </p>
