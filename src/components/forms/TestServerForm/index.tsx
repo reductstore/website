@@ -4,7 +4,7 @@ import { useLocation } from "@docusaurus/router";
 import styles from "./styles.module.css";
 import Link from "@docusaurus/Link";
 
-interface CloudSignupFormProps {
+interface TestServerFormProps {
   elementId?: string;
   title?: string;
   defaultPlan?: "SaaS" | "BYO-Cloud" | "Undecided";
@@ -24,7 +24,7 @@ const timelineOptions = ["Immediately", "1-3 months", "Exploring / Research"];
 
 const regionOptions = ["EU", "US", "APAC", "Undecided"];
 
-const CloudSignupForm: React.FC<CloudSignupFormProps> = ({
+const TestServerForm: React.FC<TestServerFormProps> = ({
   elementId = "cloud-signup-form",
   title = "Cloud Signup",
   defaultPlan = "SaaS",
@@ -343,7 +343,7 @@ const CloudSignupForm: React.FC<CloudSignupFormProps> = ({
           type="submit"
           disabled={state.submitting || !consent}
         >
-          {state.submitting ? "Submitting…" : "Request Access →"}
+          {state.submitting ? "Submitting…" : "Get Demo Server"}
         </button>
       </div>
       <ValidationError errors={state.errors} />
@@ -351,4 +351,4 @@ const CloudSignupForm: React.FC<CloudSignupFormProps> = ({
   );
 };
 
-export default CloudSignupForm;
+export default TestServerForm;

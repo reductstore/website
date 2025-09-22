@@ -438,7 +438,7 @@ async def query(entry_name: str,
 Query data for a time interval
 The time interval is defined by the start and stop parameters that can be:
 int (UNIX timestamp in microseconds), datetime,
-float (UNIX timestamp in seconds) or str (ISO 8601 string).
+float (UNIX timestamp in seconds) or str (ISO 8601 string),
 
 **Arguments**:
 
@@ -533,5 +533,40 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
           async for chunk in record.read(n=1024):
               print(chunk)
    ```
+
+<a id="reduct.bucket.Bucket.create_query_link"></a>
+
+#### create\_query\_link
+
+```python
+async def create_query_link(entry: str,
+                            start: Optional[Union[int, datetime, float,
+                                                  str]] = None,
+                            stop: Optional[Union[int, datetime, float,
+                                                 str]] = None,
+                            when: Optional[Dict] = None,
+                            **kwargs) -> str
+```
+
+Create a link to query data for a time interval
+
+The time interval is defined by the start and stop parameters that can be:
+int (UNIX timestamp in microseconds), datetime,
+float (UNIX timestamp in seconds) or str (ISO 8601 string).
+
+**Arguments**:
+
+- `entry` - name of entry in the bucket
+- `start` - the beginning of the time interval.
+  If None, then from the first record
+- `stop` - the end of the time interval. If None, then to the latest record
+- `when` - condtiion to filter records
+  
+
+**Arguments**:
+
+- `record_index` - if not None, the link will point to a specific record
+- `expire_at` - if None, the link will expire in 24 hours
+- `file_name` - file name for download, if None: entry_name_index.bin
 
 

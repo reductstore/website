@@ -4,7 +4,8 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-top: 5rem;
+  margin: 5rem auto 0 auto;
+  max-width: 840px;
 }
 
 .signUpDescription {

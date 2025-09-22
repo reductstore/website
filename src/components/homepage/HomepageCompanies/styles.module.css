@@ -1,0 +1,43 @@
+.companiesSection {
+  margin-bottom: 5rem;
+  overflow: hidden;
+}
+
+.companiesWrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.companiesTrack {
+  display: flex;
+  width: max-content;
+  animation: scroll 40s linear infinite;
+}
+
+.companyBox {
+  flex: 0 0 auto;
+  width: 200px;
+  height: 100px;
+  background: white;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 1rem;
+}
+
+.companyImage {
+  max-width: 140px;
+  max-height: 100px;
+  object-fit: contain;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}

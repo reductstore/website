@@ -18,7 +18,6 @@ export default function Pricing(): JSX.Element {
             commercial use, we offer a different plan for every scale and level
             of support.
           </p>
-          <SandboxOffer />
           <PricingTable />
         </div>
         <br />
@@ -58,5 +57,10 @@ const pricingFaqs = [
     question: "Why BUSL-1.1?",
     answer:
       "We believe that everyone should have access to the source code of the software they use. That's why we don't provide OSS and Enterprise versions. The code base is and will be identical for all users. On the other hand, we need a way to encourage monetization of our products to provide the highest quality software. The BUSL license gives us a way to achieve our goals. Everyone has access to the source code and can use, redistribute and modify it, but if you aim to generate revenue using our software, you are required to purchase a commercial license.",
+  },
+  {
+    question: "What are ReductStore Extensions?",
+    answer:
+      "Extensions let you process data on the storage side during queries, for example selecting CSV columns, scaling images, or searching text.",
   },
 ];

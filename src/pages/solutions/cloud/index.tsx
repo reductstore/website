@@ -6,7 +6,7 @@ import Faq from "@site/src/components/shared/Faq";
 import SimpleHeaderWithButton from "@site/src/components/shared/SimpleHeaderWithButton";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import ThemedImage from "@theme/ThemedImage";
-import CloudSignupForm from "@site/src/components/forms/CloudSignupForm";
+import TestServerForm from "@site/src/components/forms/TestServerForm";
 
 export default function CloudSolution(): JSX.Element {
   const title =
@@ -53,13 +53,13 @@ export default function CloudSolution(): JSX.Element {
             ))}
           </>
           <div id="cloud-signup" className={styles.signUpSection}>
-            <h2>Get Started with ReductStore</h2>
+            <h2>Get Demo Server</h2>
             <p className={styles.signUpDescription}>
-              Submit the form and we'll provide you with a test server in the
+              Submit the form and we'll provide you with a demo server in the
               cloud (100% free). You can use it to explore ReductStore, stream
               data from your devices, and see its performance in action.
             </p>
-            <CloudSignupForm title="Cloud Signup" defaultPlan="SaaS" />
+            <TestServerForm title="Cloud Signup" defaultPlan="SaaS" />
             <ThemedImage
               className={styles.SvgImage}
               alt="Cloud Storage"

@@ -3,13 +3,11 @@ import clsx from "clsx";
 import styles from "./styles.module.css";
 import PricingPlan from "./PricingPlan";
 import { FaCheckCircle } from "react-icons/fa";
-import Modal from "../Modal";
-import PriceListForm from "../../forms/PriceListForm";
+import Link from "@docusaurus/Link";
 
 const checkedIcon = <FaCheckCircle color="green" size="1.2em" />;
 
 export default function PricingTable() {
-  const [openModal, setOpenModal] = useState(false);
   return (
     <section>
       <div className={clsx("row", styles.pricingTable)}>
@@ -18,23 +16,26 @@ export default function PricingTable() {
           subtitle=""
           description="For research, testing, and development. Commercial use in production limited to companies with capital less than 2 million USD."
           categories={[
-            { title: "Full Functionality", description: checkedIcon },
+            { title: "Core Functionality", description: checkedIcon },
             {
               title: "Support",
               description: (
                 <>
-                  <a href="https://community.reduct.store/signup/">
+                  <Link href="https://community.reduct.store/signup/">
                     <b>Community Forum</b>
-                  </a>{" "}
+                  </Link>{" "}
                   or{" "}
-                  <a href="https://github.com/reductstore/reductstore">
+                  <Link href="https://github.com/reductstore/reductstore">
                     <b>GitHub</b>
-                  </a>
+                  </Link>
                 </>
               ),
               descriptionDetail: "Only latest stable version",
             },
             { title: "Long Term Release Support", description: "-" },
+            { title: "Support for CSV & JSON", description: "-" },
+            { title: "Support for Robotics Data", description: "-" },
+            { title: "Extensible Query Engine", description: checkedIcon },
             { title: "Architecture Review", description: "-" },
             { title: "Proof of Concept (PoC)", description: "-" },
             { title: "Fully Managed", description: "-" },
@@ -42,7 +43,6 @@ export default function PricingTable() {
           ]}
           buttonUrl="/docs/getting-started"
           buttonLabel="Start for Free"
-          isHighlight
         />
 
         <PricingPlan
@@ -50,7 +50,7 @@ export default function PricingTable() {
           subtitle=""
           description="Commercial support, POC, and long-term release support for on-premise deployment."
           categories={[
-            { title: "Full Functionality", description: checkedIcon },
+            { title: "Core Functionality", description: checkedIcon },
             { title: "Support", description: "Commercial support" },
             {
               title: "Long Term Release Support",
@@ -58,6 +58,29 @@ export default function PricingTable() {
               descriptionDetail:
                 "No vendor lock-in, legacy versions are free and open source",
             },
+            {
+              title: "Support for CSV & JSON",
+              description: (
+                <>
+                  via{" "}
+                  <Link href="/docs/extensions/official/select-ext">
+                    <b>ReductSelect</b>
+                  </Link>
+                </>
+              ),
+            },
+            {
+              title: "Support for Robotics Data",
+              description: (
+                <>
+                  via{" "}
+                  <Link href="/docs/extensions/official/ros-ext">
+                    <b>ReductROS</b>
+                  </Link>
+                </>
+              ),
+            },
+            { title: "Extensible Query Engine", description: checkedIcon },
             { title: "Architecture Review", description: checkedIcon },
             {
               title: "Proof of Concept (PoC)",
@@ -66,8 +89,8 @@ export default function PricingTable() {
             { title: "Fully Managed", description: "-" },
             { title: "No-Code Provisioning", description: "-" },
           ]}
-          onClick={() => setOpenModal(true)}
-          buttonLabel="Get Price List"
+          buttonUrl="/contact?subject=DemoLicense"
+          buttonLabel="Get Demo License"
         />
 
         <PricingPlan
@@ -75,7 +98,7 @@ export default function PricingTable() {
           subtitle=""
           description="Fully managed cloud service. Join our waiting list."
           categories={[
-            { title: "Full Functionality", description: checkedIcon },
+            { title: "Core Functionality", description: checkedIcon },
             {
               title: "Support",
               description: "Commercial support",
@@ -84,21 +107,39 @@ export default function PricingTable() {
               title: "Long Term Release Support",
               description: "Always up-to-date",
             },
+            {
+              title: "Support for CSV & JSON",
+              description: (
+                <>
+                  via{" "}
+                  <Link href="/docs/extensions/official/select-ext">
+                    <b>ReductSelect</b>
+                  </Link>
+                </>
+              ),
+            },
+            {
+              title: "Support for Robotics Data",
+              description: (
+                <>
+                  via{" "}
+                  <Link href="/docs/extensions/official/ros-ext">
+                    <b>ReductROS</b>
+                  </Link>
+                </>
+              ),
+            },
+            { title: "Extensible Query Engine", description: checkedIcon },
             { title: "Architecture Review", description: checkedIcon },
             { title: "Proof of Concept (PoC)", description: checkedIcon },
             { title: "Fully Managed", description: checkedIcon },
             { title: "No-Code Provisioning", description: checkedIcon },
           ]}
-          buttonUrl="/solutions/cloud"
-          buttonLabel="Learn More"
+          buttonUrl="/solutions/cloud#cloud-signup"
+          buttonLabel="Get Demo Server"
+          isHighlight
         />
       </div>
-
-      <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
-        <div className={styles.form}>
-          <PriceListForm elementId="price-list-form" />
-        </div>
-      </Modal>
     </section>
   );
 }
