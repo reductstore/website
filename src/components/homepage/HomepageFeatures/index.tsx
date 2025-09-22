@@ -4,11 +4,11 @@ import {
   FaInfinity,
   FaTachometerAlt,
   FaTags,
-  FaCloudUploadAlt,
   FaLayerGroup,
   FaSync,
   FaSearch,
   FaKey,
+  FaPuzzlePiece,
 } from "react-icons/fa";
 import styles from "./styles.module.css";
 
@@ -56,9 +56,9 @@ export default function HomepageFeatures() {
           description="Manage your time-series blob data with ease: annotate, filter, and save AI labels or meta-data."
         />
         <Feature
-          IconComponent={FaCloudUploadAlt}
-          title="Advanced HTTP(S) API"
-          description="Integrate and communicate with ReductStore using our feature-rich and secure API."
+          IconComponent={FaPuzzlePiece}
+          title="Extensible Query Engine"
+          description="Extend ReductStore with plugins that transform data during queries—filter CSVs, resize images, search text, and more."
         />
         <Feature
           IconComponent={FaLayerGroup}
