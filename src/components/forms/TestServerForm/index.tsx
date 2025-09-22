@@ -343,7 +343,7 @@ const TestServerForm: React.FC<TestServerFormProps> = ({
           type="submit"
           disabled={state.submitting || !consent}
         >
-          {state.submitting ? "Submitting…" : "Request Access →"}
+          {state.submitting ? "Submitting…" : "Get Set Up"}
         </button>
       </div>
       <ValidationError errors={state.errors} />
