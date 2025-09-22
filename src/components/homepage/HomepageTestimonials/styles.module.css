@@ -1,5 +1,6 @@
 .testimonials {
   margin-top: 5rem;
+  margin-bottom: var(--reduct-section-space);
   text-align: center;
 }
 

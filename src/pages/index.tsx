@@ -66,9 +66,9 @@ export default function Home(): JSX.Element {
         <div className="container">
           <HomepageBenefits />
           <hr />
+          <HomepagePartners />
           <HomepageStats />
           <HomepageTestimonials />
-          <HomepagePartners />
           <hr />
           <HomepageFeatures />
           <hr />
