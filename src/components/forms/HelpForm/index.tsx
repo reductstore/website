@@ -193,6 +193,8 @@ export default function HelpForm({ subject }: HelpFormProps): JSX.Element {
 }
 
 const topics = [
+  { key: "TestLicense", label: "Request Test License" },
+  { key: "CommunityLicense", label: "Request Community License" },
   { key: "TechnicalReview", label: "Schedule a Technical Review" },
   { key: "GeneralInquiry", label: "General Inquiry" },
   { key: "LicenseQuestion", label: "License Question" },

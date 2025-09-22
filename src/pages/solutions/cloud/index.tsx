@@ -6,7 +6,7 @@ import Faq from "@site/src/components/shared/Faq";
 import SimpleHeaderWithButton from "@site/src/components/shared/SimpleHeaderWithButton";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import ThemedImage from "@theme/ThemedImage";
-import CloudSignupForm from "@site/src/components/forms/CloudSignupForm";
+import TestServerForm from "@site/src/components/forms/TestServerForm";
 
 export default function CloudSolution(): JSX.Element {
   const title =
@@ -59,7 +59,7 @@ export default function CloudSolution(): JSX.Element {
               cloud (100% free). You can use it to explore ReductStore, stream
               data from your devices, and see its performance in action.
             </p>
-            <CloudSignupForm title="Cloud Signup" defaultPlan="SaaS" />
+            <TestServerForm title="Cloud Signup" defaultPlan="SaaS" />
             <ThemedImage
               className={styles.SvgImage}
               alt="Cloud Storage"

@@ -5,11 +5,12 @@ import PricingPlan from "./PricingPlan";
 import { FaCheckCircle } from "react-icons/fa";
 import Modal from "../Modal";
 import PriceListForm from "../../forms/PriceListForm";
+import Link from "@docusaurus/Link";
 
 const checkedIcon = <FaCheckCircle color="green" size="1.2em" />;
 
 export default function PricingTable() {
-  const [openModal, setOpenModal] = useState(false);
+  const [openPriceList, setOpenPriceList] = useState(false);
   return (
     <section>
       <div className={clsx("row", styles.pricingTable)}>
@@ -23,18 +24,26 @@ export default function PricingTable() {
               title: "Support",
               description: (
                 <>
-                  <a href="https://community.reduct.store/signup/">
+                  <Link href="https://community.reduct.store/signup/">
                     <b>Community Forum</b>
-                  </a>{" "}
+                  </Link>{" "}
                   or{" "}
-                  <a href="https://github.com/reductstore/reductstore">
+                  <Link href="https://github.com/reductstore/reductstore">
                     <b>GitHub</b>
-                  </a>
+                  </Link>
                 </>
               ),
               descriptionDetail: "Only latest stable version",
             },
             { title: "Long Term Release Support", description: "-" },
+            {
+              title: "Extensions",
+              description: (
+                <Link href="/contact?subject=CommunityLicense">
+                  <strong>Request a community license</strong>
+                </Link>
+              ),
+            },
             { title: "Architecture Review", description: "-" },
             { title: "Proof of Concept (PoC)", description: "-" },
             { title: "Fully Managed", description: "-" },
@@ -58,6 +67,14 @@ export default function PricingTable() {
               descriptionDetail:
                 "No vendor lock-in, legacy versions are free and open source",
             },
+            {
+              title: "Extensions",
+              description: (
+                <Link href="/contact?subject=TestLicense">
+                  <strong>Request a test license</strong>
+                </Link>
+              ),
+            },
             { title: "Architecture Review", description: checkedIcon },
             {
               title: "Proof of Concept (PoC)",
@@ -66,7 +83,7 @@ export default function PricingTable() {
             { title: "Fully Managed", description: "-" },
             { title: "No-Code Provisioning", description: "-" },
           ]}
-          onClick={() => setOpenModal(true)}
+          onClick={() => setOpenPriceList(true)}
           buttonLabel="Get Price List"
         />
 
@@ -84,6 +101,10 @@ export default function PricingTable() {
               title: "Long Term Release Support",
               description: "Always up-to-date",
             },
+            {
+              title: "Extensions",
+              description: checkedIcon,
+            },
             { title: "Architecture Review", description: checkedIcon },
             { title: "Proof of Concept (PoC)", description: checkedIcon },
             { title: "Fully Managed", description: checkedIcon },
@@ -94,7 +115,7 @@ export default function PricingTable() {
         />
       </div>
 
-      <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
+      <Modal isOpen={openPriceList} onClose={() => setOpenPriceList(false)}>
         <div className={styles.form}>
           <PriceListForm elementId="price-list-form" />
         </div>
