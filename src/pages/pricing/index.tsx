@@ -18,7 +18,6 @@ export default function Pricing(): JSX.Element {
             commercial use, we offer a different plan for every scale and level
             of support.
           </p>
-          <SandboxOffer />
           <PricingTable />
         </div>
         <br />
