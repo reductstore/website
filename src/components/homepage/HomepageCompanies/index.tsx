@@ -3,10 +3,6 @@ import styles from "./styles.module.css";
 
 const companies = [
   {
-    image: require("@site/static/img/companies/te_connectivity.webp").default,
-    alt: "TE Connectivity Logo",
-  },
-  {
     image: require("@site/static/img/companies/panda.webp").default,
     alt: "PANDA Logo",
   },
