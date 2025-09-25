@@ -157,3 +157,9 @@ The method applies the query specified when creating the link to filter the data
     },
   ]}
 />
+
+
+### Range Requests
+
+The method supports HTTP Range Requests to download partial content. You can specify the range of bytes to download using the `Range` header in the request.
+The server will respond with the specified range of bytes along with the appropriate `Content-Range` header in the response.
