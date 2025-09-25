@@ -94,7 +94,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         if: matrix.example == 'rust'
         with:
-          toolchain: 1.85.0
+          toolchain: ${{ vars.MINIMAL_RUST_VERSION }}
 
       - name: Install Go
         if: matrix.example == 'golang'
