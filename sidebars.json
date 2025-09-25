@@ -146,7 +146,8 @@
           ]
         },
         "http-api/token-authentication",
-        "http-api/replication-api"
+        "http-api/replication-api",
+        "http-api/query-link-api"
       ]
     },
     {
