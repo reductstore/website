@@ -227,7 +227,7 @@ const config = {
         title: "ReductStore",
         logo: {
           alt: "ReductStore Logo",
-          src: "img/logo.webp",
+          src: "img/logo.svg",
         },
         hideOnScroll: false,
         items: [
