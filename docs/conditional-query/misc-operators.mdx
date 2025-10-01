@@ -56,20 +56,14 @@ The condition query engine automatically casts values to the correct type when c
 
 ```
 {
-  "$cast": [ <expression as label reference>, <"bool" | "int" | "float" | "string"> ]
+  "$cast": [ <expression as label reference>, <"bool" | "int" | "float" | "string" | "duration"> ]
 }
 ```
 
 ### Behavior
 
 The operator evaluates the first expression then casts the value to the specified type in the second argument.
-
-Supported types:
-
-- `bool`: Casts the value to a boolean.
-- `int`: Casts the value to an integer.
-- `float`: Casts the value to a float.
-- `string`: Casts the value to a string.
+Supported types are: `bool`, `int`, `float`, `string`, and `duration`. See the **[casting rules](./#type-casting)** for more details.
 
 ### Examples
 

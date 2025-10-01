@@ -179,13 +179,13 @@ During the execution of the query, the engine will try to cast types of operands
 Logical operators like `$and`, `$or`, `$not` will cast the result to a boolean.
 Comparison and arithmetic operators will cast the operands to the most precise type in the following order:
 
-|              | boolean               | integer          | duration              | float               | string |
-| ------------ | --------------------- | ---------------- | --------------------- | ------------------- | ------ |
-| **boolean**  | boolean               | integer (0 or 1) | duration (0us or 1us) | float ( 0.0 or 1.0) | -      |
-| **integer**  | integer (0 or 1)      | integer          | integer               | float               | -      |
-| **duration** | duration (0us or 1us) | integer          | duration              | float               | -      |
-| **float**    | float (0.0 or 1.0)    | float            | float                 | float               | -      |
-| **string**   | -                     | -                | -                     | -                   | string |
+|              | to bool                         | to int              | to float                | to string             | to duration             |
+| ------------ | ------------------------------- | ------------------- | ----------------------- | --------------------- | ----------------------- |
+| **bool**     | -                               | true → 1, false → 0 | true → 1.0, false → 0.0 | "true", "false"       | true → 1us, false → 0us |
+| **int**      | 0 → false, other → true         | -                   | cast to float           | string representation | value in us             |
+| **float**    | 0.0 → false, other → true       | cast to int         | -                       | string representation | value in us             |
+| **string**   | non-empty → true, empty → false | parse as int        | parse as float          | -                     | parse as duration       |
+| **duration** | 0us → false, other → true       | cast to int (in us) | cast to float (in us)   | string representation | -                       |
 
 :::info
 For edge cases and exceptions (e.g., mixed-type arithmetic), refer to **[the arithmetic operator documentation](./arithmetic-operators.mdx)**.
