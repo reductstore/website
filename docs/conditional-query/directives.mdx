@@ -4,10 +4,10 @@ description: Learn how to use directives in conditional queries to change the be
 ---
 
 <head>
-  <link
-    rel="canonical"
-    href="https://www.reduct.store/docs/conditional-query/directives"
-  />
+    <link
+        rel="canonical"
+        href="https://www.reduct.store/docs/conditional-query/directives"
+    />
 </head>
 
 # Directives
@@ -17,12 +17,22 @@ They are prefixed with `#` and can be used to control aspects such as including 
 
 The following directives are supported:
 
-| Operator         | ReductStore Version | Description                                                                                    |
-| ---------------- | ------------------- | ---------------------------------------------------------------------------------------------- |
-| `#ctx_before`    | v1.16               | Add additional records before each matching record as context, either by count or time window. |
-| `#ctx_after`     | v1.16               | Add additional records after each matching record as context, either by count or time window.  |
-| `#select_labels` | v1.16               | Retain only the specified labels in a record after filtering.                                  |
-| `#ext`           | v1.17               | Contains query parameters for extensions that process data during querying.                    |
+| Directive              | ReductStore Version | Description                                                                                    |
+|------------------------|---------------------|------------------------------------------------------------------------------------------------|
+| **Quering**            |                     |
+| `#ctx_before`          | v1.16               | Add additional records before each matching record as context, either by count or time window. |
+| `#ctx_after`           | v1.16               | Add additional records after each matching record as context, either by count or time window.  |
+| `#select_labels`       | v1.16               | Retain only the specified labels in a record after filtering.                                  |
+| **Extension**          |                     |                                                                                                |
+| `#ext`                 | v1.17               | Contains query parameters for extensions that process data during querying.                    |
+| **Communication**      |                     |                                                                                                |
+| `#batch_size`          | v1.17               | Maximum size of a batch of records returned by the query.                                      |
+| `#batch_records`       | v1.17               | Maximum number of records in a batch returned by the query.                                    |
+| `#batch_metadata_size` | v1.17               | Maximum size of metadata in a batch returned by the query.                                     |
+| `#batch_timeout`       | v1.17               | Maximum time to wait before sending a batch of records.                                        |
+| `#record_timeout`      | v1.17               | Maximum time to wait for a record to be processed before sending a batch.                      |
+| `#io_timeout`          | v1.17               | Maximum time to wait for I/O operations during querying. Reserved for future use.              |
+
 
 ## `#ctx_before`
 
@@ -124,6 +134,8 @@ The `#select_labels` directive is ignored in replication conditional queries.
 }
 ```
 
+
+
 ## `#ext`
 
 The `#ext` directive is used to specify parameters for **[extensions](../../glossary#extension)** that process data during querying.
@@ -158,3 +170,180 @@ The `#ext` directive is ignored in replication conditional queries.
   }
 }
 ```
+
+## `#batch_size`
+
+The `#batch_size` directive sets the maximum size (in bytes) of a batch of records returned by the query.
+
+### Syntax
+
+```
+{
+  "#batch_size": <expression as int | string>
+}
+```
+
+If the expression is a **string**, it can include size suffixes like `KB`, `MB`, or `GB` (e.g. `"10MB"`).
+
+### Behavior
+
+The querying stops when the batch size is reached but put the current record in the batch, even if it exceeds the limit.
+It means that the actual batch size may be larger than the specified limit.
+
+This directive overrides the server's `RS_IO_BATCH_MAX_SIZE` setting. See the [**server configuration documentation**](../configuration.mdx@io-settings) for more details.
+
+### Example
+
+```json
+{
+  "#batch_size": "5MB"
+}
+```
+
+
+## `#batch_records`
+
+The `#batch_records` directive sets the maximum number of records in a batch returned by the query.
+
+### Syntax
+
+```
+{
+  "#batch_records": <expression as int>
+}
+```
+
+### Behavior
+
+The querying stops when the number of records in the batch reaches the specified limit.
+
+This directive overrides the server's `RS_IO_BATCH_MAX_RECORDS` setting. See the [**server configuration documentation**](../configuration.mdx@io-settings) for more details.
+
+
+### Example
+
+```json
+{
+  "#batch_records": 1000
+}
+```
+
+## `#batch_metadata_size`
+
+The `#batch_metadata_size` directive sets the maximum size (in bytes) of metadata in a batch returned by the query.
+
+### Syntax
+
+```
+{
+  "#batch_metadata_size": <expression as int | string>
+}
+```
+
+If the expression is a **string**, it can include size suffixes like `KB`, `MB`, or `GB` (e.g. `"1MB"`).
+
+### Behavior
+
+The querying stops when the metadata size in the batch reaches the specified limit but put the current record in the batch, even if it exceeds the limit.
+It means that the actual metadata size may be larger than the specified limit.
+
+This directive overrides the server's `RS_IO_BATCH_MAX_METADATA_SIZE` setting. See the [**server configuration documentation**](../configuration.mdx#io-settings) for more details.
+
+### Example
+
+```json
+{
+  "#batch_metadata_size": "500KB"
+}
+```
+
+## `#batch_timeout`
+
+The `#batch_timeout` directive sets the maximum time to wait before sending a batch of records.
+
+### Syntax
+
+```
+{
+  "#batch_timeout": <expression as duration literal>
+}
+```
+
+### Behavior
+
+The querying sends the current batch when the timeout is reached, even if the batch is not full.
+
+This directive overrides the server's `RS_IO_BATCH_TIMEOUT` setting. See the [**server configuration documentation**](../configuration.mdx#io-settings) for more details.
+
+### Example
+
+```json
+{
+  "#batch_timeout": "200ms"
+}
+```
+
+::info
+The `#batch_timeout` directive is ignored in replication conditional queries.
+:::
+
+## `#record_timeout`
+
+The `#record_timeout` directive sets the maximum time to wait for a record to be processed before sending a batch.
+
+### Syntax
+
+```
+{
+  "#record_timeout": <expression as duration literal>
+}
+```
+
+### Behavior
+
+The querying sends the current batch when the timeout is reached, even if the current record is not fully processed.
+
+This directive overrides the server's `RS_IO_RECORD_TIMEOUT` setting. See the [**server configuration documentation**](../configuration.mdx#io-settings) for more details.
+
+### Example
+
+```json
+{
+  "#record_timeout": "100ms"
+}
+```
+
+:::info
+The `#record_timeout` directive is ignored in replication conditional queries.
+:::
+
+
+## `#io_timeout`
+
+The `#io_timeout` directive sets the maximum time to wait for I/O operations during querying.
+
+### Syntax
+
+```
+{
+  "#io_timeout": <expression as duration literal>
+}
+```
+
+### Behavior
+
+The querying aborts if an I/O operation takes longer than the specified timeout.
+
+:::info
+This directive is reserved for future use and currently has no effect.
+:::
+
+### Example
+
+```json
+{
+  "#io_timeout": "5s"
+}
+```
+
+
