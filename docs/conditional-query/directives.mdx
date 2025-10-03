@@ -4,10 +4,10 @@ description: Learn how to use directives in conditional queries to change the be
 ---
 
 <head>
-    <link
-        rel="canonical"
-        href="https://www.reduct.store/docs/conditional-query/directives"
-    />
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/conditional-query/directives"
+  />
 </head>
 
 # Directives
@@ -18,7 +18,7 @@ They are prefixed with `#` and can be used to control aspects such as including 
 The following directives are supported:
 
 | Directive              | ReductStore Version | Description                                                                                    |
-|------------------------|---------------------|------------------------------------------------------------------------------------------------|
+| ---------------------- | ------------------- | ---------------------------------------------------------------------------------------------- |
 | **Quering**            |                     |
 | `#ctx_before`          | v1.16               | Add additional records before each matching record as context, either by count or time window. |
 | `#ctx_after`           | v1.16               | Add additional records after each matching record as context, either by count or time window.  |
@@ -32,7 +32,6 @@ The following directives are supported:
 | `#batch_timeout`       | v1.17               | Maximum time to wait before sending a batch of records.                                        |
 | `#record_timeout`      | v1.17               | Maximum time to wait for a record to be processed before sending a batch.                      |
 | `#io_timeout`          | v1.17               | Maximum time to wait for I/O operations during querying. Reserved for future use.              |
-
 
 ## `#ctx_before`
 
@@ -134,8 +133,6 @@ The `#select_labels` directive is ignored in replication conditional queries.
 }
 ```
 
-
-
 ## `#ext`
 
 The `#ext` directive is used to specify parameters for **[extensions](../../glossary#extension)** that process data during querying.
@@ -200,7 +197,6 @@ This directive overrides the server's `RS_IO_BATCH_MAX_SIZE` setting. See the [*
 }
 ```
 
-
 ## `#batch_records`
 
 The `#batch_records` directive sets the maximum number of records in a batch returned by the query.
@@ -218,7 +214,6 @@ The `#batch_records` directive sets the maximum number of records in a batch ret
 The querying stops when the number of records in the batch reaches the specified limit.
 
 This directive overrides the server's `RS_IO_BATCH_MAX_RECORDS` setting. See the [**server configuration documentation**](../configuration.mdx@io-settings) for more details.
-
 
 ### Example
 
@@ -317,7 +312,6 @@ This directive overrides the server's `RS_IO_RECORD_TIMEOUT` setting. See the [*
 The `#record_timeout` directive is ignored in replication conditional queries.
 :::
 
-
 ## `#io_timeout`
 
 The `#io_timeout` directive sets the maximum time to wait for I/O operations during querying.
@@ -345,5 +339,3 @@ This directive is reserved for future use and currently has no effect.
   "#io_timeout": "5s"
 }
 ```
-
-
