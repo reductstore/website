@@ -114,7 +114,7 @@ ReductStore uses a lock file to prevent multiple instances from accessing the sa
 You can configure the lock file settings using the following environment variables:
 
 | Name                          | Default | Description                                                                                                                                                                                              |
-|-------------------------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ----------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `RS_LOCK_FILE_ENABLED`        | false   | If set to false, the storage will not use a lock file.                                                                                                                                                   |
 | `RS_LOCK_FILE_TIMEOUT`        | 10s     | Timeout for acquiring the lock file. If the lock file is not acquired within the timeout, the storage will exit. When set to 0, the storage will wait indefinitely.                                      |
 | `RS_LOCK_FILE_FAILURE_ACTION` | abort   | Action to take if the lock file can't be acquired. It can be `abort` or `proceed`. If set to `abort`, the storage will exit. If set to `proceed`, the storage will overwrite the lock file and continue. |
