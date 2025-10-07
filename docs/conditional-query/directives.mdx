@@ -239,7 +239,7 @@ If the expression is a **string**, it can include size suffixes like `KB`, `MB`,
 
 ### Behavior
 
-The querying stops when the metadata size in the batch reaches the specified limit but put the current record in the batch, even if it exceeds the limit.
+The querying stops when the metadata size in the batch reaches the specified limit but puts the current record in the batch, even if it exceeds the limit.
 It means that the actual metadata size may be larger than the specified limit.
 
 This directive overrides the server's `RS_IO_BATCH_MAX_METADATA_SIZE` setting. See the [**server configuration documentation**](../configuration.mdx#io-settings) for more details.
