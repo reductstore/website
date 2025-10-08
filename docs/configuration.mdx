@@ -82,7 +82,7 @@ ReductStore supports using a remote object storage as a backend to store data. Y
 | `RS_REMOTE_BUCKET`        |                | Name of the bucket to store data. The bucket must be created before starting ReductStore.    |
 | `RS_REMOTE_CACHE_PATH`    |                | Path to a folder where the storage caches data before uploading it to the remote backend.    |
 | `RS_REMOTE_CACHE_SIZE`    | 1GB            | Maximum size of the cache folder. When the limit is reached, the oldest data is removed.     |
-| `RS_REMOTE_SYNC_INTERVAL` | 0.1, 60 for S3 | Synchronization interval with the stage backend in seconds.                                  |
+| `RS_REMOTE_SYNC_INTERVAL` | 0.1, 60 for S3 | Synchronization interval with the remote backend in seconds.                                 |
 
 By default, ReductStore uses the local file system to store data. To use a remote backend, set the `RS_REMOTE_BACKEND_TYPE` variable to S3 and configure the other variables accordingly.
 When the remote backend is enabled, ReductStore caches data in the folder specified by the `RS_REMOTE_CACHE_PATH` variable, thereby reducing the number of requests made to the remote backend.
