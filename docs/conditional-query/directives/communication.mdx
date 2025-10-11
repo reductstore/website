@@ -7,23 +7,22 @@ description: Learn how to use communication directives in conditional queries to
   <link
     rel="canonical"
     href="https://www.reduct.store/docs/conditional-query/directives/communication"
-    />
+  />
 </head>
 
 The communication directives are special instructions in **[conditional queries](../glossary#conditional-query)** that modify how the query engine handles data transfer during querying.
 
-
 The following directives are supported:
 
-| Directive              | ReductStore Version | Description                                                                                    |
-| ---------------------- | ------------------- | ---------------------------------------------------------------------------------------------- |
-| **Communication**      |                     |                                                                                                |
-| `#batch_size`          | v1.17               | Maximum size of a batch of records returned by the query.                                      |
-| `#batch_records`       | v1.17               | Maximum number of records in a batch returned by the query.                                    |
-| `#batch_metadata_size` | v1.17               | Maximum size of metadata in a batch returned by the query.                                     |
-| `#batch_timeout`       | v1.17               | Maximum time to wait before sending a batch of records.                                        |
-| `#record_timeout`      | v1.17               | Maximum time to wait for a record to be processed before sending a batch.                      |
-| `#io_timeout`          | v1.17               | Maximum time to wait for I/O operations during querying. Reserved for future use.              |
+| Directive              | ReductStore Version | Description                                                                       |
+| ---------------------- | ------------------- | --------------------------------------------------------------------------------- |
+| **Communication**      |                     |                                                                                   |
+| `#batch_size`          | v1.17               | Maximum size of a batch of records returned by the query.                         |
+| `#batch_records`       | v1.17               | Maximum number of records in a batch returned by the query.                       |
+| `#batch_metadata_size` | v1.17               | Maximum size of metadata in a batch returned by the query.                        |
+| `#batch_timeout`       | v1.17               | Maximum time to wait before sending a batch of records.                           |
+| `#record_timeout`      | v1.17               | Maximum time to wait for a record to be processed before sending a batch.         |
+| `#io_timeout`          | v1.17               | Maximum time to wait for I/O operations during querying. Reserved for future use. |
 
 ## `#batch_size`
 

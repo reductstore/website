@@ -4,21 +4,21 @@ description: Learn how to use querying directives in conditional queries to modi
 ---
 
 <head>
-    <link
-        rel="canonical"
-        href="https://www.reduct.store/docs/conditional-query/directives/querying"
-    />
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/conditional-query/directives/querying"
+  />
 </head>
 
 The querying directives are special instructions in **[conditional queries](../glossary#conditional-query)** that modify how the query engine retrieves and returns data.
 
-| Directive              | ReductStore Version | Description                                                                                    |
-| ---------------------- | ------------------- | ---------------------------------------------------------------------------------------------- |
-| **Querying**           |                     |
-| `#ctx_before`          | v1.16               | Add additional records before each matching record as context, either by count or time window. |
-| `#ctx_after`           | v1.16               | Add additional records after each matching record as context, either by count or time window.  |
-| `#select_labels`       | v1.16               | Retain only the specified labels in a record after filtering.                                  |
-| `#ext`                 | v1.17               | Contains query parameters for extensions that process data during querying.                    |
+| Directive        | ReductStore Version | Description                                                                                    |
+| ---------------- | ------------------- | ---------------------------------------------------------------------------------------------- |
+| **Querying**     |                     |
+| `#ctx_before`    | v1.16               | Add additional records before each matching record as context, either by count or time window. |
+| `#ctx_after`     | v1.16               | Add additional records after each matching record as context, either by count or time window.  |
+| `#select_labels` | v1.16               | Retain only the specified labels in a record after filtering.                                  |
+| `#ext`           | v1.17               | Contains query parameters for extensions that process data during querying.                    |
 
 ## `#ctx_before`
 

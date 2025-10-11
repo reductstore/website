@@ -59,10 +59,7 @@
         {
           "type": "category",
           "label": "Cloud",
-          "items": [
-            "guides/cloud/saas",
-            "guides/cloud/azure-vm"
-          ]
+          "items": ["guides/cloud/saas", "guides/cloud/azure-vm"]
         }
       ]
     },
@@ -132,9 +129,7 @@
         "type": "doc",
         "id": "integrations/index"
       },
-      "items": [
-        "integrations/ros2-agent"
-      ]
+      "items": ["integrations/ros2-agent"]
     },
     {
       "type": "category",
