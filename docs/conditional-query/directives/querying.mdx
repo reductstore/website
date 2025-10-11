@@ -1,0 +1,156 @@
+---
+title: Querying Directives
+description: Learn how to use querying directives in conditional queries to modify the behavior of data retrieval in
+---
+
+<head>
+    <link
+        rel="canonical"
+        href="https://www.reduct.store/docs/conditional-query/directives/querying"
+    />
+</head>
+
+The querying directives are special instructions in **[conditional queries](../glossary#conditional-query)** that modify how the query engine retrieves and returns data.
+
+| Directive              | ReductStore Version | Description                                                                                    |
+| ---------------------- | ------------------- | ---------------------------------------------------------------------------------------------- |
+| **Querying**           |                     |
+| `#ctx_before`          | v1.16               | Add additional records before each matching record as context, either by count or time window. |
+| `#ctx_after`           | v1.16               | Add additional records after each matching record as context, either by count or time window.  |
+| `#select_labels`       | v1.16               | Retain only the specified labels in a record after filtering.                                  |
+| `#ext`                 | v1.17               | Contains query parameters for extensions that process data during querying.                    |
+
+## `#ctx_before`
+
+The `#ctx_before` directive allows you to include extra records that occurred **before** each matching record.
+This is useful when you want context around a matched condition, such as to see what led up to it.
+
+### Syntax
+
+```
+{
+  "#ctx_before": <expression as int> | <duration literal>
+}
+```
+
+### Behavior
+
+- If the expression is an **integer**, it is interpreted as the number of records to include before each match.
+- If the expression is a **duration literal** (e.g. `"1s"`, `"10m"`, `"500ms"`), it is interpreted as a time window to include records within that period before each match.
+
+### Examples
+
+By number of records:
+
+```json
+{
+  "#ctx_before": 10
+}
+```
+
+By time duration:
+
+```json
+{
+  "#ctx_before": "1h"
+}
+```
+
+## `#ctx_after`
+
+The `#ctx_after` directive allows you to include extra records that occur **after** each matching record.
+This is useful when you want to examine consequences or outcomes following a detected condition.
+
+### Syntax
+
+```
+{
+  "#ctx_after": <expression as int> | <duration literal>
+}
+```
+
+### Behavior
+
+- If the expression is an **integer**, it is interpreted as the number of records to include after each match.
+- If the expression is a **duration literal**, it is interpreted as a time window to include records within that period after each match.
+
+### Examples
+
+By number of records:
+
+```json
+{
+  "#ctx_after": 5
+}
+```
+
+By time duration:
+
+```json
+{
+  "#ctx_after": "30s"
+}
+```
+
+## `#select_labels`
+
+The `#select_labels` directive allows you to filter the labels retained in each record after applying the query.
+
+### Syntax
+
+```
+{
+  "#select_labels": [<label name 1>, <label name 2>, ...]
+}
+```
+
+### Behavior
+
+This directive is applied after all other query processing, including context inclusion and filtering.
+
+:::info
+The `#select_labels` directive is ignored in replication conditional queries.
+:::
+
+### Example
+
+```json
+{
+  "#select_labels": ["temperature", "humidity"]
+}
+```
+
+## `#ext`
+
+The `#ext` directive is used to specify parameters for **[extensions](../../glossary#extension)** that process data during querying.
+
+### Syntax
+
+```
+{
+  "#ext": {
+    "<extension_name>": { <extension_parameters> }
+  }
+}
+```
+
+### Behavior
+
+The `#ext` directive allows you to pass configuration options to an extension that will process the data as part of the query.
+The specific parameters depend on the extension being used. Read more about the official extensions in the [**Extensions Documentation**](../extensions/).
+
+:::info
+The `#ext` directive is ignored in replication conditional queries.
+:::
+
+### Example
+
+```json
+{
+  "#ext": {
+    "select": {
+      "columns": [{ "index": 0, "as_label": "speed" }]
+    }
+  }
+}
+```
