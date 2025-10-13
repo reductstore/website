@@ -82,7 +82,19 @@
         "conditional-query/aggregation-operators",
         "conditional-query/string-operators",
         "conditional-query/misc-operators",
-        "conditional-query/directives"
+        {
+          "type": "category",
+          "label": "Directives",
+          "collapsed": true,
+          "link": {
+            "type": "doc",
+            "id": "conditional-query/directives/index"
+          },
+          "items": [
+            "conditional-query/directives/querying",
+            "conditional-query/directives/communication"
+          ]
+        }
       ]
     },
     {
@@ -178,7 +190,6 @@
             }
           ]
         },
-
         {
           "type": "link",
           "label": "JavaScript Client",

@@ -14,14 +14,14 @@ The logical operators are used to combine multiple **[conditions in a query](../
 
 The following logical operators are supported:
 
-| Operator             | Description                                                                      |
-| -------------------- | -------------------------------------------------------------------------------- |
-| `$and` \| `$all_of`  | Logical AND operator. For result to be true, all conditions must be true.        |
-| `$or` \| `$any_of`   | Logical OR operator. For result to be true, at least one condition must be true. |
-| `$xor` \| `$one_of`  | Logical XOR operator. For result to be true, exactly one condition must be true. |
-| `$not` \| `$none_of` | Logical NOT operator. For result to be true, all conditions must be false.       |
-| `$in`                | Checks if the first expression is equal to any of the following expressions.     |
-| `$nin`               | Checks if the first expression is not equal to any of the following expressions. |
+| Operator             | ReductStore Version | Description                                                                      |
+| -------------------- | ------------------- | -------------------------------------------------------------------------------- |
+| `$and` \| `$all_of`  | v1.13               | Logical AND operator. For result to be true, all conditions must be true.        |
+| `$or` \| `$any_of`   | v1.13               | Logical OR operator. For result to be true, at least one condition must be true. |
+| `$xor` \| `$one_of`  | v1.13               | Logical XOR operator. For result to be true, exactly one condition must be true. |
+| `$not` \| `$none_of` | v1.13               | Logical NOT operator. For result to be true, all conditions must be false.       |
+| `$in`                | v1.14               | Checks if the first expression is equal to any of the following expressions.     |
+| `$nin`               | v1.14               | Checks if the first expression is not equal to any of the following expressions. |
 
 ## $and | $all_of
 

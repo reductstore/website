@@ -1,24 +1,20 @@
 ---
-title: Directives
-description: Learn how to use directives in conditional queries to change the behavior of the query in ReductStore.
+title: Querying Directives
+description: Learn how to use querying directives in conditional queries to modify the behavior of data retrieval in
 ---
 
 <head>
   <link
     rel="canonical"
-    href="https://www.reduct.store/docs/conditional-query/directives"
+    href="https://www.reduct.store/docs/conditional-query/directives/querying"
   />
 </head>
 
-# Directives
+The querying directives are special instructions in **[conditional queries](../../glossary#conditional-query)** that modify how the query engine retrieves and returns data.
 
-**[Directives](../glossary#directive)** are special instructions in conditional queries that modify how the query engine processes results.
-They are prefixed with `#` and can be used to control aspects such as including additional records before or after those that match a given condition.
-
-The following directives are supported:
-
-| Operator         | ReductStore Version | Description                                                                                    |
+| Directive        | ReductStore Version | Description                                                                                    |
 | ---------------- | ------------------- | ---------------------------------------------------------------------------------------------- |
+| **Querying**     |                     |
 | `#ctx_before`    | v1.16               | Add additional records before each matching record as context, either by count or time window. |
 | `#ctx_after`     | v1.16               | Add additional records after each matching record as context, either by count or time window.  |
 | `#select_labels` | v1.16               | Retain only the specified labels in a record after filtering.                                  |
@@ -141,7 +137,7 @@ The `#ext` directive is used to specify parameters for **[extensions](../../glos
 ### Behavior
 
 The `#ext` directive allows you to pass configuration options to an extension that will process the data as part of the query.
-The specific parameters depend on the extension being used. Read more about the official extensions in the [**Extensions Documentation**](../extensions/).
+The specific parameters depend on the extension being used. Read more about the official extensions in the [**Extensions Documentation**](../../extensions/).
 
 :::info
 The `#ext` directive is ignored in replication conditional queries.
