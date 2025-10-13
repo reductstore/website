@@ -423,10 +423,6 @@ const config = {
                 href: "/docs/guides/data-replication",
               },
               {
-                label: "Integration with Azure VM",
-                href: "/docs/guides/cloud/azure-vm",
-              },
-              {
                 label: "HTTP API Reference",
                 href: "/docs/http-api",
               },
