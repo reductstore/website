@@ -56,7 +56,7 @@ ReductStore is a high-performance, time-series database specifically designed to
 
 ### Cost-Efficiency
 
-ReductStore can actually achieve 10-100x better performance for 1/10th of the cost compared to traditional time-series object stores when working with records of around 100KB. But how exactly does it do it? Well, firstly, it can integrate with blob storages like [**Azure Blob Storage**](/docs/guides/cloud/azure-vm) or [**Google Cloud Storage**](/solutions/cloud) with a _Fuse driver_. In the example below, we’ll be using Azure Blob Storage.
+ReductStore can actually achieve 10-100x better performance for 1/10th of the cost compared to traditional time-series object stores when working with records of around 100KB. But how exactly does it do it? Well, firstly, it can integrate with blob storages like Azure Blob Storage with a _Fuse driver_ or [**S3 compatible storage**](/solutions/cloud) directly. In the example below, we’ll be using Azure Blob Storage.
 
 - **Azure Blob Storage**: A scalable object storage service optimized for large amounts of unstructured data.
 - **BlobFuse**: An open-source virtual file system driver for Azure Blob Storage.
