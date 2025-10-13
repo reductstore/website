@@ -55,12 +55,7 @@
         "guides/data-management",
         "guides/data-replication",
         "guides/access-control",
-        "guides/disaster-recovery",
-        {
-          "type": "category",
-          "label": "Cloud",
-          "items": ["guides/cloud/saas", "guides/cloud/azure-vm"]
-        }
+        "guides/disaster-recovery"
       ]
     },
     {

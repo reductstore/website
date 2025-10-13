@@ -49,12 +49,7 @@
         "guides/data-querying",
         "guides/data-management",
         "guides/data-replication",
-        "guides/access-control",
-        {
-          "type": "category",
-          "label": "Cloud",
-          "items": ["guides/cloud/saas", "guides/cloud/azure-vm"]
-        }
+        "guides/access-control"
       ]
     },
     {
