@@ -10,7 +10,7 @@ description: Learn how to use communication directives in conditional queries to
   />
 </head>
 
-The communication directives are special instructions in **[conditional queries](../glossary#conditional-query)** that modify how the query engine handles data transfer during querying.
+The communication directives are special instructions in **[conditional queries](../../glossary#conditional-query)** that modify how the query engine handles data transfer during querying.
 
 The following directives are supported:
 
@@ -43,7 +43,7 @@ If the expression is a **string**, it can include size suffixes like `KB`, `MB`,
 The querying stops when the batch size is reached but puts the current record in the batch, even if it exceeds the limit.
 It means that the actual batch size may be larger than the specified limit.
 
-This directive overrides the server's `RS_IO_BATCH_MAX_SIZE` setting. See the [**server configuration documentation**](../configuration.mdx#io-settings) for more details.
+This directive overrides the server's `RS_IO_BATCH_MAX_SIZE` setting. See the [**server configuration documentation**](../../configuration.mdx#io-settings) for more details.
 
 ### Example
 
@@ -69,7 +69,7 @@ The `#batch_records` directive sets the maximum number of records in a batch ret
 
 The querying stops when the number of records in the batch reaches the specified limit.
 
-This directive overrides the server's `RS_IO_BATCH_MAX_RECORDS` setting. See the [**server configuration documentation**](../configuration.mdx#io-settings) for more details.
+This directive overrides the server's `RS_IO_BATCH_MAX_RECORDS` setting. See the [**server configuration documentation**](../../configuration.mdx#io-settings) for more details.
 
 ### Example
 
@@ -98,7 +98,7 @@ If the expression is a **string**, it can include size suffixes like `KB`, `MB`,
 The querying stops when the metadata size in the batch reaches the specified limit but puts the current record in the batch, even if it exceeds the limit.
 It means that the actual metadata size may be larger than the specified limit.
 
-This directive overrides the server's `RS_IO_BATCH_MAX_METADATA_SIZE` setting. See the [**server configuration documentation**](../configuration.mdx#io-settings) for more details.
+This directive overrides the server's `RS_IO_BATCH_MAX_METADATA_SIZE` setting. See the [**server configuration documentation**](../../configuration.mdx#io-settings) for more details.
 
 ### Example
 
@@ -124,7 +124,7 @@ The `#batch_timeout` directive sets the maximum time to wait before sending a ba
 
 The querying sends the current batch when the timeout is reached, even if the batch is not full.
 
-This directive overrides the server's `RS_IO_BATCH_TIMEOUT` setting. See the [**server configuration documentation**](../configuration.mdx#io-settings) for more details.
+This directive overrides the server's `RS_IO_BATCH_TIMEOUT` setting. See the [**server configuration documentation**](../../configuration.mdx#io-settings) for more details.
 
 ### Example
 
@@ -154,7 +154,7 @@ The `#record_timeout` directive sets the maximum time to wait for a record to be
 
 The querying sends the current batch when the timeout is reached, even if the current record is not fully processed.
 
-This directive overrides the server's `RS_IO_BATCH_RECORD_TIMEOUT` setting. See the [**server configuration documentation**](../configuration.mdx#io-settings) for more details.
+This directive overrides the server's `RS_IO_BATCH_RECORD_TIMEOUT` setting. See the [**server configuration documentation**](../../configuration.mdx#io-settings) for more details.
 
 ### Example
 
