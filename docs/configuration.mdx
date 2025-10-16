@@ -5,7 +5,7 @@ description: ReductStore configuration options and provisioning.
 ---
 
 <head>
-    <link rel="canonical" href="https://www.reduct.store/docs/configuration"/>
+  <link rel="canonical" href="https://www.reduct.store/docs/configuration" />
 </head>
 
 # ⚙ Server Configuration and Provisioning
@@ -72,23 +72,22 @@ Or use the `snap connect reductstore:removable-media` command to connect the sna
 
 ReductStore supports using a remote object storage as a backend to store data. You can configure the remote backend using the following environment variables:
 
-| Name                              | Default        | Description                                                                                  |
-|-----------------------------------|----------------|----------------------------------------------------------------------------------------------|
-| `RS_REMOTE_BACKEND_TYPE`          | File system    | If it is set to `S3`, the storage uses an S3-compatible object storage as a backend          |
-| `RS_REMOTE_ENDPOINT`              |                | URL of the S3-compatible object storage endpoint. It's ignored for the AWS S3 service.       |
-| `RS_REMOTE_REGION`                |                | Region of the S3-compatible object storage. It's ignored for on-premises storage like MinIO. |
-| `RS_REMOTE_ACCESS_KEY`            |                | Access key for the S3-compatible object storage.                                             |
-| `RS_REMOTE_SECRET_KEY`            |                | Secret key for the S3-compatible object storage.                                             |
-| `RS_REMOTE_BUCKET`                |                | Name of the bucket to store data. The bucket must be created before starting ReductStore.    |
-| `RS_REMOTE_CACHE_PATH`            |                | Path to a folder where the storage caches data before uploading it to the remote backend.    |
-| `RS_REMOTE_CACHE_SIZE`            | 1GB            | Maximum size of the cache folder. When the limit is reached, the oldest data is removed.     |
-| `RS_REMOTE_SYNC_INTERVAL`         | 0.1, 60 for S3 | Synchronization interval with the remote backend in seconds.                                 |
+| Name                              | Default        | Description                                                                                                               |
+| --------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `RS_REMOTE_BACKEND_TYPE`          | File system    | If it is set to `S3`, the storage uses an S3-compatible object storage as a backend                                       |
+| `RS_REMOTE_ENDPOINT`              |                | URL of the S3-compatible object storage endpoint. It's ignored for the AWS S3 service.                                    |
+| `RS_REMOTE_REGION`                |                | Region of the S3-compatible object storage. It's ignored for on-premises storage like MinIO.                              |
+| `RS_REMOTE_ACCESS_KEY`            |                | Access key for the S3-compatible object storage.                                                                          |
+| `RS_REMOTE_SECRET_KEY`            |                | Secret key for the S3-compatible object storage.                                                                          |
+| `RS_REMOTE_BUCKET`                |                | Name of the bucket to store data. The bucket must be created before starting ReductStore.                                 |
+| `RS_REMOTE_CACHE_PATH`            |                | Path to a folder where the storage caches data before uploading it to the remote backend.                                 |
+| `RS_REMOTE_CACHE_SIZE`            | 1GB            | Maximum size of the cache folder. When the limit is reached, the oldest data is removed.                                  |
+| `RS_REMOTE_SYNC_INTERVAL`         | 0.1, 60 for S3 | Synchronization interval with the remote backend in seconds.                                                              |
 | `RS_REMOTE_DEFAULT_STORAGE_CLASS` | STANDARD       | Default storage class for data blocks. See the list of **[supported S3 storage classes](#supported-s3-storage-classes)**. |
 
 By default, ReductStore uses the local file system to store data. To use a remote backend, set the `RS_REMOTE_BACKEND_TYPE` variable to S3 and configure the other variables accordingly.
 When the remote backend is enabled, ReductStore caches data in the folder specified by the `RS_REMOTE_CACHE_PATH` variable, thereby reducing the number of requests made to the remote backend.
 The `RS_DATA_PATH` variable is ignored when the remote backend is enabled.
-
 
 ### Supported S3 Storage Classes
 
@@ -96,9 +95,9 @@ A user can specify default storage class for data blocks stored in the S3-compat
 The following storage classes are supported:
 
 | Name                | Description                                                                                                                         |
-|---------------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | STANDARD            | Standard storage class. Suitable for frequently accessed data.                                                                      |
-| STANDARD_IA         | Standard-Infrequent Access storage class. Suitable for data that is infrequently accessed but requires rapid access when needed.     |
+| STANDARD_IA         | Standard-Infrequent Access storage class. Suitable for data that is infrequently accessed but requires rapid access when needed.    |
 | INTELLIGENT_TIERING | Intelligent-Tiering storage class. Automatically moves data to the most cost-effective access tier based on usage patterns.         |
 | ONEZONE_IA          | One Zone-Infrequent Access storage class. Suitable for data that is infrequently accessed and stored in a single availability zone. |
 | EXPRESS_ONEZONE     | Express-One Zone storage class. Suitable for data that requires low latency access and is stored in a single availability zone.     |
