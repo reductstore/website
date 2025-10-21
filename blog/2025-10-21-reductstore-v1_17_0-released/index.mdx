@@ -24,8 +24,8 @@ These new features enhance the usability and flexibility of ReductStore for vari
 
 ### 🔗 Shared Links for Data Access
 
-ReductStore now supports **shared links**, enabling users to generate **temporary, public URLs** for specific data records — without requiring authentication.
-This makes it easier to **share datasets with external collaborators**, embed links into dashboards, or integrate with **third-party systems** that need read-only access to specific data.
+ReductStore now supports **shared links**, enabling users to generate temporary, public URLs for specific data records — without requiring authentication.
+This makes it easier to share datasets with **external collaborators**, embed links into dashboards, or integrate with **third-party systems** that need read-only access to specific data.
 
 ![Generate Shared Links in ReductStore Web Console](./img/shared-link.webp)
 
@@ -35,20 +35,20 @@ You can create shared links directly from the **Web Console**:
 2. Click the **“Share record”** icon in the action panel.
 3. Configure an **expiration time** to automatically revoke access after a defined period.
 
-Once generated, **anyone with the link** can access the data via a simple HTTP request — no login required.
+Once generated, anyone with the link can access the data via a simple HTTP request — no login required.
 This feature provides a secure and convenient way to expose selected data for collaboration and analysis.
 
 
 ### ☁️ S3-Compatible Storage Backend
 
 ReductStore now supports **S3-compatible storage backends**, allowing you to use **object storage** instead of a local file system for your underlying data.
-This update brings **greater flexibility and scalability** for managing large datasets in the cloud.
+This update brings greater flexibility and scalability for managing large datasets in the cloud.
 
 Previously, ReductStore supported only local disk storage, and users had to mount S3 buckets as local disks via FUSE drivers.
-With this release, ReductStore can now **natively integrate with S3-compatible backends** — no additional software or mounting is required.
+With this release, ReductStore can now natively integrate with S3-compatible backends — no additional software or mounting is required.
 
-This feature is designed with **performance and cost optimization** in mind.
-ReductStore uses a **local disk cache layer** to speed up read and write operations, while batching multiple records into a single data block to reduce storage and retrieval costs.
+This feature is designed with performance and **cost optimization** in mind.
+ReductStore uses a local disk cache layer to speed up read and write operations, while batching multiple records into a single data block to reduce storage and retrieval costs.
 This approach works especially well with cost-efficient AWS S3 storage classes such as **S3 Standard-IA** or **S3 Glacier**.
 
 To run ReductStore with an S3-compatible backend, use the following environment variables:
@@ -80,7 +80,7 @@ Here’s a preview of what’s coming in the next releases:
 ### 📦 Multiple Entries in a Single Request
 
 Currently, each write or query request must target a **single entry**.
-This can be limiting when dealing with **multiple entries** or **dynamic lists** of entries in your applications.
+This can be limiting when dealing with **multiple entries** or dynamic lists of entries in your applications.
 
 In upcoming versions, ReductStore will support **batch operations** across multiple entries within a single API request.
 This improvement will simplify integrations and reduce overhead for large-scale data ingestion and querying workflows.
@@ -90,7 +90,7 @@ This improvement will simplify integrations and reduce overhead for large-scale 
 Like most databases, ReductStore currently requires **exclusive access** to its data directory while running.
 As a result, running multiple instances on the same dataset—for load balancing or high availability—is not yet possible.
 
-To address this, we’re introducing a **read-only mode** that will allow one **writer instance** and multiple **reader instances** to access the same dataset concurrently.
+To address this, we’re introducing a **read-only mode** that will allow one writer instance* and multiple reader instances to access the same dataset concurrently.
 This approach will enable **scalable read operations** and **improved availability** without adding the complexity of clustering or replication mechanisms.
 
 ---
