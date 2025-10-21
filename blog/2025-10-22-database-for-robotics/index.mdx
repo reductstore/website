@@ -44,7 +44,7 @@ ext = {
     "ros": {"extract": {"topic": "/imu/data"}},
 }
 
-async with Client("https://api.reduct.store") as client:
+async with Client("https://test.reduct.store") as client:
     bucket = await client.get_bucket("my-robotics-data")
     parts = []
     async for rec in bucket.query("mcap-entry", ext=ext):
@@ -94,7 +94,7 @@ ext = {
     "when": {"$gt": [{"$abs": ["@acc_x"]}, 10]},
 }
 
-async with Client("https://api.reduct.store") as client:
+async with Client("https://test.reduct.store") as client:
     bucket = await client.get_bucket("my-robotics-data")
 
     # Loop over filtered CSV entries
@@ -123,7 +123,7 @@ from reduct import Client
 # Every 5 seconds, limit to 5 records
 when = {"$each_t": "5s", "$limit": 5}
 
-async with Client("https://api.reduct.store") as client:
+async with Client("https://test.reduct.store") as client:
     bucket = await client.get_bucket("my-robotics-data")
     async for rec in bucket.query("camera_frames", when=when):
         blob = await rec.read_all()
