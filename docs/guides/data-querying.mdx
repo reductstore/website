@@ -167,6 +167,16 @@ import ReadRecordCurl from "!!raw-loader!../examples/curl/data_querying_timestam
   <TabItem value="C++">
     <CodeBlock language="cpp">{ReadRecordCpp}</CodeBlock>
   </TabItem>
+  <TabItem value="Web Console">
+
+    1. To find a specific timestamp, you can first browse the records using the `$__interval` macro in the Web Console. The macro automatically adjusts the [**$each_t operator**](/docs/conditional-query/aggregation-operators#each_t) based on the zoom level of the graph.
+    ![Query Graph Macro](./img/data_query_macro.png)
+    2. You can zoom in the graph to select a specific time range by clicking and dragging the mouse over the graph area:
+    ![Query Graph](./img/data_query_graph.png)
+    3. On the record list below the graph, click on the record with the desired timestamp to preview its content:
+    ![Preview Record](./img/data_query_preview.png)
+
+  </TabItem>
   <TabItem value="cURL">
     <CodeBlock language="bash">{ReadRecordCurl}</CodeBlock>
   </TabItem>
