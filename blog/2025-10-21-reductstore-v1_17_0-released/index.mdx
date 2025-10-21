@@ -1,6 +1,6 @@
 ---
-title: ReductStore v1.17.0 Released with Shared Links and S3 Storage Backend Support
-description: We are pleased to announce the release of ReductStore v1.17.0, which introduces shared links for data access and support for S3-compatible storage backends.
+title: ReductStore v1.17.0 Released with Query Links and S3 Storage Backend Support
+description: We are pleased to announce the release of ReductStore v1.17.0, which introduces query links for data access and support for S3-compatible storage backends.
 authors: alexey
 tags: [news]
 slug: news/reductstore-v1_17_0-released
@@ -16,20 +16,20 @@ To download the latest released version, please visit our [**Download Page**](/d
 
 ## What's new in 1.17.0?
 
-This release includes several new features and enhancements. First, there are shared links for simplified data access. Second, there is support for S3-compatible storage backends.
+This release includes several new features and enhancements. First, there are query links for simplified data access. Second, there is support for S3-compatible storage backends.
 
 These new features enhance the usability and flexibility of ReductStore for various use cases in the cloud and on-premises environments and make it easier to share and access data stored in the database.
 
 {/* truncate */}
 
-### 🔗 Shared Links for Data Access
+### 🔗 Query Links for Data Access
 
-ReductStore now supports **shared links**, enabling users to generate temporary, public URLs for specific data records — without requiring authentication.
+ReductStore now supports **[query links](/docs/glossary#query-link)**, enabling users to generate temporary, public URLs for specific data records — without requiring authentication.
 This makes it easier to share datasets with **external collaborators**, embed links into dashboards, or integrate with **third-party systems** that need read-only access to specific data.
 
-![Generate Shared Links in ReductStore Web Console](./img/shared-link.webp)
+![Generate Query Links in ReductStore Web Console](./img/shared-link.webp)
 
-You can create shared links directly from the **Web Console** (or any SDKs):
+You can create query links directly from the **Web Console** (or any SDKs):
 
 1. Open the **Data Browser** page and select a record you want to share.
 2. Click the **“Share record”** icon in the action panel.
