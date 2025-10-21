@@ -1,0 +1,227 @@
+---
+title: Update Data
+description: HTTP Endpoints for updating data in the database.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/entry-api/update_data"
+  />
+</head>
+
+# Entry API to Update Data
+
+The API provides several endpoints for updating labels of a **[record](../../glossary#record)** or multiple records in a single request.
+
+import SwaggerComponent from "@site/src/components/SwaggerComponent";
+
+## Update Labels of a Record
+
+The method allows to update labels of an existing record. It receives
+labels in headers that start with `x-reduct-label-` and updates
+the labels or adds new ones. If a header with a label is empty, the label
+is removed. Because the content of the record is immutable, the method doesn't expect a body.
+
+All existing labels not mentioned in the request stay unchanged.
+
+The method needs a valid API token with write access to the **[entry](../../glossary#entry)**'s **[bucket](../../glossary#bucket)**
+if authentication is enabled.
+
+**Changes**:
+
+- Version 1.11: The method was introduced.
+
+<SwaggerComponent
+  method="PATCH"
+  path="/api/v1/b/:bucket_name/:entry_name"
+  summary="Update labels of a record"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        description: "Name of bucket",
+        isRequired: true,
+      },
+    },
+    {
+      type: "path",
+      details: {
+        name: ":entry_name",
+        description: "Name of entry",
+        isRequired: true,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "ts",
+        dataType: "Integer",
+        description: "A UNIX timestamp in microseconds",
+        isRequired: true,
+      },
+    },
+    {
+      type: "header",
+      details: {
+        name: "x-reduct-label-[name]",
+        description: "A value of a label assigned to the record",
+        isRequired: false,
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "The record is written",
+    },
+    {
+      status: "400",
+      message: "Bad Request",
+      summary: "Posted content bigger or smaller than content-length",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token does not have write permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket, entry or record is not found",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "Bad timestamp",
+    },
+  ]}
+/>
+
+## Update Labels of Multiple Records
+
+This method allows to update labels of multiple records in a single request. A client should describe the
+records in headers according to [the Batch Protocol](/docs/http-api/entry-api/index.mdx#batch-protocol).
+
+Existing labels not mentioned in the request stay unchanged.
+
+<SwaggerComponent
+  method="PATCH"
+  path="/api/v1/b/:bucket_name/:entry_name/batch"
+  summary="Update labels of multiple records"
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary:
+        "The request was valid. However, some records may not be written. Check headers.",
+    },
+    {
+      status: "400",
+      message: "Bad Request",
+      summary: "Posted content bigger or smaller than content-length",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token does not have write permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket or entry is not found",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "Bad header format",
+    },
+  ]}
+/>
+
+## Rename an Entry
+
+To rename an entry, the request should have a JSON document with the new name.
+
+If authentication is enabled, the method needs a valid API token with full access.
+
+**Changes**:
+
+- Version 1.12: The method was introduced.
+
+<SwaggerComponent
+  method="PUT"
+  path="/api/v1/b/:bucket_name/:entry_name/rename"
+  summary="Rename an entry"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        description: "Name of bucket",
+        isRequired: true,
+      },
+    },
+    {
+      type: "path",
+      details: {
+        name: ":entry_name",
+        description: "Name of entry",
+        isRequired: true,
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "new_name",
+        description: "New name of the entry",
+        dataType: "String",
+        isRequired: true,
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "The entry is renamed",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have enough permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket or entry doesn't exist",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "Entry with the new name already exists",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "JSON request is invalid",
+    },
+  ]}
+/>
