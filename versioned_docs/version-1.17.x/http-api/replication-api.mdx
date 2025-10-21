@@ -1,0 +1,504 @@
+---
+title: Replication API
+description: The API for managing replications
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/replication-api"
+  />
+</head>
+
+import SwaggerComponent from "@site/src/components/SwaggerComponent";
+
+# Replication API Specification Reference
+
+ReductStore supports append-only **[replication](../glossary#replication)**. This feature allows you to replicate records from one **[bucket](../glossary#bucket)** to another.
+To use the replication feature, you must create a replication task with the source and destination buckets.
+This reference describes the API for managing replication tasks.
+
+The API is available at the `/api/v1/replications` endpoint and requires an **[access token](../glossary#access-token)** with full access.
+
+For more information about replications, read the [**Replication Guide**](../guides/data-replication).
+
+## Get a List of Replication Tasks
+
+The method returns a list of replication Task with their statuses.
+
+**Changes**:
+
+- v1.8: The endpoint was added
+
+<SwaggerComponent
+  method="GET"
+  path="/api/v1/replications"
+  summary="Get a list of replication tasks"
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      description: (
+        <pre>
+          <code>{`{
+  "replications": [
+    {
+      "name": "string",             // unique name of replication
+      "is_provisioned": "bool"      // true if replication is provisioned
+      "is_active": "bool"           // true if replication is active means that the destination bucket is available and no communication errors occurred
+      "pending_records": "int"      // number of records that are not yet replicated
+    }
+  ]
+}`}</code>
+        </pre>
+      ),
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is empty or invalid",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have enough permissions",
+    },
+  ]}
+/>
+
+## Show Information about a Replication Task
+
+This method provides complete information about a replication task, including
+diagnostics and settings.
+
+**Changes**:
+
+- v1.8: The endpoint was added
+- v1.14: The `when` field was added with **[conditional query](../glossary#conditional-query)** to filter records
+
+<SwaggerComponent
+  method="GET"
+  path="/api/v1/replications/:replication_name"
+  summary="Show information about a replication task"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: "replication_name",
+        isRequired: true,
+        description: "Name of the replication to show",
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "Information about token",
+      description: (
+        <pre>
+          <code>{`{
+        "diagnostics": {
+            "hourly": {
+                "ok": "integer",                    // number of records that were successfully replicated last hour
+                "errored": "integer",               // number of records that were not replicated due to errors last hour
+                "errors": {                         // dictionary of errors that occurred last hour
+                    "integer": {                    // error code
+                        "count": "integer",         // number of errors
+                        "last_message": "string"    // last error message
+                    }
+                },
+             }
+        },
+        "info": {
+            "name": "string",             // unique name of replication
+            "is_provisioned": "bool"      // true if replication is provisioned
+            "is_active": "bool"           // true if replication is active means that the destination bucket is available and no communication errors occurred
+            "pending_records": "int"      // number of records that are not yet replicated
+        },
+        "settings": {
+            "src_bucket": "string",       // name of source bucket
+            "dst_bucket": "string",       // name of destination bucket
+            "dst_host": "string",         // url of destination host e.g https://play.reduct.store
+            "entries": [],                // list of replication entries. If empty, all records will be replicated. Wildcards are supported
+            "include": {
+                 "string": "string"       // DEPRECATED. Key-value pairs to include records that should be replicated. If empty, all records will be replicated
+            },
+            "exclude": {
+                "string": "string"        // DEPRECATED. Key-value pairs to exclude records that should not be replicated. If empty, all records will be replicated
+            },
+            "each_s": "float",            // replicate a record every S seconds
+            "each_n": "int",              // replicate every Nth record
+            "when": "string"              // conditional query to filter records
+}`}</code>
+        </pre>
+      ),
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Current access token is empty or invalid",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Current access token doesn't have enough permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Replication with the given name does not exist",
+    },
+  ]}
+/>
+
+## Create a New Replication Task
+
+The method creates a replication task with given settings.
+
+**Changes**:
+
+- v1.8: The endpoint was added
+- v1.14: The `when` field was added with conditional query to filter records
+
+<SwaggerComponent
+  method="POST"
+  path="/api/v1/replications/:replication"
+  summary="Create a new replication task"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: "replication_name",
+        isRequired: true,
+        description: "Name of new token",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "src_bucket",
+        dataType: "String",
+        isRequired: true,
+        description: "Name of source bucket, must exist",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "dst_bucket",
+        dataType: "String",
+        isRequired: true,
+        description: "Name of destination bucket, must exist",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "dst_host",
+        dataType: "String",
+        isRequired: true,
+        description: "URL of destination host e.g https://play.reduct.store",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "dst_token",
+        dataType: "String",
+        isRequired: false,
+        description:
+          "Access token for destination bucket with write access, can be empty",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "entries",
+        dataType: "String[]",
+        isRequired: false,
+        description:
+          "List of replication entries. If empty, all records will be replicated. Wildcards are supported",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "include",
+        dataType: "Object",
+        isRequired: false,
+        description:
+          "Key-value pairs to include records that should be replicated. If empty, all records will be replicated",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "exclude",
+        dataType: "Object",
+        isRequired: false,
+        description:
+          "Key-value pairs to exclude records that should not be replicated. If empty, all records will be replicated",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "each_s",
+        dataType: "Float",
+        isRequired: false,
+        description: "Replicate a record every S seconds",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "each_n",
+        dataType: "Integer",
+        isRequired: false,
+        description: "Replicate every Nth record",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "when",
+        dataType: "Object",
+        isRequired: false,
+        description: "Conditional query to filter records",
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "The replication was created",
+      description: "",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is empty or invalid",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have enough permissions",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "Replication with the same name already exists",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "Validation error occurred",
+    },
+  ]}
+/>
+
+## Update an Existing Replication Task
+
+The method updates an existing replication task with given settings. To use
+this method, you need an access token with full access.
+
+**Changes**:
+
+- v1.8: The endpoint was added
+- v1.14: The `when` field was added with conditional query to filter records
+
+<SwaggerComponent
+  method="PUT"
+  path="/api/v1/replications/:replication_name"
+  summary="Update an existing replication task"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: "replication_name",
+        isRequired: true,
+        description: "Name of new token",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "src_bucket",
+        dataType: "String",
+        isRequired: true,
+        description: "Name of source bucket, must exist",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "dst_bucket",
+        dataType: "String",
+        isRequired: true,
+        description: "Name of destination bucket, must exist",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "dst_host",
+        dataType: "String",
+        isRequired: true,
+        description: "URL of destination host e.g https://play.reduct.store",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "dst_token",
+        dataType: "String",
+        isRequired: false,
+        description:
+          "Access token for destination bucket with write access, can be empty",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "entries",
+        dataType: "String[]",
+        isRequired: false,
+        description:
+          "List of replication entries. If empty, all records will be replicated. Wildcards are supported",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "include",
+        dataType: "Object",
+        isRequired: false,
+        description:
+          "Key-value pairs to include records that should be replicated. If empty, all records will be replicated",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "exclude",
+        dataType: "Object",
+        isRequired: false,
+        description:
+          "Key-value pairs to exclude records that should not be replicated. If empty, all records will be replicated",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "each_s",
+        dataType: "Float",
+        isRequired: false,
+        description: "Replicate a record every S seconds",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "each_n",
+        dataType: "Integer",
+        isRequired: false,
+        description: "Replicate every Nth record",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "when",
+        dataType: "Object",
+        isRequired: false,
+        description: "Conditional query to filter records",
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "The replication was updated",
+      description: "",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is empty or invalid",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have enough permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Replication with the given name doesn't exist",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "Replication is provisioned",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "Validation error occurred",
+    },
+  ]}
+/>
+
+## Delete a Replication Task
+
+The method deletes a replication task.
+
+**Changes**:
+
+- v1.8: The endpoint was added
+
+<SwaggerComponent
+  method="DELETE"
+  path="/api/v1/replications/:replication_name"
+  summary="Delete a replication task"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: "replication_name",
+        isRequired: true,
+        description: "Name of new token",
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "Token was removed",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is empty or invalid",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have enough permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Replication with the given name doesn't exist",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "Replication is provisioned",
+    },
+  ]}
+/>
