@@ -29,14 +29,15 @@ This makes it easier to share datasets with **external collaborators**, embed li
 
 ![Generate Shared Links in ReductStore Web Console](./img/shared-link.webp)
 
-You can create shared links directly from the **Web Console**:
+You can create shared links directly from the **Web Console** (or any SDKs):
 
-1. Open the **Data Browser** page and select one or more records you want to share.
+1. Open the **Data Browser** page and select a record you want to share.
 2. Click the **“Share record”** icon in the action panel.
 3. Configure an **expiration time** to automatically revoke access after a defined period.
 
-Once generated, anyone with the link can access the data via a simple HTTP request — no login required.
-This feature provides a secure and convenient way to expose selected data for collaboration and analysis.
+Once generated, anyone with the link can access the selected record via a simple HTTP(S) request — no access token required.
+The link only has access to the specific query for which it was created, along with the creator's permissions.
+This provides a secure and convenient way to expose selected data for collaboration and analysis.
 
 ### ☁️ S3-Compatible Storage Backend
 
