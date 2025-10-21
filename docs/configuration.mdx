@@ -94,17 +94,17 @@ The `RS_DATA_PATH` variable is ignored when the remote backend is enabled.
 A user can specify default storage class for data blocks stored in the S3-compatible object storage using the `RS_REMOTE_DEFAULT_STORAGE_CLASS` environment variable.
 The following storage classes are supported:
 
-| Name                | Description                                                                                                                         |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| STANDARD            | Standard storage class. Suitable for frequently accessed data.                                                                      |
-| STANDARD_IA         | Standard-Infrequent Access storage class. Suitable for data that is infrequently accessed but requires rapid access when needed.    |
-| INTELLIGENT_TIERING | Intelligent-Tiering storage class. Automatically moves data to the most cost-effective access tier based on usage patterns.         |
-| ONEZONE_IA          | One Zone-Infrequent Access storage class. Suitable for data that is infrequently accessed and stored in a single availability zone. |
-| EXPRESS_ONEZONE     | Express-One Zone storage class. Suitable for data that requires low latency access and is stored in a single availability zone.     |
-| GLACIER_IR          | Glacier Instant Retrieval storage class. Suitable for data that is rarely accessed and requires immediate access when needed.       |
-| GLACIER             | Glacier storage class. Suitable for data that is rarely accessed and can be retrieved within a few hours.                           |
-| DEEP_ARCHIVE        | Deep Archive storage class. Suitable for data that is rarely accessed and can be retrieved within 12 hours.                         |
-| OUTPOSTS            | Outposts storage class. Suitable for data that needs to be stored on AWS Outposts.                                                  |
+| Name                  | Description                                                                                                                         |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `STANDARD`            | Standard storage class. Suitable for frequently accessed data.                                                                      |
+| `STANDARD_IA`         | Standard-Infrequent Access storage class. Suitable for data that is infrequently accessed but requires rapid access when needed.    |
+| `INTELLIGENT_TIERING` | Intelligent-Tiering storage class. Automatically moves data to the most cost-effective access tier based on usage patterns.         |
+| `ONEZONE_IA`          | One Zone-Infrequent Access storage class. Suitable for data that is infrequently accessed and stored in a single availability zone. |
+| `EXPRESS_ONEZONE`     | Express-One Zone storage class. Suitable for data that requires low latency access and is stored in a single availability zone.     |
+| `GLACIER_IR`          | Glacier Instant Retrieval storage class. Suitable for data that is rarely accessed and requires immediate access when needed.       |
+| `GLACIER`             | Glacier storage class. Suitable for data that is rarely accessed and can be retrieved within a few hours.                           |
+| `DEEP_ARCHIVE`        | Deep Archive storage class. Suitable for data that is rarely accessed and can be retrieved within 12 hours.                         |
+| `OUTPOSTS`            | Outposts storage class. Suitable for data that needs to be stored on AWS Outposts.                                                  |
 
 For more information about S3 storage classes, see the **[Amazon S3 Storage Classes documentation](https://aws.amazon.com/s3/storage-classes/)**.
 
