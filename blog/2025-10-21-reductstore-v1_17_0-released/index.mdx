@@ -1,14 +1,14 @@
 ---
 title: ReductStore v1.17.0 Released With Shared Links and Support for S3 Storage Backend
-description: We are pleased to announce the release of ReductStore v1.16.0, which includes new extensions for robotics and columnar data, as well as the ability to replicate context records in queries.
+description: We are pleased to announce the release of ReductStore v1.17.0, which introduces shared links for data access and support for S3-compatible storage backends.
 authors: alexey
 tags: [news]
 slug: news/reductstore-v1_17_0-released
 date: 2025-10-21
-image: ./img/release-v1.17.webp
+image: ./img/release_v117.png
 ---
 
-![ReductStore v1.17.0 Released](./img/release-v1.17.webp)
+![ReductStore v1.17.0 Released](./img/release_v117.png)
 
 We are pleased to announce the release of the latest minor version of [**ReductStore**](/), [**1.17.0**](https://github.com/reductstore/reductstore/releases/tag/v1.17.0). ReductStore is a high-performance storage and streaming solution designed for storing and managing large volumes of historical data.
 
@@ -16,9 +16,78 @@ To download the latest released version, please visit our [**Download Page**](/d
 
 ## What's new in 1.17.0?
 
+This release includes several new features and enhancements. First, there are shared links for simplified data access. Second, there is support for S3-compatible storage backends.
+
+These new features enhance the usability and flexibility of ReductStore for various use cases in the cloud and on-premises environments and make it easier to share and access data stored in the database.
+
 {/* truncate */}
 
+### Shared Links for Data Access
+
+ReductStore now supports shared links, allowing users to generate temporary URLs for accessing specific data records without requiring authentication.
+This feature is particularly useful for sharing data with external collaborators or integrating with third-party applications.
+
+
+![Generate Shared Links in ReductStore Web Console](./img/shared-link.webp)
+
+You can use the Web Console to generate shared links for specific records or datasets.
+Use the Data Browser page to look at the data. Choose the records you want, and click the "Share record" icon on the action panel.
+The link that is created can be set to expire to make sure that people can only access it for a certain amount of time.
+
+Now, anyone with the shared link can access the data directly via HTTP without needing to log in to ReductStore.
+
+### S3-Compatible Storage Backend
+
+
+ReductStore now supports S3-compatible storage backends, enabling users to utilize object storage instead of a local file system for underlying storage.
+This feature provides greater flexibility and scalability for storing large datasets in the cloud.
+
+Previously, ReductStore only supported local disk storage, and users could mount S3 buckets as local disks using FUSE drivers.
+Now, you can configure ReductStore to natively use S3-compatible storage backends. No additional software is required.
+
+We developed this feature with performance and cost optimization in mind.
+ReductStore uses local disk storage as a cache layer to optimize performance when using S3-compatible storage backends.
+Combined with batching multiple records into a single data block, this approach optimizes storage, retrieval, and transitional costs for AWS S3 storage classes, such as S3 Standard-IA or S3 Glacier.
+
+To run ReductStore with an S3-compatible storage backend, set the following environment variables:
+
+```bash
+docker run -p 8383:8383 \
+    -e RS_REMOTE_BACKEND_TYPE=s3 \
+    -e RS_REMOTE_BUCKET=<YOUR_S3_BUCKET_NAME> \
+    -e RS_REMOTE_REGION=<YOUR_S3_REGION> \
+    -e RS_REMOTE_ACCESS_KEY=<YOUR_S3_ACCESS_KEY_ID> \
+    -e RS_REMOTE_SECRET_KEY=<YOUR_S3_SECRET_ACCESS_KEY> \
+    -e RS_REMOTE_CACHE_PATH=/data/cache \
+    -e RS_LICENSE_PATH=<PATH_TO_YOUR_LICENSE_FILE> \
+    -v ${PWD}/data:/data/cache \
+    reduct/store:latest
+```
+
+Read more about configuring S3-compatible storage backend in the [**documentation**](/docs/configuration#remote-backend-settings)
+
+:::info
+This feature is available only in the On-Promise edition of ReductStore. Please see the **[Pricing page](/pricing)** for more details.
+:::
+
 ## What next?
+
+We are continuing to work on new features to improve your experience with ReductStore.
+In the upcoming releases, we plan to introduce:
+
+### Multiple Entities in a Single Request
+
+Currently, you always need to specify a single entity in the request to write or query data.
+This can be inconvenient when working with multiple entities or a dynamic list of entities.
+In the next release, we plan to add support for writing to and querying multiple entities in a single request.
+
+### Read Only Mode for ReductStore
+
+Like many other databases, ReductStore requires exclusive access to the data directory while running.
+This makes it impossible to run multiple instances of ReductStore on the same dataset for load balancing or high availability, for example.
+
+One solution to this problem is to introduce a read-only mode for ReductStore. This allows one writer instance and multiple reader instances to access the same dataset concurrently.
+This model enables scaling of read operations and improves availability without the need for complex clustering or replication mechanisms.
 
 ---
 
