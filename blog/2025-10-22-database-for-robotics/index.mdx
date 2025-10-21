@@ -5,11 +5,10 @@ authors: anthony
 date: 2025-10-22
 slug: database-for-robotics
 tags: [ros, robotics]
-# image: ./img/social-card.jpg TODO
+image: ./img/intro-image.png
 ---
 
-{/* TODO: Intro Image */}
-![Img example](./img/social-card.jpg)
+![Img example](./img/intro-image.png)
 
 Robotics teams today wrestle with data that grows faster than their infrastructure. Every robot generates streams of images, sensor readings, logs, and events in different formats. These data piles are fragmented, expensive to move, and slow to analyze. Teams often rely on generic cloud tools that are not built for robotics. They charge way too much per gigabyte (when it should cost little per terabyte), hide the raw data behind proprietary APIs, and make it hard for robots (and developers) to access or use their own data.
 
@@ -23,8 +22,6 @@ ReductStore treats robotics with the respect it deserves. It captures everything
 
 It works on robots and in the cloud using the same interface. Developers can run ReductStore on an edge device for local data capture and replicate to an S3 backend for cloud analytics or archiving. It becomes the missing layer between the robot and the observability stack.
 
-{/* TODO: [Diagram: Robot → Edge Device (ReductStore) → Cloud (S3 backend) → Observability Tools] */}
-
 ## Data Handling and Querying
 
 Developers can work directly with data using simple queries and SDKs. The focus is speed and flexibility.
@@ -33,27 +30,108 @@ Developers can work directly with data using simple queries and SDKs. The focus 
 
 You can filter topics directly when uploading or streaming data from a ROS bag.
 
-{/* TODO: example MCAP */}
+```python
+import json
+import pandas as pd
+from reduct import Client
 
-This allows you to extract only the relevant topics from multiple bags without needing to download and reprocess everything locally.
+# Extract only the IMU topic from MCAP files
+ext = {
+    "ros": {"extract": {"topic": IMU_TOPIC}},
+}
+
+async with Client("https://api.reduct.store") as client:
+    bucket = await client.get_bucket("my-robotics-data")
+    parts = []
+    async for rec in bucket.query("mcap-entry", ext=ext):
+        blob = await rec.read_all()
+        data = json.loads(blob.decode("utf-8"))
+        rows = [
+            {
+                "ts_ns": data["header"]["stamp"]["sec"] * 1_000_000_000
+                + data["header"]["stamp"]["nanosec"],
+                "linear_acceleration_x": data["linear_acceleration"]["x"],
+                "linear_acceleration_y": data["linear_acceleration"]["y"],
+                "linear_acceleration_z": data["linear_acceleration"]["z"],
+            }
+        ]
+```
+
+This allows you to extract only the relevant topics from multiple bags without needing to download and reprocess everything locally. In this example, we extract only the IMU topic as a stream of JSON records:
+
+| ts_ns         | linear_acceleration_x | linear_acceleration_y | linear_acceleration_z |
+| ------------- | --------------------- | --------------------- | --------------------- |
+| 1633024800000 | 0.1                   | 0.3                   | -9.8                  |
+| 1633024801000 | 0.0                   | 0.1                   | -9.7                  |
 
 ### 2. JSON field and CSV column filtering
 
 You can filter JSON fields and CSV columns when querying data. This means you can select only the specific fields you care about. For example, you can extract only the odometry coordinates from a stream of JSON or CSV sensor readings.
 
-{/* TODO: example JSON and CSV filtering */}
+```python
+import io
+import pandas as pd
+from reduct import Client
+
+# Select specific CSV columns and filter rows
+ext = {
+    "select": {
+        "csv": {"has_headers": True},
+        # Use "json": {}, for JSON data
+        "columns": [
+            {"name": "ts_ns"},
+            {"name": "linear_acceleration_x", "as_label": "acc_x"},
+            {"name": "linear_acceleration_y"},
+            {"name": "linear_acceleration_z"},
+        ],
+    },
+    "when": {"$gt": [{"$abs": ["@acc_x"]}, 10]},
+}
+
+async with Client("https://api.reduct.store") as client:
+    bucket = await client.get_bucket("my-robotics-data")
+
+    # Loop over filtered CSV entries
+    async for rec in bucket.query("csv_sensor_readings", ext=ext):
+        blob = await rec.read_all()
+        csv_data = pd.read_csv(io.BytesIO(blob))
+```
+
+The tabular result will only include the selected columns and rows that match the filter (absolute value of linear_acceleration_x greater than 10):
+
+| ts_ns         | linear_acceleration_x | linear_acceleration_y | linear_acceleration_z |
+| ------------- | --------------------- | --------------------- | --------------------- |
+| 1633024800000 | 12.5                  | 0.3                   | -9.8                  |
+| 1633024801000 | -15.2                 | 0.1                   | -9.7                  |
 
 ### 3. Query any type of data
 
 ReductStore automatically batches small records and streams large ones for efficient storage and access. You can query any type of data, from lightweight telemetry to high-resolution images or point clouds, efficiently.
 
-{/* example images */}
+```python
+import io
+from PIL import Image
+from reduct import Client
+
+# Every 5 seconds, limit to 5 records
+when = {"$each_t": "5s", "$limit": 5}
+
+async with Client("https://api.reduct.store") as client:
+    bucket = await client.get_bucket("my-robotics-data")
+    async for rec in bucket.query("camera_frames", when=when):
+        blob = await rec.read_all()
+        img = Image.open(io.BytesIO(blob))
+```
+
+The example above retrieves camera frames at 5-second intervals. You can then process or visualize these images as needed.
+
+![Query Images Example](./img/query-images-example.png)
 
 ### 4. Browse petabytes of data
 
-ReductStore is designed to handle massive volumes of data. Its indexing and storage architecture allows you to efficiently browse and query petabytes of robotics data with iterative queries.
+ReductStore is designed to handle massive volumes of data. Its indexing and storage architecture allows you to efficiently browse data at scale without downloading everything locally.
 
-{/* TODO: example of web console time range and zooming */}
+![Browse Large Datasets](./img/browse-data.png)
 
 :::info
 You can build custom applications on top of ReductStore using its SDKs for Python, C++, Rust, Javascript, and Go. This makes it easy to build data pipelines, dashboards that works in the browser, or integrate with existing tools.
@@ -63,39 +141,49 @@ You can build custom applications on top of ReductStore using its SDKs for Pytho
 
 ReductStore connects robots and the cloud in a simple, flexible way. It supports S3 compatible storage backends and includes a robust replication system that reliably transfers data from robots to the cloud, even when networks are unstable.
 
-{/* TODO: diagram of blocks in S3 backend */}
+![Diagram Cloud Integration](./img/cloud-integration.drawio.png)
 
-Its architecture is designed to minimize cloud storage usage. By batching records, it reduces the number of stored objects and lowers costs. This approach can deliver major savings when working with large volumes of robotics data.
+By batching multiple records into a single block, it can significantly reduce storage and retrieval costs from S3 storage providers. This approach can deliver major savings when working with large volumes of robotics data.
 
 ## Observability Stack Integration
 
 ReductStore works with the tools robotics engineers already trust.
 
-### Foxglove
+### Foxglove Studio
 
 Foxglove is an amazing tool for visualizing robotics data and debugging robots for the MCAP format.
 
-To share data from ReductStore to Foxglove, you can use the ReductStore web console (or with the SDKs) to generate a shared link that Foxglove can open directly.
+To share data from ReductStore to Foxglove, you can use the ReductStore web console (or with the SDKs) to generate a [**query link**](/docs/glossary#query-link) that Foxglove can open directly.
 
-{/* TODO: create shared link with web console and Foxglove */}
+![ReductStore Query Link](./img/reductstore-query-link.png)
+
+You can then paste the query link into Foxglove Studio to visualize the data.
+
+![Foxglove Studio](./img/foxglove-studio.png)
 
 ### Grafana
 
 Grafana is a popular open-source tool for creating dashboards and visualising time-series data. You can connect Grafana to ReductStore using the ReductStore data source plugin, which allows you to query and visualise data stored in ReductStore directly from Grafana.
 
-{/* TODO: example query JSON content and labels from Grafana */}
+You can query data using labels, which are metadata attached to each record, e.g. localization coordinates, object detected, confidence score, etc:
 
-### Canonical
+![Grafana Query Labels](./img/grafana-query-labels.png)
+
+Or you can query based on content, such as JSON files with sensor readings or other structured data:
+
+![Grafana Query Content](./img/grafana-query-content.png)
+
+### Canonical Observability Stack (COS)
 
 Canonical's COS (Canonical Observability Stack) for robotics is an end to end observability framework built on open source tools such as Prometheus, Loki, Grafana, and Foxglove.
 
 The missing piece in this stack has always been a purpose built system for storing and managing raw robotics data efficiently (from robot to cloud).
 
-{/* TODO: diagram integration with COS; agent, local robot, database */}
+![Diagram Observability Stack Integration](./img/observability-stack-integration.drawio.png)
 
 ReductStore closes that gap. It provides databases optimized for both edge and cloud environments, along with an agent that captures data directly from ROS and streams it into the observability pipeline.
 
-{/* TODO: COS catalogue with ReductStore */}
+![COS with ReductStore](./img/cos-with-reductstore.png)
 
 ## Closing Thoughts
 
