@@ -38,7 +38,6 @@ You can create shared links directly from the **Web Console**:
 Once generated, anyone with the link can access the data via a simple HTTP request — no login required.
 This feature provides a secure and convenient way to expose selected data for collaboration and analysis.
 
-
 ### ☁️ S3-Compatible Storage Backend
 
 ReductStore now supports **S3-compatible storage backends**, allowing you to use **object storage** instead of a local file system for your underlying data.
@@ -90,7 +89,7 @@ This improvement will simplify integrations and reduce overhead for large-scale 
 Like most databases, ReductStore currently requires **exclusive access** to its data directory while running.
 As a result, running multiple instances on the same dataset—for load balancing or high availability—is not yet possible.
 
-To address this, we’re introducing a **read-only mode** that will allow one writer instance* and multiple reader instances to access the same dataset concurrently.
+To address this, we’re introducing a **read-only mode** that will allow one writer instance\* and multiple reader instances to access the same dataset concurrently.
 This approach will enable **scalable read operations** and **improved availability** without adding the complexity of clustering or replication mechanisms.
 
 ---
