@@ -103,11 +103,12 @@ reduct-cli alias add local -L http://localhost:8383 -t "<ROBOT_API_TOKEN>"
 reduct-cli bucket create local/robot1-data
 
 # Create a replication task to the cloud
-reduct-cli replica create local robot1-to-cloud \
-    robot1-data https://<CLOUD_API_TOKEN>@<cloud-address>/robot1-data
+reduct-cli replica create local/robot1-to-cloud \
+    robot1-data \
+    https://<CLOUD_API_TOKEN>@<cloud-address>/robot1-data
 ```
 
-This creates a replication task called `robot1-to-cloud` that copies all data from the robot's local `robot1-data` bucket to the cloud instance.
+This creates a replication task called `robot1-to-cloud` that copies all data from the robot's local `robot1-data` bucket to the cloud instance. You can customize replication further by adding filters or rules. See the **[replication guide](/docs/guides/data-replication)** for more details.
 
 ## Storing Sensor Data
 
@@ -119,22 +120,25 @@ import time
 import random
 from reduct import Client
 
+
 async def main():
     async with Client("http://localhost:8383", api_token="<ROBOT_API_TOKEN>") as client:
-        bucket = await client.get_bucket("robot1-data", create=True)
+        bucket = await client.get_bucket("robot1-data")
 
         # Current timestamp to index the data by time in ReductStore
-        timestamp = int(time.time() * 1_000_000) # microseconds
+        timestamp = int(time.time() * 1_000_000)  # microseconds
 
         # Generate 10'000 IMU samples
         rows = []
         for i in range(10_000):
-            rows.append({
-                "ts": timestamp + i * 100,  # microseconds
-                "linear_acceleration_x": round(random.uniform(-2, 2), 3),
-                "linear_acceleration_y": round(random.uniform(-2, 2), 3),
-                "linear_acceleration_z": round(random.uniform(8.0, 10.0), 3)
-            })
+            rows.append(
+                {
+                    "ts": timestamp + i * 100,  # microseconds
+                    "linear_acceleration_x": round(random.uniform(-2, 2), 3),
+                    "linear_acceleration_y": round(random.uniform(-2, 2), 3),
+                    "linear_acceleration_z": round(random.uniform(8.0, 10.0), 3),
+                }
+            )
 
         # Convert to CSV (store 1 seconds of data per file)
         csv = (
@@ -148,20 +152,23 @@ async def main():
 
         # Write the IMU batch
         await bucket.write(
-            entry="imu_logs",
+            entry_name="imu_logs",
             data=csv.encode(),
             timestamp=timestamp,
-            labels={"sensor": "imu", "rows": "1000"}
+            labels={"sensor": "imu", "rows": "1000"},
+            content_type="text/csv",  # MIME type
         )
 
         # Write one camera image
-        with open("camera_image.jpg", "rb") as img:
+        with open("camera_image.png", "rb") as img:
             await bucket.write(
-                entry="images",
+                entry_name="images",
                 data=img.read(),
                 timestamp=timestamp,
-                labels={"sensor": "camera"}
+                labels={"sensor": "camera"},
+                content_type="image/png",
             )
+
 
 asyncio.run(main())
 ```
@@ -179,20 +186,20 @@ If your IMU data is stored as CSV, the **ReductSelect extension** lets you:
 
 Example: filter CSV rows where `acc_x > 10`:
 
-```json
+```json5
 {
-  "#ext": {
-    "select": {
-      "csv": { "has_headers": true },
-      "columns": [
-        { "name": "ts", "as_label": "ts_ns" },
-        { "name": "linear_acceleration_x", "as_label": "acc_x" },
-        { "name": "linear_acceleration_y" },
-        { "name": "linear_acceleration_z" }
-      ]
-    },
-    "when": { "@acc_x": { "$gt": 10 } }
-  }
+    "#ext": {
+        "select": {
+            "csv": {"has_headers": True},
+            "columns": [
+                {"name": "ts", "as_label": "ts_ns"},
+                {"name": "linear_acceleration_x", "as_label": "acc_x"},
+                {"name": "linear_acceleration_y"},
+                {"name": "linear_acceleration_z"},
+            ],
+        },
+        "when": {"@acc_x": {"$gt": 1.9}},
+    }
 }
 ```
 
@@ -202,21 +209,20 @@ Python example:
 import asyncio
 from reduct import Client
 
-query = { ... } # (the JSON query from above)
+when = { ... } # the JSON condition from above
 
 async def main():
     async with Client("https://<cloud-address>", api_token="<TOKEN>") as client:
         bucket = await client.get_bucket("robot1-data")
 
-        async for rec in bucket.query("imu_logs", query=query):
-            data = await rec.read()
+        async for rec in bucket.query("imu_logs", when=when):
+            data = await rec.read_all()
             print(data.decode())
 
 asyncio.run(main())
-
 ```
 
-This returns only the rows where `linear_acceleration_x > 10`, along with the timestamp.
+This returns only the rows where `linear_acceleration_x > 1.9`, along with the timestamp.
 
 ## Why This Setup Works Well for Robotics
 
