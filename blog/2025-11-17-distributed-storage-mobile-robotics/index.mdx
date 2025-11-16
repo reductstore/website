@@ -10,7 +10,7 @@ image: ./img/intro-image.png
 
 ![Distributed Storage in Mobile Robotics](./img/intro-image.png)
 
-Mobile robots produce a **lot** of data—camera images, IMU readings, logs, etc. Storing this data reliably on each robot and syncing it to the cloud can be hard. **ReductStore** makes this easier: it's a lightweight, time-series object store built for robotics and industrial IoT. It stores binary blobs (images, logs, CSV sensor data, MCAP, JSON) with timestamps and labels so you can quickly find and query them later.
+Mobile robots produce a **lot** of data (camera images, IMU readings, logs, etc). Storing this data reliably on each robot and syncing it to the cloud can be hard. **ReductStore** makes this easier: it's a lightweight, time-series object store built for robotics and industrial IoT. It stores binary blobs (images, logs, CSV sensor data, MCAP, JSON) with timestamps and labels so you can quickly find and query them later.
 
 This introduction guide explains a simple setup where each robot stores data locally and automatically syncs it to a cloud ReductStore instance backed by Amazon S3.
 
@@ -32,21 +32,25 @@ ReductStore uses an **append-only** replication model:
 
 - The robot stores new data locally.
 - ReductStore automatically detects new records.
-- It sends them to the cloud in batches.
+- It sends them to the cloud in batches (or streams large files).
 - If the network disconnects, replication continues when the robot reconnects.
 
 You can replicate:
 
-- everything
+- _everything_
 - or only specific sensors
 - or only records with certain labels
 - or based on rules (e.g., 1 record every S seconds or every N records)
 
-This can be configured per robot using environment variables (provisioning), with the web console or via the CLI (as shown below).
+This can be configured per robot using environment variables (provisioning), with the web console or via the CLI (as shown in this guide).
 
 ## Cloud ReductStore With S3 Backend
 
 ReductStore supports storing all records directly in S3. It keeps a local cache for fast access and batches many small blobs into larger blocks to save on S3 costs.
+
+:::info
+By batching data into S3 objects, you can save **significantly** on storage costs compared to storing many small files individually.
+:::
 
 Here is an example `docker-compose.yml` to run a ReductStore server that uses S3 as the remote backend and provisions buckets for robots:
 
@@ -73,10 +77,6 @@ services:
       - ./cache:/data/cache
 ```
 
-:::info
-By batching data into S3 objects, you can save significantly on storage costs compared to storing many small files individually.
-:::
-
 Run it with:
 
 ```bash
@@ -93,7 +93,7 @@ First spin up a local ReductStore on each robot. Here with Snap:
 sudo snap install reductstore
 ```
 
-That starts a ReductStore server on port `8383` by default. Then you can use the CLI to set up replication task to the cloud:
+That starts a ReductStore server on port `8383` by default. Then you can use the **[Reduct CLI](https://github.com/reductstore/reduct-cli)** to set up replication from the robot to the cloud instance:
 
 ```bash
 # Point the CLI to the robot's local ReductStore
@@ -111,7 +111,7 @@ This creates a replication task called `robot1-to-cloud` that copies all data fr
 
 ## Storing Sensor Data
 
-There are many ways to store data. When it comes to high-frequency sensor data like IMU readings, a common approach is to store them in 1-second files. Images can be stored as binary blobs (e.g., JPEG or PNG files). Here is an example of storing IMU data as CSV files and images as binary blobs using the Python SDK (this stores 10,000 IMU samples and one camera image for a given timestamp as an example):
+There are many ways to store data. When it comes to high-frequency sensor data like IMU readings, a common approach is to store them in 1-second files. Images can be stored as binary blobs (e.g., JPEG or PNG files). Here is an example of storing IMU data as CSV files and images as binary blobs using the Python SDK (this stores 10,000 samples and one camera image for a given timestamp as an example):
 
 ```python
 import asyncio
@@ -167,7 +167,7 @@ asyncio.run(main())
 ```
 
 :::warning
-If you are considering storing all IMU data as individual records in a time series database like Timescale or InfluxDB, keep in mind that high-frequency sensors (e.g., 1000 Hz) generate a lot of data. Storing each sample as an individual record can lead to performance and cost issues. Batching samples into files (e.g., one second of data per CSV file) is a more efficient storage and querying method.
+If you are considering storing all IMU data as individual records in a time series database (TSDB) like Timescale or InfluxDB, keep in mind that high-frequency sensors (e.g., 1000 Hz) can lead to performance and cost issues. Batching samples into files (e.g., one second of data per CSV file) is a more efficient storage and querying method.
 :::
 
 ## Querying Sensor Data Using ReductSelect
@@ -222,15 +222,15 @@ This returns only the rows where `linear_acceleration_x > 10`, along with the ti
 
 There are several advantages to using a specialized storage solution like ReductStore for mobile robotics:
 
-- **Robots can store data on disk** and operate offline without network connectivity
-- **Automatic replication when connected** to avoid manual uploads and simplify data management
-- **Selective replication** lets you control what data is sent to the cloud (reduction strategy) to save bandwidth and storage
-- **Labels and timestamps** make it easy to organize and query sensor data later
-- **Store files of any type** (images, CSV, logs, MCAP) in a single system without needing separate storage solutions for each data type
+- **Robots can store data locally** and operate offline without network connectivity.
+- **Automatic replication when connected** to avoid manual uploads and simplify data management.
+- **Selective replication** lets you control what data is sent to the cloud (i.e. decide on your reduction strategy) to save bandwidth and storage.
+- **Labels and timestamps** make it easy to organize and query sensor data later.
+- **Store files of any type** (images, CSV, logs, MCAP) in a single system without needing separate storage solutions for each data type.
 
 ## Next Steps
 
-ReductStore also integrates into robotics observability stacks such as the Canonical Observability Stack (COS) for robotics. You can visualize sensor data, logs, and metrics in Grafana dashboards alongside your other robot telemetry. More details in our blog post [\*\*The Missing Database for Robotics Is Out](blog/database-for-robotics)\*\*.
+ReductStore also integrates into robotics observability stacks such as the Canonical Observability Stack (COS) for robotics. You can visualize sensor data, logs, and metrics in Grafana dashboards alongside your other robot telemetry. More details in our blog post **[The Missing Database for Robotics Is Out](blog/database-for-robotics)**.
 
 ---
 
