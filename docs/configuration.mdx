@@ -133,11 +133,14 @@ Read more about batching in the **[HTTP API Reference](./http-api/entry-api#batc
 ReductStore uses a lock file to prevent multiple instances from accessing the same data folder. The lock file is created in the data folder specified by the RS_DATA_PATH variable, using the same storage backend as the data.
 You can configure the lock file settings using the following environment variables:
 
-| Name                          | Default | Description                                                                                                                                                                                              |
-| ----------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `RS_LOCK_FILE_ENABLED`        | false   | If set to false, the storage will not use a lock file.                                                                                                                                                   |
-| `RS_LOCK_FILE_TIMEOUT`        | 10s     | Timeout for acquiring the lock file. If the lock file is not acquired within the timeout, the storage will exit. When set to 0, the storage will wait indefinitely.                                      |
-| `RS_LOCK_FILE_FAILURE_ACTION` | abort   | Action to take if the lock file can't be acquired. It can be `abort` or `proceed`. If set to `abort`, the storage will exit. If set to `proceed`, the storage will overwrite the lock file and continue. |
+| Name                            | Default | Description                                                                                                                                                                                              |
+| ------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `RS_LOCK_FILE_ENABLED`          | false   | If set to false, the storage will not use a lock file.                                                                                                                                                   |
+| `RS_LOCK_FILE_POLLING_INTERVAL` | 10s     | Interval between attempts to acquire the lock file or rewrite the acuired lock file to update its timestamp.                                                                                             |
+| `RS_LOCK_FILE_ROLE`             | primary | Role of the instance. It can be `primary` or `secondary`. The primary instance acquires the lock file immediately. The secondary instance waits for the primary to acquire the file first.               |
+| `RS_LOCK_FILE_TTL`              | 30s     | Time-to-live for the lock file. If the lock file is not updated within the TTL, it is considered stale and can be overwritten by another instance.                                                       |
+| `RS_LOCK_FILE_TIMEOUT`          | 60s     | Timeout for acquiring the lock file. If the lock file is not acquired within the timeout, the storage will exit. When set to 0, the storage will wait indefinitely.                                      |
+| `RS_LOCK_FILE_FAILURE_ACTION`   | abort   | Action to take if the lock file can't be acquired. It can be `abort` or `proceed`. If set to `abort`, the storage will exit. If set to `proceed`, the storage will overwrite the lock file and continue. |
 
 Enable the lock file if using a shared data folder or remote backend to prevent data corruption in blue-green deployments or high availability setups.
 

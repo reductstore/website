@@ -145,3 +145,44 @@ environment. The method has anonymous access.
     },
   ]}
 />
+
+## Check if the Storage Engine is Active
+
+If the **[RS_LOCK_FILE_ENABLED](../configuration#lock-file-settings)** environment variable is set to `true`, the storage engine starts using a lock file mechanism to prevent multiple instances from accessing the same data directory simultaneously.
+In this case, you can use GET and HEAD methods to check if the storage engine is active and has acquired the lock on the data directory.
+
+<SwaggerComponent
+  method="get"
+  path="/api/v1/ready"
+  summary="Check if the storage engine is working"
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+    },
+    {
+      status: "503",
+      message: "Service Unavailable",
+      summary:
+        "If the storage engine is not active or has not acquired the lock file",
+    },
+  ]}
+/>
+
+<SwaggerComponent
+  method="head"
+  path="/api/v1/ready"
+  summary="Check if the storage engine is working"
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+    },
+    {
+      status: "503",
+      message: "Service Unavailable",
+      summary:
+        "If the storage engine is not active or has not acquired the lock file",
+    },
+  ]}
+/>
