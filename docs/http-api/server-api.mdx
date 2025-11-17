@@ -4,10 +4,10 @@ description: The server API provides HTTP methods for checking the status of the
 ---
 
 <head>
-    <link
-        rel="canonical"
-        href="https://www.reduct.store/docs/http-api/server-api"
-    />
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/server-api"
+  />
 </head>
 
 import SwaggerComponent from "@site/src/components/SwaggerComponent";
@@ -24,16 +24,16 @@ license.
 If authentication is enabled, the method needs a valid API token.
 
 <SwaggerComponent
-    method="get"
-    path="/api/v1/info"
-    summary="Get statistical information about the storage"
-    responses={[
-        {
-            status: "200",
-            message: "OK",
-            summary: "Returns information in JSON format",
-            description: (
-                <>
+  method="get"
+  path="/api/v1/info"
+  summary="Get statistical information about the storage"
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "Returns information in JSON format",
+      description: (
+        <>
           <pre>
             <code>
               {`{
@@ -62,16 +62,16 @@ If authentication is enabled, the method needs a valid API token.
 }`}
             </code>
           </pre>
-                </>
-            ),
-        },
-        {
-            status: "401",
-            message: "Unauthorized",
-            summary:
-                "If authentication is enabled and access token is invalid or empty",
-        },
-    ]}
+        </>
+      ),
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary:
+        "If authentication is enabled and access token is invalid or empty",
+    },
+  ]}
 />
 
 ## Get a Bucket List with Metadata
@@ -81,15 +81,15 @@ You can use this method to browse the buckets of the storage.
 If authentication is enabled, the method needs a valid API token.
 
 <SwaggerComponent
-    method="get"
-    path="/api/v1/list"
-    summary="Get a list of the buckets with their stats"
-    responses={[
-        {
-            status: "200",
-            message: "OK",
-            description: (
-                <>
+  method="get"
+  path="/api/v1/list"
+  summary="Get a list of the buckets with their stats"
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      description: (
+        <>
           <pre>
             <code>
               {`{
@@ -105,16 +105,16 @@ If authentication is enabled, the method needs a valid API token.
 }`}
             </code>
           </pre>
-                </>
-            ),
-        },
-        {
-            status: "401",
-            message: "Unauthorized",
-            summary:
-                "If authentication is enabled and access token is invalid or empty",
-        },
-    ]}
+        </>
+      ),
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary:
+        "If authentication is enabled and access token is invalid or empty",
+    },
+  ]}
 />
 
 ## Check if the Storage Engine is Alive
@@ -123,67 +123,66 @@ You can use GET and HEAD methods for health checks in Docker or Kubernetes
 environment. The method has anonymous access.
 
 <SwaggerComponent
-    method="get"
-    path="/api/v1/alive"
-    summary="Check if the storage engine is working"
-    responses={[
-        {
-            status: "200",
-            message: "OK",
-        },
-    ]}
+  method="get"
+  path="/api/v1/alive"
+  summary="Check if the storage engine is working"
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+    },
+  ]}
 />
 
 <SwaggerComponent
-    method="head"
-    path="/api/v1/alive"
-    summary="Check if the storage engine is working"
-    responses={[
-        {
-            status: "200",
-            message: "OK",
-        },
-    ]}
+  method="head"
+  path="/api/v1/alive"
+  summary="Check if the storage engine is working"
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+    },
+  ]}
 />
-
-
 
 ## Check if the Storage Engine is Active
 
 If the **[RS_LOCK_FILE_ENABLED](../configuration#lock-file-settings)** environment variable is set to `true`, the storage engine starts using a lock file mechanism to prevent multiple instances from accessing the same data directory simultaneously.
 In this case, you can use GET and HEAD methods to check if the storage engine is active and has acquired the lock on the data directory.
 
-
 <SwaggerComponent
-    method="get"
-    path="/api/v1/ready"
-    summary="Check if the storage engine is working"
-    responses={[
-        {
-            status: "200",
-            message: "OK",
-        },
-        {
-            status: "503",
-            message: "Service Unavailable",
-            summary: "If the storage engine is not active or has not acquired the lock file",
-        }
-    ]}
+  method="get"
+  path="/api/v1/ready"
+  summary="Check if the storage engine is working"
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+    },
+    {
+      status: "503",
+      message: "Service Unavailable",
+      summary:
+        "If the storage engine is not active or has not acquired the lock file",
+    },
+  ]}
 />
 
 <SwaggerComponent
-    method="head"
-    path="/api/v1/ready"
-    summary="Check if the storage engine is working"
-    responses={[
-        {
-            status: "200",
-            message: "OK",
-        },
-        {
-            status: "503",
-            message: "Service Unavailable",
-            summary: "If the storage engine is not active or has not acquired the lock file",
-        }
-    ]}
+  method="head"
+  path="/api/v1/ready"
+  summary="Check if the storage engine is working"
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+    },
+    {
+      status: "503",
+      message: "Service Unavailable",
+      summary:
+        "If the storage engine is not active or has not acquired the lock file",
+    },
+  ]}
 />

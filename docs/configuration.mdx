@@ -5,7 +5,7 @@ description: ReductStore configuration options and provisioning.
 ---
 
 <head>
-    <link rel="canonical" href="https://www.reduct.store/docs/configuration"/>
+  <link rel="canonical" href="https://www.reduct.store/docs/configuration" />
 </head>
 
 # ⚙ Server Configuration and Provisioning
@@ -134,7 +134,7 @@ ReductStore uses a lock file to prevent multiple instances from accessing the sa
 You can configure the lock file settings using the following environment variables:
 
 | Name                            | Default | Description                                                                                                                                                                                              |
-|---------------------------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `RS_LOCK_FILE_ENABLED`          | false   | If set to false, the storage will not use a lock file.                                                                                                                                                   |
 | `RS_LOCK_FILE_POLLING_INTERVAL` | 10s     | Interval between attempts to acquire the lock file or rewrite the acuired lock file to update its timestamp.                                                                                             |
 | `RS_LOCK_FILE_ROLE`             | primary | Role of the instance. It can be `primary` or `secondary`. The primary instance acquires the lock file immediately. The secondary instance waits for the primary to acquire the file first.               |
