@@ -1,48 +1,11 @@
 .whitePaperForm {
   max-width: 700px;
+  margin: 0 auto;    
   border-radius: 8px;
-  padding: 20px;
   border: 1px solid #ddd;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.inputGroup {
-  margin-bottom: 10px;
-}
-
-.inputField {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  margin-bottom: 10px;
-}
-
-.inputField:focus {
-  outline: none;
-  border: 2px solid var(--ifm-color-primary);
-}
-
-.errorMessage {
-  color: red;
-  margin-bottom: 20px;
-}
-
-.privacyPolicy {
-  margin-top: 20px;
-}
-
-.checkboxGroup {
-  width: 100%;
-  text-align: left;
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.checkboxLabel {
-  display: flex;
-  gap: 0.5rem;
-  align-items: flex-start;
-  font-size: 0.85rem;
-  line-height: 1.4;
+  padding: 20px;
+  
+  /* Ensures the container doesn't collapse while the form loads */
+  min-height: 400px; 
 }
