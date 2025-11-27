@@ -21,7 +21,7 @@ ReductStore uses environment variables for configuration. Here is a list of avai
 | `RS_LOG_LEVEL`         | INFO                                            | Logging level: TRACE, DEBUG, INFO, WARNING, ERROR. A user can filter logs by path e.g. `INFO,reductstore/api=DEBUG`                             |
 | `RS_HOST`              | 0.0.0.0                                         | Listening IP address                                                                                                                            |
 | `RS_PORT`              | 8383                                            | Listening port                                                                                                                                  |
-| `RS_INSTANCE_ROLE`     | standalone                                      | Role of the instance. It can be `standalone`, `primary`, `secondary` or `readonly`. See **[Instance Roles](#instance-roles)** for more details. |
+| `RS_INSTANCE_ROLE`     | standalone                                      | Role of the instance. It can be `standalone`, `primary`, `secondary` or `replica`. See **[Instance Roles](#instance-roles)** for more details. |
 | `RS_API_BASE_PATH`     | /                                               | Prefix for all URLs of requests                                                                                                                 |
 | `RS_PUBLIC_URL`        | http(s)://[RS_HOST]:[RS_PORT][RS_API_BASE_PATH] | Public URL of the instance. Used for **[query links](./glossary#query-link)**.                                                                  |
 | `RS_DATA_PATH`         | /data                                           | Path to a folder where the storage stores the data                                                                                              |
@@ -78,7 +78,7 @@ Depending on the deployment scenario, ReductStore can operate in different modes
 | `STANDALONE` | The instance operates independently, handling both read and write operations and don't protect data with a lock file.                                                                      |
 | `PRIMARY`    | The instance acts as the primary node in a active-passive setup, acquiring a lock file to prevent other instances from accessing the same data. It handles both read and write operations. |
 | `SECONDARY`  | The instance acts as the secondary node in a active-passive setup, acquiring a lock file asymmetrically to the primary instance. It handles both read and write operations.                |
-| `READONLY`   | The instance operates in read-only mode, allowing only read operations. It doesn't acquire a lock file and only serves data.                                                               |
+| `REPLICA`   | The instance operates in read-only mode, allowing only read operations. It doesn't acquire a lock file and only serves data.                                                               |
 
 ### Remote Backend Settings
 
