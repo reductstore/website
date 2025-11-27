@@ -16,20 +16,21 @@ description: ReductStore configuration options and provisioning.
 
 ReductStore uses environment variables for configuration. Here is a list of available settings:
 
-| Name                   | Default                                         | Description                                                                                                               |
-| ---------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `RS_LOG_LEVEL`         | INFO                                            | Logging level: TRACE, DEBUG, INFO, WARNING, ERROR. A user can filter logs by path e.g. `INFO,reductstore/api=DEBUG`       |
-| `RS_HOST`              | 0.0.0.0                                         | Listening IP address                                                                                                      |
-| `RS_PORT`              | 8383                                            | Listening port                                                                                                            |
-| `RS_API_BASE_PATH`     | /                                               | Prefix for all URLs of requests                                                                                           |
-| `RS_PUBLIC_URL`        | http(s)://[RS_HOST]:[RS_PORT][RS_API_BASE_PATH] | Public URL of the instance. Used for **[query links](./glossary#query-link)**.                                            |
-| `RS_DATA_PATH`         | /data                                           | Path to a folder where the storage stores the data                                                                        |
-| `RS_API_TOKEN`         |                                                 | If set, the storage uses token authorization                                                                              |
-| `RS_CERT_PATH`         |                                                 | Path to an SSL certificate. If unset, the storage uses HTTP instead of HTTPS                                              |
-| `RS_CERT_KEY_PATH`     |                                                 | Path to the private key of the desired SSL certificate. Should be set with RS_CERT_PATH                                   |
-| `RS_LICENSE_PATH`      |                                                 | Path to the license file. Required for commercial usage. See **[Pricing](/pricing)** for more details.                    |
-| `RS_CORS_ALLOW_ORIGIN` |                                                 | Sets the `Access-Control-Allow-Origin header`. Use `*` to allow all origins or list specific origins separated by commas. |
-| `RS_EXT_PATH`          |                                                 | If set, it activates the experimental extension API. The path should be a folder with extension binaries.                 |
+| Name                   | Default                                         | Description                                                                                                                                    |
+| ---------------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `RS_LOG_LEVEL`         | INFO                                            | Logging level: TRACE, DEBUG, INFO, WARNING, ERROR. A user can filter logs by path e.g. `INFO,reductstore/api=DEBUG`                            |
+| `RS_HOST`              | 0.0.0.0                                         | Listening IP address                                                                                                                           |
+| `RS_PORT`              | 8383                                            | Listening port                                                                                                                                 |
+| `RS_INSTANCE_ROLE`     | STANDALONE                                      | Role of the instance. It can be `STANDALONE`, `PRIMARY`, `SECONDARY` or `REPLICA`. See **[Instance Roles](#instance-roles)** for more details. |
+| `RS_API_BASE_PATH`     | /                                               | Prefix for all URLs of requests                                                                                                                |
+| `RS_PUBLIC_URL`        | http(s)://[RS_HOST]:[RS_PORT][RS_API_BASE_PATH] | Public URL of the instance. Used for **[query links](./glossary#query-link)**.                                                                 |
+| `RS_DATA_PATH`         | /data                                           | Path to a folder where the storage stores the data                                                                                             |
+| `RS_API_TOKEN`         |                                                 | If set, the storage uses token authorization                                                                                                   |
+| `RS_CERT_PATH`         |                                                 | Path to an SSL certificate. If unset, the storage uses HTTP instead of HTTPS                                                                   |
+| `RS_CERT_KEY_PATH`     |                                                 | Path to the private key of the desired SSL certificate. Should be set with RS_CERT_PATH                                                        |
+| `RS_LICENSE_PATH`      |                                                 | Path to the license file. Required for commercial usage. See **[Pricing](/pricing)** for more details.                                         |
+| `RS_CORS_ALLOW_ORIGIN` |                                                 | Sets the `Access-Control-Allow-Origin header`. Use `*` to allow all origins or list specific origins separated by commas.                      |
+| `RS_EXT_PATH`          |                                                 | If set, it activates the experimental extension API. The path should be a folder with extension binaries.                                      |
 
 **For Snap Users**
 
@@ -67,6 +68,17 @@ snap set reductstore data-path=/mnt/data
 Removing the snap will remove all data stored in the default data path. If you want to keep the data, you need to move it to another location before removing the snap.
 Or use the `snap connect reductstore:removable-media` command to connect the snap to the `removable-media` interface and store the data in a folder outside the snap.
 :::
+
+### Instance Roles
+
+Depending on the deployment scenario, ReductStore can operate in different modes. You can set the instance role using the `RS_INSTANCE_ROLE` environment variable. The available roles are:
+
+| Role         | Description                                                                                                                                                                                                             |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `STANDALONE` | The instance operates independently, handling both read and write operations and doesn't protect data with a lock file.                                                                                                 |
+| `PRIMARY`    | The instance acts as the primary node in an active-passive setup, acquiring a lock file to prevent other instances from accessing the same data. It handles both read and write operations.                             |
+| `SECONDARY`  | The instance acts as the secondary node in an active-passive setup, acquiring a lock file asymmetrically to the primary instance. It handles both read and write operations but operates only when the primary is down. |
+| `REPLICA`    | The instance operates in read-only mode, allowing only read operations. It doesn't acquire a lock file and only serves data.                                                                                            |
 
 ### Remote Backend Settings
 
@@ -135,14 +147,22 @@ You can configure the lock file settings using the following environment variabl
 
 | Name                            | Default | Description                                                                                                                                                                                              |
 | ------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `RS_LOCK_FILE_ENABLED`          | false   | If set to false, the storage will not use a lock file.                                                                                                                                                   |
 | `RS_LOCK_FILE_POLLING_INTERVAL` | 10s     | Interval between attempts to acquire the lock file or rewrite the acuired lock file to update its timestamp.                                                                                             |
 | `RS_LOCK_FILE_ROLE`             | primary | Role of the instance. It can be `primary` or `secondary`. The primary instance acquires the lock file immediately. The secondary instance waits for the primary to acquire the file first.               |
 | `RS_LOCK_FILE_TTL`              | 30s     | Time-to-live for the lock file. If the lock file is not updated within the TTL, it is considered stale and can be overwritten by another instance.                                                       |
 | `RS_LOCK_FILE_TIMEOUT`          | 60s     | Timeout for acquiring the lock file. If the lock file is not acquired within the timeout, the storage will exit. When set to 0, the storage will wait indefinitely.                                      |
 | `RS_LOCK_FILE_FAILURE_ACTION`   | abort   | Action to take if the lock file can't be acquired. It can be `abort` or `proceed`. If set to `abort`, the storage will exit. If set to `proceed`, the storage will overwrite the lock file and continue. |
 
-Enable the lock file if using a shared data folder or remote backend to prevent data corruption in blue-green deployments or high availability setups.
+The lock file is enabled when the `RS_INSTANCE_ROLE` variable is set to `primary` or `secondary`. If the variable is not set, the lock file mechanism is disabled.
+
+### Storage Engine Settings
+
+A user can configure storage engine settings to change behavior of data storage and retrieval. The following table describes the available environment variables:
+
+| Name                                | Default | Description                                                                                           |
+| ----------------------------------- | ------- | ----------------------------------------------------------------------------------------------------- |
+| `RS_ENGINE_COMPACTION_INTERVAL`     | 60s     | Interval between compaction WALs into blocks and synchronization of the storage state to the backend. |
+| `RS_ENGINE_REPLICA_UPDATE_INTERVAL` | 60s     | Interval between updates of bucket, entry lists and indexes from the backend in the read-only mode.   |
 
 ### Replication Settings
 
