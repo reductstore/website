@@ -76,8 +76,8 @@ Depending on the deployment scenario, ReductStore can operate in different modes
 | Role         | Description                                                                                                                                                                                |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `STANDALONE` | The instance operates independently, handling both read and write operations and don't protect data with a lock file.                                                                      |
-| `PRIMARY`    | The instance acts as the primary node in a active-passive setup, acquiring a lock file to prevent other instances from accessing the same data. It handles both read and write operations. |
-| `SECONDARY`  | The instance acts as the secondary node in a active-passive setup, acquiring a lock file asymmetrically to the primary instance. It handles both read and write operations.                |
+| `PRIMARY`    | The instance acts as the primary node in an active-passive setup, acquiring a lock file to prevent other instances from accessing the same data. It handles both read and write operations. |
+| `SECONDARY`  | The instance acts as the secondary node in an active-passive setup, acquiring a lock file asymmetrically to the primary instance. It handles both read and write operations.                |
 | `REPLICA`   | The instance operates in read-only mode, allowing only read operations. It doesn't acquire a lock file and only serves data.                                                               |
 
 ### Remote Backend Settings
