@@ -224,6 +224,58 @@ Image parameters: {'height': 720, 'width': 1280, 'is_bigendian': 0, 'encoding': 
   - `schema`: `sensor_msgs/Image`
   - `encoding`: `cdr`
 
+### Filtering Extracted JSON Messages
+
+This example demonstrates how to use the ROS extension to apply filters to the JSON output of ReductStore.
+
+<div>
+    <div style={{width: '50%', float: 'left'}}>
+        ```json
+        {
+            "#ext": {
+                "ros": {  # name of the extension to use
+                    "extract": {
+                        "topic": "/test",
+                        "as_label": {
+
+                            "data1": "data",
+                        },
+                    },
+                },"when": {
+                            "@data1" : {"$eq":'world'},
+                }
+            }
+        }
+        ```
+    </div>
+
+</div>
+
+#### Expected Output
+
+The expected output of the above code is as follows:
+
+```
+Record timestamp: 24
+Record labels: {'@encoding': 'cdr', '@schema': 'std_msgs/String', '@topic': '/test'}
+{"data":"hello"}
+```
+
+#### Explanation
+
+- The extension extracts ROS 2 messages from an `.mcap` file stored in ReductStore.
+- Only messages from the topic `/test` are selected using the `topic` filter in the `ros.extract` configuration.
+- The content of each message is CDR-encoded and decoded by the extension.
+- The decoded message is returned as JSON with the field `data`, matching the `std_msgs/String` schema.
+- Each record corresponds to one ROS 2 message and includes:
+- The decoded JSON payload, e.g., `{"data":"hello"}`
+- The output is filtered, as the second entry did not have a matching `data` value.
+- Message metadata as labels, including:
+  - `topic`: `/test`
+  - `schema`: `std_msgs/String`
+  - `encoding`: `cdr`
+  - `@label1`: `hello`
+
 ### Transforming MCAP with Splitting and Topic Filtering
 
 This example demonstrates how to use the ROS extension to create new MCAP episodes while including and excluding topics using regular expressions.
