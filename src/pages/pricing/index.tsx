@@ -2,30 +2,32 @@ import Layout from "@theme/Layout";
 import PricingTable from "@site/src/components/shared/PricingTable";
 import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import Faq from "@site/src/components/shared/Faq";
-import SandboxOffer from "@site/src/components/promotional/SandboxOffer";
 
 export default function Pricing(): JSX.Element {
   return (
     <Layout
-      title="Pricing: Tailored for Every Scale"
-      description="ReductStore is free for research, testing, and development. For commercial use, we offer a different plan for every scale and level of support."
+      title="Pricing"
+      description="Choose the right ReductStore plan for your scale—from free community use to commercial self-hosted and fully managed cloud offerings."
     >
       <main>
-        <SimpleHeader pageTitle="Tailored for Every Scale" />
-        <div className="container">
+        <SimpleHeader pageTitle="Plans Tailored for Every Scale" />
+
+        <section className="container">
           <p>
-            ReductStore is free for research, testing, and development. For
-            commercial use, we offer a different plan for every scale and level
-            of support.
+            ReductStore is free for research, testing, and development.
+            Commercial plans support long-term deployments, production
+            workloads, and enterprise-level requirements.
           </p>
           <PricingTable />
-        </div>
-        <br />
-        <SimpleHeader pageTitle="Frequently Asked Questions" pageTitleAs="h2" />
-        <div className="container">
+        </section>
+
+        <section className="container">
+          <SimpleHeader
+            pageTitle="Frequently Asked Questions"
+            pageTitleAs="h2"
+          />
           <Faq faqs={pricingFaqs} defaultOpenCount={3} />
-        </div>
-        <br />
+        </section>
       </main>
     </Layout>
   );
