@@ -36,6 +36,7 @@ export default function PricingTable() {
             { title: "Support for CSV & JSON", description: "-" },
             { title: "Support for Robotics Data", description: "-" },
             { title: "Extensible Query Engine", description: checkedIcon },
+            { title: "S3 Backend", description: "-" },
             { title: "Architecture Review", description: "-" },
             { title: "Proof of Concept (PoC)", description: "-" },
             { title: "Fully Managed", description: "-" },
@@ -81,6 +82,7 @@ export default function PricingTable() {
               ),
             },
             { title: "Extensible Query Engine", description: checkedIcon },
+            { title: "S3 Backend", description: checkedIcon },
             { title: "Architecture Review", description: checkedIcon },
             {
               title: "Proof of Concept (PoC)",
@@ -130,6 +132,7 @@ export default function PricingTable() {
               ),
             },
             { title: "Extensible Query Engine", description: checkedIcon },
+            { title: "S3 Backend", description: checkedIcon },
             { title: "Architecture Review", description: checkedIcon },
             { title: "Proof of Concept (PoC)", description: checkedIcon },
             { title: "Fully Managed", description: checkedIcon },
