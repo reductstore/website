@@ -42,6 +42,14 @@ As edge devices often have limited storage capacity, ReductStore offers volume-b
 
 When it comes to syncing the robot's data to a cloud or central storage, ReductStore uses conditional replication, which basically means that users can set filters in order to replicate only specific entries or a subset of records that satisfy a given set of rules. This is achieved through a JSON-like query language in the ReductStore HTTP API, enabling efficient data transfer based on customized conditions. The API also supports batch operations, reducing the number of requests and improving overall performance when transferring large datasets.
 
+With the S3 backend, ReductStore batches and caches many small records on disk before pushing them to cloud object storage, reducing request counts and storage costs. For example if you have many pictures being stored at high frequency, ReductStore will group them into larger objects before uploading to S3.
+
+For data visualization and monitoring, you can connect Grafana to visualize metrics. With this, you can create dashboards that combine sensor telemetry with system performance metrics.
+
+Additionally, ReductStore supports Foxglove for MCAP visualization by creating shareable query links to easily share specific data segments for collaborative analysis.
+
+ReductStore also provides extensions that allow you to filter or merge records directly on the server side. For example, you can query all the temperature sensor readings above a certain threshold within a specific time range accross multiple MCAP files, without needing to download and process the entire dataset locally.
+
 
 ### Foxglove & MCAP
 
