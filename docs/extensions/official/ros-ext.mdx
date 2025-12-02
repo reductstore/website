@@ -231,8 +231,7 @@ Image parameters: {'height': 720, 'width': 1280, 'is_bigendian': 0, 'encoding': 
 
 This example demonstrates how to use the ROS extension to apply filters to the JSON output of ReductStore.
 
-<div>
-    <div style={{width: '50%', float: 'left'}}>
+
         ```json
         {
             "#ext": {
@@ -240,19 +239,16 @@ This example demonstrates how to use the ROS extension to apply filters to the J
                     "extract": {
                         "topic": "/test",
                         "as_label": {
-
-                            "data1": "data",
+                            "data1": "data", # specify the label and the json path
                         },
                     },
                 },"when": {
-                            "@data1" : {"$eq":'world'},
+                         "@data1" : {"$eq": "hello"}, # specify the filtering condition
                 }
             }
         }
         ```
-    </div>
 
-</div>
 
 #### Expected Output
 
@@ -277,7 +273,7 @@ Record labels: {'@encoding': 'cdr', '@schema': 'std_msgs/String', '@topic': '/te
   - `topic`: `/test`
   - `schema`: `std_msgs/String`
   - `encoding`: `cdr`
-  - `@label1`: `hello`
+  - `@data1`: `hello`
 
 ### Transforming MCAP with Splitting and Topic Filtering
 
