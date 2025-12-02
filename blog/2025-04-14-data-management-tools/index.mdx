@@ -1,7 +1,7 @@
 ---
 title: Comparing Data Management Tools for Robotics
 description: A comprehensive overview of data management tools for robotics, including ReductStore, Foxglove, Rerun, and Heex. In this article, we will compare their key features, strengths, and use cases to help you choose the right tool for your robotics projects.
-authors: gracija
+authors: [gracija, anthony]
 tags: [robotics, ros, comparison]
 slug: data-management-tools
 date: 2025-04-14
@@ -42,7 +42,6 @@ As edge devices often have limited storage capacity, ReductStore offers volume-b
 
 When it comes to syncing the robot's data to a cloud or central storage, ReductStore uses conditional replication, which basically means that users can set filters in order to replicate only specific entries or a subset of records that satisfy a given set of rules. This is achieved through a JSON-like query language in the ReductStore HTTP API, enabling efficient data transfer based on customized conditions. The API also supports batch operations, reducing the number of requests and improving overall performance when transferring large datasets.
 
-[**ReductStore integrates with Google Cloud Storage**](/solutions/cloud), offering the fastest and most cost-effective cloud storage for time series objects. It cuts data storage costs by storing infrequently accessed data in lower-cost tiers, such as Cool or Cold. Additionally, it uses the pay-as-you-go model, allowing users to pay only for the storage they use.
 
 ### Foxglove & MCAP
 
