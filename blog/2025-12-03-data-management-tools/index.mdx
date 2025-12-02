@@ -31,20 +31,21 @@ If you're working with robots and need to organize, stream, or store data more e
 
 ## Key Criteria for Comparison
 
-When choosing a data management tool for robotics, it's important to look at a few key areas to make sure the tool can handle what your system requires.
+When picking a data tool for robotics, focus on these areas:
 
-- Data Type Support. Robotics systems produce different kinds of data, and each type needs different storage and processing methods.
-  - Lightweight telemetry data includes things like GPS, IMU readings, joint positions, and basic system status. This data is small, quick to access, and helpful for monitoring and analytics.
-  - Downsampled sensor data is reduced in resolution or frequency. It includes lower-framerate camera images or simplified lidar scans. It is useful for reviewing operations or incidents without using too much storage.
-  - Full-resolution data is the complete output from sensors, such as full-rate camera frames and dense lidar scans. This takes the most storage but is necessary for deep debugging, model training, and investigating important events.
+- **Data Types**
+  Robotics is a large field with many sensor types. The tool should support the data you work with, such as:
+  - _Telemetry:_ Lightweight (GPS, IMU, joints), ideal for monitoring.
+  - _Downsampled Data:_ Lower-rate images or lidar for incident review without high storage cost.
+  - _Full-Resolution:_ Raw sensor outputs for deep debugging or training. This is storage-intensive but essential for some applications.
+- **Integration**
+  The tool should work with what you already use, like ROS, Grafana, MQTT, cloud platforms (S3, Azure, Google Cloud), and your development environment to avoid extra glue code and simplify workflows.
+- **Performance and Scalability**
+  Data must move quickly (both locally and to the cloud). Large files or slow queries can block robots or delay analysis.
+- **Ease of Use and APIs**
+  A simple UI and solid API support make it easier to automate, scale, and adapt the tool to different use cases.
 
-- Integration and Ecosystem. The tool should work well with other systems like ROS, MQTT, Grafana, cloud platforms, and development environments. Good integration reduces effort, speeds up workflows, and supports long-term scaling and flexibility.
-
-- Performance and Scalability. Robotics applications need fast, reliable data processing. Any delays can affect navigation, manipulation, or safety. For instance, large files like ROS bags can overwhelm edge devices and slow them down, and uploading them to the cloud can also take time.
-
-- Ease of Use and API Support. A simple interface makes it easier for teams to learn and work with the tool. Well-designed APIs make it easier to automate tasks, connect with other systems, and adapt the tool to different use cases.
-
-## In-Depth Comparison of Tools
+## Tool Overviews
 
 ### ReductStore
 
@@ -52,11 +53,11 @@ When choosing a data management tool for robotics, it's important to look at a f
 
 **ReductStore** is a storage and streaming system designed for robotics data. It works both on the robot and in central storage (on-premise/self-hosted or in the cloud) with the same interface and SDKs (in Python, C++, Go, Javascript/TypeScript or Rust). That means your code stays the same whether you're reading local, remote data (or creating a browser-based dashboard).
 
-To move data to the cloud, ReductStore uses **conditional replication**. You can define rules to upload only certain records: by label, topic, or event. For example, replicate all incident data, or just 1 out of 10 entries for routine monitoring.
+To move data to the cloud, ReductStore uses **conditional replication**. You can define rules to upload only certain records: by label, rules, or event. For example, replicate all incident data, or just 1 out of 10 entries for routine monitoring.
 
 ReductStore handles storage limits on edge devices with **FIFO retention**. Old data is deleted only when the device is full. Each bucket can have different rules, so you can keep more images and less telemetry, for example.
 
-With an **S3 backend**, ReductStore batches small records together before uploading. This cuts down the number of requests and lowers cloud storage costs. For observability, you can connect **Grafana** to ReductStore to create dashboards with system metrics and sensor data. For MCAP files, ReductStore supports shareable query links that open directly in **Foxglove**.
+With an **S3 backend**, ReductStore batches small records together before uploading. This cuts down the number of requests and lowers cloud storage costs. For observability, you can connect **Grafana** to ReductStore to create dashboards with system metrics and sensor data. For MCAP files, ReductStore supports shareable query links that open directly in **Foxglove v1/v2**.
 
 It also lets you **filter or merge records server-side**. For example, you can pull all temperature readings above a threshold over a time range without downloading full datasets.
 
@@ -82,7 +83,7 @@ The interface is built for time-series and sensor data, with interactive 2D/3D v
 
 **Rerun** is an open-source visualization solution for time-series and multimodal data. It supports data types like images, point clouds, lidar, depth maps, tensors, and other sensor streams.
 
-Its main strength is combining flexible logging with a fast, built-in 3D viewer designed for robotics and XR applications. For large datasets, Rerun provides a **column-oriented API** to speed up ingestion and reduce memory usage. It also uses efficient internal structures to minimize allocations, and supports selective logging to reduce noise.
+Its main strength is combining flexible logging with a fast, built-in 3D viewer designed for robotics and extended reality (XR) applications. For large datasets, Rerun provides a **column-oriented API** to speed up ingestion and reduce memory usage. It also uses efficient internal structures to minimize allocations and optimize performance on edge devices.
 
 Rerun doesn't offer native ROS integration yet, but it can be used in ROS projects by adding custom logging to nodes.
 
@@ -94,7 +95,7 @@ The UI is built for **real-time 3D exploration**, with overlays and live trackin
 
 ![Heex Dashboard](./img/heex_dashboard.png)
 
-**Heex** is a data capture and review platform for robotics that focuses on collecting only key moments—like errors or specific events instead of logging everything. This reduces bandwidth and storage needs while keeping important context.
+**Heex** is a data capture and review platform for autonomous systems that focuses on collecting only key moments—like errors or specific events instead of logging everything. This reduces bandwidth and storage needs while keeping important context.
 
 Robots using Heex record data continuously in short ROSbag segments. A small agent on the robot watches for triggers and uploads only selected segments to the cloud based on rules.
 
@@ -119,11 +120,11 @@ To help visualize the differences between the tools, here is a comparison table 
 
 ## Conclusion
 
-Each tool addresses a different part of the robotics data workflow. **ReductStore** is ideal for scalable storage and streaming across robot fleets and cloud. **Foxglove** excels at visualizing MCAP logs and ROS topics. **Rerun** offers flexible, real-time 3D inspection for custom applications. **Heex** focuses on capturing just the important moments for efficient fleet analysis.
+Each tool addresses a different part of the robotics data workflow. **ReductStore** is ideal for distributed storage across many robots, with selective replication to the cloud and flexible integration with tools like Grafana and Foxglove. **Foxglove** excels at visualizing MCAP logs and ROS topics. **Rerun** offers flexible, real-time 3D inspection for custom applications. **Heex** focuses on capturing just the important moments for efficient fleet analysis.
 
 Choosing the right tool depends on what kind of data you collect, how you process it, and where you need it to go. In many cases, combining tools can give you the best of all worlds.
 
 ---
 
 Thanks for reading. I hope this article helps you decide on the right storage strategy for your vibration data.
-If you have questions or comments, feel free to visit the [ReductStore Community Forum](https://community.reduct.store/signup).
+If you have questions or comments, feel free to visit the [**ReductStore Community Forum**](https://community.reduct.store/signup).
