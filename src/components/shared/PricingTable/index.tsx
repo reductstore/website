@@ -168,7 +168,7 @@ export default function PricingTable() {
           subtitle="Fully Managed"
           description="Zero-maintenance cloud service with enterprise features."
           categories={createFeatures("cloud")}
-          buttonUrl="/solutions/cloud#cloud-signup"
+          buttonUrl="/solutions/cloud"
           buttonLabel="Get Demo Server"
           isHighlight
           termsUrl="/terms"

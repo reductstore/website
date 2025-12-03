@@ -2,13 +2,22 @@ import React, { useEffect } from "react";
 import styles from "./styles.module.css";
 import { useColorMode } from "@docusaurus/theme-common";
 
-export default function WhitePaperForm(): JSX.Element {
+interface DemoServerFormProps {
+  elementId?: string;
+  // This interface may be used by parent components so we keep them
+  title?: string;
+  defaultPlan?: "SaaS" | "BYO-Cloud" | "Undecided";
+}
+
+const DemoServerForm: React.FC<DemoServerFormProps> = ({
+  elementId = "cloud-signup-form",
+}) => {
   const { colorMode } = useColorMode();
 
   const LIGHT_FORM_URL =
-    "https://webforms.pipedrive.com/f/6xXV2oOSR22rPi82rJYlw0nAtTjwfwksw9PegThRNm1gOkenxGfqy1uoLbBro9g7x9";
+    "https://webforms.pipedrive.com/f/6rCFNfriKPr8CvMzasDqBKVfi3oMNIbET8g4IYKC8aq2wMDPZRrwytYMpDqw1T64Gn";
   const DARK_FORM_URL =
-    "https://webforms.pipedrive.com/f/ckzC52Q30R209mMTuX2IJikmVPQaIrQEoh3Vut00x4I6KIQixN5Nv6wwTN9AoDfD9N";
+    "https://webforms.pipedrive.com/f/6UN7hr5OqMd5IedWUJQkKHlx1ZVRMWOyXKy1kwFjjaeKKbjvlLHCAbbV5Q8o8yBkhd";
 
   const currentFormUrl = colorMode === "dark" ? DARK_FORM_URL : LIGHT_FORM_URL;
 
@@ -43,7 +52,7 @@ export default function WhitePaperForm(): JSX.Element {
   }, [currentFormUrl]);
 
   return (
-    <div id="whitepaper-form" className={styles.whitePaperForm}>
+    <div id={elementId} className={styles.form}>
       <div
         className="pipedriveWebForms"
         data-pd-webforms={currentFormUrl}
@@ -51,4 +60,6 @@ export default function WhitePaperForm(): JSX.Element {
       ></div>
     </div>
   );
-}
+};
+
+export default DemoServerForm;

@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import styles from "./styles.module.css";
 import { useColorMode } from "@docusaurus/theme-common";
 
-export default function WhitePaperForm(): JSX.Element {
+export default function ContactForm(): JSX.Element {
   const { colorMode } = useColorMode();
 
   const LIGHT_FORM_URL =
-    "https://webforms.pipedrive.com/f/6xXV2oOSR22rPi82rJYlw0nAtTjwfwksw9PegThRNm1gOkenxGfqy1uoLbBro9g7x9";
+    "https://webforms.pipedrive.com/f/c54RV9QrJSwqHXaRLGKHaKjvu7PE6hUroRJiP3QhaT3L6Q2LBxyqyeEFNBNUO6N2Cv";
   const DARK_FORM_URL =
-    "https://webforms.pipedrive.com/f/ckzC52Q30R209mMTuX2IJikmVPQaIrQEoh3Vut00x4I6KIQixN5Nv6wwTN9AoDfD9N";
+    "https://webforms.pipedrive.com/f/5X6q2iiv1GzWyTiG9gANrAYNsjrtHXZaZIfGwdgGu630RNKELEPxMwf6JoanpkUQev";
 
   const currentFormUrl = colorMode === "dark" ? DARK_FORM_URL : LIGHT_FORM_URL;
 
@@ -43,7 +43,7 @@ export default function WhitePaperForm(): JSX.Element {
   }, [currentFormUrl]);
 
   return (
-    <div id="whitepaper-form" className={styles.whitePaperForm}>
+    <div id="contact-us-form" className={styles.ContactForm}>
       <div
         className="pipedriveWebForms"
         data-pd-webforms={currentFormUrl}

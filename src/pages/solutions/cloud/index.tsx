@@ -6,7 +6,7 @@ import Faq from "@site/src/components/shared/Faq";
 import SimpleHeaderWithButton from "@site/src/components/shared/SimpleHeaderWithButton";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import ThemedImage from "@theme/ThemedImage";
-import TestServerForm from "@site/src/components/forms/TestServerForm";
+import DemoServerForm from "@site/src/components/forms/DemoServerForm";
 
 export default function CloudSolution(): JSX.Element {
   const title =
@@ -25,20 +25,8 @@ export default function CloudSolution(): JSX.Element {
             "1/10th the Storage Cost",
             "Scale to Petabytes",
           ]}
-          imageSvg={
-            <ThemedImage
-              className={styles.SvgImage}
-              alt="Cloud Storage"
-              sources={{
-                light: useBaseUrl(
-                  "/img/solutions/cloud/cloud_solution_light.svg",
-                ),
-                dark: useBaseUrl(
-                  "/img/solutions/cloud/cloud_solution_dark.svg",
-                ),
-              }}
-            />
-          }
+          imageSrc="/img/solutions/cloud/cloud.png"
+          imageAlt="Cloud Storage"
         />
         <div className="container">
           <>
@@ -53,25 +41,7 @@ export default function CloudSolution(): JSX.Element {
             ))}
           </>
           <div id="cloud-signup" className={styles.signUpSection}>
-            <h2>Get Demo Server</h2>
-            <p className={styles.signUpDescription}>
-              Submit the form and we'll provide you with a demo server in the
-              cloud (100% free). You can use it to explore ReductStore, stream
-              data from your devices, and see its performance in action.
-            </p>
-            <TestServerForm title="Cloud Signup" defaultPlan="SaaS" />
-            <ThemedImage
-              className={styles.SvgImage}
-              alt="Cloud Storage"
-              sources={{
-                light: useBaseUrl(
-                  "/img/solutions/cloud/cloud_storage_light.drawio.svg",
-                ),
-                dark: useBaseUrl(
-                  "/img/solutions/cloud/cloud_storage_dark.drawio.svg",
-                ),
-              }}
-            />
+            <DemoServerForm title="Cloud Signup" defaultPlan="SaaS" />
           </div>
           <div className={styles.faqs}>
             <Faq faqs={cloudFaqs} defaultOpenCount={3} />

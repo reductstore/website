@@ -1,7 +1,8 @@
 .banner {
   position: fixed;
   bottom: 20px;
-  margin-right: 80px;
+  left: 50%;
+  transform: translateX(-50%);
   padding: 10px;
   background-color: white;
   color: #000;
@@ -19,19 +20,19 @@
 
 @keyframes slide-in {
   from {
-    right: -100%;
+    bottom: -100%;
   }
   to {
-    right: 80px;
+    bottom: 80px;
   }
 }
 
 @keyframes overshoot {
   0% {
-    right: 80px;
+    bottom: 80px;
   }
   100% {
-    right: 20px;
+    bottom: 20px;
   }
 }
 
