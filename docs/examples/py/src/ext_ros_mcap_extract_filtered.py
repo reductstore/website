@@ -6,6 +6,7 @@ from reduct import Client
 HERE = Path(__file__).parent
 
 
+
 async def main():
     async with Client("http://localhost:8383", api_token="my-token") as client:
         bucket = await client.create_bucket(
