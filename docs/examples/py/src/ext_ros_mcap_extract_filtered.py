@@ -1,0 +1,60 @@
+from time import time_ns
+from pathlib import Path
+
+from reduct import Client
+
+HERE = Path(__file__).parent
+
+
+async def main():
+    async with Client("http://localhost:8383", api_token="my-token") as client:
+        bucket = await client.create_bucket(
+            "my-bucket",
+            exist_ok=True,
+        )
+        # Write a mcap file with timestamps
+        now = time_ns() // 1000
+
+        data = b""
+        with open(f"{HERE}/res/file.mcap", "rb") as f:
+            data = f.read()
+
+        await bucket.write(
+            "mcap",
+            data,
+            content_length=len(data),
+            timestamp=now,
+            content_type="application/mcap",
+        )
+
+        # Prepare the query with the 'ros' extension
+        condition = {
+            "#ext": {
+                "ros": {  # name of the extension to use
+                    "extract": {
+                        "topic": "/test",
+                        "as_label": {
+                            "data1": "data",
+                        },
+                    },
+                },
+                "when": {
+                    "@data1": {"$eq": "world"},
+                },
+            }
+        }
+
+        # Query the data with the 'ros' extension
+        async for record in bucket.query("mcap", start=now, when=condition):
+            print(f"Record timestamp: {record.timestamp}")
+            print(f"Record labels: {record.labels}")
+
+            json = await record.read_all()
+            print(json.decode("utf-8").strip())
+
+
+# 5. Run the main function
+if __name__ == "__main__":
+    import asyncio
+
+    asyncio.run(main())
