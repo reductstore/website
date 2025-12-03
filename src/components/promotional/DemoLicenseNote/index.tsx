@@ -12,7 +12,7 @@ const DemoLicenseNote = () => {
       <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
         <Link
           className="button button--primary"
-          to="/solutions/cloud#cloud-signup"
+          to="/solutions/cloud"
           style={{ textDecoration: "none" }}
         >
           Get Demo Server

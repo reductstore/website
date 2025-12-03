@@ -1,14 +1,25 @@
 import React, { useEffect } from "react";
 import styles from "./styles.module.css";
-import { useColorMode } from '@docusaurus/theme-common';
+import { useColorMode } from "@docusaurus/theme-common";
 
-export default function HelpForm(): JSX.Element {
+interface DemoServerFormProps {
+  elementId?: string;
+  // This interface may be used by parent components so we keep them
+  title?: string;
+  defaultPlan?: "SaaS" | "BYO-Cloud" | "Undecided";
+}
+
+const DemoServerForm: React.FC<DemoServerFormProps> = ({
+  elementId = "cloud-signup-form",
+}) => {
   const { colorMode } = useColorMode();
 
-  const LIGHT_FORM_URL = "https://webforms.pipedrive.com/f/c54RV9QrJSwqHXaRLGKHaKjvu7PE6hUroRJiP3QhaT3L6Q2LBxyqyeEFNBNUO6N2Cv";
-  const DARK_FORM_URL = "https://webforms.pipedrive.com/f/5X6q2iiv1GzWyTiG9gANrAYNsjrtHXZaZIfGwdgGu630RNKELEPxMwf6JoanpkUQev";
+  const LIGHT_FORM_URL =
+    "https://webforms.pipedrive.com/f/6rCFNfriKPr8CvMzasDqBKVfi3oMNIbET8g4IYKC8aq2wMDPZRrwytYMpDqw1T64Gn";
+  const DARK_FORM_URL =
+    "https://webforms.pipedrive.com/f/6UN7hr5OqMd5IedWUJQkKHlx1ZVRMWOyXKy1kwFjjaeKKbjvlLHCAbbV5Q8o8yBkhd";
 
-  const currentFormUrl = colorMode === 'dark' ? DARK_FORM_URL : LIGHT_FORM_URL;
+  const currentFormUrl = colorMode === "dark" ? DARK_FORM_URL : LIGHT_FORM_URL;
 
   useEffect(() => {
     const scriptUrl = "https://webforms.pipedrive.com/f/loader";
@@ -21,7 +32,7 @@ export default function HelpForm(): JSX.Element {
 
     // Clear Pipedrive global memory for reloading scripts on theme change
     if ((window as any).pipedriveWebForms) {
-        (window as any).pipedriveWebForms = undefined;
+      (window as any).pipedriveWebForms = undefined;
     }
 
     const script = document.createElement("script");
@@ -31,7 +42,9 @@ export default function HelpForm(): JSX.Element {
 
     // Cleanup: Remove the script when the component unmounts
     return () => {
-      const scriptToRemove = document.querySelector(`script[src="${scriptUrl}"]`);
+      const scriptToRemove = document.querySelector(
+        `script[src="${scriptUrl}"]`,
+      );
       if (scriptToRemove) {
         scriptToRemove.remove();
       }
@@ -39,13 +52,14 @@ export default function HelpForm(): JSX.Element {
   }, [currentFormUrl]);
 
   return (
-    <div id="contact-us-form" className={styles.helpForm}>
+    <div id={elementId} className={styles.form}>
       <div
         className="pipedriveWebForms"
         data-pd-webforms={currentFormUrl}
         key={currentFormUrl}
-      >
-      </div>
+      ></div>
     </div>
   );
-}
+};
+
+export default DemoServerForm;

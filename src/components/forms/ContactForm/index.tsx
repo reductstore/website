@@ -1,23 +1,16 @@
 import React, { useEffect } from "react";
 import styles from "./styles.module.css";
-import { useColorMode } from '@docusaurus/theme-common';
+import { useColorMode } from "@docusaurus/theme-common";
 
-interface TestServerFormProps {
-  elementId?: string;
-  // This interface may be used by parent components so we keep them
-  title?: string;
-  defaultPlan?: "SaaS" | "BYO-Cloud" | "Undecided";
-}
-
-const TestServerForm: React.FC<TestServerFormProps> = ({
-  elementId = "cloud-signup-form",
-}) => {
+export default function ContactForm(): JSX.Element {
   const { colorMode } = useColorMode();
 
-  const LIGHT_FORM_URL = "https://webforms.pipedrive.com/f/6rCFNfriKPr8CvMzasDqBKVfi3oMNIbET8g4IYKC8aq2wMDPZRrwytYMpDqw1T64Gn";
-  const DARK_FORM_URL = "https://webforms.pipedrive.com/f/6UN7hr5OqMd5IedWUJQkKHlx1ZVRMWOyXKy1kwFjjaeKKbjvlLHCAbbV5Q8o8yBkhd";
+  const LIGHT_FORM_URL =
+    "https://webforms.pipedrive.com/f/c54RV9QrJSwqHXaRLGKHaKjvu7PE6hUroRJiP3QhaT3L6Q2LBxyqyeEFNBNUO6N2Cv";
+  const DARK_FORM_URL =
+    "https://webforms.pipedrive.com/f/5X6q2iiv1GzWyTiG9gANrAYNsjrtHXZaZIfGwdgGu630RNKELEPxMwf6JoanpkUQev";
 
-  const currentFormUrl = colorMode === 'dark' ? DARK_FORM_URL : LIGHT_FORM_URL;
+  const currentFormUrl = colorMode === "dark" ? DARK_FORM_URL : LIGHT_FORM_URL;
 
   useEffect(() => {
     const scriptUrl = "https://webforms.pipedrive.com/f/loader";
@@ -30,7 +23,7 @@ const TestServerForm: React.FC<TestServerFormProps> = ({
 
     // Clear Pipedrive global memory for reloading scripts on theme change
     if ((window as any).pipedriveWebForms) {
-        (window as any).pipedriveWebForms = undefined;
+      (window as any).pipedriveWebForms = undefined;
     }
 
     const script = document.createElement("script");
@@ -40,7 +33,9 @@ const TestServerForm: React.FC<TestServerFormProps> = ({
 
     // Cleanup: Remove the script when the component unmounts
     return () => {
-      const scriptToRemove = document.querySelector(`script[src="${scriptUrl}"]`);
+      const scriptToRemove = document.querySelector(
+        `script[src="${scriptUrl}"]`,
+      );
       if (scriptToRemove) {
         scriptToRemove.remove();
       }
@@ -48,15 +43,12 @@ const TestServerForm: React.FC<TestServerFormProps> = ({
   }, [currentFormUrl]);
 
   return (
-    <div id={elementId} className={styles.form}>
+    <div id="contact-us-form" className={styles.ContactForm}>
       <div
         className="pipedriveWebForms"
         data-pd-webforms={currentFormUrl}
         key={currentFormUrl}
-      >
-      </div>
+      ></div>
     </div>
   );
-};
-
-export default TestServerForm;
+}

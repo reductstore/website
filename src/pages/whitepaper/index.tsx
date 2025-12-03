@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import Layout from "@theme/Layout";
 import WhitePaperForm from "@site/src/components/forms/WhitePaperForm";
@@ -6,14 +6,10 @@ import styles from "./styles.module.css";
 import clsx from "clsx";
 import BulletPointItem from "@site/src/components/shared/BulletPointItem";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import Modal from "@site/src/components/shared/Modal";
 
-const WhitePaperImg =
-  require("@site/static/img/whitepaper/whitepaper.png").default;
 const subBulletIcon = faArrowRight;
 
 export default function ReductAI(): JSX.Element {
-  const [isModalOpen, setModalOpen] = useState(false);
   return (
     <Layout
       title="Efficient Storage & Streaming for Robotics and Industrial IoT"
@@ -24,7 +20,7 @@ export default function ReductAI(): JSX.Element {
         <div className={clsx("container", styles.whitePaperContainer)}>
           <div className="row">
             {/* Description Column */}
-            <div className="col col--6">
+            <div className="col col--5">
               <p className={styles.bulletTitle}>What you'll learn:</p>
               <ul className={styles.bulletPoints}>
                 <BulletPointItem>
@@ -72,35 +68,17 @@ export default function ReductAI(): JSX.Element {
                   </BulletPointItem>
                 </ul>
               </ul>
-              <div className={styles.readNowBtn}>
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="button button--lg button--primary"
-                >
-                  Download White Paper (PDF)
-                </button>
+            </div>
+
+            {/* Form Column */}
+            <div className="col col--7">
+              <div className={styles.formColumn}>
+                <WhitePaperForm />
               </div>
             </div>
 
-            {/* Image Column */}
-            <div className="col col--6">
-              <div className={styles.imageWrapper}>
-                <img
-                  src={WhitePaperImg}
-                  alt="White Paper Cover"
-                  className={styles.image}
-                />
-              </div>
-            </div>
+            {/* End of Row */}
           </div>
-
-          {/* Download Modal */}
-          <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
-            <div className={styles.formWrapper}>
-              <h2 className={styles.formTitle}>Download White Paper (PDF)</h2>
-              <WhitePaperForm />
-            </div>
-          </Modal>
         </div>
       </main>
     </Layout>

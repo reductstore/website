@@ -7,21 +7,50 @@ import useBannertStore from "@site/src/store/useBannertStore";
 const whitePaperImage =
   require("@site/static/img/whitepaper/whitepaper.png").default;
 
+const MIN_MOBILE_WIDTH = 1300;
+
 const SlidingBanner: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const { wasBannerShown, setBannerShown } = useBannertStore();
 
   useEffect(() => {
-    const isMobile = window.innerWidth <= 768;
-    const isDismissed = Cookies.get("reductstore_bannerDismissed") === "true";
-    if (!wasBannerShown && !isMobile && !isDismissed) {
-      const timeout = setTimeout(() => {
-        setVisible(true);
-        setBannerShown(true);
-      }, 13_000);
-      return () => clearTimeout(timeout);
-    }
-  }, [wasBannerShown, setBannerShown, setVisible]);
+    const checkMobileAndShowBanner = () => {
+      const isMobile = window.innerWidth <= MIN_MOBILE_WIDTH;
+      const isDismissed = Cookies.get("reductstore_bannerDismissed") === "true";
+
+      // Hide banner if mobile
+      if (isMobile && visible) {
+        setVisible(false);
+        return;
+      }
+
+      // Show banner if conditions are met
+      if (!wasBannerShown && !isMobile && !isDismissed) {
+        const timeout = setTimeout(() => {
+          setVisible(true);
+          setBannerShown(true);
+        }, 13_000);
+        return () => clearTimeout(timeout);
+      }
+    };
+
+    // Check on mount
+    checkMobileAndShowBanner();
+
+    // Add resize listener
+    const handleResize = () => {
+      const isMobile = window.innerWidth <= MIN_MOBILE_WIDTH;
+      if (isMobile && visible) {
+        setVisible(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [wasBannerShown, setBannerShown, visible]);
 
   const handleClose = () => {
     setVisible(false);

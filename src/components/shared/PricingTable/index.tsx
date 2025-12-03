@@ -135,7 +135,7 @@ export default function PricingTable() {
             { title: "Fully Managed", description: checkedIcon },
             { title: "No-Code Provisioning", description: checkedIcon },
           ]}
-          buttonUrl="/solutions/cloud#cloud-signup"
+          buttonUrl="/solutions/cloud"
           buttonLabel="Get Demo Server"
           isHighlight
         />

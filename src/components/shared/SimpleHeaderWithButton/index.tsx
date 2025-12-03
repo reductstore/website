@@ -7,7 +7,8 @@ interface SimpleHeaderWithButtonProps {
   title: string;
   subtitle: string;
   benefits: string[];
-  imageSvg: React.ReactNode;
+  imageSrc: string;
+  imageAlt?: string;
   scrollToId: string;
   headerTag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 }
@@ -16,7 +17,8 @@ function SimpleHeaderWithButton({
   title,
   subtitle,
   benefits,
-  imageSvg,
+  imageSrc,
+  imageAlt = "",
   scrollToId,
   headerTag = "h1",
 }: SimpleHeaderWithButtonProps) {
@@ -60,7 +62,9 @@ function SimpleHeaderWithButton({
             ))}
           </ul>
         </div>
-        <div className={styles.BannerRight}>{imageSvg}</div>
+        <div className={styles.BannerRight}>
+          <img src={imageSrc} alt={imageAlt} className={styles.BannerImage} />
+        </div>
       </div>
     </header>
   );

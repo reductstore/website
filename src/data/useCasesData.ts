@@ -7,57 +7,62 @@ export interface UseCase {
 
 const useCases: UseCase[] = [
   {
-    title: "Edge Computing",
+    title: "Robotics Data",
     description:
-      "Learn how to store and manage data for edge computing and AI applications.",
-    link: "/use-cases/ai-workflows",
+      "A database purpose built for robotics data pipelines (AMRs, drones, ROS, physical-AI systems) with practical examples.",
+    link: "/blog/database-for-robotics",
+    image: require("@site/static/img/use-cases/robot.webp").default,
+  },
+  {
+    title: "Data Acquisition for Manufacturing",
+    description:
+      "Learn how to store and manage data for edge computing and AI application in manufacturing.",
+    link: "/blog/daq-manufacture-system",
     image:
       require("@site/static/img/use-cases/ai-workflows/ai-labels-and-metadata-for-every-record.webp")
         .default,
   },
   {
     title: "Computer Vision",
-    description: "Learn how to store data for computer vision applications.",
-    link: "/use-cases/computer-vision",
+    description:
+      "Explore how to implement computer vision applications in industrial settings with practical examples.",
+    link: "/blog/computer-vision-applications",
     image: require("@site/static/img/use-cases/computer-vision.webp").default,
   },
   {
-    title: "Vibration sensors",
-    description: "Learn how to store and manage high-frequency vibration data.",
-    link: "/use-cases/vibration-sensors",
+    title: "Vibration Data",
+    description:
+      "Strategies for reducing and storing vibration sensor data effectively.",
+    link: "/blog/how-to-store-vibration-sensor-data",
     image:
       require("@site/static/img/use-cases/vibration-sensors/reduction-strategy.webp")
         .default,
   },
   {
-    title: "Robotics Data",
-    description:
-      "Learn how to store and manage robot logs, images, and sensor data.",
-    link: "/blog/store-robotic-data",
-    image: require("@site/static/img/use-cases/robot.webp").default,
-  },
-  {
     title: "MQTT Data Storage",
-    description: "Learn how to store and manage MQTT data.",
+    description:
+      "Best practices for storing and managing MQTT data in IIoT applications.",
     link: "/blog/advice/database/mqtt-data-storage",
     image: require("@site/static/img/use-cases/mqtt.webp").default,
   },
   {
     title: "Kafka Data Sink",
-    description: "Learn how to implement a Kafka data sink.",
+    description:
+      "Learn how to set up a data sink using Apache Kafka for data streaming applications.",
     link: "/blog/tutorial/datastreaming/kafka/data-sink-guide",
     image: require("@site/static/img/use-cases/kafka.webp").default,
   },
   {
     title: "Anomaly Detection",
     description:
-      "Learn how to implement an open-source AI anomaly detection system.",
+      "Implement open-source AI anomaly detection at the edge with practical examples.",
     link: "/blog/computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection",
     image: require("@site/static/img/use-cases/anomaly-detection.webp").default,
   },
   {
     title: "Pytorch Data Streaming",
-    description: "Learn how to implement database data streaming with Pytorch.",
+    description:
+      "Techniques for streaming database data into PyTorch for machine learning applications.",
     link: "/blog/ai/datastreaming/pytorch/implement-database-data-streaming-pytorch",
     image: require("@site/static/img/use-cases/pytorch.webp").default,
   },
