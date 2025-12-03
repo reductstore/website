@@ -51,7 +51,7 @@ loop.run_until_complete(main())
 ```
 
 Why is it useful? You can use it when you need to download or replicate a large amount of data, but you don't need all the data points. Downsampling can help you reduce the amount of data you need to transfer and save disk space.
-You can also use it to save downsampled data for long-term storage while keeping the original data for short-term analysis. For example, if you have data from **[vibration sensors](/use-cases/vibration-sensors)**, you can replicate one record per hour to a long-term bucket to see drifts in the data over years.
+You can also use it to save downsampled data for long-term storage while keeping the original data for short-term analysis. For example, if you **[store data from vibration sensors](/blog/how-to-store-vibration-sensor-data)**, you can replicate one record per hour to a long-term bucket to see drifts in the data over years.
 
 ### Ready for FUSE-based file systems
 

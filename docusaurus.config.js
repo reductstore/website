@@ -354,24 +354,24 @@ const config = {
                 to: "/solutions/cloud",
               },
               {
-                label: "Edge AI",
-                to: "/use-cases/ai-workflows",
+                label: "Robotics Data",
+                to: "/blog/database-for-robotics",
               },
               {
-                label: "Vibration Data",
-                to: "/use-cases/vibration-sensors",
+                label: "DAQ for Manufacturing",
+                to: "/blog/daq-manufacture-system",
               },
               {
                 label: "Computer Vision",
-                to: "/blog/tags/computer-vision",
+                to: "/blog/computer-vision-applications",
               },
               {
-                label: "IoT (MQTT)",
-                to: "/blog/tags/mqtt",
+                label: "Vibration Data",
+                to: "/blog/how-to-store-vibration-sensor-data",
               },
               {
-                label: "Robotics (ROS)",
-                to: "/blog/tags/ros",
+                label: "IIoT (MQTT)",
+                to: "/blog/advice/database/mqtt-data-storage",
               },
             ],
           },
