@@ -54,7 +54,7 @@ A user can use the `ext` query parameter to activate the `ros` extension and def
                "topic": "string",      # ROS topic name to extract from
                "encode": "object",     # e.g., {"data":"jpeg"} for JPEG encoding
                 "as_label": "object"   # e.g., {"label_name": "path_to_json"}
-            },"when": "object"         # e.g., {"@label_name" : {"$eq": "specified_value"}}
+            }
 
             "transform": {
               "include": "string[]",   # e.g., ["/topic-.*"]
@@ -227,26 +227,17 @@ Image parameters: {'height': 720, 'width': 1280, 'is_bigendian': 0, 'encoding': 
   - `schema`: `sensor_msgs/Image`
   - `encoding`: `cdr`
 
-### Using as_label parameter in ROS-EXT
+### Using Extracted Data for Filtering
 
 This example demonstrates how to use the ROS extension to apply filters to the JSON output of ReductStore.
 
-        ```json
-        {
-            "#ext": {
-                "ros": {  # name of the extension to use
-                    "extract": {
-                        "topic": "/test",
-                        "as_label": {
-                            "data1": "data", # specify the label and the json path
-                        },
-                    },
-                },"when": {
-                         "@data1" : {"$eq": "hello"} # specify the filtering condition
-                }
-            }
-        }
-        ```
+import RosExtractFilteredTopicPy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_extract_filtered.py";
+
+<Tabs>
+  <TabItem value="Python">
+    <CodeBlock language="python">{RosExtractFilteredTopicPy}</CodeBlock>
+  </TabItem>
+</Tabs>
 
 #### Expected Output
 
