@@ -237,7 +237,12 @@
     },
     {
       "route": "/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications",
-      "redirect": "/blog/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications",
+      "redirect": "/blog/computer-vision-applications",
+      "statusCode": 301
+    },
+    {
+      "route": "/blog/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications",
+      "redirect": "/blog/computer-vision-applications",
       "statusCode": 301
     },
     {

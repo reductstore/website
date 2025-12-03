@@ -22,9 +22,7 @@ export default function DataIngestionSection(
         </b>{" "}
         or{" "}
         <b>
-          <Link to="/blog/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications">
-            a CV camera
-          </Link>
+          <Link to="/blog/computer-vision-applications">a CV camera</Link>
         </b>
         .
       </p>
