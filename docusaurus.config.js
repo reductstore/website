@@ -43,7 +43,6 @@ const config = {
   plugins: [
     require.resolve("./src/plugins/docusaurus-plugin-matomo"),
     require.resolve("./src/plugins/docusaurus-plugin-consent-manager"),
-    require.resolve("./src/plugins/docusaurus-plugin-crisp"),
     require.resolve("./src/plugins/docusaurus-plugin-stream"),
     [
       require.resolve("./src/plugins/docusaurus-plugin-py-sdk-gen"),
@@ -123,24 +122,6 @@ const config = {
                 priority: null,
                 changefreq: null,
               },
-              {
-                url: "https://cloud.reduct.store/",
-                lastmod: new Date().toISOString(),
-                priority: null,
-                changefreq: null,
-              },
-              {
-                url: "https://cloud.reduct.store/signup",
-                lastmod: new Date().toISOString(),
-                priority: null,
-                changefreq: null,
-              },
-              {
-                url: "https://cloud.reduct.store/signin",
-                lastmod: new Date().toISOString(),
-                priority: null,
-                changefreq: null,
-              },
             ];
             return [
               ...items.filter(
@@ -184,11 +165,6 @@ const config = {
         cookieyesId: "28ee242ee07e2579793c1355",
         stagingCookieyesId: "3d9b3daecacd570c664904b4",
         googleTagManagerId: "GTM-WBJ3M84W",
-      },
-
-      // Crisp chat integration
-      crisp: {
-        siteId: "735614ef-d4bd-4d27-8700-aac9e08f8bc9",
       },
 
       // Stripe integration
@@ -272,24 +248,24 @@ const config = {
             position: "left",
             items: [
               {
-                label: "Edge AI",
-                to: "/use-cases/ai-workflows",
+                label: "Robotics Data",
+                to: "/blog/database-for-robotics",
               },
               {
-                label: "Vibration Data",
-                to: "/use-cases/vibration-sensors",
+                label: "DAQ for Manufacturing",
+                to: "/blog/daq-manufacture-system",
               },
               {
                 label: "Computer Vision",
-                to: "/use-cases/computer-vision",
+                to: "/blog/computer-vision-applications",
+              },
+              {
+                label: "Vibration Data",
+                to: "/blog/how-to-store-vibration-sensor-data",
               },
               {
                 label: "IIoT (MQTT)",
-                to: "/blog/tags/mqtt",
-              },
-              {
-                label: "Robotics",
-                to: "/blog/tags/robotics",
+                to: "/blog/advice/database/mqtt-data-storage",
               },
               {
                 label: "Explore More",
