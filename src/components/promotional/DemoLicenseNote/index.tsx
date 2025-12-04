@@ -5,7 +5,7 @@ const DemoLicenseNote = () => {
   return (
     <Admonition type="info" title="License Information">
       <p>
-        This extension is available under a <strong>commercial license</strong>.
+        This feature is available under a <strong>commercial license</strong>.
         For testing, you can either use a free demo server (extension included)
         or request a demo license for your own deployment.
       </p>

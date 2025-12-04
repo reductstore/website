@@ -1,0 +1,178 @@
+---
+title: S3 Integration
+description: Using S3 compatible storage as a backend for ReductStore.
+sidebar_position: 2
+---
+
+import DemoLicenseNote from "@site/src/components/promotional/DemoLicenseNote";
+
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/integrations/s3" />
+</head>
+
+This tutorial walks through using an S3-compatible backend for ReductStore in three deployment patterns:
+
+- A single **standalone** instance that writes directly to S3 and uses a local cache for recent data
+- An **active-passive** pair where one node is active and the other waits to take over if the first one fails
+- **Read-only replicas** that serve data from S3 close to your consumers, while writes happen elsewhere
+
+This roughly matches a typical journey: you start with a standalone instance, move to active-passive when you need higher availability, and later add replicas for read scaling or geo-distribution. For each pattern, you will see when it makes sense, how to start the containers, and what to watch during operations. In the examples, we use simple Docker Compose snippets for demonstration, but you can apply the same environment variables to Kubernetes, systemd, or plain `docker run`. All scenarios rely on the remote backend settings described in the **[configuration reference](../configuration#remote-backend-settings)**.
+
+<DemoLicenseNote />
+
+## Prerequisites
+
+For all S3-based topologies, you need:
+
+- An existing bucket in Amazon S3 or any S3-compatible service (MinIO, Ceph, Cloudflare R2, etc.)
+- Access and secret keys that allow bucket-level read/write, list, and delete
+- Network connectivity from the host to the S3 endpoint and region you plan to use
+- A valid license file for commercial usage, mounted into the container and configured via `RS_LICENSE_PATH` (see **[Configuration](../configuration#general)** for details)
+- A persistent cache path on the host (for example, a Docker volume) sized for your expected hot data
+- ReductStore v1.18+ container image and a TCP listener for port `8383`
+
+## Shared S3 configuration
+
+Use these variables for every topology and adjust values to your environment. When the S3 backend is enabled, `RS_DATA_PATH` is ignored and only the cache path is used locally. Think of S3 as your long-term storage and the cache as a local “hot tier” that keeps recent data close to the node.
+
+```bash
+RS_REMOTE_BACKEND_TYPE=S3
+RS_REMOTE_BUCKET=reduct-data
+RS_REMOTE_REGION=us-east-1
+RS_REMOTE_ENDPOINT=https://s3.amazonaws.com # Set for non-AWS endpoints
+RS_REMOTE_ACCESS_KEY=<your-access-key>
+RS_REMOTE_SECRET_KEY=<your-secret-key>
+RS_REMOTE_CACHE_PATH=/var/reduct/cache
+RS_REMOTE_CACHE_SIZE=10GB          # Adjust based on your workload
+RS_REMOTE_SYNC_INTERVAL=60s        # Adjust based on ingestion rate
+```
+
+## Standalone on S3
+
+Standalone mode is the simplest way to combine ReductStore with S3. You run a single instance that writes data to S3 and keeps a local cache for fast access to recent records. There is no lock file or coordination with other nodes, so you only manage one container and one set of credentials. If you are not sure which pattern to pick, start here.
+
+**When to use**: small teams or edge deployments that need S3 durability without coordination across multiple nodes. This setup is a good fit for pilot projects, development environments, or single-tenant services where short maintenance windows are fine.
+
+```yaml
+version: "3.9"
+services:
+  reduct-standalone:
+    image: reduct/store:latest
+    environment:
+      RS_INSTANCE_ROLE: STANDALONE
+      RS_REMOTE_BACKEND_TYPE: S3
+      RS_REMOTE_BUCKET: reduct-data
+      RS_REMOTE_REGION: us-east-1
+      RS_REMOTE_ACCESS_KEY: ${AWS_ACCESS_KEY_ID}
+      RS_REMOTE_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY}
+      RS_REMOTE_CACHE_PATH: /var/reduct/cache
+      RS_REMOTE_CACHE_SIZE: 10GB
+      RS_REMOTE_SYNC_INTERVAL: 60s
+      RS_LICENSE_PATH: /var/reduct/license/license.key
+    volumes:
+      - reduct-cache:/var/reduct/cache
+      - ./license/license.key:/var/reduct/license/license.key:ro
+    ports:
+      - "8383:8383"
+
+volumes:
+  reduct-cache:
+```
+
+**Operations tips**
+
+- Scale cache size (`RS_REMOTE_CACHE_SIZE`) to keep the hottest blocks local and reduce S3 calls.
+- Keep `RS_REMOTE_SYNC_INTERVAL` above 10–30 seconds to avoid excessive S3 writes if you ingest at high rate.
+
+## Active-passive with S3
+
+Active-passive mode adds a second ReductStore instance as a standby. At any time, only one node is active and allowed to write to S3; the other node watches the same bucket and waits to take over if the first one disappears. From the client side, you still talk to a single virtual endpoint (for example, a load balancer), but behind the scenes traffic is routed to whichever node currently holds the lock.
+
+**When to use**: production environments that require automated failover without concurrent writers. This pattern is ideal for on-prem clusters or cloud VMs where you can run two nodes against the same S3 bucket and let one take over automatically if the other dies, without manual intervention.
+
+Failover is coordinated by the lock file: the active node periodically refreshes it, and the standby node only becomes active if the lock is stale. Health checks must use the ready endpoint so your load balancer only sends traffic to the active node and never splits writes across both.
+
+```yaml
+version: "3.9"
+services:
+  reduct-primary:
+    image: reduct/store:latest
+    environment:
+      RS_INSTANCE_ROLE: PRIMARY
+      RS_REMOTE_BACKEND_TYPE: S3
+      RS_REMOTE_BUCKET: reduct-ha
+      RS_REMOTE_REGION: us-east-1
+      RS_REMOTE_ACCESS_KEY: ${AWS_ACCESS_KEY_ID}
+      RS_REMOTE_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY}
+      RS_REMOTE_CACHE_PATH: /var/reduct/cache
+      RS_LOCK_FILE_TTL: 45s # Wait 45s if lock is stale before taking over
+      RS_LOCK_FILE_TIMEOUT: 0 # Wait indefinitely for the lock
+      RS_LICENSE_PATH: /var/reduct/license/license.key
+    volumes:
+      - primary-cache:/var/reduct/cache
+      - ./license/license.key:/var/reduct/license/license.key:ro
+    ports:
+      - "8383:8383"
+
+  reduct-secondary:
+    image: reduct/store:latest
+    environment:
+      RS_INSTANCE_ROLE: SECONDARY
+      RS_REMOTE_BACKEND_TYPE: S3
+      RS_REMOTE_BUCKET: reduct-ha
+      RS_REMOTE_REGION: us-east-1
+      RS_REMOTE_ACCESS_KEY: ${AWS_ACCESS_KEY_ID}
+      RS_REMOTE_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY}
+      RS_REMOTE_CACHE_PATH: /var/reduct/cache
+      RS_LOCK_FILE_TTL: 45s # Wait 45s if lock is stale before taking over
+      RS_LOCK_FILE_TIMEOUT: 0 # Wait indefinitely for the lock
+      RS_LICENSE_PATH: /var/reduct/license/license.key
+    volumes:
+      - secondary-cache:/var/reduct/cache
+      - ./license/license.key:/var/reduct/license/license.key:ro
+
+volumes:
+  primary-cache:
+  secondary-cache:
+```
+
+**Operations tips**
+
+- The primary acquires the lock file and serves reads/writes. The secondary waits for the lock and takes over after the TTL if the primary stops updating it. From the client’s point of view, the URL stays the same; only the active container changes.
+- Put both nodes behind a load balancer that checks `GET /api/v1/ready` (see **[Server API](../http-api/server-api#check-if-the-storage-engine-is-active)**). Route traffic only to nodes returning `200 OK`; a node that loses the lock will return `503` and should be taken out of rotation.
+- Set `RS_LOCK_FILE_TIMEOUT=0` on both nodes to make them wait indefinitely for the lock.
+
+## Read-only replica on S3
+
+Read-only replicas attach to the same S3 bucket as your writer but never acquire the lock file or perform writes. They periodically refresh bucket metadata and indexes from S3, serve reads from their local cache, and fall back to S3 when needed. This gives you extra read capacity and better locality without introducing split-brain writes.
+
+**When to use**: analytics or ML workloads that need low-latency reads near users while keeping a single write path elsewhere. Replicas provide read scaling without risking divergent writes, because they always treat S3 as the source of truth.
+
+```yaml
+version: "3.9"
+services:
+  reduct-replica:
+    image: reduct/store:latest
+    environment:
+      RS_INSTANCE_ROLE: REPLICA
+      RS_REMOTE_BACKEND_TYPE: S3
+      RS_REMOTE_BUCKET: reduct-ha
+      RS_REMOTE_REGION: us-east-1
+      RS_REMOTE_ACCESS_KEY: ${AWS_ACCESS_KEY_ID}
+      RS_REMOTE_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY}
+      RS_REMOTE_CACHE_PATH: /var/reduct/cache
+      RS_REMOTE_CACHE_SIZE: 50GB
+      RS_ENGINE_REPLICA_UPDATE_INTERVAL: 30s # Refresh indexes and changes from S3 every 30s
+      RS_LICENSE_PATH: /var/reduct/license/license.key
+    volumes:
+      - replica-cache:/var/reduct/cache
+      - ./license/license.key:/var/reduct/license/license.key:ro
+volumes:
+  replica-cache:
+```
+
+**Operations tips**
+
+- You can run multiple replicas against the same S3 bucket to scale reads horizontally. In this case, ensure your load balancer supports sticky sessions since some of the ReductStore HTTP API calls use server-side cursors.
+- Tune `RS_ENGINE_REPLICA_UPDATE_INTERVAL` for how often bucket lists and indexes are refreshed from S3; shorter intervals reduce staleness at the cost of extra S3 calls.
+- Place replicas in regions close to clients to shorten RTT while S3 keeps durability. Ingest still happens on the primary/secondary pair or standalone writer.
