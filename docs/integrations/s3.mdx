@@ -130,6 +130,8 @@ services:
     volumes:
       - secondary-cache:/var/reduct/cache
       - ./license/license.key:/var/reduct/license/license.key:ro
+    ports:
+      - "8384:8383"
 
 volumes:
   primary-cache:
