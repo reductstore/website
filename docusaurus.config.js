@@ -117,7 +117,7 @@ const config = {
                 changefreq: null,
               },
               {
-                url: "https://play.reduct.store/",
+                url: "https://play.reduct.store/replica/",
                 lastmod: new Date().toISOString(),
                 priority: null,
                 changefreq: null,
