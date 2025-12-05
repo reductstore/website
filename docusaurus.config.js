@@ -176,7 +176,7 @@ const config = {
 
       // Remote playground dataset
       playServer: {
-        url: "https://play.reduct.store/replica/",
+        url: "https://play.reduct.store/replica",
         token: "reductstore",
         bucket: "datasets",
       },
