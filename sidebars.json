@@ -124,7 +124,11 @@
         "type": "doc",
         "id": "integrations/index"
       },
-      "items": ["integrations/s3", "integrations/ros2-agent"]
+      "items": [
+        "integrations/s3",
+        "integrations/grafana/index",
+        "integrations/ros2-agent"
+      ]
     },
     {
       "type": "category",
