@@ -1,0 +1,86 @@
+---
+title: ⚙ Configuration
+description: ReductStore configuration options and provisioning.
+---
+
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/configuration" />
+</head>
+
+# ⚙ Server Configuration
+
+This section describes how to configure ReductStore using environment variables and snap settings.
+
+## General Settings
+
+ReductStore uses environment variables for configuration. Here is a list of the general settings:
+
+| Name                   | Default                                         | Description                                                                                                                                    |
+| ---------------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `RS_LOG_LEVEL`         | INFO                                            | Logging level: TRACE, DEBUG, INFO, WARNING, ERROR. A user can filter logs by path e.g. `INFO,reductstore/api=DEBUG`                            |
+| `RS_HOST`              | 0.0.0.0                                         | Listening IP address                                                                                                                           |
+| `RS_PORT`              | 8383                                            | Listening port                                                                                                                                 |
+| `RS_INSTANCE_ROLE`     | STANDALONE                                      | Role of the instance. It can be `STANDALONE`, `PRIMARY`, `SECONDARY` or `REPLICA`. See **[Instance Roles](#instance-roles)** for more details. |
+| `RS_API_BASE_PATH`     | /                                               | Prefix for all URLs of requests                                                                                                                |
+| `RS_PUBLIC_URL`        | http(s)://[RS_HOST]:[RS_PORT][RS_API_BASE_PATH] | Public URL of the instance. Used for **[query links](../glossary#query-link)**.                                                                |
+| `RS_DATA_PATH`         | /data                                           | Path to a folder where the storage stores the data                                                                                             |
+| `RS_API_TOKEN`         |                                                 | If set, the storage uses token authorization                                                                                                   |
+| `RS_CERT_PATH`         |                                                 | Path to an SSL certificate. If unset, the storage uses HTTP instead of HTTPS                                                                   |
+| `RS_CERT_KEY_PATH`     |                                                 | Path to the private key of the desired SSL certificate. Should be set with RS_CERT_PATH                                                        |
+| `RS_LICENSE_PATH`      |                                                 | Path to the license file. Required for commercial usage. See **[Pricing](/pricing)** for more details.                                         |
+| `RS_CORS_ALLOW_ORIGIN` |                                                 | Sets the `Access-Control-Allow-Origin header`. Use `*` to allow all origins or list specific origins separated by commas.                      |
+| `RS_EXT_PATH`          |                                                 | If set, it activates the experimental extension API. The path should be a folder with extension binaries.                                      |
+
+You can tune other settings such as performance, storage engine, and more. See **[the advanced settings](./settings.mdx)**.
+
+### Instance Roles
+
+Depending on the deployment scenario, ReductStore can operate in different modes. You can set the instance role using the `RS_INSTANCE_ROLE` environment variable. The available roles are:
+
+| Role         | Description                                                                                                                                                                                                             |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `STANDALONE` | The instance operates independently, handling both read and write operations and doesn't protect data with a lock file.                                                                                                 |
+| `PRIMARY`    | The instance acts as the primary node in an active-passive setup, acquiring a lock file to prevent other instances from accessing the same data. It handles both read and write operations.                             |
+| `SECONDARY`  | The instance acts as the secondary node in an active-passive setup, acquiring a lock file asymmetrically to the primary instance. It handles both read and write operations but operates only when the primary is down. |
+| `REPLICA`    | The instance operates in read-only mode, allowing only read operations. It doesn't acquire a lock file and only serves data.                                                                                            |
+
+## For Snap Users
+
+If you use snap, you can configure the database by using the `snap set` command:
+
+```
+snap set reductstore log-level=DEBUG
+```
+
+This command changes the log level to DEBUG and restarts the database. You can check the current configuration with the `snap get reductstoret` command:
+
+```
+snap get reductstore
+Key            Value
+api-base       /
+api-token
+cert-key-path
+cert-path
+data-path      /var/snap/reductstore/common
+host           0.0.0.0
+log-level      DEBUG
+port           8383
+```
+
+By default, the database uses the `/var/snap/reductstore/common` folder to store data. Due to snap restrictions, you can't use root filesystem folders.
+We recommend that you connect the snap to the `removable-media` interface and store the data in a folder outside the snap in `/mnt/*` or `/media/*` folders:
+
+```
+snap connect reductstore:removable-media
+mkdir /mnt/data
+snap set reductstore data-path=/mnt/data
+```
+
+:::danger
+Removing the snap will remove all data stored in the default data path. If you want to keep the data, you need to move it to another location before removing the snap.
+Or use the `snap connect reductstore:removable-media` command to connect the snap to the `removable-media` interface and store the data in a folder outside the snap.
+:::
+
+import DocCardList from "@theme/DocCardList";
+
+<DocCardList />
