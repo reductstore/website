@@ -100,7 +100,7 @@ jobs:
         if: matrix.example == 'golang'
         uses: actions/setup-go@v4
         with:
-          go-version: 1.24
+          go-version: 1.22
           check-latest: true
 
       - name: Install Python dependencies

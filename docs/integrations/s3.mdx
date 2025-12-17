@@ -16,7 +16,7 @@ This tutorial walks through using an S3-compatible backend for ReductStore in th
 - An **active-passive** pair where one node is active and the other waits to take over if the first one fails
 - **Read-only replicas** that serve data from S3 close to your consumers, while writes happen elsewhere
 
-This roughly matches a typical journey: you start with a standalone instance, move to active-passive when you need higher availability, and later add replicas for read scaling or geo-distribution. For each pattern, you will see when it makes sense, how to start the containers, and what to watch during operations. In the examples, we use simple Docker Compose snippets for demonstration, but you can apply the same environment variables to Kubernetes, systemd, or plain `docker run`. All scenarios rely on the remote backend settings described in the **[configuration reference](../configuration#remote-backend-settings)**.
+This roughly matches a typical journey: you start with a standalone instance, move to active-passive when you need higher availability, and later add replicas for read scaling or geo-distribution. For each pattern, you will see when it makes sense, how to start the containers, and what to watch during operations. In the examples, we use simple Docker Compose snippets for demonstration, but you can apply the same environment variables to Kubernetes, systemd, or plain `docker run`. All scenarios rely on the remote backend settings described in the **[configuration reference](../configuration/settings.mdx#remote-backend-settings)**.
 
 <DemoLicenseNote />
 
@@ -27,7 +27,7 @@ For all S3-based topologies, you need:
 - An existing bucket in Amazon S3 or any S3-compatible service (MinIO, Ceph, Cloudflare R2, etc.)
 - Access and secret keys that allow bucket-level read/write, list, and delete
 - Network connectivity from the host to the S3 endpoint and region you plan to use
-- A valid license file for commercial usage, mounted into the container and configured via `RS_LICENSE_PATH` (see **[Configuration](../configuration#general)** for details)
+- A valid license file for commercial usage, mounted into the container and configured via `RS_LICENSE_PATH` (see **[Configuration](../configuration/index.mdx#general-settings)** for details)
 - A persistent cache path on the host (for example, a Docker volume) sized for your expected hot data
 - ReductStore v1.18+ container image and a TCP listener for port `8383`
 
