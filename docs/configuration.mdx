@@ -149,13 +149,13 @@ You can configure the lock file settings using the following environment variabl
 
 | Name                            | Default | Description                                                                                                                                                                                              |
 | ------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `RS_LOCK_FILE_POLLING_INTERVAL` | 10s     | Interval between attempts to acquire the lock file or rewrite the acuired lock file to update its timestamp.                                                                                             |
+| `RS_LOCK_FILE_POLLING_INTERVAL` | 10s     | Interval between attempts to acquire the lock file or rewrite the acquired lock file to update its timestamp.                                                                                            |
 | `RS_LOCK_FILE_ROLE`             | primary | Role of the instance. It can be `primary` or `secondary`. The primary instance acquires the lock file immediately. The secondary instance waits for the primary to acquire the file first.               |
 | `RS_LOCK_FILE_TTL`              | 30s     | Time-to-live for the lock file. If the lock file is not updated within the TTL, it is considered stale and can be overwritten by another instance.                                                       |
 | `RS_LOCK_FILE_TIMEOUT`          | 60s     | Timeout for acquiring the lock file. If the lock file is not acquired within the timeout, the storage will exit. When set to 0, the storage will wait indefinitely.                                      |
 | `RS_LOCK_FILE_FAILURE_ACTION`   | abort   | Action to take if the lock file can't be acquired. It can be `abort` or `proceed`. If set to `abort`, the storage will exit. If set to `proceed`, the storage will overwrite the lock file and continue. |
 
-The lock file is enabled when the `RS_INSTANCE_ROLE` variable is set to `primary` or `secondary`. If the variable is not set, the lock file mechanism is disabled.
+The lock file is enabled when the `RS_INSTANCE_ROLE` variable is set to `PRIMARY` or `SECONDARY`. If the variable is not set, the lock file mechanism is disabled.
 
 ### Storage Engine Settings
 
