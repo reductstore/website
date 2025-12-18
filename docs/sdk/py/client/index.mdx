@@ -67,7 +67,7 @@ Get high level server info
 **Returns**:
 
 - `ServerInfo` - server information
-  
+
 
 **Raises**:
 
@@ -321,6 +321,26 @@ Update an existing replication
 
 - `ReductError` - if there is an HTTP error
 
+<a id="reduct.client.Client.set_replication_mode"></a>
+
+#### set\_replication\_mode
+
+```python
+async def set_replication_mode(replication_name: str,
+                               mode: ReplicationMode) -> None
+```
+
+Update mode for an existing replication without overriding settings
+
+**Arguments**:
+
+- `replication_name` - Name of the replication to update
+- `mode` - New replication mode
+
+**Raises**:
+
+- `ReductError` - if there is an HTTP error
+
 <a id="reduct.client.Client.delete_replication"></a>
 
 #### delete\_replication
@@ -338,5 +358,3 @@ Delete a replication
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-
-

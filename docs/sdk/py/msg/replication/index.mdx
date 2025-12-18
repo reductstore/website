@@ -14,6 +14,16 @@ description: API reference for the Replication Module Module of the ReductStore 
 
 Message types for the Replication API
 
+<a id="reduct.msg.replication.ReplicationMode"></a>
+
+## ReplicationMode
+
+```python
+class ReplicationMode(str, Enum)
+```
+
+Replication mode
+
 <a id="reduct.msg.replication.ReplicationInfo"></a>
 
 ## ReplicationInfo
@@ -41,6 +51,12 @@ replication is provisioned and can't be deleted or changed
 #### is\_active
 
 replication is active and the remote server is reachable
+
+<a id="reduct.msg.replication.ReplicationInfo.mode"></a>
+
+#### mode
+
+current replication mode
 
 <a id="reduct.msg.replication.ReplicationInfo.pending_records"></a>
 
@@ -183,6 +199,12 @@ replicate a record every S seconds
 
 replicate every Nth record
 
+<a id="reduct.msg.replication.ReplicationSettings.mode"></a>
+
+#### mode
+
+replication mode
+
 <a id="reduct.msg.replication.ReplicationDetailInfo"></a>
 
 ## ReplicationDetailInfo
@@ -210,5 +232,3 @@ replication information
 #### settings
 
 replication settings
-
-
