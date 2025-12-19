@@ -35,6 +35,7 @@
 - One logical change per commit; avoid bundling unrelated docs and feature updates together.
 - PRs should include: summary of change, testing notes (commands run), screenshots or GIFs for visible UI changes, and links to related issues/tickets.
 - Keep docs in sync with behavior (update `README.md`, `docs/`, or `versioned_docs/` when features change) and mention any new environment variables or config requirements.
+- Use GitHub CLI to create a PR with the following tempate https://github.com/reductstore/.github/blob/main/.github/pull_request_template.md.
 
 ## Repository links
 
