@@ -160,6 +160,7 @@ jobs:
             reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-rename
             reduct-cli replica create http://my-token@127.0.0.1:8383/example-replication  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
             reduct-cli replica create http://my-token@127.0.0.1:8383/repl-to-remove  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
+            reduct-cli replica create http://my-token@127.0.0.1:8383/my_replication example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
             reduct-cli token create http://my-token@127.0.0.1:8383/token-to-remove
             curl -X POST -H "Authorization: Bearer my-token" -d "" http://127.0.0.1:8383/api/v1/b/bucket-to-remove/example-entry?ts=1
             curl -X POST -H "Authorization: Bearer my-token" -d "" http://127.0.0.1:8383/api/v1/b/example-bucket/entry_1?ts=1
