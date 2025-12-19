@@ -202,9 +202,51 @@ import BrowseReplicaCurl from "!!raw-loader!../examples/curl/data_replication_br
   </TabItem>
 </Tabs>
 
+### Replication modes
+
+Replication tasks can be switched between modes via the SDKs or HTTP API without recreating the task:
+
+- `enabled`: Replicates incoming records to the target bucket (default).
+- `paused`: Collects new transactions without sending them until you resume the task.
+- `disabled`: Ignores new transactions; no new data is queued or sent.
+
+Switch modes when a target is under maintenance or recovering. Provisioned replications keep the mode defined by their environment variables; update those variables if you need to change their behavior.
+
+import UpdateReplicaModePy from "!!raw-loader!../examples/py/src/data_replication_mode.py";
+import UpdateReplicaModeJs from "!!raw-loader!../examples/js/src/data_replication_mode.mjs";
+import UpdateReplicaModeGo from "!!raw-loader!../examples/go/src/data_replication_mode.go";
+import UpdateReplicaModeRs from "!!raw-loader!../examples/rs/examples/data_replication_mode.rs";
+import UpdateReplicaModeCpp from "!!raw-loader!../examples/cpp/src/data_replication_mode.cc";
+import UpdateReplicaModeCurl from "!!raw-loader!../examples/curl/data_replication_mode.sh";
+
+<Tabs>
+  <TabItem value="Python">
+    <CodeBlock language="python">{UpdateReplicaModePy}</CodeBlock>
+  </TabItem>
+  <TabItem value="JavaScript">
+    <CodeBlock language="javascript">{UpdateReplicaModeJs}</CodeBlock>
+  </TabItem>
+  <TabItem value="Go">
+    <CodeBlock language="go">{UpdateReplicaModeGo}</CodeBlock>
+  </TabItem>
+  <TabItem value="Rust">
+    <CodeBlock language="rust">{UpdateReplicaModeRs}</CodeBlock>
+  </TabItem>
+  <TabItem value="C++">
+    <CodeBlock language="cpp">{UpdateReplicaModeCpp}</CodeBlock>
+  </TabItem>
+  <TabItem value="cURL">
+    <CodeBlock language="bash">{UpdateReplicaModeCurl}</CodeBlock>
+  </TabItem>
+</Tabs>
+
 ### Removing a Replication Task
 
 You can remove a replication task by using the ReductStore SDKs, REST API, CLI and Web Console. Once you remove a replication task, the replication process stops immediately, and the transaction log is deleted from the database.
+
+:::danger
+Removing a task deletes its transaction log and drops any queued (unsynced) records. If you only need a temporary stop, switch the task to `paused` or `disabled` instead of deleting it.
+:::
 
 :::info
 You can't remove a provisioned replication task. Before removing it, you need to

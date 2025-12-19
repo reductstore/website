@@ -149,6 +149,11 @@ jobs:
           cd ${{ matrix.example_root }}
           for example in $(find ${PWD}/${{ matrix.path_prefix }} -type f -not -path "*/.*");
           do
+            if [ "${{ matrix.example }}" = "golang" ] && [[ "$example" == *"data_replication_mode.go" ]]; then
+              echo "Skip $example (replication mode not supported in current Go SDK)"
+              continue
+            fi
+
             echo '${{secrets.LICENSE_KEY}}' > ./license.lic
             docker run -d  -v ${PWD}:/misc \
                 --name reductstore -p 8383:8383 \
@@ -160,6 +165,7 @@ jobs:
             reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-rename
             reduct-cli replica create http://my-token@127.0.0.1:8383/example-replication  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
             reduct-cli replica create http://my-token@127.0.0.1:8383/repl-to-remove  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
+            reduct-cli replica create http://my-token@127.0.0.1:8383/my_replication example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
             reduct-cli token create http://my-token@127.0.0.1:8383/token-to-remove
             curl -X POST -H "Authorization: Bearer my-token" -d "" http://127.0.0.1:8383/api/v1/b/bucket-to-remove/example-entry?ts=1
             curl -X POST -H "Authorization: Bearer my-token" -d "" http://127.0.0.1:8383/api/v1/b/example-bucket/entry_1?ts=1
@@ -190,8 +196,8 @@ jobs:
           lfs: false
       - name: Run provisioning examples
         run: |
-          for example in $(find docs/guides/examples/provisioning -type f );
+          for example in $(find docs/examples/provisioning -type f );
           do
-            docker-compose -f $example up -d
-            docker-compose -f $example down
+            docker compose -f $example up -d
+            docker compose -f $example down
           done
