@@ -190,7 +190,7 @@ jobs:
           lfs: false
       - name: Run provisioning examples
         run: |
-          for example in $(find docs/guides/examples/provisioning -type f );
+          for example in $(find docs/examples/provisioning -type f );
           do
             docker-compose -f $example up -d
             docker-compose -f $example down
