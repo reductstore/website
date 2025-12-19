@@ -14,6 +14,18 @@ description: HTTP Endpoints for deleting data from an entry in the database.
 
 The API provides several endpoints for deleting data from an **[entry](../../glossary#entry)** in the database. It can be an entire entry, a specific **[record](../../glossary#record)**, a batch of records in a single request or records within a time range.
 
+:::info Non-Blocking Deletion
+Delete operations are **non-blocking** and may take time to complete, especially for entries with large amounts of data. The HTTP request returns immediately with a 200 OK status, but the actual deletion of data blocks happens asynchronously in the background.
+
+**What to expect:**
+
+- Records are immediately marked for deletion and become unavailable for read operations
+- Physical deletion of data blocks continues in the background
+- Large entries may take considerable time to be fully removed from disk
+- When deleting an entire entry, it disappears from the entry list once deletion is complete
+- No explicit progress tracking is available via the API
+  :::
+
 ## Remove a Record from an Entry
 
 The method removes a record from an entry or the entire entry.

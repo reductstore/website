@@ -184,3 +184,15 @@ If the query type is `REMOVE`, the API returns a JSON object with the number of 
   removed_records: "integer";
 }
 ```
+
+:::info Non-Blocking Deletion
+Query-based delete operations (`REMOVE` query type) are **non-blocking** and may take time to complete, especially when removing large numbers of records. The HTTP request returns immediately with the count of records marked for deletion, but the actual deletion of data blocks happens asynchronously in the background.
+
+**What to expect:**
+
+- The response returns the count of records marked for deletion
+- Records become immediately unavailable for read operations
+- Physical deletion of data blocks continues in the background
+- Large deletion operations may take considerable time to complete on disk
+- No explicit progress tracking is available beyond the initial count returned
+  :::

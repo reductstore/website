@@ -400,6 +400,17 @@ access.
 This operation is irreversible. All data in the bucket will be lost.
 :::
 
+:::info Non-Blocking Deletion
+Delete operations are **non-blocking** and may take time to complete, especially for large buckets with significant amounts of data. The HTTP request returns immediately with a 200 OK status, but the actual deletion happens asynchronously in the background.
+
+**What to expect:**
+
+- The bucket is immediately marked for deletion and becomes unavailable for read/write operations
+- Physical deletion of data blocks continues in the background
+- Large buckets may take considerable time to be fully removed from disk
+- No explicit progress tracking is available; the bucket simply disappears from the bucket list once deletion is complete
+  :::
+
 <SwaggerComponent
   method="DELETE"
   path="/api/v1/b/:bucket_name"
