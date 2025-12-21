@@ -24,6 +24,7 @@ access to the entry's **[bucket](../../glossary#bucket)**.
   labels, the method sends them as headers that start with `x-reduct-label`.
 - Version 1.4: the `x-reduct-last` header is deprecated. Use the NoContent response instead.
 - Version 1.16: the `x-reduct-last` header is removed.
+- Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
 
 <head>
   <link
@@ -106,6 +107,11 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
             summary: "Access token does not have the required permissions to access the resource",
         },
         {
+            status: "409",
+            message: "Conflict",
+            summary: "The bucket is being deleted or the entry is being deleted",
+        },
+        {
             status: "404",
             message: "Not Found",
             summary: "The bucket or record with the specified timestamp does not exist.",
@@ -131,6 +137,7 @@ If authentication is enabled, the method needs a valid API token with read acces
 **Changes**:
 
 - Version 1.5: the method was introduced.
+- Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
 
 <SwaggerComponent
     method="GET"
@@ -190,6 +197,11 @@ If authentication is enabled, the method needs a valid API token with read acces
             summary: "Access token doesn't have the required permissions to access this resource",
         },
         {
+            status: "409",
+            message: "Conflict",
+            summary: "The bucket is being deleted or the entry is being deleted",
+        },
+        {
             status: "404",
             message: "Not Found",
             summary: "The bucket or record with the specified timestamp doesn't exist",
@@ -229,6 +241,7 @@ access to the bucket of the entry.
   A client can ask them later. The query will not be removed until its TTL has expired. The `stop` parameter is ignored for continuous queries.
 - Version 1.6: the method provides the `limit` query parameter. It limits the number of records in the query. If it is not set, the query is unlimited by default.
 - Version 1.10: the method has the `each_n` and `each_s` query parameters. If the `each_n` parameter is set, the method returns only every `each_n`-th record. If the `each_s` parameter is set, the method returns only one record per `each_s` seconds.
+- Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
 
 :::warning
 Since version 1.13, the method is deprecated. Use the [**Query API**](/docs/http-api/entry-api/run_query.mdx) instead.
@@ -368,6 +381,11 @@ Since version 1.13, the method is deprecated. Use the [**Query API**](/docs/http
       status: "403",
       message: "Forbidden",
       summary: "Access token doesn't have the required permissions",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "The bucket is being deleted or the entry is being deleted",
     },
     {
       status: "404",
