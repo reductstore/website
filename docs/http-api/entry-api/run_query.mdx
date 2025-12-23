@@ -17,6 +17,7 @@ The API provides a single endpoint for running queries on an **[entry](../../glo
 **Changes**:
 
 - Version 1.13: the method was introduced.
+- Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
 
 import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
@@ -65,6 +66,11 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
       message: "Forbidden",
       summary:
         "Access token doesn’t have the required permissions to access the resource.",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "The bucket is being deleted or the entry is being deleted",
     },
     {
       status: "404",
