@@ -35,7 +35,7 @@ In the table below, you can see the available strategies and their effectiveness
 | Hot Standby Setup                          | Active-passive pair sharing the same storage with a lock file                        | seconds       | ✅               | ❌              | ✅             | ❌                 |
 | Read-only Replicas                         | One writer with multiple read-only nodes for read scaling and decoupled ingestion    | zero          | ✅               | ❌              | ✅             | ❌                 |
 
-## Data Loss Detection And Automated Recovery
+## Data Loss Detection and Automated Recovery
 
 ReductStore’s disaster recovery strategy begins with detecting data loss. The core principle is: whatever happens, detect and isolate the problem as early as possible, and continue operating with unaffected data.
 
@@ -75,6 +75,7 @@ If corruption is detected:
 - A `500 Internal Server Error` is returned.
 - The issue is logged for administrative review.
 - The corrupted block is removed from the in-memory index and will be ignored on subsequent requests until restart.
+  On restart, the corrupted block is removed only if integrity checks are enabled; otherwise, it must be removed manually or the issue will repeat.
 
 An administrator can inspect the logs and take corrective actions such as removing the corrupted block or restoring it from a backup.
 
@@ -292,7 +293,7 @@ For an end-to-end active-passive setup on S3, see **[S3 Integration](../integrat
 ## Read-only Replicas
 
 Read-only replicas let you run multiple ReductStore instances in `REPLICA` mode against the same dataset.
-Replicas serve **reads only** and periodically refresh bucket metadata and indexes from the storage backend, so newly written data is not visible immediately. You can tune this behavior with `RS_ENGINE_REPLICA_UPDATE_INTERVAL` on replicas and `RS_ENGINE_COMPACTION_INTERVAL` on the writer, which controls how often WALs are compacted into blocks and synced to the backend (in addition to syncing when a block is finished).
+Replicas serve **reads only** and periodically refresh bucket metadata and indexes from the storage backend, so newly written data is not visible immediately.
 
 This deployment pattern helps you:
 
@@ -325,7 +326,7 @@ Read-only replicas poll for metadata and index updates, so data appears with a d
 - `RS_ENGINE_REPLICA_UPDATE_INTERVAL`: How often replicas refresh bucket metadata and indexes from the backend.
 - `RS_ENGINE_COMPACTION_INTERVAL`: How often the writer compacts WALs into blocks and syncs them to the backend (in addition to syncing when a block is finished).
 
-### Example: Docker Compose (shared file system)
+### Example: Docker Compose (shared storage)
 
 This example shows one writer and two read-only replicas using the same shared data directory. In production, the shared storage must be accessible from all nodes (for example, NFS, EFS, CephFS).
 
