@@ -38,7 +38,17 @@
         }
       ]
     },
-    "configuration",
+    {
+      "type": "category",
+      "label": "⚙ Configuration",
+      "collapsed": true,
+      "collapsible": true,
+      "link": {
+        "type": "doc",
+        "id": "configuration/index"
+      },
+      "items": ["configuration/settings", "configuration/provisioning"]
+    },
     {
       "type": "category",
       "label": "\uD83D\uDCDA Guides",

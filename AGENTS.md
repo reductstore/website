@@ -35,3 +35,15 @@
 - One logical change per commit; avoid bundling unrelated docs and feature updates together.
 - PRs should include: summary of change, testing notes (commands run), screenshots or GIFs for visible UI changes, and links to related issues/tickets.
 - Keep docs in sync with behavior (update `README.md`, `docs/`, or `versioned_docs/` when features change) and mention any new environment variables or config requirements.
+- Use GitHub CLI to create a PR with the following template https://github.com/reductstore/.github/blob/main/.github/pull_request_template.md.
+
+## Repository links
+
+- Main Repo: https://github.com/reductstore/reductstore
+- CLI: https://github.com/reductstore/reduct-cli
+- Web Console: https://github.com/reductstore/web-console
+- Python SDK: https://github.com/reductstore/reduct-py
+- JavaScript SDK: https://github.com/reductstore/reduct-js
+- Go SDK: https://github.com/reductstore/reduct-go
+- Rust SDK: https://github.com/reductstore/reduct-rs
+- C++ SDK: https://github.com/reductstore/reduct-cpp

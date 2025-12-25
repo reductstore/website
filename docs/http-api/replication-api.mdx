@@ -29,6 +29,7 @@ The method returns a list of replication Task with their statuses.
 **Changes**:
 
 - v1.8: The endpoint was added
+- v1.18: Added the `mode` field to show whether replication is `enabled`, `paused`, or `disabled`
 
 <SwaggerComponent
   method="GET"
@@ -44,6 +45,7 @@ The method returns a list of replication Task with their statuses.
   "replications": [
     {
       "name": "string",             // unique name of replication
+      "mode": "string",             // replication mode: enabled, paused, or disabled
       "is_provisioned": "bool"      // true if replication is provisioned
       "is_active": "bool"           // true if replication is active means that the destination bucket is available and no communication errors occurred
       "pending_records": "int"      // number of records that are not yet replicated
@@ -75,6 +77,7 @@ diagnostics and settings.
 
 - v1.8: The endpoint was added
 - v1.14: The `when` field was added with **[conditional query](../glossary#conditional-query)** to filter records
+- v1.18: Added the `mode` field to the replication info and settings
 
 <SwaggerComponent
   method="GET"
@@ -112,6 +115,7 @@ diagnostics and settings.
         },
         "info": {
             "name": "string",             // unique name of replication
+            "mode": "string",             // replication mode: enabled, paused, or disabled
             "is_provisioned": "bool"      // true if replication is provisioned
             "is_active": "bool"           // true if replication is active means that the destination bucket is available and no communication errors occurred
             "pending_records": "int"      // number of records that are not yet replicated
@@ -129,7 +133,8 @@ diagnostics and settings.
             },
             "each_s": "float",            // replicate a record every S seconds
             "each_n": "int",              // replicate every Nth record
-            "when": "string"              // conditional query to filter records
+            "when": "string",             // conditional query to filter records
+            "mode": "string"              // replication mode: enabled (default), paused, or disabled
 }`}</code>
         </pre>
       ),
@@ -160,6 +165,7 @@ The method creates a replication task with given settings.
 
 - v1.8: The endpoint was added
 - v1.14: The `when` field was added with conditional query to filter records
+- v1.18: Added optional `mode` to start replications as `enabled`, `paused`, or `disabled`
 
 <SwaggerComponent
   method="POST"
@@ -268,6 +274,16 @@ The method creates a replication task with given settings.
         description: "Conditional query to filter records",
       },
     },
+    {
+      type: "body",
+      details: {
+        name: "mode",
+        dataType: "String",
+        isRequired: false,
+        description:
+          'Replication mode. Default is "enabled"; use "paused" to collect transactions without sending them or "disabled" to skip new transactions.',
+      },
+    },
   ]}
   responses={[
     {
@@ -308,6 +324,7 @@ this method, you need an access token with full access.
 
 - v1.8: The endpoint was added
 - v1.14: The `when` field was added with conditional query to filter records
+- v1.18: Added optional `mode` to switch between `enabled`, `paused`, and `disabled`
 
 <SwaggerComponent
   method="PUT"
@@ -416,6 +433,16 @@ this method, you need an access token with full access.
         description: "Conditional query to filter records",
       },
     },
+    {
+      type: "body",
+      details: {
+        name: "mode",
+        dataType: "String",
+        isRequired: false,
+        description:
+          'Replication mode. Use "enabled" to send data, "paused" to accumulate transactions without sending them, or "disabled" to ignore new transactions.',
+      },
+    },
   ]}
   responses={[
     {
@@ -423,6 +450,72 @@ this method, you need an access token with full access.
       message: "OK",
       summary: "The replication was updated",
       description: "",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is empty or invalid",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have enough permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Replication with the given name doesn't exist",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "Replication is provisioned",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "Validation error occurred",
+    },
+  ]}
+/>
+
+## Update Replication Mode
+
+Use this endpoint to switch a replication task between `enabled`, `paused`, and `disabled` without overwriting other settings.
+
+**Changes**:
+
+- v1.18: The endpoint was added
+
+<SwaggerComponent
+  method="PATCH"
+  path="/api/v1/replications/:replication_name/mode"
+  summary="Update replication mode"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: "replication_name",
+        isRequired: true,
+        description: "Name of the replication to update",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "mode",
+        dataType: "String",
+        isRequired: true,
+        description:
+          'New replication mode: "enabled" to send records, "paused" to store pending transactions without sending, or "disabled" to ignore new transactions.',
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "Replication mode was updated",
     },
     {
       status: "401",

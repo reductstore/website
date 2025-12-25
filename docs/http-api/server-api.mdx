@@ -80,6 +80,10 @@ You can use this method to browse the buckets of the storage.
 
 If authentication is enabled, the method needs a valid API token.
 
+**Changes**:
+
+- Version 1.18: bucket responses include the `status` field (`READY` / `DELETING`).
+
 <SwaggerComponent
   method="get"
   path="/api/v1/list"
@@ -99,7 +103,8 @@ If authentication is enabled, the method needs a valid API token.
         "entry_count": "integer", // number of entries in the bucket
         "size": "integer",        // size of stored data in the bucket in bytes
         "oldest_record": "integer", // unix timestamp of oldest record in microseconds
-        "latest_record": "integer"  // unix timestamp of latest record in microseconds
+        "latest_record": "integer",  // unix timestamp of latest record in microseconds
+        "status": Union["READY", "DELETING"] // resource status
       }
     ]
 }`}
