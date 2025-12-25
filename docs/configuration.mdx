@@ -165,6 +165,7 @@ A user can configure storage engine settings to change behavior of data storage 
 | ----------------------------------- | ------- | ----------------------------------------------------------------------------------------------------- |
 | `RS_ENGINE_COMPACTION_INTERVAL`     | 60s     | Interval between compaction WALs into blocks and synchronization of the storage state to the backend. |
 | `RS_ENGINE_REPLICA_UPDATE_INTERVAL` | 60s     | Interval between updates of bucket, entry lists and indexes from the backend in the read-only mode.   |
+| `RS_ENGINE_ENABLE_INTEGRITY_CHECKS` | true    | Enable integrity checks during startup validation and block descriptor loading.                       |
 
 ### Replication Settings
 

@@ -50,6 +50,10 @@ When a ReductStore instance starts, the storage engine performs the following ch
 - Updates indexes
 - Validates data integrity
 
+:::info
+For S3 backends, these integrity checks can take time and incur additional S3 request costs. You can disable them with `RS_ENGINE_ENABLE_INTEGRITY_CHECKS=false`.
+:::
+
 This process helps recover from the following scenarios:
 
 1. **Power Failure or Crash**:
@@ -60,7 +64,7 @@ This process helps recover from the following scenarios:
 
 - Each index file has a CRC to verify its integrity. If corrupted, the engine will detect this and recreate it from **[block](../glossary#block)** descriptors.
 - If the number or size of data blocks doesn’t match the index file, it will be rebuilt using the block descriptors.
-- If the storage engine detects a corrupted block descriptor during the index rebuild, it will remove the corrupted block and continue with the rest of the data.
+- If the storage engine detects a corrupted block descriptor during the index rebuild, it will remove the corrupted block and continue with the rest of the data (when integrity checks are enabled).
 
 ### Runtime Data Loss Detection
 
@@ -70,6 +74,7 @@ If corruption is detected:
 - The storage engine aborts the current I/O operation.
 - A `500 Internal Server Error` is returned.
 - The issue is logged for administrative review.
+- The corrupted block is removed from the in-memory index and will be ignored on subsequent requests until restart.
 
 An administrator can inspect the logs and take corrective actions such as removing the corrupted block or restoring it from a backup.
 
@@ -102,7 +107,7 @@ await bucket.write(
 A robust backup and restore strategy is essential for disaster recovery—especially in scenarios involving data corruption or loss.
 This strategy includes creating regular file backups of the ReductStore instance and restoring them when necessary.
 
-Due to architectural constraints of the ReductStore storage engine, **file backups can only be created or restored when the instance is stopped**.
+Due to architectural constraints of the ReductStore storage engine, **file backups can only be created or restored when the active instance is stopped**.
 This ensures data consistency by preventing write operations during the process but also introduces downtime.
 
 ### Backup Process
@@ -224,6 +229,7 @@ reduct-cli cp backup/<bucket_name> primary/<bucket_name> \
 A **hot standby** setup runs two ReductStore instances against the **same storage backend** (shared file system or the same remote backend). Only one instance is allowed to be active at a time; the active node holds a **lock file** and periodically refreshes it.
 
 When the primary fails, the secondary waits for the lock file to become stale (TTL) and then takes over. From the client side, you should expose a single virtual endpoint (for example, a load balancer) that routes traffic only to the active node.
+This model requires failover logic that can switch traffic in your load balancer or reverse proxy, including solutions that support backup upstreams (for example, NGINX).
 
 ![Hot Standby Setup](./img/disaster_recovery_hot_standby.png)
 
@@ -285,7 +291,8 @@ For an end-to-end active-passive setup on S3, see **[S3 Integration](../integrat
 
 ## Read-only Replicas
 
-Read-only replicas let you run multiple ReductStore instances in `REPLICA` mode against the same dataset. Replicas serve **reads only** and periodically refresh bucket metadata and indexes from the storage backend.
+Read-only replicas let you run multiple ReductStore instances in `REPLICA` mode against the same dataset.
+Replicas serve **reads only** and periodically refresh bucket metadata and indexes from the storage backend, so newly written data is not visible immediately. You can tune this behavior with `RS_ENGINE_REPLICA_UPDATE_INTERVAL` on replicas and `RS_ENGINE_COMPACTION_INTERVAL` on the writer, which controls how often WALs are compacted into blocks and synced to the backend (in addition to syncing when a block is finished).
 
 This deployment pattern helps you:
 
@@ -296,6 +303,8 @@ This deployment pattern helps you:
 :::note
 Read-only replicas provide high availability for **reads**. To keep writes available during failures, combine replicas with **[Hot Standby Setup](#hot-standby-setup)** for the ingestion endpoint.
 :::
+
+![Read-only Replicas](./img/disaster_recovery_read_replicas.png)
 
 ### Prerequisites
 
@@ -309,9 +318,16 @@ Read-only replicas provide high availability for **reads**. To keep writes avail
 - Route **write** traffic to the ingestion endpoint (writer node).
 - Route **read** traffic to replicas (for example, via a separate load balancer for query traffic).
 
-### Example: Docker Compose (S3 backend)
+### Tuning
 
-This example shows one writer and two read-only replicas using the same S3 bucket. Replicas keep their own cache and refresh metadata periodically.
+Read-only replicas poll for metadata and index updates, so data appears with a delay. Use these variables to tune staleness:
+
+- `RS_ENGINE_REPLICA_UPDATE_INTERVAL`: How often replicas refresh bucket metadata and indexes from the backend.
+- `RS_ENGINE_COMPACTION_INTERVAL`: How often the writer compacts WALs into blocks and syncs them to the backend (in addition to syncing when a block is finished).
+
+### Example: Docker Compose (shared file system)
+
+This example shows one writer and two read-only replicas using the same shared data directory. In production, the shared storage must be accessible from all nodes (for example, NFS, EFS, CephFS).
 
 ```yaml
 version: "3.9"
@@ -320,14 +336,9 @@ services:
     image: reduct/store:latest
     environment:
       RS_INSTANCE_ROLE: PRIMARY
-      RS_REMOTE_BACKEND_TYPE: S3
-      RS_REMOTE_BUCKET: reduct-ha
-      RS_REMOTE_REGION: us-east-1
-      RS_REMOTE_ACCESS_KEY: ${AWS_ACCESS_KEY_ID}
-      RS_REMOTE_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY}
-      RS_REMOTE_CACHE_PATH: /var/reduct/cache
+      RS_DATA_PATH: /data
     volumes:
-      - writer-cache:/var/reduct/cache
+      - reduct-data:/data
     ports:
       - "8383:8383"
 
@@ -335,14 +346,10 @@ services:
     image: reduct/store:latest
     environment:
       RS_INSTANCE_ROLE: REPLICA
-      RS_REMOTE_BACKEND_TYPE: S3
-      RS_REMOTE_BUCKET: reduct-ha
-      RS_REMOTE_REGION: us-east-1
-      RS_REMOTE_ACCESS_KEY: ${AWS_ACCESS_KEY_ID}
-      RS_REMOTE_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY}
-      RS_REMOTE_CACHE_PATH: /var/reduct/cache
+      RS_DATA_PATH: /data
+      RS_ENGINE_REPLICA_UPDATE_INTERVAL: 30s
     volumes:
-      - replica1-cache:/var/reduct/cache
+      - reduct-data:/data
     ports:
       - "8384:8383"
 
@@ -350,21 +357,15 @@ services:
     image: reduct/store:latest
     environment:
       RS_INSTANCE_ROLE: REPLICA
-      RS_REMOTE_BACKEND_TYPE: S3
-      RS_REMOTE_BUCKET: reduct-ha
-      RS_REMOTE_REGION: us-east-1
-      RS_REMOTE_ACCESS_KEY: ${AWS_ACCESS_KEY_ID}
-      RS_REMOTE_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY}
-      RS_REMOTE_CACHE_PATH: /var/reduct/cache
+      RS_DATA_PATH: /data
+      RS_ENGINE_REPLICA_UPDATE_INTERVAL: 30s
     volumes:
-      - replica2-cache:/var/reduct/cache
+      - reduct-data:/data
     ports:
       - "8385:8383"
 
 volumes:
-  writer-cache:
-  replica1-cache:
-  replica2-cache:
+  reduct-data:
 ```
 
-For a full walkthrough (including tuning and operations tips), see **[S3 Integration](../integrations/s3#read-only-replica-on-s3)**.
+For a full walkthrough using S3, see **[S3 Integration](../integrations/s3#read-only-replica-on-s3)**.

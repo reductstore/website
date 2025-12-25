@@ -83,7 +83,7 @@ Get statistics about bucket
 #### get\_entry\_list
 
 ```python
-async def get_entry_list() -> List[EntryInfo]
+async def get_entry_list() -> list[EntryInfo]
 ```
 
 Get list of entries with their stats
@@ -133,8 +133,7 @@ Remove entry from bucket
 #### remove\_record
 
 ```python
-async def remove_record(entry_name: str, timestamp: Union[int, datetime, float,
-                                                          str])
+async def remove_record(entry_name: str, timestamp: TimestampLike)
 ```
 
 Remove record from entry
@@ -154,7 +153,7 @@ Remove record from entry
 
 ```python
 async def remove_batch(entry_name: str,
-                       batch: Batch) -> Dict[int, ReductError]
+                       batch: Batch) -> dict[int, ReductError]
 ```
 
 Remove batch of records from entries in a sole request
@@ -179,10 +178,9 @@ Remove batch of records from entries in a sole request
 
 ```python
 async def remove_query(entry_name: str,
-                       start: Optional[Union[int, datetime, float,
-                                             str]] = None,
-                       stop: Optional[Union[int, datetime, float, str]] = None,
-                       when: Optional[Dict] = None,
+                       start: TimestampLike | None = None,
+                       stop: TimestampLike | None = None,
+                       when: dict | None = None,
                        **kwargs) -> int
 ```
 
@@ -256,7 +254,7 @@ Rename bucket
 ```python
 @asynccontextmanager
 async def read(entry_name: str,
-               timestamp: Optional[Union[int, datetime, float, str]] = None,
+               timestamp: TimestampLike | None = None,
                head: bool = False) -> AsyncIterator[Record]
 ```
 
@@ -291,9 +289,9 @@ Read a record from entry
 
 ```python
 async def write(entry_name: str,
-                data: Union[bytes, AsyncIterator[bytes]],
-                timestamp: Optional[Union[int, datetime, float, str]] = None,
-                content_length: Optional[int] = None,
+                data: bytes | AsyncIterator[bytes],
+                timestamp: TimestampLike | None = None,
+                content_length: int | None = None,
                 **kwargs)
 ```
 
@@ -317,16 +315,16 @@ Write a record to entry
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-  
+
 
 **Example**:
 ```python
       await bucket.write("entry-1", b"some_data",
          timestamp="2021-09-10T10:30:00")
-     
+
       # You can write data chunk-wise using an asynchronous iterator and the
       # size of the content:
-     
+
       async def sender():
           for chunk in [b"part1", b"part2", b"part3"]:
               yield chunk
@@ -338,7 +336,7 @@ Write a record to entry
 #### write\_batch
 
 ```python
-async def write_batch(entry_name: str, batch: Batch) -> Dict[int, ReductError]
+async def write_batch(entry_name: str, batch: Batch) -> dict[int, ReductError]
 ```
 
 Write a batch of records to entries in a sole request
@@ -362,8 +360,8 @@ Write a batch of records to entries in a sole request
 #### update
 
 ```python
-async def update(entry_name: str, timestamp: Union[int, datetime, float, str],
-                 labels: Dict[str, str])
+async def update(entry_name: str, timestamp: TimestampLike, labels: dict[str,
+                                                                         str])
 ```
 
 Update labels of an existing record
@@ -379,7 +377,7 @@ If a label is empty, it will be removed.
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-  
+
 
 **Example**:
 ```python
@@ -393,7 +391,7 @@ If a label is empty, it will be removed.
 
 ```python
 async def update_batch(entry_name: str,
-                       batch: Batch) -> Dict[int, ReductError]
+                       batch: Batch) -> dict[int, ReductError]
 ```
 
 Update labels of existing records
@@ -413,7 +411,7 @@ If a label is empty, it will be removed.
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-  
+
 
 **Example**:
 ```python
@@ -428,10 +426,10 @@ If a label is empty, it will be removed.
 
 ```python
 async def query(entry_name: str,
-                start: Optional[Union[int, datetime, float, str]] = None,
-                stop: Optional[Union[int, datetime, float, str]] = None,
-                ttl: Optional[int] = None,
-                when: Optional[Dict] = None,
+                start: TimestampLike | None = None,
+                stop: TimestampLike | None = None,
+                ttl: int | None = None,
+                when: dict | None = None,
                 **kwargs) -> AsyncIterator[Record]
 ```
 
@@ -461,7 +459,7 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string),
 **Returns**:
 
 - `AsyncIterator[Record]` - iterator to the records
-  
+
 
 **Example**:
 ```python
@@ -492,9 +490,9 @@ Get full information about bucket (settings, statistics, entries)
 
 ```python
 async def subscribe(entry_name: str,
-                    start: Optional[Union[int, datetime, float, str]] = None,
+                    start: TimestampLike | None = None,
                     poll_interval=1.0,
-                    when: Optional[Dict] = None,
+                    when: dict | None = None,
                     **kwargs) -> AsyncIterator[Record]
 ```
 
@@ -523,7 +521,7 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
 **Returns**:
 
 - `AsyncIterator[Record]` - iterator to the records
-  
+
 
 **Example**:
 ```python
@@ -540,11 +538,9 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
 
 ```python
 async def create_query_link(entry: str,
-                            start: Optional[Union[int, datetime, float,
-                                                  str]] = None,
-                            stop: Optional[Union[int, datetime, float,
-                                                 str]] = None,
-                            when: Optional[Dict] = None,
+                            start: TimestampLike | None = None,
+                            stop: TimestampLike | None = None,
+                            when: dict | None = None,
                             **kwargs) -> str
 ```
 
@@ -561,7 +557,7 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
   If None, then from the first record
 - `stop` - the end of the time interval. If None, then to the latest record
 - `when` - condtiion to filter records
-  
+
 
 **Arguments**:
 
@@ -569,5 +565,3 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
 - `expire_at` - if None, the link will expire in 24 hours
 - `file_name` - file name for download, if None: entry_name_index.bin
 - `base_url` - base URL for the link, if None: use server URL
-
-
