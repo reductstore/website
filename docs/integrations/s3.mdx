@@ -89,7 +89,7 @@ Active-passive mode adds a second ReductStore instance as a standby. At any time
 
 **When to use**: production environments that require automated failover without concurrent writers. This pattern is ideal for on-prem clusters or cloud VMs where you can run two nodes against the same S3 bucket and let one take over automatically if the other dies, without manual intervention.
 
-Failover is coordinated by the lock file: the active node periodically refreshes it, and the standby node only becomes active if the lock is stale. Health checks must use the ready endpoint so your load balancer only sends traffic to the active node and never splits writes across both.
+Failover is coordinated by the lock file: the active node periodically refreshes it, and the standby node only becomes active if the lock is stale. Use `GET /api/v1/alive` for a basic liveness health check, and use `GET /api/v1/ready` to route traffic only to the active node so you never split writes across both.
 
 ```yaml
 version: "3.9"
@@ -140,7 +140,9 @@ volumes:
 **Operations tips**
 
 - The primary acquires the lock file and serves reads/writes. The secondary waits for the lock and takes over after the TTL if the primary stops updating it. From the client’s point of view, the URL stays the same; only the active container changes.
-- Put both nodes behind a load balancer that checks `GET /api/v1/ready` (see **[Server API](../http-api/server-api#check-if-the-storage-engine-is-active)**). Route traffic only to nodes returning `200 OK`; a node that loses the lock will return `503` and should be taken out of rotation.
+- Put both nodes behind a load balancer that checks `GET /api/v1/ready` (see **[Server API](../http-api/server-api#check-if-the-storage-engine-is-active)**). Route traffic only to nodes returning `200 OK`; a node that loses the lock returns `503` and should be taken out of rotation.
+- Use `GET /api/v1/alive` for a simple liveness health check (for example, to verify basic connectivity).
+- For a simple liveness check from the CLI (helpful when debugging connectivity), run `reduct-cli server alive http://127.0.0.1:8383`.
 - Set `RS_LOCK_FILE_TIMEOUT=0` on both nodes to make them wait indefinitely for the lock.
 
 ## Read-only replica on S3

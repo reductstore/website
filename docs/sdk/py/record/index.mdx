@@ -96,10 +96,10 @@ Batch of records to write them in one request
 #### add
 
 ```python
-def add(timestamp: Union[int, datetime, float, str],
+def add(timestamp: TimestampLike,
         data: bytes = b"",
-        content_type: Optional[str] = None,
-        labels: Optional[Dict[str, str]] = None)
+        content_type: str | None = None,
+        labels: dict[str, str] | None = None)
 ```
 
 Add record to batch
@@ -117,7 +117,7 @@ Add record to batch
 #### items
 
 ```python
-def items() -> List[Tuple[int, Record]]
+def items() -> list[tuple[int, Record]]
 ```
 
 Get records as dict items
@@ -173,5 +173,3 @@ async def parse_batched_records(resp: ClientResponse) -> AsyncIterator[Record]
 ```
 
 Parse batched records from response
-
-
