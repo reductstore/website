@@ -1,0 +1,111 @@
+---
+title: Update data
+description: HTTP endpoint to update labels for multiple records across entries using Batch Protocol v2.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/io-api/update_data"
+  />
+</head>
+
+# Update record labels (I/O API)
+
+This endpoint updates labels for multiple records across multiple entries using **Batch Protocol v2** header naming and the label delta format.
+See the [**Batch protocol v2**](./#batch-protocol-v2) section for details.
+
+import SwaggerComponent from "@site/src/components/SwaggerComponent";
+
+<SwaggerComponent
+  method="PATCH"
+  path="/api/v1/io/:bucket_name/update"
+  summary="Update labels for multiple records across entries"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        isRequired: true,
+        description: "Name of bucket",
+      },
+    },
+    {
+      type: "header",
+      details: {
+        name: "x-reduct-entries",
+        isRequired: true,
+        description:
+          "Comma-separated, percent-encoded entry names (index == position).",
+      },
+    },
+    {
+      type: "header",
+      details: {
+        name: "x-reduct-start-ts",
+        isRequired: true,
+        description: "First timestamp in the batch (microseconds).",
+      },
+    },
+    {
+      type: "header",
+      details: {
+        name: "x-reduct-labels",
+        isRequired: false,
+        description:
+          "Optional label index for compact label deltas (comma-separated, percent-encoded label names).",
+      },
+    },
+    {
+      type: "header",
+      details: {
+        name: "x-reduct-<ENTRY-INDEX>-<TIME-DELTA-uS>",
+        isRequired: true,
+        description:
+          "Per-record update header; its value contains a label delta as described in Batch Protocol v2.",
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary:
+        "The request was valid. Per-record errors are returned in x-reduct-error-* headers.",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token does not have write permissions for the bucket",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket does not exist",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "Invalid Batch Protocol v2 headers or label delta format",
+    },
+  ]}
+/>
+
+## Per-record errors
+
+If a record cannot be updated, the response includes an error header for that record:
+
+```
+x-reduct-error-<ENTRY-INDEX>-<TIME-DELTA-uS>: <STATUS_CODE>,<ERROR_MESSAGE>
+```
+
+## Label delta format
+
+Label delta updates only the mentioned labels. Remove a label by sending an empty value (`k=`). Unmentioned labels keep their previous value for the entry.
+
+If `x-reduct-labels` is provided, you can use numeric indexes in the delta (for example `0=one,1=,c=3`).
