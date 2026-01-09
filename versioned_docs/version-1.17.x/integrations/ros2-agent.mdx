@@ -140,15 +140,16 @@ The `remote` section specifies where the agent should fetch a pipeline
 configuration YAML file from in a ReductStore instance.  
 It does **not** define pipelines itself.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `remote.url` | string | Base URL of the ReductStore instance where the pipeline configuration is stored **(required)** |
-| `remote.api_token` | string | API token used to authenticate when accessing the remote configuration **(required)** |
-| `remote.bucket` | string | Bucket containing the pipeline configuration YAML file **(required)** |
-| `remote.entry` | string | Entry name under which the pipeline configuration YAML file is stored **(required)** |
-| `remote.pull_frequency_s` | int | Poll interval (in seconds) for reloading the remote configuration (default: `60`) |
+| Parameter                 | Type   | Description                                                                                    |
+| ------------------------- | ------ | ---------------------------------------------------------------------------------------------- |
+| `remote.url`              | string | Base URL of the ReductStore instance where the pipeline configuration is stored **(required)** |
+| `remote.api_token`        | string | API token used to authenticate when accessing the remote configuration **(required)**          |
+| `remote.bucket`           | string | Bucket containing the pipeline configuration YAML file **(required)**                          |
+| `remote.entry`            | string | Entry name under which the pipeline configuration YAML file is stored **(required)**           |
+| `remote.pull_frequency_s` | int    | Poll interval (in seconds) for reloading the remote configuration (default: `60`)              |
 
 **Notes**
+
 - Remote configuration is enabled **only if all required parameters are provided**.
 - The referenced ReductStore entry must contain a **YAML file**.
 - The YAML content must follow the same structure as the local `pipelines`
@@ -167,24 +168,25 @@ This backup is used as a fallback in the following cases:
 
 If a valid `backup.yaml` is available, the agent will load the pipeline
 configuration from the backup instead of failing immediately.
+
 ### Pipeline Section
 
 Each key under `pipelines` defines a separate recording pipeline, which results in a distinct [**entry**](../glossary#entry) in ReductStore. Each pipeline can be configured independently with its own topic filters, compression settings, and file-splitting behavior.
 
-| Parameter | Type | Default | Description |
-|--------|------|---------|-------------|
-| `include_topics` | string[] | — | List of ROS 2 topic names or regex patterns to record **(required)** |
-| `exclude_topics` | string[] | — | List of ROS 2 topic names or regex patterns to exclude |
-| `filename_mode` | enum | `timestamp` | File naming strategy: `timestamp` or `incremental` |
-| `compression` | enum | `zstd` | Compression algorithm: `none`, `lz4`, or `zstd` |
-| `output_format` | enum | `mcap` | Output format: `mcap` or `cdr` |
-| `chunk_size_bytes` | int | `1MB` | Size of each MCAP chunk (1KB–10MB) |
-| `enable_crcs` | bool | `true` | Append CRC checks to each chunk |
-| `spool_max_size_bytes` | int | `10MB` | Maximum in-memory buffer before flushing (1KB–1GB) |
-| `split.max_duration_s` | int | — | Split file after N seconds (1–3600) **(required)** |
-| `split.max_size_bytes` | int | — | Split file when size exceeds this limit (1KB–1GB) |
-| `downsample_mode` | enum | `none` | Message downsampling mode: `none`, `stride`, `max_rate` |
-| `downsample.stride_n` | int | — | Record every Nth message. Must be n=>2 (required if `stride`) |
-| `downsample.max_rate_hz` | float | — | Maximum message frequency in Hz. Must be >0.0 (required if `max_rate`) |
-| `static_labels` | map | — | Static key–value labels applied to all records |
-| `labels.mode` | enum | `last` | Dynamic label aggregation mode: `last`, `first`, or `max` |
+| Parameter                | Type     | Default     | Description                                                            |
+| ------------------------ | -------- | ----------- | ---------------------------------------------------------------------- |
+| `include_topics`         | string[] | —           | List of ROS 2 topic names or regex patterns to record **(required)**   |
+| `exclude_topics`         | string[] | —           | List of ROS 2 topic names or regex patterns to exclude                 |
+| `filename_mode`          | enum     | `timestamp` | File naming strategy: `timestamp` or `incremental`                     |
+| `compression`            | enum     | `zstd`      | Compression algorithm: `none`, `lz4`, or `zstd`                        |
+| `output_format`          | enum     | `mcap`      | Output format: `mcap` or `cdr`                                         |
+| `chunk_size_bytes`       | int      | `1MB`       | Size of each MCAP chunk (1KB–10MB)                                     |
+| `enable_crcs`            | bool     | `true`      | Append CRC checks to each chunk                                        |
+| `spool_max_size_bytes`   | int      | `10MB`      | Maximum in-memory buffer before flushing (1KB–1GB)                     |
+| `split.max_duration_s`   | int      | —           | Split file after N seconds (1–3600) **(required)**                     |
+| `split.max_size_bytes`   | int      | —           | Split file when size exceeds this limit (1KB–1GB)                      |
+| `downsample_mode`        | enum     | `none`      | Message downsampling mode: `none`, `stride`, `max_rate`                |
+| `downsample.stride_n`    | int      | —           | Record every Nth message. Must be n=>2 (required if `stride`)          |
+| `downsample.max_rate_hz` | float    | —           | Maximum message frequency in Hz. Must be >0.0 (required if `max_rate`) |
+| `static_labels`          | map      | —           | Static key–value labels applied to all records                         |
+| `labels.mode`            | enum     | `last`      | Dynamic label aggregation mode: `last`, `first`, or `max`              |
