@@ -315,16 +315,16 @@ Write a record to entry
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-
+  
 
 **Example**:
 ```python
       await bucket.write("entry-1", b"some_data",
          timestamp="2021-09-10T10:30:00")
-
+     
       # You can write data chunk-wise using an asynchronous iterator and the
       # size of the content:
-
+     
       async def sender():
           for chunk in [b"part1", b"part2", b"part3"]:
               yield chunk
@@ -377,7 +377,7 @@ If a label is empty, it will be removed.
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-
+  
 
 **Example**:
 ```python
@@ -411,7 +411,7 @@ If a label is empty, it will be removed.
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-
+  
 
 **Example**:
 ```python
@@ -459,7 +459,7 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string),
 **Returns**:
 
 - `AsyncIterator[Record]` - iterator to the records
-
+  
 
 **Example**:
 ```python
@@ -521,7 +521,7 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
 **Returns**:
 
 - `AsyncIterator[Record]` - iterator to the records
-
+  
 
 **Example**:
 ```python
@@ -557,7 +557,7 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
   If None, then from the first record
 - `stop` - the end of the time interval. If None, then to the latest record
 - `when` - condtiion to filter records
-
+  
 
 **Arguments**:
 
@@ -565,3 +565,5 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
 - `expire_at` - if None, the link will expire in 24 hours
 - `file_name` - file name for download, if None: entry_name_index.bin
 - `base_url` - base URL for the link, if None: use server URL
+
+
