@@ -166,6 +166,23 @@
             "http-api/entry-api/delete_data"
           ]
         },
+        {
+          "type": "category",
+          "label": "I/O API",
+          "className": "io-api-experimental",
+          "link": {
+            "type": "doc",
+            "id": "http-api/io-api/index"
+          },
+          "collapsed": false,
+          "items": [
+            "http-api/io-api/run_query",
+            "http-api/io-api/read_data",
+            "http-api/io-api/write_data",
+            "http-api/io-api/update_data",
+            "http-api/io-api/delete_data"
+          ]
+        },
         "http-api/token-authentication",
         "http-api/replication-api",
         "http-api/query-link-api"

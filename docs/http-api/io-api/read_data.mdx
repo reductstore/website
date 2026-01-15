@@ -1,0 +1,86 @@
+---
+title: Read data
+description: HTTP endpoint to read batched query results across entries using Batch Protocol v2.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/io-api/read_data"
+  />
+</head>
+
+# Read query results (I/O API)
+
+This endpoint reads the next batch of records for a query ID produced by `POST /api/v1/io/:bucket_name/q`.
+The query ID must be sent in the `x-reduct-query-id` request header.
+
+The response uses **Batch Protocol v2**. See the [**Batch protocol v2**](./#batch-protocol-v2) section for details.
+
+import SwaggerComponent from "@site/src/components/SwaggerComponent";
+
+<SwaggerComponent
+  method="GET"
+  path="/api/v1/io/:bucket_name/read"
+  summary="Read the next batch of records for a query id"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        isRequired: true,
+        description: "Name of bucket",
+      },
+    },
+    {
+      type: "header",
+      details: {
+        name: "x-reduct-query-id",
+        isRequired: true,
+        description: "Query id returned by POST /api/v1/io/:bucket_name/q",
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "A batch of records is returned using Batch Protocol v2",
+    },
+    {
+      status: "204",
+      message: "No Content",
+      summary: "No more records are available for the query id",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token does not have read permissions for the bucket",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket or query id does not exist",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "Missing or invalid x-reduct-query-id header",
+    },
+  ]}
+/>
+
+## Response headers
+
+- `x-reduct-entries`: comma-separated, percent-encoded entry names (index == position).
+- `x-reduct-start-ts`: the start timestamp for the batch (microseconds); record timestamp is `start + delta`.
+- `x-reduct-labels` (optional): comma-separated, percent-encoded label names (index == position).
+- `x-reduct-<ENTRY-INDEX>-<TIME-DELTA-uS>`: record metadata for each returned record (see Batch Protocol v2).
+- `x-reduct-last`: `true` if the returned batch includes the last record in the query; otherwise `false`.
+
+The response body is the concatenation of record bodies in the same order as the per-record headers.
