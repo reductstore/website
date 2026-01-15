@@ -12,12 +12,14 @@
 
 .testimonialsTrack {
   display: flex;
+  align-items: flex-start;
   width: max-content;
   animation: scroll 40s linear infinite;
+  animation-play-state: running;
 }
 
 .testimonialCard {
-  width: 300px;
+  /*  */
 }
 
 .message {
