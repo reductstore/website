@@ -30,3 +30,6 @@ private/
 
 # Go
 go.sum
+
+# Npm
+package-lock.json

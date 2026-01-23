@@ -16,7 +16,7 @@
     "fmt": "prettier --write .",
     "fmt:check": "prettier --check .",
     "build:azure": "npm run clear && npm run build",
-    "depcheck": "depcheck . || true"
+    "depcheck": "depcheck . --config=.depcheckrc || true"
   },
   "dependencies": {
     "@algolia/client-search": "^5.47.0",
@@ -29,24 +29,26 @@
     "@fortawesome/react-fontawesome": "^3.1.1",
     "@mdx-js/react": "^3.0.0",
     "@types/react": "^19.2.9",
-    "browserify": "^17.0.0",
+    "buffer": "^6.0.3",
     "clsx": "^2.1.1",
-    "docusaurus-plugin-umami": "^2.0.0",
     "dotenv": "^17.2.3",
+    "https-browserify": "^1.0.0",
+    "js-cookie": "^3.0.5",
+    "lodash": "^4.17.23",
     "prism-react-renderer": "^2.2.0",
     "raw-loader": "^4.0.2",
     "react": "^19.2.3",
-    "react-calendly": "^4.3.1",
-    "react-cookie-consent": "^10.0.1",
     "react-countdown-circle-timer": "^3.2.1",
     "react-dom": "^19.2.3",
     "react-icons": "^5.3.0",
-    "react-loadable": "^5.5.0",
+    "react-router-dom": "^7.12.0",
     "react-tooltip": "^5.26.0",
     "reduct-js": "^1.17.1",
     "rehype-katex": "7",
     "remark-math": "6",
     "search-insights": "^2.10.0",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
     "xterm": "^5.3.0",
     "xterm-addon-fit": "^0.8.0",
     "xterm-addon-web-links": "^0.9.0",
@@ -56,6 +58,8 @@
     "@docusaurus/module-type-aliases": "^3.0.1",
     "@docusaurus/tsconfig": "^3.0.1",
     "@docusaurus/types": "^3.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.53.1",
+    "@typescript-eslint/parser": "^8.53.1",
     "depcheck": "^1.4.7",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
@@ -77,14 +81,6 @@
   },
   "engines": {
     "node": ">=20.0"
-  },
-  "depcheck": {
-    "ignoreMatches": [
-      "@docusaurus/*",
-      "@theme/*",
-      "@theme-original/*",
-      "@site/*"
-    ]
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
