@@ -39,6 +39,7 @@
     "prism-react-renderer": "^2.2.0",
     "raw-loader": "^4.0.2",
     "react": "^19.2.3",
+    "react-loadable": "^5.5.0",
     "react-countdown-circle-timer": "^3.2.1",
     "react-dom": "^19.2.3",
     "react-icons": "^5.3.0",
@@ -50,9 +51,9 @@
     "search-insights": "^2.10.0",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
-    "xterm": "^5.3.0",
-    "xterm-addon-fit": "^0.8.0",
-    "xterm-addon-web-links": "^0.9.0",
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/addon-web-links": "^0.12.0",
+    "@xterm/xterm": "^5.3.0",
     "zustand": "^5.0.0"
   },
   "devDependencies": {
@@ -66,7 +67,8 @@
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.2.5",
     "remark-code-snippets": "^1.1.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "webpack": "^5.94.0"
   },
   "browserslist": {
     "production": [

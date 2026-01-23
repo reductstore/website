@@ -8,6 +8,7 @@
     "@docusaurus/module-type-aliases",
     "buffer",
     "raw-loader",
+    "webpack",
     "@algolia/client-search",
     "search-insights"
   ]
