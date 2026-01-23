@@ -9312,7 +9312,7 @@ recma-stringify@^1.0.0:
     unified "^11.0.0"
     vfile "^6.0.0"
 
-reduct-js@^1.13.0:
+reduct-js@^1.17.1:
   version "1.17.1"
   resolved "https://registry.yarnpkg.com/reduct-js/-/reduct-js-1.17.1.tgz#d70b3b4405a437adf1fe087dde552922286caf3f"
   integrity sha512-t+tw1cJTHOHqQX9fSMGjnZPFzyb2s/5653CHolOBKIwic+oZAAQ3ow7M9aVlBKbkVQlT4mOdtpFYuvrepezmVQ==

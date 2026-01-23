@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import styles from "./styles.module.css";
 import clsx from "clsx";
-import { useImageFetcher } from "./useImageFetcher";
 import ImageWithLabels from "./ImageWithLabels";
 import { FaEye as EyeIcon, FaEyeSlash as EyeSlashIcon } from "react-icons/fa";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
+import BrowserOnly from "@docusaurus/BrowserOnly";
+
+type UseImageFetcherHook = typeof import("./useImageFetcher").useImageFetcher;
+
+const useImageFetcherHook: UseImageFetcherHook | null =
+  ExecutionEnvironment.canUseDOM
+    ? require("./useImageFetcher").useImageFetcher
+    : null;
 
 const DATASETS = {
   imdb: {
@@ -24,7 +31,7 @@ const DATASETS = {
   },
 };
 
-const ImageCarousel = () => {
+const ImageCarouselContent = () => {
   if (ExecutionEnvironment.canUseDOM && window.innerWidth < 768) {
     return (
       <div className={styles.mainContainer}>
@@ -44,7 +51,11 @@ const ImageCarousel = () => {
   const datasetName = DATASETS[dataset].name;
   const datasetIds = Object.keys(DATASETS);
 
-  const { datasets, imagesWithLabels, error } = useImageFetcher(
+  if (!useImageFetcherHook) {
+    return null;
+  }
+
+  const { datasets, imagesWithLabels, error } = useImageFetcherHook(
     dataset,
     start,
     numImages,
@@ -154,5 +165,18 @@ const ImageCarousel = () => {
     </div>
   );
 };
+const ImageCarousel = () => (
+  <BrowserOnly
+    fallback={
+      <div className={styles.mainContainer}>
+        <div className="alert alert--info" role="alert">
+          The dataset preview is available in the browser only.
+        </div>
+      </div>
+    }
+  >
+    {() => <ImageCarouselContent />}
+  </BrowserOnly>
+);
 
 export default ImageCarousel;
