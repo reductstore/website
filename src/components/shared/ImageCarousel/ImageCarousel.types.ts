@@ -1,4 +1,4 @@
-import { LabelMap } from "reduct-js/lib/cjs/Record";
+import type { LabelMap } from "reduct-js/lib/cjs/Record";
 
 export interface ImageWithLabelsItem {
   url: string;
