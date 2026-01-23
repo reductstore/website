@@ -15,7 +15,8 @@
     "typecheck": "tsc",
     "fmt": "prettier --write .",
     "fmt:check": "prettier --check .",
-    "build:azure": "npm run clear && npm run build"
+    "build:azure": "npm run clear && npm run build",
+    "depcheck": "depcheck . || true"
   },
   "dependencies": {
     "@algolia/client-search": "^5.47.0",
@@ -55,6 +56,7 @@
     "@docusaurus/module-type-aliases": "^3.0.1",
     "@docusaurus/tsconfig": "^3.0.1",
     "@docusaurus/types": "^3.0.1",
+    "depcheck": "^1.4.7",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.2.5",
@@ -75,6 +77,14 @@
   },
   "engines": {
     "node": ">=18.0"
+  },
+  "depcheck": {
+    "ignoreMatches": [
+      "@docusaurus/*",
+      "@theme/*",
+      "@theme-original/*",
+      "@site/*"
+    ]
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
