@@ -157,6 +157,7 @@ jobs:
             echo '${{secrets.LICENSE_KEY}}' > ./license.lic
             docker run -d  -v ${PWD}:/misc \
                 --name reductstore -p 8383:8383 \
+                --env RS_LOG_LEVEL=debug \
                 --env RS_API_TOKEN="my-token"  \
                 --env RS_LICENSE_PATH=/misc/license.lic reduct/store:${{ matrix.reduct_version }}
             sleep 1
