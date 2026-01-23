@@ -24,12 +24,16 @@ export const useImageFetcher = (
   >([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const abortControllerRef = useRef<AbortController | null>(null);
+  const fetchVersionRef = useRef(0);
   const imageUrlsRef = useRef<string[]>([]);
 
-  const client = new Client(playServer.url, {
-    apiToken: playServer.token,
-  });
+  const clientRef = useRef<Client | null>(null);
+  if (!clientRef.current) {
+    clientRef.current = new Client(playServer.url, {
+      apiToken: playServer.token,
+    });
+  }
+  const client = clientRef.current;
 
   const fetchBucketInfo = useCallback(async () => {
     try {
@@ -65,21 +69,18 @@ export const useImageFetcher = (
   }, []);
 
   const fetchImages = useCallback(async () => {
+    fetchVersionRef.current += 1;
+    const thisVersion = fetchVersionRef.current;
+
     setError(null);
     setLoading(true);
 
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-
-    abortControllerRef.current = new AbortController();
-    const { signal } = abortControllerRef.current;
-
-    revokeImageUrls();
+    const previousUrls = [...imageUrlsRef.current];
+    const localUrls: string[] = [];
 
     try {
       const bucket = await client.getBucket(playServer.bucket);
-      const stop = start + num_images + 1;
+      const stop = start + num_images;
       const newImagesWithLabels: ImageWithLabelsItem[] = [];
 
       for await (const record of bucket.query(
@@ -87,30 +88,44 @@ export const useImageFetcher = (
         BigInt(start),
         BigInt(stop),
       )) {
-        if (signal.aborted) {
-          throw new Error("Request aborted");
+        if (fetchVersionRef.current !== thisVersion) {
+          localUrls.forEach((url) => URL.revokeObjectURL(url));
+          return;
         }
 
         const recordBuffer = await record.read();
         const labels = record.labels;
         const recordData = new Uint8Array(recordBuffer);
-        const blob = new Blob([recordData], { type: "image/jpeg" });
+        const blob = new Blob([recordData], {
+          type: record.contentType || "image/jpeg",
+        });
         const imageUrl = URL.createObjectURL(blob);
+        localUrls.push(imageUrl);
         newImagesWithLabels.push({ url: imageUrl, labels });
       }
 
-      imageUrlsRef.current = newImagesWithLabels.map((img) => img.url);
+      if (fetchVersionRef.current !== thisVersion) {
+        localUrls.forEach((url) => URL.revokeObjectURL(url));
+        return;
+      }
+
+      imageUrlsRef.current = localUrls;
       setImagesWithLabels(newImagesWithLabels);
+
+      previousUrls.forEach((url) => URL.revokeObjectURL(url));
     } catch (error) {
-      if ((error as Error).message !== "Request aborted") {
+      localUrls.forEach((url) => URL.revokeObjectURL(url));
+      if (fetchVersionRef.current === thisVersion) {
         const errorMessage = `Error fetching images: ${(error as Error).message}`;
         console.error(errorMessage);
         setError(errorMessage);
       }
     } finally {
-      setLoading(false);
+      if (fetchVersionRef.current === thisVersion) {
+        setLoading(false);
+      }
     }
-  }, [dataset, start, revokeImageUrls]);
+  }, [dataset, start, num_images]);
 
   const debouncedFetchImages = useCallback(debounce(fetchImages, 100), [
     fetchImages,
@@ -121,12 +136,8 @@ export const useImageFetcher = (
 
     return () => {
       debouncedFetchImages.cancel();
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-      revokeImageUrls();
     };
-  }, [debouncedFetchImages, revokeImageUrls]);
+  }, [debouncedFetchImages]);
 
   useEffect(() => {
     return () => {
