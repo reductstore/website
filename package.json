@@ -17,7 +17,7 @@
     "fmt": "prettier --write .",
     "fmt:check": "prettier --check .",
     "build:azure": "npm run clear && npm run build",
-    "depcheck": "depcheck . --config=.depcheckrc || true"
+    "depcheck": "depcheck . --config=.depcheckrc"
   },
   "dependencies": {
     "@algolia/client-search": "^5.47.0",
