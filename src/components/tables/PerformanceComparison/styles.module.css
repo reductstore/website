@@ -13,6 +13,6 @@
 }
 
 .tabContent p {
-  color: var(--reduct-dimmed-color);
+  color: var(--reduct-dimmed);
   font-size: 0.8rem;
 }

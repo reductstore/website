@@ -1,10 +1,10 @@
 .banner {
   background-image: repeating-linear-gradient(
     45deg,
-    var(--reduct-background-gray-light),
-    var(--reduct-background-gray-light) 20px,
-    var(--reduct--background-white) 20px,
-    var(--reduct--background-white) 40px
+    var(--reduct-surface-1-light),
+    var(--reduct-surface-1-light) 20px,
+    var(--reduct-surface-0) 20px,
+    var(--reduct-surface-0) 40px
   );
   width: 100%;
   padding: 25px;

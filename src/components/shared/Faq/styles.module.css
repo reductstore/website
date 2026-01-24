@@ -5,7 +5,7 @@
 .faqQuestion {
   cursor: pointer;
   font-weight: bold;
-  background-color: var(--reduct-background-gray);
+  background-color: var(--reduct-surface-1);
   border-radius: 5px;
   padding: 10px;
   display: flex;
@@ -14,7 +14,7 @@
 }
 
 .faqQuestion:hover {
-  background-color: var(--reduct-background-gray-hover);
+  background-color: var(--reduct-surface-1-hover);
 }
 
 .faqIcon {

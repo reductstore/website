@@ -4,47 +4,66 @@
  * work well for content-centric websites.
  */
 
-/* You can override the default Infima variables here. */
 :root {
-  /* Infima: set one primary color; Infima derives the rest */
+  /* infima */
   --ifm-color-primary: #2b0548;
-
+  --ifm-color-primary-dark: #270441;
+  --ifm-color-primary-darker: #25043d;
+  --ifm-color-primary-darkest: #1e0332;
+  --ifm-color-primary-light: #2f054f;
+  --ifm-color-primary-lighter: #310653;
+  --ifm-color-primary-lightest: #38065e;
+  --ifm-color-primary-hover: #3a0661;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 
-  /* Reduct tokens */
+  /* Layout */
   --reduct-section-space: 7rem;
   --reduct-bottom-page-margin: 3rem;
-  --reduct-dimmed-color: #6c757d;
 
-  --reduct--background-white: #ffffff;
-  --reduct-background-gray: #f0f0f0;
-  --reduct-background-gray-hover: #e0e0e0;
-  --reduct-background-gray-light: #f5f5f5;
+  /* Text */
+  --reduct-dimmed: #6c757d;
+  --reduct-on-primary-muted: rgba(255, 255, 255, 0.85);
 
-  --reduct-button-color-primary: #db817b;
-  --reduct-button-color-primary-hover: rgba(219, 129, 123, 0.87);
-  --reduct-button-border-secondary: rgba(255, 255, 255, 1);
-  --reduct-button-border-secondary-hover: rgba(255, 255, 255, 0.87);
+  /* Surfaces */
+  --reduct-surface-0: #ffffff;
+  --reduct-surface-1: #f0f0f0;
+
+  /* Accent */
+  --reduct-accent: #db817bff;
+  --reduct-accent-hover: #e18f89;
+
+  /* Borders */
+  --reduct-border: #ffffffff;
 }
 
 html[data-theme="dark"],
 body[data-theme="dark"] {
+  /* infima */
   --ifm-color-primary: #dabeed;
-
+  --ifm-color-primary-dark: #bd73f6;
+  --ifm-color-primary-darker: #b765f5;
+  --ifm-color-primary-darkest: #b057f4;
+  --ifm-color-primary-light: #cb8ff8;
+  --ifm-color-primary-lighter: #d19df9;
+  --ifm-color-primary-lightest: #d8abfa;
+  --ifm-color-primary-hover: #b158f5;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 
-  --reduct-dimmed-color: #adb5bd;
-  --reduct--background-white: #303030;
+  /* Text */
+  --reduct-dimmed: #adb5bd;
+  --reduct-on-primary-muted: var(--reduct-dimmed);
 
-  --reduct-background-gray: #303030;
-  --reduct-background-gray-hover: #404040;
-  --reduct-background-gray-light: #282828;
+  /* Surfaces */
+  --reduct-surface-0: #303030;
+  --reduct-surface-1: #303030;
 
-  --reduct-button-color-primary: #ff776b;
-  --reduct-button-color-primary-hover: rgba(255, 119, 107, 0.88);
-  --reduct-button-border-secondary: #383838;
-  --reduct-button-border-secondary-hover: #4d4d4d;
+  /* Accent */
+  --reduct-accent: #ff776b;
+  --reduct-accent-hover: #ff8a80;
+
+  /* Borders */
+  --reduct-border: #383838;
 }
 
 /* CSS to hide on mobile */
@@ -185,12 +204,14 @@ body {
 }
 
 .navbar__items--right .DocSearch-Button {
+  color: var(--ifm-font-color-base) !important;
   background-color: var(--ifm-background-surface-color) !important;
   border: 0 !important;
   transition: none !important;
 }
 
 .navbar__items--right .DocSearch-Button-Key {
+  color: var(--ifm-font-color-base) !important;
   background-color: var(--ifm-color-emphasis-200) !important;
   transition: none !important;
 }

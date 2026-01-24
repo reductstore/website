@@ -17,9 +17,9 @@
 }
 
 .compactTable th {
-  background-color: var(--reduct-background-gray);
+  background-color: var(--reduct-surface-1);
 }
 
 .compactTable tr:nth-child(even) {
-  background-color: var(--reduct-background-gray-light);
+  background-color: var(--reduct-surface-1-light);
 }

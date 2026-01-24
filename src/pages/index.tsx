@@ -1,4 +1,5 @@
 import React from "react";
+import type { JSX } from "react";
 import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
@@ -26,10 +27,10 @@ function HomepageHeader() {
           {siteConfig.tagline}
         </h1>
         <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
-          An ELT-based solution for robotics and industrial IoT data acquisition
-          systems. Capture data in its raw form, ingest and stream data of any
-          size-images, sensor readings, logs, files, ROS bags-and store it with
-          time indexing and labels for ultra-fast retrieval and management.
+          An <strong>ELT-based solution</strong> for robotics and industrial IoT
+          data acquisition. Capture raw data, ingest and stream data of any
+          size—images, sensor readings, logs, files, ROS bags—and store it with
+          time indexing and labels for ultra-fast retrieval.
         </p>
         <div className={styles.buttonContainer}>
           <Link
