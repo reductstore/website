@@ -140,3 +140,26 @@ html,
 body {
   overflow-x: hidden;
 }
+
+/* Algolia DocSearch styling */
+.DocSearch-Logo {
+  visibility: hidden;
+}
+
+.DocSearch-Container {
+  --docsearch-highlight-color: var(--ifm-color-primary);
+  --docsearch-soft-primary-color: color-mix(in srgb, var(--ifm-color-primary) 15%, transparent);
+}
+
+html[data-theme="dark"] .DocSearch-Container {
+  --docsearch-highlight-color: var(--ifm-color-primary);
+  --docsearch-soft-primary-color: color-mix(in srgb, var(--ifm-color-primary) 18%, transparent);
+  --docsearch-searchbox-background: var(--ifm-background-surface-color);
+  --docsearch-searchbox-focus-background: var(--ifm-background-surface-color);
+  --docsearch-icon-color: var(--ifm-font-color-base);
+}
+
+.navbar__items--right .DocSearch-Button {
+  background-color: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-300);
+}
