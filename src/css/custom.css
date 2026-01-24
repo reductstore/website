@@ -82,6 +82,29 @@ img {
   height: auto;
 }
 
+/* Navbar logo hover color matches link hover color. */
+.navbar__logo {
+  position: relative;
+}
+.navbar__logo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--ifm-navbar-link-color);
+  -webkit-mask: url("/img/logo.svg") center / contain no-repeat;
+  mask: url("/img/logo.svg") center / contain no-repeat;
+  transition: background-color var(--ifm-transition-fast)
+    var(--ifm-transition-timing-default);
+}
+.navbar__brand:hover .navbar__logo::before {
+  background-color: var(--ifm-navbar-link-hover-color);
+}
+.navbar__logo .navbar-logo {
+  display: block;
+  height: 100%;
+  opacity: 0;
+}
+
 /* CSS for Github icon */
 .header-github-link::before {
   content: "";
