@@ -55,7 +55,7 @@ body[data-theme="dark"] {
   --reduct-on-primary-muted: var(--reduct-dimmed);
 
   /* Surfaces */
-  --reduct-surface-0: #303030;
+  --reduct-surface-0: #242526;
   --reduct-surface-1: #303030;
 
   /* Accent */

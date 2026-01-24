@@ -74,7 +74,7 @@
 
 /* Dark mode: hero matches page background + readable text */
 html[data-theme="dark"] .heroBanner {
-  background-color: var(--ifm-background-color);
+  background-color: var(--reduct-surface-0);
 }
 
 html[data-theme="dark"] .heroTitle {

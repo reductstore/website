@@ -1,13 +1,32 @@
 .statsSection {
   text-align: center;
-  padding: 2rem;
+  padding: 3rem 2rem;
   border-radius: 8px;
+  background-color: var(--reduct-surface-1);
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.statsTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: var(--ifm-heading-color);
 }
 
 .statsSubheader {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
+  color: var(--ifm-color-emphasis-700);
+}
+
+html[data-theme="dark"] .statsSection {
+  background-color: var(--reduct-surface-0);
+  border-color: var(--ifm-color-emphasis-300);
+}
+
+html[data-theme="dark"] .statsSubheader {
+  color: var(--ifm-color-emphasis-600);
 }
 
 .btn {
@@ -18,7 +37,7 @@
   margin-top: 2rem;
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 1.5rem;
   justify-content: center;
   align-items: flex-start;
   margin-left: auto;
@@ -28,20 +47,35 @@
 
 .statCard {
   width: 200px;
-  height: 150px;
+  height: 140px;
   text-align: center;
-  padding: 1rem;
-  background-color: white;
+  padding: 1.25rem 1rem;
+  background-color: var(--reduct-surface-0);
   border-radius: 8px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+html[data-theme="dark"] .statCard {
+  background-color: var(--reduct-surface-1);
+  border-color: var(--ifm-color-emphasis-300);
 }
 
 .statValue {
   font-size: 2rem;
   font-weight: bold;
-  color: black;
+  color: var(--ifm-color-primary);
+  margin-bottom: 0.5rem;
 }
 
 .statDescription {
   font-size: 0.875rem;
-  color: black;
+  color: var(--ifm-color-emphasis-700);
+  line-height: 1.4;
+}
+
+html[data-theme="dark"] .statDescription {
+  color: var(--ifm-color-emphasis-600);
 }
