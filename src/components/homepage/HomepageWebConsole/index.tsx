@@ -3,7 +3,7 @@ import clsx from "clsx";
 import styles from "./styles.module.css";
 import Link from "@docusaurus/Link";
 
-const CliImage = require("@site/static/img/web-console.webp").default;
+const CliImage = require("@site/static/img/web-console.png").default;
 
 function HomepageWebConsole() {
   return (
