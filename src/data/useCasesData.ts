@@ -11,8 +11,9 @@ const useCases: UseCase[] = [
     description:
       "A database purpose built for robotics data pipelines (AMRs, drones, ROS, physical-AI systems) with practical examples.",
     link: "/blog/database-for-robotics",
-    image: require("@site/blog/2025-10-22-database-for-robotics/img/intro-image.png")
-      .default,
+    image:
+      require("@site/blog/2025-10-22-database-for-robotics/img/intro-image.png")
+        .default,
   },
   {
     title: "Data Acquisition for Manufacturing",
@@ -45,8 +46,9 @@ const useCases: UseCase[] = [
     description:
       "Best practices for storing and managing MQTT data in IIoT applications.",
     link: "/blog/advice/database/mqtt-data-storage",
-    image: require("@site/blog/2025-05-08-mqtt-data-storage/img/social-card.jpg")
-      .default,
+    image:
+      require("@site/blog/2025-05-08-mqtt-data-storage/img/social-card.jpg")
+        .default,
   },
   {
     title: "Kafka Data Sink",
