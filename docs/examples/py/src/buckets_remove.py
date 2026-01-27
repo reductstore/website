@@ -1,3 +1,4 @@
+import asyncio
 from reduct import Client, ReductError
 
 
@@ -8,6 +9,7 @@ async def remove_bucket():
 
         bucket = await client.get_bucket("bucket-to-remove")
         await bucket.remove()
+        await asyncio.sleep(1)  # Wait a moment for the removal to propagate
 
         # Check that the bucket no longer exists
         try:
@@ -18,6 +20,4 @@ async def remove_bucket():
 
 
 if __name__ == "__main__":
-    import asyncio
-
     asyncio.run(remove_bucket())
