@@ -180,7 +180,6 @@ jobs:
             fi
 
             docker stop reductstore
-            docker rm reductstore
           done
       - name: Print Docker logs
         if: failure()
