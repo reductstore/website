@@ -2,6 +2,7 @@ import Layout from "@theme/Layout";
 import PricingTable from "@site/src/components/shared/PricingTable";
 import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import Faq from "@site/src/components/shared/Faq";
+import { JSX } from "react";
 
 export default function Pricing(): JSX.Element {
   return (
@@ -35,34 +36,33 @@ export default function Pricing(): JSX.Element {
 
 const pricingFaqs = [
   {
-    question: "Do you ship different software for free and commercial plans?",
+    question: "Is the software the same for all plans?",
     answer:
-      "No, regardless of the plan, we ship the same software with source code available in a public repository on GitHub.",
+      "Yes. Same software, same source code on GitHub. Plans differ only in support and licensing terms.",
   },
   {
-    question: "How do you control disk usage?",
+    question: "How does disk usage licensing work?",
     answer:
-      "When you sign a license agreement, we will send you a license key as a text file that contains information about the licensee and the allowed disk usage. You should specify the path to the license when you run the database. The database will keep work even if the disk usage exceeds the limit, but the CLI client, WebConsole and SDKs will generate warnings about the license.",
+      "You receive a license key specifying allowed disk usage. The database continues working if exceeded—CLI, WebConsole, and SDKs will show warnings.",
   },
   {
-    question: "Will my infrastructure crash when the license expires?",
+    question: "What happens when the license expires?",
     answer:
-      "No, the database will continue to work, but the CLI client, WebConsole and SDKs will generate warnings about the license.",
+      "The database keeps running. CLI, WebConsole, and SDKs show license warnings.",
   },
   {
-    question:
-      "You say that the free plan works only for companies with capital less than 2 million USD, how do you count it?",
+    question: "How is the $2M capital threshold calculated?",
     answer:
-      "By capital, we mean the highest value of your total gross revenue, your total budget, or any funding you've received, regardless of its source, in the last 12 months.",
+      "The highest of: total gross revenue, total budget, or funding received in the last 12 months.",
   },
   {
     question: "Why BUSL-1.1?",
     answer:
-      "We believe that everyone should have access to the source code of the software they use. That's why we don't provide OSS and Enterprise versions. The code base is and will be identical for all users. On the other hand, we need a way to encourage monetization of our products to provide the highest quality software. The BUSL license gives us a way to achieve our goals. Everyone has access to the source code and can use, redistribute and modify it, but if you aim to generate revenue using our software, you are required to purchase a commercial license.",
+      "One codebase for everyone with full source access. Free for research and small companies. Commercial license required for production use above $2M capital.",
   },
   {
-    question: "What are ReductStore Extensions?",
+    question: "What are Extensions?",
     answer:
-      "Extensions let you process data on the storage side during queries, for example selecting CSV columns, scaling images, or searching text.",
+      "Server-side data processing during queries—e.g., CSV column selection, image scaling, rosbag topic filtering.",
   },
 ];

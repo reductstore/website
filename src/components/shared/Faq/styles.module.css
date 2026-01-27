@@ -13,10 +13,6 @@
   transition: background-color 0.3s ease;
 }
 
-.faqQuestion:hover {
-  background-color: var(--reduct-surface-1-hover);
-}
-
 .faqIcon {
   margin-right: 10px;
   transition: transform 0.3s ease;
