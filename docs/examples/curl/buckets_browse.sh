@@ -7,9 +7,9 @@ AUTH_HEADER="Authorization: Bearer my-token"
 printf "Browse all buckets:\n"
 curl -X GET \
   -H "${AUTH_HEADER}" \
-  -a "${API_PATH}"/list
+  "${API_PATH}"/list
 
 printf "\nBrowse a specific bucket:\n"
 curl -X GET \
   -H "${AUTH_HEADER}" \
-  -a "${API_PATH}"/b/my-bucket
+  "${API_PATH}"/b/my-bucket

@@ -6,6 +6,6 @@ AUTH_HEADER="Authorization: Bearer my-token"
 
 curl -X PUT \
   -H "${AUTH_HEADER}" \
-  -a "${API_PATH}/b/bucket-to-rename/rename" \
+  "${API_PATH}/b/bucket-to-rename/rename" \
   -H "Content-Type: application/json" \
   -d '{"new_name": "bucket-renamed"}'

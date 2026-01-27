@@ -6,8 +6,8 @@ AUTH_HEADER="Authorization: Bearer my-token"
 
 # List all replications
 curl -H "${AUTH_HEADER}" \
-  -a "${API_PATH}"/replications/
+  "${API_PATH}"/replications/
 
 # Browse a specific replication
 curl -H "${AUTH_HEADER}" \
-  -a "${API_PATH}"/replications/example-replication
+  "${API_PATH}"/replications/example-replication

@@ -9,9 +9,9 @@ TIME=`date +%s000000`
 curl -d "Some binary data" \
   -H "${AUTH_HEADER}" \
   -H "Content-Type: plain/text" \
-  -X POST -a ${API_PATH}/b/example-bucket/entry_1?ts=${TIME}
+  -X POST ${API_PATH}/b/example-bucket/entry_1?ts=${TIME}
 
 
 # Delete a single record
 curl -H "${AUTH_HEADER}" \
-  -X DELETE -a ${API_PATH}/b/example-bucket/entry_1?ts=${TIME}
+  -X DELETE ${API_PATH}/b/example-bucket/entry_1?ts=${TIME}

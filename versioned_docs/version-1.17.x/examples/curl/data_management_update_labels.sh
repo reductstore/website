@@ -11,11 +11,11 @@ curl -d "Some binary data" \
   -H "x-reduct-label-key1: value1" \
   -H "x-reduct-label-key2: value2" \
   -H "Content-Type: plain/text" \
-  -X POST -a ${API_PATH}/b/example-bucket/entry_1?ts=${TIME}
+  -X POST ${API_PATH}/b/example-bucket/entry_1?ts=${TIME}
 
 
 # Update the "key1" label to "new_value1" and remove the "key2" label
 curl -H "${AUTH_HEADER}" \
   -H "x-reduct-label-key1: new_value1" \
   -H "x-reduct-label-key2: " \
-  -X PATCH -a ${API_PATH}/b/example-bucket/entry_1/labels
+  -X PATCH ${API_PATH}/b/example-bucket/entry_1/labels

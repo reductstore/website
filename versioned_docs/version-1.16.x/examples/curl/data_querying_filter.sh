@@ -12,8 +12,8 @@ ID=`curl -H "${AUTH_HEADER}" \
   "when": {
       "&photo_taken": {"$gt": 2006},
       "&face_score": {"$lt": 4}
-}' -X POST -a "${API_PATH}/b/example-bucket/imdb/q" | jq -r ".id"`
+}' -X POST "${API_PATH}/b/example-bucket/imdb/q" | jq -r ".id"`
 
 # Fetch the data (without batching) until the end
-curl -H "${AUTH_HEADER}" -X GET -a "${API_PATH}/b/example-bucket/imdb?q=${ID}" --output ./phot_1.jpeg
-curl -H "${AUTH_HEADER}" -X GET -a "${API_PATH}/b/example-bucket/imdb?q=${ID}" --output ./phot_2.jpeg
+curl -H "${AUTH_HEADER}" -X GET "${API_PATH}/b/example-bucket/imdb?q=${ID}" --output ./phot_1.jpeg
+curl -H "${AUTH_HEADER}" -X GET "${API_PATH}/b/example-bucket/imdb?q=${ID}" --output ./phot_2.jpeg

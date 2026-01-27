@@ -8,7 +8,7 @@ AUTH_HEADER="Authorization: Bearer my-token"
 TIME=`date +%s000000`
 curl -d "Some binary data" \
   -H "${AUTH_HEADER}" \
-  -X POST -a ${API_PATH}/b/example-bucket/entry_1?ts=${TIME}
+  -X POST ${API_PATH}/b/example-bucket/entry_1?ts=${TIME}
 
 # Fetch the record by timestamp
-curl -H "${AUTH_HEADER}" -X GET -a "${API_PATH}/b/example-bucket/entry_1?ts=${TIME}"
+curl -H "${AUTH_HEADER}" -X GET "${API_PATH}/b/example-bucket/entry_1?ts=${TIME}"

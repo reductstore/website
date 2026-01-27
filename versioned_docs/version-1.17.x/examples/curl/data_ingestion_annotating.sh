@@ -11,4 +11,4 @@ curl -d "Some binary data" \
   -H "x-reduct-label-name: example" \
   -H "x-reduct-label-score: 0.9" \
   -H "Content-Type: plain/text" \
-  -X POST -a ${API_PATH}/b/example-bucket/entry_1?ts=${TIME}
+  -X POST ${API_PATH}/b/example-bucket/entry_1?ts=${TIME}

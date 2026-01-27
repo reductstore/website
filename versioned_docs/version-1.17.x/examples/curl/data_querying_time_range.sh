@@ -8,13 +8,13 @@ AUTH_HEADER="Authorization: Bearer my-token"
 TIME=`date +%s000000`
 curl -d "Some binary data" \
   -H "${AUTH_HEADER}" \
-  -X POST -a ${API_PATH}/b/example-bucket/entry_1?ts=${TIME}
+  -X POST ${API_PATH}/b/example-bucket/entry_1?ts=${TIME}
 
 # Query data for a specific time range
 STOP_TIME=`date +%s000000`
 ID=`curl -H "${AUTH_HEADER}" \
   -d '{"query_type": "QUERY", "start": '${TIME}', "stop": '${STOP_TIME}'}' \
-  -X POST -a "${API_PATH}/b/example-bucket/entry_1/q" | jq -r ".id"`
+  -X POST "${API_PATH}/b/example-bucket/entry_1/q" | jq -r ".id"`
 # Fetch the data (without batching)
-curl -H "${AUTH_HEADER}" -X GET -a "${API_PATH}/b/example-bucket/entry_1?q=${ID}"
-curl -H "${AUTH_HEADER}" -X GET -a "${API_PATH}/b/example-bucket/entry_1?q=${ID}"
+curl -H "${AUTH_HEADER}" -X GET "${API_PATH}/b/example-bucket/entry_1?q=${ID}"
+curl -H "${AUTH_HEADER}" -X GET "${API_PATH}/b/example-bucket/entry_1?q=${ID}"

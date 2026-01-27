@@ -8,4 +8,4 @@ AUTH_HEADER="Authorization: Bearer my-token"
 curl -X UPDATE \
   -d '{"quota_size":5000000000}' \
   -H "${AUTH_HEADER}" \
-  -a "${API_PATH}"/b/my_data
+  "${API_PATH}"/b/my_data
