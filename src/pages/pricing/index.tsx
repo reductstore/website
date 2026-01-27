@@ -2,7 +2,9 @@ import Layout from "@theme/Layout";
 import PricingTable from "@site/src/components/shared/PricingTable";
 import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import Faq from "@site/src/components/shared/Faq";
+import PlaygroundOffer from "@site/src/components/promotional/PlaygroundOffer";
 import { JSX } from "react";
+import styles from "./styles.module.css";
 
 export default function Pricing(): JSX.Element {
   return (
@@ -11,14 +13,16 @@ export default function Pricing(): JSX.Element {
       description="Choose the right ReductStore plan for your scale—from free community use to commercial self-hosted and fully managed cloud offerings."
     >
       <main>
-        <SimpleHeader pageTitle="Plans Tailored for Every Scale" />
+        <SimpleHeader pageTitle="ReductStore Pricing" />
 
         <section className="container">
-          <p>
-            ReductStore is free for research, testing, and development.
-            Commercial plans support long-term deployments, production
-            workloads, and enterprise-level requirements.
-          </p>
+          <div className={styles.introSection}>
+            <p className={styles.introText}>
+              Free for research, testing, and development. Commercial plans
+              cover production licensing, support, and deployment requirements.
+            </p>
+            <PlaygroundOffer />
+          </div>
           <PricingTable />
         </section>
 

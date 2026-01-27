@@ -68,6 +68,15 @@ body[data-theme="dark"] {
   --reduct-border: #383838;
 }
 
+/* Custom Footer Colors */
+.footer--dark {
+  --ifm-footer-background-color: #252526;
+}
+
+.footer {
+  background-color: var(--ifm-footer-background-color);
+}
+
 /* CSS to hide on mobile */
 .hideOnMobile {
   display: none;
