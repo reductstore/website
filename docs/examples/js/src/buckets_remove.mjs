@@ -8,9 +8,9 @@ const client = new Client("http://127.0.0.1:8383", { apiToken: "my-token" });
 const bucket = await client.getBucket("bucket-to-remove");
 await bucket.remove();
 
-// Check that the bucket no longer exists
+// Check that the bucket no longer exists or is in the process of being removed
 try {
   await client.getBucket("bucket-to-remove");
 } catch (e) {
-  assert(e.status === 404);
+  assert(e.statusCode === 404 || e.statusCode === 409);
 }

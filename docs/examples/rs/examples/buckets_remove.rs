@@ -12,10 +12,12 @@ async fn main() -> Result<(), ReductError> {
     // Remove the bucket "bucket-to-remove"
     let bucket = client.get_bucket("bucket-to-remove").await?;
     bucket.remove().await?;
-    tokio::time::sleep(std::time::Duration::from_secs(1)).await;
 
-    // Check that the bucket no longer exists
-    let bucket = client.get_bucket("bucket-to-remove").await;
-    assert_eq!(bucket.err().unwrap().status, ErrorCode::NotFound);
+    // Check that the bucket no longer exists or is in the process of being removed
+    let status_code = client.get_bucket("bucket-to-remove").await.err().unwrap().status
+    assert_eq!(
+        status_code,
+        ErrorCode::NotFound | ErrorCode::Conflict
+    );
     Ok(())
 }

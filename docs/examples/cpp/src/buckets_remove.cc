@@ -20,10 +20,7 @@ int main() {
     auto remove_err = bucket->Remove();
     assert(remove_err == Error::kOk);
 
-    // Wait a moment for the removal finalization
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-
-    // Check that the bucket no longer exists
+    // Check that the bucket no longer exists or is in the process of being removed
     auto [_, get_err2] = client->GetBucket("bucket-to-remove");
-    assert(get_err2.code == 404);
+    assert(get_err2.code == 404 || get_err2.code == 409);
 }
