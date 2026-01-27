@@ -12,6 +12,7 @@ async fn main() -> Result<(), ReductError> {
     // Remove the bucket "bucket-to-remove"
     let bucket = client.get_bucket("bucket-to-remove").await?;
     bucket.remove().await?;
+    tokio::time::sleep(std::time::Duration::from_secs(1)).await;
 
     // Check that the bucket no longer exists
     let bucket = client.get_bucket("bucket-to-remove").await;
