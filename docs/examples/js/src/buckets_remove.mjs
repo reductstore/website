@@ -12,5 +12,6 @@ await bucket.remove();
 try {
   await client.getBucket("bucket-to-remove");
 } catch (e) {
-  assert(e.statusCode === 404 || e.statusCode === 409);
+  const status = e?.status ?? e?.statusCode;
+  assert(status === 404 || status === 409);
 }
