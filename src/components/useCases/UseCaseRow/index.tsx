@@ -1,12 +1,13 @@
-import React from "react";
+import React, { JSX } from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 
 interface UseCaseRowProps {
   title: string;
-  illustration: string;
+  illustration?: string;
   isImageLeft: boolean;
   description: string | JSX.Element;
+  children?: React.ReactNode;
 }
 
 const UseCaseRow: React.FC<UseCaseRowProps> = ({
@@ -14,7 +15,14 @@ const UseCaseRow: React.FC<UseCaseRowProps> = ({
   description,
   illustration,
   isImageLeft,
+  children,
 }) => {
+  const mediaContent = children ? (
+    <div className={styles.customContent}>{children}</div>
+  ) : (
+    <img src={illustration} alt={title} />
+  );
+
   return (
     <div
       className={clsx("row", styles.useCaseRow, {
@@ -23,7 +31,7 @@ const UseCaseRow: React.FC<UseCaseRowProps> = ({
     >
       {isImageLeft && (
         <div className={clsx("col col--6", styles.imageSection)}>
-          <img src={illustration} alt={title} />
+          {mediaContent}
         </div>
       )}
       <div className={clsx("col col--6", styles.textSection)}>
@@ -32,7 +40,7 @@ const UseCaseRow: React.FC<UseCaseRowProps> = ({
       </div>
       {!isImageLeft && (
         <div className={clsx("col col--6", styles.imageSection)}>
-          <img src={illustration} alt={title} />
+          {mediaContent}
         </div>
       )}
     </div>

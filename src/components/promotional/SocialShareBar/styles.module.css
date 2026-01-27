@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--reduct-dimmed-color);
+  color: var(--reduct-dimmed);
   font-size: 1.1rem;
   margin-bottom: 1.5rem;
 }
@@ -17,7 +17,7 @@
   content: "";
   flex: 1;
   height: 0.5px;
-  background-color: var(--reduct-dimmed-color);
+  background-color: var(--reduct-dimmed);
   margin: 0 0.5rem;
 }
 
@@ -33,7 +33,7 @@
   align-items: center;
   width: 2.5rem;
   height: 2.5rem;
-  background-color: var(--reduct--background-white);
+  background-color: var(--reduct-surface-0);
   border-radius: 50%;
   border: 1px solid #e5e5e5;
   transition: transform 0.3s ease;

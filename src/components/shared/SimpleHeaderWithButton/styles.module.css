@@ -1,4 +1,3 @@
-/* Style for the Banner Content */
 .Banner {
   padding: 40px 0;
   display: flex;
@@ -20,14 +19,15 @@
 
 .BannerRight {
   flex: 1 1 50%;
-  text-align: center;
-  padding: 3rem;
+  text-align: right;
+  padding-top: 0;
+  padding-left: 3rem;
 }
 
 .BannerImage {
   max-width: 100%;
   height: auto;
-  border-radius: 8px;
+  /* border-radius: 8px; */
 }
 
 .BannerTitle {

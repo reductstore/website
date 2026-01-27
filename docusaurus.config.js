@@ -209,6 +209,7 @@ const config = {
         logo: {
           alt: "ReductStore Logo",
           src: "img/logo.svg",
+          className: "navbar-logo",
         },
         hideOnScroll: false,
         items: [

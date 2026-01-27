@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "./styles.module.css";
-import clsx from "clsx";
 
 const stats = [
   { value: "+60K", description: "downloads" },
@@ -19,14 +18,18 @@ const stats = [
     value: "~90%",
     description: "reduction in cloud storage costs",
   },
+  {
+    value: "5+",
+    description: "years of active development",
+  },
 ];
 
 function HomepageStats() {
   return (
-    <section className={clsx("hero hero--primary", styles.statsSection)}>
+    <section className={styles.statsSection}>
       <div className="container">
-        <h2 className="hero__title">Developers choose ReductStore</h2>
-        <p className={clsx("hero__subtitle", styles.statsSubheader)}>
+        <h2 className={styles.statsTitle}>Developers choose ReductStore</h2>
+        <p className={styles.statsSubheader}>
           Trusted by robotics and IIoT engineers to process billions of
           time-indexed records
         </p>

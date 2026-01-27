@@ -1,4 +1,4 @@
-import React from "react";
+import React, { JSX } from "react";
 import Layout from "@theme/Layout";
 import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import styles from "./styles.module.css";

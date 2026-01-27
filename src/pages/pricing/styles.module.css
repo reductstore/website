@@ -1,0 +1,17 @@
+.introSection {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  justify-content: space-between;
+}
+
+.introText {
+  max-width: 32rem;
+  flex: 1 1 20rem;
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--ifm-color-emphasis-700);
+}

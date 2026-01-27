@@ -5,7 +5,6 @@
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 2em;
   justify-content: center;
-  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -62,7 +61,7 @@
 }
 
 .subtitle {
-  color: var(--reduct-dimmed-color);
+  color: var(--reduct-dimmed);
 }
 
 .underlinedText {
@@ -100,7 +99,7 @@
 
 .termsLink {
   font-size: 0.75em;
-  color: var(--reduct-dimmed-color);
+  color: var(--reduct-dimmed);
   text-decoration: none;
   transition: color 0.2s ease;
 }
@@ -127,7 +126,7 @@
   margin-left: 5px;
   vertical-align: top;
   cursor: help;
-  color: var(--reduct-dimmed-color);
+  color: var(--reduct-dimmed);
 }
 
 .featureIcon {
@@ -146,7 +145,7 @@
 }
 
 .tooltipTrigger {
-  border-bottom: 1px dotted var(--reduct-dimmed-color);
+  border-bottom: 1px dotted var(--reduct-dimmed);
   cursor: help;
   transition: border-color 0.2s ease;
 }
@@ -182,7 +181,7 @@
 .freePlanDisclaimer {
   margin-top: 1em;
   font-size: 0.8em;
-  color: var(--reduct-dimmed-color);
+  color: var(--reduct-dimmed);
 }
 
 /* Modal */
