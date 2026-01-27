@@ -1,6 +1,8 @@
 #include <reduct/client.h>
 #include <iostream>
 #include <cassert>
+#include <thread>
+#include <chrono>
 
 using reduct::IBucket;
 using reduct::IClient;
@@ -17,6 +19,9 @@ int main() {
     assert(get_err == Error::kOk);
     auto remove_err = bucket->Remove();
     assert(remove_err == Error::kOk);
+
+    // Wait a moment for the removal finalization
+    std::this_thread::sleep_for(std::chrono::seconds(1));
 
     // Check that the bucket no longer exists
     auto [_, get_err2] = client->GetBucket("bucket-to-remove");
