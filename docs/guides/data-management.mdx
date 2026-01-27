@@ -230,6 +230,10 @@ import DeleteRecordsRangeCli from "!!raw-loader!../examples/cli/data_management_
   </TabItem>
 </Tabs>
 
+:::info[Experemtal Feature]
+Starting with version 1.18, you can also remove records across multiple entries by providing the 'entry' parameter with a list of entry names or a wildcard pattern.
+:::
+
 :::warning
 Deleting records in a time range is a heavy operation and may take a long time to complete because it copies the retained records to new blocks and deletes the old ones.
 :::

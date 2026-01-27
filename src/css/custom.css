@@ -117,3 +117,18 @@ html,
 body {
   overflow-x: hidden;
 }
+
+/* Sidebar badge for experimental docs */
+.io-api-experimental > .menu__list-item-collapsible > .menu__link::after {
+  content: "Experimental";
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.35rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 999px;
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-emphasis-800);
+  font-size: 0.65rem;
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
