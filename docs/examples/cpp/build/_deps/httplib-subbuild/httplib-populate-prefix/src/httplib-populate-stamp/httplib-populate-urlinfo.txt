@@ -1,0 +1,12 @@
+# This is a generated file and its contents are an internal implementation detail.
+# The download step will be re-executed if anything in this file changes.
+# No other meaning or use of this file is supported.
+
+method=url
+command=/usr/local/bin/cmake;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;/home/runner/work/website/website/docs/examples/cpp/build/_deps/httplib-subbuild/httplib-populate-prefix/src/httplib-populate-stamp/download-httplib-populate.cmake;COMMAND;/usr/local/bin/cmake;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;/home/runner/work/website/website/docs/examples/cpp/build/_deps/httplib-subbuild/httplib-populate-prefix/src/httplib-populate-stamp/verify-httplib-populate.cmake;COMMAND;/usr/local/bin/cmake;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;/home/runner/work/website/website/docs/examples/cpp/build/_deps/httplib-subbuild/httplib-populate-prefix/src/httplib-populate-stamp/extract-httplib-populate.cmake
+source_dir=/home/runner/work/website/website/docs/examples/cpp/build/_deps/httplib-src
+work_dir=/home/runner/work/website/website/docs/examples/cpp/build/_deps
+url(s)=https://github.com/yhirose/cpp-httplib/archive/refs/tags/v0.14.3.zip
+hash=MD5=af82eb38506ca531b6d1d53524ff7912
+      no_extract=
+

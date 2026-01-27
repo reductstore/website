@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/runner/work/website/website/docs/examples/cpp/build/_deps/reductcpp-subbuild/CMakeFiles/reductcpp-populate"
+		},
+		{
+			"file" : "/home/runner/work/website/website/docs/examples/cpp/build/_deps/reductcpp-subbuild/CMakeFiles/reductcpp-populate.rule"
+		},
+		{
+			"file" : "/home/runner/work/website/website/docs/examples/cpp/build/_deps/reductcpp-subbuild/CMakeFiles/reductcpp-populate-complete.rule"
+		},
+		{
+			"file" : "/home/runner/work/website/website/docs/examples/cpp/build/_deps/reductcpp-subbuild/reductcpp-populate-prefix/src/reductcpp-populate-stamp/reductcpp-populate-build.rule"
+		},
+		{
+			"file" : "/home/runner/work/website/website/docs/examples/cpp/build/_deps/reductcpp-subbuild/reductcpp-populate-prefix/src/reductcpp-populate-stamp/reductcpp-populate-configure.rule"
+		},
+		{
+			"file" : "/home/runner/work/website/website/docs/examples/cpp/build/_deps/reductcpp-subbuild/reductcpp-populate-prefix/src/reductcpp-populate-stamp/reductcpp-populate-download.rule"
+		},
+		{
+			"file" : "/home/runner/work/website/website/docs/examples/cpp/build/_deps/reductcpp-subbuild/reductcpp-populate-prefix/src/reductcpp-populate-stamp/reductcpp-populate-install.rule"
+		},
+		{
+			"file" : "/home/runner/work/website/website/docs/examples/cpp/build/_deps/reductcpp-subbuild/reductcpp-populate-prefix/src/reductcpp-populate-stamp/reductcpp-populate-mkdir.rule"
+		},
+		{
+			"file" : "/home/runner/work/website/website/docs/examples/cpp/build/_deps/reductcpp-subbuild/reductcpp-populate-prefix/src/reductcpp-populate-stamp/reductcpp-populate-patch.rule"
+		},
+		{
+			"file" : "/home/runner/work/website/website/docs/examples/cpp/build/_deps/reductcpp-subbuild/reductcpp-populate-prefix/src/reductcpp-populate-stamp/reductcpp-populate-test.rule"
+		},
+		{
+			"file" : "/home/runner/work/website/website/docs/examples/cpp/build/_deps/reductcpp-subbuild/reductcpp-populate-prefix/src/reductcpp-populate-stamp/reductcpp-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"reductcpp-populate"
+		],
+		"name" : "reductcpp-populate"
+	}
+}

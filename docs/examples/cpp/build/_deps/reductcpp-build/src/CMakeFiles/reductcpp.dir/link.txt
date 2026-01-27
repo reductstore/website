@@ -1,0 +1,2 @@
+/usr/bin/ar qc libreductcpp.a CMakeFiles/reductcpp.dir/reduct/internal/batch_v1.cc.o CMakeFiles/reductcpp.dir/reduct/internal/batch_v2.cc.o CMakeFiles/reductcpp.dir/reduct/internal/http_client.cc.o CMakeFiles/reductcpp.dir/reduct/internal/serialisation.cc.o CMakeFiles/reductcpp.dir/reduct/bucket.cc.o CMakeFiles/reductcpp.dir/reduct/client.cc.o CMakeFiles/reductcpp.dir/reduct/error.cc.o
+/usr/bin/ranlib libreductcpp.a
