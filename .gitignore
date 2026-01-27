@@ -27,6 +27,11 @@ target
 Cargo.lock
 private/
 
+# Example build artifacts
+docs/examples/cpp/build/
+docs/examples/rs/build/
+docs/examples/py/src/__pycache__/
+
 
 # Go
 go.sum
