@@ -14,7 +14,7 @@ async fn main() -> Result<(), ReductError> {
     bucket.remove().await?;
 
     // Check that the bucket no longer exists or is in the process of being removed
-    let status_code = client.get_bucket("bucket-to-remove").await.err().unwrap().status
+    let status_code = client.get_bucket("bucket-to-remove").await.err().unwrap().status;
     assert_eq!(
         status_code,
         ErrorCode::NotFound | ErrorCode::Conflict
