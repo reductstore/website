@@ -7,13 +7,13 @@ function HomepageCTA() {
   return (
     <section className={styles.section}>
       <Heading as="h2">
-        Efficient Storage & Streaming for Robotics and Industrial IoT
+        Time-Series Blob Storage for Robotics & Industrial IoT
       </Heading>
       <p>
-        Learn how ReductStore helps robotics and IIoT teams manage petabytes of
-        multimodal data-at the edge and in the cloud-with a unified solution
-        that delivers 10x speed, 90% lower infrastructure costs, and zero data
-        loss, even with limited bandwidth and poor connectivity.
+        Learn how ReductStore helps robotics and industrial teams store images,
+        sensor data, and logs on edge devices, then replicate to on-prem or
+        cloud. With benchmarks and comparisons vs. TimescaleDB, MongoDB, and
+        MinIO.
       </p>
       <Link className="button button--primary button--lg" to="/whitepaper">
         Download White Paper (PDF)
