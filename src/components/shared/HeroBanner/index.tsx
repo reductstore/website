@@ -2,26 +2,32 @@ import styles from "./styles.module.css";
 import Heading from "@theme/Heading";
 import { FaCheck } from "react-icons/fa"; // Importing icon
 import Link from "@docusaurus/Link";
+import ThemedImage from "@theme/ThemedImage";
+import useBaseUrl from "@docusaurus/useBaseUrl";
 
-interface SimpleHeaderWithButtonProps {
+interface HeroBannerProps {
   title: string;
   subtitle: string;
   benefits: string[];
-  imageSrc: string;
+  imageSrc?: string;
+  imageSrcDark?: string;
+  imageSrcLight?: string;
   imageAlt?: string;
   scrollToId: string;
   headerTag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 }
 
-function SimpleHeaderWithButton({
+function HeroBanner({
   title,
   subtitle,
   benefits,
   imageSrc,
+  imageSrcDark,
+  imageSrcLight,
   imageAlt = "",
   scrollToId,
   headerTag = "h1",
-}: SimpleHeaderWithButtonProps) {
+}: HeroBannerProps) {
   const scrollToForm = () => {
     const formElement = document.getElementById(scrollToId);
     if (formElement) {
@@ -62,11 +68,22 @@ function SimpleHeaderWithButton({
           </ul>
         </div>
         <div className={styles.BannerRight}>
-          <img src={imageSrc} alt={imageAlt} className={styles.BannerImage} />
+          {imageSrcDark && imageSrcLight ? (
+            <ThemedImage
+              sources={{
+                light: useBaseUrl(imageSrcLight),
+                dark: useBaseUrl(imageSrcDark),
+              }}
+              alt={imageAlt}
+              className={styles.BannerImage}
+            />
+          ) : (
+            <img src={imageSrc} alt={imageAlt} className={styles.BannerImage} />
+          )}
         </div>
       </div>
     </header>
   );
 }
 
-export default SimpleHeaderWithButton;
+export default HeroBanner;

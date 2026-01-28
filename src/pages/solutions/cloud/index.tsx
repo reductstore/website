@@ -3,7 +3,7 @@ import Layout from "@theme/Layout";
 import styles from "./styles.module.css";
 import UseCaseRow from "@site/src/components/useCases/UseCaseRow";
 import Faq from "@site/src/components/shared/Faq";
-import SimpleHeaderWithButton from "@site/src/components/shared/SimpleHeaderWithButton";
+import HeroBanner from "@site/src/components/shared/HeroBanner";
 import DemoServerForm from "@site/src/components/forms/DemoServerForm";
 import PerformanceComparison from "@site/src/components/tables/PerformanceComparison";
 
@@ -14,7 +14,7 @@ export default function CloudSolution(): JSX.Element {
   return (
     <Layout title={title} description={description}>
       <main>
-        <SimpleHeaderWithButton
+        <HeroBanner
           scrollToId="cloud-signup"
           title={title}
           subtitle={description}
@@ -23,7 +23,8 @@ export default function CloudSolution(): JSX.Element {
             "Edge-to-Cloud Replication",
             "On Your Infrastructure or Ours",
           ]}
-          imageSrc="/img/solutions/cloud/cloud.png"
+          imageSrcDark="/img/solutions/cloud/cloud-main-dark.drawio.svg"
+          imageSrcLight="/img/solutions/cloud/cloud-main-light.drawio.svg"
           imageAlt="Cloud Storage"
         />
         <div className="container">

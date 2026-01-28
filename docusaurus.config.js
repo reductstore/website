@@ -172,14 +172,7 @@ const config = {
         stagingCookieyesId: "3d9b3daecacd570c664904b4",
         googleTagManagerId: "GTM-WBJ3M84W",
       },
-
-      // Stripe integration
-      paymentLinks: {
-        standard: "https://buy.stripe.com/14k7teamx1fogykeUW",
-        premium: "https://buy.stripe.com/bIYcNyfGR1foci48wx",
-        iot: "https://buy.stripe.com/cN2cNy3Y93nwci4bII",
-      },
-
+      
       // Remote playground dataset
       playServer: {
         url: "https://play.reduct.store/replica",

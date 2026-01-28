@@ -9,24 +9,28 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
 }
 
 .BannerLeft {
   flex: 1 1 50%;
-  max-width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .BannerRight {
   flex: 1 1 50%;
-  text-align: right;
-  padding-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
   padding-left: 3rem;
 }
 
 .BannerImage {
-  max-width: 100%;
+  width: 80%;
   height: auto;
+  object-fit: contain;
 }
 
 .BannerTitle {
@@ -74,6 +78,17 @@
   .BannerRight {
     max-width: 100%;
     text-align: center;
+    padding-left: 0;
+  }
+
+  .BannerRight {
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .BannerImage {
+    width: 90vw;
+    max-width: 500px;
   }
 
   .BenefitsList {
