@@ -2,26 +2,17 @@ import React from "react";
 import styles from "./styles.module.css";
 
 const stats = [
-  { value: "+60K", description: "downloads" },
-  { value: "+100", description: "production deployments" },
-  { value: "+1 PT", description: "of time-series data managed" },
-  { value: "99.99%", description: "uptime across all deployments" },
+  { value: "60k+", description: "downloads" },
+  { value: "100+", description: "production deployments" },
+  { value: "1+ PB", description: "time series data managed" },
+  { value: "99.99%", description: "uptime across production deployments" },
   {
-    value: "+603%",
-    description: "faster read operations for 100 KB records",
+    value: "10x",
+    description: "faster writes for 100 KB records than TimescaleDB",
   },
-  {
-    value: "+924%",
-    description: "faster write operations for 100 KB records",
-  },
-  {
-    value: "~90%",
-    description: "reduction in cloud storage costs",
-  },
-  {
-    value: "5+",
-    description: "years of active development",
-  },
+  { value: "15x", description: "faster reads for 100 KB records than MinIO" },
+  { value: "90%", description: "lower cloud cost by batching 100 KB records" },
+  { value: "5+", description: "years of active development" },
 ];
 
 function HomepageStats() {
