@@ -40,7 +40,7 @@ function SimpleHeaderWithButton({
             {title}
           </Heading>
           <p className={styles.BannerSubtitle}>{subtitle}</p>
-          <div className={styles.ButtonWithText}>
+          <div className={styles.Button}>
             <Link
               className="button button--primary button--lg"
               to="#"
@@ -51,7 +51,6 @@ function SimpleHeaderWithButton({
             >
               Start for Free →
             </Link>
-            <p>No credit card required.</p>
           </div>
           <ul className={styles.BenefitsList}>
             {benefits.map((benefit, index) => (

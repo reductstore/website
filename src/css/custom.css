@@ -25,6 +25,7 @@
   --reduct-primary-text: #1c1e21;
   --reduct-dimmed: #6c757d;
   --reduct-on-primary-muted: rgba(255, 255, 255, 0.85);
+  --reduct-font-size-subtitle: 1.2rem;
 
   /* Surfaces */
   --reduct-surface-0: #ffffff;

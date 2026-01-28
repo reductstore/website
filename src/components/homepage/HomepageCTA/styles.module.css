@@ -6,6 +6,8 @@
 }
 
 .section p {
+  color: var(--reduct-dimmed);
+  font-size: 1.1rem;
   margin: 2rem auto;
-  max-width: 80%;
+  max-width: 900px;
 }

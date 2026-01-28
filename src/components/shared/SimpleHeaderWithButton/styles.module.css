@@ -27,7 +27,6 @@
 .BannerImage {
   max-width: 100%;
   height: auto;
-  /* border-radius: 8px; */
 }
 
 .BannerTitle {
@@ -36,14 +35,13 @@
 }
 
 .BannerSubtitle {
-  font-size: 1.25rem;
+  font-size: var(--reduct-font-size-subtitle);
   margin-bottom: 30px;
+  max-width: 600px;
 }
 
-.ButtonWithText {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
+.Button {
+  margin-bottom: 20px;
 }
 
 /* Benefits list styling */
@@ -62,7 +60,7 @@
 .BenefitIcon {
   margin-right: 10px;
   color: green;
-  font-size: 1.2rem;
+  font-size: var(--reduct-font-size-subtitle);
 }
 
 /* Responsive adjustments */
