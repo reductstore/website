@@ -1,0 +1,14 @@
+.architectureSection {
+  margin: 4rem 0;
+}
+
+.architectureSection img {
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .architectureSection {
+    margin: 2rem 0;
+  }
+}

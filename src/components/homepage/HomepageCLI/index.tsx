@@ -4,7 +4,7 @@ import styles from "./styles.module.css";
 import Link from "@docusaurus/Link";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 
-const CliDemoImg = require("@site/static/img/cli-demo.webp").default;
+const CliDemoImg = require("@site/static/img/landing/cli-demo.webp").default;
 
 function HomepageCLI() {
   const [isLargeScreen, setIsLargeScreen] = useState(false);

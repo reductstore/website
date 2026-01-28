@@ -13,6 +13,7 @@ import HomepageSDKs from "../components/homepage/HomepageSDKs";
 import HomepageWebConsole from "../components/homepage/HomepageWebConsole";
 import HomepageCLI from "../components/homepage/HomepageCLI";
 import HomepageBenefits from "../components/homepage/HomepageBenefits";
+import HomepageArchitecture from "../components/homepage/HomepageArchitecture";
 import HomepageUseCase from "../components/homepage/HomepageUseCase";
 import styles from "./index.module.css";
 import HomepageStats from "../components/homepage/HomepageStats";
@@ -64,7 +65,10 @@ export default function Home(): JSX.Element {
       <HomepageHeader />
       <main>
         <div className="container">
+          <HomepageArchitecture />
+          <hr className={styles.industrialHr} />
           <HomepageBenefits />
+          <hr className={styles.industrialHr} />
           <HomepageStats />
           <HomepageTestimonials />
           <HomepageCompanies />
