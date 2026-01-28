@@ -167,3 +167,18 @@ html[data-theme="dark"] .buttonSecondary:hover {
     margin-right: auto;
   }
 }
+
+/* Industrial dashed hr divider */
+.industrialHr {
+  border: none;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--ifm-color-primary) 0px,
+    var(--ifm-color-primary) 6px,
+    transparent 6px,
+    transparent 10px
+  );
+  opacity: 0.5;
+  margin: 3rem 0;
+}

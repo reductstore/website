@@ -13,7 +13,7 @@
   --ifm-color-primary-light: #2f054f;
   --ifm-color-primary-lighter: #310653;
   --ifm-color-primary-lightest: #38065e;
-  --ifm-color-primary-hover: #3a0661;
+  --ifm-color-primary-hover: var(--ifm-color-primary-darkest);
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 
@@ -42,14 +42,13 @@
 html[data-theme="dark"],
 body[data-theme="dark"] {
   /* infima */
-  --ifm-color-primary: #dabeed;
-  --ifm-color-primary-dark: #bd73f6;
-  --ifm-color-primary-darker: #b765f5;
-  --ifm-color-primary-darkest: #b057f4;
-  --ifm-color-primary-light: #cb8ff8;
-  --ifm-color-primary-lighter: #d19df9;
-  --ifm-color-primary-lightest: #d8abfa;
-  --ifm-color-primary-hover: #b158f5;
+  --ifm-color-primary: #b8a6c8;
+  --ifm-color-primary-dark: #c3b3d6;
+  --ifm-color-primary-darker: #c9bee0;
+  --ifm-color-primary-darkest: #d6cbea;
+  --ifm-color-primary-light: #afa0c0;
+  --ifm-color-primary-lighter: #a798b7;
+  --ifm-color-primary-lightest: #9e8fae;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 
   /* Text */

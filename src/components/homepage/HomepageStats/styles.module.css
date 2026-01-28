@@ -66,7 +66,7 @@ html[data-theme="dark"] .statCard {
 .statValue {
   font-size: 2rem;
   font-weight: bold;
-  color: var(--ifm-color-primary);
+  color: var(--ifm-heading-color);
   margin-bottom: 0.5rem;
 }
 

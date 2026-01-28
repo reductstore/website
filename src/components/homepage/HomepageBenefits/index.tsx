@@ -1,5 +1,11 @@
 import React from "react";
-import { LuZap, LuPiggyBank, LuGlobe, LuPuzzle } from "react-icons/lu";
+import {
+  LuZap,
+  LuPiggyBank,
+  LuGlobe,
+  LuDatabase,
+  LuPuzzle,
+} from "react-icons/lu";
 
 import styles from "./styles.module.css";
 
@@ -11,28 +17,28 @@ interface BenefitsValue {
 
 const benefits: BenefitsValue[] = [
   {
-    icon: <LuZap />,
-    title: "High Performance",
+    icon: <LuPuzzle />,
+    title: "Any Data Format",
     description:
-      "Save hours of data processing time for robotics and industrial data workflows, from ingestion to analysis.",
+      "Store multimodal time series of any size: images, video, LiDAR, IMU, logs, files, ROS bags and more.",
+  },
+  {
+    icon: <LuGlobe />,
+    title: "Fleet Scale Collection",
+    description:
+      "Collect from many robots or devices and replicate to the cloud over intermittent connectivity.",
   },
   {
     icon: <LuPiggyBank />,
     title: "Lower Cost at Scale",
     description:
-      "Reduce cloud costs by storing only selected data and batching records into fewer objects in S3-compatible storage.",
+      "Use S3 compatible blob storage and batch records into fewer objects to reduce storage and API costs.",
   },
   {
-    icon: <LuGlobe />,
-    title: "Distributed by Design",
+    icon: <LuZap />,
+    title: "Best Performance",
     description:
-      "Collect data from robots and edge devices and stream directly to the cloud or local storage reliably over unstable networks.",
-  },
-  {
-    icon: <LuPuzzle />,
-    title: "Extensible & Integrable",
-    description:
-      "Store data in any format and integrate with existing tools and platforms with custom extensions and SDKs for popular languages.",
+      "High throughput ingestion and fast retrieval of exact time ranges for replay, debugging, and training.",
   },
 ];
 

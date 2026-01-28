@@ -155,7 +155,7 @@ export default function PricingTable() {
 
         <PricingPlan
           title="Self-Hosted"
-          subtitle="On-Premise"
+          subtitle="On-Premises"
           description="Commercial support, proof-of-concept assistance, and long-term release support for on-premise deployments."
           categories={createFeatures("onpremise")}
           buttonUrl="/contact?subject=DemoLicense"

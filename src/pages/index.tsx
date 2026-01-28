@@ -45,7 +45,7 @@ function HomepageHeader() {
             className={clsx("button button--lg", styles.buttonSecondary)}
             to="/docs/getting-started"
           >
-            <LuServer /> On-Premise
+            <LuServer /> On-Premises
           </Link>
         </div>
       </div>
@@ -69,17 +69,17 @@ export default function Home(): JSX.Element {
           <HomepageTestimonials />
           <HomepageCompanies />
           <HomepagePartners />
-          <hr />
+          <hr className={styles.industrialHr} />
           <HomepageFeatures />
-          <hr />
+          <hr className={styles.industrialHr} />
           <HomepageSDKs />
-          <hr />
+          <hr className={styles.industrialHr} />
           <HomepageWebConsole />
-          <hr />
+          <hr className={styles.industrialHr} />
           <HomepageCLI />
-          <hr />
+          <hr className={styles.industrialHr} />
           <HomepageUseCase />
-          <hr />
+          <hr className={styles.industrialHr} />
           <HomepageFaqs />
         </div>
         <HomepageCTA />
