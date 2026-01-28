@@ -25,13 +25,14 @@ function HomepageHeader() {
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
         <h1 className={clsx("hero__title", styles.heroTitle)}>
-          {siteConfig.tagline}
+          High Performance Data Storage and Streaming for{" "}
+          <span className={styles.heroAccent}>Robotics</span> and{" "}
+          <span className={styles.heroAccent}>Industrial IoT</span>
         </h1>
         <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
-          An <strong>ELT-based solution</strong> for robotics and industrial IoT
-          data acquisition. Capture raw data, ingest and stream data of any
-          size—images, sensor readings, logs, files, ROS bags—and store it with
-          time indexing and labels for ultra-fast retrieval.
+          Store and stream multimodal time series from many robots or devices.
+          Built to handle large data volumes, poor connectivity, and fast event
+          retrieval at scale.
         </p>
         <div className={styles.buttonContainer}>
           <Link

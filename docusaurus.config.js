@@ -10,7 +10,8 @@ import rehypeKatex from "rehype-katex";
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "ReductStore",
-  tagline: "High Performance Storage and Streaming Solution",
+  tagline:
+    "High Performance Data Storage and Streaming for Robotics and Industrial IoT",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
