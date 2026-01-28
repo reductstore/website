@@ -51,10 +51,7 @@ function HomepageCLI() {
           )}
         >
           <h2 className="hideOnMobile">CLI Client</h2>
-          <p>
-            You can customize data retention and replication policies using the
-            ReductStore CLI client.
-          </p>
+          <p>Command line interface to manage data and system configuration.</p>
           <Link
             className={clsx("button button--primary button--lg", styles.btn)}
             to="/docs/getting-started"
