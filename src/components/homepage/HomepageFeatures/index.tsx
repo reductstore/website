@@ -32,52 +32,54 @@ export default function HomepageFeatures() {
       <div className="row">
         <Feature
           IconComponent={LuTimer}
-          title="Time Series Blob Storage"
-          description="Capture and access blob data as time series, tailored for edge computing, computer vision, and IoT."
+          title="Multimodal Time Series Storage"
+          description="Store time ordered records of any type and size: log files, images, video, LiDAR, ROS bags and more."
+        />
+        <Feature
+          IconComponent={LuTags}
+          title="Labels and Filtering"
+          description="Attach labels to records and filter reads and replication to keep only the data you need."
+        />
+        <Feature
+          IconComponent={LuRefreshCw}
+          title="Selective Edge to Cloud Replication"
+          description="Replicate using rules based on labels or events, even with limited bandwidth and intermittent connectivity."
+        />
+      </div>
+
+      <div className="row">
+        <Feature
+          IconComponent={LuLayers}
+          title="Batching for Lower Cloud Cost"
+          description="Batch records into fewer objects for S3 compatible storage to reduce API overhead and cloud cost."
         />
         <Feature
           IconComponent={LuInfinity}
-          title="No Size Limit for Blobs"
-          description="ReductStore handles blob data without size limits; your disk capacity is the only boundary."
+          title="No Hard Size Limits"
+          description="Handle small sensor samples to large blobs like video clips, frames, point clouds, and files."
         />
         <Feature
           IconComponent={LuGauge}
-          title="Real-Time FIFO Quota"
-          description="Ensure optimal storage management with FIFO quotas, preventing disk space shortages in real-time."
+          title="Retention and Quotas"
+          description="FIFO quotas based on volume keep edge disks from filling up and maintain a rolling window of recent data."
         />
       </div>
+
       <div className="row">
         <Feature
-          IconComponent={LuTags}
-          title="Data Labeling & Filtering"
-          description="Manage your time-series blob data with ease: annotate, filter, and save AI labels or meta-data."
+          IconComponent={LuSearch}
+          title="Fast Event Retrieval"
+          description="Query exact time ranges and filter by labels to replay events and debug without scanning hour long logs."
         />
         <Feature
           IconComponent={LuPuzzle}
           title="Extensible Query Engine"
-          description="Extend ReductStore with plugins that transform data during queries—filter CSVs, resize images, search text, and more."
-        />
-        <Feature
-          IconComponent={LuLayers}
-          title="Efficient Data Batching"
-          description="Minimize network overhead in areas with high latency by fetching records in batched HTTP responses."
-        />
-      </div>
-      <div className="row">
-        <Feature
-          IconComponent={LuRefreshCw}
-          title="Data Replication"
-          description="Synchronize data across buckets with replication for high availability and disaster recovery."
-        />
-        <Feature
-          IconComponent={LuSearch}
-          title="Iterative Data Querying"
-          description="Efficiently queries large datasets with minimal load for real-time and historical data processing."
+          description="Use extensions to transform data during queries, like resizing images, filtering CSV, or extracting ROS topics."
         />
         <Feature
           IconComponent={LuKey}
           title="Token Authorization"
-          description="Secure data access with token-based authorization to protect your data from unauthorized access."
+          description="Secure access for devices and services with token based authorization."
         />
       </div>
     </section>
