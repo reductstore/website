@@ -12,11 +12,11 @@ const subBulletIcon = faArrowRight;
 export default function ReductAI(): JSX.Element {
   return (
     <Layout
-      title="Time-Series Blob Storage for Robotics & Industrial Applications"
-      description="Store time-stamped blob data on edge devices, replicate to cloud. Performance benchmarks vs. TimescaleDB, MongoDB, MinIO."
+      title="White Paper"
+      description="ReductStore white paper: architecture, benchmarks, and use cases for robotics and industrial IoT."
     >
       <main>
-        <SimpleHeader pageTitle="Time-Series Blob Storage for Robotics & Industrial Applications" />
+        <SimpleHeader pageTitle="ReductStore White Paper" />
         <div className={clsx("container", styles.whitePaperContainer)}>
           <div className="row">
             {/* Description Column */}
