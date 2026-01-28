@@ -38,6 +38,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  gap: 0.5rem;
   transition:
     background-color 160ms ease,
     border-color 160ms ease,
