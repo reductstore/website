@@ -10,6 +10,12 @@
   margin: 0 auto;
 }
 
+@media (max-width: 768px) {
+  .architectureImage {
+    min-height: auto;
+  }
+}
+
 .architectureImage :global(img) {
   display: block;
   width: 100%;
@@ -22,10 +28,4 @@
 }
 :global(html[data-theme="dark"]) .architectureImage :global(img[src*="light"]) {
   display: none;
-}
-
-@media (max-width: 768px) {
-  .architectureSection {
-    padding: 1.5rem 0;
-  }
 }
