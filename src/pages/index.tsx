@@ -12,6 +12,9 @@ import HomepageFaqs from "../components/homepage/HomepageFaqs";
 import HomepageSDKs from "../components/homepage/HomepageSDKs";
 import HomepageWebConsole from "../components/homepage/HomepageWebConsole";
 import HomepageCLI from "../components/homepage/HomepageCLI";
+import HomepagePerformance from "../components/homepage/HomepagePerformance";
+import HomepageObservability from "../components/homepage/HomepageObservability";
+import HomepageRobotics from "../components/homepage/HomepageRobotics";
 import HomepageBenefits from "../components/homepage/HomepageBenefits";
 import HomepageArchitecture from "../components/homepage/HomepageArchitecture";
 import HomepageUseCase from "../components/homepage/HomepageUseCase";
@@ -81,6 +84,12 @@ export default function Home(): JSX.Element {
           <HomepageWebConsole />
           <hr className={styles.industrialHr} />
           <HomepageCLI />
+          <hr className={styles.industrialHr} />
+          <HomepagePerformance />
+          <hr className={styles.industrialHr} />
+          <HomepageObservability />
+          <hr className={styles.industrialHr} />
+          <HomepageRobotics />
           <hr className={styles.industrialHr} />
           <HomepageUseCase />
           <hr className={styles.industrialHr} />

@@ -13,6 +13,12 @@
   width: 100%;
 }
 
+.tabContent > div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .tabContent p {
   color: var(--reduct-dimmed);
   font-size: 0.8rem;

@@ -1,0 +1,19 @@
+.performanceSection {
+  padding: 2rem 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn {
+  margin-top: 1rem;
+}
+
+@media (max-width: 996px) {
+  .row {
+    flex-direction: column-reverse;
+  }
+}

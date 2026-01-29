@@ -1,10 +1,12 @@
 .tableResponsive {
   overflow-x: auto;
   width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .compactTable {
-  width: 100%;
+  width: auto;
   border-collapse: collapse;
   margin: 10px 0;
   font-size: 14px;
