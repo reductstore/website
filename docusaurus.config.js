@@ -47,7 +47,6 @@ const config = {
   },
 
   plugins: [
-    require.resolve("./src/plugins/docusaurus-plugin-matomo"),
     require.resolve("./src/plugins/docusaurus-plugin-consent-manager"),
     require.resolve("./src/plugins/docusaurus-plugin-stream"),
     [
@@ -158,21 +157,13 @@ const config = {
         searchParameters: {},
       },
 
-      // Matomo analytics
-      matomo: {
-        url: "https://cdn.matomo.cloud/reductstore.matomo.cloud",
-        container: "lnt4UdBs",
-        previewSuffix: "_staging_24832eb3877816bd5f3a40a3",
-        devSuffix: "_dev_f19bac1b68c75bffed400ddd",
-      },
-
       // Consent management platform (CMP)
       cmp: {
         cookieyesId: "28ee242ee07e2579793c1355",
         stagingCookieyesId: "3d9b3daecacd570c664904b4",
         googleTagManagerId: "GTM-WBJ3M84W",
       },
-      
+
       // Remote playground dataset
       playServer: {
         url: "https://play.reduct.store/replica",

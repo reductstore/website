@@ -12,7 +12,7 @@ const stats = [
   },
   { value: "15x", description: "faster reads for 100 KB records than MinIO" },
   { value: "90%", description: "lower cloud cost by batching 100 KB records" },
-  { value: "5+", description: "years of active development" },
+  { value: "4+", description: "years of active development" },
 ];
 
 function HomepageStats() {

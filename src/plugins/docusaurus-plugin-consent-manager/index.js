@@ -59,18 +59,6 @@ module.exports = function (context) {
               cookieyes.type = 'text/javascript';
               cookieyes.src = 'https://cdn-cookieyes.com/client_data/${cookieyesId}/script.js';
               document.head.appendChild(cookieyes);
-              
-              // Matomo consent handling
-              document.addEventListener("cookieyes_consent_update", function (eventData) {
-                const data = eventData.detail;                
-                if (data.accepted.includes("analytics")) {
-                  window._mtm = window._mtm || [];
-                  _mtm.push({"event": "giveConsent"});
-                } else {
-                  window._mtm = window._mtm || [];
-                  _mtm.push({"event": "forgetConsent"});
-                }
-              });
             `,
             attributes: {
               type: "text/javascript",
