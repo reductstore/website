@@ -4,8 +4,8 @@
  * work well for content-centric websites.
  */
 
-/* You can override the default Infima variables here. */
 :root {
+  /* infima */
   --ifm-color-primary: #2b0548;
   --ifm-color-primary-dark: #270441;
   --ifm-color-primary-darker: #25043d;
@@ -13,26 +13,36 @@
   --ifm-color-primary-light: #2f054f;
   --ifm-color-primary-lighter: #310653;
   --ifm-color-primary-lightest: #38065e;
-  --ifm-color-primary-hover: #3a0661;
+  --ifm-color-primary-hover: var(--ifm-color-primary-darkest);
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+  /* Layout */
   --reduct-section-space: 7rem;
   --reduct-bottom-page-margin: 3rem;
-  --reduct-dimmed-color: #6c757d;
-  --reduct--background-white: white;
-  --reduct-background-gray: #f0f0f0;
-  --reduct-background-gray-hover: #e0e0e0;
-  --reduct-background-gray-light: #f5f5f5;
 
-  --reduct-button-color-primary: #db817bff;
-  --reduct-button-color-primary-hover: #db817bdd;
-  --reduct-button-border-secondary: #ffffffff;
-  --reduct-button-border-secondary-hover: #ffffffdd;
+  /* Text */
+  --reduct-primary-text: #1c1e21;
+  --reduct-dimmed: #6c757d;
+  --reduct-on-primary-muted: rgba(255, 255, 255, 0.85);
+  --reduct-on-primary-text: #ffffff;
+  --reduct-font-size-subtitle: 1.2rem;
+
+  /* Surfaces */
+  --reduct-surface-0: #ffffff;
+  --reduct-surface-1: #f0f0f0;
+
+  /* Accent */
+  --reduct-accent: #db817bff;
+  --reduct-accent-hover: #e18f89;
+
+  /* Borders */
+  --reduct-border: #ffffffff;
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
 html[data-theme="dark"],
 body[data-theme="dark"] {
+  /* infima */
   --ifm-color-primary: #dabeed;
   --ifm-color-primary-dark: #bd73f6;
   --ifm-color-primary-darker: #b765f5;
@@ -40,18 +50,33 @@ body[data-theme="dark"] {
   --ifm-color-primary-light: #cb8ff8;
   --ifm-color-primary-lighter: #d19df9;
   --ifm-color-primary-lightest: #d8abfa;
-  --ifm-color-primary-hover: #b158f5;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
-  --reduct-dimmed-color: #adb5bd;
-  --reduct--background-white: #303030;
-  --reduct-background-gray: #303030;
-  --reduct-background-gray-hover: #404040;
-  --reduct-background-gray-light: #282828;
 
-  --reduct-button-color-primary: #ff776b;
-  --reduct-button-color-primary-hover: #ff776be1;
-  --reduct-button-border-secondary: #383838;
-  --reduct-button-border-secondary-hover: #4d4d4d;
+  /* Text */
+  --reduct-primary-text: #e4e6eb;
+  --reduct-dimmed: #adb5bd;
+  --reduct-on-primary-muted: var(--reduct-dimmed);
+  --reduct-on-primary-text: #121212;
+
+  /* Surfaces */
+  --reduct-surface-0: #242526;
+  --reduct-surface-1: #303030;
+
+  /* Accent */
+  --reduct-accent: #ff776b;
+  --reduct-accent-hover: #ff8a80;
+
+  /* Borders */
+  --reduct-border: #383838;
+}
+
+/* Custom Footer Colors */
+.footer--dark {
+  --ifm-footer-background-color: #252526;
+}
+
+.footer {
+  background-color: var(--ifm-footer-background-color);
 }
 
 /* CSS to hide on mobile */
@@ -80,6 +105,38 @@ body[data-theme="dark"] {
 img {
   max-width: 100%;
   height: auto;
+}
+
+/* Navbar CSS */
+.navbar__brand,
+.navbar__brand:hover,
+.navbar__brand:focus {
+  color: var(--ifm-navbar-link-color);
+}
+.navbar__title {
+  color: inherit;
+}
+.navbar__brand:hover .navbar__title,
+.navbar__brand:focus .navbar__title {
+  color: inherit;
+}
+.navbar__logo {
+  position: relative;
+}
+.navbar__logo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: currentColor; /* <-- matches .navbar__brand color */
+  -webkit-mask: url("/img/logo.svg") center / contain no-repeat;
+  mask: url("/img/logo.svg") center / contain no-repeat;
+}
+.navbar__logo img {
+  opacity: 0;
+}
+.navbar__logo img {
+  height: 100%;
+  display: block;
 }
 
 /* CSS for Github icon */
@@ -116,6 +173,60 @@ img {
 html,
 body {
   overflow-x: hidden;
+}
+
+/* Algolia DocSearch styling */
+.DocSearch-Logo {
+  visibility: hidden;
+}
+
+.DocSearch-Container {
+  --docsearch-primary-color: var(--ifm-color-primary);
+  --docsearch-highlight-color: var(--ifm-color-primary);
+  --docsearch-soft-primary-color: color-mix(
+    in srgb,
+    var(--ifm-color-primary) 15%,
+    transparent
+  );
+  --docsearch-searchbox-background: var(--ifm-background-surface-color);
+  --docsearch-searchbox-focus-background: var(--ifm-color-emphasis-100);
+
+  --docsearch-icon-color: var(--ifm-font-color-base);
+  --docsearch-text-color: var(--ifm-font-color-base);
+  --docsearch-muted-color: var(--ifm-color-emphasis-600);
+  --docsearch-secondary-text-color: var(--ifm-color-emphasis-700);
+  --docsearch-screen-icon-color: var(--ifm-font-color-base);
+  --docsearch-subtle-color: var(--ifm-color-emphasis-300);
+  --docsearch-footer-background: var(--ifm-color-emphasis-100);
+
+  --docsearch-hit-highlight-color: color-mix(
+    in srgb,
+    var(--ifm-color-primary) 15%,
+    transparent
+  );
+  --docsearch-hit-background: var(--ifm-color-emphasis-200);
+  --docsearch-modal-background: var(--ifm-color-emphasis-100);
+}
+
+.DocSearch-Screen-Icon {
+  color: var(--docsearch-screen-icon-color);
+}
+
+.DocSearch-Screen-Icon svg {
+  stroke: currentColor;
+}
+
+.navbar__items--right .DocSearch-Button {
+  color: var(--ifm-font-color-base) !important;
+  background-color: var(--ifm-background-surface-color) !important;
+  border: 0 !important;
+  transition: none !important;
+}
+
+.navbar__items--right .DocSearch-Button-Key {
+  color: var(--ifm-font-color-base) !important;
+  background-color: var(--ifm-color-emphasis-200) !important;
+  transition: none !important;
 }
 
 /* Sidebar badge for experimental docs */

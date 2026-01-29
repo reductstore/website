@@ -1,8 +1,10 @@
 import React from "react";
+import type { JSX } from "react";
 import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
+import { LuServer, LuCloud } from "react-icons/lu";
 import HomepageFeatures from "../components/homepage/HomepageFeatures";
 import HomepageTestimonials from "../components/homepage/HomepageTestimonials";
 import HomepageCTA from "../components/homepage/HomepageCTA";
@@ -10,7 +12,11 @@ import HomepageFaqs from "../components/homepage/HomepageFaqs";
 import HomepageSDKs from "../components/homepage/HomepageSDKs";
 import HomepageWebConsole from "../components/homepage/HomepageWebConsole";
 import HomepageCLI from "../components/homepage/HomepageCLI";
+import HomepagePerformance from "../components/homepage/HomepagePerformance";
+import HomepageObservability from "../components/homepage/HomepageObservability";
+import HomepageRobotics from "../components/homepage/HomepageRobotics";
 import HomepageBenefits from "../components/homepage/HomepageBenefits";
+import HomepageArchitecture from "../components/homepage/HomepageArchitecture";
 import HomepageUseCase from "../components/homepage/HomepageUseCase";
 import styles from "./index.module.css";
 import HomepageStats from "../components/homepage/HomepageStats";
@@ -23,26 +29,27 @@ function HomepageHeader() {
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
         <h1 className={clsx("hero__title", styles.heroTitle)}>
-          {siteConfig.tagline}
+          High Performance Data Storage and Streaming for{" "}
+          <span className={styles.heroAccent}>Robotics</span> and{" "}
+          <span className={styles.heroAccent}>Industrial IoT</span>
         </h1>
         <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
-          An ELT-based solution for robotics and industrial IoT data acquisition
-          systems. Capture data in its raw form, ingest and stream data of any
-          size-images, sensor readings, logs, files, ROS bags-and store it with
-          time indexing and labels for ultra-fast retrieval and management.
+          Store and stream multimodal time series from many robots or devices.
+          Built to handle large data volumes, poor connectivity, and fast event
+          retrieval at scale.
         </p>
         <div className={styles.buttonContainer}>
           <Link
             className={clsx("button button--lg", styles.buttonPrimary)}
-            to="/docs/getting-started"
+            to="/solutions/cloud"
           >
-            Get Started
+            <LuCloud /> Cloud
           </Link>
           <Link
             className={clsx("button button--lg", styles.buttonSecondary)}
-            to="/whitepaper"
+            to="/docs/getting-started"
           >
-            White Paper
+            <LuServer /> On-Premises
           </Link>
         </div>
       </div>
@@ -61,22 +68,31 @@ export default function Home(): JSX.Element {
       <HomepageHeader />
       <main>
         <div className="container">
+          <HomepageArchitecture />
+          <hr className={styles.industrialHr} />
           <HomepageBenefits />
+          <hr className={styles.industrialHr} />
           <HomepageStats />
           <HomepageTestimonials />
           <HomepageCompanies />
           <HomepagePartners />
-          <hr />
+          <hr className={styles.industrialHr} />
           <HomepageFeatures />
-          <hr />
+          <hr className={styles.industrialHr} />
           <HomepageSDKs />
-          <hr />
+          <hr className={styles.industrialHr} />
           <HomepageWebConsole />
-          <hr />
+          <hr className={styles.industrialHr} />
           <HomepageCLI />
-          <hr />
+          <hr className={styles.industrialHr} />
+          <HomepagePerformance />
+          <hr className={styles.industrialHr} />
+          <HomepageObservability />
+          <hr className={styles.industrialHr} />
+          <HomepageRobotics />
+          <hr className={styles.industrialHr} />
           <HomepageUseCase />
-          <hr />
+          <hr className={styles.industrialHr} />
           <HomepageFaqs />
         </div>
         <HomepageCTA />

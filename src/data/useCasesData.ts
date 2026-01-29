@@ -11,7 +11,9 @@ const useCases: UseCase[] = [
     description:
       "A database purpose built for robotics data pipelines (AMRs, drones, ROS, physical-AI systems) with practical examples.",
     link: "/blog/database-for-robotics",
-    image: require("@site/static/img/use-cases/robot.webp").default,
+    image:
+      require("@site/blog/2025-10-22-database-for-robotics/img/intro-image.png")
+        .default,
   },
   {
     title: "Data Acquisition for Manufacturing",
@@ -19,7 +21,7 @@ const useCases: UseCase[] = [
       "Learn how to store and manage data for edge computing and AI application in manufacturing.",
     link: "/blog/daq-manufacture-system",
     image:
-      require("@site/static/img/use-cases/ai-workflows/ai-labels-and-metadata-for-every-record.webp")
+      require("@site/blog/2025-03-17-daq-manufacture-system/img/daq-intro.png")
         .default,
   },
   {
@@ -27,7 +29,9 @@ const useCases: UseCase[] = [
     description:
       "Explore how to implement computer vision applications in industrial settings with practical examples.",
     link: "/blog/computer-vision-applications",
-    image: require("@site/static/img/use-cases/computer-vision.webp").default,
+    image:
+      require("@site/blog/2025-07-08-3-ways-store-data-for-computer-vision-applications/img/cv-intro.png")
+        .default,
   },
   {
     title: "Vibration Data",
@@ -35,7 +39,7 @@ const useCases: UseCase[] = [
       "Strategies for reducing and storing vibration sensor data effectively.",
     link: "/blog/how-to-store-vibration-sensor-data",
     image:
-      require("@site/static/img/use-cases/vibration-sensors/reduction-strategy.webp")
+      require("@site/blog/2024-12-05-data-flow-with-vibration-data/img/vibration_data_flow_intro.png")
         .default,
   },
   {
@@ -43,28 +47,36 @@ const useCases: UseCase[] = [
     description:
       "Best practices for storing and managing MQTT data in IIoT applications.",
     link: "/blog/advice/database/mqtt-data-storage",
-    image: require("@site/static/img/use-cases/mqtt.webp").default,
+    image:
+      require("@site/blog/2025-05-08-mqtt-data-storage/img/mqtt-data-storage.png")
+        .default,
   },
   {
     title: "Kafka Data Sink",
     description:
       "Learn how to set up a data sink using Apache Kafka for data streaming applications.",
     link: "/blog/tutorial/datastreaming/kafka/data-sink-guide",
-    image: require("@site/static/img/use-cases/kafka.webp").default,
+    image:
+      require("@site/blog/2024-02-04-kafka-tutorial-data-sink/img/kafka-reductstore.png")
+        .default,
   },
   {
     title: "Anomaly Detection",
     description:
       "Implement open-source AI anomaly detection at the edge with practical examples.",
     link: "/blog/computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection",
-    image: require("@site/static/img/use-cases/anomaly-detection.webp").default,
+    image:
+      require("@site/blog/2023-10-15-Implementing-open-source-ai-anomaly-detection/img/anomaly_detection_banner.png")
+        .default,
   },
   {
     title: "Pytorch Data Streaming",
     description:
       "Techniques for streaming database data into PyTorch for machine learning applications.",
     link: "/blog/ai/datastreaming/pytorch/implement-database-data-streaming-pytorch",
-    image: require("@site/static/img/use-cases/pytorch.webp").default,
+    image:
+      require("@site/blog/2024-01-13-implement-data-streaming-pytorch/img/pytorch-iterabledataset.png")
+        .default,
   },
 ];
 

@@ -1,9 +1,12 @@
 .tableResponsive {
   overflow-x: auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .compactTable {
-  width: 100%;
+  width: auto;
   border-collapse: collapse;
   margin: 10px 0;
   font-size: 14px;
@@ -17,9 +20,9 @@
 }
 
 .compactTable th {
-  background-color: var(--reduct-background-gray);
+  background-color: var(--reduct-surface-1);
 }
 
 .compactTable tr:nth-child(even) {
-  background-color: var(--reduct-background-gray-light);
+  background-color: var(--reduct-surface-1-light);
 }

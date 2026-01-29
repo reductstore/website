@@ -1,0 +1,31 @@
+.architectureSection {
+  margin: 3rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.architectureImage {
+  width: min(900px, 100%);
+  min-height: 280px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .architectureImage {
+    min-height: auto;
+  }
+}
+
+.architectureImage :global(img) {
+  display: block;
+  width: 100%;
+  object-fit: contain;
+}
+
+/* Hide inactive theme image to prevent duplicate flash on load */
+:global(html[data-theme="light"]) .architectureImage :global(img[src*="dark"]) {
+  display: none;
+}
+:global(html[data-theme="dark"]) .architectureImage :global(img[src*="light"]) {
+  display: none;
+}

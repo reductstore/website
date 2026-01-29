@@ -1,0 +1,23 @@
+.roboticsSection {
+  padding: 2rem 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.roboticsImage {
+  max-width: 100%;
+  height: auto;
+}
+
+.btn {
+  margin-top: 1rem;
+}
+
+@media (max-width: 996px) {
+  .row {
+    flex-direction: column-reverse;
+  }
+}

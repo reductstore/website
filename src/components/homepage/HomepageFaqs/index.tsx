@@ -17,125 +17,86 @@ export default function HomepageFaqs() {
 
 const landingFaqs = [
   {
-    question:
-      "How does the database scale, and what are the infrastructure requirements for scaling up?",
+    question: "What is ReductStore?",
     answer: (
       <p>
-        ReductStore is built for scalability, designed to efficiently manage
-        large data volumes typical in edge computing and AI/ML workflows. It
-        combines blob and time-series data functionalities, enabling the system
-        to handle billions of time-stamped blobs. Scaling up primarily involves
-        expanding disk capacity. The system's architecture supports low-latency
-        access with iterator and range query capabilities, ensuring optimal
-        performance at scale. More information about the architecture can be
-        found in the{" "}
+        ReductStore is a time-series database for blob data—images, sensor
+        readings, rosbags, logs—designed for robotics and industrial
+        applications. Store data on edge devices or robots, then replicate to
+        on-prem servers or cloud with S3 backend. Learn more in the{" "}
         <strong>
           <Link to="/docs/how-does-it-work">How Does It Work</Link>
         </strong>{" "}
-        section of the documentation.
+        section.
       </p>
     ),
   },
   {
-    question:
-      "Are there any customization options for data retention and replication policies?",
+    question: "How does replication work?",
     answer: (
       <p>
-        Yes, ReductStore includes several customizable features for managing
-        data, one of which is the First In, First Out (FIFO) approach. This
-        method is specifically designed to handle data based on volume
-        intervals, ensuring that as new entries are added, older ones are
-        systematically removed to prevent disk space issues. Additionally, AI
-        labels can be attached to blobs as metadata, helping in the
-        identification and replication of key data, thus ensuring vital
-        information is retained. These functionalities are all accessible
-        through the{" "}
+        Set up replication tasks to stream data from edge devices to another
+        instance—on-prem or cloud. Supports high availability setups and S3
+        backends for cloud deployments. See the{" "}
         <strong>
-          <Link to="https://cli.reduct.store">ReductStore CLI</Link>
-        </strong>
-        , making the management of data retention and replication
-        straightforward and effective.
+          <Link to="/docs/next/integrations/s3">S3 Integration</Link>
+        </strong>{" "}
+        guide.
       </p>
     ),
   },
   {
-    question:
-      "Is it compatible with popular programming languages and data formats?",
+    question: "What deployment options are available?",
     answer: (
       <p>
-        Yes, ReductStore ensures compatibility with a variety of programming
-        languages via its HTTP(S) API. Being a blob storage system, it supports
-        the storage of all types of unstructured data in byte form, making it
-        straightforward to incorporate into your existing setups and manage a
-        wide range of data.
-      </p>
-    ),
-  },
-  {
-    question:
-      "How does the database ensure data compliance, especially for sensitive or regulated industries?",
-    answer: (
-      <p>
-        ReductStore is dedicated to ensuring data compliance, particularly for
-        sensitive or regulated industries, and is well-suited for both edge
-        computing and on-premise environments. It provides strict retention
-        policy, token-based authorization for secure access, and data
-        replication capabilities to facilitate disaster recovery. These features
-        work together to align with industry standards and meet regulatory
-        demands, ensuring the protection and integrity of your data.
-      </p>
-    ),
-  },
-  {
-    question:
-      "How does the licensing work, and are there different tiers or plans available?",
-    answer: (
-      <p>
-        ReductStore offers a flexible licensing model designed to meet the needs
-        of various users, from startups to large enterprises. Our tiered pricing
-        structure allows you to choose a plan that best suits your project's
-        scale and complexity. You can find detailed breakdowns of what each tier
-        offers on our{" "}
+        Fully on-premises, cloud on your infrastructure, or managed cloud on
+        ours. All options support the same features. Check our{" "}
         <strong>
           <Link to="/pricing">Pricing</Link>
         </strong>{" "}
-        page, aiding in your decision-making process. We employ the Business
-        Source License (BUSL) to provide a middle ground between the
-        collaborative spirit of open source and the practical needs of
-        commercial ventures. For more insights into our licensing, please visit
-        our{" "}
+        page for details.
+      </p>
+    ),
+  },
+  {
+    question: "What programming languages are supported?",
+    answer: (
+      <p>
+        SDKs for Python, JavaScript, C++, Rust, and Go. Plus an HTTP API for any
+        language and a CLI for scripting and automation.
+      </p>
+    ),
+  },
+  {
+    question: "What is the license?",
+    answer: (
+      <p>
+        BUSL-1.1 (Business Source License). Free for research, testing, and
+        companies under $2M capital. Commercial license required for production
+        use above that threshold. See our{" "}
         <strong>
           <Link to="https://github.com/reductstore/reductstore/blob/main/LICENSE">
-            GitHub License page
+            LICENSE
           </Link>
-        </strong>
-        .
+        </strong>{" "}
+        for details.
       </p>
     ),
   },
   {
-    question:
-      "What kind of support is available for developers and administrators?",
+    question: "What support is available?",
     answer: (
       <p>
-        ReductStore provides a variety of support options for developers and
-        administrators, tailored to the plan selected on our{" "}
+        Community support via{" "}
+        <strong>
+          <Link to="https://community.reduct.store/">Discourse</Link>
+        </strong>{" "}
+        . Commercial plans include direct support with guaranteed response
+        times. See{" "}
         <strong>
           <Link to="/pricing">Pricing</Link>
         </strong>{" "}
-        page. For community-driven assistance and sharing of insights, you can
-        join us on{" "}
-        <strong>
-          <Link to="https://community.reduct.store/signup">Discourse</Link>
-        </strong>{" "}
-        or engage in discussions on{" "}
-        <strong>
-          <Link to="https://github.com/reductstore/reductstore">GitHub</Link>
-        </strong>
-        . Our direct support includes email, chat, and video calls, with
-        response times based on the plan selected. We also provide long-term
-        release support and offer architecture review services to ensure your
-        infrastructure is perfectly aligned with your operational requirements.
+        for plan details.
       </p>
     ),
   },

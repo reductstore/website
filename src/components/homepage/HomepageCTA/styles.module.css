@@ -2,10 +2,12 @@
   padding-top: var(--reduct-section-space);
   padding-bottom: var(--reduct-section-space);
   text-align: center;
-  background-color: var(--reduct-background-gray);
+  background-color: var(--reduct-surface-1);
 }
 
 .section p {
+  color: var(--reduct-dimmed);
+  font-size: 1.1rem;
   margin: 2rem auto;
-  max-width: 80%;
+  max-width: 900px;
 }

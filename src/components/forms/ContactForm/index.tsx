@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { JSX, useEffect } from "react";
 import styles from "./styles.module.css";
 import { useColorMode } from "@docusaurus/theme-common";
 

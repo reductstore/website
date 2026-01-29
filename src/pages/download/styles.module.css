@@ -1,3 +1,14 @@
+.introSection {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  justify-content: space-between;
+}
+
 .introText {
   margin-bottom: 3rem;
+  font-size: var(--reduct-font-size-subtitle);
+  max-width: 800px;
 }

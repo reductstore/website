@@ -1,0 +1,99 @@
+.Banner {
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.BannerContent {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.BannerLeft {
+  flex: 1 1 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.BannerRight {
+  flex: 1 1 50%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-left: 3rem;
+}
+
+.BannerImage {
+  width: 80%;
+  height: auto;
+  object-fit: contain;
+}
+
+.BannerTitle {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.BannerSubtitle {
+  font-size: var(--reduct-font-size-subtitle);
+  margin-bottom: 30px;
+  max-width: 600px;
+}
+
+.Button {
+  margin-bottom: 20px;
+}
+
+/* Benefits list styling */
+.BenefitsList {
+  margin-top: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.BenefitItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.BenefitIcon {
+  margin-right: 10px;
+  color: green;
+  font-size: var(--reduct-font-size-subtitle);
+}
+
+/* Responsive adjustments */
+@media (max-width: 997px) {
+  .BannerContent {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .BannerLeft,
+  .BannerRight {
+    max-width: 100%;
+    text-align: center;
+    padding-left: 0;
+  }
+
+  .BannerRight {
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .BannerImage {
+    width: 90vw;
+    max-width: 500px;
+  }
+
+  .BenefitsList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
