@@ -225,6 +225,7 @@ body {
   color: var(--ifm-font-color-base) !important;
   background-color: var(--ifm-color-emphasis-200) !important;
   transition: none !important;
+}
 
 /* Sidebar badge for experimental docs */
 .io-api-experimental > .menu__list-item-collapsible > .menu__link::after {
