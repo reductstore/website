@@ -174,8 +174,8 @@ html[data-theme="dark"] .buttonSecondary:hover {
   height: 2px;
   background: repeating-linear-gradient(
     90deg,
-    var(--ifm-color-primary) 0px,
-    var(--ifm-color-primary) 6px,
+    var(--reduct-dimmed) 0px,
+    var(--reduct-dimmed) 6px,
     transparent 6px,
     transparent 10px
   );

@@ -1,8 +1,16 @@
 .architectureSection {
   margin: 4rem 0;
+  display: flex;
+  justify-content: center;
 }
 
-.architectureSection img {
+.architectureImage {
+  width: min(900px, 100%);
+  margin: 0 auto;
+  display: block;
+}
+
+.architectureImage img {
   width: 100%;
   height: auto;
 }

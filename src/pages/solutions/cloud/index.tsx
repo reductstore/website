@@ -19,8 +19,9 @@ export default function CloudSolution(): JSX.Element {
       title: "Observability",
       description: (
         <p>
-          Visualize time-series data in Grafana dashboards. Query images, sensor
-          readings, and logs directly. Monitor replication and storage health.
+          Visualize time-series data in Grafana dashboards. Query labels and
+          content of records (e.g. CSV columns, JSON fields, ROS message
+          fields). Set up alerts for anomalies.
         </p>
       ),
       image: useBaseUrl("/img/solutions/cloud/grafana.png"),
@@ -83,7 +84,7 @@ export default function CloudSolution(): JSX.Element {
             description={
               <p>
                 Optimized for robotics and industrial workloads. 100KB images:
-                10x faster writes than TimescaleDB, 15x faster reads than MinIO.
+                10x faster writes than TimescaleDB, 16x faster reads than MinIO.
               </p>
             }
             isImageLeft={false}
@@ -118,7 +119,7 @@ const features = [
   {
     title: "S3 Backend with Batching",
     description:
-      "Store data on AWS S3, Google Cloud Storage, or MinIO. Batches small records into larger blobs to reduce API calls and costs.",
+      "Store data on any S3-compatible storage. Batches small records into larger blobs to reduce API calls and costs.",
     icon: <LuDatabase size={32} />,
   },
   {
@@ -144,16 +145,11 @@ const cloudFaqs = [
   {
     question: "How does edge-to-cloud replication work?",
     answer:
-      "Configure replication tasks to sync data from edge instances to cloud. Filter by labels. Handles intermittent connectivity automatically.",
+      "Configure replication tasks to copy data from edge instances to cloud. Filter by labels. Handles intermittent connectivity automatically.",
   },
   {
     question: "What deployment options are available?",
     answer:
-      "Self-hosted on AWS, GCP, Hetzner, or on-prem. Managed cloud option available. High availability and blue-green deployments supported.",
-  },
-  {
-    question: "How do I manage the database?",
-    answer:
-      "Web console for visual management. CLI for scripting. Full REST API for integration.",
+      "Self-hosted on AWS, GCP, Hetzner, or on-prem. Managed cloud option on our infrastructure available. High availability and blue-green deployments supported.",
   },
 ];

@@ -8,6 +8,7 @@ export default function HomepageArchitecture(): JSX.Element {
     <section className={styles.architectureSection}>
       <ThemedImage
         alt="ReductStore Architecture Diagram"
+        className={styles.architectureImage}
         sources={{
           light: useBaseUrl("/img/landing/architecture-light.svg"),
           dark: useBaseUrl("/img/landing/architecture-dark.svg"),
