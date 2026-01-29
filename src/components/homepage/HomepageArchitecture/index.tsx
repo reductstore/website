@@ -6,14 +6,15 @@ import useBaseUrl from "@docusaurus/useBaseUrl";
 export default function HomepageArchitecture(): JSX.Element {
   return (
     <section className={styles.architectureSection}>
-      <ThemedImage
-        alt="ReductStore Architecture Diagram"
-        className={styles.architectureImage}
-        sources={{
-          light: useBaseUrl("/img/landing/architecture-light.svg"),
-          dark: useBaseUrl("/img/landing/architecture-dark.svg"),
-        }}
-      />
+      <div className={styles.architectureImage}>
+        <ThemedImage
+          alt="ReductStore Architecture Diagram"
+          sources={{
+            light: useBaseUrl("/img/landing/architecture-light.svg"),
+            dark: useBaseUrl("/img/landing/architecture-dark.svg"),
+          }}
+        />
+      </div>
     </section>
   );
 }

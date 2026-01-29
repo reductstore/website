@@ -1,22 +1,31 @@
 .architectureSection {
-  margin: 4rem 0;
+  margin: 3rem 0;
   display: flex;
   justify-content: center;
 }
 
 .architectureImage {
   width: min(900px, 100%);
+  min-height: 280px;
   margin: 0 auto;
-  display: block;
 }
 
-.architectureImage img {
+.architectureImage :global(img) {
+  display: block;
   width: 100%;
-  height: auto;
+  object-fit: contain;
+}
+
+/* Hide inactive theme image to prevent duplicate flash on load */
+:global(html[data-theme="light"]) .architectureImage :global(img[src*="dark"]) {
+  display: none;
+}
+:global(html[data-theme="dark"]) .architectureImage :global(img[src*="light"]) {
+  display: none;
 }
 
 @media (max-width: 768px) {
   .architectureSection {
-    margin: 2rem 0;
+    padding: 1.5rem 0;
   }
 }
