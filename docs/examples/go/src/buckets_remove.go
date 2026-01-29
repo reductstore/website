@@ -22,7 +22,7 @@ func main() {
 		panic(err)
 	}
 
-	// Check that the bucket no longer exists
+	// Check that the bucket no longer exists or is in the process of being removed
 	_, err = client.GetBucket(context.Background(), "bucket-to-remove")
 	if err == nil {
 		panic("Bucket should not exist anymore")

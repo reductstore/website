@@ -85,21 +85,21 @@ import CreateBucketProvision from "!!raw-loader!../examples/provisioning/buckets
 import CreateBucketCurl from "!!raw-loader!../examples/curl/buckets_create.sh";
 
 <Tabs>
-  <TabItem value="CLI">
-    <CodeBlock language="bash">
-      {CreateBucketCLI}
-    </CodeBlock>
-  </TabItem>
+    <TabItem value="CLI">
+        <CodeBlock language="bash">
+            {CreateBucketCLI}
+        </CodeBlock>
+    </TabItem>
 
-  <TabItem value="Web Console">
+    <TabItem value="Web Console">
 
-    1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
-    2. Enter the API token if the authorization is enabled.
-    3. Click on the **"Buckets"** tab in the left sidebar.
-    4. Click on the plus icon in the top right corner to create a new bucket:
-    ![Create a bucket with Web Console](./img/buckets_create.png)
-    5. In the **"Add a new bucket"** dialog, enter the bucket name and settings.
-    6. Click on the "Create" button to create the bucket:<br /><img
+        1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
+        2. Enter the API token if the authorization is enabled.
+        3. Click on the **"Buckets"** tab in the left sidebar.
+        4. Click on the plus icon in the top right corner to create a new bucket:
+        ![Create a bucket with Web Console](./img/buckets_create.png)
+        5. In the **"Add a new bucket"** dialog, enter the bucket name and settings.
+        6. Click on the "Create" button to create the bucket:<br/><img
         src={
             require("./img/buckets_create_settings.png").default
         }
@@ -107,43 +107,44 @@ import CreateBucketCurl from "!!raw-loader!../examples/curl/buckets_create.sh";
         width="400"
     />
 
-  </TabItem>
-
-  <TabItem value="Python">
-    <CodeBlock language="python">
-      {CreateBucketPy}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="JavaScript">
-    <CodeBlock language="javascript">
-      {CreateBucketJs}
-    </CodeBlock>
-  </TabItem>
-<TabItem value="Go">
-    <CodeBlock language="go">
-      {CreateBucketGo}
-    </CodeBlock>
     </TabItem>
-  <TabItem value="Rust">
-    <CodeBlock language="rust">
-      {CreateBucketRs}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="C++">
-    <CodeBlock language="cpp">
-      {CreateBucketCpp}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="cURL">
-    <CodeBlock language="bash">
-      {CreateBucketCurl}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="Provisioning">
-    <CodeBlock language="yml">
-      {CreateBucketProvision}
-    </CodeBlock>
-  </TabItem>
+
+    <TabItem value="Python">
+        <CodeBlock language="python">
+            {CreateBucketPy}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">
+            {CreateBucketJs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Go">
+        <CodeBlock language="go">
+            {CreateBucketGo}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {CreateBucketRs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">
+            {CreateBucketCpp}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="cURL">
+        <CodeBlock language="bash">
+            {CreateBucketCurl}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Provisioning">
+        <CodeBlock language="yml">
+            {CreateBucketProvision}
+        </CodeBlock>
+    </TabItem>
+
 </Tabs>
 
 ### Browse Buckets
@@ -159,54 +160,55 @@ import ListBucketsCpp from "!!raw-loader!../examples/cpp/src/buckets_browse.cc";
 import ListBucketsCurl from "!!raw-loader!../examples/curl/buckets_browse.sh";
 
 <Tabs>
-  <TabItem value="CLI">
-    <CodeBlock language="shell">
-      {ListBucketsCLI}
-    </CodeBlock>
-  </TabItem>
-
-  <TabItem value="Web Console">
-    1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
-    2. Enter the API token if the authorization is enabled.
-    3. Click on the **"Buckets"** tab in the left sidebar.
-    4. You will see a list of all buckets in the store.
-    5. Click on a specific bucket to view its details:
-    ![Browse buckets with Web Console](./img/buckets_browse_all.png)
-    6. You can see the bucket settings by clicking on the **cog icon(⚙️)** in the bucket panel:
-    ![Browse bucket settings with Web Console](./img/buckets_browse_cog.png)
-
-  </TabItem>
-
-  <TabItem value="Python">
-    <CodeBlock language="python">
-      {ListBucketsPy}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="JavaScript">
-    <CodeBlock language="javascript">
-      {ListBucketsJs}
-    </CodeBlock>
-  </TabItem>
-    <TabItem value="Go">
-        <CodeBlock language="go">
-        {ListBucketsGo}
+    <TabItem value="CLI">
+        <CodeBlock language="shell">
+            {ListBucketsCLI}
         </CodeBlock>
     </TabItem>
-  <TabItem value="Rust">
-    <CodeBlock language="rust">
-      {ListBucketsRs}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="C++">
-    <CodeBlock language="cpp">
-      {ListBucketsCpp}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="cURL">
-    <CodeBlock language="bash">
-      {ListBucketsCurl}
-    </CodeBlock>
-  </TabItem>
+
+    <TabItem value="Web Console">
+        1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
+        2. Enter the API token if the authorization is enabled.
+        3. Click on the **"Buckets"** tab in the left sidebar.
+        4. You will see a list of all buckets in the store.
+        5. Click on a specific bucket to view its details:
+        ![Browse buckets with Web Console](./img/buckets_browse_all.png)
+        6. You can see the bucket settings by clicking on the **cog icon(⚙️)** in the bucket panel:
+        ![Browse bucket settings with Web Console](./img/buckets_browse_cog.png)
+
+    </TabItem>
+
+    <TabItem value="Python">
+        <CodeBlock language="python">
+            {ListBucketsPy}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">
+            {ListBucketsJs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Go">
+        <CodeBlock language="go">
+            {ListBucketsGo}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {ListBucketsRs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">
+            {ListBucketsCpp}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="cURL">
+        <CodeBlock language="bash">
+            {ListBucketsCurl}
+        </CodeBlock>
+    </TabItem>
+
 </Tabs>
 
 ### Changing Bucket Settings
@@ -225,23 +227,23 @@ import ChangeBucketCpp from "!!raw-loader!../examples/cpp/src/buckets_change.cc"
 import ChangeBucketCurl from "!!raw-loader!../examples/curl/buckets_change.sh";
 
 <Tabs>
-  <TabItem value="CLI">
-    <CodeBlock language="shell">
-      {ChangeBucketCLI}
-    </CodeBlock>
-  </TabItem>
+    <TabItem value="CLI">
+        <CodeBlock language="shell">
+            {ChangeBucketCLI}
+        </CodeBlock>
+    </TabItem>
 
-  <TabItem value="Web Console">
+    <TabItem value="Web Console">
 
-    1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
-    2. Enter the API token if the authorization is enabled.
-    3. Click on the **"Buckets"** tab in the left sidebar.
-    4. You will see a list of all buckets in the store.
-    5. Click on a specific bucket in the list:
-    ![Browse buckets with Web Console](./img/buckets_browse_all.png)
-    6. Open the bucket settings by clicking on **cog icon(⚙️)** in the bucket panel:
-    ![Browse a bucket with Web Console](./img/buckets_change_cog.png)
-    7. Modify the settings as needed and click on the **Update** button:<br /><img
+        1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
+        2. Enter the API token if the authorization is enabled.
+        3. Click on the **"Buckets"** tab in the left sidebar.
+        4. You will see a list of all buckets in the store.
+        5. Click on a specific bucket in the list:
+        ![Browse buckets with Web Console](./img/buckets_browse_all.png)
+        6. Open the bucket settings by clicking on **cog icon(⚙️)** in the bucket panel:
+        ![Browse a bucket with Web Console](./img/buckets_change_cog.png)
+        7. Modify the settings as needed and click on the **Update** button:<br/><img
         src={
             require("./img/buckets_change_settings.png").default
         }
@@ -249,38 +251,39 @@ import ChangeBucketCurl from "!!raw-loader!../examples/curl/buckets_change.sh";
         width="400"
     />
 
-  </TabItem>
+    </TabItem>
 
-  <TabItem value="Python">
-    <CodeBlock language="python">
-      {ChangeBucketPy}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="JavaScript">
-    <CodeBlock language="javascript">
-      {ChangeBucketJs}
-    </CodeBlock>
-  </TabItem>
-    <TabItem value="Go">
-        <CodeBlock language="go">
-        {ChangeBucketGo}
+    <TabItem value="Python">
+        <CodeBlock language="python">
+            {ChangeBucketPy}
         </CodeBlock>
     </TabItem>
-  <TabItem value="Rust">
-    <CodeBlock language="rust">
-      {ChangeBucketRs}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="C++">
-    <CodeBlock language="cpp">
-      {ChangeBucketCpp}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="cURL">
-    <CodeBlock language="bash">
-      {ChangeBucketCurl}
-    </CodeBlock>
-  </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">
+            {ChangeBucketJs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Go">
+        <CodeBlock language="go">
+            {ChangeBucketGo}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {ChangeBucketRs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">
+            {ChangeBucketCpp}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="cURL">
+        <CodeBlock language="bash">
+            {ChangeBucketCurl}
+        </CodeBlock>
+    </TabItem>
+
 </Tabs>
 
 :::note
@@ -300,55 +303,56 @@ import RenameBucketCpp from "!!raw-loader!../examples/cpp/src/buckets_rename.cc"
 import RenameBucketCurl from "!!raw-loader!../examples/curl/buckets_rename.sh";
 
 <Tabs>
-  <TabItem value="CLI">
-    <CodeBlock language="shell">
-      {RenameBucketCLI}
-    </CodeBlock>
-  </TabItem>
-
-  <TabItem value="Web Console">
-
-    1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
-    2. Enter the API token if the authorization is enabled.
-    3. Click on the **"Buckets"** tab in the left sidebar.
-    4. You will see a list of all buckets in the store.
-    5. Click on the edit icon in the bucket panel:
-    ![Browse buckets with Web Console](./img/bucket_rename.png)
-    6. Rename the bucket and click on the **Save** button:
-    ![Remove a bucket with Web Console](./img/bucket_rename_save.png)
-
-  </TabItem>
-
-  <TabItem value="Python">
-    <CodeBlock language="python">
-      {RenameBucketPy}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="JavaScript">
-    <CodeBlock language="javascript">
-      {RenameBucketJs}
-    </CodeBlock>
-  </TabItem>
-    <TabItem value="Go">
-        <CodeBlock language="go">
-        {RenameBucketGo}
+    <TabItem value="CLI">
+        <CodeBlock language="shell">
+            {RenameBucketCLI}
         </CodeBlock>
     </TabItem>
-  <TabItem value="Rust">
-    <CodeBlock language="rust">
-      {RenameBucketRs}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="C++">
-    <CodeBlock language="cpp">
-      {RenameBucketCpp}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="cURL">
-    <CodeBlock language="bash">
-      {RenameBucketCurl}
-    </CodeBlock>
-  </TabItem>
+
+    <TabItem value="Web Console">
+
+        1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
+        2. Enter the API token if the authorization is enabled.
+        3. Click on the **"Buckets"** tab in the left sidebar.
+        4. You will see a list of all buckets in the store.
+        5. Click on the edit icon in the bucket panel:
+        ![Browse buckets with Web Console](./img/bucket_rename.png)
+        6. Rename the bucket and click on the **Save** button:
+        ![Remove a bucket with Web Console](./img/bucket_rename_save.png)
+
+    </TabItem>
+
+    <TabItem value="Python">
+        <CodeBlock language="python">
+            {RenameBucketPy}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">
+            {RenameBucketJs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Go">
+        <CodeBlock language="go">
+            {RenameBucketGo}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {RenameBucketRs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">
+            {RenameBucketCpp}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="cURL">
+        <CodeBlock language="bash">
+            {RenameBucketCurl}
+        </CodeBlock>
+    </TabItem>
+
 </Tabs>
 
 :::note
@@ -359,6 +363,11 @@ You can't rename a provisioned bucket. You should unprovision it first.
 
 A bucket can be deleted using the SDKs, CLI client, Web Console, or REST API. A client must have full access permission to delete a bucket if the authorization is enabled.
 
+Pay attention that removing a bucket doesn't remove it immediately.
+The bucket is marked as **DELETING**, and the cleanup continues in the background.
+During this time, you cannot access the bucket or its entries.
+Once the deletion is complete, the bucket and all its data are permanently removed from the store.
+
 import RemoveBucketCLI from "!!raw-loader!../examples/cli/buckets_remove.sh";
 import RemoveBucketPy from "!!raw-loader!../examples/py/src/buckets_remove.py";
 import RemoveBucketJs from "!!raw-loader!../examples/js/src/buckets_remove.mjs";
@@ -368,23 +377,23 @@ import RemoveBucketCpp from "!!raw-loader!../examples/cpp/src/buckets_remove.cc"
 import RemoveBucketCurl from "!!raw-loader!../examples/curl/buckets_remove.sh";
 
 <Tabs>
-  <TabItem value="CLI">
-    <CodeBlock language="shell">
-      {RemoveBucketCLI}
-    </CodeBlock>
-  </TabItem>
+    <TabItem value="CLI">
+        <CodeBlock language="shell">
+            {RemoveBucketCLI}
+        </CodeBlock>
+    </TabItem>
 
-  <TabItem value="Web Console">
+    <TabItem value="Web Console">
 
-    1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
-    2. Enter the API token if the authorization is enabled.
-    3. Click on the **"Buckets"** tab in the left sidebar.
-    4. You will see a list of all buckets in the store.
-    5. Click on a specific bucket in the list:
-    ![Browse buckets with Web Console](./img/buckets_browse_all.png)
-    6. Click on the **Trash** icon in the bucket panel:
-    ![Remove a bucket with Web Console](./img/buckets_remove.png)
-    7. Confirm the deletion by typing the bucket name and clicking on the **Remove** button:<br /><img
+        1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
+        2. Enter the API token if the authorization is enabled.
+        3. Click on the **"Buckets"** tab in the left sidebar.
+        4. You will see a list of all buckets in the store.
+        5. Click on a specific bucket in the list:
+        ![Browse buckets with Web Console](./img/buckets_browse_all.png)
+        6. Click on the **Trash** icon in the bucket panel:
+        ![Remove a bucket with Web Console](./img/buckets_remove.png)
+        7. Confirm the deletion by typing the bucket name and clicking on the **Remove** button:<br/><img
         src={
             require("./img/buckets_remove_confirm.png").default
         }
@@ -392,38 +401,39 @@ import RemoveBucketCurl from "!!raw-loader!../examples/curl/buckets_remove.sh";
         width="400"
     />
 
-  </TabItem>
+    </TabItem>
 
-  <TabItem value="Python">
-    <CodeBlock language="python">
-      {RemoveBucketPy}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="JavaScript">
-    <CodeBlock language="javascript">
-      {RemoveBucketJs}
-    </CodeBlock>
-  </TabItem>
-    <TabItem value="Go">
-        <CodeBlock language="go">
-        {RemoveBucketGo}
+    <TabItem value="Python">
+        <CodeBlock language="python">
+            {RemoveBucketPy}
         </CodeBlock>
     </TabItem>
-  <TabItem value="Rust">
-    <CodeBlock language="rust">
-      {RemoveBucketRs}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="C++">
-    <CodeBlock language="cpp">
-      {RemoveBucketCpp}
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="cURL">
-    <CodeBlock language="bash">
-      {RemoveBucketCurl}
-    </CodeBlock>
-  </TabItem>
+    <TabItem value="JavaScript">
+        <CodeBlock language="javascript">
+            {RemoveBucketJs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Go">
+        <CodeBlock language="go">
+            {RemoveBucketGo}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="Rust">
+        <CodeBlock language="rust">
+            {RemoveBucketRs}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="C++">
+        <CodeBlock language="cpp">
+            {RemoveBucketCpp}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="cURL">
+        <CodeBlock language="bash">
+            {RemoveBucketCurl}
+        </CodeBlock>
+    </TabItem>
+
 </Tabs>
 
 :::warning
