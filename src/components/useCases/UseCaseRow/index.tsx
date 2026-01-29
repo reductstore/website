@@ -4,7 +4,7 @@ import styles from "./styles.module.css";
 
 interface UseCaseRowProps {
   title: string;
-  illustration?: string;
+  illustration?: string | JSX.Element;
   isImageLeft: boolean;
   description: string | JSX.Element;
   children?: React.ReactNode;
@@ -17,11 +17,24 @@ const UseCaseRow: React.FC<UseCaseRowProps> = ({
   isImageLeft,
   children,
 }) => {
-  const mediaContent = children ? (
-    <div className={styles.customContent}>{children}</div>
-  ) : (
-    <img src={illustration} alt={title} />
-  );
+  const renderMediaContent = () => {
+    if (children) {
+      return <div className={styles.customContent}>{children}</div>;
+    }
+
+    if (!illustration) {
+      return null;
+    }
+
+    if (typeof illustration === "string") {
+      return <img src={illustration} alt={title} />;
+    }
+
+    return illustration;
+  };
+
+  const mediaContent = renderMediaContent();
+  const shouldRenderMedia = Boolean(mediaContent);
 
   return (
     <div
@@ -29,7 +42,7 @@ const UseCaseRow: React.FC<UseCaseRowProps> = ({
         [styles.useCaseRowLeft]: isImageLeft,
       })}
     >
-      {isImageLeft && (
+      {isImageLeft && shouldRenderMedia && (
         <div className={clsx("col col--6", styles.imageSection)}>
           {mediaContent}
         </div>
@@ -38,7 +51,7 @@ const UseCaseRow: React.FC<UseCaseRowProps> = ({
         <h2>{title}</h2>
         {description}
       </div>
-      {!isImageLeft && (
+      {!isImageLeft && shouldRenderMedia && (
         <div className={clsx("col col--6", styles.imageSection)}>
           {mediaContent}
         </div>

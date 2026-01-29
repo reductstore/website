@@ -1,16 +1,54 @@
 import React, { JSX } from "react";
 import Layout from "@theme/Layout";
+import ThemedImage from "@theme/ThemedImage";
+import useBaseUrl from "@docusaurus/useBaseUrl";
 import styles from "./styles.module.css";
 import UseCaseRow from "@site/src/components/useCases/UseCaseRow";
 import Faq from "@site/src/components/shared/Faq";
 import HeroBanner from "@site/src/components/shared/HeroBanner";
 import DemoServerForm from "@site/src/components/forms/DemoServerForm";
 import PerformanceComparison from "@site/src/components/tables/PerformanceComparison";
+import { LuDatabase, LuGlobe, LuShield } from "react-icons/lu";
 
 export default function CloudSolution(): JSX.Element {
-  const title = "Cloud Storage for Time-Series Blob Data";
+  const title = "Cloud Storage for Robotics and Industrial Workloads";
   const description =
-    "Store images, sensor data, and logs in the cloud. Replicate from edge devices with S3 backend. Faster and more cost-effective than traditional time-series databases.";
+    "Run on AWS, GCP, Hetzner, or on-prem. S3 backend with batching. High availability supported.";
+  const sectionsWithImages = [
+    {
+      title: "Observability",
+      description: (
+        <p>
+          Visualize time-series data in Grafana dashboards. Query images, sensor
+          readings, and logs directly. Monitor replication and storage health.
+        </p>
+      ),
+      image: useBaseUrl("/img/solutions/cloud/grafana.png"),
+    },
+    {
+      title: "Robotics Support",
+      description: (
+        <p>
+          ReductStore Agent records ROS2 topics directly to storage. Store
+          camera feeds, LiDAR scans, and sensor data with timestamps. Foxglove
+          for visualization and debugging.
+        </p>
+      ),
+      image: (
+        <ThemedImage
+          sources={{
+            light: useBaseUrl(
+              "/img/solutions/cloud/cloud-robotics-light.drawio.svg",
+            ),
+            dark: useBaseUrl(
+              "/img/solutions/cloud/cloud-robotics-dark.drawio.svg",
+            ),
+          }}
+          alt="Robotics Support"
+        />
+      ),
+    },
+  ];
   return (
     <Layout title={title} description={description}>
       <main>
@@ -19,28 +57,51 @@ export default function CloudSolution(): JSX.Element {
           title={title}
           subtitle={description}
           benefits={[
-            "S3-Compatible Backend",
-            "Edge-to-Cloud Replication",
-            "On Your Infrastructure or Ours",
+            "Any Infrastructure",
+            "S3 Backend with Batching",
+            "High Availability",
           ]}
           imageSrcDark="/img/solutions/cloud/cloud-main-dark.drawio.svg"
           imageSrcLight="/img/solutions/cloud/cloud-main-light.drawio.svg"
           imageAlt="Cloud Storage"
         />
         <div className="container">
-          <>
-            {diagrams.map((diagram, index) => (
-              <UseCaseRow
-                key={diagram.title}
-                title={diagram.title}
-                description={diagram.description}
-                illustration={diagram.image}
-                isImageLeft={index % 2 === 0}
-              >
-                {diagram.component}
-              </UseCaseRow>
+          {/* Feature Cards */}
+          <div className={styles.featureCards}>
+            {features.map((feature) => (
+              <div key={feature.title} className={styles.featureCard}>
+                <div className={styles.featureIcon}>{feature.icon}</div>
+                <h3>{feature.title}</h3>
+                <p>{feature.description}</p>
+              </div>
             ))}
-          </>
+          </div>
+
+          {/* Performance Section */}
+          <UseCaseRow
+            title="High Performance"
+            description={
+              <p>
+                Optimized for robotics and industrial workloads. 100KB images:
+                10x faster writes than TimescaleDB, 15x faster reads than MinIO.
+              </p>
+            }
+            isImageLeft={false}
+          >
+            <PerformanceComparison />
+          </UseCaseRow>
+
+          {/* Sections with images */}
+          {sectionsWithImages.map((section, index) => (
+            <UseCaseRow
+              key={section.title}
+              title={section.title}
+              description={section.description}
+              illustration={section.image}
+              isImageLeft={index % 2 === 0}
+            />
+          ))}
+
           <div id="cloud-signup" className={styles.signUpSection}>
             <DemoServerForm title="Cloud Signup" defaultPlan="SaaS" />
           </div>
@@ -53,96 +114,46 @@ export default function CloudSolution(): JSX.Element {
   );
 }
 
-const diagrams = [
+const features = [
   {
-    title: "S3-Compatible Backend",
-    description: (
-      <p>
-        Use any S3-compatible storage as the backend: AWS S3, Google Cloud
-        Storage, Azure Blob, MinIO. Local cache for recent data, cloud storage
-        for long-term retention.
-      </p>
-    ),
-    image: require("@site/static/img/solutions/cloud/lowest-cost.png").default,
+    title: "S3 Backend with Batching",
+    description:
+      "Store data on AWS S3, Google Cloud Storage, or MinIO. Batches small records into larger blobs to reduce API calls and costs.",
+    icon: <LuDatabase size={32} />,
   },
   {
-    title: "Performance Benchmarks",
-    description: (
-      <p>
-        ReductStore outperforms traditional time-series databases and object
-        storage for blob data. For example 100KB images: 10x faster writes than
-        TimescaleDB and 15x faster reads than MinIO.
-      </p>
-    ),
-    component: <PerformanceComparison />,
+    title: "Run Anywhere",
+    description:
+      "Deploy on AWS, Google Cloud, Hetzner, or on-prem with MinIO. Switch infrastructure when needed. Same API everywhere.",
+    icon: <LuGlobe size={32} />,
   },
   {
-    title: "Edge-to-Cloud Replication",
-    description: (
-      <p>
-        Replicate data from edge devices to cloud storage. Filter by labels and
-        metadata to sync only what matters. Works with limited bandwidth and
-        intermittent connectivity.
-      </p>
-    ),
-    image: require("@site/static/img/solutions/cloud/scale-to-petabytes.png")
-      .default,
-  },
-  {
-    title: "Extensible Query Engine",
-    description: (
-      <p>
-        Process data on the storage side during queries. Built-in extensions for
-        CSV column selection, JSON parsing, and image scaling. ROS message
-        decoding for robotics. Custom extensions on demand.
-      </p>
-    ),
-    image: require("@site/static/img/solutions/cloud/faster-performance.png")
-      .default,
-  },
-  {
-    title: "Grafana Integration",
-    description: (
-      <p>
-        Visualize time-series blob data in Grafana dashboards. Query images,
-        sensor readings, and logs directly. Monitor data pipelines and
-        replication status.
-      </p>
-    ),
-    image: require("@site/static/img/solutions/cloud/cloud.png").default,
-  },
-  {
-    title: "Robotics Support",
-    description: (
-      <p>
-        ReductStore Agent for ROS2 records topics directly to storage. Foxglove
-        integration for visualization and debugging. Store camera feeds, LiDAR
-        scans, and sensor data with timestamps.
-      </p>
-    ),
-    image: require("@site/static/img/solutions/cloud/cloud.png").default,
+    title: "High Availability",
+    description:
+      "Run multiple instances for redundancy. Blue-green deployments for zero-downtime updates. Built for production.",
+    icon: <LuShield size={32} />,
   },
 ];
 
 const cloudFaqs = [
   {
-    question: "What deployment options are available?",
+    question: "What S3-compatible backends are supported?",
     answer:
-      "Deploy on your own infrastructure (AWS, GCP, Azure, on-prem) or use our managed cloud. Same software, same features.",
+      "AWS S3, Google Cloud Storage, MinIO, and any S3-compatible object storage.",
   },
   {
     question: "How does edge-to-cloud replication work?",
     answer:
-      "Set up replication tasks to sync data from edge instances to cloud. Filter by labels to replicate only relevant data. Handles intermittent connectivity automatically.",
+      "Configure replication tasks to sync data from edge instances to cloud. Filter by labels. Handles intermittent connectivity automatically.",
   },
   {
-    question: "What S3-compatible backends are supported?",
+    question: "What deployment options are available?",
     answer:
-      "AWS S3, Google Cloud Storage, Azure Blob Storage, MinIO, and any S3-compatible object storage.",
+      "Self-hosted on AWS, GCP, Hetzner, or on-prem. Managed cloud option available. High availability and blue-green deployments supported.",
   },
   {
-    question: "How does data security work?",
+    question: "How do I manage the database?",
     answer:
-      "Token-based authentication, TLS encryption in transit, and your data stays in your infrastructure if you choose self-hosted deployment.",
+      "Web console for visual management. CLI for scripting. Full REST API for integration.",
   },
 ];

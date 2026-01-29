@@ -25,6 +25,7 @@
   --reduct-primary-text: #1c1e21;
   --reduct-dimmed: #6c757d;
   --reduct-on-primary-muted: rgba(255, 255, 255, 0.85);
+  --reduct-on-primary-text: #ffffff;
   --reduct-font-size-subtitle: 1.2rem;
 
   /* Surfaces */
@@ -55,6 +56,7 @@ body[data-theme="dark"] {
   --reduct-primary-text: #e4e6eb;
   --reduct-dimmed: #adb5bd;
   --reduct-on-primary-muted: var(--reduct-dimmed);
+  --reduct-on-primary-text: #121212;
 
   /* Surfaces */
   --reduct-surface-0: #242526;
