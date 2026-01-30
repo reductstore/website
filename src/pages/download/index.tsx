@@ -28,7 +28,9 @@ export default function DownloadPage(): JSX.Element {
               </Link>{" "}
               guide to set up your first ReductStore instance.
             </p>
-            <PlaygroundOffer />
+            <div className={styles.offer}>
+              <PlaygroundOffer />
+            </div>
           </div>
           <InstallReductStore />
           <hr />

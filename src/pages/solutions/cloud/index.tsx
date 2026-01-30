@@ -1,13 +1,11 @@
 import React, { JSX } from "react";
 import Layout from "@theme/Layout";
-import ThemedImage from "@theme/ThemedImage";
-import useBaseUrl from "@docusaurus/useBaseUrl";
 import styles from "./styles.module.css";
 import Faq from "@site/src/components/shared/Faq";
 import HeroBanner from "@site/src/components/shared/HeroBanner";
 import DemoServerForm from "@site/src/components/forms/DemoServerForm";
-import PerformanceComparison from "@site/src/components/tables/PerformanceComparison";
 import { LuDatabase, LuGlobe, LuShield } from "react-icons/lu";
+import CloudMainDiagram from "@site/static/img/solutions/cloud/cloud-main.drawio.svg";
 
 export default function CloudSolution(): JSX.Element {
   const title = "Cloud Storage for Robotics and Industrial Workloads";
@@ -25,8 +23,7 @@ export default function CloudSolution(): JSX.Element {
             "S3 Backend with Batching",
             "High Availability",
           ]}
-          imageSrcDark="/img/solutions/cloud/cloud-main-dark.drawio.svg"
-          imageSrcLight="/img/solutions/cloud/cloud-main-light.drawio.svg"
+          imageSvg={CloudMainDiagram}
           imageAlt="Cloud Storage"
         />
         <div className="container">

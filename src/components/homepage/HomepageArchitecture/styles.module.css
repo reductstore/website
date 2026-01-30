@@ -8,6 +8,8 @@
   width: min(900px, 100%);
   min-height: 280px;
   margin: 0 auto;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 @media (max-width: 768px) {
@@ -16,16 +18,17 @@
   }
 }
 
-.architectureImage :global(img) {
+.architectureDiagram {
   display: block;
   width: 100%;
+  height: auto;
   object-fit: contain;
 }
 
-/* Hide inactive theme image to prevent duplicate flash on load */
-:global(html[data-theme="light"]) .architectureImage :global(img[src*="dark"]) {
-  display: none;
+:global(html[data-theme="light"]) .architectureDiagram {
+  color-scheme: light !important;
 }
-:global(html[data-theme="dark"]) .architectureImage :global(img[src*="light"]) {
-  display: none;
+
+:global(html[data-theme="dark"]) .architectureDiagram {
+  color-scheme: dark !important;
 }

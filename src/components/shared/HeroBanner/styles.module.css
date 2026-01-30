@@ -27,10 +27,26 @@
   padding-left: 3rem;
 }
 
-.BannerImage {
+.BannerImageWrapper {
   width: 80%;
+  border-radius: 16px;
+  overflow: hidden;
+  display: block;
+}
+
+.BannerImage {
+  width: 100%;
   height: auto;
   object-fit: contain;
+  display: block;
+}
+
+:global(html[data-theme="light"]) .BannerImage {
+  color-scheme: light !important;
+}
+
+:global(html[data-theme="dark"]) .BannerImage {
+  color-scheme: dark !important;
 }
 
 .BannerTitle {
@@ -87,6 +103,11 @@
   }
 
   .BannerImage {
+    width: 100%;
+    max-width: none;
+  }
+
+  .BannerImageWrapper {
     width: 90vw;
     max-width: 500px;
   }
