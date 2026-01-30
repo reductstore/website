@@ -2,8 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 import Link from "@docusaurus/Link";
-import ThemedImage from "@theme/ThemedImage";
-import useBaseUrl from "@docusaurus/useBaseUrl";
+import RoboticsDiagram from "@site/static/img/solutions/cloud/cloud-robotics.drawio.svg";
 
 function HomepageRobotics() {
   return (
@@ -24,17 +23,10 @@ function HomepageRobotics() {
           </Link>
         </div>
         <div className="col col--7 text--center">
-          <ThemedImage
-            sources={{
-              light: useBaseUrl(
-                "/img/solutions/cloud/cloud-robotics-light.drawio.svg",
-              ),
-              dark: useBaseUrl(
-                "/img/solutions/cloud/cloud-robotics-dark.drawio.svg",
-              ),
-            }}
-            alt="Robotics Support"
+          <RoboticsDiagram
             className={styles.roboticsImage}
+            role="img"
+            aria-label="Robotics Support"
           />
         </div>
       </div>
