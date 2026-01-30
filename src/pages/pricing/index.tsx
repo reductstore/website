@@ -21,7 +21,9 @@ export default function Pricing(): JSX.Element {
               Free for research, testing, and development. Commercial plans
               cover production licensing, support, and deployment requirements.
             </p>
-            <PlaygroundOffer />
+            <div className={styles.offer}>
+              <PlaygroundOffer />
+            </div>
           </div>
           <PricingTable />
         </section>
