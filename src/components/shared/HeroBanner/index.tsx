@@ -2,16 +2,13 @@ import styles from "./styles.module.css";
 import Heading from "@theme/Heading";
 import { FaCheck } from "react-icons/fa"; // Importing icon
 import Link from "@docusaurus/Link";
-import ThemedImage from "@theme/ThemedImage";
-import useBaseUrl from "@docusaurus/useBaseUrl";
 
 interface HeroBannerProps {
   title: string;
   subtitle: string;
   benefits: string[];
   imageSrc?: string;
-  imageSrcDark?: string;
-  imageSrcLight?: string;
+  imageSvg?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   imageAlt?: string;
   scrollToId: string;
   headerTag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
@@ -22,8 +19,7 @@ function HeroBanner({
   subtitle,
   benefits,
   imageSrc,
-  imageSrcDark,
-  imageSrcLight,
+  imageSvg: ImageSvg,
   imageAlt = "",
   scrollToId,
   headerTag = "h1",
@@ -68,17 +64,22 @@ function HeroBanner({
           </ul>
         </div>
         <div className={styles.BannerRight}>
-          {imageSrcDark && imageSrcLight ? (
-            <ThemedImage
-              sources={{
-                light: useBaseUrl(imageSrcLight),
-                dark: useBaseUrl(imageSrcDark),
-              }}
-              alt={imageAlt}
-              className={styles.BannerImage}
-            />
+          {ImageSvg ? (
+            <div className={styles.BannerImageWrapper}>
+              <ImageSvg
+                className={styles.BannerImage}
+                role="img"
+                aria-label={imageAlt}
+              />
+            </div>
           ) : (
-            <img src={imageSrc} alt={imageAlt} className={styles.BannerImage} />
+            <div className={styles.BannerImageWrapper}>
+              <img
+                src={imageSrc}
+                alt={imageAlt}
+                className={styles.BannerImage}
+              />
+            </div>
           )}
         </div>
       </div>
