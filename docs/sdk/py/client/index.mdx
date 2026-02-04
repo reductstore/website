@@ -30,9 +30,9 @@ HTTP Client for Reduct Storage HTTP API
 
 ```python
 def __init__(url: str,
-             api_token: Optional[str] = None,
-             timeout: Optional[float] = None,
-             extra_headers: Optional[Dict[str, str]] = None,
+             api_token: str | None = None,
+             timeout: float | None = None,
+             extra_headers: dict[str, str] | None = None,
              **kwargs)
 ```
 
@@ -78,7 +78,7 @@ Get high level server info
 #### list
 
 ```python
-async def list() -> List[BucketInfo]
+async def list() -> list[BucketInfo]
 ```
 
 Get a list of all buckets on server
@@ -119,7 +119,7 @@ Load a bucket to work with
 
 ```python
 async def create_bucket(name: str,
-                        settings: Optional[BucketSettings] = None,
+                        settings: BucketSettings | None = None,
                         exist_ok: bool = False) -> Bucket
 ```
 
@@ -146,7 +146,7 @@ Create a new bucket
 #### get\_token\_list
 
 ```python
-async def get_token_list() -> List[Token]
+async def get_token_list() -> list[Token]
 ```
 
 Get a list of all tokens
@@ -245,7 +245,7 @@ Get information about the current token
 #### get\_replications
 
 ```python
-async def get_replications() -> List[ReplicationInfo]
+async def get_replications() -> list[ReplicationInfo]
 ```
 
 Get a list of replications
@@ -316,6 +316,26 @@ Update an existing replication
 
 - `replication_name` - Name of the replication to update
 - `settings` - New settings for the replication
+
+**Raises**:
+
+- `ReductError` - if there is an HTTP error
+
+<a id="reduct.client.Client.set_replication_mode"></a>
+
+#### set\_replication\_mode
+
+```python
+async def set_replication_mode(replication_name: str,
+                               mode: ReplicationMode) -> None
+```
+
+Update mode for an existing replication without overriding settings
+
+**Arguments**:
+
+- `replication_name` - Name of the replication to update
+- `mode` - New replication mode
 
 **Raises**:
 

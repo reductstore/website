@@ -29,6 +29,8 @@ If authentication is enabled, the method needs a valid API token with read acces
 
 - Version 1.6: initially, the method removed only the entire entry.
 - Version 1.12: the method can remove a record with a specific timestamp by setting the `ts` query parameter.
+- Version 1.18: deleting an entire entry (no `ts`) is non-blocking; cleanup continues in the background.
+- Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
 
 import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
@@ -72,6 +74,11 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
             summary: "The entry has been removed",
         },
         {
+            status: "409",
+            message: "Conflict",
+            summary: "The bucket is being deleted or the entry is being deleted",
+        },
+        {
             status: "401",
             message: "Unauthorized",
             summary: "Access token is invalid or empty",
@@ -100,6 +107,7 @@ If authentication is enabled, the method needs a valid API token with read acces
 **Changes**:
 
 - Version 1.12: the method was introduced.
+- Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
 
 <SwaggerComponent
     method="DELETE"
@@ -160,6 +168,13 @@ If authentication is enabled, the method needs a valid API token with read acces
                     "The bucket or entry doesn't exist",
             },
             {
+                status: "409",
+                message:
+                    "Conflict",
+                summary:
+                    "The bucket is being deleted or the entry is being deleted",
+            },
+            {
                 status: "422",
                 message:
                     "Unprocessable Entity",
@@ -184,6 +199,7 @@ If authentication is enabled, the method needs a valid API token with read acces
 **Changes**:
 
 - Version 1.12: the method was introduced.
+- Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
 
 :::warning
 Since version 1.13, the method is deprecated. Use the [**Query API**](/docs/http-api/entry-api/run_query.mdx) instead.
@@ -289,6 +305,11 @@ Since version 1.13, the method is deprecated. Use the [**Query API**](/docs/http
             status: "403",
             message: "Forbidden",
             summary: "Access token doesn't have the required permissions",
+        },
+        {
+            status: "409",
+            message: "Conflict",
+            summary: "The bucket is being deleted or the entry is being deleted",
         },
         {
             status: "404",

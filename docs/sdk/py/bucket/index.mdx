@@ -83,7 +83,7 @@ Get statistics about bucket
 #### get\_entry\_list
 
 ```python
-async def get_entry_list() -> List[EntryInfo]
+async def get_entry_list() -> list[EntryInfo]
 ```
 
 Get list of entries with their stats
@@ -133,8 +133,7 @@ Remove entry from bucket
 #### remove\_record
 
 ```python
-async def remove_record(entry_name: str, timestamp: Union[int, datetime, float,
-                                                          str])
+async def remove_record(entry_name: str, timestamp: TimestampLike)
 ```
 
 Remove record from entry
@@ -154,7 +153,7 @@ Remove record from entry
 
 ```python
 async def remove_batch(entry_name: str,
-                       batch: Batch) -> Dict[int, ReductError]
+                       batch: Batch) -> dict[int, ReductError]
 ```
 
 Remove batch of records from entries in a sole request
@@ -173,16 +172,39 @@ Remove batch of records from entries in a sole request
 
 - `ReductError` - if there is an HTTP error
 
+<a id="reduct.bucket.Bucket.remove_record_batch"></a>
+
+#### remove\_record\_batch
+
+```python
+async def remove_record_batch(
+        batch: RecordBatch) -> dict[str, dict[int, ReductError]]
+```
+
+Remove batch of records from entries in a sole request (Multi-entry API)
+
+**Arguments**:
+
+- `batch` - list of timestamps
+
+**Returns**:
+
+  Dict[str, Dict[int, ReductError]]: the dictionary of errors
+  with entry names as keys and dictionaries of record timestamps as keys
+
+**Raises**:
+
+- `ReductError` - if there is an HTTP error
+
 <a id="reduct.bucket.Bucket.remove_query"></a>
 
 #### remove\_query
 
 ```python
-async def remove_query(entry_name: str,
-                       start: Optional[Union[int, datetime, float,
-                                             str]] = None,
-                       stop: Optional[Union[int, datetime, float, str]] = None,
-                       when: Optional[Dict] = None,
+async def remove_query(entries: str | list[str],
+                       start: TimestampLike | None = None,
+                       stop: TimestampLike | None = None,
+                       when: dict | None = None,
                        **kwargs) -> int
 ```
 
@@ -191,13 +213,17 @@ The time interval is defined by the start and stop parameters that can be:
 int (UNIX timestamp in microseconds), datetime,
 float (UNIX timestamp in seconds) or str (ISO 8601 string).
 
+Since version 1.18: entry_name can be a list of entries to query from
+multiple entries. You can also use wildcards in entry names.
+
+
 **Arguments**:
 
-- `entry_name` - name of entry in the bucket
+- `entries` - name(s) of entry in the bucket
 - `start` - the beginning of the time interval.
   If None, then from the first record
 - `stop` - the end of the time interval. If None, then to the latest record
-- `when` - condtion to filter
+- `when` - condition to filter
 
 **Arguments**:
 
@@ -256,7 +282,7 @@ Rename bucket
 ```python
 @asynccontextmanager
 async def read(entry_name: str,
-               timestamp: Optional[Union[int, datetime, float, str]] = None,
+               timestamp: TimestampLike | None = None,
                head: bool = False) -> AsyncIterator[Record]
 ```
 
@@ -291,9 +317,9 @@ Read a record from entry
 
 ```python
 async def write(entry_name: str,
-                data: Union[bytes, AsyncIterator[bytes]],
-                timestamp: Optional[Union[int, datetime, float, str]] = None,
-                content_length: Optional[int] = None,
+                data: bytes | AsyncIterator[bytes],
+                timestamp: TimestampLike | None = None,
+                content_length: int | None = None,
                 **kwargs)
 ```
 
@@ -338,7 +364,7 @@ Write a record to entry
 #### write\_batch
 
 ```python
-async def write_batch(entry_name: str, batch: Batch) -> Dict[int, ReductError]
+async def write_batch(entry_name: str, batch: Batch) -> dict[int, ReductError]
 ```
 
 Write a batch of records to entries in a sole request
@@ -357,13 +383,37 @@ Write a batch of records to entries in a sole request
 
 - `ReductError` - if there is an HTTP  or communication error
 
+<a id="reduct.bucket.Bucket.write_record_batch"></a>
+
+#### write\_record\_batch
+
+```python
+async def write_record_batch(
+        batch: RecordBatch) -> dict[str, dict[int, ReductError]]
+```
+
+Write a batch of records to entries in a sole request (Multi-entry API)
+
+**Arguments**:
+
+- `batch` - list of records
+
+**Returns**:
+
+  Dict[str, Dict[int, ReductError]]: the dictionary of errors
+  with entry names as keys and dictionaries of record timestamps as keys
+
+**Raises**:
+
+- `ReductError` - if there is an HTTP  or communication error
+
 <a id="reduct.bucket.Bucket.update"></a>
 
 #### update
 
 ```python
-async def update(entry_name: str, timestamp: Union[int, datetime, float, str],
-                 labels: Dict[str, str])
+async def update(entry_name: str, timestamp: TimestampLike, labels: dict[str,
+                                                                         str])
 ```
 
 Update labels of an existing record
@@ -383,9 +433,10 @@ If a label is empty, it will be removed.
 
 **Example**:
 ```python
-      await bucket.update("entry-1", "2022-01-01T01:00:00",
+      await bucket.update(
+          "entry-1", "2022-01-01T01:00:00", {"label1": "value1", "label2": ""}
+      )
    ```
-- `{"label1"` - "value1", "label2": ""})
 
 <a id="reduct.bucket.Bucket.update_batch"></a>
 
@@ -393,11 +444,11 @@ If a label is empty, it will be removed.
 
 ```python
 async def update_batch(entry_name: str,
-                       batch: Batch) -> Dict[int, ReductError]
+                       batch: Batch) -> dict[int, ReductError]
 ```
 
 Update labels of existing records
-If a label doesn't exist, it will be created.
+
 If a label is empty, it will be removed.
 
 **Arguments**:
@@ -417,6 +468,45 @@ If a label is empty, it will be removed.
 
 **Example**:
 ```python
+      batch = RecordBatch()
+      batch.add(
+          "entry-1",
+          1640995200000000,
+          labels={"label1": "value1", "label2": ""},
+      )
+      await bucket.update_record_batch("entry-1", batch)
+   ```
+
+<a id="reduct.bucket.Bucket.update_record_batch"></a>
+
+#### update\_record\_batch
+
+```python
+async def update_record_batch(
+        batch: RecordBatch) -> dict[str, dict[int, ReductError]]
+```
+
+Update labels of existing records using Multi-entry API
+If a label doesn't exist, it will be created.
+If a label is empty, it will be removed.
+
+**Arguments**:
+
+  batch : dict of entry names as keys and dict of timestamps as keys and
+  labels as values
+
+**Returns**:
+
+  Dict[str, Dict[int, ReductError]]: the dictionary of errors
+  with entry names as keys and dictionaries of record timestamps as keys
+
+**Raises**:
+
+- `ReductError` - if there is an HTTP error
+  
+
+**Example**:
+```python
       batch = Batch()
       batch.add(1640995200000000, labels={"label1": "value1", "label2": ""})
       await bucket.update_batch("entry-1", batch)
@@ -427,11 +517,11 @@ If a label is empty, it will be removed.
 #### query
 
 ```python
-async def query(entry_name: str,
-                start: Optional[Union[int, datetime, float, str]] = None,
-                stop: Optional[Union[int, datetime, float, str]] = None,
-                ttl: Optional[int] = None,
-                when: Optional[Dict] = None,
+async def query(entries: str | list[str],
+                start: TimestampLike | None = None,
+                stop: TimestampLike | None = None,
+                ttl: int | None = None,
+                when: dict | None = None,
                 **kwargs) -> AsyncIterator[Record]
 ```
 
@@ -440,9 +530,12 @@ The time interval is defined by the start and stop parameters that can be:
 int (UNIX timestamp in microseconds), datetime,
 float (UNIX timestamp in seconds) or str (ISO 8601 string),
 
+Since version 1.18: entry_name can be a list of entries to query from
+multiple entries. You can also use wildcards in entry names.
+
 **Arguments**:
 
-- `entry_name` - name of entry in the bucket
+- `entries` - name(s) of entry in the bucket
 - `start` - the beginning of the time interval.
   If None, then from the first record
 - `stop` - the end of the time interval. If None, then to the latest record
@@ -491,10 +584,10 @@ Get full information about bucket (settings, statistics, entries)
 #### subscribe
 
 ```python
-async def subscribe(entry_name: str,
-                    start: Optional[Union[int, datetime, float, str]] = None,
+async def subscribe(entries: str | list[str],
+                    start: TimestampLike | None = None,
                     poll_interval=1.0,
-                    when: Optional[Dict] = None,
+                    when: dict | None = None,
                     **kwargs) -> AsyncIterator[Record]
 ```
 
@@ -503,9 +596,12 @@ The time interval is defined by the start and stop parameters
 that can be: int (UNIX timestamp in microseconds) datetime,
 float (UNIX timestamp in seconds) or str (ISO 8601 string).
 
+Since version 1.18: entry_name can be a list of entries to query from
+multiple entries. You can also use wildcards in entry names.
+
 **Arguments**:
 
-- `entry_name` - name of entry in the bucket
+- `entries` - name(s) of entry in the bucket
 - `start` - the beginning timestamp to read records.
   If None, then from the first record.
 - `poll_interval` - inteval to ask new records in seconds
@@ -539,12 +635,10 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
 #### create\_query\_link
 
 ```python
-async def create_query_link(entry: str,
-                            start: Optional[Union[int, datetime, float,
-                                                  str]] = None,
-                            stop: Optional[Union[int, datetime, float,
-                                                 str]] = None,
-                            when: Optional[Dict] = None,
+async def create_query_link(entries: str | list[str],
+                            start: TimestampLike | None = None,
+                            stop: TimestampLike | None = None,
+                            when: dict | None = None,
                             **kwargs) -> str
 ```
 
@@ -554,9 +648,12 @@ The time interval is defined by the start and stop parameters that can be:
 int (UNIX timestamp in microseconds), datetime,
 float (UNIX timestamp in seconds) or str (ISO 8601 string).
 
+Since version 1.18: entry_name can be a list of entries to query from
+multiple entries. You can also use wildcards in entry names.
+
 **Arguments**:
 
-- `entry` - name of entry in the bucket
+- `entries` - name(s) of entry in the bucket
 - `start` - the beginning of the time interval.
   If None, then from the first record
 - `stop` - the end of the time interval. If None, then to the latest record

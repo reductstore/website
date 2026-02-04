@@ -38,7 +38,17 @@
         }
       ]
     },
-    "configuration",
+    {
+      "type": "category",
+      "label": "⚙ Configuration",
+      "collapsed": true,
+      "collapsible": true,
+      "link": {
+        "type": "doc",
+        "id": "configuration/index"
+      },
+      "items": ["configuration/settings", "configuration/provisioning"]
+    },
     {
       "type": "category",
       "label": "\uD83D\uDCDA Guides",
@@ -124,7 +134,11 @@
         "type": "doc",
         "id": "integrations/index"
       },
-      "items": ["integrations/ros2-agent"]
+      "items": [
+        "integrations/s3",
+        "integrations/grafana/index",
+        "integrations/ros2-agent"
+      ]
     },
     {
       "type": "category",
@@ -150,6 +164,23 @@
             "http-api/entry-api/write_data",
             "http-api/entry-api/update_data",
             "http-api/entry-api/delete_data"
+          ]
+        },
+        {
+          "type": "category",
+          "label": "I/O API",
+          "className": "io-api-experimental",
+          "link": {
+            "type": "doc",
+            "id": "http-api/io-api/index"
+          },
+          "collapsed": false,
+          "items": [
+            "http-api/io-api/run_query",
+            "http-api/io-api/read_data",
+            "http-api/io-api/write_data",
+            "http-api/io-api/update_data",
+            "http-api/io-api/delete_data"
           ]
         },
         "http-api/token-authentication",

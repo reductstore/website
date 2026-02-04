@@ -18,11 +18,11 @@ export default function DataIngestionSection(
         collection of records with unique timestamps. It must have a unique name
         within the bucket and usually represents a data source, such as{" "}
         <b>
-          <Link to="/use-cases/vibration-sensors">a vibration sensor</Link>
+          <Link to="/blog/how-to-store-vibration-sensor-data">a vibration sensor</Link>
         </b>{" "}
         or{" "}
         <b>
-          <Link to="/blog/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications">
+          <Link to="/blog/computer-vision-applications">
             a CV camera
           </Link>
         </b>

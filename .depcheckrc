@@ -1,0 +1,16 @@
+{
+  "ignores": [
+    "@docusaurus/*",
+    "@theme/*",
+    "@theme-original/*",
+    "@site/*",
+    "@docusaurus/types",
+    "@docusaurus/module-type-aliases",
+    "buffer",
+    "raw-loader",
+    "webpack",
+    "@algolia/client-search",
+    "search-insights",
+    "react-loadable"
+  ]
+}

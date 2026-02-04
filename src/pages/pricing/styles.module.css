@@ -1,0 +1,25 @@
+.introSection {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  justify-content: space-between;
+}
+
+.introText {
+  max-width: 500px;
+  flex: 1 1 20rem;
+  margin: 0;
+  font-size: var(--reduct-font-size-subtitle);
+}
+
+.offer {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 760px) {
+  .offer {
+    display: none;
+  }
+}

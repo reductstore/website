@@ -31,6 +31,7 @@ if authentication is enabled.
 **Changes**:
 
 - Version 1.11: The method was introduced.
+- Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
 
 <SwaggerComponent
   method="PATCH"
@@ -98,6 +99,11 @@ if authentication is enabled.
       summary: "Bucket, entry or record is not found",
     },
     {
+      status: "409",
+      message: "Conflict",
+      summary: "The bucket is being deleted or the entry is being deleted",
+    },
+    {
       status: "422",
       message: "Unprocessable Entity",
       summary: "Bad timestamp",
@@ -111,6 +117,10 @@ This method allows to update labels of multiple records in a single request. A c
 records in headers according to [the Batch Protocol](/docs/http-api/entry-api/index.mdx#batch-protocol).
 
 Existing labels not mentioned in the request stay unchanged.
+
+**Changes**:
+
+- Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
 
 <SwaggerComponent
   method="PATCH"
@@ -144,6 +154,11 @@ Existing labels not mentioned in the request stay unchanged.
       summary: "Bucket or entry is not found",
     },
     {
+      status: "409",
+      message: "Conflict",
+      summary: "The bucket is being deleted or the entry is being deleted",
+    },
+    {
       status: "422",
       message: "Unprocessable Entity",
       summary: "Bad header format",
@@ -160,6 +175,7 @@ If authentication is enabled, the method needs a valid API token with full acces
 **Changes**:
 
 - Version 1.12: The method was introduced.
+- Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
 
 <SwaggerComponent
   method="PUT"
@@ -216,7 +232,8 @@ If authentication is enabled, the method needs a valid API token with full acces
     {
       status: "409",
       message: "Conflict",
-      summary: "Entry with the new name already exists",
+      summary:
+        "Entry with the new name already exists, or the bucket/entry is being deleted",
     },
     {
       status: "422",

@@ -26,6 +26,10 @@ The API uses the following types of endpoints each with its own purpose:
 
 To reduce HTTP overhead when sending many small objects, ReductStore provides a batch model for writing and reading data. The meta information about records is serialized in a CSV line in the headers, and the content of the records is sent in the body of an HTTP request or response.
 
+:::info
+This section describes the batch format used by the Entry API batch endpoints (`/api/v1/b/:bucket_name/:entry_name/batch`). For batched I/O across multiple entries, use the [**I/O API**](./io-api) and Batch Protocol v2.
+:::
+
 The HTTP header format:
 
 ```
@@ -63,7 +67,7 @@ Where:
 - `ERROR_CODE` is the HTTP error code of the error.
 - `ERROR_MESSAGE` is the error message.
 
-On the server side you can control the parameters of batching by using the **[I/O Settings](../configuration#io-settings)**.
+On the server side you can control the parameters of batching by using the **[I/O Settings](../../configuration/settings.mdx#io-settings)**.
 
 ## Entry API Endpoints
 

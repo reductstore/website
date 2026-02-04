@@ -10,7 +10,8 @@ import rehypeKatex from "rehype-katex";
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "ReductStore",
-  tagline: "High Performance Storage and Streaming Solution",
+  tagline:
+    "High Performance Data Storage and Streaming for Robotics and Industrial IoT",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
@@ -25,7 +26,6 @@ const config = {
   projectName: "website", // Usually your repo name.
 
   onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "warn",
 
   // When deploying to GitHub Pages, it is better to use an explicit "trailingSlash" site config.
   // Otherwise, GitHub Pages will add an extra trailing slash to your site urls only on direct-access (not when navigation) with a server redirect.
@@ -40,10 +40,14 @@ const config = {
     locales: ["en"],
   },
 
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: "warn",
+    },
+  },
+
   plugins: [
-    require.resolve("./src/plugins/docusaurus-plugin-matomo"),
     require.resolve("./src/plugins/docusaurus-plugin-consent-manager"),
-    require.resolve("./src/plugins/docusaurus-plugin-crisp"),
     require.resolve("./src/plugins/docusaurus-plugin-stream"),
     [
       require.resolve("./src/plugins/docusaurus-plugin-py-sdk-gen"),
@@ -118,25 +122,7 @@ const config = {
                 changefreq: null,
               },
               {
-                url: "https://play.reduct.store/",
-                lastmod: new Date().toISOString(),
-                priority: null,
-                changefreq: null,
-              },
-              {
-                url: "https://cloud.reduct.store/",
-                lastmod: new Date().toISOString(),
-                priority: null,
-                changefreq: null,
-              },
-              {
-                url: "https://cloud.reduct.store/signup",
-                lastmod: new Date().toISOString(),
-                priority: null,
-                changefreq: null,
-              },
-              {
-                url: "https://cloud.reduct.store/signin",
+                url: "https://play.reduct.store",
                 lastmod: new Date().toISOString(),
                 priority: null,
                 changefreq: null,
@@ -171,14 +157,6 @@ const config = {
         searchParameters: {},
       },
 
-      // Matomo analytics
-      matomo: {
-        url: "https://cdn.matomo.cloud/reductstore.matomo.cloud",
-        container: "lnt4UdBs",
-        previewSuffix: "_staging_24832eb3877816bd5f3a40a3",
-        devSuffix: "_dev_f19bac1b68c75bffed400ddd",
-      },
-
       // Consent management platform (CMP)
       cmp: {
         cookieyesId: "28ee242ee07e2579793c1355",
@@ -186,21 +164,9 @@ const config = {
         googleTagManagerId: "GTM-WBJ3M84W",
       },
 
-      // Crisp chat integration
-      crisp: {
-        siteId: "735614ef-d4bd-4d27-8700-aac9e08f8bc9",
-      },
-
-      // Stripe integration
-      paymentLinks: {
-        standard: "https://buy.stripe.com/14k7teamx1fogykeUW",
-        premium: "https://buy.stripe.com/bIYcNyfGR1foci48wx",
-        iot: "https://buy.stripe.com/cN2cNy3Y93nwci4bII",
-      },
-
       // Remote playground dataset
       playServer: {
-        url: "https://play.reduct.store",
+        url: "https://play.reduct.store/replica",
         token: "reductstore",
         bucket: "datasets",
       },
@@ -228,6 +194,7 @@ const config = {
         logo: {
           alt: "ReductStore Logo",
           src: "img/logo.svg",
+          className: "navbar-logo",
         },
         hideOnScroll: false,
         items: [
@@ -272,24 +239,24 @@ const config = {
             position: "left",
             items: [
               {
-                label: "Edge AI",
-                to: "/use-cases/ai-workflows",
+                label: "Robotics Data",
+                to: "/blog/database-for-robotics",
               },
               {
-                label: "Vibration Data",
-                to: "/use-cases/vibration-sensors",
+                label: "DAQ for Manufacturing",
+                to: "/blog/daq-manufacture-system",
               },
               {
                 label: "Computer Vision",
-                to: "/use-cases/computer-vision",
+                to: "/blog/computer-vision-applications",
+              },
+              {
+                label: "Vibration Data",
+                to: "/blog/how-to-store-vibration-sensor-data",
               },
               {
                 label: "IIoT (MQTT)",
-                to: "/blog/tags/mqtt",
-              },
-              {
-                label: "Robotics",
-                to: "/blog/tags/robotics",
+                to: "/blog/advice/database/mqtt-data-storage",
               },
               {
                 label: "Explore More",
@@ -378,24 +345,24 @@ const config = {
                 to: "/solutions/cloud",
               },
               {
-                label: "Edge AI",
-                to: "/use-cases/ai-workflows",
+                label: "Robotics Data",
+                to: "/blog/database-for-robotics",
               },
               {
-                label: "Vibration Data",
-                to: "/use-cases/vibration-sensors",
+                label: "DAQ for Manufacturing",
+                to: "/blog/daq-manufacture-system",
               },
               {
                 label: "Computer Vision",
-                to: "/blog/tags/computer-vision",
+                to: "/blog/computer-vision-applications",
               },
               {
-                label: "IoT (MQTT)",
-                to: "/blog/tags/mqtt",
+                label: "Vibration Data",
+                to: "/blog/how-to-store-vibration-sensor-data",
               },
               {
-                label: "Robotics (ROS)",
-                to: "/blog/tags/ros",
+                label: "IIoT (MQTT)",
+                to: "/blog/advice/database/mqtt-data-storage",
               },
             ],
           },

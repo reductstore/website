@@ -1,3 +1,4 @@
+import asyncio
 from reduct import Client, ReductError
 
 
@@ -13,11 +14,9 @@ async def remove_bucket():
         try:
             await client.get_bucket("bucket-to-remove")
         except ReductError as e:
-            # The bucket should not exist anymore
-            assert e.status_code == 404
+            # The bucket should not exist anymore or still be in the process of being removed
+            assert e.status_code in [404, 409]
 
 
 if __name__ == "__main__":
-    import asyncio
-
     asyncio.run(remove_bucket())

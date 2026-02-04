@@ -32,6 +32,7 @@ drains the sent body and returns an HTTP status.
 - Version 1.3: the database supports labels. You can assign any number
   of labels to a record by using headers that start with
   `x-reduct-label-`.
+- Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
 
 import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
@@ -112,7 +113,8 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
     {
       status: "409",
       message: "Conflict",
-      summary: "A record with the same timestamp already exists",
+      summary:
+        "A record with the same timestamp already exists, or the bucket/entry is being deleted",
     },
     {
       status: "422",
@@ -131,6 +133,7 @@ client should describe the records in headers in the format of [the Batch Protoc
 
 - Version 1.7: the database supports labels. You can assign any number
   of labels to a record by using headers that start with `x-reduct-label-`.
+- Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
 
 <SwaggerComponent
     method="POST"
@@ -162,6 +165,11 @@ client should describe the records in headers in the format of [the Batch Protoc
             status: "404",
             message: "Not Found",
             summary: "Bucket is not found",
+        },
+        {
+            status: "409",
+            message: "Conflict",
+            summary: "The bucket is being deleted or the entry is being deleted",
         },
         {
             status: "422",

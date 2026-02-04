@@ -1,0 +1,110 @@
+---
+title: Write data
+description: HTTP endpoint to write batched records to multiple entries using Batch Protocol v2.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/io-api/write_data"
+  />
+</head>
+
+# Write batched records (I/O API)
+
+This endpoint writes multiple records across multiple entries in a single request using **Batch Protocol v2**.
+See the [**Batch protocol v2**](./#batch-protocol-v2) section for details.
+
+import SwaggerComponent from "@site/src/components/SwaggerComponent";
+
+<SwaggerComponent
+  method="POST"
+  path="/api/v1/io/:bucket_name/write"
+  summary="Write batched records across entries"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        isRequired: true,
+        description: "Name of bucket",
+      },
+    },
+    {
+      type: "header",
+      details: {
+        name: "content-length",
+        isRequired: true,
+        description:
+          "Total size of the request body; must equal the sum of content-lengths in per-record headers.",
+      },
+    },
+    {
+      type: "header",
+      details: {
+        name: "x-reduct-entries",
+        isRequired: true,
+        description:
+          "Comma-separated, percent-encoded entry names (index == position).",
+      },
+    },
+    {
+      type: "header",
+      details: {
+        name: "x-reduct-start-ts",
+        isRequired: true,
+        description: "First timestamp in the batch (microseconds).",
+      },
+    },
+    {
+      type: "header",
+      details: {
+        name: "x-reduct-<ENTRY-INDEX>-<TIME-DELTA-uS>",
+        isRequired: true,
+        description:
+          "Per-record metadata header for each record; body is concatenated in entry index order, then by timestamp.",
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary:
+        "The request was valid. Some records may fail; per-record errors are returned in x-reduct-error-* headers.",
+    },
+    {
+      status: "400",
+      message: "Bad Request",
+      summary: "Posted content bigger or smaller than content-length",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token does not have write permissions for the bucket",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket does not exist",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "Invalid Batch Protocol v2 headers",
+    },
+  ]}
+/>
+
+## Per-record errors
+
+If a record cannot be written, the response includes an error header for that record:
+
+```
+x-reduct-error-<ENTRY-INDEX>-<TIME-DELTA-uS>: <STATUS_CODE>,<ERROR_MESSAGE>
+```

@@ -1,0 +1,13 @@
+.form {
+  width: 100%;
+  margin: 0 auto;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  padding: 1.25rem;
+  background: var(--ifm-background-color);
+
+  /* Ensures the container doesn't collapse while the form loads */
+  min-height: 600px;
+  min-width: 400px;
+  max-width: 700px;
+}

@@ -5,14 +5,10 @@ authors: anthony
 tags: [advice, database, mqtt]
 slug: advice/database/mqtt-data-storage
 date: 2025-05-08
-image: ./img/social-card.jpg
+image: ./img/mqtt-data-storage.png
 ---
 
-![Photo by Jan Antonin Kolar](./img/jan-antonin-kolar.webp)
-
-<small style={{ display: "block", marginTop: "-20px" }}>
-  Photo by Jan Antonin Kolar on Unsplash.
-</small>
+![MQTT Data Storage](./img/mqtt-data-storage.png)
 
 At a previous company, we used MQTT to send industrial data, such as vibration readings, images and log files. However, maintaining a history of this data proved challenging. Initially, we used a combination of a time-series database and an object store, but we struggled to ingest blob data quickly enough, and the system was difficult to maintain.
 
@@ -59,7 +55,7 @@ An important aspect to consider is the real-time aspect of IoT projects. Note th
 Another aspect to consider is the type of data that can be transmitted via MQTT (which is pretty much anything). The MQTT protocol is format-agnostic, meaning that it does not specify how data should be formatted. This allows for a wide variety of data types to be transmitted via MQTT, including text, images, or audio. The only requirements are that the data must be formatted either as a string (UTF-8 encoded) or as a byte stream, and that the payload size does not exceed 256MB-which is pretty large, like a 2K video for 35 seconds.
 
 In the context of computer vision, MQTT can be used to transmit images captured by cameras. This is particularly useful in surveillance systems, smart homes, or industrial applications where cameras are used to monitor and analyze visual data. The images can be transmitted as binary streams and stored in a database for further processing, analysis, or review.
-If you are interested in learning more about storing data for computer vision applications, you can check out our tutorial [**3 Ways to Store Data for Computer Vision Applications**](/blog/tutorials/computer-vision/3-ways-stora-data-for-computer-vision-applications).
+If you are interested in learning more about storing data for computer vision applications, you can check out our tutorial [**3 Ways to Store Data for Computer Vision Applications**](/blog/computer-vision-applications).
 
 ## Factors to consider when choosing a MQTT data store
 

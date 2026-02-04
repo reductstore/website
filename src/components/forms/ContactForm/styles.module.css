@@ -1,0 +1,7 @@
+.ContactForm {
+  width: 100%;
+
+  /* Ensures the container doesn't collapse while the form loads */
+  min-height: 600px;
+  min-width: 400px;
+}

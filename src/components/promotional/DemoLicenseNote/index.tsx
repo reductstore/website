@@ -5,14 +5,14 @@ const DemoLicenseNote = () => {
   return (
     <Admonition type="info" title="License Information">
       <p>
-        This extension is available under a <strong>commercial license</strong>.
+        This feature is available under a <strong>commercial license</strong>.
         For testing, you can either use a free demo server (extension included)
         or request a demo license for your own deployment.
       </p>
       <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
         <Link
           className="button button--primary"
-          to="/solutions/cloud#cloud-signup"
+          to="/solutions/cloud"
           style={{ textDecoration: "none" }}
         >
           Get Demo Server

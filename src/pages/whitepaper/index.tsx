@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { JSX } from "react";
 import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import Layout from "@theme/Layout";
 import WhitePaperForm from "@site/src/components/forms/WhitePaperForm";
@@ -6,101 +6,73 @@ import styles from "./styles.module.css";
 import clsx from "clsx";
 import BulletPointItem from "@site/src/components/shared/BulletPointItem";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import Modal from "@site/src/components/shared/Modal";
 
-const WhitePaperImg =
-  require("@site/static/img/whitepaper/whitepaper.png").default;
 const subBulletIcon = faArrowRight;
 
 export default function ReductAI(): JSX.Element {
-  const [isModalOpen, setModalOpen] = useState(false);
   return (
     <Layout
-      title="Efficient Storage & Streaming for Robotics and Industrial IoT"
-      description="Learn how ReductStore manages petabytes of multimodal data across edge and cloud with 10x speed, 90% cost savings, and zero data loss."
+      title="White Paper"
+      description="ReductStore white paper: architecture, benchmarks, and use cases for robotics and industrial IoT."
     >
       <main>
-        <SimpleHeader pageTitle="Efficient Storage & Streaming for Robotics and Industrial IoT" />
+        <SimpleHeader pageTitle="ReductStore White Paper" />
         <div className={clsx("container", styles.whitePaperContainer)}>
           <div className="row">
             {/* Description Column */}
-            <div className="col col--6">
-              <p className={styles.bulletTitle}>What you'll learn:</p>
+            <div className="col col--5">
+              <p className={styles.bulletTitle}>What's inside:</p>
               <ul className={styles.bulletPoints}>
                 <BulletPointItem>
-                  Challenges in handling petabytes of robotics and IIoT data
+                  Challenges in managing time-stamped blob data and why a new
+                  solution was needed
                 </BulletPointItem>
                 <BulletPointItem>
-                  Why traditional databases fail for time-indexed blob data with
-                  metadata labels
+                  Why time-series databases and object storage fall short for
+                  robotics & industrial use cases
                 </BulletPointItem>
                 <BulletPointItem>
-                  How ReductStore compares to InfluxDB, TimescaleDB, MongoDB,
-                  and MinIO
+                  Benchmarks and comparisons vs. TimescaleDB, MongoDB, and MinIO
                 </BulletPointItem>
-                <BulletPointItem>
-                  Key features for edge-first, cloud-smart storage:
-                </BulletPointItem>
+                <BulletPointItem>Key features:</BulletPointItem>
                 <ul className={styles.subBulletPoints}>
                   <BulletPointItem icon={subBulletIcon} size="xs">
-                    Real-time FIFO quota system to prevent disk overflow
+                    FIFO quota to prevent disk overflow on edge
                   </BulletPointItem>
                   <BulletPointItem icon={subBulletIcon} size="xs">
-                    Metadata labeling and filtering for selective cloud sync
+                    Metadata labels for selective replication
                   </BulletPointItem>
                   <BulletPointItem icon={subBulletIcon} size="xs">
-                    Optimized for poor connectivity and high-latency
-                    environments
+                    S3 backend for cloud deployments
+                  </BulletPointItem>
+                  <BulletPointItem icon={subBulletIcon} size="xs">
+                    Unreliable network handling for edge-to-cloud replication
                   </BulletPointItem>
                 </ul>
               </ul>
-              <p className={styles.bulletTitle}>Key Insights:</p>
+              <p className={styles.bulletTitle}>Performance highlights:</p>
               <ul className={styles.bulletPoints}>
-                <BulletPointItem>Performance benchmarks:</BulletPointItem>
-                <ul className={styles.subBulletPoints}>
-                  <BulletPointItem icon={subBulletIcon} size="xs">
-                    1604% faster writes (1MB records) vs. TimescaleDB
-                  </BulletPointItem>
-                  <BulletPointItem icon={subBulletIcon} size="xs">
-                    291% faster reads (1MB blobs) vs. MinIO
-                  </BulletPointItem>
-                </ul>
-                <BulletPointItem>Cost savings:</BulletPointItem>
-                <ul className={styles.subBulletPoints}>
-                  <BulletPointItem icon={subBulletIcon} size="xs">
-                    Save $273,000 per year vs. TimescaleDB
-                  </BulletPointItem>
-                </ul>
+                <BulletPointItem>
+                  16x faster writes vs. TimescaleDB (1MB records)
+                </BulletPointItem>
+                <BulletPointItem>
+                  3x faster reads vs. MinIO (1MB blobs)
+                </BulletPointItem>
+                <BulletPointItem>
+                  Significant infrastructure cost savings
+                </BulletPointItem>
               </ul>
-              <div className={styles.readNowBtn}>
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="button button--lg button--primary"
-                >
-                  Download White Paper (PDF)
-                </button>
+            </div>
+
+            {/* Form Column */}
+            <div className="col col--7">
+              <div className={styles.formColumn}>
+                <WhitePaperForm />
               </div>
             </div>
 
-            {/* Image Column */}
-            <div className="col col--6">
-              <div className={styles.imageWrapper}>
-                <img
-                  src={WhitePaperImg}
-                  alt="White Paper Cover"
-                  className={styles.image}
-                />
-              </div>
-            </div>
+            {/* End of Row */}
           </div>
-
-          {/* Download Modal */}
-          <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
-            <div className={styles.formWrapper}>
-              <h2 className={styles.formTitle}>Download White Paper (PDF)</h2>
-              <WhitePaperForm />
-            </div>
-          </Modal>
         </div>
       </main>
     </Layout>

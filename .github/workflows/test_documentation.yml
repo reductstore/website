@@ -76,13 +76,13 @@ jobs:
         run: |
           docker run -d --name reductstore-init -p 8384:8383  reduct/store:${{ matrix.reduct_version }}
           sleep 3
-          reduct-cli cp https://reductstore@play.reduct.store/datasets  http://my-token@127.0.0.1:8384/example-bucket --limit 100
+          reduct-cli cp https://reductstore@play.reduct.store/replica/datasets  http://my-token@127.0.0.1:8384/example-bucket --limit 100
 
       - name: Install Python
         uses: actions/setup-python@v5
         if: matrix.example == 'python'
         with:
-          python-version: 3.9
+          python-version: "3.10"
 
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -100,7 +100,7 @@ jobs:
         if: matrix.example == 'golang'
         uses: actions/setup-go@v4
         with:
-          go-version: 1.24
+          go-version: 1.22
           check-latest: true
 
       - name: Install Python dependencies
@@ -149,9 +149,15 @@ jobs:
           cd ${{ matrix.example_root }}
           for example in $(find ${PWD}/${{ matrix.path_prefix }} -type f -not -path "*/.*");
           do
+            if [ "${{ matrix.example }}" = "golang" ] && [[ "$example" == *"data_replication_mode.go" ]]; then
+              echo "Skip $example (replication mode not supported in current Go SDK)"
+              continue
+            fi
+
             echo '${{secrets.LICENSE_KEY}}' > ./license.lic
             docker run -d  -v ${PWD}:/misc \
                 --name reductstore -p 8383:8383 \
+                --env RS_LOG_LEVEL=debug \
                 --env RS_API_TOKEN="my-token"  \
                 --env RS_LICENSE_PATH=/misc/license.lic reduct/store:${{ matrix.reduct_version }}
             sleep 1
@@ -160,6 +166,7 @@ jobs:
             reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-rename
             reduct-cli replica create http://my-token@127.0.0.1:8383/example-replication  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
             reduct-cli replica create http://my-token@127.0.0.1:8383/repl-to-remove  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
+            reduct-cli replica create http://my-token@127.0.0.1:8383/my_replication example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
             reduct-cli token create http://my-token@127.0.0.1:8383/token-to-remove
             curl -X POST -H "Authorization: Bearer my-token" -d "" http://127.0.0.1:8383/api/v1/b/bucket-to-remove/example-entry?ts=1
             curl -X POST -H "Authorization: Bearer my-token" -d "" http://127.0.0.1:8383/api/v1/b/example-bucket/entry_1?ts=1
@@ -177,6 +184,7 @@ jobs:
           done
       - name: Print Docker logs
         if: failure()
+        continue-on-error: true
         run: |
           docker logs reductstore
 
@@ -190,8 +198,8 @@ jobs:
           lfs: false
       - name: Run provisioning examples
         run: |
-          for example in $(find docs/guides/examples/provisioning -type f );
+          for example in $(find docs/examples/provisioning -type f );
           do
-            docker-compose -f $example up -d
-            docker-compose -f $example down
+            docker compose -f $example up -d
+            docker compose -f $example down
           done

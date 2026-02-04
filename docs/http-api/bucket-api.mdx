@@ -32,6 +32,10 @@ bucket in JSON format.
 
 If authentication is enabled, the method needs a valid API token.
 
+**Changes**:
+
+- Version 1.18: bucket and entry responses include the `status` field (`READY` / `DELETING`).
+
 <SwaggerComponent
   method="GET"
   path="/api/v1/b/:bucket_name"
@@ -64,10 +68,11 @@ If authentication is enabled, the method needs a valid API token.
     "info": {
         "name": "string",                        // bucket name
         "entry_count": "integer",                // number of entries
-        "size": "integer",                       // disk usage in bytes
-        "oldest_record": "integer",              // unix timestamp of oldest record in microseconds
-        "latest_record": "integer"               // unix timestamp of latest record in microseconds
-        "is_provisioned": "bool"                 // provisioned
+            "size": "integer",                       // disk usage in bytes
+            "oldest_record": "integer",              // unix timestamp of oldest record in microseconds
+            "latest_record": "integer"               // unix timestamp of latest record in microseconds
+            "is_provisioned": "bool",                // provisioned
+            "status": Union["READY", "DELETING"]      // resource status
     },
     "entries": [
         {
@@ -77,6 +82,7 @@ If authentication is enabled, the method needs a valid API token.
             "record_count": "integer",           // number of records
             "oldest_record": "integer",          // unix timestamp of oldest record in microseconds
             "latest_record": "integer"           // unix timestamp of latest record in microseconds
+            "status": Union["READY", "DELETING"]  // resource status
         }
     ]
 }`}</code>
@@ -400,6 +406,10 @@ access.
 This operation is irreversible. All data in the bucket will be lost.
 :::
 
+**Changes**:
+
+- Version 1.18: deletion is non-blocking; cleanup continues in the background.
+
 <SwaggerComponent
   method="DELETE"
   path="/api/v1/b/:bucket_name"
@@ -438,7 +448,7 @@ This operation is irreversible. All data in the bucket will be lost.
     {
       status: "409",
       message: "Conflict",
-      summary: "Bucket is provisioned",
+      summary: "Bucket is provisioned or being deleted",
     },
   ]}
 />

@@ -24,6 +24,16 @@ class QuotaType(Enum)
 
 determines if database has a fixed size
 
+<a id="reduct.msg.bucket.Status"></a>
+
+## Status
+
+```python
+class Status(Enum)
+```
+
+Resource status during deletion
+
 <a id="reduct.msg.bucket.BucketSettings"></a>
 
 ## BucketSettings
@@ -104,6 +114,12 @@ UNIX timestamp of the latest record in microseconds
 
 bucket is provisioned amd you can't remove it or change its settings
 
+<a id="reduct.msg.bucket.BucketInfo.status"></a>
+
+#### status
+
+current status of the bucket (READY or DELETING)
+
 <a id="reduct.msg.bucket.EntryInfo"></a>
 
 ## EntryInfo
@@ -149,6 +165,12 @@ UNIX timestamp of the oldest record in microseconds
 #### latest\_record
 
 UNIX timestamp of the latest record in microseconds
+
+<a id="reduct.msg.bucket.EntryInfo.status"></a>
+
+#### status
+
+current status of the entry (READY or DELETING)
 
 <a id="reduct.msg.bucket.BucketFullInfo"></a>
 
@@ -215,6 +237,12 @@ Query entry
 #### query\_type
 
 query type
+
+<a id="reduct.msg.bucket.QueryEntry.entries"></a>
+
+#### entries
+
+list of entry names to query
 
 <a id="reduct.msg.bucket.QueryEntry.start"></a>
 
