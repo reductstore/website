@@ -1,48 +1,11 @@
 ---
-title: ReductROS
-description: Extension for ReductStore to extract and transform data in ROS formats.
+title: MCAP
+description: Parameters and examples for working with MCAP files in ReductROS.
 ---
 
-<head>
-  <link
-    rel="canonical"
-    href="https://www.reduct.store/docs/extensions/official/ros-ext"
-  />
-</head>
+# MCAP
 
-# ReductROS
-
-The ReductROS [**extension**](../../glossary#extension) provides tools that can be used to extract and transform data stored in ReductStore into formats that are compatible with the Robot Operating System (ROS).
-It allows users to query and convert historical data, such as sensor readings and camera images, into the JSON format, which can then be easily used for analysis, visualisation or integration with other systems.
-
-import DemoLicenseNote from "@site/src/components/promotional/DemoLicenseNote";
-
-<DemoLicenseNote />
-
-## Supported File and Message Formats
-
-The ReductROS extension supports parsing and extracting data exclusively from [MCAP](https://mcap.dev/) files containing messages encoded in the [CDR (Common Data Representation)](https://design.ros2.org/articles/serialization.html) format—used as the default serialization method in ROS 2.
-
-These `.mcap` files typically originate from ROS 2 logging tools and encapsulate serialized messages across multiple topics, along with metadata such as timestamps and message types. ReductROS provides functionality to:
-
-- **Decode CDR-encoded ROS 2 messages** embedded in MCAP files.
-- **Extract specific topics** from the MCAP file based on user-defined parameters and convert them into JSON format.
-- **Encode binary data** (e.g., images, point clouds) into base64 strings or JPEG format for easier handling and analysis.
-- **Expose metadata**, including topic names, timestamps, and message types alongside message content.
-
-### Input
-
-- `.mcap` files containing ROS 2 messages in binary CDR format
-
-### Output
-
-- Transformed `MCAP` files or `JSON` representations of ROS 2 messages
-- `timestamp` from the message header
-- `computed_labels` containing metadata such as topic name, message type, and encoding
-
-This output format is ideal for analysis, visualization, integration with external systems, or further transformation to other formats.
-
-## Query Format
+## Query format
 
 A user can use the `ext` query parameter to activate the `ros` extension and define the parameters for extracting and transforming ROS data in the following format:
 
@@ -67,7 +30,7 @@ A user can use the `ext` query parameter to activate the `ros` extension and def
 }
 ```
 
-### Data Extraction
+### Data extraction
 
 The `extract` property allows you to specify the ROS topic from which to extract message and convert it to JSON format.
 The extension will read the MCAP file, decode the messages from the specified topic, and return each message as a JSON record with
@@ -80,7 +43,7 @@ the timestamp from the message header.
 | `encode.<field>` | `string` | No        | The encoding format for binary fields in the message. Supported values are `base64` and `jpeg`. If not specified, the field will be returned as a JSON list. |
 | `as_label`       | `object` | No        | An object that specifies dynamic computed lables that will be delivered to the client. Can be a basis for output filtering.                                  |
 
-#### Encoding Binary Data
+#### Encoding binary data
 
 The `encode` property allows you to specify how to handle binary data in the extracted messages.
 You can choose to encode binary fields in the following formats:
@@ -94,7 +57,7 @@ You can choose to encode binary fields in the following formats:
 Currently, the extension supports encoding only **[sensor_msgs/msg/Image](http://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Image.html)** messages with `encoding` set to `rgb8`, `bgr8`, or `mono8`.
 :::
 
-### Data Transformation
+### Data transformation
 
 The `transform` property allows you to generate new MCAP episodes with topic filtering and size/duration limits.
 
@@ -147,16 +110,16 @@ When `transform` is provided, the extension:
 The following examples demonstrate how to use the **ReductROS** extension to extract and transform ROS messages.
 Although this example is written in Python, it can be run using any of the official SDKs.
 
-import CodeBlock from "@theme/CodeBlock";
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
+import CodeBlock from '@theme/CodeBlock';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-### Extracting Messages as JSON
+### Extracting messages as JSON
 
-This example demonstrates how to use the ROS extension to extract topic from an MCAP file stored in ReductStore and
-convert it to JSON format.
+This example demonstrates how to use the ROS extension to extract a topic from an MCAP file stored in ReductStore,
+convert it to JSON format, and use `as_label` plus `when` for filtering.
 
-import RosExtractTopicPy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_extract.py";
+import RosExtractTopicPy from '!!raw-loader!../../../examples/py/src/ext_ros_mcap_extract.py';
 
 <Tabs>
   <TabItem value="Python">
@@ -164,17 +127,14 @@ import RosExtractTopicPy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_e
   </TabItem>
 </Tabs>
 
-#### Expected Output
+#### Expected output
 
 The expected output of the above code is as follows:
 
 ```
 Record timestamp: 24
-Record labels: {'@encoding': 'cdr', '@schema': 'std_msgs/String', '@topic': '/test'}
+Record labels: {'@encoding': 'cdr', '@schema': 'std_msgs/String', '@topic': '/test', '@data1': 'hello'}
 {"data":"hello"}
-Record timestamp: 25
-Record labels: {'@encoding': 'cdr', '@schema': 'std_msgs/String', '@topic': '/test'}
-{"data":"world"}
 ```
 
 #### Explanation
@@ -189,13 +149,15 @@ Record labels: {'@encoding': 'cdr', '@schema': 'std_msgs/String', '@topic': '/te
   - `topic`: `/test`
   - `schema`: `std_msgs/String`
   - `encoding`: `cdr`
+- The `as_label` option adds `@data1` based on the JSON path `data`.
+- The `when` filter selects only records where `@data1` equals `hello`.
 
-### Extracting Messages as JSON with JPEG Encoding
+### Extracting messages as JSON with JPEG encoding
 
 This example demonstrates how to use the ROS extension to extract topic from an MCAP file stored in ReductStore and
 convert it to JSON format, while also encoding binary image data into JPEG format.
 
-import RosExtractImagePy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_extract_jpeg.py";
+import RosExtractImagePy from '!!raw-loader!../../../examples/py/src/ext_ros_mcap_extract_jpeg.py';
 
 <Tabs>
   <TabItem value="Python">
@@ -203,7 +165,7 @@ import RosExtractImagePy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_e
   </TabItem>
 </Tabs>
 
-#### Expected Output
+#### Expected output
 
 The expected output of the above code is as follows:
 
@@ -227,48 +189,11 @@ Image parameters: {'height': 720, 'width': 1280, 'is_bigendian': 0, 'encoding': 
   - `schema`: `sensor_msgs/Image`
   - `encoding`: `cdr`
 
-### Using Extracted Data for Filtering
-
-This example demonstrates how to use the ROS extension to apply filters to the JSON output of ReductStore.
-
-import RosExtractFilteredTopicPy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_extract_filtered.py";
-
-<Tabs>
-  <TabItem value="Python">
-    <CodeBlock language="python">{RosExtractFilteredTopicPy}</CodeBlock>
-  </TabItem>
-</Tabs>
-
-#### Expected Output
-
-The expected output of the above code is as follows:
-
-```
-Record timestamp: 24
-Record labels: {'@encoding': 'cdr', '@schema': 'std_msgs/String', '@topic': '/test'}
-{"data":"hello"}
-```
-
-#### Explanation
-
-- The extension extracts ROS 2 messages from an `.mcap` file stored in ReductStore.
-- Only messages from the topic `/test` are selected using the `topic` filter in the `ros.extract` configuration.
-- The content of each message is CDR-encoded and decoded by the extension.
-- The decoded message is returned as JSON with the field `data`, matching the `std_msgs/String` schema.
-- Each record corresponds to one ROS 2 message and includes:
-- The decoded JSON payload, e.g., `{"data":"hello"}`
-- The output is filtered, as the second entry did not have a matching `data` value.
-- Message metadata as labels, including:
-  - `topic`: `/test`
-  - `schema`: `std_msgs/String`
-  - `encoding`: `cdr`
-  - `@data1`: `hello`
-
-### Transforming MCAP with Splitting and Topic Filtering
+### Transforming MCAP with splitting and topic filtering
 
 This example demonstrates how to use the ROS extension to create new MCAP episodes while including and excluding topics using regular expressions.
 
-import RosTransformMcapPy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_transform.py";
+import RosTransformMcapPy from '!!raw-loader!../../../examples/py/src/ext_ros_mcap_transform.py';
 
 <Tabs>
   <TabItem value="Python">
@@ -276,7 +201,7 @@ import RosTransformMcapPy from "!!raw-loader!../../examples/py/src/ext_ros_mcap_
   </TabItem>
 </Tabs>
 
-#### Expected Output
+#### Expected output
 
 The expected output of the above code is as follows:
 

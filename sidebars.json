@@ -121,7 +121,18 @@
           },
           "items": [
             "extensions/official/select-ext",
-            "extensions/official/ros-ext"
+            {
+              "type": "category",
+              "label": "ReductROS",
+              "link": {
+                "type": "doc",
+                "id": "extensions/official/ros-ext/index"
+              },
+              "items": [
+                "extensions/official/ros-ext/mcap",
+                "extensions/official/ros-ext/rosbag"
+              ]
+            }
           ]
         },
         "extensions/development"
