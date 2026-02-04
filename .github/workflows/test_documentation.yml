@@ -71,6 +71,7 @@ jobs:
           tar -xvf reduct-cli.x86_64-unknown-linux-gnu.tar.gz
           chmod +x reduct-cli
           sudo mv reduct-cli /usr/local/bin
+          reduct-cli --version
 
       - name: Prepare ReductStore instance with data
         run: |
