@@ -110,16 +110,16 @@ When `transform` is provided, the extension:
 The following examples demonstrate how to use the **ReductROS** extension to extract and transform ROS messages.
 Although this example is written in Python, it can be run using any of the official SDKs.
 
-import CodeBlock from '@theme/CodeBlock';
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import CodeBlock from "@theme/CodeBlock";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 ### Extracting messages as JSON
 
 This example demonstrates how to use the ROS extension to extract a topic from an MCAP file stored in ReductStore,
 convert it to JSON format, and use `as_label` plus `when` for filtering.
 
-import RosExtractTopicPy from '!!raw-loader!../../../examples/py/src/ext_ros_mcap_extract.py';
+import RosExtractTopicPy from "!!raw-loader!../../../examples/py/src/ext_ros_mcap_extract.py";
 
 <Tabs>
   <TabItem value="Python">
@@ -157,7 +157,7 @@ Record labels: {'@encoding': 'cdr', '@schema': 'std_msgs/String', '@topic': '/te
 This example demonstrates how to use the ROS extension to extract topic from an MCAP file stored in ReductStore and
 convert it to JSON format, while also encoding binary image data into JPEG format.
 
-import RosExtractImagePy from '!!raw-loader!../../../examples/py/src/ext_ros_mcap_extract_jpeg.py';
+import RosExtractImagePy from "!!raw-loader!../../../examples/py/src/ext_ros_mcap_extract_jpeg.py";
 
 <Tabs>
   <TabItem value="Python">
@@ -193,7 +193,7 @@ Image parameters: {'height': 720, 'width': 1280, 'is_bigendian': 0, 'encoding': 
 
 This example demonstrates how to use the ROS extension to create new MCAP episodes while including and excluding topics using regular expressions.
 
-import RosTransformMcapPy from '!!raw-loader!../../../examples/py/src/ext_ros_mcap_transform.py';
+import RosTransformMcapPy from "!!raw-loader!../../../examples/py/src/ext_ros_mcap_transform.py";
 
 <Tabs>
   <TabItem value="Python">

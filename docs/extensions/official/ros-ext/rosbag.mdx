@@ -97,12 +97,12 @@ Each output record contains:
 The `transform` property allows you to filter topics from a rosbag and re-pack them into new rosbag episodes.
 The output is a ZIP archive with content type `application/rosbag`.
 
-| Field      | Type       | Mandatory | Description                                                                                    |
-| ---------- | ---------- | --------- | ---------------------------------------------------------------------------------------------- |
+| Field      | Type       | Mandatory | Description                                                                                     |
+| ---------- | ---------- | --------- | ----------------------------------------------------------------------------------------------- |
 | `include`  | `string[]` | No        | List of topics to include. Supports regular expressions. If omitted, all topics are considered. |
-| `exclude`  | `string[]` | No        | List of topics to exclude. Applied **after** `include`.                                        |
-| `duration` | `string`   | No        | Maximum duration per episode (e.g., `5m`, `2h`, `1d`).                                         |
-| `size`     | `string`   | No        | Maximum content length per episode (e.g., `100MB`, `1GB`).                                     |
+| `exclude`  | `string[]` | No        | List of topics to exclude. Applied **after** `include`.                                         |
+| `duration` | `string`   | No        | Maximum duration per episode (e.g., `5m`, `2h`, `1d`).                                          |
+| `size`     | `string`   | No        | Maximum content length per episode (e.g., `100MB`, `1GB`).                                      |
 
 :::info
 If a topic pattern does not contain regex tokens (like `.*`, `^`, `$`), it is treated as an exact match.
@@ -147,15 +147,15 @@ When `transform` is provided, the extension:
 The following examples demonstrate how to use the **ReductROS** extension to extract and transform rosbag data.
 Although these examples are written in Python, they can be run using any of the official SDKs.
 
-import CodeBlock from '@theme/CodeBlock';
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import CodeBlock from "@theme/CodeBlock";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 ### Extracting messages as JSON
 
 This example demonstrates how to extract a single topic from a rosbag stored in ReductStore and convert it to JSON.
 
-import RosbagExtractPy from '!!raw-loader!../../../examples/py/src/ext_ros_rosbag_extract.py';
+import RosbagExtractPy from "!!raw-loader!../../../examples/py/src/ext_ros_rosbag_extract.py";
 
 <Tabs>
   <TabItem value="Python">
@@ -177,7 +177,7 @@ Record labels: {'encoding': 'cdr', 'schema': 'geometry_msgs/Accel', 'topic': '/t
 
 This example demonstrates how to filter topics from a rosbag and emit new rosbag episodes.
 
-import RosbagTransformPy from '!!raw-loader!../../../examples/py/src/ext_ros_rosbag_transform.py';
+import RosbagTransformPy from "!!raw-loader!../../../examples/py/src/ext_ros_rosbag_transform.py";
 
 <Tabs>
   <TabItem value="Python">
