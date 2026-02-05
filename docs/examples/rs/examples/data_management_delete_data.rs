@@ -1,5 +1,5 @@
 use reduct_rs::{ReductClient, ReductError};
-use tokio;
+use tokio::time::{sleep, Duration};
 
 #[tokio::main]
 async fn main() -> Result<(), ReductError> {
@@ -14,6 +14,9 @@ async fn main() -> Result<(), ReductError> {
 
     // Delete only entry with name "example-entry"
     bucket.remove_entry("example-entry").await?;
+
+    // Wait for the storage to finish removing blocks
+    sleep(Duration::from_secs(1)).await;
 
     // Remove entire bucket
     bucket.remove().await?;

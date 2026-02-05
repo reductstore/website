@@ -1,6 +1,8 @@
 #include <reduct/client.h>
-#include <iostream>
 #include <cassert>
+#include <chrono>
+#include <iostream>
+#include <thread>
 
 using reduct::IBucket;
 using reduct::IClient;
@@ -19,6 +21,9 @@ int main() {
     // Delete only entry with name "example-entry"
     auto remove_entry_err = bucket->RemoveEntry("example-entry");
     assert(remove_entry_err == Error::kOk);
+
+    // Wait for the storage to finish removing blocks
+    std::this_thread::sleep_for(std::chrono::seconds(1));
 
     // Remove entire bucket
     auto remove_err = bucket->Remove();

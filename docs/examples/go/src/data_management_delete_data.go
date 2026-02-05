@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	reduct "github.com/reductstore/reduct-go"
+	"time"
 )
 
 func main() {
@@ -22,6 +23,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	// Wait for the storage to finish removing blocks
+	time.Sleep(1 * time.Second)
 
 	// Remove entire bucket
 	err = bucket.Remove(context.Background())
