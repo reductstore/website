@@ -1,11 +1,11 @@
 ---
 title: "BucketSettings"
-description: "API reference for the BucketSettings class in the ReductStore Client SDK for JavaScript."
+description: "API reference for BucketSettings in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/BucketSettings" />
 </head>
-
 
 # BucketSettings
 

@@ -1,11 +1,11 @@
 ---
 title: "Status"
-description: "API reference for the Status enum in the ReductStore Client SDK for JavaScript."
+description: "API reference for Status in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/enumerations/Status" />
 </head>
-
 
 # Status
 

@@ -1,11 +1,11 @@
 ---
 title: "QuotaType"
-description: "API reference for the QuotaType enum in the ReductStore Client SDK for JavaScript."
+description: "API reference for QuotaType in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/enumerations/QuotaType" />
 </head>
-
 
 # QuotaType
 

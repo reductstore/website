@@ -1,0 +1,232 @@
+---
+title: "RecordBatch"
+description: "API reference for the RecordBatch class in the ReductStore Client SDK for JavaScript."
+---
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/RecordBatch" />
+</head>
+
+
+# RecordBatch
+
+Defined in: [RecordBatch.ts:34](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L34)
+
+Batch of records to write them in one request (batch protocol v2).
+
+## Constructors
+
+### Constructor
+
+&gt; **new RecordBatch**(`bucketName`, `httpClient`, `type`): `RecordBatch`
+
+Defined in: [RecordBatch.ts:42](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L42)
+
+#### Parameters
+
+##### bucketName
+
+`string`
+
+##### httpClient
+
+`HttpClient`
+
+##### type
+
+[`RecordBatchType`](../enumerations/RecordBatchType.md)
+
+#### Returns
+
+`RecordBatch`
+
+## Methods
+
+### add()
+
+&gt; **add**(`entry`, `ts`, `data`, `contentType?`, `labels?`): `void`
+
+Defined in: [RecordBatch.ts:63](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L63)
+
+Add record to batch with entry name.
+
+#### Parameters
+
+##### entry
+
+`string`
+
+name of entry
+
+##### ts
+
+`bigint`
+
+timestamp of record as a UNIX timestamp in microseconds
+
+##### data
+
+`any`
+
+&#123;Buffer | string&#125; data to write
+
+##### contentType?
+
+`string`
+
+default: application/octet-stream
+
+##### labels?
+
+`LabelMap`
+
+default: &#123;&#125;
+
+#### Returns
+
+`void`
+
+***
+
+### addOnlyLabels()
+
+&gt; **addOnlyLabels**(`entry`, `ts`, `labels`): `void`
+
+Defined in: [RecordBatch.ts:97](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L97)
+
+Add labels to batch for update.
+
+#### Parameters
+
+##### entry
+
+`string`
+
+name of entry
+
+##### ts
+
+`bigint`
+
+timestamp of record as a UNIX timestamp in microseconds
+
+##### labels
+
+`LabelMap`
+
+labels to update
+
+#### Returns
+
+`void`
+
+***
+
+### addOnlyTimestamp()
+
+&gt; **addOnlyTimestamp**(`entry`, `ts`): `void`
+
+Defined in: [RecordBatch.ts:119](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L119)
+
+Add timestamps to batch for removal.
+
+#### Parameters
+
+##### entry
+
+`string`
+
+name of entry
+
+##### ts
+
+`bigint`
+
+timestamp of record as a UNIX timestamp in microseconds
+
+#### Returns
+
+`void`
+
+***
+
+### clear()
+
+&gt; **clear**(): `void`
+
+Defined in: [RecordBatch.ts:256](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L256)
+
+Clear batch
+
+#### Returns
+
+`void`
+
+***
+
+### items()
+
+&gt; **items**(): \[\[`string`, `bigint`\], `RecordBatchItem`\][]
+
+Defined in: [RecordBatch.ts:212](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L212)
+
+Get records in batch sorted by entry name and timestamp.
+
+#### Returns
+
+\[\[`string`, `bigint`\], `RecordBatchItem`\][]
+
+***
+
+### lastAccessTime()
+
+&gt; **lastAccessTime**(): `number`
+
+Defined in: [RecordBatch.ts:242](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L242)
+
+Get last access time of batch
+
+#### Returns
+
+`number`
+
+***
+
+### recordCount()
+
+&gt; **recordCount**(): `number`
+
+Defined in: [RecordBatch.ts:249](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L249)
+
+Get number of records in batch
+
+#### Returns
+
+`number`
+
+***
+
+### send()
+
+&gt; **send**(): `Promise`\&lt;`Map`\&lt;`string`, `Map`\&lt;`bigint`, [`APIError`](APIError.md)\&gt;\&gt;\&gt;
+
+Defined in: [RecordBatch.ts:140](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L140)
+
+Send batch request (Multi-entry API).
+
+#### Returns
+
+`Promise`\&lt;`Map`\&lt;`string`, `Map`\&lt;`bigint`, [`APIError`](APIError.md)\&gt;\&gt;\&gt;
+
+***
+
+### size()
+
+&gt; **size**(): `bigint`
+
+Defined in: [RecordBatch.ts:235](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L235)
+
+Get total size of batch
+
+#### Returns
+
+`bigint`

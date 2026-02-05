@@ -1,0 +1,97 @@
+---
+title: Delete data
+description: HTTP endpoint to remove multiple records across entries using Batch Protocol v2 header naming.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/io-api/delete_data"
+  />
+</head>
+
+# Remove records (I/O API)
+
+This endpoint removes multiple records across multiple entries using **Batch Protocol v2** header naming.
+See the [**Batch protocol v2**](./#batch-protocol-v2) section for details.
+
+import SwaggerComponent from "@site/src/components/SwaggerComponent";
+
+<SwaggerComponent
+  method="DELETE"
+  path="/api/v1/io/:bucket_name/remove"
+  summary="Remove multiple records across entries"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        isRequired: true,
+        description: "Name of bucket",
+      },
+    },
+    {
+      type: "header",
+      details: {
+        name: "x-reduct-entries",
+        isRequired: true,
+        description:
+          "Comma-separated, percent-encoded entry names (index == position).",
+      },
+    },
+    {
+      type: "header",
+      details: {
+        name: "x-reduct-start-ts",
+        isRequired: true,
+        description: "First timestamp in the batch (microseconds).",
+      },
+    },
+    {
+      type: "header",
+      details: {
+        name: "x-reduct-<ENTRY-INDEX>-<TIME-DELTA-uS>",
+        isRequired: true,
+        description:
+          "One header per record to remove; timestamp is start + delta. The header value may be empty.",
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary:
+        "The request was processed. Per-record errors are returned in x-reduct-error-* headers.",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token does not have write permissions for the bucket",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket does not exist",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary:
+        "Missing required headers or invalid Batch Protocol v2 header names",
+    },
+  ]}
+/>
+
+## Per-record errors
+
+If a record cannot be removed, the response includes an error header for that record:
+
+```
+x-reduct-error-<ENTRY-INDEX>-<TIME-DELTA-uS>: <STATUS_CODE>,<ERROR_MESSAGE>
+```

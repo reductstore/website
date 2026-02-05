@@ -1,11 +1,11 @@
 ---
 title: "LicenseInfo"
-description: "API reference for the LicenseInfo class in the ReductStore Client SDK for JavaScript."
+description: "API reference for LicenseInfo in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/LicenseInfo" />
 </head>
-
 
 # LicenseInfo
 
