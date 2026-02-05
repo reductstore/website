@@ -1,0 +1,79 @@
+---
+title: Provisioning
+description: ReductStore resource provisioning using environment variables.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/configuration/provisioning"
+  />
+</head>
+
+# ReductStore Provisioning
+
+ReductStore provides an **[HTTP API](../glossary#http-api)** to create and configure resources such as buckets, access tokens or **[replication](../glossary#replication)** tasks. However, if you are following an Infrastructure as Code (IaC) approach, you may want to provision resources at the deployment stage and ensure that they can't be modified or deleted using the HTTP API.
+
+## Example
+
+Here is an example of provisioning two buckets and a token to access them:
+
+```
+RS_BUCKET_A_NAME=bucket-1
+RS_BUCKET_A_QUOTA_TYPE=FIFO
+RS_BUCKET_A_QUOTA_SIZE=1Tb
+
+RS_BUCKET_B_NAME=bucket-2
+
+RS_TOKEN_A_NAME=token
+RS_TOKEN_A_VALUE=somesecret
+RS_TOKEN_A_READ=bucket-1,bucket-2
+```
+
+As you can see, each resource has a type and an ID. The type is `BUCKET` for buckets and `TOKEN` for tokens. The ID is a unique identifier for the resource. You can use any string value for the ID. It is only used to group resources of the same type.
+
+Below you will find the available settings for each resource type.
+
+## Bucket Provisioning
+
+You can provision buckets by setting environment variables. The following table lists the available settings:
+
+| Name                               | Default | Description                                                      |
+| ---------------------------------- | ------- | ---------------------------------------------------------------- |
+| `RS_BUCKET_<ID>_NAME`              |         | Provisioned **[bucket](../glossary#bucket)** name (required)     |
+| `RS_BUCKET_<ID>_QUOTA_TYPE`        | NONE    | It can be NONE, FIFO or HARD.                                    |
+| `RS_BUCKET_<ID>_QUOTA_SIZE`        | 0       | Size of quota to start removing old data e.g. 1 KB, 10.4 MB etc. |
+| `RS_BUCKET_<ID>_MAX_BLOCK_SIZE`    | 64Mb    | Maximal **[block](../glossary#block)** size for batched records  |
+| `RS_BUCKET_<ID>_MAX_BLOCK_RECORDS` | 1024    | Maximal number of batched records in a block                     |
+
+For more information about the bucket settings, see the **[Buckets Guide](../guides/buckets.mdx#bucket-settings)**.
+
+## Token Provisioning
+
+You can provision tokens by setting environment variables. The following table lists the available settings:
+
+| Name                        | Default | Description                                       |
+| --------------------------- | ------- | ------------------------------------------------- |
+| `RS_TOKEN_<ID>_NAME`        |         | Provisioned token name (required)                 |
+| `RS_TOKEN_<ID>_VALUE`       |         | Provisioned value of token (required)             |
+| `RS_TOKEN_<ID>_FULL_ACCESS` | false   | Full access permission                            |
+| `RS_TOKEN_<ID>_READ`        |         | List of buckets for reading separated by a comma. |
+| `RS_TOKEN_<ID>_WRITE`       |         | List of buckets for writing separated by a comma. |
+
+For more information about the token settings, see the **[Access Control Guide](../guides/access-control.mdx)**.
+
+## Replication Provisioning
+
+You can provision replication tasks by setting environment variables. The following table lists the available settings:
+
+| Name                             | Default | Description                                                                                                        |
+| -------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
+| `RS_REPLICATION_<ID>_NAME`       |         | Provisioned replication task name (required)                                                                       |
+| `RS_REPLICATION_<ID>_SRC_BUCKET` |         | Source bucket name (required)                                                                                      |
+| `RS_REPLICATION_<ID>_DST_BUCKET` |         | Remote bucket name (required). It must be created before replication                                               |
+| `RS_REPLICATION_<ID>_DST_HOST`   |         | URL of destination instance (required). For example, https://play.reduct.store or http://localhost:8383            |
+| `RS_REPLICATION_<ID>_DST_TOKEN`  |         | Token for destination instance                                                                                     |
+| `RS_REPLICATION_<ID>_ENTRIES`    |         | List of entries to replicate. Separate entries with a comma. If the list is empty, all entries will be replicated. |
+| `RS_REPLICATION_<ID>_WHEN`       |         | Condition for replication. If not set, all entries will be replicated.                                             |
+
+For more information about the replication settings, see the **[Data Replication Guide](../guides/data-replication.mdx)**.

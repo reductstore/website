@@ -1,0 +1,138 @@
+---
+title: Aggregation Operators
+description: Learn how to use aggregation operators to aggregate data in ReductStore.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/conditional-query/aggregation-operators"
+  />
+</head>
+
+The aggregation operators are used within the **[conditional query](../glossary#conditional-query)** to post-process or throttle matched records.
+They can be combined with other logical and comparison operators.
+
+The following aggregation operators are supported:
+
+| Operator  | ReductStore Version | Description                                                       |
+| --------- | ------------------- | ----------------------------------------------------------------- |
+| `$each_n` | v1.16               | Keeps each N-th record after previous condition                   |
+| `$each_t` | v1.16               | Keeps a record after the previous condition once in time interval |
+| `$limit`  | v1.16               | Limits the number of records to be processed in the query         |
+
+:::info
+The order of operators affects the result. Conditions are applied sequentially, so placing an aggregation operator before or after a filter changes the outcome.
+:::
+
+## $each_n
+
+The `$each_n` operator is used to keep each N-th record after the previous condition.
+
+### Syntax
+
+```
+{
+  "$each_n": [ <expression as integer> ]
+}
+```
+
+### Behavior
+
+The operator evaluates the first expression as an integer and uses it to select every N-th matching record.
+
+### Examples
+
+Filter records with a score greater than 10, then return every 5th record from the result:
+
+```json
+{
+  "&score": { "$gt": 10 },
+  "$each_n": 5
+}
+```
+
+Select every 5th record, then return those with a score greater than 10:
+
+```json
+{
+  "$each_n": 5,
+  "&score": { "$gt": 10 }
+}
+```
+
+## $each_t
+
+The `$each_t` operator keeps a record if its timestamp is at least the specified number of seconds after the previous matching record.
+
+### Syntax
+
+```
+{
+  "$each_t": [ <duration> | <expression as float> ]
+}
+```
+
+### Behavior
+
+The operator supports a duration in the format of `5s` (5 seconds) or a float value representing seconds:
+
+- If the operand is a duration literal (e.g., `5s`), it is used directly.
+- If some other expression is provided, it is evaluated as a float and interpreted as seconds.
+
+### Examples
+
+Filter records with a score greater than 10, then return only those that are at least 5 seconds apart.
+
+```json
+{
+  "&score": { "$gt": 10 },
+  "$each_t": "5s"
+}
+```
+
+Keep only records at least 5 seconds apart, then filter for scores greater than 10:
+
+```json
+{
+  "$each_t": "5s",
+  "&score": { "$gt": 10 }
+}
+```
+
+## $limit
+
+The `$limit` operator restricts the result set to a maximum of N records.
+
+### Syntax
+
+```
+{
+  "$limit": [ <expression as integer> ]
+}
+```
+
+### Behavior
+
+The operator evaluates the first expression as an integer and uses it to limit the number of records to be processed in the query.
+The operator is applied after the previous condition, so it limits the number of records that match the previous condition.
+
+### Examples
+
+Limit the number of records whose score is greater than 10 to 5:
+
+```json
+{
+  "&score": { "$gt": 10 },
+  "$limit": 5
+}
+```
+
+Find records with a score greater than 10 in the first 5 records:
+
+```json
+{
+  "$limit": 5,
+  "&score": { "$gt": 10 }
+}
+```
