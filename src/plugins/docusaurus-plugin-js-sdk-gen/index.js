@@ -157,9 +157,7 @@ function escapeMdxExpressions(content) {
 
 function titleizeFromFilename(filename) {
   const base = filename.replace(/\.[^.]+$/, "");
-  return base
-    .replace(/[-_]+/g, " ")
-    .replace(/\b\w/g, (ch) => ch.toUpperCase());
+  return base.replace(/[-_]+/g, " ").replace(/\b\w/g, (ch) => ch.toUpperCase());
 }
 
 function normalizeTitle(title) {
@@ -215,13 +213,11 @@ function transformDocContent(content, filePath) {
   }
 
   const preHeading = lines.slice(bodyStart, firstHeadingIndex);
-  const hasBreadcrumbs = preHeading.some((line) =>
-    line.includes("reduct-js"),
-  );
+  const hasBreadcrumbs = preHeading.some((line) => line.includes("reduct-js"));
   if (hasBreadcrumbs) {
     lines.splice(bodyStart, firstHeadingIndex - bodyStart);
-    firstHeadingIndex = lines.findIndex((line, idx) =>
-      idx >= bodyStart && line.startsWith("# "),
+    firstHeadingIndex = lines.findIndex(
+      (line, idx) => idx >= bodyStart && line.startsWith("# "),
     );
   }
 
@@ -266,7 +262,10 @@ function stripFrontmatterAndHead(content) {
   }
   while (idx < lines.length && lines[idx].trim() === "") idx += 1;
   if (lines[idx] && lines[idx].trim().toLowerCase() === "<head>") {
-    while (idx < lines.length && lines[idx].trim().toLowerCase() !== "</head>") {
+    while (
+      idx < lines.length &&
+      lines[idx].trim().toLowerCase() !== "</head>"
+    ) {
       idx += 1;
     }
     if (lines[idx] && lines[idx].trim().toLowerCase() === "</head>") {

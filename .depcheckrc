@@ -9,6 +9,8 @@
     "buffer",
     "raw-loader",
     "webpack",
+    "typedoc",
+    "typedoc-plugin-markdown",
     "@algolia/client-search",
     "search-insights",
     "react-loadable"
