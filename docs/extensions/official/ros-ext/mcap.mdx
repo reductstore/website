@@ -5,6 +5,12 @@ description: Parameters and examples for working with MCAP files in ReductROS.
 
 # MCAP
 
+MCAP is a container format for recorded robotics data. In ROS 2, it commonly stores CDR-encoded messages across many topics with metadata like timestamps and schemas. ReductROS can extract and transform ROS 2 messages from MCAP files stored in ReductStore (content type `application/mcap`).
+
+import DemoLicenseNote from "@site/src/components/promotional/DemoLicenseNote";
+
+<DemoLicenseNote />
+
 ## Query format
 
 A user can use the `ext` query parameter to activate the `ros` extension and define the parameters for extracting and transforming ROS data in the following format:
