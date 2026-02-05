@@ -67,6 +67,14 @@ const config = {
         ],
       },
     ],
+    [
+      require.resolve("./src/plugins/docusaurus-plugin-js-sdk-gen"),
+      {
+        sdkRepo: "https://github.com/reductstore/reduct-js.git",
+        sdkBranch: "main",
+        destination: "docs/sdk/js",
+      },
+    ],
   ],
 
   // LaTex support
