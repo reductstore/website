@@ -24,3 +24,11 @@
   height: auto;
   object-fit: contain;
 }
+
+:global(html[data-theme="light"]) .architectureDiagram {
+  color-scheme: light !important;
+}
+
+:global(html[data-theme="dark"]) .architectureDiagram {
+  color-scheme: dark !important;
+}
