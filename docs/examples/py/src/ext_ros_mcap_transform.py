@@ -45,6 +45,7 @@ async def main():
 
         # Query the data with the 'ros' extension
         async for record in bucket.query("mcap", start=now, when=condition):
+            print(f"Record entry: {record.entry}")
             print(f"Record timestamp: {record.timestamp}")
 
             # Each record corresponds to a new MCAP episode
