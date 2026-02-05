@@ -1,4 +1,5 @@
 
+import asyncio
 from reduct import Client, Bucket
 
 
@@ -11,11 +12,12 @@ async def main():
         # Delete only entry with name "example-entry"
         await bucket.remove_entry("example-entry")
 
+        # Wait for the storage to finish removing blocks
+        await asyncio.sleep(1)
+
         # Remove entire bucket
         await bucket.remove()
 
 
 if __name__ == "__main__":
-    import asyncio
-
     asyncio.run(main())

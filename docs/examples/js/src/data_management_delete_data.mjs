@@ -10,5 +10,8 @@ const bucket = await client.getBucket("bucket-to-remove");
 // Delete only entry with name "example-entry"
 await bucket.removeEntry("example-entry");
 
+// Wait for the storage to finish removing blocks
+await new Promise((resolve) => setTimeout(resolve, 1000));
+
 // Remove entire bucket
 await bucket.remove();

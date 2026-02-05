@@ -12,34 +12,40 @@ async def main():
             "my-bucket",
             exist_ok=True,
         )
-        # Write a mcap file with timestamps
+        # Write a rosbag ZIP archive with timestamps
         now = time_ns() // 1000
 
-        data = b""
-        with open(f"{HERE}/../data/file.mcap", "rb") as f:
+        with open(f"{HERE}/../data/rosbag_test.zip", "rb") as f:
             data = f.read()
 
-        await bucket.write("mcap", data, content_length=len(data), timestamp=now, content_type="application/mcap")
+        await bucket.write(
+            "rosbag",
+            data,
+            content_length=len(data),
+            timestamp=now,
+            content_type="application/rosbag",
+        )
 
         # Prepare the query with the 'ros' extension
         condition = {
             "#ext": {
-                "ros": {  # name of the extension to use
+                "ros": {
+                    "rosbag": {},
                     "extract": {
-                        "topic": "/test",  # Specify the topic to extract from the mcap file
+                        "topic": "/test/geometry_msgs/accel",
                         "as_label": {
-                            "data1": "data",
+                            "lin_x": "linear.x",
                         },
                     },
                 },
                 "when": {
-                    "@data1": {"$eq": "hello"},
+                    "@lin_x": {"$gt": 0.0},
                 },
             }
         }
 
         # Query the data with the 'ros' extension
-        async for record in bucket.query("mcap", start=now, when=condition):
+        async for record in bucket.query("rosbag", start=now, when=condition):
             print(f"Record entry: {record.entry}")
             print(f"Record timestamp: {record.timestamp}")
             print(f"Record labels: {record.labels}")
@@ -48,7 +54,6 @@ async def main():
             print(json.decode("utf-8").strip())
 
 
-# 5. Run the main function
 if __name__ == "__main__":
     import asyncio
 

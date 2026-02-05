@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Test examples
     strategy:
-      max-parallel: 8
       matrix:
         example: [python, rust, golang, curl, cpp, node, cli]
         doc_version: [next, 1.17.x, 1.16.x]
@@ -24,7 +23,7 @@ jobs:
             example_root: docs/examples
 
           - doc_version: 1.17.x
-            reduct_version: latest
+            reduct_version: v1.17.10
             example_root: versioned_docs/version-1.17.x/examples
 
           - doc_version: 1.16.x
@@ -71,9 +70,11 @@ jobs:
           tar -xvf reduct-cli.x86_64-unknown-linux-gnu.tar.gz
           chmod +x reduct-cli
           sudo mv reduct-cli /usr/local/bin
+          reduct-cli --version
 
       - name: Prepare ReductStore instance with data
         run: |
+          docker pull reduct/store:${{ matrix.reduct_version }}
           docker run -d --name reductstore-init -p 8384:8383  reduct/store:${{ matrix.reduct_version }}
           sleep 3
           reduct-cli cp https://reductstore@play.reduct.store/replica/datasets  http://my-token@127.0.0.1:8384/example-bucket --limit 100

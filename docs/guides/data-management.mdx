@@ -132,6 +132,13 @@ import DeleteDataCurl from "!!raw-loader!../examples/curl/data_management_delete
   </TabItem>
 </Tabs>
 
+:::info
+Pay attention that removing a bucket doesn't remove it immediately.
+The bucket is marked as **DELETING**, and the cleanup continues in the background.
+During this time, you cannot access the bucket or its entries.
+Once the deletion is complete, the bucket and all its data are permanently removed from the store.
+:::
+
 ### Deleting Specific Records
 
 You can remove a single record from an entry or a set of records by specifying their timestamps.

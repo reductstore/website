@@ -286,10 +286,6 @@ import ChangeBucketCurl from "!!raw-loader!../examples/curl/buckets_change.sh";
 
 </Tabs>
 
-:::note
-You can't change settings for provisioned buckets. You should unprovision it first.
-:::
-
 ### Renaming a Bucket
 
 A bucket can be renamed using the SDKs, CLI client, Web Console, or REST API. A client must have full access permission to rename a bucket if the authorization is enabled.
@@ -355,18 +351,9 @@ import RenameBucketCurl from "!!raw-loader!../examples/curl/buckets_rename.sh";
 
 </Tabs>
 
-:::note
-You can't rename a provisioned bucket. You should unprovision it first.
-:::
-
 ### Removing a Bucket
 
 A bucket can be deleted using the SDKs, CLI client, Web Console, or REST API. A client must have full access permission to delete a bucket if the authorization is enabled.
-
-Pay attention that removing a bucket doesn't remove it immediately.
-The bucket is marked as **DELETING**, and the cleanup continues in the background.
-During this time, you cannot access the bucket or its entries.
-Once the deletion is complete, the bucket and all its data are permanently removed from the store.
 
 import RemoveBucketCLI from "!!raw-loader!../examples/cli/buckets_remove.sh";
 import RemoveBucketPy from "!!raw-loader!../examples/py/src/buckets_remove.py";
@@ -440,6 +427,9 @@ import RemoveBucketCurl from "!!raw-loader!../examples/curl/buckets_remove.sh";
 Removing a bucket will also remove all the data stored in it. This action is irreversible.
 :::
 
-:::note
-You can't remove a provisioned bucket. You should unprovision it first.
+:::info
+Pay attention that removing a bucket doesn't remove it immediately.
+The bucket is marked as **DELETING**, and the cleanup continues in the background.
+During this time, you cannot access the bucket or its entries.
+Once the deletion is complete, the bucket and all its data are permanently removed from the store.
 :::

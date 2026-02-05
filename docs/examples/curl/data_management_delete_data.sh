@@ -9,6 +9,9 @@ curl -X DELETE \
   -H "${AUTH_HEADER}" \
   -a "${API_PATH}"/b/bucket-to-remove/example-entry
 
+# Wait for the storage to finish removing blocks
+sleep 1
+
 # Delete entire bucket
 curl -X DELETE \
   -H "${AUTH_HEADER}" \
