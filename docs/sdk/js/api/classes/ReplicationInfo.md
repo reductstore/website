@@ -1,14 +1,13 @@
 ---
-title: "Class: ReplicationInfo"
+title: "ReplicationInfo"
+description: "API reference for the ReplicationInfo class in the ReductStore Client SDK for JavaScript."
 ---
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/ReplicationInfo" />
+</head>
 
-[**reduct-js**](../index.md)
 
-***
-
-[reduct-js](../index.md) / ReplicationInfo
-
-# Class: ReplicationInfo
+# ReplicationInfo
 
 Defined in: [messages/ReplicationInfo.ts:26](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ReplicationInfo.ts#L26)
 

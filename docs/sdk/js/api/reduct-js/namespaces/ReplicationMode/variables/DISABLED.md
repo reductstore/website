@@ -1,12 +1,11 @@
 ---
 title: "Variable: DISABLED"
+description: "API reference for Variable: DISABLED in the ReductStore Client SDK for JavaScript."
 ---
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/reduct-js/namespaces/ReplicationMode/variables/DISABLED" />
+</head>
 
-[**reduct-js**](../../../../index.md)
-
-***
-
-[reduct-js](../../../../index.md) / [ReplicationMode](../index.md) / DISABLED
 
 # Variable: DISABLED
 

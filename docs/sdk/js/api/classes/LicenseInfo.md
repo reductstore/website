@@ -1,14 +1,13 @@
 ---
-title: "Class: LicenseInfo"
+title: "LicenseInfo"
+description: "API reference for the LicenseInfo class in the ReductStore Client SDK for JavaScript."
 ---
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/LicenseInfo" />
+</head>
 
-[**reduct-js**](../index.md)
 
-***
-
-[reduct-js](../index.md) / LicenseInfo
-
-# Class: LicenseInfo
+# LicenseInfo
 
 Defined in: [messages/ServerInfo.ts:7](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L7)
 

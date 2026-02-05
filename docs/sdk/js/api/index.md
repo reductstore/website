@@ -1,10 +1,11 @@
 ---
 title: "reduct-js"
+description: "API reference for reduct-js in the ReductStore Client SDK for JavaScript."
 ---
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/index" />
+</head>
 
-**reduct-js**
-
-***
 
 # reduct-js
 

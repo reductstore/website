@@ -13,13 +13,6 @@
   border-radius: 12px;
 }
 
-:global(html[data-theme="light"]) .roboticsImage {
-  color-scheme: light !important;
-}
-
-:global(html[data-theme="dark"]) .roboticsImage {
-  color-scheme: dark !important;
-}
 
 .btn {
   margin-top: 1rem;

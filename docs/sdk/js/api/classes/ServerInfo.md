@@ -1,14 +1,13 @@
 ---
-title: "Class: ServerInfo"
+title: "ServerInfo"
+description: "API reference for the ServerInfo class in the ReductStore Client SDK for JavaScript."
 ---
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/ServerInfo" />
+</head>
 
-[**reduct-js**](../index.md)
 
-***
-
-[reduct-js](../index.md) / ServerInfo
-
-# Class: ServerInfo
+# ServerInfo
 
 Defined in: [messages/ServerInfo.ts:39](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L39)
 

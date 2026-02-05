@@ -1,21 +1,24 @@
 ---
-title: "APIError"
-description: "API reference for the APIError class in the ReductStore Client SDK for JavaScript."
+title: Error Module
+description: API reference for the Error Module of the ReductStore Client SDK for JavaScript.
 ---
 <head>
-  <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/APIError" />
+  <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/error" />
 </head>
 
+# Error Module
 
-# APIError
+## Classes
+
+## APIError
 
 Defined in: [APIError.ts:4](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/APIError.ts#L4)
 
 Represents HTTP Error
 
-## Constructors
+### Constructors
 
-### Constructor
+#### Constructor
 
 &gt; **new APIError**(`message`, `status?`, `original?`): `APIError`
 
@@ -23,27 +26,27 @@ Defined in: [APIError.ts:23](https://github.com/reductstore/reduct-js/blob/d0e71
 
 Create an error from HTTP status and message
 
-#### Parameters
+##### Parameters
 
-##### message
+###### message
 
 `string`
 
-##### status?
+###### status?
 
 `number`
 
-##### original?
+###### original?
 
 `unknown`
 
-#### Returns
+##### Returns
 
 `APIError`
 
-## Properties
+### Properties
 
-### message?
+#### message?
 
 &gt; `optional` **message**: `string`
 
@@ -53,7 +56,7 @@ Parsed message from the storage engine
 
 ***
 
-### original?
+#### original?
 
 &gt; `optional` **original**: `unknown`
 
@@ -63,10 +66,11 @@ Original error from HTTP client with the full information
 
 ***
 
-### status?
+#### status?
 
 &gt; `optional` **status**: `number`
 
 Defined in: [APIError.ts:8](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/APIError.ts#L8)
 
 HTTP status of error. If it is empty, it means communication problem
+

@@ -1,12 +1,11 @@
 ---
 title: "ReplicationMode"
+description: "API reference for ReplicationMode in the ReductStore Client SDK for JavaScript."
 ---
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/reduct-js/namespaces/ReplicationMode/index" />
+</head>
 
-[**reduct-js**](../../../index.md)
-
-***
-
-[reduct-js](../../../index.md) / ReplicationMode
 
 # ReplicationMode
 

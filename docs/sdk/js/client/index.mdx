@@ -1,19 +1,22 @@
 ---
-title: "Client"
-description: "API reference for the Client class in the ReductStore Client SDK for JavaScript."
+title: Client Module
+description: API reference for the Client Module of the ReductStore Client SDK for JavaScript.
 ---
 <head>
-  <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/Client" />
+  <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/client" />
 </head>
 
+# Client Module
 
-# Client
+## Classes
+
+## Client
 
 Defined in: [Client.ts:31](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Client.ts#L31)
 
-## Constructors
+### Constructors
 
-### Constructor
+#### Constructor
 
 &gt; **new Client**(`url`, `options`): `Client`
 
@@ -21,123 +24,123 @@ Defined in: [Client.ts:39](https://github.com/reductstore/reduct-js/blob/d0e71ee
 
 HTTP Client for ReductStore
 
-#### Parameters
+##### Parameters
 
-##### url
+###### url
 
 `string`
 
 URL to the storage
 
-##### options
+###### options
 
 `ClientOptions` = `&#123;&#125;`
 
-#### Returns
+##### Returns
 
 `Client`
 
-## Methods
+### Methods
 
-### close()
+#### close()
 
-&gt; **close**(): `Promise`\&lt;`void`\&gt;
+&gt; **close**(): `Promise`&lt;`void`&gt;
 
 Defined in: [Client.ts:56](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Client.ts#L56)
 
 Close underlying HTTP resources (Node.js only).
 
-#### Returns
+##### Returns
 
-`Promise`\&lt;`void`\&gt;
+`Promise`&lt;`void`&gt;
 
 ***
 
-### createBucket()
+#### createBucket()
 
-&gt; **createBucket**(`name`, `settings?`): `Promise`\&lt;[`Bucket`](Bucket.md)\&gt;
+&gt; **createBucket**(`name`, `settings?`): `Promise`&lt;[`Bucket`](api/classes/Bucket)&gt;
 
 Defined in: [Client.ts:79](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Client.ts#L79)
 
 Create a new bucket
 
-#### Parameters
+##### Parameters
 
-##### name
+###### name
 
 `string`
 
 name of the bucket
 
-##### settings?
+###### settings?
 
-[`BucketSettings`](BucketSettings.md)
+[`BucketSettings`](api/classes/BucketSettings)
 
 optional settings
 
-#### Returns
+##### Returns
 
-`Promise`\&lt;[`Bucket`](Bucket.md)\&gt;
+`Promise`&lt;[`Bucket`](api/classes/Bucket)&gt;
 
 ***
 
-### createReplication()
+#### createReplication()
 
-&gt; **createReplication**(`name`, `settings`): `Promise`\&lt;`void`\&gt;
+&gt; **createReplication**(`name`, `settings`): `Promise`&lt;`void`&gt;
 
 Defined in: [Client.ts:211](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Client.ts#L211)
 
 Create a new replication
 
-#### Parameters
+##### Parameters
 
-##### name
+###### name
 
 `string`
 
 name of the replication
 
-##### settings
+###### settings
 
-[`ReplicationSettings`](ReplicationSettings.md)
+[`ReplicationSettings`](api/classes/ReplicationSettings)
 
 settings of the replication
 
-#### Returns
+##### Returns
 
-`Promise`\&lt;`void`\&gt;
+`Promise`&lt;`void`&gt;
 
 ***
 
-### createToken()
+#### createToken()
 
-&gt; **createToken**(`name`, `permissions`): `Promise`\&lt;`string`\&gt;
+&gt; **createToken**(`name`, `permissions`): `Promise`&lt;`string`&gt;
 
 Defined in: [Client.ts:129](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Client.ts#L129)
 
 Create a new access token
 
-#### Parameters
+##### Parameters
 
-##### name
+###### name
 
 `string`
 
 name of the token
 
-##### permissions
+###### permissions
 
-[`TokenPermissions`](TokenPermissions.md)
+[`TokenPermissions`](api/classes/TokenPermissions)
 
 permissions for the token
 
-#### Returns
+##### Returns
 
-`Promise`\&lt;`string`\&gt;
+`Promise`&lt;`string`&gt;
 
 the token
 
-#### Example
+##### Example
 
 ```ts
 const token = await client.createToken("my-token", {fullAccess: true});
@@ -146,284 +149,285 @@ const client = new Client("https://play.storage-reduct.dev", {apiToken: token});
 
 ***
 
-### deleteReplication()
+#### deleteReplication()
 
-&gt; **deleteReplication**(`name`): `Promise`\&lt;`void`\&gt;
+&gt; **deleteReplication**(`name`): `Promise`&lt;`void`&gt;
 
 Defined in: [Client.ts:252](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Client.ts#L252)
 
 Delete a replication
 
-#### Parameters
+##### Parameters
 
-##### name
+###### name
 
 `string`
 
 name of the replication
 
-#### Returns
+##### Returns
 
-`Promise`\&lt;`void`\&gt;
+`Promise`&lt;`void`&gt;
 
 ***
 
-### deleteToken()
+#### deleteToken()
 
-&gt; **deleteToken**(`name`): `Promise`\&lt;`void`\&gt;
+&gt; **deleteToken**(`name`): `Promise`&lt;`void`&gt;
 
 Defined in: [Client.ts:167](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Client.ts#L167)
 
 Delete a token by name
 
-#### Parameters
+##### Parameters
 
-##### name
+###### name
 
 `string`
 
 name of the token
 
-#### Returns
+##### Returns
 
-`Promise`\&lt;`void`\&gt;
+`Promise`&lt;`void`&gt;
 
 ***
 
-### getBucket()
+#### getBucket()
 
-&gt; **getBucket**(`name`): `Promise`\&lt;[`Bucket`](Bucket.md)\&gt;
+&gt; **getBucket**(`name`): `Promise`&lt;[`Bucket`](api/classes/Bucket)&gt;
 
 Defined in: [Client.ts:92](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Client.ts#L92)
 
 Get a bucket by name
 
-#### Parameters
+##### Parameters
 
-##### name
+###### name
 
 `string`
 
 name of the bucket
 
-#### Returns
+##### Returns
 
-`Promise`\&lt;[`Bucket`](Bucket.md)\&gt;
+`Promise`&lt;[`Bucket`](api/classes/Bucket)&gt;
 
 ***
 
-### getBucketList()
+#### getBucketList()
 
-&gt; **getBucketList**(): `Promise`\&lt;[`BucketInfo`](BucketInfo.md)[]\&gt;
+&gt; **getBucketList**(): `Promise`&lt;[`BucketInfo`](api/classes/BucketInfo)[]&gt;
 
 Defined in: [Client.ts:66](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Client.ts#L66)
 
 Get list of buckets
 
-#### Returns
+##### Returns
 
-`Promise`\&lt;[`BucketInfo`](BucketInfo.md)[]\&gt;
+`Promise`&lt;[`BucketInfo`](api/classes/BucketInfo)[]&gt;
 
-#### Async
+##### Async
 
-#### See
+##### See
 
 BucketInfo
 
 ***
 
-### getInfo()
+#### getInfo()
 
-&gt; **getInfo**(): `Promise`\&lt;[`ServerInfo`](ServerInfo.md)\&gt;
+&gt; **getInfo**(): `Promise`&lt;[`ServerInfo`](api/classes/ServerInfo)&gt;
 
 Defined in: [Client.ts:48](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Client.ts#L48)
 
 Get server information
 
-#### Returns
+##### Returns
 
-`Promise`\&lt;[`ServerInfo`](ServerInfo.md)\&gt;
+`Promise`&lt;[`ServerInfo`](api/classes/ServerInfo)&gt;
 
 the data about the server
 
-#### Async
+##### Async
 
 ***
 
-### getOrCreateBucket()
+#### getOrCreateBucket()
 
-&gt; **getOrCreateBucket**(`name`, `settings?`): `Promise`\&lt;[`Bucket`](Bucket.md)\&gt;
+&gt; **getOrCreateBucket**(`name`, `settings?`): `Promise`&lt;[`Bucket`](api/classes/Bucket)&gt;
 
 Defined in: [Client.ts:103](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Client.ts#L103)
 
 Try to create a bucket and get it if it already exists
 
-#### Parameters
+##### Parameters
 
-##### name
+###### name
 
 `string`
 
 name of the bucket
 
-##### settings?
+###### settings?
 
-[`BucketSettings`](BucketSettings.md)
+[`BucketSettings`](api/classes/BucketSettings)
 
 optional settings
 
-#### Returns
+##### Returns
 
-`Promise`\&lt;[`Bucket`](Bucket.md)\&gt;
+`Promise`&lt;[`Bucket`](api/classes/Bucket)&gt;
 
 ***
 
-### getReplication()
+#### getReplication()
 
-&gt; **getReplication**(`name`): `Promise`\&lt;[`FullReplicationInfo`](FullReplicationInfo.md)\&gt;
+&gt; **getReplication**(`name`): `Promise`&lt;[`FullReplicationInfo`](api/classes/FullReplicationInfo)&gt;
 
 Defined in: [Client.ts:198](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Client.ts#L198)
 
 Get full information about a replication
 
-#### Parameters
+##### Parameters
 
-##### name
+###### name
 
 `string`
 
 name of the replication
 
-#### Returns
+##### Returns
 
-`Promise`\&lt;[`FullReplicationInfo`](FullReplicationInfo.md)\&gt;
+`Promise`&lt;[`FullReplicationInfo`](api/classes/FullReplicationInfo)&gt;
 
 the replication
 
 ***
 
-### getReplicationList()
+#### getReplicationList()
 
-&gt; **getReplicationList**(): `Promise`\&lt;[`ReplicationInfo`](ReplicationInfo.md)[]\&gt;
+&gt; **getReplicationList**(): `Promise`&lt;[`ReplicationInfo`](api/classes/ReplicationInfo)[]&gt;
 
 Defined in: [Client.ts:184](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Client.ts#L184)
 
 Get the list of replications
 
-#### Returns
+##### Returns
 
-`Promise`\&lt;[`ReplicationInfo`](ReplicationInfo.md)[]\&gt;
+`Promise`&lt;[`ReplicationInfo`](api/classes/ReplicationInfo)[]&gt;
 
 the list of replications
 
 ***
 
-### getToken()
+#### getToken()
 
-&gt; **getToken**(`name`): `Promise`\&lt;[`Token`](Token.md)\&gt;
+&gt; **getToken**(`name`): `Promise`&lt;[`Token`](api/classes/Token)&gt;
 
 Defined in: [Client.ts:145](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Client.ts#L145)
 
 Get a token by name
 
-#### Parameters
+##### Parameters
 
-##### name
+###### name
 
 `string`
 
 name of the token
 
-#### Returns
+##### Returns
 
-`Promise`\&lt;[`Token`](Token.md)\&gt;
+`Promise`&lt;[`Token`](api/classes/Token)&gt;
 
 the token
 
 ***
 
-### getTokenList()
+#### getTokenList()
 
-&gt; **getTokenList**(): `Promise`\&lt;[`Token`](Token.md)[]\&gt;
+&gt; **getTokenList**(): `Promise`&lt;[`Token`](api/classes/Token)[]&gt;
 
 Defined in: [Client.ts:156](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Client.ts#L156)
 
 List all tokens
 
-#### Returns
+##### Returns
 
-`Promise`\&lt;[`Token`](Token.md)[]\&gt;
+`Promise`&lt;[`Token`](api/classes/Token)[]&gt;
 
 the list of tokens
 
 ***
 
-### me()
+#### me()
 
-&gt; **me**(): `Promise`\&lt;[`Token`](Token.md)\&gt;
+&gt; **me**(): `Promise`&lt;[`Token`](api/classes/Token)&gt;
 
 Defined in: [Client.ts:175](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Client.ts#L175)
 
 Get current API token and its permissions
 
-#### Returns
+##### Returns
 
-`Promise`\&lt;[`Token`](Token.md)\&gt;
+`Promise`&lt;[`Token`](api/classes/Token)&gt;
 
 the token
 
 ***
 
-### setReplicationMode()
+#### setReplicationMode()
 
-&gt; **setReplicationMode**(`name`, `mode`): `Promise`\&lt;`void`\&gt;
+&gt; **setReplicationMode**(`name`, `mode`): `Promise`&lt;`void`&gt;
 
 Defined in: [Client.ts:243](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Client.ts#L243)
 
 Update replication mode without changing settings
 
-#### Parameters
+##### Parameters
 
-##### name
+###### name
 
 `string`
 
 name of the replication
 
-##### mode
+###### mode
 
-[`ReplicationMode`](../type-aliases/ReplicationMode.md)
+[`ReplicationMode`](api/type-aliases/ReplicationMode)
 
 new mode: enabled, paused, or disabled
 
-#### Returns
+##### Returns
 
-`Promise`\&lt;`void`\&gt;
+`Promise`&lt;`void`&gt;
 
 ***
 
-### updateReplication()
+#### updateReplication()
 
-&gt; **updateReplication**(`name`, `settings`): `Promise`\&lt;`void`\&gt;
+&gt; **updateReplication**(`name`, `settings`): `Promise`&lt;`void`&gt;
 
 Defined in: [Client.ts:227](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Client.ts#L227)
 
 Update a replication
 
-#### Parameters
+##### Parameters
 
-##### name
+###### name
 
 `string`
 
 name of the replication
 
-##### settings
+###### settings
 
-[`ReplicationSettings`](ReplicationSettings.md)
+[`ReplicationSettings`](api/classes/ReplicationSettings)
 
 settings of the replication
 
-#### Returns
+##### Returns
 
-`Promise`\&lt;`void`\&gt;
+`Promise`&lt;`void`&gt;
+

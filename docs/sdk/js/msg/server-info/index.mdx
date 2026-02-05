@@ -1,0 +1,214 @@
+---
+title: Server Info Module
+description: API reference for the Server Info Module of the ReductStore Client SDK for JavaScript.
+---
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/msg/server-info" />
+</head>
+
+# Server Info Module
+
+## Classes
+
+## LicenseInfo
+
+Defined in: [messages/ServerInfo.ts:7](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L7)
+
+### Constructors
+
+#### Constructor
+
+&gt; **new LicenseInfo**(): `LicenseInfo`
+
+##### Returns
+
+`LicenseInfo`
+
+### Properties
+
+#### deviceNumber
+
+&gt; `readonly` **deviceNumber**: `number` = `0`
+
+Defined in: [messages/ServerInfo.ts:17](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L17)
+
+***
+
+#### diskQuota
+
+&gt; `readonly` **diskQuota**: `number` = `0`
+
+Defined in: [messages/ServerInfo.ts:19](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L19)
+
+***
+
+#### expiryDate
+
+&gt; `readonly` **expiryDate**: `number` = `0`
+
+Defined in: [messages/ServerInfo.ts:13](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L13)
+
+***
+
+#### fingerprint
+
+&gt; `readonly` **fingerprint**: `string` = `"UNKNOWN"`
+
+Defined in: [messages/ServerInfo.ts:21](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L21)
+
+***
+
+#### invoice
+
+&gt; `readonly` **invoice**: `string` = `"UNKNOWN"`
+
+Defined in: [messages/ServerInfo.ts:11](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L11)
+
+***
+
+#### licensee
+
+&gt; `readonly` **licensee**: `string` = `"UNKNOWN"`
+
+Defined in: [messages/ServerInfo.ts:9](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L9)
+
+***
+
+#### plan
+
+&gt; `readonly` **plan**: `string` = `"UNKNOWN"`
+
+Defined in: [messages/ServerInfo.ts:15](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L15)
+
+### Methods
+
+#### parse()
+
+&gt; `static` **parse**(`data`): `LicenseInfo`
+
+Defined in: [messages/ServerInfo.ts:23](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L23)
+
+##### Parameters
+
+###### data
+
+`OriginalLicenseInfo`
+
+##### Returns
+
+`LicenseInfo`
+
+## ServerInfo
+
+Defined in: [messages/ServerInfo.ts:39](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L39)
+
+Represents information about storage
+
+### Constructors
+
+#### Constructor
+
+&gt; **new ServerInfo**(): `ServerInfo`
+
+##### Returns
+
+`ServerInfo`
+
+### Properties
+
+#### bucketCount
+
+&gt; `readonly` **bucketCount**: `bigint` = `0n`
+
+Defined in: [messages/ServerInfo.ts:48](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L48)
+
+Number of buckets
+
+***
+
+#### defaults
+
+&gt; `readonly` **defaults**: `ServerDefaults`
+
+Defined in: [messages/ServerInfo.ts:78](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L78)
+
+Default settings
+
+***
+
+#### latestRecord
+
+&gt; `readonly` **latestRecord**: `bigint` = `0n`
+
+Defined in: [messages/ServerInfo.ts:68](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L68)
+
+Unix timestamp of the latest record in microseconds
+
+***
+
+#### license?
+
+&gt; `readonly` `optional` **license**: [`LicenseInfo`](../api/classes/LicenseInfo)
+
+Defined in: [messages/ServerInfo.ts:73](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L73)
+
+License information
+
+***
+
+#### oldestRecord
+
+&gt; `readonly` **oldestRecord**: `bigint` = `0n`
+
+Defined in: [messages/ServerInfo.ts:63](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L63)
+
+Unix timestamp of the oldest record in microseconds
+
+***
+
+#### uptime
+
+&gt; `readonly` **uptime**: `bigint` = `0n`
+
+Defined in: [messages/ServerInfo.ts:58](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L58)
+
+Server uptime in seconds
+
+***
+
+#### usage
+
+&gt; `readonly` **usage**: `bigint` = `0n`
+
+Defined in: [messages/ServerInfo.ts:53](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L53)
+
+Stored data in bytes
+
+***
+
+#### version
+
+&gt; `readonly` **version**: `string` = `""`
+
+Defined in: [messages/ServerInfo.ts:43](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L43)
+
+Version storage server
+
+### Methods
+
+#### parse()
+
+&gt; `static` **parse**(`data`): `ServerInfo`
+
+Defined in: [messages/ServerInfo.ts:80](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L80)
+
+##### Parameters
+
+###### data
+
+`OriginalServerInfo`
+
+##### Returns
+
+`ServerInfo`
+

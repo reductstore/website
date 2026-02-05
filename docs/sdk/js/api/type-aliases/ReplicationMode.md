@@ -1,14 +1,13 @@
 ---
-title: "Type Alias: ReplicationMode"
+title: "ReplicationMode"
+description: "API reference for Type Alias: ReplicationMode in the ReductStore Client SDK for JavaScript."
 ---
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/type-aliases/ReplicationMode" />
+</head>
 
-[**reduct-js**](../index.md)
 
-***
-
-[reduct-js](../index.md) / ReplicationMode
-
-# Type Alias: ReplicationMode
+# ReplicationMode
 
 &gt; **ReplicationMode** = `"enabled"` \| `"paused"` \| `"disabled"`
 

@@ -1,14 +1,13 @@
 ---
-title: "Class: Token"
+title: "Token"
+description: "API reference for the Token class in the ReductStore Client SDK for JavaScript."
 ---
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/Token" />
+</head>
 
-[**reduct-js**](../index.md)
 
-***
-
-[reduct-js](../index.md) / Token
-
-# Class: Token
+# Token
 
 Defined in: [messages/Token.ts:62](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/Token.ts#L62)
 

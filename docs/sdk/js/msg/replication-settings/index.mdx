@@ -1,31 +1,34 @@
 ---
-title: "ReplicationSettings"
-description: "API reference for the ReplicationSettings class in the ReductStore Client SDK for JavaScript."
+title: Replication Settings Module
+description: API reference for the Replication Settings Module of the ReductStore Client SDK for JavaScript.
 ---
 <head>
-  <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/ReplicationSettings" />
+  <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/msg/replication-settings" />
 </head>
 
+# Replication Settings Module
 
-# ReplicationSettings
+## Classes
+
+## ReplicationSettings
 
 Defined in: [messages/ReplicationSettings.ts:24](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ReplicationSettings.ts#L24)
 
 Replication settings
 
-## Constructors
+### Constructors
 
-### Constructor
+#### Constructor
 
 &gt; **new ReplicationSettings**(): `ReplicationSettings`
 
-#### Returns
+##### Returns
 
 `ReplicationSettings`
 
-## Properties
+### Properties
 
-### dstBucket
+#### dstBucket
 
 &gt; `readonly` **dstBucket**: `string` = `""`
 
@@ -35,7 +38,7 @@ Destination bucket. Must exist.
 
 ***
 
-### dstHost
+#### dstHost
 
 &gt; `readonly` **dstHost**: `string` = `""`
 
@@ -45,7 +48,7 @@ Destination host. Must exist.
 
 ***
 
-### dstToken?
+#### dstToken?
 
 &gt; `readonly` `optional` **dstToken**: `string`
 
@@ -55,7 +58,7 @@ Destination token. Must have write access to the destination bucket.
 
 ***
 
-### entries
+#### entries
 
 &gt; `readonly` **entries**: `string`[] = `[]`
 
@@ -65,9 +68,9 @@ List of entries to replicate. If empty, all entries are replicated. Wildcards ar
 
 ***
 
-### mode?
+#### mode?
 
-&gt; `readonly` `optional` **mode**: [`ReplicationMode`](../type-aliases/ReplicationMode.md)
+&gt; `readonly` `optional` **mode**: [`ReplicationMode`](../api/type-aliases/ReplicationMode)
 
 Defined in: [messages/ReplicationSettings.ts:58](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ReplicationSettings.ts#L58)
 
@@ -75,7 +78,7 @@ Replication mode
 
 ***
 
-### srcBucket
+#### srcBucket
 
 &gt; `readonly` **srcBucket**: `string` = `""`
 
@@ -85,7 +88,7 @@ Source bucket. Must exist.
 
 ***
 
-### when?
+#### when?
 
 &gt; `readonly` `optional` **when**: `any`
 
@@ -93,38 +96,39 @@ Defined in: [messages/ReplicationSettings.ts:53](https://github.com/reductstore/
 
 Conditional query
 
-## Methods
+### Methods
 
-### parse()
+#### parse()
 
 &gt; `static` **parse**(`data`): `ReplicationSettings`
 
 Defined in: [messages/ReplicationSettings.ts:60](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ReplicationSettings.ts#L60)
 
-#### Parameters
+##### Parameters
 
-##### data
+###### data
 
 `OriginalReplicationSettings`
 
-#### Returns
+##### Returns
 
 `ReplicationSettings`
 
 ***
 
-### serialize()
+#### serialize()
 
 &gt; `static` **serialize**(`data`): `OriginalReplicationSettings`
 
 Defined in: [messages/ReplicationSettings.ts:72](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ReplicationSettings.ts#L72)
 
-#### Parameters
+##### Parameters
 
-##### data
+###### data
 
 `ReplicationSettings`
 
-#### Returns
+##### Returns
 
 `OriginalReplicationSettings`
+
