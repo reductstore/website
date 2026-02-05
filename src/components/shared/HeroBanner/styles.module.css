@@ -41,14 +41,6 @@
   display: block;
 }
 
-:global(html[data-theme="light"]) .BannerImage {
-  color-scheme: light !important;
-}
-
-:global(html[data-theme="dark"]) .BannerImage {
-  color-scheme: dark !important;
-}
-
 .BannerTitle {
   font-size: 2.5rem;
   margin-bottom: 20px;

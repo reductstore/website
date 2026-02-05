@@ -228,9 +228,34 @@
           ]
         },
         {
-          "type": "link",
+          "type": "category",
           "label": "JavaScript Client",
-          "href": "https://github.com/reductstore/reduct-js"
+          "link": {
+            "type": "doc",
+            "id": "sdk/js/index"
+          },
+          "items": [
+            "sdk/js/client/index",
+            "sdk/js/bucket/index",
+            "sdk/js/batch/index",
+            "sdk/js/record-batch/index",
+            "sdk/js/error/index",
+            {
+              "type": "category",
+              "label": "Messages",
+              "items": [
+                "sdk/js/msg/bucket-info/index",
+                "sdk/js/msg/bucket-settings/index",
+                "sdk/js/msg/entry-info/index",
+                "sdk/js/msg/query-entry/index",
+                "sdk/js/msg/replication-info/index",
+                "sdk/js/msg/replication-settings/index",
+                "sdk/js/msg/server-info/index",
+                "sdk/js/msg/status/index",
+                "sdk/js/msg/token/index"
+              ]
+            }
+          ]
         },
         {
           "type": "link",
