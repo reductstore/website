@@ -5,10 +5,10 @@ authors: alexey
 tags: [news]
 slug: news/reductstore-v1_18_0-released
 date: 2026-02-05
-image: ./img/release_v117.png
+image: ./img/release-v1-18.png
 ---
 
-![ReductStore v1.18.0 Released](./img/release_v117.png)
+![ReductStore v1.18.0 Released](./img/release-v1-18.png)
 
 We are pleased to announce the release of the latest minor version of [**ReductStore**](/), [**1.18.0**](https://github.com/reductstore/reductstore/releases/tag/v1.18.0). ReductStore is a high-performance storage and streaming solution designed for storing and managing large volumes of historical data.
 
@@ -31,6 +31,8 @@ In ReductStore v1.18.0, resilient deployments are now a first-class feature. Usi
 
 Run two nodes against the same backend (a shared filesystem or the same remote backend). Only one node is active at a time: the active node holds a lock file and refreshes it, while the standby waits and takes over when the lock becomes stale.
 
+![ReductStore Hot standby deployment](./img/disaster_recovery_hot_standby.webp)
+
 - Set `RS_INSTANCE_ROLE=PRIMARY` for the active node and `RS_INSTANCE_ROLE=SECONDARY` for the standby.
 - Put both nodes behind a single virtual endpoint (load balancer / reverse proxy).
 - Route traffic only to the node that returns `200 OK` on `GET /api/v1/ready` (the inactive node returns `503`).
@@ -41,6 +43,8 @@ To avoid split-brain writes, don’t run both nodes in `STANDALONE` mode against
 ### Read-only replicas for read scaling
 
 Add one or more `REPLICA` nodes to serve queries from the same dataset. Replicas never write and periodically refresh bucket metadata and indexes from the backend, so newly written data may appear with a small delay.
+
+![ReductStore Read-only replicas](./img/disaster_recovery_read_replicas.webp)
 
 - Route writes to a dedicated ingestion node (or the active node in a hot-standby pair).
 - Route reads to replicas to scale query workloads horizontally.
