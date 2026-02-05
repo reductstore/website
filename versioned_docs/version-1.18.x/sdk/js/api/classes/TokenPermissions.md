@@ -2,10 +2,10 @@
 title: "TokenPermissions"
 description: "API reference for the TokenPermissions class in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/TokenPermissions" />
 </head>
-
 
 # TokenPermissions
 
@@ -34,7 +34,7 @@ Defined in: [messages/Token.ts:18](https://github.com/reductstore/reduct-js/blob
 Full access
 The token allows to create, remove and update settings of buckets, manage tokens and read and write data.
 
-***
+---
 
 ### read?
 
@@ -45,7 +45,7 @@ Defined in: [messages/Token.ts:24](https://github.com/reductstore/reduct-js/blob
 Read access
 List of buckets allowed to read
 
-***
+---
 
 ### write?
 
@@ -74,7 +74,7 @@ Defined in: [messages/Token.ts:32](https://github.com/reductstore/reduct-js/blob
 
 `TokenPermissions`
 
-***
+---
 
 ### serialize()
 

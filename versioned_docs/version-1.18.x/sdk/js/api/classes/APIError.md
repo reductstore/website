@@ -2,10 +2,10 @@
 title: "APIError"
 description: "API reference for the APIError class in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/APIError" />
 </head>
-
 
 # APIError
 
@@ -51,7 +51,7 @@ Defined in: [APIError.ts:13](https://github.com/reductstore/reduct-js/blob/d0e71
 
 Parsed message from the storage engine
 
-***
+---
 
 ### original?
 
@@ -61,7 +61,7 @@ Defined in: [APIError.ts:18](https://github.com/reductstore/reduct-js/blob/d0e71
 
 Original error from HTTP client with the full information
 
-***
+---
 
 ### status?
 

@@ -540,10 +540,7 @@ function fixTypedocWarnings(tmpDir) {
   }
 
   const content = fs.readFileSync(bucketPath, "utf8");
-  const updated = content.replace(
-    /^\s*\*\s*@param\s+tsList[^\n]*\n/m,
-    "",
-  );
+  const updated = content.replace(/^\s*\*\s*@param\s+tsList[^\n]*\n/m, "");
   if (updated !== content) {
     fs.writeFileSync(bucketPath, updated);
   }

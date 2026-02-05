@@ -2,15 +2,14 @@
 title: Bucket Module
 description: API reference for the Bucket Module Module of the ReductStore Client SDK for Python.
 ---
+
 <head>
-    <link rel="canonical" href="https://www.reduct.store/docs/sdk/py/bucket" />
+  <link rel="canonical" href="https://www.reduct.store/docs/sdk/py/bucket" />
 </head>
 
 # Bucket Module
 
 <a id="reduct.bucket"></a>
-
-
 
 Bucket module for ReductStore HTTP API
 
@@ -26,7 +25,7 @@ A bucket of data in Reduct Storage
 
 <a id="reduct.bucket.Bucket.get_settings"></a>
 
-#### get\_settings
+#### get_settings
 
 ```python
 async def get_settings() -> BucketSettings
@@ -44,7 +43,7 @@ Get current bucket settings
 
 <a id="reduct.bucket.Bucket.set_settings"></a>
 
-#### set\_settings
+#### set_settings
 
 ```python
 async def set_settings(settings: BucketSettings)
@@ -80,7 +79,7 @@ Get statistics about bucket
 
 <a id="reduct.bucket.Bucket.get_entry_list"></a>
 
-#### get\_entry\_list
+#### get_entry_list
 
 ```python
 async def get_entry_list() -> list[EntryInfo]
@@ -112,7 +111,7 @@ Remove bucket
 
 <a id="reduct.bucket.Bucket.remove_entry"></a>
 
-#### remove\_entry
+#### remove_entry
 
 ```python
 async def remove_entry(entry_name: str)
@@ -130,7 +129,7 @@ Remove entry from bucket
 
 <a id="reduct.bucket.Bucket.remove_record"></a>
 
-#### remove\_record
+#### remove_record
 
 ```python
 async def remove_record(entry_name: str, timestamp: TimestampLike)
@@ -149,7 +148,7 @@ Remove record from entry
 
 <a id="reduct.bucket.Bucket.remove_batch"></a>
 
-#### remove\_batch
+#### remove_batch
 
 ```python
 async def remove_batch(entry_name: str,
@@ -165,8 +164,8 @@ Remove batch of records from entries in a sole request
 
 **Returns**:
 
-  Dict[int, ReductError]: the dictionary of errors
-  with  record timestamps as keys
+Dict[int, ReductError]: the dictionary of errors
+with record timestamps as keys
 
 **Raises**:
 
@@ -174,7 +173,7 @@ Remove batch of records from entries in a sole request
 
 <a id="reduct.bucket.Bucket.remove_record_batch"></a>
 
-#### remove\_record\_batch
+#### remove_record_batch
 
 ```python
 async def remove_record_batch(
@@ -189,8 +188,8 @@ Remove batch of records from entries in a sole request (Multi-entry API)
 
 **Returns**:
 
-  Dict[str, Dict[int, ReductError]]: the dictionary of errors
-  with entry names as keys and dictionaries of record timestamps as keys
+Dict[str, Dict[int, ReductError]]: the dictionary of errors
+with entry names as keys and dictionaries of record timestamps as keys
 
 **Raises**:
 
@@ -198,7 +197,7 @@ Remove batch of records from entries in a sole request (Multi-entry API)
 
 <a id="reduct.bucket.Bucket.remove_query"></a>
 
-#### remove\_query
+#### remove_query
 
 ```python
 async def remove_query(entries: str | list[str],
@@ -216,7 +215,6 @@ float (UNIX timestamp in seconds) or str (ISO 8601 string).
 Since version 1.18: entry_name can be a list of entries to query from
 multiple entries. You can also use wildcards in entry names.
 
-
 **Arguments**:
 
 - `entries` - name(s) of entry in the bucket
@@ -227,8 +225,9 @@ multiple entries. You can also use wildcards in entry names.
 
 **Arguments**:
 
-  each_s(Union[int, float]): remove a record for each S seconds
-  (DEPRECATED use $each_t in when)
+each_s(Union[int, float]): remove a record for each S seconds
+(DEPRECATED use $each_t in when)
+
 - `each_n(int)` - remove each N-th record
   (DEPRECATED use $each_n in when)
 - `strict(bool)` - if True: strict query
@@ -236,11 +235,11 @@ multiple entries. You can also use wildcards in entry names.
 
 **Returns**:
 
-  number of removed records
+number of removed records
 
 <a id="reduct.bucket.Bucket.rename_entry"></a>
 
-#### rename\_entry
+#### rename_entry
 
 ```python
 async def rename_entry(old_name: str, new_name: str)
@@ -305,11 +304,12 @@ Read a record from entry
 - `ReductError` - if there is an HTTP error
 
 **Example**:
+
 ```python
       async def reader():
           async with bucket.read("entry", timestamp=123456789) as record:
               data = await record.read_all()
-   ```
+```
 
 <a id="reduct.bucket.Bucket.write"></a>
 
@@ -343,25 +343,25 @@ Write a record to entry
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-  
 
 **Example**:
+
 ```python
       await bucket.write("entry-1", b"some_data",
          timestamp="2021-09-10T10:30:00")
-     
+
       # You can write data chunk-wise using an asynchronous iterator and the
       # size of the content:
-     
+
       async def sender():
           for chunk in [b"part1", b"part2", b"part3"]:
               yield chunk
       await bucket.write("entry-1", sender(), content_length=15)
-   ```
+```
 
 <a id="reduct.bucket.Bucket.write_batch"></a>
 
-#### write\_batch
+#### write_batch
 
 ```python
 async def write_batch(entry_name: str, batch: Batch) -> dict[int, ReductError]
@@ -376,16 +376,16 @@ Write a batch of records to entries in a sole request
 
 **Returns**:
 
-  Dict[int, ReductError]: the dictionary of errors
-  with record timestamps as keys
+Dict[int, ReductError]: the dictionary of errors
+with record timestamps as keys
 
 **Raises**:
 
-- `ReductError` - if there is an HTTP  or communication error
+- `ReductError` - if there is an HTTP or communication error
 
 <a id="reduct.bucket.Bucket.write_record_batch"></a>
 
-#### write\_record\_batch
+#### write_record_batch
 
 ```python
 async def write_record_batch(
@@ -400,12 +400,12 @@ Write a batch of records to entries in a sole request (Multi-entry API)
 
 **Returns**:
 
-  Dict[str, Dict[int, ReductError]]: the dictionary of errors
-  with entry names as keys and dictionaries of record timestamps as keys
+Dict[str, Dict[int, ReductError]]: the dictionary of errors
+with entry names as keys and dictionaries of record timestamps as keys
 
 **Raises**:
 
-- `ReductError` - if there is an HTTP  or communication error
+- `ReductError` - if there is an HTTP or communication error
 
 <a id="reduct.bucket.Bucket.update"></a>
 
@@ -429,18 +429,18 @@ If a label is empty, it will be removed.
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-  
 
 **Example**:
+
 ```python
       await bucket.update(
           "entry-1", "2022-01-01T01:00:00", {"label1": "value1", "label2": ""}
       )
-   ```
+```
 
 <a id="reduct.bucket.Bucket.update_batch"></a>
 
-#### update\_batch
+#### update_batch
 
 ```python
 async def update_batch(entry_name: str,
@@ -458,15 +458,15 @@ If a label is empty, it will be removed.
 
 **Returns**:
 
-  Dict[int, ReductError]: the dictionary of errors
-  with record timestamps as keys
+Dict[int, ReductError]: the dictionary of errors
+with record timestamps as keys
 
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-  
 
 **Example**:
+
 ```python
       batch = RecordBatch()
       batch.add(
@@ -475,11 +475,11 @@ If a label is empty, it will be removed.
           labels={"label1": "value1", "label2": ""},
       )
       await bucket.update_record_batch("entry-1", batch)
-   ```
+```
 
 <a id="reduct.bucket.Bucket.update_record_batch"></a>
 
-#### update\_record\_batch
+#### update_record_batch
 
 ```python
 async def update_record_batch(
@@ -492,25 +492,25 @@ If a label is empty, it will be removed.
 
 **Arguments**:
 
-  batch : dict of entry names as keys and dict of timestamps as keys and
-  labels as values
+batch : dict of entry names as keys and dict of timestamps as keys and
+labels as values
 
 **Returns**:
 
-  Dict[str, Dict[int, ReductError]]: the dictionary of errors
-  with entry names as keys and dictionaries of record timestamps as keys
+Dict[str, Dict[int, ReductError]]: the dictionary of errors
+with entry names as keys and dictionaries of record timestamps as keys
 
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-  
 
 **Example**:
+
 ```python
       batch = Batch()
       batch.add(1640995200000000, labels={"label1": "value1", "label2": ""})
       await bucket.update_batch("entry-1", batch)
-   ```
+```
 
 <a id="reduct.bucket.Bucket.query"></a>
 
@@ -554,20 +554,20 @@ multiple entries. You can also use wildcards in entry names.
 **Returns**:
 
 - `AsyncIterator[Record]` - iterator to the records
-  
 
 **Example**:
+
 ```python
       async for record in bucket.query("entry-1", stop=time.time_ns() / 1000):
           data: bytes = record.read_all()
           # or
           async for chunk in record.read(n=1024):
               print(chunk)
-   ```
+```
 
 <a id="reduct.bucket.Bucket.get_full_info"></a>
 
-#### get\_full\_info
+#### get_full_info
 
 ```python
 async def get_full_info() -> BucketFullInfo
@@ -619,20 +619,20 @@ multiple entries. You can also use wildcards in entry names.
 **Returns**:
 
 - `AsyncIterator[Record]` - iterator to the records
-  
 
 **Example**:
+
 ```python
       async for record in bucket.subscribes("entry-1"):
           data: bytes = record.read_all()
           # or
           async for chunk in record.read(n=1024):
               print(chunk)
-   ```
+```
 
 <a id="reduct.bucket.Bucket.create_query_link"></a>
 
-#### create\_query\_link
+#### create_query_link
 
 ```python
 async def create_query_link(entries: str | list[str],
@@ -658,7 +658,6 @@ multiple entries. You can also use wildcards in entry names.
   If None, then from the first record
 - `stop` - the end of the time interval. If None, then to the latest record
 - `when` - condtiion to filter records
-  
 
 **Arguments**:
 
@@ -666,5 +665,3 @@ multiple entries. You can also use wildcards in entry names.
 - `expire_at` - if None, the link will expire in 24 hours
 - `file_name` - file name for download, if None: entry_name_index.bin
 - `base_url` - base URL for the link, if None: use server URL
-
-

@@ -2,10 +2,10 @@
 title: "LicenseInfo"
 description: "API reference for the LicenseInfo class in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/LicenseInfo" />
 </head>
-
 
 # LicenseInfo
 
@@ -29,7 +29,7 @@ Defined in: [messages/ServerInfo.ts:7](https://github.com/reductstore/reduct-js/
 
 Defined in: [messages/ServerInfo.ts:17](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L17)
 
-***
+---
 
 ### diskQuota
 
@@ -37,7 +37,7 @@ Defined in: [messages/ServerInfo.ts:17](https://github.com/reductstore/reduct-js
 
 Defined in: [messages/ServerInfo.ts:19](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L19)
 
-***
+---
 
 ### expiryDate
 
@@ -45,7 +45,7 @@ Defined in: [messages/ServerInfo.ts:19](https://github.com/reductstore/reduct-js
 
 Defined in: [messages/ServerInfo.ts:13](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L13)
 
-***
+---
 
 ### fingerprint
 
@@ -53,7 +53,7 @@ Defined in: [messages/ServerInfo.ts:13](https://github.com/reductstore/reduct-js
 
 Defined in: [messages/ServerInfo.ts:21](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L21)
 
-***
+---
 
 ### invoice
 
@@ -61,7 +61,7 @@ Defined in: [messages/ServerInfo.ts:21](https://github.com/reductstore/reduct-js
 
 Defined in: [messages/ServerInfo.ts:11](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L11)
 
-***
+---
 
 ### licensee
 
@@ -69,7 +69,7 @@ Defined in: [messages/ServerInfo.ts:11](https://github.com/reductstore/reduct-js
 
 Defined in: [messages/ServerInfo.ts:9](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L9)
 
-***
+---
 
 ### plan
 

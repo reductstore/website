@@ -2,10 +2,10 @@
 title: "BucketInfo"
 description: "API reference for the BucketInfo class in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/BucketInfo" />
 </head>
-
 
 # BucketInfo
 
@@ -33,7 +33,7 @@ Defined in: [messages/BucketInfo.ts:15](https://github.com/reductstore/reduct-js
 
 Number of entries in the bucket
 
-***
+---
 
 ### isProvisioned?
 
@@ -43,7 +43,7 @@ Defined in: [messages/BucketInfo.ts:35](https://github.com/reductstore/reduct-js
 
 Is the bucket provisioned, and you can't remove it or change its settings
 
-***
+---
 
 ### latestRecord
 
@@ -53,7 +53,7 @@ Defined in: [messages/BucketInfo.ts:30](https://github.com/reductstore/reduct-js
 
 Unix timestamp of the latest record in microseconds
 
-***
+---
 
 ### name
 
@@ -63,7 +63,7 @@ Defined in: [messages/BucketInfo.ts:10](https://github.com/reductstore/reduct-js
 
 Name of the bucket
 
-***
+---
 
 ### oldestRecord
 
@@ -73,7 +73,7 @@ Defined in: [messages/BucketInfo.ts:25](https://github.com/reductstore/reduct-js
 
 Unix timestamp of the oldest record in microseconds
 
-***
+---
 
 ### size
 
@@ -83,7 +83,7 @@ Defined in: [messages/BucketInfo.ts:20](https://github.com/reductstore/reduct-js
 
 Size of stored data in the bucket in bytes
 
-***
+---
 
 ### status
 

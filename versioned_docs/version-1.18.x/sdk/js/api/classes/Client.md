@@ -2,10 +2,10 @@
 title: "Client"
 description: "API reference for the Client class in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/Client" />
 </head>
-
 
 # Client
 
@@ -51,7 +51,7 @@ Close underlying HTTP resources (Node.js only).
 
 `Promise`\&lt;`void`\&gt;
 
-***
+---
 
 ### createBucket()
 
@@ -79,7 +79,7 @@ optional settings
 
 `Promise`\&lt;[`Bucket`](Bucket.md)\&gt;
 
-***
+---
 
 ### createReplication()
 
@@ -107,7 +107,7 @@ settings of the replication
 
 `Promise`\&lt;`void`\&gt;
 
-***
+---
 
 ### createToken()
 
@@ -140,11 +140,13 @@ the token
 #### Example
 
 ```ts
-const token = await client.createToken("my-token", {fullAccess: true});
-const client = new Client("https://play.storage-reduct.dev", {apiToken: token});
+const token = await client.createToken("my-token", { fullAccess: true });
+const client = new Client("https://play.storage-reduct.dev", {
+  apiToken: token,
+});
 ```
 
-***
+---
 
 ### deleteReplication()
 
@@ -166,7 +168,7 @@ name of the replication
 
 `Promise`\&lt;`void`\&gt;
 
-***
+---
 
 ### deleteToken()
 
@@ -188,7 +190,7 @@ name of the token
 
 `Promise`\&lt;`void`\&gt;
 
-***
+---
 
 ### getBucket()
 
@@ -210,7 +212,7 @@ name of the bucket
 
 `Promise`\&lt;[`Bucket`](Bucket.md)\&gt;
 
-***
+---
 
 ### getBucketList()
 
@@ -230,7 +232,7 @@ Get list of buckets
 
 BucketInfo
 
-***
+---
 
 ### getInfo()
 
@@ -248,7 +250,7 @@ the data about the server
 
 #### Async
 
-***
+---
 
 ### getOrCreateBucket()
 
@@ -276,7 +278,7 @@ optional settings
 
 `Promise`\&lt;[`Bucket`](Bucket.md)\&gt;
 
-***
+---
 
 ### getReplication()
 
@@ -300,7 +302,7 @@ name of the replication
 
 the replication
 
-***
+---
 
 ### getReplicationList()
 
@@ -316,7 +318,7 @@ Get the list of replications
 
 the list of replications
 
-***
+---
 
 ### getToken()
 
@@ -340,7 +342,7 @@ name of the token
 
 the token
 
-***
+---
 
 ### getTokenList()
 
@@ -356,7 +358,7 @@ List all tokens
 
 the list of tokens
 
-***
+---
 
 ### me()
 
@@ -372,7 +374,7 @@ Get current API token and its permissions
 
 the token
 
-***
+---
 
 ### setReplicationMode()
 
@@ -400,7 +402,7 @@ new mode: enabled, paused, or disabled
 
 `Promise`\&lt;`void`\&gt;
 
-***
+---
 
 ### updateReplication()
 

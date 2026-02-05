@@ -2,10 +2,10 @@
 title: "QueryOptions"
 description: "API reference for the QueryOptions class in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/QueryOptions" />
 </head>
-
 
 # QueryOptions
 
@@ -33,7 +33,7 @@ Defined in: [messages/QueryEntry.ts:55](https://github.com/reductstore/reduct-js
 
 Don't stop query until TTL is reached
 
-***
+---
 
 ### eachN?
 
@@ -42,9 +42,9 @@ Don't stop query until TTL is reached
 Defined in: [messages/QueryEntry.ts:48](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/QueryEntry.ts#L48)
 
 Return only one record per N records
- @deprecated: use $each_n operator in when instead. Will be remove in v1.18.0
+@deprecated: use $each_n operator in when instead. Will be remove in v1.18.0
 
-***
+---
 
 ### eachS?
 
@@ -55,7 +55,7 @@ Defined in: [messages/QueryEntry.ts:44](https://github.com/reductstore/reduct-js
 Return only one record per S second
 @deprecated: use $each_t operator in when instead. Will be remove in v1.18.0
 
-***
+---
 
 ### ext?
 
@@ -65,7 +65,7 @@ Defined in: [messages/QueryEntry.ts:65](https://github.com/reductstore/reduct-js
 
 Additional parameters for extensions
 
-***
+---
 
 ### head?
 
@@ -75,7 +75,7 @@ Defined in: [messages/QueryEntry.ts:59](https://github.com/reductstore/reduct-js
 
 Return only metadata
 
-***
+---
 
 ### limit?
 
@@ -84,9 +84,9 @@ Return only metadata
 Defined in: [messages/QueryEntry.ts:52](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/QueryEntry.ts#L52)
 
 Limit number of records
- @deprecated: use $limit operator in when instead. Will be remove in v1.18.0
+@deprecated: use $limit operator in when instead. Will be remove in v1.18.0
 
-***
+---
 
 ### pollInterval?
 
@@ -96,7 +96,7 @@ Defined in: [messages/QueryEntry.ts:57](https://github.com/reductstore/reduct-js
 
 Poll interval for new records only for continue=true
 
-***
+---
 
 ### strict?
 
@@ -106,7 +106,7 @@ Defined in: [messages/QueryEntry.ts:63](https://github.com/reductstore/reduct-js
 
 strict conditional query
 
-***
+---
 
 ### ttl?
 
@@ -116,7 +116,7 @@ Defined in: [messages/QueryEntry.ts:40](https://github.com/reductstore/reduct-js
 
 Time to live in seconds
 
-***
+---
 
 ### when?
 

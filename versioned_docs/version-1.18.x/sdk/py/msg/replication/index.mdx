@@ -2,15 +2,17 @@
 title: Replication Module
 description: API reference for the Replication Module Module of the ReductStore Client SDK for Python.
 ---
+
 <head>
-    <link rel="canonical" href="https://www.reduct.store/docs/sdk/py/msg/replication" />
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/sdk/py/msg/replication"
+  />
 </head>
 
 # Replication Module
 
 <a id="reduct.msg.replication"></a>
-
-
 
 Message types for the Replication API
 
@@ -42,13 +44,13 @@ name of the replication
 
 <a id="reduct.msg.replication.ReplicationInfo.is_provisioned"></a>
 
-#### is\_provisioned
+#### is_provisioned
 
 replication is provisioned and can't be deleted or changed
 
 <a id="reduct.msg.replication.ReplicationInfo.is_active"></a>
 
-#### is\_active
+#### is_active
 
 replication is active and the remote server is reachable
 
@@ -60,7 +62,7 @@ current replication mode
 
 <a id="reduct.msg.replication.ReplicationInfo.pending_records"></a>
 
-#### pending\_records
+#### pending_records
 
 number of records to replicate
 
@@ -98,7 +100,7 @@ number of times this error occurred
 
 <a id="reduct.msg.replication.ReplicationDiagnosticsError.last_message"></a>
 
-#### last\_message
+#### last_message
 
 last error message for this error
 
@@ -158,25 +160,25 @@ Settings for creating a replication
 
 <a id="reduct.msg.replication.ReplicationSettings.src_bucket"></a>
 
-#### src\_bucket
+#### src_bucket
 
 source bucket name
 
 <a id="reduct.msg.replication.ReplicationSettings.dst_bucket"></a>
 
-#### dst\_bucket
+#### dst_bucket
 
 destination bucket name
 
 <a id="reduct.msg.replication.ReplicationSettings.dst_host"></a>
 
-#### dst\_host
+#### dst_host
 
 url of the destination instance
 
 <a id="reduct.msg.replication.ReplicationSettings.dst_token"></a>
 
-#### dst\_token
+#### dst_token
 
 access token for the destination instance
 
@@ -226,5 +228,3 @@ replication information
 #### settings
 
 replication settings
-
-

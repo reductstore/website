@@ -2,10 +2,10 @@
 title: "Bucket"
 description: "API reference for the Bucket class in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/Bucket" />
 </head>
-
 
 # Bucket
 
@@ -75,7 +75,7 @@ name of the entry
 
 Promise&lt;ReadableRecord&gt;
 
-***
+---
 
 ### beginRemoveBatch()
 
@@ -97,7 +97,7 @@ Remove a batch of records
 
 `Promise`\&lt;[`Batch`](Batch.md)\&gt;
 
-***
+---
 
 ### beginRemoveRecordBatch()
 
@@ -111,7 +111,7 @@ Create a new batch for removing records across multiple entries.
 
 [`RecordBatch`](RecordBatch.md)
 
-***
+---
 
 ### beginUpdateBatch()
 
@@ -131,7 +131,7 @@ Create a new batch for updating records in the database.
 
 `Promise`\&lt;[`Batch`](Batch.md)\&gt;
 
-***
+---
 
 ### beginUpdateRecordBatch()
 
@@ -154,7 +154,7 @@ batch.addOnlyLabels("entry-2", 2000n, { label1: "value2" });
 await batch.send();
 ```
 
-***
+---
 
 ### beginWrite()
 
@@ -195,7 +195,7 @@ const record = await bucket.beginWrite("entry", {
 await record.write("Hello!");
 ```
 
-***
+---
 
 ### beginWriteBatch()
 
@@ -215,7 +215,7 @@ Create a new batch for writing records to the database.
 
 `Promise`\&lt;[`Batch`](Batch.md)\&gt;
 
-***
+---
 
 ### beginWriteRecordBatch()
 
@@ -238,7 +238,7 @@ batch.add("entry-2", 2000n, "data");
 await batch.send();
 ```
 
-***
+---
 
 ### createQueryLink()
 
@@ -302,7 +302,7 @@ base url for link generation. If not set, the server's base url will be used
 
 `Promise`\&lt;`string`\&gt;
 
-***
+---
 
 ### getEntryList()
 
@@ -318,7 +318,7 @@ Get entry list
 
 #### Async
 
-***
+---
 
 ### getInfo()
 
@@ -334,7 +334,7 @@ Get information about a bucket
 
 #### Async
 
-***
+---
 
 ### getName()
 
@@ -346,7 +346,7 @@ Defined in: [Bucket.ts:351](https://github.com/reductstore/reduct-js/blob/d0e71e
 
 `string`
 
-***
+---
 
 ### getSettings()
 
@@ -362,7 +362,7 @@ Get bucket settings
 
 #### Async
 
-***
+---
 
 ### query()
 
@@ -415,7 +415,7 @@ for await (const record in bucket.query("entry-1", start, stop)) {
 }
 ```
 
-***
+---
 
 ### remove()
 
@@ -431,7 +431,7 @@ Remove bucket
 
 #### Async
 
-***
+---
 
 ### removeEntry()
 
@@ -455,7 +455,7 @@ Remove an entry
 
 #### Async
 
-***
+---
 
 ### removeQuery()
 
@@ -495,7 +495,7 @@ Remove records by query
 
 `Promise`\&lt;`number`\&gt;
 
-***
+---
 
 ### removeRecord()
 
@@ -523,7 +523,7 @@ Remove a record
 
 `Promise`\&lt;`void`\&gt;
 
-***
+---
 
 ### rename()
 
@@ -545,7 +545,7 @@ new name of the bucket
 
 `Promise`\&lt;`void`\&gt;
 
-***
+---
 
 ### renameEntry()
 
@@ -573,7 +573,7 @@ new entry name
 
 `Promise`\&lt;`void`\&gt;
 
-***
+---
 
 ### setSettings()
 
@@ -597,7 +597,7 @@ Set bucket settings
 
 #### Async
 
-***
+---
 
 ### update()
 

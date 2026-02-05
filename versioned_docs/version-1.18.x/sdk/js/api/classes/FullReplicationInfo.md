@@ -2,10 +2,10 @@
 title: "FullReplicationInfo"
 description: "API reference for the FullReplicationInfo class in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/FullReplicationInfo" />
 </head>
-
 
 # FullReplicationInfo
 
@@ -33,7 +33,7 @@ Defined in: [messages/ReplicationInfo.ts:80](https://github.com/reductstore/redu
 
 Replication statistics
 
-***
+---
 
 ### info
 
@@ -43,7 +43,7 @@ Defined in: [messages/ReplicationInfo.ts:70](https://github.com/reductstore/redu
 
 Replication info
 
-***
+---
 
 ### settings
 

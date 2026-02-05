@@ -2,10 +2,10 @@
 title: "ReplicationMode"
 description: "API reference for Type Alias: ReplicationMode in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/type-aliases/ReplicationMode" />
 </head>
-
 
 # ReplicationMode
 

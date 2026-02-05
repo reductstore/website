@@ -2,10 +2,10 @@
 title: "ReplicationSettings"
 description: "API reference for the ReplicationSettings class in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/ReplicationSettings" />
 </head>
-
 
 # ReplicationSettings
 
@@ -33,7 +33,7 @@ Defined in: [messages/ReplicationSettings.ts:33](https://github.com/reductstore/
 
 Destination bucket. Must exist.
 
-***
+---
 
 ### dstHost
 
@@ -43,7 +43,7 @@ Defined in: [messages/ReplicationSettings.ts:38](https://github.com/reductstore/
 
 Destination host. Must exist.
 
-***
+---
 
 ### dstToken?
 
@@ -53,7 +53,7 @@ Defined in: [messages/ReplicationSettings.ts:43](https://github.com/reductstore/
 
 Destination token. Must have write access to the destination bucket.
 
-***
+---
 
 ### entries
 
@@ -63,7 +63,7 @@ Defined in: [messages/ReplicationSettings.ts:48](https://github.com/reductstore/
 
 List of entries to replicate. If empty, all entries are replicated. Wildcards are supported.
 
-***
+---
 
 ### mode?
 
@@ -73,7 +73,7 @@ Defined in: [messages/ReplicationSettings.ts:58](https://github.com/reductstore/
 
 Replication mode
 
-***
+---
 
 ### srcBucket
 
@@ -83,7 +83,7 @@ Defined in: [messages/ReplicationSettings.ts:28](https://github.com/reductstore/
 
 Source bucket. Must exist.
 
-***
+---
 
 ### when?
 
@@ -111,7 +111,7 @@ Defined in: [messages/ReplicationSettings.ts:60](https://github.com/reductstore/
 
 `ReplicationSettings`
 
-***
+---
 
 ### serialize()
 

@@ -2,10 +2,10 @@
 title: "RecordBatch"
 description: "API reference for the RecordBatch class in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/RecordBatch" />
 </head>
-
 
 # RecordBatch
 
@@ -85,7 +85,7 @@ default: &#123;&#125;
 
 `void`
 
-***
+---
 
 ### addOnlyLabels()
 
@@ -119,7 +119,7 @@ labels to update
 
 `void`
 
-***
+---
 
 ### addOnlyTimestamp()
 
@@ -147,7 +147,7 @@ timestamp of record as a UNIX timestamp in microseconds
 
 `void`
 
-***
+---
 
 ### clear()
 
@@ -161,7 +161,7 @@ Clear batch
 
 `void`
 
-***
+---
 
 ### items()
 
@@ -175,7 +175,7 @@ Get records in batch sorted by entry name and timestamp.
 
 \[\[`string`, `bigint`\], `RecordBatchItem`\][]
 
-***
+---
 
 ### lastAccessTime()
 
@@ -189,7 +189,7 @@ Get last access time of batch
 
 `number`
 
-***
+---
 
 ### recordCount()
 
@@ -203,7 +203,7 @@ Get number of records in batch
 
 `number`
 
-***
+---
 
 ### send()
 
@@ -217,7 +217,7 @@ Send batch request (Multi-entry API).
 
 `Promise`\&lt;`Map`\&lt;`string`, `Map`\&lt;`bigint`, [`APIError`](APIError.md)\&gt;\&gt;\&gt;
 
-***
+---
 
 ### size()
 

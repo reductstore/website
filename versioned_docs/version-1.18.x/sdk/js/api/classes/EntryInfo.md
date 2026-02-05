@@ -2,10 +2,10 @@
 title: "EntryInfo"
 description: "API reference for the EntryInfo class in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/EntryInfo" />
 </head>
-
 
 # EntryInfo
 
@@ -33,7 +33,7 @@ Defined in: [messages/EntryInfo.ts:15](https://github.com/reductstore/reduct-js/
 
 Number of blocks
 
-***
+---
 
 ### latestRecord
 
@@ -43,7 +43,7 @@ Defined in: [messages/EntryInfo.ts:35](https://github.com/reductstore/reduct-js/
 
 Unix timestamp of the latest record in microseconds
 
-***
+---
 
 ### name
 
@@ -53,7 +53,7 @@ Defined in: [messages/EntryInfo.ts:10](https://github.com/reductstore/reduct-js/
 
 Name of the entry
 
-***
+---
 
 ### oldestRecord
 
@@ -63,7 +63,7 @@ Defined in: [messages/EntryInfo.ts:30](https://github.com/reductstore/reduct-js/
 
 Unix timestamp of the oldest record in microseconds
 
-***
+---
 
 ### recordCount
 
@@ -73,7 +73,7 @@ Defined in: [messages/EntryInfo.ts:20](https://github.com/reductstore/reduct-js/
 
 Number of records
 
-***
+---
 
 ### size
 
@@ -83,7 +83,7 @@ Defined in: [messages/EntryInfo.ts:25](https://github.com/reductstore/reduct-js/
 
 Size of stored data in the bucket in bytes
 
-***
+---
 
 ### status
 

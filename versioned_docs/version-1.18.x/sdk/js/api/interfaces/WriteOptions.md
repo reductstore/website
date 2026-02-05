@@ -2,10 +2,10 @@
 title: "WriteOptions"
 description: "API reference for the WriteOptions interface in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/interfaces/WriteOptions" />
 </head>
-
 
 # WriteOptions
 
@@ -21,7 +21,7 @@ Options for writing records
 
 Defined in: [Bucket.ts:21](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Bucket.ts#L21)
 
-***
+---
 
 ### labels?
 
@@ -29,7 +29,7 @@ Defined in: [Bucket.ts:21](https://github.com/reductstore/reduct-js/blob/d0e71ee
 
 Defined in: [Bucket.ts:20](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Bucket.ts#L20)
 
-***
+---
 
 ### ts?
 

@@ -18,13 +18,13 @@ This package provides an asynchronous HTTP client for interacting with **[Reduct
 
 ## Features
 
-* Supports the **[ReductStore HTTP API v1.18](https://www.reduct.store/docs/http-api)**
-* Bucket management
-* API Token management
-* Write, read and query data
-* Labeling records
-* Batching records for read and write operations
-* Replication management
+- Supports the **[ReductStore HTTP API v1.18](https://www.reduct.store/docs/http-api)**
+- Bucket management
+- API Token management
+- Write, read and query data
+- Labeling records
+- Batching records for read and write operations
+- Replication management
 
 ## Install
 
@@ -53,8 +53,9 @@ const main = async () => {
 
   // 3. Write some data with timestamps in the 'entry-1' entry
   const us = (dateString) => BigInt(Date.parse(dateString) * 1000);
-  await (await bucket.beginWrite("sensor-1", { ts: us("2024-01-01T10:00:00Z") }))
-    .write("<Blob data>");
+  await (
+    await bucket.beginWrite("sensor-1", { ts: us("2024-01-01T10:00:00Z") })
+  ).write("<Blob data>");
 
   // 4. Query the data by time range
   for await (const record of bucket.query("sensor-1")) {
@@ -67,9 +68,9 @@ main().catch(console.error);
 
 The SDK supports the following ReductStore API versions:
 
-* v1.18
-* v1.17
-* v1.16
+- v1.18
+- v1.17
+- v1.16
 
 It can work with newer and older versions, but it is not guaranteed that all features will work as expected because
 the API may change and some features may be deprecated or the SDK may not support them yet.
@@ -80,7 +81,7 @@ the API may change and some features may be deprecated or the SDK may not suppor
 - **[Guides](/docs/guides/index.mdx)**
 - **[Source Code](https://github.com/reductstore/reduct-js)**
 
-import DocCardList from '@theme/DocCardList';
+import DocCardList from "@theme/DocCardList";
 
 ## Modules
 

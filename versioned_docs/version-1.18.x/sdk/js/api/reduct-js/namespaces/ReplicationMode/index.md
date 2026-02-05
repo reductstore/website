@@ -2,10 +2,10 @@
 title: "ReplicationMode"
 description: "API reference for ReplicationMode in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/reduct-js/namespaces/ReplicationMode/index" />
 </head>
-
 
 # ReplicationMode
 
@@ -19,7 +19,7 @@ This allows both TypeScript type usage and JavaScript runtime value access
 const mode: ReplicationMode = "enabled";
 
 // JavaScript runtime constant usage:
-import { ReplicationMode } from 'reduct-js';
+import { ReplicationMode } from "reduct-js";
 const mode = ReplicationMode.ENABLED; // "enabled"
 ```
 

@@ -2,10 +2,10 @@
 title: "Batch"
 description: "API reference for the Batch class in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/Batch" />
 </head>
-
 
 # Batch
 
@@ -81,7 +81,7 @@ default: &#123;&#125;
 
 `void`
 
-***
+---
 
 ### addOnlyLabels()
 
@@ -108,7 +108,7 @@ timestamp of record as a UNIX timestamp in microseconds
 
 `void`
 
-***
+---
 
 ### addOnlyTimestamp()
 
@@ -131,7 +131,7 @@ timestamp of record as a UNIX timestamp in microseconds
 
 `void`
 
-***
+---
 
 ### clear()
 
@@ -145,7 +145,7 @@ Clear batch
 
 `void`
 
-***
+---
 
 ### items()
 
@@ -159,7 +159,7 @@ Get records in batch sorted by timestamp
 
 `IterableIterator`\&lt;\[`bigint`, \&#123; `contentType`: `string`; `data`: `Buffer`; `labels`: `LabelMap`; \&#125;\]\&gt;
 
-***
+---
 
 ### lastAccessTime()
 
@@ -173,7 +173,7 @@ Get last access time of batch
 
 `number`
 
-***
+---
 
 ### recordCount()
 
@@ -187,7 +187,7 @@ Get number of records in batch
 
 `number`
 
-***
+---
 
 ### size()
 
@@ -201,7 +201,7 @@ Get total size of batch
 
 `bigint`
 
-***
+---
 
 ### write()
 

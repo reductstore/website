@@ -2,10 +2,10 @@
 title: "ServerInfo"
 description: "API reference for the ServerInfo class in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/ServerInfo" />
 </head>
-
 
 # ServerInfo
 
@@ -33,7 +33,7 @@ Defined in: [messages/ServerInfo.ts:48](https://github.com/reductstore/reduct-js
 
 Number of buckets
 
-***
+---
 
 ### defaults
 
@@ -43,7 +43,7 @@ Defined in: [messages/ServerInfo.ts:78](https://github.com/reductstore/reduct-js
 
 Default settings
 
-***
+---
 
 ### latestRecord
 
@@ -53,7 +53,7 @@ Defined in: [messages/ServerInfo.ts:68](https://github.com/reductstore/reduct-js
 
 Unix timestamp of the latest record in microseconds
 
-***
+---
 
 ### license?
 
@@ -63,7 +63,7 @@ Defined in: [messages/ServerInfo.ts:73](https://github.com/reductstore/reduct-js
 
 License information
 
-***
+---
 
 ### oldestRecord
 
@@ -73,7 +73,7 @@ Defined in: [messages/ServerInfo.ts:63](https://github.com/reductstore/reduct-js
 
 Unix timestamp of the oldest record in microseconds
 
-***
+---
 
 ### uptime
 
@@ -83,7 +83,7 @@ Defined in: [messages/ServerInfo.ts:58](https://github.com/reductstore/reduct-js
 
 Server uptime in seconds
 
-***
+---
 
 ### usage
 
@@ -93,7 +93,7 @@ Defined in: [messages/ServerInfo.ts:53](https://github.com/reductstore/reduct-js
 
 Stored data in bytes
 
-***
+---
 
 ### version
 

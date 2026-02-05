@@ -2,10 +2,10 @@
 title: "Token"
 description: "API reference for the Token class in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/Token" />
 </head>
-
 
 # Token
 
@@ -33,7 +33,7 @@ Defined in: [messages/Token.ts:71](https://github.com/reductstore/reduct-js/blob
 
 Creation time of the token as unix timestamp in milliseconds
 
-***
+---
 
 ### isProvisioned?
 
@@ -43,7 +43,7 @@ Defined in: [messages/Token.ts:76](https://github.com/reductstore/reduct-js/blob
 
 Is the token provisioned, and you can't remove it or change it
 
-***
+---
 
 ### name
 
@@ -53,7 +53,7 @@ Defined in: [messages/Token.ts:66](https://github.com/reductstore/reduct-js/blob
 
 Name of the token
 
-***
+---
 
 ### permissions?
 

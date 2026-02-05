@@ -2,8 +2,12 @@
 title: Record Batch Module
 description: API reference for the Record Batch Module of the ReductStore Client SDK for JavaScript.
 ---
+
 <head>
-  <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/record-batch" />
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/sdk/js/record-batch"
+  />
 </head>
 
 # Record Batch Module
@@ -88,7 +92,7 @@ default: &#123;&#125;
 
 `void`
 
-***
+---
 
 #### addOnlyLabels()
 
@@ -122,7 +126,7 @@ labels to update
 
 `void`
 
-***
+---
 
 #### addOnlyTimestamp()
 
@@ -150,7 +154,7 @@ timestamp of record as a UNIX timestamp in microseconds
 
 `void`
 
-***
+---
 
 #### clear()
 
@@ -164,7 +168,7 @@ Clear batch
 
 `void`
 
-***
+---
 
 #### items()
 
@@ -178,7 +182,7 @@ Get records in batch sorted by entry name and timestamp.
 
 \[\[`string`, `bigint`\], `RecordBatchItem`\][]
 
-***
+---
 
 #### lastAccessTime()
 
@@ -192,7 +196,7 @@ Get last access time of batch
 
 `number`
 
-***
+---
 
 #### recordCount()
 
@@ -206,7 +210,7 @@ Get number of records in batch
 
 `number`
 
-***
+---
 
 #### send()
 
@@ -220,7 +224,7 @@ Send batch request (Multi-entry API).
 
 `Promise`&lt;`Map`&lt;`string`, `Map`&lt;`bigint`, [`APIError`](api/classes/APIError)&gt;&gt;&gt;
 
-***
+---
 
 #### size()
 
@@ -233,7 +237,6 @@ Get total size of batch
 ##### Returns
 
 `bigint`
-
 
 ## Enumerations
 
@@ -249,7 +252,7 @@ Defined in: [RecordBatch.ts:25](https://github.com/reductstore/reduct-js/blob/d0
 
 Defined in: [RecordBatch.ts:28](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L28)
 
-***
+---
 
 #### UPDATE
 
@@ -257,11 +260,10 @@ Defined in: [RecordBatch.ts:28](https://github.com/reductstore/reduct-js/blob/d0
 
 Defined in: [RecordBatch.ts:27](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L27)
 
-***
+---
 
 #### WRITE
 
 &gt; **WRITE**: `0`
 
 Defined in: [RecordBatch.ts:26](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L26)
-

@@ -2,8 +2,12 @@
 title: Bucket Settings Module
 description: API reference for the Bucket Settings Module of the ReductStore Client SDK for JavaScript.
 ---
+
 <head>
-  <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/msg/bucket-settings" />
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/sdk/js/msg/bucket-settings"
+  />
 </head>
 
 # Bucket Settings Module
@@ -36,7 +40,7 @@ Defined in: [messages/BucketSettings.ts:19](https://github.com/reductstore/reduc
 
 Maximum number of records in a block
 
-***
+---
 
 #### maxBlockSize?
 
@@ -46,7 +50,7 @@ Defined in: [messages/BucketSettings.ts:14](https://github.com/reductstore/reduc
 
 Maximal block size in a block
 
-***
+---
 
 #### quotaSize?
 
@@ -56,7 +60,7 @@ Defined in: [messages/BucketSettings.ts:31](https://github.com/reductstore/reduc
 
 Quota size in bytes
 
-***
+---
 
 #### quotaType?
 
@@ -65,8 +69,8 @@ Quota size in bytes
 Defined in: [messages/BucketSettings.ts:26](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/BucketSettings.ts#L26)
 
 Quota type. The storage supports two types:
-  NONE: A bucket will consume the whole free disk space.
-  FIFO: A bucket removes the oldest block of some entry, when it reaches the quota limit.
+NONE: A bucket will consume the whole free disk space.
+FIFO: A bucket removes the oldest block of some entry, when it reaches the quota limit.
 
 ### Methods
 
@@ -86,7 +90,7 @@ Defined in: [messages/BucketSettings.ts:33](https://github.com/reductstore/reduc
 
 `BucketSettings`
 
-***
+---
 
 #### serialize()
 
@@ -104,7 +108,6 @@ Defined in: [messages/BucketSettings.ts:46](https://github.com/reductstore/reduc
 
 `OriginalBucketSettings`
 
-
 ## Enumerations
 
 ## QuotaType
@@ -119,7 +122,7 @@ Defined in: [messages/BucketSettings.ts:1](https://github.com/reductstore/reduct
 
 Defined in: [messages/BucketSettings.ts:3](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/BucketSettings.ts#L3)
 
-***
+---
 
 #### HARD
 
@@ -127,11 +130,10 @@ Defined in: [messages/BucketSettings.ts:3](https://github.com/reductstore/reduct
 
 Defined in: [messages/BucketSettings.ts:4](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/BucketSettings.ts#L4)
 
-***
+---
 
 #### NONE
 
 &gt; **NONE**: `0`
 
 Defined in: [messages/BucketSettings.ts:2](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/BucketSettings.ts#L2)
-
