@@ -75,6 +75,7 @@ jobs:
 
       - name: Prepare ReductStore instance with data
         run: |
+          docker pull reduct/store:${{ matrix.reduct_version }}
           docker run -d --name reductstore-init -p 8384:8383  reduct/store:${{ matrix.reduct_version }}
           sleep 3
           reduct-cli cp https://reductstore@play.reduct.store/replica/datasets  http://my-token@127.0.0.1:8384/example-bucket --limit 100
