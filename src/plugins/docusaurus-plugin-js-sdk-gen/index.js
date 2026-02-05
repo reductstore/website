@@ -533,6 +533,22 @@ function renameReadmes(rootDir) {
   }
 }
 
+function fixTypedocWarnings(tmpDir) {
+  const bucketPath = path.join(tmpDir, "src", "Bucket.ts");
+  if (!fs.existsSync(bucketPath)) {
+    return;
+  }
+
+  const content = fs.readFileSync(bucketPath, "utf8");
+  const updated = content.replace(
+    /^\s*\*\s*@param\s+tsList[^\n]*\n/m,
+    "",
+  );
+  if (updated !== content) {
+    fs.writeFileSync(bucketPath, updated);
+  }
+}
+
 export default async function (context, opts) {
   return {
     name: "docusaurus-plugin-js-sdk-gen",
@@ -563,6 +579,7 @@ export default async function (context, opts) {
       run(
         `git clone --depth 1 --branch ${opts.sdkBranch} ${opts.sdkRepo} ${tmpDir}`,
       );
+      fixTypedocWarnings(tmpDir);
 
       if (!fs.existsSync(destination)) {
         fs.mkdirSync(destination, { recursive: true });
@@ -586,6 +603,9 @@ export default async function (context, opts) {
           "--hideGenerator",
           "--excludeExternals",
           "--skipErrorChecking",
+          "--validation.notExported false",
+          "--blockTags @async",
+          "--blockTags @constructor",
         ].join(" "),
         { cwd: process.cwd() },
       );
@@ -601,6 +621,9 @@ export default async function (context, opts) {
           "--hideGenerator",
           "--excludeExternals",
           "--skipErrorChecking",
+          "--validation.notExported false",
+          "--blockTags @async",
+          "--blockTags @constructor",
         ].join(" "),
         { cwd: process.cwd() },
       );
