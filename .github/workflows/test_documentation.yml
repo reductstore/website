@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Test examples
     strategy:
-      max-parallel: 8
       matrix:
         example: [python, rust, golang, curl, cpp, node, cli]
         doc_version: [next, 1.17.x, 1.16.x]
