@@ -31,7 +31,7 @@ A user can use the `ext` query parameter to activate the `ros` extension and def
                "topic": "string",      # ROS topic name to extract from
                "encode": "object",     # e.g., {"data":"jpeg"} for JPEG encoding
                 "as_label": "object"   # e.g., {"label_name": "path_to_json"}
-            }
+            },
 
             "transform": {
               "include": "string[]",   # e.g., ["/topic-.*"]
@@ -52,7 +52,7 @@ You must specify **either** `extract` **or** `transform` for a rosbag request.
 
 The `extract` property allows you to select a single topic from a rosbag and convert it to JSON.
 The extension reads the rosbag, decodes the messages for the specified topic, and returns each message as a JSON record with
-timestamps from the message header.
+timestamps from the message header (when present).
 
 | Parameter        | Type     | Mandatory | Description                                                                                                                                                  |
 | ---------------- | -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |

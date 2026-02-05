@@ -23,7 +23,7 @@ A user can use the `ext` query parameter to activate the `ros` extension and def
                "topic": "string",      # ROS topic name to extract from
                "encode": "object",     # e.g., {"data":"jpeg"} for JPEG encoding
                 "as_label": "object"   # e.g., {"label_name": "path_to_json"}
-            }
+            },
 
             "transform": {
               "include": "string[]",   # e.g., ["/topic-.*"]
@@ -38,16 +38,16 @@ A user can use the `ext` query parameter to activate the `ros` extension and def
 
 ### Data extraction
 
-The `extract` property allows you to specify the ROS topic from which to extract message and convert it to JSON format.
+The `extract` property allows you to specify the ROS topic from which to extract messages and convert them to JSON format.
 The extension will read the MCAP file, decode the messages from the specified topic, and return each message as a JSON record with
-the timestamp from the message header.
+the timestamp from the message header (when present).
 
 | Parameter        | Type     | Mandatory | Description                                                                                                                                                  |
 | ---------------- | -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `topic`          | `string` | Yes       | The name of the ROS topic to extract messages from. This should match the topic names used in the MCAP file.                                                 |
 | `encode`         | `object` | No        | A dictionary specifying how to encode binary data in the messages. For example, `{"data": "jpeg"}` for JPEG encoding.                                        |
 | `encode.<field>` | `string` | No        | The encoding format for binary fields in the message. Supported values are `base64` and `jpeg`. If not specified, the field will be returned as a JSON list. |
-| `as_label`       | `object` | No        | An object that specifies dynamic computed lables that will be delivered to the client. Can be a basis for output filtering.                                  |
+| `as_label`       | `object` | No        | An object that specifies dynamic computed labels that will be delivered to the client. Can be a basis for output filtering.                                  |
 
 #### Encoding binary data
 
@@ -67,12 +67,12 @@ Currently, the extension supports encoding only **[sensor_msgs/msg/Image](http:/
 
 The `transform` property allows you to generate new MCAP episodes with topic filtering and size/duration limits.
 
-| Field      | Type       | Mandatory | Description                                                                                    |
-| ---------- | ---------- | --------- | ---------------------------------------------------------------------------------------------- |
-| `include`  | `string[]` | No        | List of topics to include. Support regular expressions. If omitted, all topics are considered. |
-| `exclude`  | `string[]` | No        | List of topics to exclude. Applied **after** `include`.                                        |
-| `duration` | `string`   | No        | Maximum duration per episode (e.g., `5m`, `2h`, `1d`).                                         |
-| `size`     | `string`   | No        | Maximum content length per episode (e.g., `100MB`, `1GB`).                                     |
+| Field      | Type       | Mandatory | Description                                                                                     |
+| ---------- | ---------- | --------- | ----------------------------------------------------------------------------------------------- |
+| `include`  | `string[]` | No        | List of topics to include. Supports regular expressions. If omitted, all topics are considered. |
+| `exclude`  | `string[]` | No        | List of topics to exclude. Applied **after** `include`.                                         |
+| `duration` | `string`   | No        | Maximum duration per episode (e.g., `5m`, `2h`, `1d`).                                          |
+| `size`     | `string`   | No        | Maximum content length per episode (e.g., `100MB`, `1GB`).                                      |
 
 :::info
 The `size` parameter refers to the uncompressed size of the episode. The actual file size may be smaller due to MCAP's chunk compression.
@@ -109,7 +109,7 @@ When `transform` is provided, the extension:
 - All topics starting with `/camera/` are included (because of `/camera/.*`).
 - The topic `/imu/data` is included exactly (because of `^/imu/data$`).
 - The topic `/camera/debug` is excluded, even though it matches the `/camera/.*` rule.
-- Output is a sequence of MCAP episodes, each ≤ 10 minute or ≤ 500 MB (whichever comes first).
+- Output is a sequence of MCAP episodes, each ≤ 10 minutes or ≤ 500 MB (whichever comes first).
 
 ## Examples
 
