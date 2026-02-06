@@ -1,0 +1,166 @@
+---
+title: Query Link API
+description: The API for creating query links to share data securely without access tokens.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/query-link-api"
+  />
+</head>
+
+import SwaggerComponent from "@site/src/components/SwaggerComponent";
+
+# Query Link API Specification Reference
+
+Since version 1.17.0, ReductStore supports **Query Links** - a secure way to share data without access tokens.
+These links can be created with the creator's read permissions and an expiration time, allowing controlled anonymous access to specific data.
+
+## Create a Query Link
+
+You can use this method to create a query link for a specific bucket.
+The request body should include the bucket and endpoint, as well as a query parameter to filter the data.
+The given query will be applied to the data when accessed via the link.
+
+<SwaggerComponent
+  method="post"
+  path="/api/v1/links/:file_name"
+  summary="Create a query link"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: "file_name",
+        isRequired: true,
+        description:
+          "File name to be used when creating the link (e.g. data.jsonl)",
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "Returns information in JSON format",
+      description: (
+        <>
+          <pre>
+            <code>
+              {`{
+    "link": "string" // The generated query link
+}`}
+            </code>
+          </pre>
+        </>
+      ),
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary:
+        "If authentication is enabled and access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary:
+        "Current access token doesn't have enough permissions to read the bucket",
+    },
+  ]}
+/>
+
+The method receives a JSON object in the request body with the following fields:
+
+```json5
+{
+  expire_at: "integer", // Expiration date in unix timestamp (seconds)
+  bucket: "string", // Bucket name
+  entry: "string", // Entry name
+  query: "object", // Query object
+  index: "integer", // (Optional) Record index in the query result to be returned by default (r query parameter)
+  base_url: "string", // (Optional) Base URL to use in the generated link
+}
+```
+
+## Download Data Using a Query Link
+
+You can use this method to download data using a query link.
+The method applies the query specified when creating the link to filter the data and returns the content of the record along with metadata in the response headers.
+
+<SwaggerComponent
+  method="get"
+  path="/api/v1/links/:file_name"
+  summary="Download data using a query link"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: "file_name",
+        isRequired: true,
+        description: "File name to download (e.g. data.jsonl)",
+      },
+    },
+  ]}
+  queryParams={[
+    {
+      name: "ct",
+      type: "string",
+      isRequired: true,
+      description: "Encrypted query",
+    },
+    {
+      name: "s",
+      type: "string",
+      isRequired: true,
+      description: "Salt for the encryption",
+    },
+    {
+      name: "n",
+      type: "string",
+      isRequired: true,
+      description: "Nonce for the encryption",
+    },
+    {
+      name: "i",
+      type: "string",
+      isRequired: true,
+      description: "Name of the token used to create the link",
+    },
+    {
+      name: "r",
+      type: "string",
+      isRequired: false,
+      description:
+        "Record number in the query result to download. If not provided, the first record matching the query will be returned.",
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary:
+        "The request was successful. The response contains the content of the record along with metadata in the response headers.",
+      description: (
+        <>
+          <code>"string"</code>
+        </>
+      ),
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "The queried bucket or entry does not exist",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "Bad query parameters or expired link",
+    },
+  ]}
+/>
+
+### Range Requests
+
+The method supports HTTP Range Requests to download partial content. You can specify the range of bytes to download using the `Range` header in the request.
+The server will respond with the specified range of bytes along with the appropriate `Content-Range` header in the response.

@@ -1,0 +1,31 @@
+---
+title: ReductROS
+description: Extension for ReductStore to extract and transform data in ROS formats.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/extensions/official/ros-ext"
+  />
+</head>
+
+# ReductROS
+
+The ReductROS [**extension**](../../glossary#extension) provides tools that can be used to extract and transform data stored in ReductStore into formats that are compatible with the Robot Operating System (ROS).
+It allows users to query and convert historical data, such as sensor readings and camera images, into the JSON format, which can then be easily used for analysis, visualisation or integration with other systems.
+
+import DemoLicenseNote from "@site/src/components/promotional/DemoLicenseNote";
+
+<DemoLicenseNote />
+
+## Supported file and message formats
+
+The ReductROS extension supports parsing and extracting data from:
+
+- **[MCAP](./ros-ext/mcap)** files containing messages encoded in the **CDR (Common Data Representation)** format used by ROS 2.
+- **[Rosbag](./ros-ext/rosbag)** archives from ROS 2 `rosbag2` in **SQLite3** or **MCAP** storage, uploaded as ZIP files containing `metadata.yaml`.
+
+import DocCardList from "@theme/DocCardList";
+
+<DocCardList />

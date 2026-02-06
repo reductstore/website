@@ -1,11 +1,11 @@
 ---
 title: "BucketInfo"
-description: "API reference for the BucketInfo class in the ReductStore Client SDK for JavaScript."
+description: "API reference for BucketInfo in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/BucketInfo" />
 </head>
-
 
 # BucketInfo
 

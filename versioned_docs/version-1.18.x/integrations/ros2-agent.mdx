@@ -1,0 +1,194 @@
+---
+title: ROS 2 Agent
+description: Record ROS 2 topics into ReductStore as MCAP files with time-based indexing, labels, and compression.
+sidebar_position: 1
+---
+
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/integrations" />
+</head>
+
+The **ros2-reduct-agent** is a ROS 2 node that records selected topics as MCAP files and stores them in [**ReductStore**](/).
+
+Key features:
+
+- Continuous recording of ROS 2 topics as MCAP files into ReductStore
+- File rotation by duration or size to avoid large, hard-to-use files
+- Topic grouping into separate pipelines, each writing its own file sequence
+- Per-pipeline topic selection, compression, and chunking
+
+![Agent Workflow](../img/agent.src.png)
+
+## System Requirements
+
+| Component | Version              |
+| --------- | -------------------- |
+| ROS 2     | Jazzy Jalisco        |
+| OS        | Ubuntu 24.04 (Noble) |
+| Python    | ≥ 3.12               |
+
+Start a local ReductStore instance:
+
+```bash
+docker run -p 8383:8383 -v ${PWD}/data:/data reduct/store:latest
+```
+
+For more details on running ReductStore, see the [**Getting Started**](/docs/getting-started) guide.
+
+## Installation
+
+The ReductStore ROS 2 Agent can be installed using one of the following methods:
+
+- **Snap package (recommended)** – production deployments and Ubuntu Core
+- **Build from source** – development and debugging
+
+### Install via Snap (Recommended)
+
+This method is recommended for production deployments and Ubuntu Core systems.
+
+```bash
+# Install snapcraft if not already installed
+sudo snap install snapcraft --classic
+
+# Build the snap
+snapcraft pack
+
+# Install locally (for testing)
+sudo snap install --dangerous reductstore-agent_*.snap
+```
+
+Or install directly from the store (edge channel for now):
+
+```bash
+sudo snap install reductstore-agent --edge
+```
+
+### Build from Source
+
+This installation method is intended for contributors and advanced users who
+want to modify or debug the agent. It is not required for normal operation.
+
+```bash
+## Clone into your ROS 2 workspace
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws/src
+git clone https://github.com/reductstore/ros2-reduct-agent.git
+cd ..
+
+## Install dependencies and build
+rosdep install --from-paths src --ignore-src -r -y
+colcon build --packages-select ros2_reduct_agent
+
+## Run with your config
+source install/local_setup.bash
+ros2 run ros2_reduct_agent recorder --ros-args --params-file ./config.yaml
+```
+
+## Configuration Reference
+
+The agent is configured using a standard ROS 2 YAML file with two sections: `storage` and `pipelines`. For example:
+
+```yaml
+/**/*:
+  ros__parameters:
+    storage: # local ReductStore instance
+      url: "http://localhost:8383"
+      api_token: "access_token"
+      bucket: "ros_data"
+      quota_type: "FIFO"
+      quota_size: "200GB"
+    pipelines:
+      telemetry:
+        filename_mode: "timestamp"
+        include_topics:
+          - "/camera/.*"
+        exclude_topics:
+          - "/camera/ignore"
+        static_labels:
+          source: telemetry
+          robot: alpha
+        split:
+          max_duration_s: 3600
+          max_size_bytes: 10000
+        downsample:
+          downsampling_mode: stride
+          stride_n: 5
+```
+
+## Configuration overview
+
+The agent requires the following configuration sections to start:
+
+- **`storage`** – specifies the ReductStore instance where data is written
+- **Pipeline configuration** – defines what data is recorded, provided either:
+  - locally via `pipelines`, or
+  - remotely via a configuration reference in `remote`
+
+If any required configuration is missing, the agent will fail to start.
+
+### Storage Section
+
+The `storage` section configures the connection to ReductStore.
+
+| Parameter   | Type   | Description                                                         |
+| ----------- | ------ | ------------------------------------------------------------------- |
+| `url`       | string | ReductStore endpoint (e.g., `http://localhost:8383`) **(required)** |
+| `bucket`    | string | Target bucket (auto-created if missing) **(required)**              |
+| `api_token` | string | API token with write permission                                     |
+
+### Remote Config Section
+
+The `remote` section specifies where the agent should fetch a pipeline
+configuration YAML file from in a ReductStore instance.  
+It does **not** define pipelines itself.
+
+| Parameter                 | Type   | Description                                                                                    |
+| ------------------------- | ------ | ---------------------------------------------------------------------------------------------- |
+| `remote.url`              | string | Base URL of the ReductStore instance where the pipeline configuration is stored **(required)** |
+| `remote.api_token`        | string | API token used to authenticate when accessing the remote configuration **(required)**          |
+| `remote.bucket`           | string | Bucket containing the pipeline configuration YAML file **(required)**                          |
+| `remote.entry`            | string | Entry name under which the pipeline configuration YAML file is stored **(required)**           |
+| `remote.pull_frequency_s` | int    | Poll interval (in seconds) for reloading the remote configuration (default: `60`)              |
+
+**Notes**
+
+- Remote configuration is enabled **only if all required parameters are provided**.
+- The referenced ReductStore entry must contain a **YAML file**.
+- The YAML content must follow the same structure as the local `pipelines`
+  configuration.
+
+### Remote configuration backup
+
+When remote configuration is enabled, the agent automatically stores a local
+backup of the fetched pipeline configuration as `backup.yaml`.
+
+This backup is used as a fallback in the following cases:
+
+- The agent restarts and the remote configuration is temporarily unavailable
+- The remote configuration cannot be fetched at startup
+- Periodic refresh fails while `remote.pull_frequency_s` is enabled
+
+If a valid `backup.yaml` is available, the agent will load the pipeline
+configuration from the backup instead of failing immediately.
+
+### Pipeline Section
+
+Each key under `pipelines` defines a separate recording pipeline, which results in a distinct [**entry**](../glossary#entry) in ReductStore. Each pipeline can be configured independently with its own topic filters, compression settings, and file-splitting behavior.
+
+| Parameter                | Type     | Default     | Description                                                            |
+| ------------------------ | -------- | ----------- | ---------------------------------------------------------------------- |
+| `include_topics`         | string[] | —           | List of ROS 2 topic names or regex patterns to record **(required)**   |
+| `exclude_topics`         | string[] | —           | List of ROS 2 topic names or regex patterns to exclude                 |
+| `filename_mode`          | enum     | `timestamp` | File naming strategy: `timestamp` or `incremental`                     |
+| `compression`            | enum     | `zstd`      | Compression algorithm: `none`, `lz4`, or `zstd`                        |
+| `output_format`          | enum     | `mcap`      | Output format: `mcap` or `cdr`                                         |
+| `chunk_size_bytes`       | int      | `1MB`       | Size of each MCAP chunk (1KB–10MB)                                     |
+| `enable_crcs`            | bool     | `true`      | Append CRC checks to each chunk                                        |
+| `spool_max_size_bytes`   | int      | `10MB`      | Maximum in-memory buffer before flushing (1KB–1GB)                     |
+| `split.max_duration_s`   | int      | —           | Split file after N seconds (1–3600) **(required)**                     |
+| `split.max_size_bytes`   | int      | —           | Split file when size exceeds this limit (1KB–1GB)                      |
+| `downsample_mode`        | enum     | `none`      | Message downsampling mode: `none`, `stride`, `max_rate`                |
+| `downsample.stride_n`    | int      | —           | Record every Nth message. Must be n=>2 (required if `stride`)          |
+| `downsample.max_rate_hz` | float    | —           | Maximum message frequency in Hz. Must be >0.0 (required if `max_rate`) |
+| `static_labels`          | map      | —           | Static key–value labels applied to all records                         |
+| `labels.mode`            | enum     | `last`      | Dynamic label aggregation mode: `last`, `first`, or `max`              |

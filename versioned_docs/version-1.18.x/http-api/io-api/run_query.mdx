@@ -1,0 +1,127 @@
+---
+title: Run query
+description: HTTP endpoint to run a query across entries in a bucket and read results in batches.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/io-api/run_query"
+  />
+</head>
+
+# Run a query (I/O API)
+
+This endpoint runs a query across multiple entries in a bucket. Use the returned query ID with the I/O API read endpoint (`GET /api/v1/io/:bucket_name/read`).
+
+import SwaggerComponent from "@site/src/components/SwaggerComponent";
+
+<SwaggerComponent
+  method="POST"
+  path="/api/v1/io/:bucket_name/q"
+  summary="Run a query across entries in a bucket"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        isRequired: true,
+        description: "Name of bucket",
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary:
+        "If query_type is QUERY, returns a query id. If query_type is REMOVE, returns removed_records.",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary:
+        "Access token does not have required permissions (read for QUERY, write for REMOVE).",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket does not exist",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "Invalid query body or missing required query parameters",
+    },
+  ]}
+/>
+
+## JSON request body
+
+The request body is the same query model as the Entry API, with an additional `entries` field to select multiple entries:
+
+```typescript
+{
+  // Required. Possible values: "QUERY", "REMOVE".
+  query_type: 'string';
+
+  // Optional. Specific entries to query or delete records from.
+  entries?: 'string[]';
+
+  // Optional. The start UNIX timestamp of the query in microseconds.
+  start?: 'integer';
+
+  // Optional. The end UNIX timestamp of the query in microseconds.
+  stop?: 'integer';
+
+  // Optional. A conditional query to filter records.
+  when?: 'object';
+
+  // Optional. Extension configuration.
+  ext?: 'object';
+
+  // Optional. TTL (Time To Live) in seconds for the query.
+  ttl?: 'integer';
+
+  // Optional. If true, the query will remain open for continuous data retrieval.
+  continuous?: 'boolean';
+
+  // Optional. Return only metadata without record bodies.
+  only_metadata?: 'boolean';
+}
+```
+
+:::info
+For `query_type: "REMOVE"`, define at least one query parameter (for example `entries`, `start`/`stop`, or `when`). An empty remove query is rejected.
+:::
+
+## Entry filtering
+
+- If `entries` is omitted, the query applies to all entries in the bucket.
+- `entries` supports wildcards:
+- `["*"]` selects all entries.
+- `["prefix-*"]` selects all entries with names starting with `prefix-`.
+- You can mix exact names and prefix wildcards (for example `["cam-1", "cam-*", "room/*"]`).
+
+## Responses
+
+If the query type is `QUERY`, the API returns a JSON object with the query ID:
+
+```typescript
+{
+  id: "integer";
+}
+```
+
+If the query type is `REMOVE`, the API returns a JSON object with the number of removed records:
+
+```typescript
+{
+  removed_records: "integer";
+}
+```

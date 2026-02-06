@@ -1,11 +1,11 @@
 ---
 title: "ReplicationSettings"
-description: "API reference for the ReplicationSettings class in the ReductStore Client SDK for JavaScript."
+description: "API reference for ReplicationSettings in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/ReplicationSettings" />
 </head>
-
 
 # ReplicationSettings
 

@@ -1,11 +1,11 @@
 ---
 title: "Batch"
-description: "API reference for the Batch class in the ReductStore Client SDK for JavaScript."
+description: "API reference for Batch in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/Batch" />
 </head>
-
 
 # Batch
 
