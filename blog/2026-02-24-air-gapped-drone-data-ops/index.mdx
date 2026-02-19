@@ -1,0 +1,129 @@
+---
+title: Air-Gapped Drone Data Operations with Delayed Sync and Auditability
+description: A practical ReductStore-first architecture for drone teams that must capture data offline, enforce selective replication, and maintain a verifiable audit trail.
+authors: anthony
+slug: air-gapped-drone-data-ops
+tags: [aerospace, robotics, database, edge computing]
+---
+
+# Air-Gapped Drone Data Operations with Delayed Sync and Auditability
+
+Air-gapped drone programs need a storage design that works when the network does not. Most failures happen in the same places: inconsistent local retention, manual copy workflows, and no reliable proof of what was captured, replicated, or skipped.
+
+This guide is a **ReductStore-first blueprint** for operating drone pipelines in disconnected environments with delayed synchronization and an auditable data trail.
+
+{/* truncate */}
+
+## Who this is for
+
+- Defense and aerospace teams running disconnected UAV missions
+- Integrators building edge-to-ground-station data pipelines
+- Teams replacing ad-hoc file drops or fragile rsync scripts
+
+## The operational constraints (problem framing)
+
+In air-gapped operations, your storage layer must support all of this simultaneously:
+
+1. **Offline-first ingestion** on edge compute
+2. **Deterministic retention** under finite disk constraints
+3. **Selective sync** (only policy-approved records move out)
+4. **Auditability** for chain-of-custody and compliance reviews
+5. **Simple recovery** after power/network interruptions
+
+:::warning
+If your workflow depends on “upload after mission if someone remembers,” you don’t have a reliable pipeline.
+:::
+
+## Reference architecture (ReductStore)
+
+### Edge node (on drone or companion computer)
+
+- Run ReductStore locally (single binary / container)
+- Store sensor artifacts as timestamped records:
+  - images/video chunks
+  - telemetry batches
+  - logs/events
+  - model outputs
+- Attach labels for downstream policy routing (`mission_id`, `sensor`, `classification`, `priority`)
+
+### Delayed sync boundary
+
+- Keep the drone fully operational while disconnected
+- Queue replication tasks and execute only when approved links are available
+- Filter what is replicated by label policy (not just by path)
+
+### Ground/secure zone
+
+- Receive replicated records into controlled ReductStore buckets
+- Preserve metadata/labels for traceability
+- Query by time windows and labels for mission review and incident analysis
+
+## Data model (initial schema draft)
+
+Use a consistent label contract from day one:
+
+```text
+mission_id=<uuid>
+platform_id=<drone-id>
+sensor=<camera|imu|lidar|event>
+classification=<public|restricted|secret>
+replication_policy=<none|delayed|approved>
+checksum=<sha256>
+```
+
+This enables deterministic filtering and repeatable audits.
+
+## Retention strategy (offline safety)
+
+- Configure bucket quotas per sensor class
+- Use FIFO by volume for high-rate streams
+- Reserve “protected” buckets for critical mission events
+- Keep retention policy explicit and versioned in infra config
+
+## Replication policy (delayed + selective)
+
+Recommended baseline:
+
+- Replicate only `replication_policy=approved`
+- Prioritize low-bandwidth metadata before large media payloads
+- Include labels needed for compliance review
+- Log replication outcomes per mission window
+
+:::info
+ReductStore replication and label-based querying are the core primitives that make this architecture practical without custom ingestion services.
+:::
+
+## Auditability model
+
+Track and verify at three levels:
+
+1. **Capture audit:** record written with timestamp + labels + checksum
+2. **Replication audit:** when/where each approved record was copied
+3. **Access audit:** who queried/exported mission data and when
+
+## Implementation plan (for publication draft)
+
+- [ ] Add deployment example (Docker/Snap) for edge node
+- [ ] Add concrete ReductStore replication config block
+- [ ] Add SDK snippet (Python) for labeled writes + checksum label
+- [ ] Add query snippet for post-mission audit report generation
+- [ ] Add internal links to related ReductStore posts/docs
+
+## Internal links to add in final draft
+
+- `/blog/store-robotic-data`
+- `/blog/store-ros-topics`
+- `/blog/distributed-storage-mobile-robotics`
+- `/docs/guides/data-replication`
+- `/docs/guides/query-data`
+
+## Positioning summary (editorial)
+
+The key message of this article is not generic “edge storage is hard.”
+It is:
+
+> **ReductStore provides the minimum reliable primitives (timestamped blob records, labels, retention control, and selective replication) to make air-gapped drone data operations repeatable and auditable.**
+
+---
+
+If this structure looks good, next step is to fill each section with production-ready examples and release-quality copy for tomorrow’s publication window.
