@@ -38,6 +38,3 @@ go.sum
 
 # Npm
 package-lock.json
-
-# local indexing artifacts
-.ai/
