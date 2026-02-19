@@ -29,32 +29,7 @@ The architecture has three main components:
 - **A ground station runs a ReductStore instance** that receives replicated data for analysis and archiving.
 - **ReductStore replication tasks** copy data from drone to ground based on labels and conditions (e.g., only records flagged as anomalies, plus context around them).
 
-```text
-┌──────────────────────┐
-│    Drone Sensors      │
-│  camera, IMU, lidar   │
-└──────────┬───────────┘
-           │
-           v
-┌──────────────────────┐
-│  Edge ReductStore     │
-│  - write with labels  │
-│  - FIFO retention     │
-└──────────┬───────────┘
-           │ (when trusted link is available)
-           v
-┌──────────────────────┐
-│  Replication Task     │
-│  - filter by labels   │
-│  - include context    │
-└──────────┬───────────┘
-           │
-           v
-┌──────────────────────┐
-│  Ground ReductStore   │
-│  - query & audit      │
-└──────────────────────┘
-```
+![Drone Workflow](./img/drone-workflow.svg)
 
 Each drone pushes its data to the ground whenever it is connected. If the network disconnects, replication continues when the drone reconnects. This approach provides offline capability, lets you decide which data to replicate, and keeps a clear record of what happened.
 
@@ -72,7 +47,7 @@ services:
       RS_API_TOKEN: <DRONE_TOKEN>
       RS_BUCKET_1_NAME: mission-data
       RS_BUCKET_1_QUOTA_TYPE: FIFO
-      RS_BUCKET_1_QUOTA_SIZE: 10000000000  # 10 GB
+      RS_BUCKET_1_QUOTA_SIZE: 10000000000 # 10 GB
     volumes:
       - ./data:/data
 ```
