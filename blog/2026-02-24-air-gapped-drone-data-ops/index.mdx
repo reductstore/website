@@ -8,7 +8,7 @@ tags: [aerospace, robotics, database]
 
 Drones in air-gapped environments produce a **lot** of data (camera images, telemetry, logs, model outputs). Storing this data reliably on each drone and syncing it to a ground station later can be hard. **ReductStore** makes this easier: it's a lightweight, time-series object store that works offline first and syncs when a trusted link becomes available.
 
-This guide explains a simple setup where each drone stores data locally with labels, syncs only approved records to a ground station, and keeps a clear audit trail of what was captured and replicated.
+This guide explains a simple setup where each drone stores data locally with labels, syncs records to a ground station based on what it detects, and keeps a clear audit trail of what was captured and replicated.
 
 {/* truncate */}
 
@@ -27,7 +27,7 @@ The architecture has three main components:
 
 - **Each drone runs a small ReductStore server** to save images and telemetry locally on disk (this lets the drone operate fully offline).
 - **A ground station runs a ReductStore instance** that receives replicated data for analysis and archiving.
-- **ReductStore replication tasks** copy data from drone to ground based on labels (e.g., only records marked as `approved`).
+- **ReductStore replication tasks** copy data from drone to ground based on labels and conditions (e.g., only records flagged as anomalies, plus context around them).
 
 ```text
 ┌──────────────────────┐
@@ -46,7 +46,7 @@ The architecture has three main components:
 ┌──────────────────────┐
 │  Replication Task     │
 │  - filter by labels   │
-│  - approved only      │
+│  - include context    │
 └──────────┬───────────┘
            │
            v
@@ -130,9 +130,8 @@ async def main():
             labels={
                 "mission_id": "m-2026-02-24-01",
                 "platform_id": "uav-07",
-                "sensor": "camera",
-                "classification": "restricted",
-                "replication_policy": "approved",
+                "anomaly": "false",
+                "confidence": "0.95",
                 "checksum": checksum,
             },
             content_type="image/jpeg",
@@ -150,8 +149,7 @@ async def main():
             labels={
                 "mission_id": "m-2026-02-24-01",
                 "platform_id": "uav-07",
-                "sensor": "gps",
-                "replication_policy": "approved",
+                "anomaly": "false",
                 "checksum": hashlib.sha256(csv_data.encode()).hexdigest(),
             },
             content_type="text/csv",
@@ -161,13 +159,13 @@ async def main():
 asyncio.run(main())
 ```
 
-The `replication_policy` label is important: it controls which records will be synced later. Records with `replication_policy=approved` will be replicated; records with `replication_policy=none` stay on the drone only.
+The `anomaly` label is important: it lets the replication task decide what to sync based on what the drone actually sees. For example, if the drone detects something unusual (an object, a warning, a low confidence score), it sets `anomaly=true`. The replication task can then automatically sync that record — plus the context around it.
 
 The `checksum` label gives you a simple way to verify data integrity during audits.
 
 ## Setting Up Selective Replication
 
-Once the drone connects to a trusted network, replication sends only approved records to the ground station. You can set this up with the CLI:
+Once the drone connects to a trusted network, replication sends only the relevant records to the ground station. The simplest approach is to replicate based on a label, for example only records where the drone detected an anomaly:
 
 ```bash
 reduct-cli alias add drone -L http://localhost:8383 -t "<DRONE_TOKEN>"
@@ -175,12 +173,26 @@ reduct-cli alias add drone -L http://localhost:8383 -t "<DRONE_TOKEN>"
 reduct-cli replica create drone/mission-to-ground \
     mission-data \
     https://<GROUND_TOKEN>@<ground-address>/drone-data \
-    --when '{"&replication_policy": {"$eq": "approved"}}'
+    --when '{"&anomaly": {"$eq": "true"}}'
 ```
 
-This creates a replication task that copies only records where `replication_policy=approved` from the drone's `mission-data` bucket to the ground station's `drone-data` bucket.
+This creates a replication task that copies only records where `anomaly=true` from the drone's `mission-data` bucket to the ground station.
 
-You can also provision this directly in Docker using environment variables:
+### Replicating with context (before and after)
+
+In many cases, you don't just want the anomaly record itself — you also want to see what happened **before** it. ReductStore supports this with the `#ctx_before` and `#ctx_after` directives. For example, to replicate each anomaly record plus 30 seconds of data before it and 10 seconds after:
+
+```json
+{
+  "&anomaly": { "$eq": "true" },
+  "#ctx_before": "30s",
+  "#ctx_after": "10s"
+}
+```
+
+This is powerful for drone operations: imagine the drone's onboard model detects an unexpected object. ReductStore will replicate that record **and** the 30 seconds of camera frames leading up to the detection, so the ground team can review what happened.
+
+You can provision this directly in Docker using environment variables:
 
 ```yaml
 services:
@@ -200,14 +212,16 @@ services:
       RS_REPLICATION_1_DST_TOKEN: <GROUND_TOKEN>
       RS_REPLICATION_1_WHEN: |
         {
-          "&replication_policy": { "$$eq": "approved" }
+          "&anomaly": { "$$eq": "true" },
+          "#ctx_before": "30s",
+          "#ctx_after": "10s"
         }
     volumes:
       - ./data:/data
 ```
 
 :::info
-With this setup, the drone can operate fully offline. Replication runs automatically when a connection is available and pauses when it's not. No manual file copies needed.
+With this setup, the drone can operate fully offline. Replication runs automatically when a connection is available and pauses when it's not. No manual file copies needed. And because context is included, the ground team always has enough data to understand what triggered the event.
 :::
 
 ## Querying for Audit Reports
@@ -230,7 +244,7 @@ async def main():
         ):
             print(
                 f"ts={record.timestamp}, "
-                f"sensor={record.labels.get('sensor')}, "
+                f"anomaly={record.labels.get('anomaly')}, "
                 f"checksum={record.labels.get('checksum')}, "
                 f"size={record.size}"
             )
@@ -239,28 +253,29 @@ async def main():
 asyncio.run(main())
 ```
 
-This gives you a clear log: timestamp, sensor, checksum, and size for every record in that mission. You can use this to verify that all approved data arrived on the ground side.
+This gives you a clear log of every record in that mission: timestamp, anomaly flag, checksum, and size. You can use this to verify that all expected data arrived on the ground side.
 
-For a deeper audit, compare the checksums on the drone side with the ground side to confirm data integrity.
+To go further, compare the checksums on the drone with the ground side to confirm nothing was altered during transfer.
 
 ## Why This Setup Works Well for Drones
 
-There are several advantages to using ReductStore for air-gapped drone operations:
+Drones have specific constraints that general purpose databases don't handle well. Here is what makes this setup practical:
 
-- **Drones can store data locally** and operate fully offline without any network dependency.
-- **Automatic replication when connected** removes the need for manual file transfers or rsync scripts.
-- **Selective replication with labels** lets you control exactly what data leaves the drone, which is important for classified or restricted environments.
-- **FIFO retention** keeps the drone's disk from filling up without deleting data prematurely.
-- **Labels and timestamps** make it easy to query and audit mission data later.
-- **Checksums in labels** give you a simple integrity check for compliance reviews.
+- **Full offline operation.** Drones store everything locally and don't need a network connection during the mission. Data is safe on disk until sync happens.
+- **Automatic sync when connected.** When the drone lands or connects to a trusted network, replication picks up where it left off. No manual file transfers, no rsync scripts, no USB sticks.
+- **Smart replication with context.** You don't have to sync everything. The replication task filters by labels and can include past records around each event using `#ctx_before`. The ground team gets exactly what they need to understand what happened.
+- **Disk never fills up unexpectedly.** FIFO retention removes the oldest data only when the disk is full. The drone always keeps as much history as possible without running out of space mid mission.
+- **Easy auditing.** Every record has a timestamp, labels, and a checksum. After a mission, you can query the ground station and verify exactly what was captured and what was synced.
+- **Store any file type.** Camera frames, telemetry CSV, logs, MCAP files, model outputs. Everything goes into the same system with the same interface.
 
 ## Next Steps
 
-If you're working with drones or robots that need offline storage and cloud sync, check out these related articles:
+If you want to go deeper, check out these articles:
 
-- **[Distributed Storage in Mobile Robotics](/blog/distributed-storage-mobile-robotics)** — a similar setup for mobile robots with S3 cloud backend
-- **[How to Store and Manage Robotics Data](/blog/store-robotic-data)** — a deeper look at ReductStore's features for robotics
-- **[Data Replication Guide](/docs/guides/data-replication)** — full documentation on replication tasks, filters, and modes
+- **[Distributed Storage in Mobile Robotics](/blog/distributed-storage-mobile-robotics)** for a similar setup with mobile robots and S3 cloud backend
+- **[How to Store and Manage Robotics Data](/blog/store-robotic-data)** for a broader look at ReductStore features for robotics
+- **[Data Replication Guide](/docs/guides/data-replication)** for the full documentation on replication tasks, filters, and modes
+- **[Conditional Query Reference](/docs/conditional-query)** for all available directives including `#ctx_before` and `#ctx_after`
 
 ---
 
