@@ -1,129 +1,267 @@
 ---
 title: Air-Gapped Drone Data Operations with Delayed Sync and Auditability
-description: A practical ReductStore-first architecture for drone teams that must capture data offline, enforce selective replication, and maintain a verifiable audit trail.
+description: How to set up local storage on drones with delayed replication and audit trail using ReductStore.
 authors: anthony
 slug: air-gapped-drone-data-ops
-tags: [aerospace, robotics, database, edge computing]
+tags: [aerospace, robotics, database]
 ---
 
-# Air-Gapped Drone Data Operations with Delayed Sync and Auditability
+Drones in air-gapped environments produce a **lot** of data (camera images, telemetry, logs, model outputs). Storing this data reliably on each drone and syncing it to a ground station later can be hard. **ReductStore** makes this easier: it's a lightweight, time-series object store that works offline first and syncs when a trusted link becomes available.
 
-Air-gapped drone programs need a storage design that works when the network does not. Most failures happen in the same places: inconsistent local retention, manual copy workflows, and no reliable proof of what was captured, replicated, or skipped.
-
-This guide is a **ReductStore-first blueprint** for operating drone pipelines in disconnected environments with delayed synchronization and an auditable data trail.
+This guide explains a simple setup where each drone stores data locally with labels, syncs only approved records to a ground station, and keeps a clear audit trail of what was captured and replicated.
 
 {/* truncate */}
 
-## Who this is for
+What we'll cover:
 
-- Defense and aerospace teams running disconnected UAV missions
-- Integrators building edge-to-ground-station data pipelines
-- Teams replacing ad-hoc file drops or fragile rsync scripts
+- [**Edge-to-Ground Architecture**](#edge-to-ground-architecture)
+- [**Setting Up the Edge Node**](#setting-up-the-edge-node)
+- [**Storing Drone Data with Labels**](#storing-drone-data-with-labels)
+- [**Setting Up Selective Replication**](#setting-up-selective-replication)
+- [**Querying for Audit Reports**](#querying-for-audit-reports)
+- [**Why This Setup Works Well for Drones**](#why-this-setup-works-well-for-drones)
 
-## The operational constraints (problem framing)
+## Edge-to-Ground Architecture
 
-In air-gapped operations, your storage layer must support all of this simultaneously:
+The architecture has three main components:
 
-1. **Offline-first ingestion** on edge compute
-2. **Deterministic retention** under finite disk constraints
-3. **Selective sync** (only policy-approved records move out)
-4. **Auditability** for chain-of-custody and compliance reviews
-5. **Simple recovery** after power/network interruptions
-
-:::warning
-If your workflow depends on “upload after mission if someone remembers,” you don’t have a reliable pipeline.
-:::
-
-## Reference architecture (ReductStore)
-
-### Edge node (on drone or companion computer)
-
-- Run ReductStore locally (single binary / container)
-- Store sensor artifacts as timestamped records:
-  - images/video chunks
-  - telemetry batches
-  - logs/events
-  - model outputs
-- Attach labels for downstream policy routing (`mission_id`, `sensor`, `classification`, `priority`)
-
-### Delayed sync boundary
-
-- Keep the drone fully operational while disconnected
-- Queue replication tasks and execute only when approved links are available
-- Filter what is replicated by label policy (not just by path)
-
-### Ground/secure zone
-
-- Receive replicated records into controlled ReductStore buckets
-- Preserve metadata/labels for traceability
-- Query by time windows and labels for mission review and incident analysis
-
-## Data model (initial schema draft)
-
-Use a consistent label contract from day one:
+- **Each drone runs a small ReductStore server** to save images and telemetry locally on disk (this lets the drone operate fully offline).
+- **A ground station runs a ReductStore instance** that receives replicated data for analysis and archiving.
+- **ReductStore replication tasks** copy data from drone to ground based on labels (e.g., only records marked as `approved`).
 
 ```text
-mission_id=<uuid>
-platform_id=<drone-id>
-sensor=<camera|imu|lidar|event>
-classification=<public|restricted|secret>
-replication_policy=<none|delayed|approved>
-checksum=<sha256>
+┌──────────────────────┐
+│    Drone Sensors      │
+│  camera, IMU, lidar   │
+└──────────┬───────────┘
+           │
+           v
+┌──────────────────────┐
+│  Edge ReductStore     │
+│  - write with labels  │
+│  - FIFO retention     │
+└──────────┬───────────┘
+           │ (when trusted link is available)
+           v
+┌──────────────────────┐
+│  Replication Task     │
+│  - filter by labels   │
+│  - approved only      │
+└──────────┬───────────┘
+           │
+           v
+┌──────────────────────┐
+│  Ground ReductStore   │
+│  - query & audit      │
+└──────────────────────┘
 ```
 
-This enables deterministic filtering and repeatable audits.
+Each drone pushes its data to the ground whenever it is connected. If the network disconnects, replication continues when the drone reconnects. This approach provides offline capability, lets you decide which data to replicate, and keeps a clear record of what happened.
 
-## Retention strategy (offline safety)
+## Setting Up the Edge Node
 
-- Configure bucket quotas per sensor class
-- Use FIFO by volume for high-rate streams
-- Reserve “protected” buckets for critical mission events
-- Keep retention policy explicit and versioned in infra config
+Start by running ReductStore on the drone's companion computer. Here is a minimal `docker-compose.yml`:
 
-## Replication policy (delayed + selective)
+```yaml
+services:
+  reductstore:
+    image: reduct/store:latest
+    ports:
+      - "8383:8383"
+    environment:
+      RS_API_TOKEN: <DRONE_TOKEN>
+      RS_BUCKET_1_NAME: mission-data
+      RS_BUCKET_1_QUOTA_TYPE: FIFO
+      RS_BUCKET_1_QUOTA_SIZE: 10000000000  # 10 GB
+    volumes:
+      - ./data:/data
+```
 
-Recommended baseline:
+Run it with:
 
-- Replicate only `replication_policy=approved`
-- Prioritize low-bandwidth metadata before large media payloads
-- Include labels needed for compliance review
-- Log replication outcomes per mission window
+```bash
+docker compose up -d
+```
+
+This starts a ReductStore server with a `mission-data` bucket that uses FIFO retention. Old data is deleted only when the 10 GB limit is reached, so the drone always keeps as much history as possible.
 
 :::info
-ReductStore replication and label-based querying are the core primitives that make this architecture practical without custom ingestion services.
+FIFO quota is volume-based, not time-based. This means data is only deleted when disk space runs out, not after a fixed time period. This is important for drones that may sit idle between missions.
 :::
 
-## Auditability model
+If you prefer Snap instead of Docker:
 
-Track and verify at three levels:
+```bash
+sudo snap install reductstore
+```
 
-1. **Capture audit:** record written with timestamp + labels + checksum
-2. **Replication audit:** when/where each approved record was copied
-3. **Access audit:** who queried/exported mission data and when
+That starts a ReductStore server on port `8383` by default. You can then create the bucket using the **[Reduct CLI](https://github.com/reductstore/reduct-cli)**:
 
-## Implementation plan (for publication draft)
+```bash
+reduct-cli alias add drone -L http://localhost:8383 -t "<DRONE_TOKEN>"
+reduct-cli bucket create drone/mission-data --quota-type FIFO --quota-size 10GB
+```
 
-- [ ] Add deployment example (Docker/Snap) for edge node
-- [ ] Add concrete ReductStore replication config block
-- [ ] Add SDK snippet (Python) for labeled writes + checksum label
-- [ ] Add query snippet for post-mission audit report generation
-- [ ] Add internal links to related ReductStore posts/docs
+## Storing Drone Data with Labels
 
-## Internal links to add in final draft
+Use labels to tag every record with mission context. This is what makes selective replication and auditing possible later. Here is an example using the Python SDK:
 
-- `/blog/store-robotic-data`
-- `/blog/store-ros-topics`
-- `/blog/distributed-storage-mobile-robotics`
-- `/docs/guides/data-replication`
-- `/docs/guides/query-data`
+```python
+import asyncio
+import time
+import hashlib
+from reduct import Client, BucketSettings, QuotaType
 
-## Positioning summary (editorial)
 
-The key message of this article is not generic “edge storage is hard.”
-It is:
+async def main():
+    async with Client("http://localhost:8383", api_token="<DRONE_TOKEN>") as client:
+        bucket = await client.get_bucket("mission-data")
 
-> **ReductStore provides the minimum reliable primitives (timestamped blob records, labels, retention control, and selective replication) to make air-gapped drone data operations repeatable and auditable.**
+        # Read a camera frame
+        payload = open("frame.jpg", "rb").read()
+        checksum = hashlib.sha256(payload).hexdigest()
+        timestamp = int(time.time() * 1_000_000)  # microseconds
+
+        # Write with mission labels
+        await bucket.write(
+            "camera",
+            payload,
+            timestamp=timestamp,
+            labels={
+                "mission_id": "m-2026-02-24-01",
+                "platform_id": "uav-07",
+                "sensor": "camera",
+                "classification": "restricted",
+                "replication_policy": "approved",
+                "checksum": checksum,
+            },
+            content_type="image/jpeg",
+        )
+
+        # Write telemetry as a CSV batch
+        csv_data = "ts,lat,lon,alt,speed\n"
+        csv_data += "1708771200000000,47.3769,8.5417,450.2,12.5\n"
+        csv_data += "1708771201000000,47.3770,8.5418,451.0,12.8\n"
+
+        await bucket.write(
+            "telemetry",
+            csv_data.encode(),
+            timestamp=timestamp,
+            labels={
+                "mission_id": "m-2026-02-24-01",
+                "platform_id": "uav-07",
+                "sensor": "gps",
+                "replication_policy": "approved",
+                "checksum": hashlib.sha256(csv_data.encode()).hexdigest(),
+            },
+            content_type="text/csv",
+        )
+
+
+asyncio.run(main())
+```
+
+The `replication_policy` label is important: it controls which records will be synced later. Records with `replication_policy=approved` will be replicated; records with `replication_policy=none` stay on the drone only.
+
+The `checksum` label gives you a simple way to verify data integrity during audits.
+
+## Setting Up Selective Replication
+
+Once the drone connects to a trusted network, replication sends only approved records to the ground station. You can set this up with the CLI:
+
+```bash
+reduct-cli alias add drone -L http://localhost:8383 -t "<DRONE_TOKEN>"
+
+reduct-cli replica create drone/mission-to-ground \
+    mission-data \
+    https://<GROUND_TOKEN>@<ground-address>/drone-data \
+    --when '{"&replication_policy": {"$eq": "approved"}}'
+```
+
+This creates a replication task that copies only records where `replication_policy=approved` from the drone's `mission-data` bucket to the ground station's `drone-data` bucket.
+
+You can also provision this directly in Docker using environment variables:
+
+```yaml
+services:
+  reductstore:
+    image: reduct/store:latest
+    ports:
+      - "8383:8383"
+    environment:
+      RS_API_TOKEN: <DRONE_TOKEN>
+      RS_BUCKET_1_NAME: mission-data
+      RS_BUCKET_1_QUOTA_TYPE: FIFO
+      RS_BUCKET_1_QUOTA_SIZE: 10000000000
+      RS_REPLICATION_1_NAME: mission-to-ground
+      RS_REPLICATION_1_SRC_BUCKET: mission-data
+      RS_REPLICATION_1_DST_BUCKET: drone-data
+      RS_REPLICATION_1_DST_HOST: https://<ground-address>
+      RS_REPLICATION_1_DST_TOKEN: <GROUND_TOKEN>
+      RS_REPLICATION_1_WHEN: |
+        {
+          "&replication_policy": { "$$eq": "approved" }
+        }
+    volumes:
+      - ./data:/data
+```
+
+:::info
+With this setup, the drone can operate fully offline. Replication runs automatically when a connection is available and pauses when it's not. No manual file copies needed.
+:::
+
+## Querying for Audit Reports
+
+After a mission, you can query the ground station to check what was captured and replicated. Here is a simple example that lists all records from a specific mission:
+
+```python
+import asyncio
+from reduct import Client
+
+
+async def main():
+    async with Client("https://<ground-address>", api_token="<GROUND_TOKEN>") as client:
+        bucket = await client.get_bucket("drone-data")
+
+        # Query all camera records from a specific mission
+        async for record in bucket.query(
+            "camera",
+            when={"&mission_id": {"$eq": "m-2026-02-24-01"}},
+        ):
+            print(
+                f"ts={record.timestamp}, "
+                f"sensor={record.labels.get('sensor')}, "
+                f"checksum={record.labels.get('checksum')}, "
+                f"size={record.size}"
+            )
+
+
+asyncio.run(main())
+```
+
+This gives you a clear log: timestamp, sensor, checksum, and size for every record in that mission. You can use this to verify that all approved data arrived on the ground side.
+
+For a deeper audit, compare the checksums on the drone side with the ground side to confirm data integrity.
+
+## Why This Setup Works Well for Drones
+
+There are several advantages to using ReductStore for air-gapped drone operations:
+
+- **Drones can store data locally** and operate fully offline without any network dependency.
+- **Automatic replication when connected** removes the need for manual file transfers or rsync scripts.
+- **Selective replication with labels** lets you control exactly what data leaves the drone, which is important for classified or restricted environments.
+- **FIFO retention** keeps the drone's disk from filling up without deleting data prematurely.
+- **Labels and timestamps** make it easy to query and audit mission data later.
+- **Checksums in labels** give you a simple integrity check for compliance reviews.
+
+## Next Steps
+
+If you're working with drones or robots that need offline storage and cloud sync, check out these related articles:
+
+- **[Distributed Storage in Mobile Robotics](/blog/distributed-storage-mobile-robotics)** — a similar setup for mobile robots with S3 cloud backend
+- **[How to Store and Manage Robotics Data](/blog/store-robotic-data)** — a deeper look at ReductStore's features for robotics
+- **[Data Replication Guide](/docs/guides/data-replication)** — full documentation on replication tasks, filters, and modes
 
 ---
 
-If this structure looks good, next step is to fill each section with production-ready examples and release-quality copy for tomorrow’s publication window.
+I hope you found this article helpful! If you have any questions or feedback, don't hesitate to reach out on our [**ReductStore Community**](https://community.reduct.store/signup) forum.
