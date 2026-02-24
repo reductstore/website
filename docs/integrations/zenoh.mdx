@@ -42,7 +42,7 @@ In Zenoh, a **key** is a concrete address for a value, such as `organizationA/bu
 
 A key is a `/`-separated sequence of non-empty UTF-8 segments, similar to a filesystem path. Individual key segments may not contain `*`, `$`, `?`, or `#`.
 
-Key expressions extend plain keys with three wildcards:
+Key expressions extend plain keys with three wildcards. The following table and examples are taken from the [**Zenoh abstractions documentation**](https://zenoh.io/docs/manual/abstractions/):
 
 | Wildcard | Matches                                                                                 | Example                                         |
 | -------- | --------------------------------------------------------------------------------------- | ----------------------------------------------- |
@@ -58,7 +58,7 @@ See the [**Zenoh abstractions documentation**](https://zenoh.io/docs/manual/abst
 
 ## Selectors
 
-When querying, Zenoh uses a **selector** — a key expression optionally followed by `?` and a list of parameters:
+When querying, Zenoh uses a **selector** — a key expression optionally followed by `?` and a list of parameters. The following syntax is from the [**Zenoh abstractions documentation**](https://zenoh.io/docs/manual/abstractions/):
 
 ```
 factory/**/temperature?start=1700000000000000&limit=100
