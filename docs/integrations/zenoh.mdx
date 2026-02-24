@@ -22,22 +22,25 @@ The Zenoh API is compiled under the `zenoh-api` Cargo feature flag. Official Doc
 
 ReductStore opens a Zenoh session on startup and registers a **subscriber** (for writes) and a **queryable** (for reads). Both talk directly to the storage engine without going through HTTP.
 
-| Zenoh concept      | ReductStore mapping                                             |
-| ------------------ | --------------------------------------------------------------- |
-| **Subscriber**     | Write path. Samples published to a key expression are ingested. |
-| **Queryable**      | Read path. Queries against a key expression retrieve records.   |
-| **Key expression** | Becomes the **entry name** inside the configured bucket.        |
-| **Encoding**       | Mapped to the record's **content type**.                        |
-| **Attachment**     | JSON-encoded map of **labels** (key-value metadata).            |
-| **Timestamp**      | Zenoh HLC timestamp converted to Unix microseconds.             |
+| Zenoh concept      | ReductStore mapping                                                                                          |
+| ------------------ | ------------------------------------------------------------------------------------------------------------ |
+| **Subscriber**     | Write path. Samples published to keys matching the configured key expression are ingested.                   |
+| **Queryable**      | Read path. Queries whose selector matches the configured key expression retrieve records.                     |
+| **Key**            | The concrete address of a sample (e.g. `robot/arm/joint1`). Becomes the **entry name** in the bucket.       |
+| **Key expression** | A wildcard pattern (e.g. `robot/**`). Used to configure which keys the subscriber and queryable respond to.  |
+| **Encoding**       | Mapped to the record's **content type**.                                                                     |
+| **Attachment**     | JSON-encoded map of **labels** (key-value metadata).                                                         |
+| **Timestamp**      | Zenoh HLC timestamp converted to Unix microseconds.                                                          |
 
 All data is stored in a single ReductStore bucket. The bucket is created automatically if it does not exist.
 
 ## Key Expressions
 
-Key expressions are the addressing language of Zenoh. ReductStore uses the same [Key Expression Language](https://github.com/eclipse-zenoh/roadmap/blob/main/rfcs/ALL/Key%20Expressions.md) for both `RS_ZENOH_SUB_KEYEXPRS` and `RS_ZENOH_QUERY_KEYEXPRS`, and the matched key expression becomes the entry name stored in ReductStore.
+In Zenoh, a **key** is a concrete address for a value, such as `organizationA/building8/room275/sensor3/temperature`. A **key expression** is a pattern defined using the [Key Expression Language](https://github.com/eclipse-zenoh/roadmap/blob/main/rfcs/ALL/Key%20Expressions.md) that can match a set of keys.
 
-A Zenoh key is a `/`-separated sequence of non-empty UTF-8 segments, similar to a filesystem path. Individual key segments may not contain `*`, `$`, `?`, or `#`.
+`RS_ZENOH_SUB_KEYEXPRS` and `RS_ZENOH_QUERY_KEYEXPRS` take key expressions — they define which keys the subscriber and queryable respond to. The **key** of each individual sample (the concrete address it was published to) is what becomes the entry name in ReductStore.
+
+A key is a `/`-separated sequence of non-empty UTF-8 segments, similar to a filesystem path. Individual key segments may not contain `*`, `$`, `?`, or `#`.
 
 Key expressions extend plain keys with three wildcards:
 
@@ -129,7 +132,7 @@ Both values follow the [Key Expression Language](#key-expressions) described abo
 
 When a Zenoh publisher sends a sample to a key expression that matches `RS_ZENOH_SUB_KEYEXPRS`:
 
-1. The full key expression becomes the entry name (leading and trailing `/` are stripped).
+1. The sample's key becomes the entry name (leading and trailing `/` are stripped).
 2. The sample payload is written to that entry in `RS_ZENOH_BUCKET`.
 3. The sample's **encoding** is mapped to the record's **content type**. If no encoding is set, the content type defaults to `application/octet-stream`.
 4. If the sample carries a Zenoh timestamp, it is converted from HLC to Unix microseconds and used as the record timestamp. Otherwise the server clock is used.
@@ -176,7 +179,7 @@ session.put(
 
 When a Zenoh client sends a query to a key expression that matches `RS_ZENOH_QUERY_KEYEXPRS`, ReductStore looks up the matching records and replies with them.
 
-The query takes the form of a [selector](#selectors): the key expression maps to the entry name within `RS_ZENOH_BUCKET`, and the parameters after `?` control which records are returned.
+The query takes the form of a [selector](#selectors): the key part of the selector maps to the entry name within `RS_ZENOH_BUCKET`, and the parameters after `?` control which records are returned.
 
 ### Point-in-time Lookup
 
