@@ -22,15 +22,15 @@ The Zenoh API is compiled under the `zenoh-api` Cargo feature flag. Official Doc
 
 ReductStore opens a Zenoh session on startup and registers a **subscriber** (for writes) and a **queryable** (for reads). Both talk directly to the storage engine without going through HTTP.
 
-| Zenoh concept      | ReductStore mapping                                                                                          |
-| ------------------ | ------------------------------------------------------------------------------------------------------------ |
-| **Subscriber**     | Write path. Samples published to keys matching the configured key expression are ingested.                   |
-| **Queryable**      | Read path. Queries whose selector matches the configured key expression retrieve records.                     |
-| **Key**            | The concrete address of a sample (e.g. `robot/arm/joint1`). Becomes the **entry name** in the bucket.       |
-| **Key expression** | A wildcard pattern (e.g. `robot/**`). Used to configure which keys the subscriber and queryable respond to.  |
-| **Encoding**       | Mapped to the record's **content type**.                                                                     |
-| **Attachment**     | JSON-encoded map of **labels** (key-value metadata).                                                         |
-| **Timestamp**      | Zenoh HLC timestamp converted to Unix microseconds.                                                          |
+| Zenoh concept      | ReductStore mapping                                                                                                                              |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Subscriber**     | Write path. Samples published to keys matching the configured key expression are ingested.                                                        |
+| **Queryable**      | Read path. Queries whose selector matches the configured key expression retrieve **[records](../glossary#record)**.                               |
+| **Key**            | The concrete address of a sample (e.g. `robot/arm/joint1`). Becomes the **[entry](../glossary#entry)** name in the **[bucket](../glossary#bucket)**. |
+| **Key expression** | A wildcard pattern (e.g. `robot/**`). Used to configure which keys the subscriber and queryable respond to.                                      |
+| **Encoding**       | Mapped to the **[record](../glossary#record)**'s **content type**.                                                                               |
+| **Attachment**     | JSON-encoded map of **[labels](../glossary#label)** (key-value metadata).                                                                        |
+| **Timestamp**      | Zenoh HLC timestamp converted to Unix microseconds.                                                                                              |
 
 All data is stored in a single ReductStore bucket. The bucket is created automatically if it does not exist.
 
