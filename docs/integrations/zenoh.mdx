@@ -300,3 +300,6 @@ ReductStore API tokens are not checked for Zenoh connections. If you need per-to
 ## Current Limitations
 
 - **Single-bucket mode.** All Zenoh data maps to one configured bucket. Routing to different buckets based on the key expression is not yet supported.
+- **No data deletion.** Records, entries, and buckets cannot be deleted through the Zenoh API. Use the [**HTTP API**](/docs/http-api) for data management operations.
+- **Limited query parameters.** The Zenoh API exposes a fixed set of query parameters (`start`, `stop`, `limit`, and so on). The full [**ReductStore query language**](/docs/guides/data-querying) — including conditional `when` expressions and strict mode — is not available over Zenoh.
+- **No topic-to-label mapping.** There is no way to map a Zenoh key or key expression to a ReductStore label. For example, it is not currently possible to store data from multiple Zenoh topics as records under a single entry and use the topic name as a label.
