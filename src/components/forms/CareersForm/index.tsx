@@ -33,7 +33,6 @@ const CareersForm: React.FC<CareersFormProps> = ({
   const [linkedin, setLinkedin] = useState("");
   const [message, setMessage] = useState("");
   const [consent, setConsent] = useState(false);
-  const [cvFile, setCvFile] = useState<File | null>(null);
 
   const [utmParams, setUtmParams] = useState({
     utm_campaign: "",
@@ -70,10 +69,6 @@ const CareersForm: React.FC<CareersFormProps> = ({
 
     const formEl = e.currentTarget;
     const formData = new FormData(formEl);
-
-    if (cvFile) {
-      formData.set("cv", cvFile, cvFile.name);
-    }
 
     await handleSubmit(formData);
   };
@@ -174,19 +169,6 @@ const CareersForm: React.FC<CareersFormProps> = ({
             field="message"
             errors={state.errors}
           />
-        </div>
-
-        <div className={styles.inputGroup}>
-          <label htmlFor="cv">CV (PDF)</label>
-          <input
-            id="cv"
-            type="file"
-            name="cv"
-            accept="application/pdf"
-            onChange={(e) => setCvFile(e.target.files?.[0] || null)}
-            required
-          />
-          <ValidationError prefix="CV" field="cv" errors={state.errors} />
         </div>
 
         <div className={styles.checkboxGroup} style={{ gridColumn: "1 / -1" }}>
