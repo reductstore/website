@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 700" width="100%" height="100%">
+  <defs>
+    <style>
+      :root {
+        /* Light Mode Colors */
+        --card-bg: #FFFFFF;
+        --card-brand: #2B0548;
+        --card-stroke: #333333;
+        --shadow: #000000;
+        --text-main: #333333;
+        --text-muted: #666666;
+        --text-inverse: #FFFFFF;
+        --line: #333333;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          /* Dark Mode Colors */
+          --card-bg: #1E1E1E;
+          --card-stroke: #555555;
+          --shadow: #000000;
+          --text-main: #EFEFEF;
+          --text-muted: #A0A0A0;
+          --line: #EFEFEF;
+        }
+      }
+
+      text {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      
+      .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .shadow { fill: var(--shadow); }
+      
+      .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
+      .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-bullet { font-size: 15px; font-weight: 400; fill: var(--text-main); }
+      .text-bullet-inverse { font-size: 15px; font-weight: 400; fill: var(--text-inverse); }
+      .text-subtitle { font-size: 14px; fill: var(--text-muted); }
+      .text-note { font-size: 13px; font-style: italic; fill: var(--text-muted); }
+      
+      .connector { stroke: var(--line); stroke-width: 2; }
+      .arrow-head { fill: var(--line); }
+    </style>
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
+    </marker>
+  </defs>
+
+  <rect x="158" y="48" width="284" height="80" rx="16" class="shadow" />
+  <rect x="150" y="40" width="284" height="80" rx="16" class="card-standard" />
+  
+  <text x="292" y="70" class="text-title" text-anchor="middle">Drone Sensors</text>
+  <text x="292" y="94" class="text-subtitle" text-anchor="middle">camera, IMU, lidar</text>
+
+  <line x1="292" y1="120" x2="292" y2="175" class="connector" marker-end="url(#arrow)" />
+
+
+  <rect x="158" y="193" width="284" height="96" rx="16" class="shadow" />
+  <rect x="150" y="185" width="284" height="96" rx="16" class="card-brand" />
+  
+  <text x="292" y="215" class="text-title-inverse" text-anchor="middle">Edge ReductStore</text>
+  <text x="175" y="244" class="text-bullet-inverse">• write with labels</text>
+  <text x="175" y="266" class="text-bullet-inverse">• FIFO retention</text>
+
+  <line x1="292" y1="281" x2="292" y2="355" class="connector" marker-end="url(#arrow)" />
+  <text x="302" y="325" class="text-note">(when trusted link is available)</text>
+
+
+  <rect x="158" y="373" width="284" height="96" rx="16" class="shadow" />
+  <rect x="150" y="365" width="284" height="96" rx="16" class="card-standard" />
+  
+  <text x="292" y="395" class="text-title" text-anchor="middle">Replication Task</text>
+  <text x="175" y="424" class="text-bullet">• filter by labels</text>
+  <text x="175" y="446" class="text-bullet">• include context</text>
+
+  <line x1="292" y1="461" x2="292" y2="535" class="connector" marker-end="url(#arrow)" />
+
+
+  <rect x="158" y="553" width="284" height="80" rx="16" class="shadow" />
+  <rect x="150" y="545" width="284" height="80" rx="16" class="card-brand" />
+  
+  <text x="292" y="575" class="text-title-inverse" text-anchor="middle">Ground ReductStore</text>
+  <text x="175" y="604" class="text-bullet-inverse">• query &amp; audit</text>
+
+</svg>
