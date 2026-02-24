@@ -10,7 +10,7 @@ sidebar_position: 4
 
 # Zenoh API
 
-ReductStore can receive and serve time-series data directly over [Zenoh](https://zenoh.io), using its native pub/sub and query primitives. This is an alternative ingestion and retrieval path that runs alongside the existing HTTP API — both work at the same time and share the same stored data.
+ReductStore can receive and serve time-series data directly over [**Zenoh**](https://zenoh.io), using its native pub/sub and query primitives. This is an alternative ingestion and retrieval path that runs alongside the existing HTTP API — both work at the same time and share the same stored data.
 
 This page explains how to enable the Zenoh API, how to configure it, and what you can and cannot do with it compared to the HTTP API.
 
@@ -36,7 +36,7 @@ All data is stored in a single ReductStore bucket. The bucket is created automat
 
 ## Key Expressions
 
-In Zenoh, a **key** is a concrete address for a value, such as `organizationA/building8/room275/sensor3/temperature`. A **key expression** is a pattern defined using the [Key Expression Language](https://github.com/eclipse-zenoh/roadmap/blob/main/rfcs/ALL/Key%20Expressions.md) that can match a set of keys.
+In Zenoh, a **key** is a concrete address for a value, such as `organizationA/building8/room275/sensor3/temperature`. A **key expression** is a pattern defined using the [**Key Expression Language**](https://github.com/eclipse-zenoh/roadmap/blob/main/rfcs/ALL/Key%20Expressions.md) that can match a set of keys.
 
 `RS_ZENOH_SUB_KEYEXPRS` and `RS_ZENOH_QUERY_KEYEXPRS` take key expressions — they define which keys the subscriber and queryable respond to. The **key** of each individual sample (the concrete address it was published to) is what becomes the entry name in ReductStore.
 
@@ -54,7 +54,7 @@ Key expressions extend plain keys with three wildcards:
 Prefer `*` and `**` over `$*` when designing your key space. `$*` is slower and is usually only needed when different identifiers are mixed within the same segment — e.g. `robot12` and `pc18`. Structuring keys as `robot/12` and `pc/18` instead avoids this.
 :::
 
-See the [Zenoh abstractions documentation](https://zenoh.io/docs/manual/abstractions/) for the full key expression specification.
+See the [**Zenoh abstractions documentation**](https://zenoh.io/docs/manual/abstractions/) for the full key expression specification.
 
 ## Selectors
 
@@ -66,7 +66,7 @@ factory/**/temperature?start=1700000000000000&limit=100
 |--- key expression --| |------ parameters ------|
 ```
 
-The key expression part is used by Zenoh routers to route the query to the right queryable. The parameters are passed through to ReductStore and interpreted as query filters (see [Time-range Query](#time-range-query) below). Parameters are `&`-separated `key=value` pairs, and values may be URL-encoded.
+The key expression part is used by Zenoh routers to route the query to the right queryable. The parameters are passed through to ReductStore and interpreted as query filters (see [**Time-range Query**](#time-range-query) below). Parameters are `&`-separated `key=value` pairs, and values may be URL-encoded.
 
 ## Configuration
 
@@ -107,7 +107,7 @@ Unknown keys are logged as warnings and ignored. For advanced session settings (
 
 #### JSON5 config file
 
-Pass the path to a standard [Zenoh JSON5 configuration file](https://github.com/eclipse-zenoh/zenoh/blob/main/DEFAULT_CONFIG.json5):
+Pass the path to a standard [**Zenoh JSON5 configuration file**](https://github.com/eclipse-zenoh/zenoh/blob/main/DEFAULT_CONFIG.json5):
 
 ```
 RS_ZENOH_CONFIG_PATH=/etc/reductstore/zenoh.json5
@@ -126,7 +126,7 @@ RS_ZENOH_CONFIG_PATH=/etc/reductstore/zenoh.json5
 | `RS_ZENOH_SUB_KEYEXPRS`   | —       | Key expression for the subscriber (write path). Disabled if unset.               |
 | `RS_ZENOH_QUERY_KEYEXPRS` | —       | Key expression for the queryable (read path). Disabled if unset.                 |
 
-Both values follow the [Key Expression Language](#key-expressions) described above.
+Both values follow the [**Key Expression Language**](#key-expressions) described above.
 
 ## Write Path
 
@@ -179,7 +179,7 @@ session.put(
 
 When a Zenoh client sends a query to a key expression that matches `RS_ZENOH_QUERY_KEYEXPRS`, ReductStore looks up the matching records and replies with them.
 
-The query takes the form of a [selector](#selectors): the key part of the selector maps to the entry name within `RS_ZENOH_BUCKET`, and the parameters after `?` control which records are returned.
+The query takes the form of a [**selector**](#selectors): the key part of the selector maps to the entry name within `RS_ZENOH_BUCKET`, and the parameters after `?` control which records are returned.
 
 ### Point-in-time Lookup
 
@@ -283,7 +283,7 @@ docker run -d \
 
 The HTTP API stays fully operational when the Zenoh API is enabled. Data written via Zenoh is immediately visible over HTTP and vice versa. A typical setup uses Zenoh for ingestion from edge nodes and the HTTP API or Web Console for querying, management, and replication.
 
-Data management operations such as deleting records, entries, or buckets are not available through the Zenoh API. Use the [HTTP API](/docs/http-api) for those.
+Data management operations such as deleting records, entries, or buckets are not available through the Zenoh API. Use the [**HTTP API**](/docs/http-api) for those.
 
 ## Authentication
 
@@ -291,9 +291,9 @@ Zenoh has its own access control system, separate from ReductStore API tokens. R
 
 You configure who can connect, and what they can do, at the Zenoh level using:
 
-- [Access control rules](https://zenoh.io/docs/manual/access-control/) to allow or deny operations on specific key expressions per subject
-- [User-password authentication](https://zenoh.io/docs/manual/user-password/) to authenticate clients and peers before they join the session
-- [TLS authentication](https://zenoh.io/docs/manual/tls/) for mutual certificate-based authentication
+- [**Access control rules**](https://zenoh.io/docs/manual/access-control/) to allow or deny operations on specific key expressions per subject
+- [**User-password authentication**](https://zenoh.io/docs/manual/user-password/) to authenticate clients and peers before they join the session
+- [**TLS authentication**](https://zenoh.io/docs/manual/tls/) for mutual certificate-based authentication
 
 ReductStore API tokens are not checked for Zenoh connections. If you need per-token access control on top of Zenoh, use the HTTP API.
 
