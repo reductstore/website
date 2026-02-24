@@ -1,5 +1,5 @@
 ---
-title: Entry Attachments
+title: Attachments
 description: How to store and manage entry attachments using the system `$meta` entry.
 ---
 
@@ -15,14 +15,15 @@ description: How to store and manage entry attachments using the system `$meta` 
 You can store **[attachments](../../glossary#attachment)** for any entry by writing records into a dedicated system entry:
 
 ```
-<entry_name>/$meta
+<parent_entry_name>/$meta
 ```
 
 This is useful for schema fragments, calibration metadata, plugin configuration, or any small JSON payload that should travel with the entry.
 
-Attachments use the same Entry API endpoints as regular records.
-However, they have additional restrictions and requirements to ensure they are used, stored and replicated correctly and do not interfere with regular entry data.
-Each attachment is identified by a required `key` label that allows storing multiple attachments in the same `$meta` entry and updating/removing them individually.
+Attachments are regular records with a few extra rules.
+Each attachment is identified by a required `key` label, which lets you store multiple attachments in the same `$meta` entry and update/remove them individually.
+
+For example, if your parent entry name is `robot/front/camera`, the attachments entry is `robot/front/camera/$meta`.
 
 import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
@@ -41,12 +42,14 @@ For write requests:
 
 - `x-reduct-label-key` is required.
 - Writing with the same `key` replaces the previous attachment with that `key`.
+- Writing with `x-reduct-label-remove: true` is not allowed. Use a label update (`PATCH`) to remove an attachment.
 
 Attachments can also be created with batch endpoints. The same rules apply: the entry path must end with `/$meta`, and the `key` label is required for each attachment record.
 
 **Changes**:
 
-- Version 1.19 (Unreleased): Entry attachments in system `$meta` entries were introduced.
+- Version 1.19: Entry attachments in system `$meta` entries were introduced.
+- Version 1.19: entry names can be hierarchical paths with multiple segments (for example, `a/b/c`).
 
 <SwaggerComponent
   method="POST"
@@ -65,7 +68,8 @@ Attachments can also be created with batch endpoints. The same rules apply: the 
       type: "path",
       details: {
         name: ":entry_name",
-        description: "Name of the parent entry (without `/$meta` suffix)",
+        description:
+          "Name of the parent entry (without `/$meta` suffix). Can be hierarchical (for example, `a/b/c`).",
         isRequired: true,
       },
     },
@@ -138,7 +142,12 @@ If a `$meta` record with `key=$plugin` already exists, it is replaced by this ne
 
 Reading attachments works exactly like reading regular records: use the attachment path and timestamp.
 
-`$meta` is a system entry, so it is hidden from bucket `entry_count` and entry lists and can't be accessed with wildcard queries. You must read it by its exact path with `/$meta` suffix and timestamp.
+Because `$meta` is a system entry:
+
+- It is hidden from bucket `entry_count` and entry lists.
+- Wildcard entry-name queries do not include it, so you must address it by its exact path (`<parent_entry_name>/$meta`).
+
+If you don't know the timestamp of an attachment, query the `$meta` entry by `key` first (see the [**Query API**](./run_query.mdx)).
 
 <SwaggerComponent
   method="GET"
@@ -157,7 +166,8 @@ Reading attachments works exactly like reading regular records: use the attachme
       type: "path",
       details: {
         name: ":entry_name",
-        description: "Name of the parent entry (without `/$meta` suffix)",
+        description:
+          "Name of the parent entry (without `/$meta` suffix). Can be hierarchical (for example, `a/b/c`).",
         isRequired: true,
       },
     },
@@ -210,6 +220,7 @@ Reading attachments works exactly like reading regular records: use the attachme
 To remove an attachment, update labels of the existing `$meta` record and set `remove=true`.
 
 This is intentionally done through `PATCH` (update), not through a write request.
+It is also the recommended way when replication is enabled, because record deletions are not replicated.
 
 The `PATCH` request must target an existing attachment record timestamp.
 
@@ -230,7 +241,8 @@ The `PATCH` request must target an existing attachment record timestamp.
       type: "path",
       details: {
         name: ":entry_name",
-        description: "Name of the parent entry (without `/$meta` suffix)",
+        description:
+          "Name of the parent entry (without `/$meta` suffix). Can be hierarchical (for example, `a/b/c`).",
         isRequired: true,
       },
     },
@@ -249,7 +261,7 @@ The `PATCH` request must target an existing attachment record timestamp.
         name: "x-reduct-label-key",
         description:
           "Attachment key. Keys starting with `$` are reserved for internal use.",
-        isRequired: true,
+        isRequired: false,
       },
     },
     {
@@ -320,7 +332,8 @@ If you need to delete it, remove the parent entry instead. The `$meta` entry is 
       type: "path",
       details: {
         name: ":entry_name",
-        description: "Name of the parent entry (without `/$meta` suffix)",
+        description:
+          "Name of the parent entry (without `/$meta` suffix). Can be hierarchical (for example, `a/b/c`).",
         isRequired: true,
       },
     },
@@ -338,7 +351,8 @@ If you need to delete it, remove the parent entry instead. The `$meta` entry is 
 
 In practice, attachment handling usually looks like this:
 
-1. Write attachment JSON to `<entry_name>/$meta` with a `key`.
+1. Write attachment data to `<parent_entry_name>/$meta` with a `key`.
 2. Write a newer record with the same `key` when you need to update it.
-3. Read the latest attachment record when needed.
-4. Remove it with `PATCH` and `x-reduct-label-remove: true`.
+3. Query `<parent_entry_name>/$meta` by `key` if you need to find the attachment timestamp.
+4. Read the attachment record when needed.
+5. Remove it with `PATCH` and `x-reduct-label-remove: true`.

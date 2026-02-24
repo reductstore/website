@@ -30,8 +30,6 @@ ReductStore is designed specifically for storing and managing large amounts of u
 In comparison to other S3-like object storage, ReductStore works differently:
 
 - **Indexing By Time.** Each **[record](./glossary#record)** in an **[entry](./glossary#entry)** is written with a unique timestamp. The storage engine is optimised for reading data by time ranges.
-- **Flat Storage Structure.** It doesn't have a tree-like structure for data.
-  There are only buckets and entries with unique names in them.
 - **Batching Data.** Historical data is usually written forward and queried by time range.
   Batching can be used to optimise ingestion, retrieval and storage.
   The **[HTTP API](./glossary#http-api)** provides endpoints to write and query data in batches, reducing the number of requests and HTTP overhead.
@@ -49,9 +47,9 @@ Compared to other time series databases:
 - **Blob Optimization.** Most time series databases have poor support for storing blobs and are optimised only for analytical needs.
   ReductStore is designed to store and manage large amounts of unstructured data.
   There's no limit to the size of data you can store. You can store images, videos or any other type of data in the storage engine.
-- **No Aggregation.** ReductStore doesn't provide any aggregation functionality.
-  You can't calculate averages, sums or other statistics on the data stored in the storage engine.
-  You must read all the data and calculate the statistics on the client side.
+- **No Built-in Aggregation.** ReductStore doesn't provide aggregation functionality out of the box.
+  You can't calculate averages, sums or other statistics on data stored in the storage engine directly.
+  However, you can use extensions for well-known data formats to add aggregation support. For example, you can use [**Official Extensions**](./extensions/index.mdx) to extract data more efficiently and aggregate it.
 
 All these features make ReductStore a perfect solution for applications when you have continuous data streams and need to store and manage large amounts of unstructured data.
 
@@ -84,6 +82,7 @@ The buckets have many settings that you can configure. Read more about them in t
 An entry represents a source of data and has a unique name within a bucket. You can think of an entry as a table in an SQL database.
 Entries are used to separate data with different sources or purposes within a bucket.
 They are completely independent and can be used in parallel without conflict.
+Entry names can be hierarchical paths such as `robot/front/camera/image`, where each part is a segment of the full entry name.
 
 ![The internal structure of ReductStore entry](./img/entries.png)
 
