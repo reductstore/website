@@ -2,16 +2,24 @@
 title: Air-Gapped Drone Data Operations with Delayed Sync and Auditability
 description: How to set up local storage on drones with delayed replication and audit trail using ReductStore.
 authors: anthony
-slug: air-gapped-drone-data-ops
+slug: air-gapped-drone-data
 tags: [aerospace, robotics, database]
 image: ./img/architecture-drone-social.png
 ---
 
-![Architecture for Air-Gapped Drone Data Operations](./img/architecture-drone.drawio.svg)
+import ThemedImage from "@theme/ThemedImage";
 
-Drones in air-gapped environments produce a **lot** of data (camera images, telemetry, logs, model outputs). Storing this data reliably on each drone and syncing it to a ground station later can be hard. **ReductStore** makes this easier: it's a lightweight, time-series object store that works offline first and syncs when a trusted link becomes available.
+<ThemedImage
+  alt="Architecture for Air-Gapped Drone Data Operations"
+  sources={{
+    light: require("./img/architecture-drone-light.drawio.svg").default,
+    dark: require("./img/architecture-drone-dark.drawio.svg").default,
+  }}
+/>
 
-This guide explains a simple setup where each drone stores data locally with labels, syncs records to a ground station based on what it detects, and keeps a clear audit trail of what was captured and replicated.
+Drones in air-gapped environments produce a **lot** of data (camera images, telemetry, logs, model outputs). Storing this data reliably on each drone and syncing it to a ground station later can be hard. **ReductStore** makes this easier: it's a lightweight, time-series object store that works offline and replicate data when a connection is available.
+
+This guide explains a simple setup where each drone stores data locally with labels, replicates records to a ground station based on what it detects, and keeps a clear audit trail of what was captured and replicated.
 
 {/* truncate */}
 
@@ -88,7 +96,7 @@ Use labels to tag every record with mission context. This is what makes selectiv
 import asyncio
 import time
 import hashlib
-from reduct import Client, BucketSettings, QuotaType
+from reduct import Client
 
 
 async def main():
@@ -199,7 +207,7 @@ services:
 ```
 
 :::info
-With this setup, the drone can operate fully offline. Replication runs automatically when a connection is available and pauses when it's not. No manual file copies needed. And because context is included, the ground team always has enough data to understand what triggered the event.
+With this setup, the drone can operate fully offline. Replication runs automatically when a connection is available and waits when it's not. It's also possible to pause replication tasks if needed. And because context is included, the ground team always has enough data to understand what triggered the event.
 :::
 
 ## Querying for Audit Reports
@@ -233,7 +241,7 @@ asyncio.run(main())
 
 This gives you a clear log of every record in that mission: timestamp, anomaly flag, checksum, and size. You can use this to verify that all expected data arrived on the ground side.
 
-To go further, compare the checksums on the drone with the ground side to confirm nothing was altered during transfer.
+To go further, compare the checksums on the drone with the ground side to confirm nothing was altered during transfer. You can also check the error logs of the replication task to see if any records failed to replicate.
 
 ## Why This Setup Works Well for Drones
 
@@ -253,8 +261,8 @@ If you want to go deeper, check out these articles:
 - **[Distributed Storage in Mobile Robotics](/blog/distributed-storage-mobile-robotics)** for a similar setup with mobile robots and S3 cloud backend
 - **[How to Store and Manage Robotics Data](/blog/store-robotic-data)** for a broader look at ReductStore features for robotics
 - **[Data Replication Guide](/docs/guides/data-replication)** for the full documentation on replication tasks, filters, and modes
-- **[Conditional Query Reference](/docs/conditional-query)** for all available directives including `#ctx_before` and `#ctx_after`
+- **[Conditional Query Reference](/docs/conditional-query)** for all available conditional query operators you can use in replication filters and queries
 
 ---
 
-I hope you found this article helpful! If you have any questions or feedback, don't hesitate to reach out on our [**ReductStore Community**](https://community.reduct.store/signup) forum.
+I hope you found this article helpful! If you have any questions or feedback, don't hesitate to reach out on our [**ReductStore Community**](https://community.reduct.store) forum.
