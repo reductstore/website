@@ -27,10 +27,43 @@ ReductStore opens a Zenoh session on startup and registers a **subscriber** (for
 | **Subscriber**     | Write path. Samples published to a key expression are ingested. |
 | **Queryable**      | Read path. Queries against a key expression retrieve records.   |
 | **Key expression** | Becomes the **entry name** inside the configured bucket.        |
+| **Encoding**       | Mapped to the record's **content type**.                        |
 | **Attachment**     | JSON-encoded map of **labels** (key-value metadata).            |
-| **Timestamp**      | Zenoh NTP-64 timestamp converted to Unix microseconds.          |
+| **Timestamp**      | Zenoh HLC timestamp converted to Unix microseconds.             |
 
 All data is stored in a single ReductStore bucket. The bucket is created automatically if it does not exist.
+
+## Key Expressions
+
+Key expressions are the addressing language of Zenoh. ReductStore uses the same [Key Expression Language](https://github.com/eclipse-zenoh/roadmap/blob/main/rfcs/ALL/Key%20Expressions.md) for both `RS_ZENOH_SUB_KEYEXPRS` and `RS_ZENOH_QUERY_KEYEXPRS`, and the matched key expression becomes the entry name stored in ReductStore.
+
+A Zenoh key is a `/`-separated sequence of non-empty UTF-8 segments, similar to a filesystem path. Individual key segments may not contain `*`, `$`, `?`, or `#`.
+
+Key expressions extend plain keys with three wildcards:
+
+| Wildcard | Matches                                                                                 | Example                                         |
+| -------- | --------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `*`      | Any single segment (not including `/`). Must be surrounded by `/` or be the whole chunk | `robot1/*/temperature` matches `robot1/imu/temperature` but not `robot1/a/b/temperature` |
+| `$*`     | Any substring within a single segment, including an empty string                        | `robot$*/temperature` matches `robot1/temperature` and `robotA/temperature`              |
+| `**`     | Any number of segments, including none. Must appear after `/` or at the start           | `factory/**/temperature` matches all temperature keys under `factory` at any depth       |
+
+:::tip
+Prefer `*` and `**` over `$*` when designing your key space. `$*` is slower and is usually only needed when different identifiers are mixed within the same segment — e.g. `robot12` and `pc18`. Structuring keys as `robot/12` and `pc/18` instead avoids this.
+:::
+
+See the [Zenoh abstractions documentation](https://zenoh.io/docs/manual/abstractions/) for the full key expression specification.
+
+## Selectors
+
+When querying, Zenoh uses a **selector** — a key expression optionally followed by `?` and a list of parameters:
+
+```
+factory/**/temperature?start=1700000000000000&limit=100
+^                     ^ ^
+|--- key expression --| |------ parameters ------|
+```
+
+The key expression part is used by Zenoh routers to route the query to the right queryable. The parameters are passed through to ReductStore and interpreted as query filters (see [Time-range Query](#time-range-query) below). Parameters are `&`-separated `key=value` pairs, and values may be URL-encoded.
 
 ## Configuration
 
@@ -90,13 +123,7 @@ RS_ZENOH_CONFIG_PATH=/etc/reductstore/zenoh.json5
 | `RS_ZENOH_SUB_KEYEXPRS`   | —       | Key expression for the subscriber (write path). Disabled if unset.               |
 | `RS_ZENOH_QUERY_KEYEXPRS` | —       | Key expression for the queryable (read path). Disabled if unset.                 |
 
-Use standard Zenoh wildcards: `*` for a single segment, `**` for any number of segments.
-
-| `RS_ZENOH_SUB_KEYEXPRS` | What is matched                               |
-| ----------------------- | --------------------------------------------- |
-| `**`                    | All key expressions                           |
-| `robot1/**`             | All keys under the `robot1` prefix            |
-| `factory/line1/*`       | All single-segment keys under `factory/line1` |
+Both values follow the [Key Expression Language](#key-expressions) described above.
 
 ## Write Path
 
@@ -104,8 +131,31 @@ When a Zenoh publisher sends a sample to a key expression that matches `RS_ZENOH
 
 1. The full key expression becomes the entry name (leading and trailing `/` are stripped).
 2. The sample payload is written to that entry in `RS_ZENOH_BUCKET`.
-3. If the sample carries a Zenoh timestamp, it is converted from NTP-64 to Unix microseconds and used as the record timestamp. Otherwise the server clock is used.
-4. If the sample carries a Zenoh attachment, it is decoded as a JSON object and stored as record labels.
+3. The sample's **encoding** is mapped to the record's **content type**. If no encoding is set, the content type defaults to `application/octet-stream`.
+4. If the sample carries a Zenoh timestamp, it is converted from HLC to Unix microseconds and used as the record timestamp. Otherwise the server clock is used.
+5. If the sample carries a Zenoh attachment, it is decoded as a JSON object and stored as record labels.
+
+### Encoding and Content Type
+
+Zenoh samples carry an optional encoding that describes the format of their payload. ReductStore stores this as the record's content type, making it available when reading back the data over HTTP or Zenoh.
+
+Standard Zenoh encodings like `text/plain`, `application/json`, or `image/jpeg` map directly to their MIME type equivalents in ReductStore. If you publish without setting an encoding, the content type defaults to `application/octet-stream`.
+
+```python
+import zenoh
+
+session = zenoh.open(zenoh.Config())
+
+# Publish JSON with explicit encoding
+session.put(
+    "factory/line1/status",
+    b'{"state": "running", "speed": 120}',
+    encoding=zenoh.Encoding.APPLICATION_JSON,
+)
+
+# Publish binary data (defaults to application/octet-stream)
+session.put("factory/line1/camera", b"<raw image bytes>")
+```
 
 ### Sending Labels
 
@@ -126,7 +176,7 @@ session.put(
 
 When a Zenoh client sends a query to a key expression that matches `RS_ZENOH_QUERY_KEYEXPRS`, ReductStore looks up the matching records and replies with them.
 
-The key expression maps to the entry name within `RS_ZENOH_BUCKET`. Query parameters are passed as Zenoh selector parameters (`?key=value&...`).
+The query takes the form of a [selector](#selectors): the key expression maps to the entry name within `RS_ZENOH_BUCKET`, and the parameters after `?` control which records are returned.
 
 ### Point-in-time Lookup
 
@@ -139,7 +189,7 @@ Fetch the single record at an exact timestamp:
 ```python
 replies = session.get("factory/line1/camera?ts=1700000000000000")
 for reply in replies:
-    print(reply.ok.payload)
+    print(reply.ok.payload.to_bytes())
 ```
 
 ### Time-range Query
@@ -247,4 +297,3 @@ ReductStore API tokens are not checked for Zenoh connections. If you need per-to
 ## Current Limitations
 
 - **Single-bucket mode.** All Zenoh data maps to one configured bucket. Routing to different buckets based on the key expression is not yet supported.
-- **Binary payload only.** The Zenoh API always stores and returns raw bytes with content type `application/octet-stream`. Use labels to carry any semantic metadata.
