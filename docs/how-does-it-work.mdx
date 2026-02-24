@@ -96,7 +96,7 @@ The storage engine writes data into the current block until it reaches the block
 It then creates a new block and updates the block index.
 Because the index is only updated when the block is full, all changes are stored in the write-ahead logs to prevent data loss.
 
-#### Entry Attachments
+### Attachments
 
 If you need metadata that is common for all records in an entry (for example, schema or calibration info), you can store it as **attachments** in a system entry `<entry_name>/$meta` instead of duplicating it in record labels.
 
@@ -181,6 +181,17 @@ Some more details about replication:
 - **Filtering.** The storage engine supports filtering records using the [**Conditional Query**](./conditional-query/index.mdx) language, so that you can replicate only records that match the query.
 
 You can manage replications by using the Replication API or provision them with environment variables. See the [**Replication Guide**](./guides/data-replication.mdx) for more details.
+
+## Resilient Deployment
+
+ReductStore supports resilient deployment patterns for both write and read workloads:
+
+- **Primary-secondary hot standby** for failure-tolerant ingestion.  
+  A primary node handles writes while a secondary node stays in sync and can take over quickly if the primary fails.
+- **Read-only replication** for scalable and resilient data access.  
+  Read replicas can serve query traffic without affecting ingestion throughput on the primary node.
+
+For deployment patterns and architecture examples, see the [**Disaster Recovery Guide**](./guides/disaster-recovery.mdx).
 
 ## Security
 

@@ -20,13 +20,13 @@ You can store **[attachments](../../glossary#attachment)** for any entry by writ
 
 This is useful for schema fragments, calibration metadata, plugin configuration, or any small JSON payload that should travel with the entry.
 
-Attachments use the same Entry API endpoints as regular records.  
-The only difference is the entry path: set `:entry_name` to `<entry_name>/$meta` (for example `camera-1/$meta`).
+Attachments use the same Entry API endpoints as regular records.
+However, they have additional restrictions and requirements to ensure they are used, stored and replicated correctly and do not interfere with regular entry data.
 Each attachment is identified by a required `key` label that allows storing multiple attachments in the same `$meta` entry and updating/removing them individually.
 
 import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
-:::warn Reserved Keys
+:::warning Reserved Keys
 Attachment keys starting with `$` are reserved for internal ReductStore purposes.
 Please use keys without a leading `$` for user-defined attachments.
 :::
@@ -40,11 +40,9 @@ If a record with the same key already exists in the same `$meta` entry, ReductSt
 For write requests:
 
 - `x-reduct-label-key` is required.
-- `x-reduct-label-remove: true` is not allowed. Use `PATCH` to remove an attachment.
 - Writing with the same `key` replaces the previous attachment with that `key`.
 
-
-The attachments can be also created with batch endpoints, but the same rules apply: the entry path must end with `/$meta`, and the `key` label is required for each attachment record.we
+Attachments can also be created with batch endpoints. The same rules apply: the entry path must end with `/$meta`, and the `key` label is required for each attachment record.
 
 **Changes**:
 
@@ -67,8 +65,7 @@ The attachments can be also created with batch endpoints, but the same rules app
       type: "path",
       details: {
         name: ":entry_name",
-        description:
-          "Entry path, including `/$meta` suffix (e.g. `camera-1/$meta`)",
+        description: "Name of the parent entry (without `/$meta` suffix)",
         isRequired: true,
       },
     },
@@ -139,9 +136,9 @@ If a `$meta` record with `key=$plugin` already exists, it is replaced by this ne
 
 ## Read an Attachment
 
-Reading attachments works exactly like reading regular records: use the attachment entry path and the timestamp.
+Reading attachments works exactly like reading regular records: use the attachment path and timestamp.
 
-`$meta` is a system entry, so it is hidden from bucket `entry_count` and entry lists. It's also impossible to query them with wildcards. You can read them only by their exact entry path (`<entry_name>/$meta`) and timestamp.
+`$meta` is a system entry, so it is hidden from bucket `entry_count` and entry lists and can't be accessed with wildcard queries. You must read it by its exact path with `/$meta` suffix and timestamp.
 
 <SwaggerComponent
   method="GET"
@@ -160,8 +157,7 @@ Reading attachments works exactly like reading regular records: use the attachme
       type: "path",
       details: {
         name: ":entry_name",
-        description:
-          "Entry path, including `/$meta` suffix (e.g. `camera-1/$meta`)",
+        description: "Name of the parent entry (without `/$meta` suffix)",
         isRequired: true,
       },
     },
@@ -234,8 +230,7 @@ The `PATCH` request must target an existing attachment record timestamp.
       type: "path",
       details: {
         name: ":entry_name",
-        description:
-          "Entry path, including `/$meta` suffix (e.g. `camera-1/$meta`)",
+        description: "Name of the parent entry (without `/$meta` suffix)",
         isRequired: true,
       },
     },
@@ -325,8 +320,7 @@ If you need to delete it, remove the parent entry instead. The `$meta` entry is 
       type: "path",
       details: {
         name: ":entry_name",
-        description:
-          "Entry path, including `/$meta` suffix (e.g. `camera-1/$meta`)",
+        description: "Name of the parent entry (without `/$meta` suffix)",
         isRequired: true,
       },
     },
