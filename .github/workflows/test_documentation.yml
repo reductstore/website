@@ -30,7 +30,7 @@ jobs:
             image: reduct/store:v1.17.10
             example_root: versioned_docs/version-1.17.x/examples
 
-          - language: python
+          - example: python
             cmd: python3
             path_prefix: py/src
 
