@@ -86,8 +86,8 @@ Exactly **one** of the two variables below is required when `RS_ZENOH_ENABLED=tr
 
 | Name                   | Default | Description                                                                                  |
 | ---------------------- | ------- | -------------------------------------------------------------------------------------------- |
-| `RS_ZENOH_CONFIG`      | —       | Inline config string, e.g. `mode=client;peer=tcp/localhost:7447`. Takes precedence over path |
-| `RS_ZENOH_CONFIG_PATH` | —       | Path to a Zenoh JSON5 config file (e.g. `/etc/reductstore/zenoh.json5`)                      |
+| `RS_ZENOH_CONFIG`      |         | Inline config string, e.g. `mode=client;peer=tcp/localhost:7447`. Takes precedence over path |
+| `RS_ZENOH_CONFIG_PATH` |         | Path to a Zenoh JSON5 config file (e.g. `/etc/reductstore/zenoh.json5`)                      |
 
 #### Inline config format
 
@@ -123,8 +123,8 @@ RS_ZENOH_CONFIG_PATH=/etc/reductstore/zenoh.json5
 
 | Name                      | Default | Description                                                                      |
 | ------------------------- | ------- | -------------------------------------------------------------------------------- |
-| `RS_ZENOH_SUB_KEYEXPRS`   | —       | Key expression for the subscriber (write path). Disabled if unset.               |
-| `RS_ZENOH_QUERY_KEYEXPRS` | —       | Key expression for the queryable (read path). Disabled if unset.                 |
+| `RS_ZENOH_SUB_KEYEXPRS`   |         | Key expression for the subscriber (write path). Disabled if unset.               |
+| `RS_ZENOH_QUERY_KEYEXPRS` |         | Key expression for the queryable (read path). Disabled if unset.                 |
 
 Both values follow the [**Key Expression Language**](#key-expressions) described above.
 
@@ -273,11 +273,11 @@ docker run -d \
 | Name                      | Default | Description                                                       |
 | ------------------------- | ------- | ----------------------------------------------------------------- |
 | `RS_ZENOH_ENABLED`        | `false` | Enable the Zenoh API (`true`, `1`, `yes`, `on`)                   |
-| `RS_ZENOH_CONFIG`         | —       | Inline Zenoh config string (takes precedence over path)           |
-| `RS_ZENOH_CONFIG_PATH`    | —       | Path to a Zenoh JSON5 config file                                 |
+| `RS_ZENOH_CONFIG`         |         | Inline Zenoh config string (takes precedence over path)           |
+| `RS_ZENOH_CONFIG_PATH`    |         | Path to a Zenoh JSON5 config file                                 |
 | `RS_ZENOH_BUCKET`         | `zenoh` | Target bucket (auto-created if missing)                           |
-| `RS_ZENOH_SUB_KEYEXPRS`   | —       | Key expression for the subscriber (write path). Disabled if unset |
-| `RS_ZENOH_QUERY_KEYEXPRS` | —       | Key expression for the queryable (read path). Disabled if unset   |
+| `RS_ZENOH_SUB_KEYEXPRS`   |         | Key expression for the subscriber (write path). Disabled if unset |
+| `RS_ZENOH_QUERY_KEYEXPRS` |         | Key expression for the queryable (read path). Disabled if unset   |
 
 ## Using the HTTP API alongside Zenoh
 
