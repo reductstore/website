@@ -38,7 +38,7 @@ The Zenoh API is configured entirely through environment variables. All variable
 
 ### Enabling the API
 
-| Variable           | Default | Description                                                 |
+| Name               | Default | Description                                                 |
 | ------------------ | ------- | ----------------------------------------------------------- |
 | `RS_ZENOH_ENABLED` | `false` | Set to `true`, `1`, `yes`, or `on` to enable the Zenoh API |
 
@@ -48,7 +48,7 @@ No Zenoh sockets are opened until this is set to a truthy value.
 
 Exactly **one** of the two variables below is required when `RS_ZENOH_ENABLED=true`:
 
-| Variable               | Default | Description                                                                                  |
+| Name                   | Default | Description                                                                                  |
 | ---------------------- | ------- | -------------------------------------------------------------------------------------------- |
 | `RS_ZENOH_CONFIG`      | —       | Inline config string, e.g. `mode=client;peer=tcp/localhost:7447`. Takes precedence over path |
 | `RS_ZENOH_CONFIG_PATH` | —       | Path to a Zenoh JSON5 config file (e.g. `/etc/reductstore/zenoh.json5`)                      |
@@ -79,13 +79,13 @@ RS_ZENOH_CONFIG_PATH=/etc/reductstore/zenoh.json5
 
 ### Storage Mapping
 
-| Variable          | Default | Description                                                            |
+| Name              | Default | Description                                                            |
 | ----------------- | ------- | ---------------------------------------------------------------------- |
 | `RS_ZENOH_BUCKET` | `zenoh` | Target ReductStore bucket. Created automatically if it does not exist. |
 
 ### Key Expression Routing
 
-| Variable                  | Default | Description                                                                      |
+| Name                      | Default | Description                                                                      |
 | ------------------------- | ------- | -------------------------------------------------------------------------------- |
 | `RS_ZENOH_SUB_KEYEXPRS`   | —       | Key expression for the subscriber (write path). Disabled if unset.               |
 | `RS_ZENOH_QUERY_KEYEXPRS` | —       | Key expression for the queryable (read path). Disabled if unset.                 |
@@ -130,11 +130,11 @@ The key expression maps to the entry name within `RS_ZENOH_BUCKET`. Query parame
 
 ### Point-in-time Lookup
 
-Fetch the single record at an exact timestamp (Unix microseconds):
+Fetch the single record at an exact timestamp:
 
-| Parameter | Type   | Description                                 |
-| --------- | ------ | ------------------------------------------- |
-| `ts`      | uint64 | Exact record timestamp in Unix microseconds |
+| Parameter | Description                                 | Type      |
+| --------- | ------------------------------------------- | --------- |
+| `ts`      | Exact record timestamp in Unix microseconds | Timestamp |
 
 ```python
 replies = session.get("factory/line1/camera?ts=1700000000000000")
@@ -146,18 +146,18 @@ for reply in replies:
 
 If `ts` is not set, a range query is performed. The following parameters are supported:
 
-| Parameter       | Type   | Description                                                                    |
-| --------------- | ------ | ------------------------------------------------------------------------------ |
-| `start`         | uint64 | Range start timestamp (Unix µs, inclusive). Defaults to the oldest record.     |
-| `stop`          | uint64 | Range stop timestamp (Unix µs, exclusive). Defaults to the latest record.      |
-| `each_s`        | float  | Return at most one record every N seconds (must be greater than 0).            |
-| `each_n`        | uint64 | Return every Nth record (must be greater than 0).                              |
-| `limit`         | uint64 | Maximum number of records to return.                                           |
-| `continuous`    | bool   | Keep the query alive and stream new records as they arrive.                    |
-| `ttl`           | uint64 | Time-to-live for a continuous query in seconds.                                |
-| `metadata`      | bool   | Return labels and timestamps only, without payload.                            |
-| `include-<key>` | string | Only return records where label `<key>` equals the value, e.g. `include-robot=alpha`. |
-| `exclude-<key>` | string | Exclude records where label `<key>` equals the value, e.g. `exclude-status=error`.    |
+| Parameter       | Description                                                                    | Type      | Default                            |
+| --------------- | ------------------------------------------------------------------------------ | --------- | ---------------------------------- |
+| `start`         | Range start timestamp (Unix µs, inclusive)                                     | Timestamp | Timestamp of the first record      |
+| `stop`          | Range stop timestamp (Unix µs, exclusive)                                      | Timestamp | Timestamp of the last record       |
+| `each_s`        | Return at most one record every N seconds (must be greater than 0)             | Float     |                                    |
+| `each_n`        | Return every Nth record (must be greater than 0)                               | Integer   |                                    |
+| `limit`         | Maximum number of records to return                                            | Integer   |                                    |
+| `continuous`    | Keep the query alive and stream new records as they arrive                     | Boolean   | False                              |
+| `ttl`           | Time-to-live for a continuous query in seconds                                 | Integer   | 60                                 |
+| `metadata`      | Return labels and timestamps only, without payload                             | Boolean   | False                              |
+| `include-<key>` | Only return records where label `<key>` equals the value, e.g. `include-robot=alpha` | String |                             |
+| `exclude-<key>` | Exclude records where label `<key>` equals the value, e.g. `exclude-status=error`   | String |                             |
 
 ```python
 replies = session.get(
@@ -217,12 +217,12 @@ docker run -d \
 
 ## Configuration Reference
 
-| Variable                  | Default | Description                                                   |
-| ------------------------- | ------- | ------------------------------------------------------------- |
-| `RS_ZENOH_ENABLED`        | `false` | Enable the Zenoh API (`true`, `1`, `yes`, `on`)               |
-| `RS_ZENOH_CONFIG`         | —       | Inline Zenoh config string (takes precedence over path)       |
-| `RS_ZENOH_CONFIG_PATH`    | —       | Path to a Zenoh JSON5 config file                             |
-| `RS_ZENOH_BUCKET`         | `zenoh` | Target bucket (auto-created if missing)                       |
+| Name                      | Default | Description                                                       |
+| ------------------------- | ------- | ----------------------------------------------------------------- |
+| `RS_ZENOH_ENABLED`        | `false` | Enable the Zenoh API (`true`, `1`, `yes`, `on`)                   |
+| `RS_ZENOH_CONFIG`         | —       | Inline Zenoh config string (takes precedence over path)           |
+| `RS_ZENOH_CONFIG_PATH`    | —       | Path to a Zenoh JSON5 config file                                 |
+| `RS_ZENOH_BUCKET`         | `zenoh` | Target bucket (auto-created if missing)                           |
 | `RS_ZENOH_SUB_KEYEXPRS`   | —       | Key expression for the subscriber (write path). Disabled if unset |
 | `RS_ZENOH_QUERY_KEYEXPRS` | —       | Key expression for the queryable (read path). Disabled if unset   |
 
