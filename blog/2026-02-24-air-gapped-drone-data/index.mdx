@@ -7,15 +7,7 @@ tags: [aerospace, robotics, database]
 image: ./img/architecture-drone-social.png
 ---
 
-import ThemedImage from "@theme/ThemedImage";
-
-<ThemedImage
-  alt="Architecture for Air-Gapped Drone Data Operations"
-  sources={{
-    light: require("./img/architecture-drone-light.drawio.svg").default,
-    dark: require("./img/architecture-drone-dark.drawio.svg").default,
-  }}
-/>
+![Architecture for Air-Gapped Drone Data](./img/architecture-drone.drawio.svg)
 
 Drones in air-gapped environments produce a **lot** of data (camera images, telemetry, logs, model outputs). Storing this data reliably on each drone and syncing it to a ground station later can be hard. **ReductStore** makes this easier: it's a lightweight, time-series object store that works offline and replicate data when a connection is available.
 
