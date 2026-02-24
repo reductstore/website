@@ -96,6 +96,12 @@ The storage engine writes data into the current block until it reaches the block
 It then creates a new block and updates the block index.
 Because the index is only updated when the block is full, all changes are stored in the write-ahead logs to prevent data loss.
 
+#### Entry Attachments
+
+If you need metadata that is common for all records in an entry (for example, schema or calibration info), you can store it as **attachments** in a system entry `<entry_name>/$meta` instead of duplicating it in record labels.
+
+Attachments are kept in a hidden system entry (not shown in regular user entry lists), and they can be replicated together with data from the parent entry.
+
 ### Records
 
 A record is a piece of data stored in an entry.
