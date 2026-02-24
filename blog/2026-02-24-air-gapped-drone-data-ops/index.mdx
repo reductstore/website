@@ -4,7 +4,10 @@ description: How to set up local storage on drones with delayed replication and 
 authors: anthony
 slug: air-gapped-drone-data-ops
 tags: [aerospace, robotics, database]
+image: ./img/architecture-drone-social.png
 ---
+
+![Architecture for Air-Gapped Drone Data Operations](./img/architecture-drone.drawio.svg)
 
 Drones in air-gapped environments produce a **lot** of data (camera images, telemetry, logs, model outputs). Storing this data reliably on each drone and syncing it to a ground station later can be hard. **ReductStore** makes this easier: it's a lightweight, time-series object store that works offline first and syncs when a trusted link becomes available.
 
