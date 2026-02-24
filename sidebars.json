@@ -148,7 +148,8 @@
       "items": [
         "integrations/s3",
         "integrations/grafana/index",
-        "integrations/ros2-agent"
+        "integrations/ros2-agent",
+        "integrations/zenoh"
       ]
     },
     {
