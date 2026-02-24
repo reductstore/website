@@ -8,9 +8,11 @@ sidebar_position: 4
   <link rel="canonical" href="https://www.reduct.store/docs/integrations/zenoh" />
 </head>
 
-# Zenoh API Integration
+# Zenoh API
 
-ReductStore includes an optional **Zenoh API** that lets you ingest and retrieve time-series records using the [Zenoh](https://zenoh.io) pub/sub and query protocol — alongside the existing HTTP API. This is especially useful in robotics and IoT edge deployments where Zenoh is already the messaging backbone and adding an HTTP stack is impractical.
+ReductStore can receive and serve time-series data directly over [Zenoh](https://zenoh.io), using its native pub/sub and query primitives. This is an alternative ingestion and retrieval path that runs alongside the existing HTTP API — both work at the same time and share the same stored data.
+
+This page explains how to enable the Zenoh API, how to configure it, and what you can and cannot do with it compared to the HTTP API.
 
 :::info
 The Zenoh API is compiled under the `zenoh-api` Cargo feature flag. Official Docker images ship with this feature enabled. If you build from source, add `--features zenoh-api` to your `cargo build` invocation.
@@ -18,56 +20,54 @@ The Zenoh API is compiled under the `zenoh-api` Cargo feature flag. Official Doc
 
 ## How It Works
 
-The integration runs as a sidecar runtime inside ReductStore and communicates directly with the storage engine — no HTTP round-trips are involved.
+ReductStore opens a Zenoh session on startup and registers a **subscriber** (for writes) and a **queryable** (for reads). Both talk directly to the storage engine without going through HTTP.
 
-| Zenoh concept     | ReductStore mapping                                              |
-| ----------------- | ---------------------------------------------------------------- |
-| **Subscriber**    | Write path — samples published to a key expression are ingested  |
-| **Queryable**     | Read path — queries against a key expression retrieve records    |
-| **Key expression**| Becomes the **entry name** inside the configured bucket          |
-| **Attachment**    | JSON-encoded map of **labels** (key-value metadata)              |
-| **Timestamp**     | Zenoh NTP-64 timestamp → stored as Unix microseconds             |
+| Zenoh concept      | ReductStore mapping                                             |
+| ------------------ | --------------------------------------------------------------- |
+| **Subscriber**     | Write path. Samples published to a key expression are ingested. |
+| **Queryable**      | Read path. Queries against a key expression retrieve records.   |
+| **Key expression** | Becomes the **entry name** inside the configured bucket.        |
+| **Attachment**     | JSON-encoded map of **labels** (key-value metadata).            |
+| **Timestamp**      | Zenoh NTP-64 timestamp converted to Unix microseconds.          |
 
-All data lands in a single, configurable ReductStore bucket (single-bucket mode). The bucket is created automatically if it does not exist.
+All data is stored in a single ReductStore bucket. The bucket is created automatically if it does not exist.
 
 ## Configuration
 
-The Zenoh API is controlled entirely through environment variables (or Docker `-e` flags). All variables are optional unless noted.
+The Zenoh API is configured entirely through environment variables. All variables are optional unless noted.
 
-### Enabling the Integration
+### Enabling the API
 
-| Variable              | Default  | Description                                                   |
-| --------------------- | -------- | ------------------------------------------------------------- |
-| `RS_ZENOH_ENABLED`    | `false`  | Set to `true`, `1`, `yes`, or `on` to enable the Zenoh API   |
+| Variable           | Default | Description                                                 |
+| ------------------ | ------- | ----------------------------------------------------------- |
+| `RS_ZENOH_ENABLED` | `false` | Set to `true`, `1`, `yes`, or `on` to enable the Zenoh API |
 
-The Zenoh API is disabled by default. No Zenoh sockets are opened unless this variable is set to a truthy value.
+No Zenoh sockets are opened until this is set to a truthy value.
 
 ### Session Configuration
 
-Exactly **one** of the two config variables below is required when `RS_ZENOH_ENABLED=true`:
+Exactly **one** of the two variables below is required when `RS_ZENOH_ENABLED=true`:
 
-| Variable                | Default | Description                                                                                   |
-| ----------------------- | ------- | --------------------------------------------------------------------------------------------- |
-| `RS_ZENOH_CONFIG`       | —       | Inline config string, e.g. `mode=client;peer=tcp/localhost:7447`. Takes precedence over path. |
-| `RS_ZENOH_CONFIG_PATH`  | —       | Path to a Zenoh JSON5 config file (e.g. `/etc/reductstore/zenoh.json5`)                       |
+| Variable               | Default | Description                                                                                  |
+| ---------------------- | ------- | -------------------------------------------------------------------------------------------- |
+| `RS_ZENOH_CONFIG`      | —       | Inline config string, e.g. `mode=client;peer=tcp/localhost:7447`. Takes precedence over path |
+| `RS_ZENOH_CONFIG_PATH` | —       | Path to a Zenoh JSON5 config file (e.g. `/etc/reductstore/zenoh.json5`)                      |
 
 #### Inline config format
 
 The inline config is a semicolon-separated list of `key=value` pairs:
 
-| Key              | Example value             | Description                                              |
-| ---------------- | ------------------------- | -------------------------------------------------------- |
-| `mode`           | `client`, `peer`, `router`| Zenoh session mode                                       |
-| `peer` / `connect` | `tcp/localhost:7447`    | Comma-separated connect endpoints                        |
-| `listen`         | `tcp/0.0.0.0:7447`        | Comma-separated listen endpoints                         |
-
-Example:
+| Key                | Example value              | Description                         |
+| ------------------ | -------------------------- | ----------------------------------- |
+| `mode`             | `client`, `peer`, `router` | Zenoh session mode                  |
+| `peer` / `connect` | `tcp/localhost:7447`       | Comma-separated connect endpoints   |
+| `listen`           | `tcp/0.0.0.0:7447`         | Comma-separated listen endpoints    |
 
 ```
 RS_ZENOH_CONFIG=mode=client;peer=tcp/192.168.1.10:7447
 ```
 
-Unknown keys are logged as warnings and ignored. For advanced session settings (TLS, multicast discovery, scouting, etc.) use a JSON5 config file instead.
+Unknown keys are logged as warnings and ignored. For advanced session settings (TLS, multicast discovery, scouting, and so on), use a JSON5 config file instead.
 
 #### JSON5 config file
 
@@ -79,45 +79,42 @@ RS_ZENOH_CONFIG_PATH=/etc/reductstore/zenoh.json5
 
 ### Storage Mapping
 
-| Variable                | Default  | Description                                                                          |
-| ----------------------- | -------- | ------------------------------------------------------------------------------------ |
-| `RS_ZENOH_BUCKET`       | `zenoh`  | Target ReductStore bucket. Created automatically if it does not exist.               |
+| Variable          | Default | Description                                                            |
+| ----------------- | ------- | ---------------------------------------------------------------------- |
+| `RS_ZENOH_BUCKET` | `zenoh` | Target ReductStore bucket. Created automatically if it does not exist. |
 
 ### Key Expression Routing
 
-| Variable                  | Default | Description                                                                                                         |
-| ------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
-| `RS_ZENOH_SUB_KEYEXPRS`   | —       | Key expression for the Zenoh **subscriber** (write path). If unset, the write path is disabled.                     |
-| `RS_ZENOH_QUERY_KEYEXPRS` | —       | Key expression for the Zenoh **queryable** (read path). If unset, the read path is disabled.                        |
+| Variable                  | Default | Description                                                                      |
+| ------------------------- | ------- | -------------------------------------------------------------------------------- |
+| `RS_ZENOH_SUB_KEYEXPRS`   | —       | Key expression for the subscriber (write path). Disabled if unset.               |
+| `RS_ZENOH_QUERY_KEYEXPRS` | —       | Key expression for the queryable (read path). Disabled if unset.                 |
 
 Use standard Zenoh wildcards: `*` for a single segment, `**` for any number of segments.
 
-Examples:
+| `RS_ZENOH_SUB_KEYEXPRS` | What is matched                               |
+| ----------------------- | --------------------------------------------- |
+| `**`                    | All key expressions                           |
+| `robot1/**`             | All keys under the `robot1` prefix            |
+| `factory/line1/*`       | All single-segment keys under `factory/line1` |
 
-| `RS_ZENOH_SUB_KEYEXPRS` | What is matched                                     |
-| ----------------------- | --------------------------------------------------- |
-| `**`                    | All key expressions                                 |
-| `robot1/**`             | All keys under the `robot1` prefix                  |
-| `factory/line1/*`       | All single-segment keys under `factory/line1`       |
-
-## Write Path (Subscriber)
+## Write Path
 
 When a Zenoh publisher sends a sample to a key expression that matches `RS_ZENOH_SUB_KEYEXPRS`:
 
-1. The full key expression becomes the **entry name** (leading/trailing `/` are stripped).
-2. The sample payload (bytes) is written to that entry in `RS_ZENOH_BUCKET`.
-3. If the sample carries a **Zenoh timestamp**, it is converted from NTP-64 to Unix microseconds and used as the record timestamp. Otherwise, the server's wall clock is used.
-4. If the sample carries a **Zenoh attachment**, it is decoded as a JSON object and stored as record **labels**.
+1. The full key expression becomes the entry name (leading and trailing `/` are stripped).
+2. The sample payload is written to that entry in `RS_ZENOH_BUCKET`.
+3. If the sample carries a Zenoh timestamp, it is converted from NTP-64 to Unix microseconds and used as the record timestamp. Otherwise the server clock is used.
+4. If the sample carries a Zenoh attachment, it is decoded as a JSON object and stored as record labels.
 
 ### Sending Labels
 
-Attach a JSON-serialised label map to the Zenoh sample to annotate each record:
+Attach a JSON label map to the Zenoh sample to annotate the record:
 
 ```python
 import zenoh, json
 
 session = zenoh.open(zenoh.Config())
-# Publish with labels as attachment
 session.put(
     "factory/line1/camera",
     b"<binary payload>",
@@ -125,19 +122,19 @@ session.put(
 )
 ```
 
-## Read Path (Queryable)
+## Read Path
 
-When a Zenoh client sends a query to a key expression that matches `RS_ZENOH_QUERY_KEYEXPRS`, ReductStore resolves it against the storage and replies with the matching records.
+When a Zenoh client sends a query to a key expression that matches `RS_ZENOH_QUERY_KEYEXPRS`, ReductStore looks up the matching records and replies with them.
 
-The key expression maps to the **entry name** within `RS_ZENOH_BUCKET`. Query parameters are passed as Zenoh selector parameters (`?key=value&...`).
+The key expression maps to the entry name within `RS_ZENOH_BUCKET`. Query parameters are passed as Zenoh selector parameters (`?key=value&...`).
 
 ### Point-in-time Lookup
 
 Fetch the single record at an exact timestamp (Unix microseconds):
 
-| Parameter | Type   | Description                                        |
-| --------- | ------ | -------------------------------------------------- |
-| `ts`      | uint64 | Exact record timestamp in Unix microseconds        |
+| Parameter | Type   | Description                                 |
+| --------- | ------ | ------------------------------------------- |
+| `ts`      | uint64 | Exact record timestamp in Unix microseconds |
 
 ```python
 replies = session.get("factory/line1/camera?ts=1700000000000000")
@@ -147,23 +144,22 @@ for reply in replies:
 
 ### Time-range Query
 
-If `ts` is not set, a streaming range query is performed. The following parameters are supported:
+If `ts` is not set, a range query is performed. The following parameters are supported:
 
-| Parameter       | Type    | Description                                                                                           |
-| --------------- | ------- | ----------------------------------------------------------------------------------------------------- |
-| `start`         | uint64  | Range start timestamp (Unix µs, inclusive). Defaults to the oldest record.                            |
-| `stop`          | uint64  | Range stop timestamp (Unix µs, exclusive). Defaults to the latest record.                             |
-| `each_s`        | float   | Return at most one record every N seconds (must be > 0).                                              |
-| `each_n`        | uint64  | Return every Nth record (must be > 0).                                                                |
-| `limit`         | uint64  | Maximum number of records to return.                                                                  |
-| `continuous`    | bool    | Keep the query alive and stream new records as they arrive.                                           |
-| `ttl`           | uint64  | Time-to-live for a continuous query in seconds.                                                       |
-| `metadata`      | bool    | If `true`, skip payload — return labels and timestamps only.                                          |
-| `include-<key>` | string  | Only return records where label `<key>` equals the value, e.g. `include-robot=alpha`.                 |
-| `exclude-<key>` | string  | Exclude records where label `<key>` equals the value, e.g. `exclude-status=error`.                   |
+| Parameter       | Type   | Description                                                                    |
+| --------------- | ------ | ------------------------------------------------------------------------------ |
+| `start`         | uint64 | Range start timestamp (Unix µs, inclusive). Defaults to the oldest record.     |
+| `stop`          | uint64 | Range stop timestamp (Unix µs, exclusive). Defaults to the latest record.      |
+| `each_s`        | float  | Return at most one record every N seconds (must be greater than 0).            |
+| `each_n`        | uint64 | Return every Nth record (must be greater than 0).                              |
+| `limit`         | uint64 | Maximum number of records to return.                                           |
+| `continuous`    | bool   | Keep the query alive and stream new records as they arrive.                    |
+| `ttl`           | uint64 | Time-to-live for a continuous query in seconds.                                |
+| `metadata`      | bool   | Return labels and timestamps only, without payload.                            |
+| `include-<key>` | string | Only return records where label `<key>` equals the value, e.g. `include-robot=alpha`. |
+| `exclude-<key>` | string | Exclude records where label `<key>` equals the value, e.g. `exclude-status=error`.    |
 
 ```python
-# Fetch up to 100 records between two timestamps
 replies = session.get(
     "factory/line1/camera",
     parameters="start=1700000000000000&stop=1700086400000000&limit=100"
@@ -189,7 +185,7 @@ for reply in replies:
 
 ## Quick Start with Docker
 
-The following example starts ReductStore with the Zenoh API enabled in client mode, connecting to a Zenoh router at `192.168.1.10:7447`. All published data is stored in the `sensors` bucket; the subscriber listens on all key expressions and the queryable answers queries on all key expressions.
+Start ReductStore with the Zenoh API in client mode, connecting to a Zenoh router at `192.168.1.10:7447`. All published data lands in the `sensors` bucket.
 
 ```bash
 docker run -d \
@@ -219,28 +215,36 @@ docker run -d \
   reduct/store:latest
 ```
 
-## Configuration Reference Summary
+## Configuration Reference
 
-| Variable                  | Default  | Description                                                   |
-| ------------------------- | -------- | ------------------------------------------------------------- |
-| `RS_ZENOH_ENABLED`        | `false`  | Enable the Zenoh API (`true`/`1`/`yes`/`on`)                 |
-| `RS_ZENOH_CONFIG`         | —        | Inline Zenoh config string (takes precedence over path)       |
-| `RS_ZENOH_CONFIG_PATH`    | —        | Path to a Zenoh JSON5 config file                             |
-| `RS_ZENOH_BUCKET`         | `zenoh`  | Target bucket (auto-created if missing)                       |
-| `RS_ZENOH_SUB_KEYEXPRS`   | —        | Key expression for subscriber (write path). Disabled if unset |
-| `RS_ZENOH_QUERY_KEYEXPRS` | —        | Key expression for queryable (read path). Disabled if unset   |
+| Variable                  | Default | Description                                                   |
+| ------------------------- | ------- | ------------------------------------------------------------- |
+| `RS_ZENOH_ENABLED`        | `false` | Enable the Zenoh API (`true`, `1`, `yes`, `on`)               |
+| `RS_ZENOH_CONFIG`         | —       | Inline Zenoh config string (takes precedence over path)       |
+| `RS_ZENOH_CONFIG_PATH`    | —       | Path to a Zenoh JSON5 config file                             |
+| `RS_ZENOH_BUCKET`         | `zenoh` | Target bucket (auto-created if missing)                       |
+| `RS_ZENOH_SUB_KEYEXPRS`   | —       | Key expression for the subscriber (write path). Disabled if unset |
+| `RS_ZENOH_QUERY_KEYEXPRS` | —       | Key expression for the queryable (read path). Disabled if unset   |
 
-## Relationship to the HTTP API
+## Using the HTTP API alongside Zenoh
 
-The Zenoh API is additive — the HTTP API continues to operate normally alongside it. Data written via Zenoh appears immediately in the HTTP API and vice versa. This means you can:
+The HTTP API stays fully operational when the Zenoh API is enabled. Data written via Zenoh is immediately visible over HTTP and vice versa. A typical setup uses Zenoh for ingestion from edge nodes and the HTTP API or Web Console for querying, management, and replication.
 
-- Ingest sensor data over Zenoh from constrained edge devices.
-- Query and visualise historical records via the HTTP API or the [**Web Console**](/docs/getting-started).
-- Replicate data to the cloud using [**Data Replication**](/docs/guides/data-replication).
+Data management operations such as deleting records, entries, or buckets are not available through the Zenoh API. Use the [HTTP API](/docs/http-api) for those.
 
-## Limitations
+## Authentication
 
-- **Single-bucket mode only.** All Zenoh data maps to one configured bucket. Multi-bucket routing based on key expression is not yet supported.
-- **No authentication.** The Zenoh layer itself does not enforce ReductStore access-control tokens. Secure the Zenoh network at the transport level (e.g. TLS, private VLAN).
-- **Binary payload only.** The Zenoh API always stores and returns raw bytes with content type `application/octet-stream`. Use labels to carry semantic metadata.
-- **Write-once semantics.** ReductStore records are immutable. A Zenoh sample with a timestamp that already exists in the entry will be rejected.
+Zenoh has its own access control system, separate from ReductStore API tokens. ReductStore registers itself as a regular Zenoh node. Any Zenoh node that is allowed to connect to the session can publish and query data.
+
+You configure who can connect, and what they can do, at the Zenoh level using:
+
+- [Access control rules](https://zenoh.io/docs/manual/access-control/) to allow or deny operations on specific key expressions per subject
+- [User-password authentication](https://zenoh.io/docs/manual/user-password/) to authenticate clients and peers before they join the session
+- [TLS authentication](https://zenoh.io/docs/manual/tls/) for mutual certificate-based authentication
+
+ReductStore API tokens are not checked for Zenoh connections. If you need per-token access control on top of Zenoh, use the HTTP API.
+
+## Current Limitations
+
+- **Single-bucket mode.** All Zenoh data maps to one configured bucket. Routing to different buckets based on the key expression is not yet supported.
+- **Binary payload only.** The Zenoh API always stores and returns raw bytes with content type `application/octet-stream`. Use labels to carry any semantic metadata.
