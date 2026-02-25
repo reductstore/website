@@ -169,8 +169,6 @@ If `ts` is not set, a range query is performed. The following parameters are sup
 | `each_s`        | Return at most one record every N seconds (must be greater than 0)                   | Float     |                               |
 | `each_n`        | Return every Nth record (must be greater than 0)                                     | Integer   |                               |
 | `limit`         | Maximum number of records to return                                                  | Integer   |                               |
-| `continuous`    | Keep the query alive and stream new records as they arrive                           | Boolean   | False                         |
-| `ttl`           | Time-to-live for a continuous query in seconds                                       | Integer   | 60                            |
 | `metadata`      | Return labels and timestamps only, without payload                                   | Boolean   | False                         |
 | `include-<key>` | Only return records where label `<key>` equals the value, e.g. `include-robot=alpha` | String    |                               |
 | `exclude-<key>` | Exclude records where label `<key>` equals the value, e.g. `exclude-status=error`    | String    |                               |
