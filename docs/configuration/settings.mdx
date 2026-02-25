@@ -56,6 +56,32 @@ The following storage classes are supported:
 
 For more information about S3 storage classes, see the **[Amazon S3 Storage Classes documentation](https://aws.amazon.com/s3/storage-classes/)**.
 
+## Zenoh API Settings
+
+ReductStore includes an optional Zenoh API that lets you ingest and retrieve data using the [Zenoh](https://zenoh.io) pub/sub and query protocol alongside the existing HTTP API. The following environment variables configure it:
+
+| Name                      | Default | Description                                                                                        |
+| ------------------------- | ------- | -------------------------------------------------------------------------------------------------- |
+| `RS_ZENOH_ENABLED`        | `false` | Set to `true`, `1`, `yes`, or `on` to enable the Zenoh API                                        |
+| `RS_ZENOH_CONFIG`         |         | Inline Zenoh session config string, e.g. `mode=client;peer=tcp/localhost:7447`. Takes precedence over `RS_ZENOH_CONFIG_PATH` |
+| `RS_ZENOH_CONFIG_PATH`    |         | Path to a Zenoh JSON5 config file                                                                  |
+| `RS_ZENOH_BUCKET`         | `zenoh` | Target ReductStore bucket. Created automatically if it does not exist.                             |
+| `RS_ZENOH_SUB_KEYEXPRS`   |         | Key expression for the subscriber (write path). Disabled if unset.                                 |
+| `RS_ZENOH_QUERY_KEYEXPRS` |         | Key expression for the queryable (read path). Disabled if unset.                                   |
+
+### Inline Credentials
+
+When using TLS or user-password authentication with `RS_ZENOH_CONFIG`, Zenoh normally requires file paths for certificates and dictionaries. These variables let you supply the file contents directly as environment variables instead — useful in Docker or Kubernetes environments where mounting files is inconvenient. Each value is written to a temporary file at startup and its path is injected into the Zenoh session config automatically.
+
+| Name                        | Default | Description                                                                                        |
+| --------------------------- | ------- | -------------------------------------------------------------------------------------------------- |
+| `RS_ZENOH_TLS_ROOT_CA`      |         | PEM content of the root CA certificate used to verify the Zenoh router or peer (`transport/link/tls/root_ca_certificate`) |
+| `RS_ZENOH_TLS_CONNECT_CERT` |         | PEM content of the client certificate for mutual TLS (`transport/link/tls/connect_certificate`)   |
+| `RS_ZENOH_TLS_CONNECT_KEY`  |         | PEM content of the client private key for mutual TLS (`transport/link/tls/connect_private_key`)   |
+| `RS_ZENOH_AUTH_DICTIONARY`  |         | User-password dictionary content, one `user:password` entry per line (`transport/auth/usrpwd/dictionary_file`) |
+
+For usage examples, deployment patterns, and a full explanation of key expressions, selectors, and encoding, see the **[Zenoh API integration guide](../integrations/zenoh)**.
+
 ## I/O Settings
 
 In addition to general settings, you can configure I/O settings to optimize communication over HTTP with the storage engine. The following table describes the available environment variables:
