@@ -29,9 +29,10 @@ ReductStore opens a Zenoh session on startup and registers a **subscriber** (for
 | **Queryable**      | Read path. Queries whose selector matches the configured key expression retrieve **[records](../glossary#record)**.                                  |
 | **Key**            | The concrete address of a sample (e.g. `robot/arm/joint1`). Becomes the **[entry](../glossary#entry)** name in the **[bucket](../glossary#bucket)**. |
 | **Key expression** | A wildcard pattern (e.g. `robot/**`). Used to configure which keys the subscriber and queryable respond to.                                          |
-| **Encoding**       | Mapped to the record's **content type**.                                                                                   |
+| **Encoding**       | Mapped to the record's **content type**.                                                                                                             |
 | **Attachment**     | JSON-encoded map of **[labels](../glossary#label)** (key-value metadata).                                                                            |
 | **Timestamp**      | Zenoh HLC timestamp converted to Unix microseconds.                                                                                                  |
+
 :::info
 All data is stored in a single ReductStore bucket. The bucket is created automatically if it does not exist.
 :::

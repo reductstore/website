@@ -62,10 +62,10 @@ ReductStore includes an optional Zenoh API that lets you ingest and retrieve dat
 
 | Name                      | Default | Description                                                                                                                  |
 | ------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `RS_ZENOH_ENABLED`        | false | Set to `true`, `1`, `yes`, or `on` to enable the Zenoh API                                                                   |
+| `RS_ZENOH_ENABLED`        | false   | Set to `true`, `1`, `yes`, or `on` to enable the Zenoh API                                                                   |
 | `RS_ZENOH_CONFIG`         |         | Inline Zenoh session config string, e.g. `mode=client;peer=tcp/localhost:7447`. Takes precedence over `RS_ZENOH_CONFIG_PATH` |
 | `RS_ZENOH_CONFIG_PATH`    |         | Path to a Zenoh JSON5 config file                                                                                            |
-| `RS_ZENOH_BUCKET`         | zenoh | Target ReductStore bucket. Created automatically if it does not exist.                                                       |
+| `RS_ZENOH_BUCKET`         | zenoh   | Target ReductStore bucket. Created automatically if it does not exist.                                                       |
 | `RS_ZENOH_SUB_KEYEXPRS`   |         | Key expression for the subscriber (write path). Disabled if unset.                                                           |
 | `RS_ZENOH_QUERY_KEYEXPRS` |         | Key expression for the queryable (read path). Disabled if unset.                                                             |
 
