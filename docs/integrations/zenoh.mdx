@@ -4,6 +4,13 @@ description: Ingest and query ReductStore data over Zenoh publish/subscribe and 
 sidebar_position: 4
 ---
 
+import CodeBlock from "@theme/CodeBlock";
+import ZenohEncodingPy from "!!raw-loader!../examples/py/src/zenoh_encoding.py";
+import ZenohLabelsPy from "!!raw-loader!../examples/py/src/zenoh_labels.py";
+import ZenohQueryTimestampPy from "!!raw-loader!../examples/py/src/zenoh_query_timestamp.py";
+import ZenohQueryRangePy from "!!raw-loader!../examples/py/src/zenoh_query_range.py";
+import ZenohReadLabelsPy from "!!raw-loader!../examples/py/src/zenoh_read_labels.py";
+
 <head>
   <link
     rel="canonical"
@@ -57,8 +64,6 @@ Key expressions extend plain keys with three wildcards. The following table and 
 Prefer `*` and `**` over `$*` when designing your key space. According to Zenoh's documentation, `$*` is slower and is usually only needed when different identifiers are mixed within the same segment, e.g. `robot12` and `pc18`. Structuring keys as `robot/12` and `pc/18` instead avoids this.
 :::
 
-See the [**Zenoh abstractions documentation**](https://zenoh.io/docs/manual/abstractions/) for the full key expression specification.
-
 ## Selectors
 
 When querying, Zenoh uses a **selector** which is a key expression optionally followed by `?` and a list of parameters. The following syntax is from the [**Zenoh abstractions documentation**](https://zenoh.io/docs/manual/abstractions/):
@@ -73,21 +78,7 @@ The key expression part is used by Zenoh routers to route the query to the right
 
 ## Configuration
 
-Keep configuration in one place: use the **[Zenoh API Settings](../configuration/settings#zenoh-api-settings)** section in the configuration guide.
-
-The only detail worth repeating here is the inline format for `RS_ZENOH_CONFIG`:
-
-| Key                | Example value              | Description                       |
-| ------------------ | -------------------------- | --------------------------------- |
-| `mode`             | `client`, `peer`, `router` | Zenoh session mode                |
-| `peer` / `connect` | `tcp/localhost:7447`       | Comma-separated connect endpoints |
-| `listen`           | `tcp/0.0.0.0:7447`         | Comma-separated listen endpoints  |
-
-```
-RS_ZENOH_CONFIG=mode=client;peer=tcp/192.168.1.10:7447
-```
-
-For advanced session settings, use `RS_ZENOH_CONFIG_PATH` with a [**Zenoh JSON5 configuration file**](https://github.com/eclipse-zenoh/zenoh/blob/main/DEFAULT_CONFIG.json5).
+See the **[Zenoh API Settings](../configuration/settings#zenoh-api-settings)** section for the full list of environment variables.
 
 ## Write Path
 
@@ -105,35 +96,13 @@ Zenoh samples carry an optional encoding that describes the format of their payl
 
 Standard Zenoh encodings like `text/plain`, `application/json`, or `image/jpeg` map directly to their MIME type equivalents in ReductStore. If you publish without setting an encoding, the content type defaults to `application/octet-stream`.
 
-```python
-import zenoh
-
-with zenoh.open(zenoh.Config()) as session:
-    # Publish JSON with explicit encoding
-    session.put(
-        "factory/line1/status",
-        b'{"state": "running", "speed": 120}',
-        encoding=zenoh.Encoding.APPLICATION_JSON,
-    )
-
-    # Publish binary data (defaults to application/octet-stream)
-    session.put("factory/line1/camera", b"<raw image bytes>")
-```
+<CodeBlock language="python">{ZenohEncodingPy}</CodeBlock>
 
 ### Sending Labels
 
 Attach a JSON label map to the Zenoh sample to annotate the record:
 
-```python
-import zenoh, json
-
-with zenoh.open(zenoh.Config()) as session:
-    session.put(
-        "factory/line1/camera",
-        b"<binary payload>",
-        attachment=json.dumps({"robot": "alpha", "status": "ok"}).encode(),
-    )
-```
+<CodeBlock language="python">{ZenohLabelsPy}</CodeBlock>
 
 ## Read Path
 
@@ -149,14 +118,7 @@ Fetch the single record at an exact timestamp:
 | --------- | ------------------------------------------- | --------- |
 | `ts`      | Exact record timestamp in Unix microseconds | Timestamp |
 
-```python
-import zenoh
-
-with zenoh.open(zenoh.Config()) as session:
-    replies = session.get("factory/line1/camera?ts=1700000000000000")
-    for reply in replies:
-        print(reply.ok.payload.to_bytes())
-```
+<CodeBlock language="python">{ZenohQueryTimestampPy}</CodeBlock>
 
 ### Time-range Query
 
@@ -164,8 +126,8 @@ If `ts` is not set, a range query is performed. The following parameters are sup
 
 | Parameter       | Description                                                                          | Type      | Default                       |
 | --------------- | ------------------------------------------------------------------------------------ | --------- | ----------------------------- |
-| `start`         | Range start timestamp (Unix µs, inclusive)                                           | Timestamp | Timestamp of the first record |
-| `stop`          | Range stop timestamp (Unix µs, exclusive)                                            | Timestamp | Timestamp of the last record  |
+| `start`         | Range start timestamp (Unix microseconds, inclusive)                                           | Timestamp | Timestamp of the first record |
+| `stop`          | Range stop timestamp (Unix microseconds, exclusive)                                            | Timestamp | Timestamp of the last record  |
 | `each_s`        | Return at most one record every N seconds (must be greater than 0)                   | Float     |                               |
 | `each_n`        | Return every Nth record (must be greater than 0)                                     | Integer   |                               |
 | `limit`         | Maximum number of records to return                                                  | Integer   |                               |
@@ -173,39 +135,16 @@ If `ts` is not set, a range query is performed. The following parameters are sup
 | `include-<key>` | Only return records where label `<key>` equals the value, e.g. `include-robot=alpha` | String    |                               |
 | `exclude-<key>` | Exclude records where label `<key>` equals the value, e.g. `exclude-status=error`    | String    |                               |
 
-```python
-import zenoh
-
-with zenoh.open(zenoh.Config()) as session:
-    replies = session.get(
-        "factory/line1/camera",
-        parameters="start=1700000000000000&stop=1700086400000000&limit=100"
-    )
-    for reply in replies:
-        print(reply.ok.payload.to_bytes())
-```
+<CodeBlock language="python">{ZenohQueryRangePy}</CodeBlock>
 
 ### Reading Labels from Replies
 
 Labels are returned as a JSON attachment on each reply sample:
 
-```python
-import zenoh
-import json
-
-with zenoh.open(zenoh.Config()) as session:
-    replies = session.get("factory/line1/camera?limit=1")
-    for reply in replies:
-        sample = reply.ok
-        labels = {}
-        if sample.attachment is not None:
-            labels = json.loads(sample.attachment.to_bytes())
-        print(labels)
-```
+<CodeBlock language="python">{ZenohReadLabelsPy}</CodeBlock>
 
 ## Current Limitations
 
 - **Single-bucket mode.** All Zenoh data maps to one configured bucket. Routing to different buckets based on the key expression is not yet supported.
 - **No data deletion.** Records, entries, and buckets cannot be deleted through the Zenoh API. Use the [**HTTP API**](/docs/http-api) for data management operations.
-- **Limited query parameters.** The Zenoh API exposes a fixed set of query parameters (`start`, `stop`, `limit`, and so on). The full [**ReductStore query language**](/docs/guides/data-querying) — including conditional `when` expressions and strict mode — is not available over Zenoh.
-- **No topic-to-label mapping.** There is no way to map a Zenoh key or key expression to a ReductStore label. For example, it is not currently possible to store data from multiple Zenoh topics as records under a single entry and use the topic name as a label.
+- **Limited query parameters.** The Zenoh API exposes a fixed set of query parameters (`start`, `stop`, `limit`, and so on). The full [**ReductStore query language**](/docs/guides/data-querying) is not available over Zenoh.
