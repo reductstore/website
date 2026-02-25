@@ -69,12 +69,12 @@ Prefer `*` and `**` over `$*` when designing your key space. According to Zenoh'
 When querying, Zenoh uses a **selector** which is a key expression optionally followed by `?` and a list of parameters. The following syntax is from the [**Zenoh abstractions documentation**](https://zenoh.io/docs/manual/abstractions/):
 
 ```
-factory/**/temperature?start=1700000000000000&limit=100
-^                     ^ ^
-|--- key expression --| |------ parameters ------|
+factory/**/temperature?start=1700000000000000;limit=100
+^                     ^^                              ^
+|--- key expression --||--------- parameters ---------|
 ```
 
-The key expression part is used by Zenoh routers to route the query to the right queryable. The parameters are passed through to ReductStore and interpreted as query filters (see [**Time-range Query**](#time-range-query) below). Parameters are `&`-separated `key=value` pairs, and values may be URL-encoded.
+The key expression part is used by Zenoh routers to route the query to the right queryable. The parameters are passed through to ReductStore and interpreted as query filters (see [**Time-range Query**](#time-range-query) below). Parameters are `;`-separated `key=value` pairs, and values may be URL-encoded.
 
 ## Configuration
 
@@ -89,6 +89,9 @@ When a Zenoh publisher sends a sample to a key expression that matches `RS_ZENOH
 3. The sample's **encoding** is mapped to the record's **content type**. If no encoding is set, the content type defaults to `application/octet-stream`.
 4. If the sample carries a Zenoh timestamp, it is converted from HLC to Unix microseconds and used as the record timestamp. Otherwise the server clock is used.
 5. If the sample carries a Zenoh attachment, it is decoded as a JSON object and stored as record labels.
+6. Two additional labels are automatically added to every record:
+   - `zenoh_source_id`: Identifies the Zenoh node that published the sample. Useful for tracing data provenance in distributed systems.
+   - `zenoh_ts_ntp64`: The original Zenoh HLC timestamp in NTP64 format, preserving full precision before conversion to Unix microseconds.
 
 ### Encoding and Content Type
 
@@ -109,6 +112,10 @@ Attach a JSON label map to the Zenoh sample to annotate the record:
 When a Zenoh client sends a query to a key expression that matches `RS_ZENOH_QUERY_KEYEXPRS`, ReductStore looks up the matching records and replies with them.
 
 The query takes the form of a [**selector**](#selectors): the key part of the selector maps to the entry name within `RS_ZENOH_BUCKET`, and the parameters after `?` control which records are returned.
+
+:::tip
+When querying for multiple records, set the consolidation mode to `zenoh.ConsolidationMode.NONE` in your query. This ensures that all matching records are returned individually rather than being consolidated into a single response. The original Zenoh timestamp for each record is available in the `zenoh_ts_ntp64` label.
+:::
 
 ### Point-in-time Lookup
 

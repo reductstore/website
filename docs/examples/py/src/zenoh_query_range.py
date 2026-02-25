@@ -9,6 +9,7 @@ with zenoh.open(zenoh.Config()) as session:
         session.get(
             f"{KEY}?start={START}&stop={STOP}&limit=2",
             timeout=5.0,
+            consolidation=zenoh.ConsolidationMode.NONE,
         )
     )
     for reply in replies:
