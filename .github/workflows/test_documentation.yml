@@ -159,7 +159,7 @@ jobs:
             fi
 
             echo '${{secrets.LICENSE_KEY}}' > ./license.lic
-<<<<<<< Zenoh-API-for-ingestion-and-query
+
             IS_ZENOH=0
             if [[ "$example" == *"/zenoh_"*".py" ]]; then
               IS_ZENOH=1
@@ -177,21 +177,15 @@ jobs:
                   --env RS_ZENOH_CONFIG="mode=client;connect=tcp/127.0.0.1:7447" \
                   --env RS_ZENOH_SUB_KEYEXPRS="**" \
                   --env RS_ZENOH_QUERY_KEYEXPRS="**" \
-                  reduct/store:${{ matrix.reduct_version }}
+                  "${{ matrix.image }}"
             else
               docker run -d  -v ${PWD}:/misc \
                   --name reductstore -p 8383:8383 \
                   --env RS_LOG_LEVEL=debug \
                   --env RS_API_TOKEN="my-token"  \
-                  --env RS_LICENSE_PATH=/misc/license.lic reduct/store:${{ matrix.reduct_version }}
+                  --env RS_LICENSE_PATH=/misc/license.lic "${{ matrix.image }}"
             fi
-=======
-            docker run -d  -v ${PWD}:/misc \
-                --name reductstore -p 8383:8383 \
-                --env RS_LOG_LEVEL=debug \
-                --env RS_API_TOKEN="my-token"  \
-                --env RS_LICENSE_PATH=/misc/license.lic "${{ matrix.image }}"
->>>>>>> main
+
             sleep 1
             reduct-cli cp http://my-token@127.0.0.1:8384/example-bucket  http://my-token@127.0.0.1:8383/example-bucket --limit 100
             reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-remove
