@@ -22,6 +22,8 @@ import ZenohReadLabelsPy from "!!raw-loader!../examples/py/src/zenoh_read_labels
 
 ReductStore can receive and serve time-series data directly over [**Zenoh**](https://zenoh.io), using its native pub/sub and query primitives. This is an alternative ingestion and retrieval path that runs alongside the existing HTTP API. Both work at the same time and share the same stored data.
 
+Refer to the **[Zenoh API Settings](../configuration/settings#zenoh-api-settings)** section for configuration details.
+
 :::info
 The Zenoh API is compiled under the `zenoh-api` Cargo feature flag. Official Docker images ship with this feature enabled. If you build from source, add `--features zenoh-api` to your `cargo build` invocation.
 :::
@@ -76,17 +78,13 @@ factory/**/temperature?start=1700000000000000;limit=100
 
 The key expression part is used by Zenoh routers to route the query to the right queryable. The parameters are passed through to ReductStore and interpreted as query filters (see [**Time-range Query**](#time-range-query) below). Parameters are `;`-separated `key=value` pairs, and values may be URL-encoded.
 
-## Configuration
-
-See the **[Zenoh API Settings](../configuration/settings#zenoh-api-settings)** section for the full list of environment variables.
-
 ## Write Path
 
 When a Zenoh publisher sends a sample to a key expression that matches `RS_ZENOH_SUB_KEYEXPRS`:
 
 1. The sample's key becomes the entry name (leading and trailing `/` are stripped).
 2. The sample payload is written to that entry in `RS_ZENOH_BUCKET`.
-3. The sample's **encoding** is mapped to the record's **content type**. If no encoding is set, the content type defaults to `application/octet-stream`.
+3. The sample's **encoding** is mapped to the record's **content type**.
 4. If the sample carries a Zenoh timestamp, it is converted from HLC to Unix microseconds and used as the record timestamp. Otherwise the server clock is used.
 5. If the sample carries a Zenoh attachment, it is decoded as a JSON object and stored as record labels.
 6. Two additional labels are automatically added to every record:
@@ -97,13 +95,11 @@ When a Zenoh publisher sends a sample to a key expression that matches `RS_ZENOH
 
 Zenoh samples carry an optional encoding that describes the format of their payload. ReductStore stores this as the record's content type, making it available when reading back the data over HTTP or Zenoh.
 
-Standard Zenoh encodings like `text/plain`, `application/json`, or `image/jpeg` map directly to their MIME type equivalents in ReductStore. If you publish without setting an encoding, the content type defaults to `application/octet-stream`.
-
 <CodeBlock language="python">{ZenohEncodingPy}</CodeBlock>
 
 ### Sending Labels
 
-Attach a JSON label map to the Zenoh sample to annotate the record:
+Zenoh samples can also carry an optional attachment, which is a binary blob that can be used to store arbitrary metadata. ReductStore expects this attachment to be a JSON-encoded map of string key-value pairs, which it stores as record labels.
 
 <CodeBlock language="python">{ZenohLabelsPy}</CodeBlock>
 
@@ -111,7 +107,7 @@ Attach a JSON label map to the Zenoh sample to annotate the record:
 
 When a Zenoh client sends a query to a key expression that matches `RS_ZENOH_QUERY_KEYEXPRS`, ReductStore looks up the matching records and replies with them.
 
-The query takes the form of a [**selector**](#selectors): the key part of the selector maps to the entry name within `RS_ZENOH_BUCKET`, and the parameters after `?` control which records are returned.
+The query takes the form of a [**selector**](#selectors) which consists of a key expression and an optional list of parameters. The key expression is used for routing the query to the right queryable, while the parameters are interpreted as filters on which records to return.
 
 :::tip
 When querying for multiple records, set the consolidation mode to `zenoh.ConsolidationMode.NONE` in your query. This ensures that all matching records are returned individually rather than being consolidated into a single response. The original Zenoh timestamp for each record is available in the `zenoh_ts_ntp64` label.
@@ -124,6 +120,7 @@ Fetch the single record at an exact timestamp:
 | Parameter | Description                                 | Type      |
 | --------- | ------------------------------------------- | --------- |
 | `ts`      | Exact record timestamp in Unix microseconds | Timestamp |
+| `last`    | Fetch the record at the last timestamp      | Boolean   |
 
 <CodeBlock language="python">{ZenohQueryTimestampPy}</CodeBlock>
 
@@ -154,4 +151,4 @@ Labels are returned as a JSON attachment on each reply sample:
 
 - **Single-bucket mode.** All Zenoh data maps to one configured bucket. Routing to different buckets based on the key expression is not yet supported.
 - **No data deletion.** Records, entries, and buckets cannot be deleted through the Zenoh API. Use the [**HTTP API**](/docs/http-api) for data management operations.
-- **Limited query parameters.** The Zenoh API exposes a fixed set of query parameters (`start`, `stop`, `limit`, and so on). The full [**ReductStore query language**](/docs/guides/data-querying) is not available over Zenoh.
+- **Limited query parameters.** The Zenoh API exposes a fixed set of query parameters (`start`, `stop`, `limit`, and so on). The full [**ReductStore query language**](/docs/guides/data-querying) is only available through the HTTP API.
