@@ -5,7 +5,10 @@ sidebar_position: 4
 ---
 
 <head>
-  <link rel="canonical" href="https://www.reduct.store/docs/integrations/zenoh" />
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/integrations/zenoh"
+  />
 </head>
 
 # Zenoh API
@@ -22,15 +25,15 @@ The Zenoh API is compiled under the `zenoh-api` Cargo feature flag. Official Doc
 
 ReductStore opens a Zenoh session on startup and registers a **subscriber** (for writes) and a **queryable** (for reads). Both talk directly to the storage engine without going through HTTP.
 
-| Zenoh concept      | ReductStore mapping                                                                                                                              |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Subscriber**     | Write path. Samples published to keys matching the configured key expression are ingested.                                                        |
-| **Queryable**      | Read path. Queries whose selector matches the configured key expression retrieve **[records](../glossary#record)**.                               |
+| Zenoh concept      | ReductStore mapping                                                                                                                                  |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Subscriber**     | Write path. Samples published to keys matching the configured key expression are ingested.                                                           |
+| **Queryable**      | Read path. Queries whose selector matches the configured key expression retrieve **[records](../glossary#record)**.                                  |
 | **Key**            | The concrete address of a sample (e.g. `robot/arm/joint1`). Becomes the **[entry](../glossary#entry)** name in the **[bucket](../glossary#bucket)**. |
-| **Key expression** | A wildcard pattern (e.g. `robot/**`). Used to configure which keys the subscriber and queryable respond to.                                      |
-| **Encoding**       | Mapped to the **[record](../glossary#record)**'s **content type**.                                                                               |
-| **Attachment**     | JSON-encoded map of **[labels](../glossary#label)** (key-value metadata).                                                                        |
-| **Timestamp**      | Zenoh HLC timestamp converted to Unix microseconds.                                                                                              |
+| **Key expression** | A wildcard pattern (e.g. `robot/**`). Used to configure which keys the subscriber and queryable respond to.                                          |
+| **Encoding**       | Mapped to the **[record](../glossary#record)**'s **content type**.                                                                                   |
+| **Attachment**     | JSON-encoded map of **[labels](../glossary#label)** (key-value metadata).                                                                            |
+| **Timestamp**      | Zenoh HLC timestamp converted to Unix microseconds.                                                                                                  |
 
 All data is stored in a single ReductStore bucket. The bucket is created automatically if it does not exist.
 
@@ -44,8 +47,8 @@ A key is a `/`-separated sequence of non-empty UTF-8 segments, similar to a file
 
 Key expressions extend plain keys with three wildcards. The following table and examples are taken from the [**Zenoh abstractions documentation**](https://zenoh.io/docs/manual/abstractions/):
 
-| Wildcard | Matches                                                                                 | Example                                         |
-| -------- | --------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| Wildcard | Matches                                                                                 | Example                                                                                  |
+| -------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | `*`      | Any single segment (not including `/`). Must be surrounded by `/` or be the whole chunk | `robot1/*/temperature` matches `robot1/imu/temperature` but not `robot1/a/b/temperature` |
 | `$*`     | Any substring within a single segment, including an empty string                        | `robot$*/temperature` matches `robot1/temperature` and `robotA/temperature`              |
 | `**`     | Any number of segments, including none. Must appear after `/` or at the start           | `factory/**/temperature` matches all temperature keys under `factory` at any depth       |
@@ -78,11 +81,11 @@ Enable the API by setting `RS_ZENOH_ENABLED=true`, then provide exactly one of t
 
 `RS_ZENOH_CONFIG` accepts a semicolon-separated list of `key=value` pairs:
 
-| Key                | Example value              | Description                         |
-| ------------------ | -------------------------- | ----------------------------------- |
-| `mode`             | `client`, `peer`, `router` | Zenoh session mode                  |
-| `peer` / `connect` | `tcp/localhost:7447`       | Comma-separated connect endpoints   |
-| `listen`           | `tcp/0.0.0.0:7447`         | Comma-separated listen endpoints    |
+| Key                | Example value              | Description                       |
+| ------------------ | -------------------------- | --------------------------------- |
+| `mode`             | `client`, `peer`, `router` | Zenoh session mode                |
+| `peer` / `connect` | `tcp/localhost:7447`       | Comma-separated connect endpoints |
+| `listen`           | `tcp/0.0.0.0:7447`         | Comma-separated listen endpoints  |
 
 ```
 RS_ZENOH_CONFIG=mode=client;peer=tcp/192.168.1.10:7447
@@ -165,18 +168,18 @@ for reply in replies:
 
 If `ts` is not set, a range query is performed. The following parameters are supported:
 
-| Parameter       | Description                                                                    | Type      | Default                            |
-| --------------- | ------------------------------------------------------------------------------ | --------- | ---------------------------------- |
-| `start`         | Range start timestamp (Unix µs, inclusive)                                     | Timestamp | Timestamp of the first record      |
-| `stop`          | Range stop timestamp (Unix µs, exclusive)                                      | Timestamp | Timestamp of the last record       |
-| `each_s`        | Return at most one record every N seconds (must be greater than 0)             | Float     |                                    |
-| `each_n`        | Return every Nth record (must be greater than 0)                               | Integer   |                                    |
-| `limit`         | Maximum number of records to return                                            | Integer   |                                    |
-| `continuous`    | Keep the query alive and stream new records as they arrive                     | Boolean   | False                              |
-| `ttl`           | Time-to-live for a continuous query in seconds                                 | Integer   | 60                                 |
-| `metadata`      | Return labels and timestamps only, without payload                             | Boolean   | False                              |
-| `include-<key>` | Only return records where label `<key>` equals the value, e.g. `include-robot=alpha` | String |                             |
-| `exclude-<key>` | Exclude records where label `<key>` equals the value, e.g. `exclude-status=error`   | String |                             |
+| Parameter       | Description                                                                          | Type      | Default                       |
+| --------------- | ------------------------------------------------------------------------------------ | --------- | ----------------------------- |
+| `start`         | Range start timestamp (Unix µs, inclusive)                                           | Timestamp | Timestamp of the first record |
+| `stop`          | Range stop timestamp (Unix µs, exclusive)                                            | Timestamp | Timestamp of the last record  |
+| `each_s`        | Return at most one record every N seconds (must be greater than 0)                   | Float     |                               |
+| `each_n`        | Return every Nth record (must be greater than 0)                                     | Integer   |                               |
+| `limit`         | Maximum number of records to return                                                  | Integer   |                               |
+| `continuous`    | Keep the query alive and stream new records as they arrive                           | Boolean   | False                         |
+| `ttl`           | Time-to-live for a continuous query in seconds                                       | Integer   | 60                            |
+| `metadata`      | Return labels and timestamps only, without payload                                   | Boolean   | False                         |
+| `include-<key>` | Only return records where label `<key>` equals the value, e.g. `include-robot=alpha` | String    |                               |
+| `exclude-<key>` | Exclude records where label `<key>` equals the value, e.g. `exclude-status=error`    | String    |                               |
 
 ```python
 replies = session.get(
@@ -258,12 +261,12 @@ Zenoh's TLS and user-password authentication normally require certificate and di
 
 Each variable is written to a temporary file at startup and its path is automatically injected into the Zenoh session config:
 
-| Name                        | Injected Zenoh config key                            | Description                                             |
-| --------------------------- | ---------------------------------------------------- | ------------------------------------------------------- |
-| `RS_ZENOH_TLS_ROOT_CA`      | `transport/link/tls/root_ca_certificate`             | PEM content of the CA certificate that verifies the Zenoh router or peer |
-| `RS_ZENOH_TLS_CONNECT_CERT` | `transport/link/tls/connect_certificate`             | PEM content of the client certificate for mutual TLS    |
-| `RS_ZENOH_TLS_CONNECT_KEY`  | `transport/link/tls/connect_private_key`             | PEM content of the client private key for mutual TLS    |
-| `RS_ZENOH_AUTH_DICTIONARY`  | `transport/auth/usrpwd/dictionary_file`              | User-password dictionary, one `user:password` per line  |
+| Name                        | Injected Zenoh config key                | Description                                                              |
+| --------------------------- | ---------------------------------------- | ------------------------------------------------------------------------ |
+| `RS_ZENOH_TLS_ROOT_CA`      | `transport/link/tls/root_ca_certificate` | PEM content of the CA certificate that verifies the Zenoh router or peer |
+| `RS_ZENOH_TLS_CONNECT_CERT` | `transport/link/tls/connect_certificate` | PEM content of the client certificate for mutual TLS                     |
+| `RS_ZENOH_TLS_CONNECT_KEY`  | `transport/link/tls/connect_private_key` | PEM content of the client private key for mutual TLS                     |
+| `RS_ZENOH_AUTH_DICTIONARY`  | `transport/auth/usrpwd/dictionary_file`  | User-password dictionary, one `user:password` per line                   |
 
 These variables work alongside `RS_ZENOH_CONFIG`. The inline config string still enables TLS or user-password auth in the Zenoh session; the credential variables then provide the actual key material without requiring mounted files.
 
