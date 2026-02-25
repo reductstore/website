@@ -25,6 +25,7 @@ access to the entry's **[bucket](../../glossary#bucket)**.
 - Version 1.4: the `x-reduct-last` header is deprecated. Use the NoContent response instead.
 - Version 1.16: the `x-reduct-last` header is removed.
 - Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
+- Version 1.19: entry names can be hierarchical paths with multiple segments (for example, `a/b/c`).
 
 <head>
   <link
@@ -138,6 +139,7 @@ If authentication is enabled, the method needs a valid API token with read acces
 
 - Version 1.5: the method was introduced.
 - Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
+- Version 1.19: entry names can be hierarchical paths with multiple segments (for example, `a/b/c`).
 
 <SwaggerComponent
     method="GET"
@@ -242,6 +244,7 @@ access to the bucket of the entry.
 - Version 1.6: the method provides the `limit` query parameter. It limits the number of records in the query. If it is not set, the query is unlimited by default.
 - Version 1.10: the method has the `each_n` and `each_s` query parameters. If the `each_n` parameter is set, the method returns only every `each_n`-th record. If the `each_s` parameter is set, the method returns only one record per `each_s` seconds.
 - Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
+- Version 1.19: entry names can be hierarchical paths with multiple segments (for example, `a/b/c`).
 
 :::warning
 Since version 1.13, the method is deprecated. Use the [**Query API**](/docs/http-api/entry-api/run_query.mdx) instead.
