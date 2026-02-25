@@ -13,9 +13,7 @@ sidebar_position: 4
 
 # Zenoh API
 
-ReductStore can receive and serve time-series data directly over [**Zenoh**](https://zenoh.io), using its native pub/sub and query primitives. This is an alternative ingestion and retrieval path that runs alongside the existing HTTP API.
-
-This page explains how to enable the Zenoh API, how to configure it, and what you can and cannot do with it compared to the HTTP API.
+ReductStore can receive and serve time-series data directly over [**Zenoh**](https://zenoh.io), using its native pub/sub and query primitives. This is an alternative ingestion and retrieval path that runs alongside the existing HTTP API. Both work at the same time and share the same stored data.
 
 :::info
 The Zenoh API is compiled under the `zenoh-api` Cargo feature flag. Official Docker images ship with this feature enabled. If you build from source, add `--features zenoh-api` to your `cargo build` invocation.
@@ -74,13 +72,9 @@ The key expression part is used by Zenoh routers to route the query to the right
 
 ## Configuration
 
-The Zenoh API is configured through environment variables. For the full variable reference see the **[Zenoh API Settings](../configuration/settings#zenoh-api-settings)** section of the configuration guide.
+Keep configuration in one place: use the **[Zenoh API Settings](../configuration/settings#zenoh-api-settings)** section in the configuration guide.
 
-Enable the API by setting `RS_ZENOH_ENABLED=true`, then provide exactly one of the two session config options below.
-
-### Inline session config
-
-`RS_ZENOH_CONFIG` accepts a semicolon-separated list of `key=value` pairs:
+The only detail worth repeating here is the inline format for `RS_ZENOH_CONFIG`:
 
 | Key                | Example value              | Description                       |
 | ------------------ | -------------------------- | --------------------------------- |
@@ -92,11 +86,7 @@ Enable the API by setting `RS_ZENOH_ENABLED=true`, then provide exactly one of t
 RS_ZENOH_CONFIG=mode=client;peer=tcp/192.168.1.10:7447
 ```
 
-Unknown keys are logged as warnings and ignored. For advanced session settings such as TLS, multicast discovery, or scouting, use `RS_ZENOH_CONFIG_PATH` instead and point it to a standard [**Zenoh JSON5 configuration file**](https://github.com/eclipse-zenoh/zenoh/blob/main/DEFAULT_CONFIG.json5).
-
-### Key expression routing
-
-`RS_ZENOH_SUB_KEYEXPRS` sets the key expression the subscriber listens on (write path) and `RS_ZENOH_QUERY_KEYEXPRS` sets the one the queryable answers (read path). Both follow the [**Key Expression Language**](#key-expressions) described above. Either path is disabled when its variable is unset.
+For advanced session settings, use `RS_ZENOH_CONFIG_PATH` with a [**Zenoh JSON5 configuration file**](https://github.com/eclipse-zenoh/zenoh/blob/main/DEFAULT_CONFIG.json5).
 
 ## Write Path
 
@@ -117,17 +107,16 @@ Standard Zenoh encodings like `text/plain`, `application/json`, or `image/jpeg` 
 ```python
 import zenoh
 
-session = zenoh.open(zenoh.Config())
+with zenoh.open(zenoh.Config()) as session:
+    # Publish JSON with explicit encoding
+    session.put(
+        "factory/line1/status",
+        b'{"state": "running", "speed": 120}',
+        encoding=zenoh.Encoding.APPLICATION_JSON,
+    )
 
-# Publish JSON with explicit encoding
-session.put(
-    "factory/line1/status",
-    b'{"state": "running", "speed": 120}',
-    encoding=zenoh.Encoding.APPLICATION_JSON,
-)
-
-# Publish binary data (defaults to application/octet-stream)
-session.put("factory/line1/camera", b"<raw image bytes>")
+    # Publish binary data (defaults to application/octet-stream)
+    session.put("factory/line1/camera", b"<raw image bytes>")
 ```
 
 ### Sending Labels
@@ -137,12 +126,12 @@ Attach a JSON label map to the Zenoh sample to annotate the record:
 ```python
 import zenoh, json
 
-session = zenoh.open(zenoh.Config())
-session.put(
-    "factory/line1/camera",
-    b"<binary payload>",
-    attachment=json.dumps({"robot": "alpha", "status": "ok"}).encode(),
-)
+with zenoh.open(zenoh.Config()) as session:
+    session.put(
+        "factory/line1/camera",
+        b"<binary payload>",
+        attachment=json.dumps({"robot": "alpha", "status": "ok"}).encode(),
+    )
 ```
 
 ## Read Path
@@ -160,9 +149,12 @@ Fetch the single record at an exact timestamp:
 | `ts`      | Exact record timestamp in Unix microseconds | Timestamp |
 
 ```python
-replies = session.get("factory/line1/camera?ts=1700000000000000")
-for reply in replies:
-    print(reply.ok.payload.to_bytes())
+import zenoh
+
+with zenoh.open(zenoh.Config()) as session:
+    replies = session.get("factory/line1/camera?ts=1700000000000000")
+    for reply in replies:
+        print(reply.ok.payload.to_bytes())
 ```
 
 ### Time-range Query
@@ -183,12 +175,15 @@ If `ts` is not set, a range query is performed. The following parameters are sup
 | `exclude-<key>` | Exclude records where label `<key>` equals the value, e.g. `exclude-status=error`    | String    |                               |
 
 ```python
-replies = session.get(
-    "factory/line1/camera",
-    parameters="start=1700000000000000&stop=1700086400000000&limit=100"
-)
-for reply in replies:
-    print(reply.ok.payload.to_bytes())
+import zenoh
+
+with zenoh.open(zenoh.Config()) as session:
+    replies = session.get(
+        "factory/line1/camera",
+        parameters="start=1700000000000000&stop=1700086400000000&limit=100"
+    )
+    for reply in replies:
+        print(reply.ok.payload.to_bytes())
 ```
 
 ### Reading Labels from Replies
@@ -196,108 +191,17 @@ for reply in replies:
 Labels are returned as a JSON attachment on each reply sample:
 
 ```python
+import zenoh
 import json
 
-for reply in replies:
-    sample = reply.ok
-    labels = {}
-    if sample.attachment is not None:
-        labels = json.loads(sample.attachment.to_bytes())
-    print(labels)
-```
-
-## Quick Start with Docker
-
-Start ReductStore with the Zenoh API in client mode, connecting to a Zenoh router at `192.168.1.10:7447`. All published data lands in the `sensors` bucket.
-
-```bash
-docker run -d \
-  -p 8383:8383 \
-  -v ${PWD}/data:/data \
-  -e RS_ZENOH_ENABLED=true \
-  -e RS_ZENOH_CONFIG="mode=client;peer=tcp/192.168.1.10:7447" \
-  -e RS_ZENOH_BUCKET=sensors \
-  -e RS_ZENOH_SUB_KEYEXPRS="**" \
-  -e RS_ZENOH_QUERY_KEYEXPRS="**" \
-  reduct/store:latest
-```
-
-### Using a JSON5 Config File
-
-Mount a config file into the container when you need advanced Zenoh settings:
-
-```bash
-docker run -d \
-  -p 8383:8383 \
-  -v ${PWD}/data:/data \
-  -v ${PWD}/zenoh.json5:/etc/reductstore/zenoh.json5:ro \
-  -e RS_ZENOH_ENABLED=true \
-  -e RS_ZENOH_CONFIG_PATH=/etc/reductstore/zenoh.json5 \
-  -e RS_ZENOH_BUCKET=sensors \
-  -e RS_ZENOH_SUB_KEYEXPRS="**" \
-  reduct/store:latest
-```
-
-## Using the HTTP API alongside Zenoh
-
-The HTTP API stays fully operational when the Zenoh API is enabled. Data written via Zenoh is immediately visible over HTTP and vice versa. A typical setup uses Zenoh for ingestion from edge nodes and the HTTP API or Web Console for querying, management, and replication.
-
-Data management operations such as deleting records, entries, or buckets are not available through the Zenoh API. Use the [**HTTP API**](/docs/http-api) for those.
-
-## Authentication
-
-Zenoh has its own access control system, separate from ReductStore API tokens. ReductStore registers itself as a regular Zenoh node. Any Zenoh node that is allowed to connect to the session can publish and query data.
-
-You configure who can connect, and what they can do, at the Zenoh level using:
-
-- [**Access control rules**](https://zenoh.io/docs/manual/access-control/) to allow or deny operations on specific key expressions per subject
-- [**User-password authentication**](https://zenoh.io/docs/manual/user-password/) to authenticate clients and peers before they join the session
-- [**TLS authentication**](https://zenoh.io/docs/manual/tls/) for mutual certificate-based authentication
-
-ReductStore API tokens are not checked for Zenoh connections. If you need per-token access control on top of Zenoh, use the HTTP API.
-
-### Inline credentials
-
-Zenoh's TLS and user-password authentication normally require certificate and dictionary files to be present on disk. ReductStore provides environment variables that let you supply those file contents directly, so you do not need to mount extra files into the container.
-
-Each variable is written to a temporary file at startup and its path is automatically injected into the Zenoh session config:
-
-| Name                        | Injected Zenoh config key                | Description                                                              |
-| --------------------------- | ---------------------------------------- | ------------------------------------------------------------------------ |
-| `RS_ZENOH_TLS_ROOT_CA`      | `transport/link/tls/root_ca_certificate` | PEM content of the CA certificate that verifies the Zenoh router or peer |
-| `RS_ZENOH_TLS_CONNECT_CERT` | `transport/link/tls/connect_certificate` | PEM content of the client certificate for mutual TLS                     |
-| `RS_ZENOH_TLS_CONNECT_KEY`  | `transport/link/tls/connect_private_key` | PEM content of the client private key for mutual TLS                     |
-| `RS_ZENOH_AUTH_DICTIONARY`  | `transport/auth/usrpwd/dictionary_file`  | User-password dictionary, one `user:password` per line                   |
-
-These variables work alongside `RS_ZENOH_CONFIG`. The inline config string still enables TLS or user-password auth in the Zenoh session; the credential variables then provide the actual key material without requiring mounted files.
-
-**Example — TLS with inline certificates (Docker):**
-
-```bash
-docker run -d \
-  -p 8383:8383 \
-  -e RS_ZENOH_ENABLED=true \
-  -e RS_ZENOH_CONFIG="mode=client;peer=tls/192.168.1.10:7447" \
-  -e RS_ZENOH_BUCKET=sensors \
-  -e RS_ZENOH_SUB_KEYEXPRS="**" \
-  -e RS_ZENOH_TLS_ROOT_CA="$(cat ca.pem)" \
-  -e RS_ZENOH_TLS_CONNECT_CERT="$(cat client.pem)" \
-  -e RS_ZENOH_TLS_CONNECT_KEY="$(cat client.key)" \
-  reduct/store:latest
-```
-
-**Example — user-password authentication (Docker):**
-
-```bash
-docker run -d \
-  -p 8383:8383 \
-  -e RS_ZENOH_ENABLED=true \
-  -e RS_ZENOH_CONFIG="mode=client;peer=tcp/192.168.1.10:7447" \
-  -e RS_ZENOH_BUCKET=sensors \
-  -e RS_ZENOH_SUB_KEYEXPRS="**" \
-  -e RS_ZENOH_AUTH_DICTIONARY="alice:s3cr3t
-bob:hunter2" \
-  reduct/store:latest
+with zenoh.open(zenoh.Config()) as session:
+    replies = session.get("factory/line1/camera?limit=1")
+    for reply in replies:
+        sample = reply.ok
+        labels = {}
+        if sample.attachment is not None:
+            labels = json.loads(sample.attachment.to_bytes())
+        print(labels)
 ```
 
 ## Current Limitations
