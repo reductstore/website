@@ -60,14 +60,14 @@ For more information about S3 storage classes, see the **[Amazon S3 Storage Clas
 
 ReductStore includes an optional Zenoh API that lets you ingest and retrieve data using the **[Zenoh](https://zenoh.io)** pub/sub and query protocol alongside the existing HTTP API. The following environment variables configure it:
 
-| Name                      | Default | Description                                                                                                                  |
-| ------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `RS_ZENOH_ENABLED`        | false   | Set to `true`, `1`, `yes`, or `on` to enable the Zenoh API                                                                   |
-| `RS_ZENOH_CONFIG`         |         | Inline Zenoh session config string, e.g. `mode=client;peer=tcp/localhost:7447`. Takes precedence over `RS_ZENOH_CONFIG_PATH` |
-| `RS_ZENOH_CONFIG_PATH`    |         | Path to a Zenoh JSON5 config file                                                                                            |
-| `RS_ZENOH_BUCKET`         | zenoh   | Target ReductStore bucket. Created automatically if it does not exist.                                                       |
-| `RS_ZENOH_SUB_KEYEXPRS`   |         | Key expression for the subscriber (write path). Disabled if unset.                                                           |
-| `RS_ZENOH_QUERY_KEYEXPRS` |         | Key expression for the queryable (read path). Disabled if unset.                                                             |
+| Name                      | Default | Description                                                                                                                                 |
+| ------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `RS_ZENOH_ENABLED`        | false   | Set to `true`, `1`, `yes`, or `on` to enable the Zenoh API                                                                                  |
+| `RS_ZENOH_CONFIG`         |         | Inline Zenoh session config string, e.g. `mode=client;connect/endpoints=[tcp/127.0.0.1:7447]`. Takes precedence over `RS_ZENOH_CONFIG_PATH` |
+| `RS_ZENOH_CONFIG_PATH`    |         | Path to a Zenoh JSON5 config file                                                                                                           |
+| `RS_ZENOH_BUCKET`         | zenoh   | Target ReductStore bucket. Created automatically if it does not exist.                                                                      |
+| `RS_ZENOH_SUB_KEYEXPRS`   |         | Key expression for the subscriber (write path). Disabled if unset.                                                                          |
+| `RS_ZENOH_QUERY_KEYEXPRS` |         | Key expression for the queryable (read path). Disabled if unset.                                                                            |
 
 ### Inline Zenoh Credentials
 
