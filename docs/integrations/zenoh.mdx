@@ -13,7 +13,7 @@ sidebar_position: 4
 
 # Zenoh API
 
-ReductStore can receive and serve time-series data directly over [**Zenoh**](https://zenoh.io), using its native pub/sub and query primitives. This is an alternative ingestion and retrieval path that runs alongside the existing HTTP API — both work at the same time and share the same stored data.
+ReductStore can receive and serve time-series data directly over [**Zenoh**](https://zenoh.io), using its native pub/sub and query primitives. This is an alternative ingestion and retrieval path that runs alongside the existing HTTP API.
 
 This page explains how to enable the Zenoh API, how to configure it, and what you can and cannot do with it compared to the HTTP API.
 
@@ -31,17 +31,18 @@ ReductStore opens a Zenoh session on startup and registers a **subscriber** (for
 | **Queryable**      | Read path. Queries whose selector matches the configured key expression retrieve **[records](../glossary#record)**.                                  |
 | **Key**            | The concrete address of a sample (e.g. `robot/arm/joint1`). Becomes the **[entry](../glossary#entry)** name in the **[bucket](../glossary#bucket)**. |
 | **Key expression** | A wildcard pattern (e.g. `robot/**`). Used to configure which keys the subscriber and queryable respond to.                                          |
-| **Encoding**       | Mapped to the **[record](../glossary#record)**'s **content type**.                                                                                   |
+| **Encoding**       | Mapped to the record's **content type**.                                                                                   |
 | **Attachment**     | JSON-encoded map of **[labels](../glossary#label)** (key-value metadata).                                                                            |
 | **Timestamp**      | Zenoh HLC timestamp converted to Unix microseconds.                                                                                                  |
-
+:::info
 All data is stored in a single ReductStore bucket. The bucket is created automatically if it does not exist.
+:::
 
 ## Key Expressions
 
 In Zenoh, a **key** is a concrete address for a value, such as `organizationA/building8/room275/sensor3/temperature`. A **key expression** is a pattern defined using the [**Key Expression Language**](https://github.com/eclipse-zenoh/roadmap/blob/main/rfcs/ALL/Key%20Expressions.md) that can match a set of keys.
 
-`RS_ZENOH_SUB_KEYEXPRS` and `RS_ZENOH_QUERY_KEYEXPRS` take key expressions — they define which keys the subscriber and queryable respond to. The **key** of each individual sample (the concrete address it was published to) is what becomes the entry name in ReductStore.
+`RS_ZENOH_SUB_KEYEXPRS` and `RS_ZENOH_QUERY_KEYEXPRS` take key expressions. They define which keys the subscriber and queryable respond to. The **key** of each individual sample (the concrete address it was published to) is what becomes the entry name in ReductStore.
 
 A key is a `/`-separated sequence of non-empty UTF-8 segments, similar to a filesystem path. Individual key segments may not contain `*`, `$`, `?`, or `#`.
 
@@ -54,14 +55,14 @@ Key expressions extend plain keys with three wildcards. The following table and 
 | `**`     | Any number of segments, including none. Must appear after `/` or at the start           | `factory/**/temperature` matches all temperature keys under `factory` at any depth       |
 
 :::tip
-Prefer `*` and `**` over `$*` when designing your key space. `$*` is slower and is usually only needed when different identifiers are mixed within the same segment — e.g. `robot12` and `pc18`. Structuring keys as `robot/12` and `pc/18` instead avoids this.
+Prefer `*` and `**` over `$*` when designing your key space. According to Zenoh's documentation, `$*` is slower and is usually only needed when different identifiers are mixed within the same segment, e.g. `robot12` and `pc18`. Structuring keys as `robot/12` and `pc/18` instead avoids this.
 :::
 
 See the [**Zenoh abstractions documentation**](https://zenoh.io/docs/manual/abstractions/) for the full key expression specification.
 
 ## Selectors
 
-When querying, Zenoh uses a **selector** — a key expression optionally followed by `?` and a list of parameters. The following syntax is from the [**Zenoh abstractions documentation**](https://zenoh.io/docs/manual/abstractions/):
+When querying, Zenoh uses a **selector** which is a key expression optionally followed by `?` and a list of parameters. The following syntax is from the [**Zenoh abstractions documentation**](https://zenoh.io/docs/manual/abstractions/):
 
 ```
 factory/**/temperature?start=1700000000000000&limit=100
