@@ -19,18 +19,18 @@ jobs:
         doc_version: [next, 1.18.x, 1.17.x]
         include:
           - doc_version: next
-            reduct_version: main
+            image: reduct/enterprise:main
             example_root: docs/examples
 
           - doc_version: 1.18.x
-            reduct_version: v1.18.3
+            image: reduct/store:v1.18.3
             example_root: versioned_docs/version-1.18.x/examples
 
           - doc_version: 1.17.x
-            reduct_version: v1.17.10
+            image: reduct/store:v1.17.10
             example_root: versioned_docs/version-1.17.x/examples
 
-          - language: python
+          - example: python
             cmd: python3
             path_prefix: py/src
 
@@ -64,6 +64,9 @@ jobs:
           submodules: true
           lfs: true
 
+      - name: Login Docker
+        run: docker login -u "${{ secrets.DOCKER_USER }}" -p "${{ secrets.DOCKER_TOKEN }}"
+
       - name: Install reduct-cli
         run: |
           wget https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.x86_64-unknown-linux-gnu.tar.gz
@@ -74,8 +77,8 @@ jobs:
 
       - name: Prepare ReductStore instance with data
         run: |
-          docker pull reduct/store:${{ matrix.reduct_version }}
-          docker run -d --name reductstore-init -p 8384:8383  reduct/store:${{ matrix.reduct_version }}
+          docker pull ${{ matrix.image }}
+          docker run -d --name reductstore-init -p 8384:8383  ${{ matrix.image }}
           sleep 3
           reduct-cli cp https://reductstore@play.reduct.store/replica/datasets  http://my-token@127.0.0.1:8384/example-bucket --limit 100
 
@@ -160,7 +163,7 @@ jobs:
                 --name reductstore -p 8383:8383 \
                 --env RS_LOG_LEVEL=debug \
                 --env RS_API_TOKEN="my-token"  \
-                --env RS_LICENSE_PATH=/misc/license.lic reduct/store:${{ matrix.reduct_version }}
+                --env RS_LICENSE_PATH=/misc/license.lic "${{ matrix.image }}"
             sleep 1
             reduct-cli cp http://my-token@127.0.0.1:8384/example-bucket  http://my-token@127.0.0.1:8383/example-bucket --limit 100
             reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-remove

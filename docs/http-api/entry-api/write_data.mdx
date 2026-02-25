@@ -33,6 +33,7 @@ drains the sent body and returns an HTTP status.
   of labels to a record by using headers that start with
   `x-reduct-label-`.
 - Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
+- Version 1.19: entry names can be hierarchical paths with multiple segments (for example, `a/b/c`).
 
 import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
@@ -134,6 +135,7 @@ client should describe the records in headers in the format of [the Batch Protoc
 - Version 1.7: the database supports labels. You can assign any number
   of labels to a record by using headers that start with `x-reduct-label-`.
 - Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
+- Version 1.19: entry names can be hierarchical paths with multiple segments (for example, `a/b/c`).
 
 <SwaggerComponent
     method="POST"
