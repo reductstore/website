@@ -9,7 +9,7 @@ description: "API reference for APIError in the ReductStore Client SDK for JavaS
 
 # APIError
 
-Defined in: [APIError.ts:4](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/APIError.ts#L4)
+Defined in: [APIError.ts:4](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/APIError.ts#L4)
 
 Represents HTTP Error
 
@@ -19,7 +19,7 @@ Represents HTTP Error
 
 &gt; **new APIError**(`message`, `status?`, `original?`): `APIError`
 
-Defined in: [APIError.ts:23](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/APIError.ts#L23)
+Defined in: [APIError.ts:23](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/APIError.ts#L23)
 
 Create an error from HTTP status and message
 
@@ -47,7 +47,7 @@ Create an error from HTTP status and message
 
 &gt; `optional` **message**: `string`
 
-Defined in: [APIError.ts:13](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/APIError.ts#L13)
+Defined in: [APIError.ts:13](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/APIError.ts#L13)
 
 Parsed message from the storage engine
 
@@ -57,7 +57,7 @@ Parsed message from the storage engine
 
 &gt; `optional` **original**: `unknown`
 
-Defined in: [APIError.ts:18](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/APIError.ts#L18)
+Defined in: [APIError.ts:18](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/APIError.ts#L18)
 
 Original error from HTTP client with the full information
 
@@ -67,6 +67,6 @@ Original error from HTTP client with the full information
 
 &gt; `optional` **status**: `number`
 
-Defined in: [APIError.ts:8](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/APIError.ts#L8)
+Defined in: [APIError.ts:8](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/APIError.ts#L8)
 
 HTTP status of error. If it is empty, it means communication problem

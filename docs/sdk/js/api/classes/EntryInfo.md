@@ -9,7 +9,7 @@ description: "API reference for EntryInfo in the ReductStore Client SDK for Java
 
 # EntryInfo
 
-Defined in: [messages/EntryInfo.ts:6](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/EntryInfo.ts#L6)
+Defined in: [messages/EntryInfo.ts:6](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/EntryInfo.ts#L6)
 
 Information about entry
 
@@ -29,7 +29,7 @@ Information about entry
 
 &gt; `readonly` **blockCount**: `bigint` = `0n`
 
-Defined in: [messages/EntryInfo.ts:15](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/EntryInfo.ts#L15)
+Defined in: [messages/EntryInfo.ts:15](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/EntryInfo.ts#L15)
 
 Number of blocks
 
@@ -39,7 +39,7 @@ Number of blocks
 
 &gt; `readonly` **latestRecord**: `bigint` = `0n`
 
-Defined in: [messages/EntryInfo.ts:35](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/EntryInfo.ts#L35)
+Defined in: [messages/EntryInfo.ts:35](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/EntryInfo.ts#L35)
 
 Unix timestamp of the latest record in microseconds
 
@@ -49,7 +49,7 @@ Unix timestamp of the latest record in microseconds
 
 &gt; `readonly` **name**: `string` = `""`
 
-Defined in: [messages/EntryInfo.ts:10](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/EntryInfo.ts#L10)
+Defined in: [messages/EntryInfo.ts:10](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/EntryInfo.ts#L10)
 
 Name of the entry
 
@@ -59,7 +59,7 @@ Name of the entry
 
 &gt; `readonly` **oldestRecord**: `bigint` = `0n`
 
-Defined in: [messages/EntryInfo.ts:30](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/EntryInfo.ts#L30)
+Defined in: [messages/EntryInfo.ts:30](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/EntryInfo.ts#L30)
 
 Unix timestamp of the oldest record in microseconds
 
@@ -69,7 +69,7 @@ Unix timestamp of the oldest record in microseconds
 
 &gt; `readonly` **recordCount**: `bigint` = `0n`
 
-Defined in: [messages/EntryInfo.ts:20](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/EntryInfo.ts#L20)
+Defined in: [messages/EntryInfo.ts:20](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/EntryInfo.ts#L20)
 
 Number of records
 
@@ -79,7 +79,7 @@ Number of records
 
 &gt; `readonly` **size**: `bigint` = `0n`
 
-Defined in: [messages/EntryInfo.ts:25](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/EntryInfo.ts#L25)
+Defined in: [messages/EntryInfo.ts:25](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/EntryInfo.ts#L25)
 
 Size of stored data in the bucket in bytes
 
@@ -89,7 +89,7 @@ Size of stored data in the bucket in bytes
 
 &gt; `readonly` **status**: [`Status`](../enumerations/Status.md) = `Status.READY`
 
-Defined in: [messages/EntryInfo.ts:40](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/EntryInfo.ts#L40)
+Defined in: [messages/EntryInfo.ts:40](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/EntryInfo.ts#L40)
 
 Current status of the entry (READY or DELETING)
 
@@ -99,7 +99,7 @@ Current status of the entry (READY or DELETING)
 
 &gt; `static` **parse**(`bucket`): `EntryInfo`
 
-Defined in: [messages/EntryInfo.ts:42](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/EntryInfo.ts#L42)
+Defined in: [messages/EntryInfo.ts:42](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/EntryInfo.ts#L42)
 
 #### Parameters
 

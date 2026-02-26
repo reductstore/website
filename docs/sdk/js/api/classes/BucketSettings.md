@@ -9,7 +9,7 @@ description: "API reference for BucketSettings in the ReductStore Client SDK for
 
 # BucketSettings
 
-Defined in: [messages/BucketSettings.ts:10](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/BucketSettings.ts#L10)
+Defined in: [messages/BucketSettings.ts:10](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/BucketSettings.ts#L10)
 
 Represents bucket settings
 
@@ -29,7 +29,7 @@ Represents bucket settings
 
 &gt; `readonly` `optional` **maxBlockRecords**: `bigint`
 
-Defined in: [messages/BucketSettings.ts:19](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/BucketSettings.ts#L19)
+Defined in: [messages/BucketSettings.ts:19](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/BucketSettings.ts#L19)
 
 Maximum number of records in a block
 
@@ -39,7 +39,7 @@ Maximum number of records in a block
 
 &gt; `readonly` `optional` **maxBlockSize**: `bigint`
 
-Defined in: [messages/BucketSettings.ts:14](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/BucketSettings.ts#L14)
+Defined in: [messages/BucketSettings.ts:14](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/BucketSettings.ts#L14)
 
 Maximal block size in a block
 
@@ -49,7 +49,7 @@ Maximal block size in a block
 
 &gt; `readonly` `optional` **quotaSize**: `bigint`
 
-Defined in: [messages/BucketSettings.ts:31](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/BucketSettings.ts#L31)
+Defined in: [messages/BucketSettings.ts:31](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/BucketSettings.ts#L31)
 
 Quota size in bytes
 
@@ -59,7 +59,7 @@ Quota size in bytes
 
 &gt; `readonly` `optional` **quotaType**: [`QuotaType`](../enumerations/QuotaType.md)
 
-Defined in: [messages/BucketSettings.ts:26](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/BucketSettings.ts#L26)
+Defined in: [messages/BucketSettings.ts:26](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/BucketSettings.ts#L26)
 
 Quota type. The storage supports two types:
   NONE: A bucket will consume the whole free disk space.
@@ -71,7 +71,7 @@ Quota type. The storage supports two types:
 
 &gt; `static` **parse**(`data`): `BucketSettings`
 
-Defined in: [messages/BucketSettings.ts:33](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/BucketSettings.ts#L33)
+Defined in: [messages/BucketSettings.ts:33](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/BucketSettings.ts#L33)
 
 #### Parameters
 
@@ -89,7 +89,7 @@ Defined in: [messages/BucketSettings.ts:33](https://github.com/reductstore/reduc
 
 &gt; `static` **serialize**(`settings`): `OriginalBucketSettings`
 
-Defined in: [messages/BucketSettings.ts:46](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/BucketSettings.ts#L46)
+Defined in: [messages/BucketSettings.ts:46](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/BucketSettings.ts#L46)
 
 #### Parameters
 

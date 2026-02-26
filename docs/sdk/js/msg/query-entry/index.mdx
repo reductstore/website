@@ -12,7 +12,7 @@ description: API reference for the Query Entry Module of the ReductStore Client 
 
 ## QueryOptions
 
-Defined in: [messages/QueryEntry.ts:38](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/QueryEntry.ts#L38)
+Defined in: [messages/QueryEntry.ts:38](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/QueryEntry.ts#L38)
 
 Options for querying records
 
@@ -32,7 +32,7 @@ Options for querying records
 
 &gt; `optional` **continuous**: `boolean`
 
-Defined in: [messages/QueryEntry.ts:55](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/QueryEntry.ts#L55)
+Defined in: [messages/QueryEntry.ts:55](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/QueryEntry.ts#L55)
 
 Don't stop query until TTL is reached
 
@@ -42,7 +42,7 @@ Don't stop query until TTL is reached
 
 &gt; `optional` **eachN**: `number`
 
-Defined in: [messages/QueryEntry.ts:48](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/QueryEntry.ts#L48)
+Defined in: [messages/QueryEntry.ts:48](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/QueryEntry.ts#L48)
 
 Return only one record per N records
  @deprecated: use $each_n operator in when instead. Will be remove in v1.18.0
@@ -53,7 +53,7 @@ Return only one record per N records
 
 &gt; `optional` **eachS**: `number`
 
-Defined in: [messages/QueryEntry.ts:44](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/QueryEntry.ts#L44)
+Defined in: [messages/QueryEntry.ts:44](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/QueryEntry.ts#L44)
 
 Return only one record per S second
 @deprecated: use $each_t operator in when instead. Will be remove in v1.18.0
@@ -64,7 +64,7 @@ Return only one record per S second
 
 &gt; `optional` **ext**: `Record`&lt;`string`, `any`&gt;
 
-Defined in: [messages/QueryEntry.ts:65](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/QueryEntry.ts#L65)
+Defined in: [messages/QueryEntry.ts:65](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/QueryEntry.ts#L65)
 
 Additional parameters for extensions
 
@@ -74,7 +74,7 @@ Additional parameters for extensions
 
 &gt; `optional` **head**: `boolean`
 
-Defined in: [messages/QueryEntry.ts:59](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/QueryEntry.ts#L59)
+Defined in: [messages/QueryEntry.ts:59](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/QueryEntry.ts#L59)
 
 Return only metadata
 
@@ -84,7 +84,7 @@ Return only metadata
 
 &gt; `optional` **limit**: `number`
 
-Defined in: [messages/QueryEntry.ts:52](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/QueryEntry.ts#L52)
+Defined in: [messages/QueryEntry.ts:52](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/QueryEntry.ts#L52)
 
 Limit number of records
  @deprecated: use $limit operator in when instead. Will be remove in v1.18.0
@@ -95,7 +95,7 @@ Limit number of records
 
 &gt; `optional` **pollInterval**: `number`
 
-Defined in: [messages/QueryEntry.ts:57](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/QueryEntry.ts#L57)
+Defined in: [messages/QueryEntry.ts:57](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/QueryEntry.ts#L57)
 
 Poll interval for new records only for continue=true
 
@@ -105,7 +105,7 @@ Poll interval for new records only for continue=true
 
 &gt; `optional` **strict**: `boolean`
 
-Defined in: [messages/QueryEntry.ts:63](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/QueryEntry.ts#L63)
+Defined in: [messages/QueryEntry.ts:63](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/QueryEntry.ts#L63)
 
 strict conditional query
 
@@ -115,7 +115,7 @@ strict conditional query
 
 &gt; `optional` **ttl**: `number`
 
-Defined in: [messages/QueryEntry.ts:40](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/QueryEntry.ts#L40)
+Defined in: [messages/QueryEntry.ts:40](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/QueryEntry.ts#L40)
 
 Time to live in seconds
 
@@ -125,7 +125,7 @@ Time to live in seconds
 
 &gt; `optional` **when**: `Record`&lt;`string`, `any`&gt;
 
-Defined in: [messages/QueryEntry.ts:61](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/QueryEntry.ts#L61)
+Defined in: [messages/QueryEntry.ts:61](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/QueryEntry.ts#L61)
 
 Conditional query
 
@@ -135,7 +135,7 @@ Conditional query
 
 &gt; `static` **serialize**(`queryType`, `data`, `start?`, `stop?`, `entries?`): `QueryEntry`
 
-Defined in: [messages/QueryEntry.ts:67](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/QueryEntry.ts#L67)
+Defined in: [messages/QueryEntry.ts:67](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/QueryEntry.ts#L67)
 
 ##### Parameters
 
@@ -162,4 +162,3 @@ Defined in: [messages/QueryEntry.ts:67](https://github.com/reductstore/reduct-js
 ##### Returns
 
 `QueryEntry`
-

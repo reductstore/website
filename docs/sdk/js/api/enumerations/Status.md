@@ -9,7 +9,7 @@ description: "API reference for Status in the ReductStore Client SDK for JavaScr
 
 # Status
 
-Defined in: [messages/Status.ts:4](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/Status.ts#L4)
+Defined in: [messages/Status.ts:4](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/Status.ts#L4)
 
 Resource status during deletion
 
@@ -19,7 +19,7 @@ Resource status during deletion
 
 &gt; **DELETING**: `"DELETING"`
 
-Defined in: [messages/Status.ts:6](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/Status.ts#L6)
+Defined in: [messages/Status.ts:6](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/Status.ts#L6)
 
 ***
 
@@ -27,4 +27,4 @@ Defined in: [messages/Status.ts:6](https://github.com/reductstore/reduct-js/blob
 
 &gt; **READY**: `"READY"`
 
-Defined in: [messages/Status.ts:5](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/Status.ts#L5)
+Defined in: [messages/Status.ts:5](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/Status.ts#L5)

@@ -9,7 +9,7 @@ description: "API reference for RecordBatch in the ReductStore Client SDK for Ja
 
 # RecordBatch
 
-Defined in: [RecordBatch.ts:34](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L34)
+Defined in: [RecordBatch.ts:34](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/RecordBatch.ts#L34)
 
 Batch of records to write them in one request (batch protocol v2).
 
@@ -19,7 +19,7 @@ Batch of records to write them in one request (batch protocol v2).
 
 &gt; **new RecordBatch**(`bucketName`, `httpClient`, `type`): `RecordBatch`
 
-Defined in: [RecordBatch.ts:42](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L42)
+Defined in: [RecordBatch.ts:42](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/RecordBatch.ts#L42)
 
 #### Parameters
 
@@ -45,7 +45,7 @@ Defined in: [RecordBatch.ts:42](https://github.com/reductstore/reduct-js/blob/d0
 
 &gt; **add**(`entry`, `ts`, `data`, `contentType?`, `labels?`): `void`
 
-Defined in: [RecordBatch.ts:63](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L63)
+Defined in: [RecordBatch.ts:63](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/RecordBatch.ts#L63)
 
 Add record to batch with entry name.
 
@@ -91,7 +91,7 @@ default: &#123;&#125;
 
 &gt; **addOnlyLabels**(`entry`, `ts`, `labels`): `void`
 
-Defined in: [RecordBatch.ts:97](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L97)
+Defined in: [RecordBatch.ts:97](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/RecordBatch.ts#L97)
 
 Add labels to batch for update.
 
@@ -125,7 +125,7 @@ labels to update
 
 &gt; **addOnlyTimestamp**(`entry`, `ts`): `void`
 
-Defined in: [RecordBatch.ts:119](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L119)
+Defined in: [RecordBatch.ts:119](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/RecordBatch.ts#L119)
 
 Add timestamps to batch for removal.
 
@@ -153,7 +153,7 @@ timestamp of record as a UNIX timestamp in microseconds
 
 &gt; **clear**(): `void`
 
-Defined in: [RecordBatch.ts:256](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L256)
+Defined in: [RecordBatch.ts:256](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/RecordBatch.ts#L256)
 
 Clear batch
 
@@ -167,7 +167,7 @@ Clear batch
 
 &gt; **items**(): \[\[`string`, `bigint`\], `RecordBatchItem`\][]
 
-Defined in: [RecordBatch.ts:212](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L212)
+Defined in: [RecordBatch.ts:212](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/RecordBatch.ts#L212)
 
 Get records in batch sorted by entry name and timestamp.
 
@@ -181,7 +181,7 @@ Get records in batch sorted by entry name and timestamp.
 
 &gt; **lastAccessTime**(): `number`
 
-Defined in: [RecordBatch.ts:242](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L242)
+Defined in: [RecordBatch.ts:242](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/RecordBatch.ts#L242)
 
 Get last access time of batch
 
@@ -195,7 +195,7 @@ Get last access time of batch
 
 &gt; **recordCount**(): `number`
 
-Defined in: [RecordBatch.ts:249](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L249)
+Defined in: [RecordBatch.ts:249](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/RecordBatch.ts#L249)
 
 Get number of records in batch
 
@@ -209,7 +209,7 @@ Get number of records in batch
 
 &gt; **send**(): `Promise`\&lt;`Map`\&lt;`string`, `Map`\&lt;`bigint`, [`APIError`](APIError.md)\&gt;\&gt;\&gt;
 
-Defined in: [RecordBatch.ts:140](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L140)
+Defined in: [RecordBatch.ts:140](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/RecordBatch.ts#L140)
 
 Send batch request (Multi-entry API).
 
@@ -223,7 +223,7 @@ Send batch request (Multi-entry API).
 
 &gt; **size**(): `bigint`
 
-Defined in: [RecordBatch.ts:235](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/RecordBatch.ts#L235)
+Defined in: [RecordBatch.ts:235](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/RecordBatch.ts#L235)
 
 Get total size of batch
 
