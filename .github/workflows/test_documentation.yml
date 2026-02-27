@@ -19,7 +19,7 @@ jobs:
         doc_version: [next, 1.18.x, 1.17.x]
         include:
           - doc_version: next
-            image: reduct/enterprise:main
+            image: reduct/pro:main
             example_root: docs/examples
 
           - doc_version: 1.18.x
