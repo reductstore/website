@@ -126,7 +126,9 @@ jobs:
         if: matrix.example == 'golang'
         run: |
           cd ${{ matrix.example_root }}/${{ matrix.path_prefix }}/..
-          go get -u all
+          # Pin SDK from main in CI to validate unreleased Go features.
+          go get github.com/reductstore/reduct-go@main
+          go mod tidy
 
       - name: Build C++ examples
         if: matrix.example == 'cpp'
