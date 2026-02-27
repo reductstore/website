@@ -79,10 +79,54 @@ import ChangeLabelsCurl from "!!raw-loader!../examples/curl/data_management_upda
   </TabItem>
 </Tabs>
 
+## Managing Attachments
+
+**[Attachments](../glossary#attachment)** let you store shared JSON metadata for an **[entry](../glossary#entry)** without duplicating it in each record label.
+They are stored in the hidden `<entry_name>/$meta` system entry.
+
+This is useful when metadata changes less frequently than record data. For example, you can keep one schema, camera calibration profile, or model configuration per entry and reuse it for all records in that entry.
+Because attachments are regular records in a system entry, they are replicated together with the parent entry data in replication workflows.
+
+You can manage attachments using the ReductStore SDKs, the Reduct **[CLI](../glossary#cli)**, the **[Web Console](../glossary#web-console)**, or the **[HTTP API](../glossary#http-api)**.
+
+import ManageAttachmentsPy from "!!raw-loader!../examples/py/src/data_management_attachments.py";
+import ManageAttachmentsJs from "!!raw-loader!../examples/js/src/data_management_attachments.mjs";
+import ManageAttachmentsGo from "!!raw-loader!../examples/go/src/data_management_attachments.go";
+import ManageAttachmentsRs from "!!raw-loader!../examples/rs/examples/data_management_attachments.rs";
+import ManageAttachmentsCpp from "!!raw-loader!../examples/cpp/src/data_management_attachments.cc";
+import ManageAttachmentsCli from "!!raw-loader!../examples/cli/data_management_attachments.sh";
+
+<Tabs>
+  <TabItem value="CLI">
+    <CodeBlock language="bash">{ManageAttachmentsCli}</CodeBlock>
+  </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">{ManageAttachmentsPy}</CodeBlock>
+  </TabItem>
+  <TabItem value="JavaScript">
+    <CodeBlock language="javascript">{ManageAttachmentsJs}</CodeBlock>
+  </TabItem>
+  <TabItem value="Go">
+    <CodeBlock language="go">{ManageAttachmentsGo}</CodeBlock>
+  </TabItem>
+  <TabItem value="Rust">
+    <CodeBlock language="rust">{ManageAttachmentsRs}</CodeBlock>
+  </TabItem>
+  <TabItem value="C++">
+    <CodeBlock language="cpp">{ManageAttachmentsCpp}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+For low-level requests and `$meta` rules, see the **[Attachments HTTP API](../http-api/entry-api/attachments.mdx)**.
+
+:::warning
+Attachment keys starting with `$` are reserved for official ReductStore plugins and tools. Use keys without a leading `$` for user-defined attachments.
+:::
+
 ## Deleting Data
 
-The ReductStore API allows you to delete specific records from an **[entry](../glossary#entry)**, an entire entry, or an entire **[bucket](../glossary#bucket)**.
-You can do this using the Client SDKs, the Reduct **[CLI](../glossary#cli)**, or the HTTP API.
+The ReductStore API allows you to delete specific records from an entry, an entire entry, or an entire **[bucket](../glossary#bucket)**.
+You can do this using the Client SDKs, the Reduct CLI, or the HTTP API.
 
 ### Deleting Entry or Bucket
 

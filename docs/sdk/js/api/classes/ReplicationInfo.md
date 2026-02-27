@@ -9,7 +9,7 @@ description: "API reference for ReplicationInfo in the ReductStore Client SDK fo
 
 # ReplicationInfo
 
-Defined in: [messages/ReplicationInfo.ts:26](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ReplicationInfo.ts#L26)
+Defined in: [messages/ReplicationInfo.ts:26](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/ReplicationInfo.ts#L26)
 
 Replication info
 
@@ -29,7 +29,7 @@ Replication info
 
 &gt; `readonly` **isActive**: `boolean` = `false`
 
-Defined in: [messages/ReplicationInfo.ts:35](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ReplicationInfo.ts#L35)
+Defined in: [messages/ReplicationInfo.ts:35](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/ReplicationInfo.ts#L35)
 
 Remote instance is available and replication is active
 
@@ -39,7 +39,7 @@ Remote instance is available and replication is active
 
 &gt; `readonly` **isProvisioned**: `boolean` = `false`
 
-Defined in: [messages/ReplicationInfo.ts:45](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ReplicationInfo.ts#L45)
+Defined in: [messages/ReplicationInfo.ts:45](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/ReplicationInfo.ts#L45)
 
 Replication is provisioned
 
@@ -49,7 +49,7 @@ Replication is provisioned
 
 &gt; `readonly` **mode**: [`ReplicationMode`](../type-aliases/ReplicationMode.md) = `DEFAULT_REPLICATION_MODE`
 
-Defined in: [messages/ReplicationInfo.ts:40](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ReplicationInfo.ts#L40)
+Defined in: [messages/ReplicationInfo.ts:40](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/ReplicationInfo.ts#L40)
 
 Replication mode
 
@@ -59,7 +59,7 @@ Replication mode
 
 &gt; `readonly` **name**: `string` = `""`
 
-Defined in: [messages/ReplicationInfo.ts:30](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ReplicationInfo.ts#L30)
+Defined in: [messages/ReplicationInfo.ts:30](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/ReplicationInfo.ts#L30)
 
 Replication name
 
@@ -69,7 +69,7 @@ Replication name
 
 &gt; `readonly` **pendingRecords**: `bigint` = `0n`
 
-Defined in: [messages/ReplicationInfo.ts:50](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ReplicationInfo.ts#L50)
+Defined in: [messages/ReplicationInfo.ts:50](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/ReplicationInfo.ts#L50)
 
 Number of records pending replication
 
@@ -79,7 +79,7 @@ Number of records pending replication
 
 &gt; `static` **parse**(`data`): `ReplicationInfo`
 
-Defined in: [messages/ReplicationInfo.ts:52](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ReplicationInfo.ts#L52)
+Defined in: [messages/ReplicationInfo.ts:52](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/ReplicationInfo.ts#L52)
 
 #### Parameters
 

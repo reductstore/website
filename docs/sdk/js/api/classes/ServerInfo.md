@@ -9,7 +9,7 @@ description: "API reference for ServerInfo in the ReductStore Client SDK for Jav
 
 # ServerInfo
 
-Defined in: [messages/ServerInfo.ts:39](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L39)
+Defined in: [messages/ServerInfo.ts:39](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/ServerInfo.ts#L39)
 
 Represents information about storage
 
@@ -29,7 +29,7 @@ Represents information about storage
 
 &gt; `readonly` **bucketCount**: `bigint` = `0n`
 
-Defined in: [messages/ServerInfo.ts:48](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L48)
+Defined in: [messages/ServerInfo.ts:48](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/ServerInfo.ts#L48)
 
 Number of buckets
 
@@ -39,7 +39,7 @@ Number of buckets
 
 &gt; `readonly` **defaults**: `ServerDefaults`
 
-Defined in: [messages/ServerInfo.ts:78](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L78)
+Defined in: [messages/ServerInfo.ts:78](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/ServerInfo.ts#L78)
 
 Default settings
 
@@ -49,7 +49,7 @@ Default settings
 
 &gt; `readonly` **latestRecord**: `bigint` = `0n`
 
-Defined in: [messages/ServerInfo.ts:68](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L68)
+Defined in: [messages/ServerInfo.ts:68](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/ServerInfo.ts#L68)
 
 Unix timestamp of the latest record in microseconds
 
@@ -59,7 +59,7 @@ Unix timestamp of the latest record in microseconds
 
 &gt; `readonly` `optional` **license**: [`LicenseInfo`](LicenseInfo.md)
 
-Defined in: [messages/ServerInfo.ts:73](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L73)
+Defined in: [messages/ServerInfo.ts:73](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/ServerInfo.ts#L73)
 
 License information
 
@@ -69,7 +69,7 @@ License information
 
 &gt; `readonly` **oldestRecord**: `bigint` = `0n`
 
-Defined in: [messages/ServerInfo.ts:63](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L63)
+Defined in: [messages/ServerInfo.ts:63](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/ServerInfo.ts#L63)
 
 Unix timestamp of the oldest record in microseconds
 
@@ -79,7 +79,7 @@ Unix timestamp of the oldest record in microseconds
 
 &gt; `readonly` **uptime**: `bigint` = `0n`
 
-Defined in: [messages/ServerInfo.ts:58](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L58)
+Defined in: [messages/ServerInfo.ts:58](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/ServerInfo.ts#L58)
 
 Server uptime in seconds
 
@@ -89,7 +89,7 @@ Server uptime in seconds
 
 &gt; `readonly` **usage**: `bigint` = `0n`
 
-Defined in: [messages/ServerInfo.ts:53](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L53)
+Defined in: [messages/ServerInfo.ts:53](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/ServerInfo.ts#L53)
 
 Stored data in bytes
 
@@ -99,7 +99,7 @@ Stored data in bytes
 
 &gt; `readonly` **version**: `string` = `""`
 
-Defined in: [messages/ServerInfo.ts:43](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L43)
+Defined in: [messages/ServerInfo.ts:43](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/ServerInfo.ts#L43)
 
 Version storage server
 
@@ -109,7 +109,7 @@ Version storage server
 
 &gt; `static` **parse**(`data`): `ServerInfo`
 
-Defined in: [messages/ServerInfo.ts:80](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/messages/ServerInfo.ts#L80)
+Defined in: [messages/ServerInfo.ts:80](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/ServerInfo.ts#L80)
 
 #### Parameters
 

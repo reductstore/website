@@ -19,7 +19,7 @@ jobs:
         doc_version: [next, 1.18.x, 1.17.x]
         include:
           - doc_version: next
-            image: reduct/enterprise:main
+            image: reduct/pro:main
             example_root: docs/examples
 
           - doc_version: 1.18.x
@@ -126,7 +126,9 @@ jobs:
         if: matrix.example == 'golang'
         run: |
           cd ${{ matrix.example_root }}/${{ matrix.path_prefix }}/..
-          go get -u all
+          # Pin SDK from main in CI to validate unreleased Go features.
+          go get github.com/reductstore/reduct-go@main
+          go mod tidy
 
       - name: Build C++ examples
         if: matrix.example == 'cpp'

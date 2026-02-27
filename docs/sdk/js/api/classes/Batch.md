@@ -9,7 +9,7 @@ description: "API reference for Batch in the ReductStore Client SDK for JavaScri
 
 # Batch
 
-Defined in: [Batch.ts:15](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Batch.ts#L15)
+Defined in: [Batch.ts:15](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/Batch.ts#L15)
 
 ## Constructors
 
@@ -17,7 +17,7 @@ Defined in: [Batch.ts:15](https://github.com/reductstore/reduct-js/blob/d0e71ee6
 
 &gt; **new Batch**(`bucketName`, `entryName`, `httpClient`, `type`): `Batch`
 
-Defined in: [Batch.ts:33](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Batch.ts#L33)
+Defined in: [Batch.ts:33](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/Batch.ts#L33)
 
 #### Parameters
 
@@ -47,7 +47,7 @@ Defined in: [Batch.ts:33](https://github.com/reductstore/reduct-js/blob/d0e71ee6
 
 &gt; **add**(`ts`, `data`, `contentType?`, `labels?`): `void`
 
-Defined in: [Batch.ts:55](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Batch.ts#L55)
+Defined in: [Batch.ts:55](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/Batch.ts#L55)
 
 Add record to batch
 
@@ -87,7 +87,7 @@ default: &#123;&#125;
 
 &gt; **addOnlyLabels**(`ts`, `labels`): `void`
 
-Defined in: [Batch.ts:82](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Batch.ts#L82)
+Defined in: [Batch.ts:82](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/Batch.ts#L82)
 
 Add only labels to batch
 Use for updating labels
@@ -114,7 +114,7 @@ timestamp of record as a UNIX timestamp in microseconds
 
 &gt; **addOnlyTimestamp**(`ts`): `void`
 
-Defined in: [Batch.ts:95](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Batch.ts#L95)
+Defined in: [Batch.ts:95](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/Batch.ts#L95)
 
 Add only timestamp to batch
 Use for removing records
@@ -137,7 +137,7 @@ timestamp of record as a UNIX timestamp in microseconds
 
 &gt; **clear**(): `void`
 
-Defined in: [Batch.ts:218](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Batch.ts#L218)
+Defined in: [Batch.ts:218](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/Batch.ts#L218)
 
 Clear batch
 
@@ -151,7 +151,7 @@ Clear batch
 
 &gt; **items**(): `IterableIterator`\&lt;\[`bigint`, \&#123; `contentType`: `string`; `data`: `Buffer`; `labels`: `LabelMap`; \&#125;\]\&gt;
 
-Defined in: [Batch.ts:184](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Batch.ts#L184)
+Defined in: [Batch.ts:184](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/Batch.ts#L184)
 
 Get records in batch sorted by timestamp
 
@@ -165,7 +165,7 @@ Get records in batch sorted by timestamp
 
 &gt; **lastAccessTime**(): `number`
 
-Defined in: [Batch.ts:204](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Batch.ts#L204)
+Defined in: [Batch.ts:204](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/Batch.ts#L204)
 
 Get last access time of batch
 
@@ -179,7 +179,7 @@ Get last access time of batch
 
 &gt; **recordCount**(): `number`
 
-Defined in: [Batch.ts:211](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Batch.ts#L211)
+Defined in: [Batch.ts:211](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/Batch.ts#L211)
 
 Get number of records in batch
 
@@ -193,7 +193,7 @@ Get number of records in batch
 
 &gt; **size**(): `bigint`
 
-Defined in: [Batch.ts:197](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Batch.ts#L197)
+Defined in: [Batch.ts:197](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/Batch.ts#L197)
 
 Get total size of batch
 
@@ -207,7 +207,7 @@ Get total size of batch
 
 &gt; **write**(): `Promise`\&lt;`Map`\&lt;`bigint`, [`APIError`](APIError.md)\&gt;\&gt;
 
-Defined in: [Batch.ts:107](https://github.com/reductstore/reduct-js/blob/d0e71ee69ec952f8d0fc267548c514034a367605/src/Batch.ts#L107)
+Defined in: [Batch.ts:107](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/Batch.ts#L107)
 
 Write batch to entry
 

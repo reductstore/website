@@ -343,16 +343,16 @@ Write a record to entry
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-  
+
 
 **Example**:
 ```python
       await bucket.write("entry-1", b"some_data",
          timestamp="2021-09-10T10:30:00")
-     
+
       # You can write data chunk-wise using an asynchronous iterator and the
       # size of the content:
-     
+
       async def sender():
           for chunk in [b"part1", b"part2", b"part3"]:
               yield chunk
@@ -429,7 +429,7 @@ If a label is empty, it will be removed.
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-  
+
 
 **Example**:
 ```python
@@ -464,7 +464,7 @@ If a label is empty, it will be removed.
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-  
+
 
 **Example**:
 ```python
@@ -503,7 +503,7 @@ If a label is empty, it will be removed.
 **Raises**:
 
 - `ReductError` - if there is an HTTP error
-  
+
 
 **Example**:
 ```python
@@ -554,7 +554,7 @@ multiple entries. You can also use wildcards in entry names.
 **Returns**:
 
 - `AsyncIterator[Record]` - iterator to the records
-  
+
 
 **Example**:
 ```python
@@ -619,7 +619,7 @@ multiple entries. You can also use wildcards in entry names.
 **Returns**:
 
 - `AsyncIterator[Record]` - iterator to the records
-  
+
 
 **Example**:
 ```python
@@ -658,7 +658,7 @@ multiple entries. You can also use wildcards in entry names.
   If None, then from the first record
 - `stop` - the end of the time interval. If None, then to the latest record
 - `when` - condtiion to filter records
-  
+
 
 **Arguments**:
 
@@ -667,4 +667,79 @@ multiple entries. You can also use wildcards in entry names.
 - `file_name` - file name for download, if None: entry_name_index.bin
 - `base_url` - base URL for the link, if None: use server URL
 
+<a id="reduct.bucket.Bucket.write_attachments"></a>
 
+#### write\_attachments
+
+```python
+async def write_attachments(entry_name: str, attachments: dict[str, dict])
+```
+
+Write attachments to an entry
+
+**Arguments**:
+
+- `entry_name` - name of entry in the bucket
+- `attachments` - dict of attachment names and their content.
+  Content must be serializable to JSON.
+
+**Raises**:
+
+- `ReductError` - if there is an HTTP error
+
+
+**Example**:
+```python
+      await bucket.write_attachments(
+          "entry-1",
+          {"attachment1": b"data1", "attachment2": b"data2"},
+      )
+   ```
+
+<a id="reduct.bucket.Bucket.read_attachments"></a>
+
+#### read\_attachments
+
+```python
+async def read_attachments(entry_name: str) -> dict[str, Any]
+```
+
+Read attachments of a record
+
+**Arguments**:
+
+- `entry_name` - name of entry in the bucket
+- `timestamp` - timestamp of record in microseconds
+
+**Returns**:
+
+  dict of attachment names and their content
+
+**Raises**:
+
+- `ReductError` - if there is an HTTP error
+
+
+**Example**:
+```python
+      attachments = await bucket.read_attachments(
+          "entry-1", "2022-01-01T01:00:00"
+      )
+   ```
+
+<a id="reduct.bucket.Bucket.remove_attachments"></a>
+
+#### remove\_attachments
+
+```python
+async def remove_attachments(entry_name: str,
+                             attachment_keys: list[str] = None)
+```
+
+Remove attachments from an entry
+If attachment_keys is None, remove all attachments from the entry
+
+**Arguments**:
+
+- `entry_name` - name of entry in the bucket
+- `attachment_keys` - list of attachment keys to remove

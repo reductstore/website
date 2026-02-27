@@ -11,8 +11,10 @@ repos:
   - repo: local
     hooks:
       - id: fmt
-        name: yarn fmt
+        name: yarn prettier (changed files)
         entry: yarn
         language: system
         args:
-          - fmt
+          - prettier
+          - --write
+          - --ignore-unknown
