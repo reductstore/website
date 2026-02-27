@@ -2,16 +2,18 @@ import zenoh
 
 KEY = "factory/line1/range-query"
 START = 1700000000000000
-STOP = START + 10
+STOP = 1700000000010000
+CONSOLIDATION = zenoh.ConsolidationMode.NONE
 
 with zenoh.open(zenoh.Config()) as session:
-    replies = list(
-        session.get(
-            f"{KEY}?start={START}&stop={STOP}&limit=2",
+    replies = [
+        reply
+        for reply in session.get(
+            f"{KEY}?start={START};stop={STOP}",
             timeout=5.0,
-            consolidation=zenoh.ConsolidationMode.NONE,
+            consolidation=CONSOLIDATION,
         )
-    )
+        if reply.ok
+    ]
     for reply in replies:
-        if reply.ok:
-            print(reply.ok.payload.to_bytes())
+        print(reply.ok.payload.to_bytes())

@@ -68,6 +68,7 @@ ReductStore includes an optional Zenoh API that lets you ingest and retrieve dat
 | `RS_ZENOH_BUCKET`         | zenoh   | Target ReductStore bucket. Created automatically if it does not exist.                                                                      |
 | `RS_ZENOH_SUB_KEYEXPRS`   |         | Key expression for the subscriber (write path). Disabled if unset.                                                                          |
 | `RS_ZENOH_QUERY_KEYEXPRS` |         | Key expression for the queryable (read path). Disabled if unset.                                                                            |
+| `RS_ZENOH_QUERY_LOCALITY` | `Any`   | Allowed origin for query replies. One of `SessionLocal`, `Remote`, or `Any`.                                                                |
 
 ### Inline Zenoh Credentials
 

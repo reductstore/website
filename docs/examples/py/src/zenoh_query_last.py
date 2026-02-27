@@ -1,7 +1,6 @@
-import json
 import zenoh
 
-KEY = "factory/line1/camera"
+KEY = "factory/line1/last-query"
 CONSOLIDATION = zenoh.ConsolidationMode.NONE
 
 with zenoh.open(zenoh.Config()) as session:
@@ -15,9 +14,4 @@ with zenoh.open(zenoh.Config()) as session:
         if reply.ok
     ]
     for reply in replies:
-        sample = reply.ok
-        labels = {}
-        if sample.attachment is not None:
-            labels = json.loads(sample.attachment.to_bytes())
-
-        print(labels)
+        print(reply.ok.payload.to_bytes())

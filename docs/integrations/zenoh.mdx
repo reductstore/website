@@ -9,6 +9,8 @@ import ZenohEncodingPy from "!!raw-loader!../examples/py/src/zenoh_encoding.py";
 import ZenohLabelsPy from "!!raw-loader!../examples/py/src/zenoh_labels.py";
 import ZenohQueryTimestampPy from "!!raw-loader!../examples/py/src/zenoh_query_timestamp.py";
 import ZenohQueryRangePy from "!!raw-loader!../examples/py/src/zenoh_query_range.py";
+import ZenohQueryLastPy from "!!raw-loader!../examples/py/src/zenoh_query_last.py";
+import ZenohQueryWhenPy from "!!raw-loader!../examples/py/src/zenoh_query_when.py";
 import ZenohReadLabelsPy from "!!raw-loader!../examples/py/src/zenoh_read_labels.py";
 
 <head>
@@ -71,12 +73,12 @@ Prefer `*` and `**` over `$*` when designing your key space. According to Zenoh'
 When querying, Zenoh uses a **selector** which is a key expression optionally followed by `?` and a list of parameters. The following syntax is from the [**Zenoh abstractions documentation**](https://zenoh.io/docs/manual/abstractions/):
 
 ```
-factory/**/temperature?start=1700000000000000;limit=100
-^                     ^^                              ^
-|--- key expression --||--------- parameters ---------|
+factory/**/temperature?start=1700000000000000;stop=1700086400000000
+^                     ^^                                          ^
+|--- key expression --||-------------- parameters ---------------|
 ```
 
-The key expression part is used by Zenoh routers to route the query to the right queryable. The parameters are passed through to ReductStore and interpreted as query filters (see [**Time-range Query**](#time-range-query) below). Parameters are `;`-separated `key=value` pairs, and values may be URL-encoded.
+The key expression part is used by Zenoh routers to route the query to the right queryable. The parameters are passed through to ReductStore and interpreted as query filters (see [**Time-range Query**](#time-range-query) below). Parameters are `;`-separated `key=value` pairs.
 
 ## Write Path
 
@@ -107,10 +109,10 @@ Zenoh samples can also carry an optional attachment, which is a binary blob that
 
 When a Zenoh client sends a query to a key expression that matches `RS_ZENOH_QUERY_KEYEXPRS`, ReductStore looks up the matching records and replies with them.
 
-The query takes the form of a [**selector**](#selectors) which consists of a key expression and an optional list of parameters. The key expression is used for routing the query to the right queryable, while the parameters are interpreted as filters on which records to return.
+The query takes the form of a [**selector**](#selectors): the key expression routes the query to the right queryable, and the parameters after `?` control which records are returned. Parameters are `;`-separated `key=value` pairs.
 
 :::tip
-When querying for multiple records, set the consolidation mode to `zenoh.ConsolidationMode.NONE` in your query. This ensures that all matching records are returned individually rather than being consolidated into a single response. The original Zenoh timestamp for each record is available in the `zenoh_ts_ntp64` label.
+When querying for multiple records, set `consolidation=zenoh.ConsolidationMode.NONE`. This ensures all matching records are returned individually rather than merged.
 :::
 
 ### Point-in-time Lookup
@@ -120,30 +122,52 @@ Fetch the single record at an exact timestamp:
 | Parameter | Description                                 | Type      |
 | --------- | ------------------------------------------- | --------- |
 | `ts`      | Exact record timestamp in Unix microseconds | Timestamp |
-| `last`    | Fetch the record at the last timestamp      | Boolean   |
 
 <CodeBlock language="python">{ZenohQueryTimestampPy}</CodeBlock>
 
+### Latest Record
+
+Fetch only the most recent record in an entry:
+
+| Parameter | Description              | Type    | Default |
+| --------- | ------------------------ | ------- | ------- |
+| `last`    | Return the latest record | Boolean | False   |
+
+<CodeBlock language="python">{ZenohQueryLastPy}</CodeBlock>
+
 ### Time-range Query
 
-If `ts` is not set, a range query is performed. The following parameters are supported:
+If neither `ts` nor `last` is set, a range query is performed over all records in the entry:
 
-| Parameter       | Description                                                                          | Type      | Default                       |
-| --------------- | ------------------------------------------------------------------------------------ | --------- | ----------------------------- |
-| `start`         | Range start timestamp (Unix microseconds, inclusive)                                 | Timestamp | Timestamp of the first record |
-| `stop`          | Range stop timestamp (Unix microseconds, exclusive)                                  | Timestamp | Timestamp of the last record  |
-| `each_s`        | Return at most one record every N seconds (must be greater than 0)                   | Float     |                               |
-| `each_n`        | Return every Nth record (must be greater than 0)                                     | Integer   |                               |
-| `limit`         | Maximum number of records to return                                                  | Integer   |                               |
-| `metadata`      | Return labels and timestamps only, without payload                                   | Boolean   | False                         |
-| `include-<key>` | Only return records where label `<key>` equals the value, e.g. `include-robot=alpha` | String    |                               |
-| `exclude-<key>` | Exclude records where label `<key>` equals the value, e.g. `exclude-status=error`    | String    |                               |
+| Parameter | Description                                                      | Type      | Default                       |
+| --------- | ---------------------------------------------------------------- | --------- | ----------------------------- |
+| `start`   | Range start timestamp (Unix microseconds, inclusive)             | Timestamp | Timestamp of the first record |
+| `stop`    | Range stop timestamp (Unix microseconds, exclusive)              | Timestamp | Timestamp of the last record  |
+| `strict`  | Fail the query if the `when` condition references unknown labels | Boolean   | False                         |
 
 <CodeBlock language="python">{ZenohQueryRangePy}</CodeBlock>
 
+### Conditional Queries
+
+For any range query you can filter records by label using the full [**ReductStore conditional query language**](../conditional-query/index.mdx). Pass a `when` expression as a JSON attachment on the `session.get()` call:
+
+```python
+attachment = json.dumps({"when": {"&status": {"$eq": "ok"}}}).encode()
+session.get(key, attachment=attachment, ...)
+```
+
+The `when` object follows the same syntax as the HTTP API. Refer to the [**Conditional Query Reference**](../conditional-query/index.mdx) for the full list of operators.
+
+<CodeBlock language="python">{ZenohQueryWhenPy}</CodeBlock>
+
 ### Reading Labels from Replies
 
-Labels are returned as a JSON attachment on each reply sample:
+Labels are returned as a JSON attachment on each reply sample.
+
+Along with your custom labels, ReductStore also includes Zenoh metadata labels in replies:
+
+- `zenoh_source_id`
+- `zenoh_ts_ntp64`
 
 <CodeBlock language="python">{ZenohReadLabelsPy}</CodeBlock>
 
@@ -151,4 +175,3 @@ Labels are returned as a JSON attachment on each reply sample:
 
 - **Single-bucket mode.** All Zenoh data maps to one configured bucket. Routing to different buckets based on the key expression is not yet supported.
 - **No data deletion.** Records, entries, and buckets cannot be deleted through the Zenoh API. Use the [**HTTP API**](/docs/http-api) for data management operations.
-- **Limited query parameters.** The Zenoh API exposes a fixed set of query parameters (`start`, `stop`, `limit`, and so on). The full [**ReductStore query language**](/docs/guides/data-querying) is only available through the HTTP API.
