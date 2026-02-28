@@ -1,1 +1,2 @@
 reduct-py @ https://github.com/reductstore/reduct-py/archive/refs/heads/main.zip
+eclipse-zenoh~=1.7

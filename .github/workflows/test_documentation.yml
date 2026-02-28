@@ -161,11 +161,33 @@ jobs:
             fi
 
             echo '${{secrets.LICENSE_KEY}}' > ./license.lic
-            docker run -d  -v ${PWD}:/misc \
-                --name reductstore -p 8383:8383 \
-                --env RS_LOG_LEVEL=debug \
-                --env RS_API_TOKEN="my-token"  \
-                --env RS_LICENSE_PATH=/misc/license.lic "${{ matrix.image }}"
+
+            IS_ZENOH=0
+            if [[ "$example" == *"/zenoh_"*".py" ]]; then
+              IS_ZENOH=1
+              docker run --init -d --name zenoh-router --network=host eclipse/zenoh
+              sleep 2
+            fi
+
+            if [ "$IS_ZENOH" -eq 1 ]; then
+              docker run -d --network=host -v ${PWD}:/misc \
+                  --name reductstore \
+                  --env RS_LOG_LEVEL=debug \
+                  --env RS_API_TOKEN="my-token"  \
+                  --env RS_LICENSE_PATH=/misc/license.lic \
+                  --env RS_ZENOH_ENABLED=1 \
+                  --env RS_ZENOH_CONFIG="mode=client;connect/endpoints=[tcp/127.0.0.1:7447]" \
+                  --env RS_ZENOH_SUB_KEYEXPRS="**" \
+                  --env RS_ZENOH_QUERY_KEYEXPRS="**" \
+                  "${{ matrix.image }}"
+            else
+              docker run -d  -v ${PWD}:/misc \
+                  --name reductstore -p 8383:8383 \
+                  --env RS_LOG_LEVEL=debug \
+                  --env RS_API_TOKEN="my-token"  \
+                  --env RS_LICENSE_PATH=/misc/license.lic "${{ matrix.image }}"
+            fi
+
             sleep 1
             reduct-cli cp http://my-token@127.0.0.1:8384/example-bucket  http://my-token@127.0.0.1:8383/example-bucket --limit 100
             reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-remove
@@ -187,6 +209,10 @@ jobs:
 
             docker stop reductstore
             docker rm reductstore
+            if [ "$IS_ZENOH" -eq 1 ]; then
+              docker stop zenoh-router
+              docker rm zenoh-router
+            fi
           done
       - name: Print Docker logs
         if: failure()
