@@ -35,7 +35,11 @@ ReductStore supports using a remote object storage as a backend to store data. Y
 By default, ReductStore uses the local file system to store data. To use a remote backend, set the `RS_REMOTE_BACKEND_TYPE` variable to S3 and configure the other variables accordingly.
 When the remote backend is enabled, ReductStore caches data in the folder specified by the `RS_REMOTE_CACHE_PATH` variable, thereby reducing the number of requests made to the remote backend.
 The `RS_DATA_PATH` variable is ignored when the remote backend is enabled.
-For Amazon S3, you can omit `RS_REMOTE_ACCESS_KEY` and `RS_REMOTE_SECRET_KEY` entirely and let the AWS SDK resolve credentials from its default provider chain. If you set one of these variables, you must set the other one too.
+
+:::info Default AWS Credentials
+For Amazon S3, you can omit `RS_REMOTE_ACCESS_KEY` and `RS_REMOTE_SECRET_KEY` entirely and let the AWS SDK resolve credentials from its default provider chain.
+In this case, you can use any supported authentication method (e.g., environment variables starting with `AWS_`, EC2 instance roles, or ECS task roles) without needing to configure ReductStore specifically for AWS.
+:::
 
 For end-to-end deployment examples (standalone, active-passive, and read-only replicas) using S3, see the **[S3 integration guide](../integrations/s3)**.
 
