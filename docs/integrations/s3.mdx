@@ -24,7 +24,7 @@ This roughly matches a typical journey: you start with a standalone instance, mo
 For all S3-based topologies, you need:
 
 - An existing bucket in Amazon S3 or any S3-compatible service (MinIO, Ceph, Cloudflare R2, etc.)
-- Access and secret keys that allow bucket-level read/write, list, and delete
+- Either access and secret keys that allow bucket-level read/write, list, and delete, or an AWS environment where the default credential provider chain can resolve credentials
 - Network connectivity from the host to the S3 endpoint and region you plan to use
 - A valid license file for commercial usage, mounted into the container and configured via `RS_LICENSE_PATH` (see **[Configuration](../configuration/index.mdx#general-settings)** for details)
 - A persistent cache path on the host (for example, a Docker volume) sized for your expected hot data
@@ -41,10 +41,13 @@ RS_REMOTE_REGION=us-east-1
 RS_REMOTE_ENDPOINT=https://s3.amazonaws.com # Set for non-AWS endpoints
 RS_REMOTE_ACCESS_KEY=<your-access-key>
 RS_REMOTE_SECRET_KEY=<your-secret-key>
+RS_REMOTE_SESSION_TOKEN=<your-session-token> # Optional, for temporary credentials
 RS_REMOTE_CACHE_PATH=/var/reduct/cache
 RS_REMOTE_CACHE_SIZE=10GB          # Adjust based on your workload
 RS_REMOTE_SYNC_INTERVAL=60s        # Adjust based on ingestion rate
 ```
+
+If you run on AWS and want to use the default credential provider chain, omit `RS_REMOTE_ACCESS_KEY` and `RS_REMOTE_SECRET_KEY` entirely. If you provide one of them, you must provide the other one too. Use `RS_REMOTE_SESSION_TOKEN` only with temporary credentials.
 
 ## Standalone on S3
 
