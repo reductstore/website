@@ -130,7 +130,8 @@
               },
               "items": [
                 "extensions/official/ros-ext/mcap",
-                "extensions/official/ros-ext/rosbag"
+                "extensions/official/ros-ext/rosbag",
+                "extensions/official/ros-ext/raw-ros"
               ]
             }
           ]

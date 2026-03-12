@@ -11,6 +11,6 @@ description: "API reference for ReplicationMode in the ReductStore Client SDK fo
 
 &gt; **ReplicationMode** = `"enabled"` \| `"paused"` \| `"disabled"`
 
-Defined in: [messages/ReplicationMode.ts:4](https://github.com/reductstore/reduct-js/blob/e3e6d0d3a0abf3caca43ef46bff4c0dbbc5384d9/src/messages/ReplicationMode.ts#L4)
+Defined in: [messages/ReplicationMode.ts:4](https://github.com/reductstore/reduct-js/blob/7c4f0ec5aad1bcdd0498c0b040cba2ad9e6e689e/src/messages/ReplicationMode.ts#L4)
 
 ReplicationMode string literal type for TypeScript type checking
