@@ -19,12 +19,15 @@ import DemoLicenseNote from "@site/src/components/promotional/DemoLicenseNote";
 
 <DemoLicenseNote />
 
-## Supported file and message formats
+## Supported formats
 
-The ReductROS extension supports parsing and extracting data from:
+You can use the ReductROS extension to extract and transform data in the following formats:
 
-- **[MCAP](./ros-ext/mcap)** files containing messages encoded in the **CDR (Common Data Representation)** format used by ROS 2.
-- **[Rosbag](./ros-ext/rosbag)** archives from ROS 2 `rosbag2` in **SQLite3** or **MCAP** storage, uploaded as ZIP files containing `metadata.yaml`.
+| Format                           | Typical input            | What you can do                                              |
+|----------------------------------|--------------------------|--------------------------------------------------------------|
+| **[MCAP](./ros-ext/mcap)**       | MCAP files               | Extract messages as JSON or create filtered MCAP episodes.   |
+| **[Rosbag](./ros-ext/rosbag)**   | ROS 2 `rosbag2` archives | Extract messages as JSON or create filtered rosbag episodes. |
+| **[Raw ROS](./ros-ext/raw-ros)** | Raw ROS records          | Extract ROS messages as JSON.                                |
 
 import DocCardList from "@theme/DocCardList";
 

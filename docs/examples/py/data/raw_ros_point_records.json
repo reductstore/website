@@ -1,0 +1,23 @@
+[
+  {
+    "timestamp": 1773324549068633,
+    "labels": {
+      "x": "0.0"
+    },
+    "file": "raw_ros_point_0.bin"
+  },
+  {
+    "timestamp": 1773324549269300,
+    "labels": {
+      "x": "1.0"
+    },
+    "file": "raw_ros_point_1.bin"
+  },
+  {
+    "timestamp": 1773324549469334,
+    "labels": {
+      "x": "2.0"
+    },
+    "file": "raw_ros_point_2.bin"
+  }
+]
