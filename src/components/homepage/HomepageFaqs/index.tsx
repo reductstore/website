@@ -49,8 +49,9 @@ const landingFaqs = [
     question: "What deployment options are available?",
     answer: (
       <p>
-        Fully on-premises, cloud on your infrastructure, or managed cloud on
-        ours. All options support the same features. Check our{" "}
+        Self-managed with ReductStore Core, self-hosted with ReductStore Pro, or
+        managed cloud on our infrastructure. Core and Pro share the same storage
+        engine, while Pro adds commercial components and support. Check our{" "}
         <strong>
           <Link to="/pricing">Pricing</Link>
         </strong>{" "}
@@ -71,13 +72,12 @@ const landingFaqs = [
     question: "What is the license?",
     answer: (
       <p>
-        BUSL-1.1 (Business Source License). Free for research, testing, and
-        companies under $2M capital. Commercial license required for production
-        use above that threshold. See our{" "}
+        ReductStore Core is available under Apache-2.0. ReductStore Pro covers
+        commercial components and support, and any ReductStore instance that
+        replicates data to or from a Pro deployment must also be covered by a
+        Pro commercial license unless approved otherwise in writing. See our{" "}
         <strong>
-          <Link to="https://github.com/reductstore/reductstore/blob/main/LICENSE">
-            LICENSE
-          </Link>
+          <Link to="/terms">Terms</Link>
         </strong>{" "}
         for details.
       </p>
@@ -91,7 +91,7 @@ const landingFaqs = [
         <strong>
           <Link to="https://community.reduct.store/">Discourse</Link>
         </strong>{" "}
-        . Commercial plans include direct support with guaranteed response
+        . ReductStore Pro plans include direct support with guaranteed response
         times. See{" "}
         <strong>
           <Link to="/pricing">Pricing</Link>
