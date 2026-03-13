@@ -1,13 +1,13 @@
 ---
 title: Raw Messages
-description: Extract raw ROS records as JSON or export them as MCAP using `$ros` entry attachments.
+description: Extract raw ROS 1 and ROS 2 records as JSON or export them as MCAP using `$ros` entry attachments.
 ---
 
 # Raw Messages
 
 Raw Messages mode lets ReductROS decode ROS messages that are stored as individual records rather
-than as MCAP or rosbag archives. It is intended for pipelines that store ROS 1 schema metadata in
-the `$ros` [**attachment**](../../../glossary#attachment) of each entry.
+than as MCAP or rosbag archives. It supports both ROS 1 and ROS 2 pipelines that store schema
+metadata in the `$ros` [**attachment**](../../../glossary#attachment) of each entry.
 
 import DemoLicenseNote from "@site/src/components/promotional/DemoLicenseNote";
 import CodeBlock from "@theme/CodeBlock";
@@ -20,7 +20,7 @@ import TabItem from "@theme/TabItem";
 
 Raw Messages expects:
 
-- one ROS 1 message per record
+- one ROS 1 (`application/ros1`) or ROS 2 (`application/cdr`) message per record
 - one or more queried entries
 - a `$ros` attachment on each queried entry that provides the schema metadata
 
@@ -32,16 +32,16 @@ supports **extraction** to JSON and **export** to MCAP.
 Raw Messages uses an attachment named `$ros` on each queried entry. The attachment must contain the
 following JSON fields:
 
-| Field         | Type     | Description                                                      |
-| ------------- | -------- | ---------------------------------------------------------------- |
-| `encoding`    | `string` | Must be `ros1`.                                                  |
-| `schema`      | `string` | Full ROS 1 message definition used to decode the binary payload. |
-| `topic`       | `string` | Topic name associated with the stored records.                   |
-| `schema_name` | `string` | ROS 1 message type, for example `std_msgs/String`.               |
+| Field         | Type     | Description                                                |
+| ------------- | -------- | ---------------------------------------------------------- |
+| `encoding`    | `string` | Must be `ros1` (ROS 1) or `cdr` (ROS 2).                   |
+| `schema`      | `string` | Full message definition used to decode the binary payload. |
+| `topic`       | `string` | Topic name associated with the stored records.             |
+| `schema_name` | `string` | ROS message type, for example `std_msgs/String`.           |
 
 If the records were ingested with `reduct-bridge`, this attachment is written automatically.
 
-**Example `$ros` metadata**
+**Example `$ros` metadata (ROS 1)**
 
 ```json
 {
@@ -49,6 +49,17 @@ If the records were ingested with `reduct-bridge`, this attachment is written au
   "schema": "string data",
   "topic": "/chatter",
   "schema_name": "std_msgs/String"
+}
+```
+
+**Example `$ros` metadata (ROS 2)**
+
+```json
+{
+  "encoding": "cdr",
+  "schema": "string data",
+  "topic": "/chatter",
+  "schema_name": "std_msgs/msg/String"
 }
 ```
 
@@ -81,7 +92,7 @@ from the `$ros` attachment of each queried entry.
 
 ## Data extraction
 
-The `extract` property tells ReductROS how to decode each raw ROS 1 record and how to shape the
+The `extract` property tells ReductROS how to decode each raw ROS record and how to shape the
 resulting JSON output.
 
 | Parameter        | Type     | Mandatory | Description                                                                                            |
@@ -115,7 +126,7 @@ timestamp.
 
 ## Data export
 
-The `export` property converts raw ROS 1 records into MCAP episodes. It can aggregate data from
+The `export` property converts raw ROS records into MCAP episodes. It can aggregate data from
 multiple ReductStore entries into a single MCAP output stream, using the topic and schema from the
 `$ros` attachment of each entry.
 
@@ -127,7 +138,7 @@ multiple ReductStore entries into a single MCAP output stream, using the topic a
 
 When `export` is provided, the extension:
 
-1. Reads raw ROS 1 records from the queried entries.
+1. Reads raw ROS records from the queried entries.
 2. Resolves schema and topic metadata for each entry from its `$ros` attachment.
 3. Streams all matching messages into a new MCAP file.
 4. Starts a new MCAP episode whenever `duration` or `size` is reached.
