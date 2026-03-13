@@ -71,9 +71,9 @@ In addition to general settings, you can configure I/O settings to optimize comm
 | `RS_IO_BATCH_MAX_SIZE`          | 8MB     | Maximum size of a batch of records sent to the client.                                                                                  |
 | `RS_IO_BATCH_MAX_RECORDS`       | 85      | Maximum number of records in a batch sent and received from the client.                                                                 |
 | `RS_IO_BATCH_MAX_METADATA_SIZE` | 8KB     | Maximum size of metadata in a batch of records sent and received from the client.                                                       |
-| `RS_IO_BATCH_TIMEOUT`           | 5s      | Maximum time for a batch of records to be prepared and sent to the client. If the batch is not full, it will be sent after the timeout. |
-| `RS_IO_BATCH_RECORD_TIMEOUT`    | 1s      | Maximum time to wait for a record to be added to a batch. If the record is not added, the unfinished batch will be sent to the client.  |
-| `RS_IO_OPERATION_TIMEOUT`       | 60s     | Maximum time for an I/O operation (e.g., read or write). If the operation takes longer, it will be aborted.                             |
+| `RS_IO_BATCH_TIMEOUT`           | 5       | Maximum time in seconds for a batch of records to be prepared and sent to the client. If the batch is not full, it will be sent after the timeout. |
+| `RS_IO_BATCH_RECORD_TIMEOUT`    | 1       | Maximum time in seconds to wait for a record to be added to a batch. If the record is not added, the unfinished batch will be sent to the client.  |
+| `RS_IO_OPERATION_TIMEOUT`       | 60      | Maximum time in seconds for an I/O operation (e.g., read or write). If the operation takes longer, it will be aborted.                             |
 
 Most of the I/O settings are related to **[batching](../glossary#batching)** and specify the size of the batch, the number of records in the batch, and the timeout for preparing and sending the batch on the server side.
 
@@ -89,13 +89,12 @@ You can configure the lock file settings using the following environment variabl
 
 | Name                            | Default | Description                                                                                                                                                                                              |
 | ------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `RS_LOCK_FILE_POLLING_INTERVAL` | 10s     | Interval between attempts to acquire the lock file or rewrite the acquired lock file to update its timestamp.                                                                                            |
-| `RS_LOCK_FILE_ROLE`             | primary | Role of the instance. It can be `primary` or `secondary`. The primary instance acquires the lock file immediately. The secondary instance waits for the primary to acquire the file first.               |
-| `RS_LOCK_FILE_TTL`              | 30s     | Time-to-live for the lock file. If the lock file is not updated within the TTL, it is considered stale and can be overwritten by another instance.                                                       |
-| `RS_LOCK_FILE_TIMEOUT`          | 60s     | Timeout for acquiring the lock file. If the lock file is not acquired within the timeout, the storage will exit. When set to 0, the storage will wait indefinitely.                                      |
+| `RS_LOCK_FILE_POLLING_INTERVAL` | 10      | Interval in seconds between attempts to acquire the lock file or rewrite the acquired lock file to update its timestamp.                                                                                            |
+| `RS_LOCK_FILE_TTL`              | 30      | Time-to-live in seconds for the lock file. If the lock file is not updated within the TTL, it is considered stale and can be overwritten by another instance.                                                       |
+| `RS_LOCK_FILE_TIMEOUT`          | 60      | Timeout in seconds for acquiring the lock file. If the lock file is not acquired within the timeout, the storage will exit. When set to 0, the storage will wait indefinitely.                                      |
 | `RS_LOCK_FILE_FAILURE_ACTION`   | abort   | Action to take if the lock file can't be acquired. It can be `abort` or `proceed`. If set to `abort`, the storage will exit. If set to `proceed`, the storage will overwrite the lock file and continue. |
 
-The lock file is enabled when the `RS_INSTANCE_ROLE` variable is set to `primary` or `secondary`. If the variable is not set, the lock file mechanism is disabled.
+The lock file is enabled when the `RS_INSTANCE_ROLE` variable is set to `PRIMARY` or `SECONDARY`. If the variable is not set, the lock file mechanism is disabled.
 
 ## Storage Engine Settings
 
@@ -103,8 +102,8 @@ A user can configure storage engine settings to change behavior of data storage 
 
 | Name                                | Default | Description                                                                                           |
 | ----------------------------------- | ------- | ----------------------------------------------------------------------------------------------------- |
-| `RS_ENGINE_COMPACTION_INTERVAL`     | 60s     | Interval between compaction WALs into blocks and synchronization of the storage state to the backend. |
-| `RS_ENGINE_REPLICA_UPDATE_INTERVAL` | 60s     | Interval between updates of bucket, entry lists and indexes from the backend in the read-only mode.   |
+| `RS_ENGINE_COMPACTION_INTERVAL`     | 60      | Interval in seconds between compaction WALs into blocks and synchronization of the storage state to the backend. |
+| `RS_ENGINE_REPLICA_UPDATE_INTERVAL` | 60      | Interval in seconds between updates of bucket, entry lists and indexes from the backend in the read-only mode.   |
 | `RS_ENGINE_ENABLE_INTEGRITY_CHECKS` | true    | If set to `false`, the storage engine skips integrity checks at startup to improve performance.       |
 
 ## Replication Settings
@@ -113,5 +112,5 @@ ReductStore supports **[data replication](../guides/data-replication.mdx)** betw
 
 | Name                      | Default | Description                                                                                                             |
 | ------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `RS_REPLICATION_TIMEOUT`  | 5s      | Timeout for attempts to reconnect to the target server in seconds.                                                      |
+| `RS_REPLICATION_TIMEOUT`  | 5       | Timeout in seconds for attempts to reconnect to the target server.                                                      |
 | `RS_REPLICATION_LOG_SIZE` | 1000000 | Maximum number of pending records in the replication log. The oldest records are overwritten when the limit is reached. |

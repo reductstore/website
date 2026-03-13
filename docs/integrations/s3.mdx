@@ -44,7 +44,7 @@ RS_REMOTE_SECRET_KEY=<your-secret-key>
 RS_REMOTE_SESSION_TOKEN=<your-session-token> # Optional, for temporary credentials
 RS_REMOTE_CACHE_PATH=/var/reduct/cache
 RS_REMOTE_CACHE_SIZE=10GB          # Adjust based on your workload
-RS_REMOTE_SYNC_INTERVAL=60s        # Adjust based on ingestion rate
+RS_REMOTE_SYNC_INTERVAL=60        # Adjust based on ingestion rate
 ```
 
 If you run on AWS and want to use the default credential provider chain, omit `RS_REMOTE_ACCESS_KEY` and `RS_REMOTE_SECRET_KEY` entirely. If you provide one of them, you must provide the other one too. Use `RS_REMOTE_SESSION_TOKEN` only with temporary credentials.
@@ -69,7 +69,7 @@ services:
       RS_REMOTE_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY}
       RS_REMOTE_CACHE_PATH: /var/reduct/cache
       RS_REMOTE_CACHE_SIZE: 10GB
-      RS_REMOTE_SYNC_INTERVAL: 60s
+      RS_REMOTE_SYNC_INTERVAL: 60
       RS_LICENSE_PATH: /var/reduct/license/license.key
     volumes:
       - reduct-cache:/var/reduct/cache
@@ -107,7 +107,7 @@ services:
       RS_REMOTE_ACCESS_KEY: ${AWS_ACCESS_KEY_ID}
       RS_REMOTE_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY}
       RS_REMOTE_CACHE_PATH: /var/reduct/cache
-      RS_LOCK_FILE_TTL: 45s # Wait 45s if lock is stale before taking over
+      RS_LOCK_FILE_TTL: 45 # Wait 45 seconds if lock is stale before taking over
       RS_LOCK_FILE_TIMEOUT: 0 # Wait indefinitely for the lock
       RS_LICENSE_PATH: /var/reduct/license/license.key
     volumes:
@@ -126,7 +126,7 @@ services:
       RS_REMOTE_ACCESS_KEY: ${AWS_ACCESS_KEY_ID}
       RS_REMOTE_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY}
       RS_REMOTE_CACHE_PATH: /var/reduct/cache
-      RS_LOCK_FILE_TTL: 45s # Wait 45s if lock is stale before taking over
+      RS_LOCK_FILE_TTL: 45 # Wait 45 seconds if lock is stale before taking over
       RS_LOCK_FILE_TIMEOUT: 0 # Wait indefinitely for the lock
       RS_LICENSE_PATH: /var/reduct/license/license.key
     volumes:
@@ -168,7 +168,7 @@ services:
       RS_REMOTE_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY}
       RS_REMOTE_CACHE_PATH: /var/reduct/cache
       RS_REMOTE_CACHE_SIZE: 50GB
-      RS_ENGINE_REPLICA_UPDATE_INTERVAL: 30s # Refresh indexes and changes from S3 every 30s
+      RS_ENGINE_REPLICA_UPDATE_INTERVAL: 30 # Refresh indexes and changes from S3 every 30 seconds
       RS_LICENSE_PATH: /var/reduct/license/license.key
     volumes:
       - replica-cache:/var/reduct/cache
