@@ -129,9 +129,9 @@
                 "id": "extensions/official/ros-ext/index"
               },
               "items": [
+                "extensions/official/ros-ext/raw",
                 "extensions/official/ros-ext/mcap",
-                "extensions/official/ros-ext/rosbag",
-                "extensions/official/ros-ext/raw-ros"
+                "extensions/official/ros-ext/rosbag"
               ]
             }
           ]
