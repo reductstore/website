@@ -144,9 +144,9 @@ export default function PricingTable() {
     <section>
       <div className={clsx("row", styles.pricingTable)}>
         <PricingPlan
-          title="Community"
-          subtitle="BUSL-1.1"
-          description="Perfect for research, testing, and development. Commercial use in production is limited to companies with less than $2M USD in capital."
+          title="ReductStore Core"
+          subtitle="Apache-2.0"
+          description="Open-source ReductStore for self-managed edge and server deployments."
           categories={createFeatures("community")}
           buttonUrl="/docs/getting-started"
           buttonLabel="Start for Free"
@@ -154,9 +154,9 @@ export default function PricingTable() {
         />
 
         <PricingPlan
-          title="Self-Hosted"
-          subtitle="On-Premises"
-          description="Commercial support, proof-of-concept assistance, and long-term release support for on-premise deployments."
+          title="ReductStore Pro"
+          subtitle="Commercial Self-Hosted"
+          description="Commercial components, support, proof-of-concept assistance, and long-term release support for self-hosted deployments. Any ReductStore instance linked through replication to Pro must also be covered by a Pro commercial license."
           categories={createFeatures("onpremise")}
           buttonUrl="/contact?subject=DemoLicense"
           buttonLabel="Get Demo License"
@@ -165,8 +165,8 @@ export default function PricingTable() {
 
         <PricingPlan
           title="Cloud"
-          subtitle="Fully Managed"
-          description="Zero-maintenance cloud service with enterprise features."
+          subtitle="Managed Pro"
+          description="Zero-maintenance managed service built on ReductStore Pro."
           categories={createFeatures("cloud")}
           buttonUrl="/solutions/cloud"
           buttonLabel="Get Demo Server"

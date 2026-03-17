@@ -10,7 +10,7 @@ export default function Pricing(): JSX.Element {
   return (
     <Layout
       title="Pricing"
-      description="Choose the right ReductStore plan for your scale—from free community use to commercial self-hosted and fully managed cloud offerings."
+      description="Choose the right ReductStore plan for your scale, from ReductStore Core under Apache-2.0 to ReductStore Pro and fully managed cloud offerings."
     >
       <main>
         <SimpleHeader pageTitle="ReductStore Pricing" />
@@ -18,8 +18,9 @@ export default function Pricing(): JSX.Element {
         <section className="container">
           <div className={styles.introSection}>
             <p className={styles.introText}>
-              Free for research, testing, and development. Commercial plans
-              cover production licensing, support, and deployment requirements.
+              ReductStore Core is open source under Apache-2.0. ReductStore Pro
+              adds commercial components, production support, and licensed
+              self-hosted deployments.
             </p>
             <div className={styles.offer}>
               <PlaygroundOffer />
@@ -42,14 +43,15 @@ export default function Pricing(): JSX.Element {
 
 const pricingFaqs = [
   {
-    question: "Is the software the same for all plans?",
+    question:
+      "What is the difference between ReductStore Core and ReductStore Pro?",
     answer:
-      "Yes. Same software, same source code on GitHub. Plans differ only in support and licensing terms.",
+      "ReductStore Core is the open-source base distributed under Apache-2.0. ReductStore Pro adds commercial components, support, and subscription-based deployment rights.",
   },
   {
-    question: "How does disk usage licensing work?",
+    question: "How does ReductStore Pro licensing work?",
     answer:
-      "You receive a license key specifying allowed disk usage. The database continues working if exceeded—CLI, WebConsole, and SDKs will show warnings.",
+      "You receive a license key specifying the licensed scope, such as disk usage and deployment coverage. The database continues working if limits are exceeded, but CLI, WebConsole, and SDKs will show warnings.",
   },
   {
     question: "What happens when the license expires?",
@@ -57,14 +59,14 @@ const pricingFaqs = [
       "The database keeps running. CLI, WebConsole, and SDKs show license warnings.",
   },
   {
-    question: "How is the $2M capital threshold calculated?",
+    question: "Do linked replicated instances need ReductStore Pro coverage?",
     answer:
-      "The highest of: total gross revenue, total budget, or funding received in the last 12 months.",
+      "Yes. If an instance replicates data to a ReductStore Pro deployment or receives replicated data from it, that linked instance must also be covered by a ReductStore Pro commercial license unless ReductSoftware approves otherwise in writing.",
   },
   {
-    question: "Why BUSL-1.1?",
+    question: "Does ReductStore Core remain open source?",
     answer:
-      "One codebase for everyone with full source access. Free for research and small companies. Commercial license required for production use above $2M capital.",
+      "Yes. ReductStore Core is distributed under Apache-2.0. The commercial terms apply to ReductStore Pro and its proprietary components.",
   },
   {
     question: "What are Extensions?",
