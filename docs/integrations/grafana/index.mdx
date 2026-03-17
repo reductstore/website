@@ -70,12 +70,17 @@ Fill in the following fields:
 
 - **Server URL**: your ReductStore instance, e.g. `http://localhost:8383`
 - **API Token**: optional, only needed if authentication is enabled
-- **TLS Verify**: enable if you use self-signed HTTPS certificates
+- **Verify SSL**: enabled by default. Keep it on for production and disable it only for testing or when you explicitly want to skip TLS certificate verification
+- **CA Certificate Path**: optional path to a PEM-encoded CA certificate on the Grafana host. Use this when your ReductStore server uses a private or self-signed certificate authority
 
 ### Test the Connection
 
 Click **Save & Test**.
 If the setup is correct, Grafana will show a success message.
+
+:::tip
+For self-signed HTTPS setups, prefer setting **CA Certificate Path** and keeping **Verify SSL** enabled. Disabling SSL verification is less secure and should only be used for temporary testing.
+:::
 
 import GrafanaDataSourceConfig from "./img/grafana-datasource-config.png";
 
@@ -174,21 +179,24 @@ apiVersion: 1
 datasources:
   - name: reductstore
     type: reductstore-datasource
-    url: http://localhost:8383
     jsonData:
       serverURL: http://localhost:8383
+      verifySSL: true
+      caCertPath: /etc/ssl/certs/reductstore-ca.pem
     secureJsonData:
       serverToken: your_api_token
 ```
 
 ### Parameters
 
-| Parameter     | Description                      | Required |
-| ------------- | -------------------------------- | -------- |
-| `name`        | Display name in Grafana          | Yes      |
-| `type`        | Must be `reductstore-datasource` | Yes      |
-| `serverURL`   | URL of your ReductStore instance | Yes      |
-| `serverToken` | API token for authentication     | No       |
+| Parameter     | Description                                                          | Required |
+| ------------- | -------------------------------------------------------------------- | -------- |
+| `name`        | Display name in Grafana                                              | Yes      |
+| `type`        | Must be `reductstore-datasource`                                     | Yes      |
+| `serverURL`   | URL of your ReductStore instance                                     | Yes      |
+| `verifySSL`   | Enable TLS certificate verification. Defaults to `true` when omitted | No       |
+| `caCertPath`  | Path to a PEM-encoded CA certificate file on the Grafana host        | No       |
+| `serverToken` | API token for authentication                                         | No       |
 
 ### Deployment Steps
 
