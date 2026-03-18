@@ -79,6 +79,10 @@ To spin up a new replication task, you must provide the following information:
 - **Remote Token**: The API token of the target database.
 - **Filter Settings**: See the **[Conditional Replication](#conditional-replication)** section for more information.
 
+If the destination instance uses HTTPS, ReductStore verifies its TLS certificate by default.
+Use `RS_REPLICATION_VERIFY_SSL=false` only for insecure test environments.
+If the destination uses a private or custom CA, configure `RS_REPLICATION_CA_PATH` on the source instance with a PEM-encoded CA certificate.
+
 Let's create a replication task that replicates all records from the `source-bucket` to the `remote-bucket` by using
 the ReductStore SDKs, REST API, CLI and Web Console. You can also provision a Replication Task by using environment variables.
 

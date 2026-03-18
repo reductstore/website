@@ -110,7 +110,9 @@ A user can configure storage engine settings to change behavior of data storage 
 
 ReductStore supports **[data replication](../guides/data-replication.mdx)** between different instances. You can configure replication settings using the following environment variables:
 
-| Name                      | Default | Description                                                                                                             |
-| ------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `RS_REPLICATION_TIMEOUT`  | 5       | Timeout in seconds for attempts to reconnect to the target server.                                                      |
-| `RS_REPLICATION_LOG_SIZE` | 1000000 | Maximum number of pending records in the replication log. The oldest records are overwritten when the limit is reached. |
+| Name                        | Default | Description                                                                                                             |
+| --------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `RS_REPLICATION_TIMEOUT`    | 5       | Timeout in seconds for attempts to reconnect to the target server.                                                      |
+| `RS_REPLICATION_LOG_SIZE`   | 1000000 | Maximum number of pending records in the replication log. The oldest records are overwritten when the limit is reached. |
+| `RS_REPLICATION_VERIFY_SSL` | true    | If set to `false`, the replication client skips TLS certificate verification for destination instances.                 |
+| `RS_REPLICATION_CA_PATH`    |         | Path to a PEM-encoded CA certificate used to verify destination TLS certificates during replication.                    |
