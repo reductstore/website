@@ -155,6 +155,32 @@
     },
     {
       "type": "category",
+      "label": "ReductBridge",
+      "link": {
+        "type": "doc",
+        "id": "reduct-bridge/index"
+      },
+      "items": [
+        {
+          "type": "category",
+          "label": "Inputs",
+          "collapsed": false,
+          "items": [
+            "reduct-bridge/input/shell/index",
+            "reduct-bridge/input/ros1/index",
+            "reduct-bridge/input/ros2/index"
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Remotes",
+          "collapsed": false,
+          "items": ["reduct-bridge/remote/reduct/index"]
+        }
+      ]
+    },
+    {
+      "type": "category",
       "label": "HTTP API Reference",
       "link": {
         "type": "doc",
