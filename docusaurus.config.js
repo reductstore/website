@@ -75,6 +75,14 @@ const config = {
         destination: "docs/sdk/js",
       },
     ],
+    [
+      require.resolve("./src/plugins/docusaurus-plugin-reduct-bridge-docs"),
+      {
+        repo: "https://github.com/reductstore/reduct-bridge.git",
+        branch: "main",
+        destination: "docs/reduct-bridge",
+      },
+    ],
   ],
 
   // LaTex support
@@ -467,7 +475,7 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
-        additionalLanguages: ["rust", "bash"],
+        additionalLanguages: ["rust", "bash", "toml"],
       },
       colorMode: {
         defaultMode: "light",

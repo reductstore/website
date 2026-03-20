@@ -8,5 +8,8 @@ versioned_docs/version-1.12.x
 versioned_docs/version-1.13.x
 versioned_docs/version-1.14.x
 versioned_docs/version-1.15.x
+versioned_docs/version-1.16.x
+versioned_docs/version-1.17.x
 cmake-*
 target/
+docs/reduct-bridge
