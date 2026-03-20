@@ -6,6 +6,12 @@ description: "Documentation for ReductBridge, the data bridge between live robot
 
 # reduct-bridge
 
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/reductstore/reduct-bridge)](https://github.com/reductstore/reduct-bridge/releases/latest)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/reductstore/reduct-bridge/ci.yml?branch=main)](https://github.com/reductstore/reduct-bridge/actions)
+[![Docker Pulls](https://img.shields.io/docker/pulls/reduct/bridge)](https://hub.docker.com/r/reduct/bridge)
+[![GitHub all releases](https://img.shields.io/github/downloads/reductstore/reduct-bridge/total)](https://github.com/reductstore/reduct-bridge/releases/latest)
+[![codecov](https://codecov.io/gh/reductstore/reduct-bridge/branch/main/graph/badge.svg)](https://codecov.io/gh/reductstore/reduct-bridge)
+
 ReductBridge bridges live robotics and IIoT data with long-term storage in ReductStore.
 You can configure the bridge using a simple TOML file to define `inputs`, `pipelines`, and `remotes`.
 Inputs produce data, pipelines route and modify it, and remotes store it.
@@ -17,8 +23,8 @@ An `input` is a data source. It reads data from a system and produces records fo
 Supported input types include:
 
 - **[Shell](./input/shell/index.mdx)** - run shell commands on a fixed interval and store output lines as records.
-- **[ROS1](./input/ros1)** - subscribe to ROS1 topics and store ROS messages as records.
-- **[ROS2](./input/ros2)** - subscribe to ROS2 topics and store serialized CDR payloads as records.
+- **[ROS1](./input/ros1/index.mdx)** - subscribe to ROS1 topics and store ROS messages as records.
+- **[ROS2](./input/ros2/index.mdx)** - subscribe to ROS2 topics and store serialized CDR payloads as records.
 
 ## Remotes
 
@@ -26,7 +32,7 @@ A `remote` is a data destination. It receives records from pipelines and writes 
 
 Supported remote types include:
 
-- **[ReductStore](./remote/reduct)** - write pipeline records and attachments to ReductStore with configurable batching.
+- **[ReductStore](./remote/reduct/index.mdx)** - write pipeline records and attachments to ReductStore with configurable batching.
 
 ## Pipelines
 
@@ -87,9 +93,14 @@ For ROS2 builds, the installation must include the standard interface packages r
 reduct-bridge /path/to/config.toml
 ```
 
-See **[examples/ros_config.toml](https://github.com/reductstore/reduct-bridge/blob/main/examples/ros_config.toml)** for a sample configuration file.
-ROS2 inputs can use explicit `schema_paths` prefixes to resolve `<prefix>/share/<package>/msg/<Type>.msg`.
-If `schema_paths` is omitted, the bridge falls back to `AMENT_PREFIX_PATH`, `COLCON_PREFIX_PATH`, and `CMAKE_PREFIX_PATH`.
+For ROS2 inputs, start the bridge from a sourced ROS2 environment and set `ROS_HOME` to a writable directory, especially under `systemd`:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+export ROS_HOME=/var/lib/reduct-bridge/.ros
+mkdir -p "$ROS_HOME"
+reduct-bridge /path/to/config.toml
+```
 
 ## Documentation
 

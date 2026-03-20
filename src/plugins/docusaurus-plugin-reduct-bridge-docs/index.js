@@ -30,11 +30,7 @@ function getDocPathFromReadme(readmePath) {
 }
 
 function toLinkTarget(docPath) {
-  if (docPath === "index") {
-    return ".";
-  }
-
-  return docPath.replace(/\/index$/, "");
+  return `${docPath}.mdx`;
 }
 
 function toRelativeDocLink(fromReadmePath, toReadmePath) {
