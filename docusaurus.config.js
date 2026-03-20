@@ -475,7 +475,7 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
-        additionalLanguages: ["rust", "bash"],
+        additionalLanguages: ["rust", "bash", "toml"],
       },
       colorMode: {
         defaultMode: "light",
