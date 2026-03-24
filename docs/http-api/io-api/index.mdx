@@ -11,6 +11,10 @@ description: HTTP API documentation for batched reads, writes, updates, and remo
 
 The I/O API provides high-throughput endpoints for working with multiple entries in a bucket using **Batch Protocol v2**. It is designed for batched reads, writes, label updates, and deletions across entries with minimal HTTP overhead.
 
+:::info
+Since version 1.19, entry names can be hierarchical paths with multiple segments (for example, `a/b/c`).
+:::
+
 :::caution Experimental
 The I/O API is experimental and will be stabilized in the next releases.
 :::

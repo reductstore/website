@@ -1,0 +1,260 @@
+---
+title: Air-Gapped Drone Data Operations with Delayed Sync and Auditability
+description: How to set up local storage on drones with delayed replication and audit trail using ReductStore.
+authors: anthony
+slug: air-gapped-drone-data
+tags: [aerospace, robotics, database]
+image: ./img/architecture-drone-social.png
+---
+
+![Architecture for Air-Gapped Drone Data](./img/architecture-drone.drawio.svg)
+
+Drones in air-gapped environments produce a **lot** of data (camera images, telemetry, logs, model outputs). Storing this data reliably on each drone and syncing it to a ground station later can be hard. **ReductStore** makes this easier: it's a lightweight, time-series object store that works offline and replicate data when a connection is available.
+
+This guide explains a simple setup where each drone stores data locally with labels, replicates records to a ground station based on what it detects, and keeps a clear audit trail of what was captured and replicated.
+
+{/* truncate */}
+
+What we'll cover:
+
+- [**Drone-to-Ground Architecture**](#drone-to-ground-architecture)
+- [**Setting Up the Drone Node**](#setting-up-the-drone-node)
+- [**Storing Drone Data with Labels**](#storing-drone-data-with-labels)
+- [**Setting Up Selective Replication**](#setting-up-selective-replication)
+- [**Querying for Audit Reports**](#querying-for-audit-reports)
+- [**Why This Setup Works Well for Drones**](#why-this-setup-works-well-for-drones)
+
+## Drone-to-Ground Architecture
+
+The architecture has three main components:
+
+- **Each drone runs a small ReductStore server** to save images and telemetry locally on disk (this lets the drone operate fully offline).
+- **A ground station runs a ReductStore instance** that receives replicated data for analysis and archiving.
+- **ReductStore replication tasks** copy data from drone to ground based on labels and conditions (e.g., only records flagged as anomalies, plus context around them).
+
+![Drone Workflow](./img/drone-workflow.svg)
+
+Each drone pushes its data to the ground whenever it is connected. If the network disconnects, replication continues when the drone reconnects. This approach provides offline capability, lets you decide which data to replicate, and keeps a clear record of what happened.
+
+## Setting Up the Drone Node
+
+Start by running ReductStore on the drone's companion computer. Here is a minimal `docker-compose.yml`:
+
+```yaml
+services:
+  reductstore:
+    image: reduct/store:latest
+    ports:
+      - "8383:8383"
+    environment:
+      RS_API_TOKEN: <DRONE_TOKEN>
+      RS_BUCKET_1_NAME: mission-data
+      RS_BUCKET_1_QUOTA_TYPE: FIFO
+      RS_BUCKET_1_QUOTA_SIZE: 10000000000 # 10 GB
+    volumes:
+      - ./data:/data
+```
+
+Run it with:
+
+```bash
+docker compose up -d
+```
+
+This starts a ReductStore server with a `mission-data` bucket that uses FIFO retention. Old data is deleted only when the 10 GB limit is reached, so the drone always keeps as much history as possible.
+
+:::info
+FIFO quota is volume-based, not time-based. This means data is only deleted when disk space runs out, not after a fixed time period. This is important for drones that may sit idle between missions.
+:::
+
+If you prefer Snap instead of Docker:
+
+```bash
+sudo snap install reductstore
+```
+
+That starts a ReductStore server on port `8383` by default. You can then create the bucket using the **[Reduct CLI](https://github.com/reductstore/reduct-cli)**:
+
+```bash
+reduct-cli alias add drone -L http://localhost:8383 -t "<DRONE_TOKEN>"
+reduct-cli bucket create drone/mission-data --quota-type FIFO --quota-size 10GB
+```
+
+## Storing Drone Data with Labels
+
+Use labels to tag every record with mission context. This is what makes selective replication and auditing possible later. Here is an example using the Python SDK:
+
+```python
+import asyncio
+import time
+import hashlib
+from reduct import Client
+
+
+async def main():
+    async with Client("http://localhost:8383", api_token="<DRONE_TOKEN>") as client:
+        bucket = await client.get_bucket("mission-data")
+
+        # Read a camera frame
+        payload = open("frame.jpg", "rb").read()
+        checksum = hashlib.sha256(payload).hexdigest()
+        timestamp = int(time.time() * 1_000_000)  # microseconds
+
+        # Write with mission labels
+        await bucket.write(
+            "camera",
+            payload,
+            timestamp=timestamp,
+            labels={
+                "mission_id": "m-2026-02-24-01",
+                "platform_id": "uav-07",
+                "anomaly": "false",
+                "confidence": "0.95",
+                "checksum": checksum,
+            },
+            content_type="image/jpeg",
+        )
+
+        # Write telemetry as a CSV batch
+        csv_data = "ts,lat,lon,alt,speed\n"
+        csv_data += "1708771200000000,47.3769,8.5417,450.2,12.5\n"
+        csv_data += "1708771201000000,47.3770,8.5418,451.0,12.8\n"
+
+        await bucket.write(
+            "telemetry",
+            csv_data.encode(),
+            timestamp=timestamp,
+            labels={
+                "mission_id": "m-2026-02-24-01",
+                "platform_id": "uav-07",
+                "anomaly": "false",
+                "checksum": hashlib.sha256(csv_data.encode()).hexdigest(),
+            },
+            content_type="text/csv",
+        )
+
+
+asyncio.run(main())
+```
+
+The `anomaly` label is important: it lets the replication task decide what to sync based on what the drone actually sees. For example, if the drone detects something unusual (an object, a warning, a low confidence score), it sets `anomaly=true`. The replication task can then automatically sync that record — plus the context around it.
+
+The `checksum` label gives you a simple way to verify data integrity during audits.
+
+## Setting Up Selective Replication
+
+Once the drone connects to a trusted network, replication sends only the relevant records to the ground station. The simplest approach is to replicate based on a label, for example only records where the drone detected an anomaly:
+
+```bash
+reduct-cli alias add drone -L http://localhost:8383 -t "<DRONE_TOKEN>"
+
+reduct-cli replica create drone/mission-to-ground \
+    mission-data \
+    https://<GROUND_TOKEN>@<ground-address>/drone-data \
+    --when '{"&anomaly": {"$eq": "true"}}'
+```
+
+This creates a replication task that copies only records where `anomaly=true` from the drone's `mission-data` bucket to the ground station.
+
+### Replicating with context (before and after)
+
+In many cases, you don't just want the anomaly record itself — you also want to see what happened **before** it. ReductStore supports this with the `#ctx_before` and `#ctx_after` directives. For example, to replicate each anomaly record plus 30 seconds of data before it and 10 seconds after:
+
+```json
+{
+  "&anomaly": { "$eq": "true" },
+  "#ctx_before": "30s",
+  "#ctx_after": "10s"
+}
+```
+
+This is powerful for drone operations: imagine the drone's onboard model detects an unexpected object. ReductStore will replicate that record **and** the 30 seconds of camera frames leading up to the detection, so the ground team can review what happened.
+
+You can provision this directly in Docker using environment variables:
+
+```yaml
+services:
+  reductstore:
+    image: reduct/store:latest
+    ports:
+      - "8383:8383"
+    environment:
+      RS_API_TOKEN: <DRONE_TOKEN>
+      RS_BUCKET_1_NAME: mission-data
+      RS_BUCKET_1_QUOTA_TYPE: FIFO
+      RS_BUCKET_1_QUOTA_SIZE: 10000000000
+      RS_REPLICATION_1_NAME: mission-to-ground
+      RS_REPLICATION_1_SRC_BUCKET: mission-data
+      RS_REPLICATION_1_DST_BUCKET: drone-data
+      RS_REPLICATION_1_DST_HOST: https://<ground-address>
+      RS_REPLICATION_1_DST_TOKEN: <GROUND_TOKEN>
+      RS_REPLICATION_1_WHEN: |
+        {
+          "&anomaly": { "$$eq": "true" },
+          "#ctx_before": "30s",
+          "#ctx_after": "10s"
+        }
+    volumes:
+      - ./data:/data
+```
+
+:::info
+With this setup, the drone can operate fully offline. Replication runs automatically when a connection is available and waits when it's not. It's also possible to pause replication tasks if needed. And because context is included, the ground team always has enough data to understand what triggered the event.
+:::
+
+## Querying for Audit Reports
+
+After a mission, you can query the ground station to check what was captured and replicated. Here is a simple example that lists all records from a specific mission:
+
+```python
+import asyncio
+from reduct import Client
+
+
+async def main():
+    async with Client("https://<ground-address>", api_token="<GROUND_TOKEN>") as client:
+        bucket = await client.get_bucket("drone-data")
+
+        # Query all camera records from a specific mission
+        async for record in bucket.query(
+            "camera",
+            when={"&mission_id": {"$eq": "m-2026-02-24-01"}},
+        ):
+            print(
+                f"ts={record.timestamp}, "
+                f"anomaly={record.labels.get('anomaly')}, "
+                f"checksum={record.labels.get('checksum')}, "
+                f"size={record.size}"
+            )
+
+
+asyncio.run(main())
+```
+
+This gives you a clear log of every record in that mission: timestamp, anomaly flag, checksum, and size. You can use this to verify that all expected data arrived on the ground side.
+
+To go further, compare the checksums on the drone with the ground side to confirm nothing was altered during transfer. You can also check the error logs of the replication task to see if any records failed to replicate.
+
+## Why This Setup Works Well for Drones
+
+Drones have specific constraints that general purpose databases don't handle well. Here is what makes this setup practical:
+
+- **Full offline operation.** Drones store everything locally and don't need a network connection during the mission. Data is safe on disk until sync happens.
+- **Automatic sync when connected.** When the drone lands or connects to a trusted network, replication picks up where it left off. No manual file transfers, no rsync scripts, no USB sticks.
+- **Smart replication with context.** You don't have to sync everything. The replication task filters by labels and can include past records around each event using `#ctx_before`. The ground team gets exactly what they need to understand what happened.
+- **Disk never fills up unexpectedly.** FIFO retention removes the oldest data only when the disk is full. The drone always keeps as much history as possible without running out of space mid mission.
+- **Easy auditing.** Every record has a timestamp, labels, and a checksum. After a mission, you can query the ground station and verify exactly what was captured and what was synced.
+- **Store any file type.** Camera frames, telemetry CSV, logs, MCAP files, model outputs. Everything goes into the same system with the same interface.
+
+## Next Steps
+
+If you want to go deeper, check out these articles:
+
+- **[Distributed Storage in Mobile Robotics](/blog/distributed-storage-mobile-robotics)** for a similar setup with mobile robots and S3 cloud backend
+- **[How to Store and Manage Robotics Data](/blog/store-robotic-data)** for a broader look at ReductStore features for robotics
+- **[Data Replication Guide](/docs/guides/data-replication)** for the full documentation on replication tasks, filters, and modes
+- **[Conditional Query Reference](/docs/conditional-query)** for all available conditional query operators you can use in replication filters and queries
+
+---
+
+I hope you found this article helpful! If you have any questions or feedback, don't hesitate to reach out on our [**ReductStore Community**](https://community.reduct.store) forum.

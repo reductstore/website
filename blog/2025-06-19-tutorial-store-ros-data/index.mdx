@@ -650,7 +650,7 @@ Open the web console on the laptop: `http://localhost:8383` and keep it open for
 > Create a bucket named `pi_robot` on the laptop as well, otherwise the replication task will fail (it needs the destination bucket to exist).
 
 :::tip
-Use provisioning to automate bucket creation and other setup steps in a real deployment. See [**Configuration/Provisioning Documentation**](/docs/configuration#provisioning) for more.
+Use provisioning to automate bucket creation and other setup steps in a real deployment. See [**Configuration/Provisioning Documentation**](/docs/configuration/provisioning) for more.
 :::
 
 **Networking:** Make sure your laptop is accessible from the Pi. If both are on the same LAN, you might use the laptop's IP (e.g., 192.168.x.x). If the laptop's ReductStore is in Docker, ensure the port 8383 is open (it is published in the run command above). For testing, you might temporarily disable firewall or ensure port 8383 is allowed.

@@ -56,8 +56,8 @@
 }
 
 .contactIcon {
-  color: var(--reduct--background-white);
-  font-size: 1.2rem;
+  color: var(--reduct-surface-0);
+  font-size: var(--reduct-font-size-subtitle);
 }
 
 .contactLink {

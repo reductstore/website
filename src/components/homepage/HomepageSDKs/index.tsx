@@ -22,8 +22,8 @@ export default function HomepageSDKs() {
           <div className="text--center">
             <h2 className="hideOnMobile">Client SDKs</h2>
             <p>
-              You can use the following client SDKs for quick and easy
-              integration into your applications and infrastructure:
+              Read and write data, attach labels, and query time ranges from
+              your applications.
             </p>
             <div className={clsx("text--center", styles.sdkIcons)}>
               <Link

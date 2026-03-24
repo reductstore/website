@@ -1,0 +1,91 @@
+---
+title: I/O API
+description: HTTP API documentation for batched reads, writes, updates, and removals across multiple entries.
+---
+
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/http-api/io-api" />
+</head>
+
+# I/O API specification reference
+
+The I/O API provides high-throughput endpoints for working with multiple entries in a bucket using **Batch Protocol v2**. It is designed for batched reads, writes, label updates, and deletions across entries with minimal HTTP overhead.
+
+:::caution Experimental
+The I/O API is experimental and will be stabilized in the next releases.
+:::
+
+The API uses the following endpoints:
+
+- **Write** - write records to multiple entries in one request.
+- **Query + read** - run a query across entries and stream results back in batches.
+- **Update** - update labels for multiple records across entries.
+- **Remove** - remove multiple records across entries.
+
+## Batch protocol v2
+
+Batch Protocol v2 encodes record metadata in headers and concatenates record bodies without separators.
+
+### Metadata headers
+
+- `x-reduct-entries`: comma-separated, percent-encoded entry names (index == position).
+- `x-reduct-start-ts`: first timestamp in the batch (microseconds).
+- `x-reduct-labels` (optional): comma-separated, percent-encoded label names (index == position).
+
+Content is sorted by entry index in ascending order, then by timestamp (`start + delta`).
+
+### Per-record headers
+
+Each record is described by one header:
+
+```
+x-reduct-<ENTRY-INDEX>-<TIME-DELTA-uS>: <HEADER-VALUE>
+```
+
+In error responses, the same suffix is used:
+
+```
+x-reduct-error-<ENTRY-INDEX>-<TIME-DELTA-uS>: <STATUS_CODE>,<ERROR_MESSAGE>
+```
+
+### Header value format
+
+The header value always starts with the record `content-length` (bytes) and may include a `content-type` and a label delta:
+
+- `"123"`: reuse previous `content-type` and labels for the entry.
+- `"123,<ct>"`: reuse previous labels; set `content-type` to `<ct>`.
+- `"123,,<label-delta>"`: reuse previous `content-type`; apply label delta.
+- `"123,<ct>,<label-delta>"`: set `content-type` and apply label delta.
+
+Label delta sends only changed labels. Unset a label with `k=`. Unmentioned labels keep their previous value for the entry.
+
+If `x-reduct-labels` is provided, label delta may use indexes instead of names (`<IDX>=<VALUE>`), where the index refers to the position in `x-reduct-labels`.
+
+### Example request (write)
+
+This request writes three records to two entries (`cam-1` and `cam 2`). The request body is the concatenation of record payloads in entry-index order, then by timestamp (`hello` + `world` + `foo`).
+
+```http
+POST /api/v1/io/my-bucket/write HTTP/1.1
+Host: localhost:8383
+Authorization: Bearer <token>
+Content-Type: application/octet-stream
+Content-Length: 13
+x-reduct-entries: cam-1,cam%202
+x-reduct-start-ts: 1700000000000000
+x-reduct-0-0: 5,text/plain,device=cam1
+x-reduct-0-1000: 5
+x-reduct-1-0: 3,text/plain,device=cam2
+
+helloworldfoo
+```
+
+:::note
+The Entry API batch endpoints (`/api/v1/b/:bucket_name/:entry_name/batch`) use an older batch format. See [**Batch protocol**](./entry-api#batch-protocol) in the Entry API docs.
+:::
+
+## I/O API endpoints
+
+import DocCardList from "@theme/DocCardList";
+
+<DocCardList />

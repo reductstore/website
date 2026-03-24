@@ -1,0 +1,294 @@
+{
+  "docSidebar": [
+    "how-does-it-work",
+    {
+      "type": "category",
+      "label": "\uD83D\uDE80 Getting Started",
+      "collapsed": false,
+      "collapsible": false,
+      "link": {
+        "type": "doc",
+        "id": "getting-started/index"
+      },
+      "items": [
+        {
+          "type": "doc",
+          "label": "With Python",
+          "id": "getting-started/with-python"
+        },
+        {
+          "type": "doc",
+          "label": "With JavaScript",
+          "id": "getting-started/with-javascript"
+        },
+        {
+          "type": "doc",
+          "label": "With Go",
+          "id": "getting-started/with-go"
+        },
+        {
+          "type": "doc",
+          "label": "With Rust",
+          "id": "getting-started/with-rust"
+        },
+        {
+          "type": "doc",
+          "label": "With C++",
+          "id": "getting-started/with-cpp"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "⚙ Configuration",
+      "collapsed": true,
+      "collapsible": true,
+      "link": {
+        "type": "doc",
+        "id": "configuration/index"
+      },
+      "items": ["configuration/settings", "configuration/provisioning"]
+    },
+    {
+      "type": "category",
+      "label": "\uD83D\uDCDA Guides",
+      "collapsed": false,
+      "collapsible": false,
+      "link": {
+        "type": "doc",
+        "id": "guides/index"
+      },
+      "items": [
+        "guides/buckets",
+        "guides/data-ingestion",
+        "guides/data-querying",
+        "guides/data-management",
+        "guides/data-replication",
+        "guides/access-control",
+        "guides/disaster-recovery"
+      ]
+    },
+    {
+      "type": "doc",
+      "label": "\uD83D\uDDD2\uFE0F Glossary",
+      "id": "glossary"
+    },
+    {
+      "type": "category",
+      "label": "Conditional Query Reference",
+      "link": {
+        "type": "doc",
+        "id": "conditional-query/index"
+      },
+      "items": [
+        "conditional-query/logical-operators",
+        "conditional-query/comparison-operators",
+        "conditional-query/arithmetic-operators",
+        "conditional-query/aggregation-operators",
+        "conditional-query/string-operators",
+        "conditional-query/misc-operators",
+        {
+          "type": "category",
+          "label": "Directives",
+          "collapsed": true,
+          "link": {
+            "type": "doc",
+            "id": "conditional-query/directives/index"
+          },
+          "items": [
+            "conditional-query/directives/querying",
+            "conditional-query/directives/communication"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Extensions",
+      "link": {
+        "type": "doc",
+        "id": "extensions/index"
+      },
+      "items": [
+        {
+          "type": "category",
+          "label": "Official Extensions",
+          "collapsed": false,
+          "collapsible": false,
+          "link": {
+            "type": "doc",
+            "id": "extensions/official/index"
+          },
+          "items": [
+            "extensions/official/select-ext",
+            {
+              "type": "category",
+              "label": "ReductROS",
+              "link": {
+                "type": "doc",
+                "id": "extensions/official/ros-ext/index"
+              },
+              "items": [
+                "extensions/official/ros-ext/mcap",
+                "extensions/official/ros-ext/rosbag"
+              ]
+            }
+          ]
+        },
+        "extensions/development"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Integrations",
+      "link": {
+        "type": "doc",
+        "id": "integrations/index"
+      },
+      "items": [
+        "integrations/s3",
+        "integrations/grafana/index",
+        "integrations/ros2-agent"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "HTTP API Reference",
+      "link": {
+        "type": "doc",
+        "id": "http-api/index"
+      },
+      "items": [
+        "http-api/server-api",
+        "http-api/bucket-api",
+        {
+          "type": "category",
+          "label": "Entry API",
+          "link": {
+            "type": "doc",
+            "id": "http-api/entry-api/index"
+          },
+          "collapsed": false,
+          "items": [
+            "http-api/entry-api/run_query",
+            "http-api/entry-api/read_data",
+            "http-api/entry-api/write_data",
+            "http-api/entry-api/update_data",
+            "http-api/entry-api/delete_data"
+          ]
+        },
+        {
+          "type": "category",
+          "label": "I/O API",
+          "className": "io-api-experimental",
+          "link": {
+            "type": "doc",
+            "id": "http-api/io-api/index"
+          },
+          "collapsed": false,
+          "items": [
+            "http-api/io-api/run_query",
+            "http-api/io-api/read_data",
+            "http-api/io-api/write_data",
+            "http-api/io-api/update_data",
+            "http-api/io-api/delete_data"
+          ]
+        },
+        "http-api/token-authentication",
+        "http-api/replication-api",
+        "http-api/query-link-api"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Client SDKs",
+      "items": [
+        {
+          "type": "category",
+          "label": "Python Client",
+          "link": {
+            "type": "doc",
+            "id": "sdk/py/index"
+          },
+          "items": [
+            "sdk/py/client/index",
+            "sdk/py/bucket/index",
+            "sdk/py/record/index",
+            "sdk/py/error/index",
+            {
+              "type": "category",
+              "label": "Messages",
+              "items": [
+                "sdk/py/msg/server/index",
+                "sdk/py/msg/bucket/index",
+                "sdk/py/msg/replication/index",
+                "sdk/py/msg/token/index"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "JavaScript Client",
+          "link": {
+            "type": "doc",
+            "id": "sdk/js/index"
+          },
+          "items": [
+            "sdk/js/client/index",
+            "sdk/js/bucket/index",
+            "sdk/js/batch/index",
+            "sdk/js/record-batch/index",
+            "sdk/js/error/index",
+            {
+              "type": "category",
+              "label": "Messages",
+              "items": [
+                "sdk/js/msg/bucket-info/index",
+                "sdk/js/msg/bucket-settings/index",
+                "sdk/js/msg/entry-info/index",
+                "sdk/js/msg/query-entry/index",
+                "sdk/js/msg/replication-info/index",
+                "sdk/js/msg/replication-settings/index",
+                "sdk/js/msg/server-info/index",
+                "sdk/js/msg/status/index",
+                "sdk/js/msg/token/index"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "link",
+          "label": "Go Client",
+          "href": "https://github.com/reductstore/reduct-go"
+        },
+        {
+          "type": "link",
+          "label": "Rust Client",
+          "href": "https://github.com/reductstore/reduct-rs"
+        },
+        {
+          "type": "link",
+          "label": "C++ Client",
+          "href": "https://github.com/reductstore/reduct-cpp"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Tools",
+      "items": [
+        {
+          "type": "link",
+          "label": "CLI Client",
+          "href": "https://github.com/reductstore/reduct-cli"
+        },
+        {
+          "type": "link",
+          "label": "Web Console",
+          "href": "https://github.com/reductstore/web-console"
+        }
+      ]
+    }
+  ]
+}

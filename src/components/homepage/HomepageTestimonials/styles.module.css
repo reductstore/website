@@ -14,7 +14,7 @@
   display: flex;
   align-items: flex-start;
   width: max-content;
-  animation: scroll 40s linear infinite;
+  animation: scroll 120s linear infinite;
   animation-play-state: running;
 }
 

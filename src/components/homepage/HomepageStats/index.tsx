@@ -1,32 +1,26 @@
 import React from "react";
 import styles from "./styles.module.css";
-import clsx from "clsx";
 
 const stats = [
-  { value: "+60K", description: "downloads" },
-  { value: "+100", description: "production deployments" },
-  { value: "+1 PT", description: "of time-series data managed" },
-  { value: "99.99%", description: "uptime across all deployments" },
+  { value: "60k+", description: "downloads" },
+  { value: "100+", description: "production deployments" },
+  { value: "1+ PB", description: "time series data managed" },
+  { value: "99.99%", description: "uptime across production deployments" },
   {
-    value: "+603%",
-    description: "faster read operations for 100 KB records",
+    value: "10x",
+    description: "faster writes for 100 KB records than TimescaleDB",
   },
-  {
-    value: "+924%",
-    description: "faster write operations for 100 KB records",
-  },
-  {
-    value: "~90%",
-    description: "reduction in cloud storage costs",
-  },
+  { value: "15x", description: "faster reads for 100 KB records than MinIO" },
+  { value: "90%", description: "lower cloud cost by batching 100 KB records" },
+  { value: "4+", description: "years of active development" },
 ];
 
 function HomepageStats() {
   return (
-    <section className={clsx("hero hero--primary", styles.statsSection)}>
+    <section className={styles.statsSection}>
       <div className="container">
-        <h2 className="hero__title">Developers choose ReductStore</h2>
-        <p className={clsx("hero__subtitle", styles.statsSubheader)}>
+        <h2 className={styles.statsTitle}>Developers choose ReductStore</h2>
+        <p className={styles.statsSubheader}>
           Trusted by robotics and IIoT engineers to process billions of
           time-indexed records
         </p>

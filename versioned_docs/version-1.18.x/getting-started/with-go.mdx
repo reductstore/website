@@ -1,0 +1,102 @@
+---
+title: Quick Start With Golang
+description: Getting started with the ReductStore Go Client SDK.
+---
+
+import Intro from "./common/intro.tsx";
+import InstallSdk from "./common/install_sdk";
+import RunReductStore from "./common/run_reductstore.mdx";
+import QuickStart from "!!raw-loader!../examples/go/src/quick_start.go";
+import UsingSdkSection from "./common/using_sdk";
+import CreateClientSection from "./common/create_client";
+import CreateBucketSection from "./common/create_bucket";
+import DataIngestionSection from "./common/data_ingestion";
+import DataQueryingSection from "./common/data_querying";
+import NextStep from "./common/next_steps.mdx";
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/getting-started/with-go"
+  />
+</head>
+
+<Intro language="Go" repository="reduct-go" />
+
+## Installing the Go SDK
+
+<InstallSdk>
+    To start using the ReductStore Go **[SDK](../glossary#sdk)**, add the sdk to your `go.mod` file:
+
+    ```go
+    go get github.com/reductstore/reduct-go
+    ```
+
+    Then, import the `reduct-go` package in your Go code:
+
+    ```go
+    import reduct "github.com/reductstore/reduct-go"
+    ```
+
+</InstallSdk>
+
+## Running ReductStore
+
+<RunReductStore />
+
+## Hello World Example
+
+<UsingSdkSection example={QuickStart} language="go" />
+
+## Creating a Client
+
+<CreateClientSection>
+    To create a ReductStore client, you should use the `reduct.NewClient` method from the `reduct_go` package.
+    You must pass the URL of the ReductStore server as an argument and specify the client options using the `reduct.ClientOptions` struct:
+
+    ```go file=../examples/go/src/quick_start.go start=1. end=2.
+    ```
+
+</CreateClientSection>
+
+## Creating a Bucket
+
+<CreateBucketSection>
+    To create a **[bucket](../glossary#bucket)**, you can use the `CreateOrGetBucket` or `CreateBucket` methods on a `Client` instance. The method takes the name of
+    the bucket you want to create as an argument and setting. The settings are optional, and you can customize them using the `BucketSettingBuilder` struct as shown below:
+
+    ```go file=../examples/go/src/quick_start.go start=2. end=3.
+    ```
+
+</CreateBucketSection>
+
+## Data Ingestion
+
+<DataIngestionSection>
+    To write a timestamped **[record](../glossary#record)** to an **[entry](../glossary#entry)** in a bucket, you should use the `BeginWrite` method on a `Bucket` instance.
+    Pass the name of the entry you want to write to as an argument and options to specify the timestamp and labels for the record.
+    The method returns a `WritableRecord` instance to write record content to the entry:
+
+    ```go file=../examples/go/src/quick_start.go start=3. end=4.
+    ```
+
+</DataIngestionSection>
+
+## Data Querying
+
+<DataQueryingSection>
+    To iterate over all records within a specified time range, you should use the `Query` method on a bucket instance. Pass the
+    name of the entry to iterate over and query options to specify the time range. Use the `QueryBuilder` to build the query options.
+    You can also provide a condition to filter records based on labels using the `WithWhen` method.
+    Read more about the query syntax in the [**Conditional Query Reference**](../conditional-query/index.mdx).
+
+    When the query is executed, it returns a `QueryResult` object that you can iterate over to access the records:
+
+    ```go file=../examples/go/src/quick_start.go start=4.
+    ```
+
+</DataQueryingSection>
+
+## Next Steps
+
+<NextStep />

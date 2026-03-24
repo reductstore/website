@@ -1,16 +1,50 @@
 .benefits {
-  margin-top: var(--reduct-section-space);
+  margin-top: 4rem;
+  margin-bottom: 4rem;
 }
 
-.benefit {
+.benefitsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.benefitCard {
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 5rem;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  flex: 1 1 220px;
+}
+
+[data-theme="dark"] .benefitCard {
+  border-color: var(--ifm-color-emphasis-300);
 }
 
 .benefitIcon {
   margin-bottom: 1rem;
-  width: 15em;
+  font-size: 2rem;
+  color: var(--ifm-color-primary);
+}
+
+.benefitTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--ifm-heading-color);
+}
+
+.benefitDescription {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ifm-color-emphasis-700);
+  margin: 0;
+}
+
+[data-theme="dark"] .benefitDescription {
+  color: var(--ifm-color-emphasis-600);
 }

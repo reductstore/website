@@ -10,7 +10,8 @@ import rehypeKatex from "rehype-katex";
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "ReductStore",
-  tagline: "High Performance Storage and Streaming Solution",
+  tagline:
+    "High Performance Data Storage and Streaming for Robotics and Industrial IoT",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
@@ -46,7 +47,6 @@ const config = {
   },
 
   plugins: [
-    require.resolve("./src/plugins/docusaurus-plugin-matomo"),
     require.resolve("./src/plugins/docusaurus-plugin-consent-manager"),
     require.resolve("./src/plugins/docusaurus-plugin-stream"),
     [
@@ -65,6 +65,22 @@ const config = {
           "msg.server",
           "msg.token",
         ],
+      },
+    ],
+    [
+      require.resolve("./src/plugins/docusaurus-plugin-js-sdk-gen"),
+      {
+        sdkRepo: "https://github.com/reductstore/reduct-js.git",
+        sdkBranch: "main",
+        destination: "docs/sdk/js",
+      },
+    ],
+    [
+      require.resolve("./src/plugins/docusaurus-plugin-reduct-bridge-docs"),
+      {
+        repo: "https://github.com/reductstore/reduct-bridge.git",
+        branch: "main",
+        destination: "docs/reduct-bridge",
       },
     ],
   ],
@@ -157,26 +173,11 @@ const config = {
         searchParameters: {},
       },
 
-      // Matomo analytics
-      matomo: {
-        url: "https://cdn.matomo.cloud/reductstore.matomo.cloud",
-        container: "lnt4UdBs",
-        previewSuffix: "_staging_24832eb3877816bd5f3a40a3",
-        devSuffix: "_dev_f19bac1b68c75bffed400ddd",
-      },
-
       // Consent management platform (CMP)
       cmp: {
         cookieyesId: "28ee242ee07e2579793c1355",
         stagingCookieyesId: "3d9b3daecacd570c664904b4",
         googleTagManagerId: "GTM-WBJ3M84W",
-      },
-
-      // Stripe integration
-      paymentLinks: {
-        standard: "https://buy.stripe.com/14k7teamx1fogykeUW",
-        premium: "https://buy.stripe.com/bIYcNyfGR1foci48wx",
-        iot: "https://buy.stripe.com/cN2cNy3Y93nwci4bII",
       },
 
       // Remote playground dataset
@@ -209,6 +210,7 @@ const config = {
         logo: {
           alt: "ReductStore Logo",
           src: "img/logo.svg",
+          className: "navbar-logo",
         },
         hideOnScroll: false,
         items: [
@@ -473,7 +475,7 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
-        additionalLanguages: ["rust", "bash"],
+        additionalLanguages: ["rust", "bash", "toml"],
       },
       colorMode: {
         defaultMode: "light",

@@ -12,5 +12,6 @@
 
 .featureIcon {
   margin-bottom: 1rem;
-  color: "white";
+  color: var(--ifm-color-primary);
+  font-size: 2rem;
 }

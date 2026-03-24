@@ -16,6 +16,10 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
 The Entry API allows users to read, write, update, and delete data from their buckets. It also provides query operations to search for specific entries.
 
+:::info
+Since version 1.19, entry names can be hierarchical paths with multiple segments (for example, `a/b/c`).
+:::
+
 The API uses the following types of endpoints each with its own purpose:
 
 - **Single Record Endpoints** - CRUD requests for reading and writing a single **[record](../glossary#record)**. Which is simple and easy to use.

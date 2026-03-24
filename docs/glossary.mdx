@@ -21,6 +21,12 @@ A uniquely named source of data within a bucket. Entries help organize and separ
 
 _Related entries:_ [**bucket**](#bucket), [**record**](#record), [**block**](#block)
 
+## attachment
+
+A metadata record stored in an entry's system `$meta` entry and identified by a required `key` label. Attachments are used to store structured metadata (for example schemas or calibration data) alongside the parent entry.
+
+_Related entries:_ [**entry**](#entry), [**record**](#record), [**label**](#label)
+
 ## record
 
 A piece of data stored in an entry, consisting of metadata (timestamp, content type, labels) and content (actual data). Records are the fundamental data units in ReductStore and are stored within blocks.

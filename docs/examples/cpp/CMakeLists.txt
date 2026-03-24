@@ -137,3 +137,8 @@ add_executable(data_management_delete_query.cxx
         src/data_management_delete_query.cc
 )
 target_link_libraries(data_management_delete_query.cxx reductcpp::reductcpp)
+
+add_executable(data_management_attachments.cxx
+        src/data_management_attachments.cc
+)
+target_link_libraries(data_management_attachments.cxx reductcpp::reductcpp)

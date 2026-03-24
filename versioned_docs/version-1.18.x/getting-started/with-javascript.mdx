@@ -1,0 +1,103 @@
+---
+title: Quick Start With JavaScript
+description: Getting started with the ReductStore JavaScript Client SDK
+---
+
+import Intro from "./common/intro.tsx";
+import InstallSdk from "./common/install_sdk";
+import RunReductStore from "./common/run_reductstore.mdx";
+import QuickStart from "!!raw-loader!../examples/js/src/quick_start.mjs";
+import UsingSdkSection from "./common/using_sdk";
+import CreateClientSection from "./common/create_client";
+import CreateBucketSection from "./common/create_bucket";
+import DataIngestionSection from "./common/data_ingestion";
+import DataQueryingSection from "./common/data_querying";
+import NextStep from "./common/next_steps.mdx";
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/getting-started/with-javascript"
+  />
+</head>
+
+<Intro language="JavaScript" repository="reduct-js" />
+
+## Installing the JavaScript SDK
+
+<InstallSdk>
+    To install the **[SDK](../glossary#sdk)**, you will only need `npm` or `yarn`. You can install the SDK by using the following
+    command:
+
+    ```
+    npm install reduct-js
+    ```
+
+</InstallSdk>
+
+## Running ReductStore
+
+<RunReductStore />
+
+## Hello World Example
+
+<UsingSdkSection example={QuickStart} language="JavaScript" />
+
+## Creating a Client
+
+<CreateClientSection>
+    To create the client, you can use the `Client` class from the `reduct-js` package. Pass the URL of the
+    ReductStore instance you want to connect to as an argument to the `Client` constructor.
+
+    ```javascript file=../examples/js/src/quick_start.mjs start=1. end=2.
+    ```
+
+</CreateClientSection>
+
+## Creating a Bucket
+
+<CreateBucketSection>
+    To create a **[bucket](../glossary#bucket)**, you should use the `getOrCreateBucket` method on a `Client` instance. Pass the name of the
+    bucket you want to create as an argument, along with settings. If the bucket already exists, the `getOrCreateBucket`
+    method will return it.
+
+    ```javascript file=../examples/js/src/quick_start.mjs start=2. end=3.
+    ```
+
+</CreateBucketSection>
+
+## Data Ingestion
+
+<DataIngestionSection>
+    To write a timestamped **[record](../glossary#record)** to an **[entry](../glossary#entry)** in a bucket, you should use the `beginWrite` method on a `Bucket` object.
+    Pass the name of the entry you want to write to as an argument, along with the data and timestamp you want to write.
+    Additionally, you can provide labels to the record to make it easier to query later.
+
+    The `beginWrite` method will create the `sensor-1` entry if it doesn't exist and return a `WritableRecord` object.
+    The `WritableRecord` object can be used to send the data to the database:
+
+    ```javascript file=../examples/js/src/quick_start.mjs start=3. end=4.
+    ```
+
+    Pay attention that the time is a UNIX time in microseconds. This the reason why we use BigInt to represent it.
+
+</DataIngestionSection>
+
+## Data Querying
+
+<DataQueryingSection>
+    To iterate over all records in a given time range, you should use the `query` method on a bucket instance. Pass the
+    name of the entry to iterate over, and `start` and `stop` arguments to specify the time interval. You can also
+    provide a `when` condition to filter records based on labels. Read more about the query syntax in
+    the [**Conditional Query Reference**](../conditional-query/index.mdx).
+
+    The `query` method returns an async iterator over the records in the entry:
+
+    ```javascript file=../examples/js/src/quick_start.mjs start=4.
+    ```
+
+</DataQueryingSection>
+
+## Next Steps
+
+<NextStep />

@@ -1,0 +1,21 @@
+.observabilitySection {
+  padding: 2rem 0;
+}
+
+.grafanaImage {
+  max-width: 90%;
+  height: auto;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn {
+  margin-top: 1rem;
+}
+
+@media (max-width: 996px) {
+  .observabilitySection .row {
+    flex-direction: column;
+  }
+}

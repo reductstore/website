@@ -1,0 +1,358 @@
+---
+title: Attachments
+description: How to store and manage entry attachments using the system `$meta` entry.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/http-api/entry-api/attachments"
+  />
+</head>
+
+# Attachments (`$meta`)
+
+You can store **[attachments](../../glossary#attachment)** for any entry by writing records into a dedicated system entry:
+
+```
+<parent_entry_name>/$meta
+```
+
+This is useful for schema fragments, calibration metadata, plugin configuration, or any small JSON payload that should travel with the entry.
+
+Attachments are regular records with a few extra rules.
+Each attachment is identified by a required `key` label, which lets you store multiple attachments in the same `$meta` entry and update/remove them individually.
+
+For example, if your parent entry name is `robot/front/camera`, the attachments entry is `robot/front/camera/$meta`.
+
+import SwaggerComponent from "@site/src/components/SwaggerComponent";
+
+:::warning Reserved Keys
+Attachment keys starting with `$` are reserved for internal ReductStore purposes.
+Please use keys without a leading `$` for user-defined attachments.
+:::
+
+## Create or Replace an Attachment
+
+Write the attachment content as a normal record body and set the attachment key label.
+
+If a record with the same key already exists in the same `$meta` entry, ReductStore replaces it automatically.
+
+For write requests:
+
+- `x-reduct-label-key` is required.
+- Writing with the same `key` replaces the previous attachment with that `key`.
+- Writing with `x-reduct-label-remove: true` is not allowed. Use a label update (`PATCH`) to remove an attachment.
+
+Attachments can also be created with batch endpoints. The same rules apply: the entry path must end with `/$meta`, and the `key` label is required for each attachment record.
+
+**Changes**:
+
+- Version 1.19: Entry attachments in system `$meta` entries were introduced.
+- Version 1.19: entry names can be hierarchical paths with multiple segments (for example, `a/b/c`).
+
+<SwaggerComponent
+  method="POST"
+  path="/api/v1/b/:bucket_name/:entry_name/$meta"
+  summary="Write an attachment record"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        description: "Name of bucket",
+        isRequired: true,
+      },
+    },
+    {
+      type: "path",
+      details: {
+        name: ":entry_name",
+        description:
+          "Name of the parent entry (without `/$meta` suffix). Can be hierarchical (for example, `a/b/c`).",
+        isRequired: true,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "ts",
+        dataType: "Integer",
+        description: "A UNIX timestamp in microseconds",
+        isRequired: true,
+      },
+    },
+    {
+      type: "header",
+      details: {
+        name: "Content-Length",
+        description: "Content size in bytes",
+        isRequired: true,
+      },
+    },
+    {
+      type: "header",
+      details: {
+        name: "x-reduct-label-key",
+        description:
+          "Attachment key. Required for `$meta` records. Keys starting with `$` are reserved for internal use.",
+        isRequired: true,
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "The attachment record is written",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token does not have write permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket is not found",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary:
+        "A record with the same timestamp exists, or the bucket/entry is being deleted",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary:
+        "Bad timestamp, missing label `key`, or `remove=true` used in write",
+    },
+  ]}
+/>
+
+If a `$meta` record with `key=$plugin` already exists, it is replaced by this new record.
+
+## Read an Attachment
+
+Reading attachments works exactly like reading regular records: use the attachment path and timestamp.
+
+Because `$meta` is a system entry:
+
+- It is hidden from bucket `entry_count` and entry lists.
+- Wildcard entry-name queries do not include it, so you must address it by its exact path (`<parent_entry_name>/$meta`).
+
+If you don't know the timestamp of an attachment, query the `$meta` entry by `key` first (see the [**Query API**](./run_query.mdx)).
+
+<SwaggerComponent
+  method="GET"
+  path="/api/v1/b/:bucket_name/:entry_name/$meta"
+  summary="Read an attachment record"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        description: "Name of bucket",
+        isRequired: true,
+      },
+    },
+    {
+      type: "path",
+      details: {
+        name: ":entry_name",
+        description:
+          "Name of the parent entry (without `/$meta` suffix). Can be hierarchical (for example, `a/b/c`).",
+        isRequired: true,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "ts",
+        description:
+          "A UNIX timestamp in microseconds. If empty, the latest record is returned.",
+        isRequired: false,
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "The attachment record is returned in the response body",
+    },
+    {
+      status: "204",
+      message: "No Content",
+      summary: "No record is available for the request",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token does not have read permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket or entry doesn't exist",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "The bucket is being deleted or the entry is being deleted",
+    },
+  ]}
+/>
+
+## Remove an Attachment
+
+To remove an attachment, update labels of the existing `$meta` record and set `remove=true`.
+
+This is intentionally done through `PATCH` (update), not through a write request.
+It is also the recommended way when replication is enabled, because record deletions are not replicated.
+
+The `PATCH` request must target an existing attachment record timestamp.
+
+<SwaggerComponent
+  method="PATCH"
+  path="/api/v1/b/:bucket_name/:entry_name/$meta"
+  summary="Remove attachment by key (`remove=true`)"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        description: "Name of bucket",
+        isRequired: true,
+      },
+    },
+    {
+      type: "path",
+      details: {
+        name: ":entry_name",
+        description:
+          "Name of the parent entry (without `/$meta` suffix). Can be hierarchical (for example, `a/b/c`).",
+        isRequired: true,
+      },
+    },
+    {
+      type: "query",
+      details: {
+        name: "ts",
+        dataType: "Integer",
+        description: "Timestamp of the existing `$meta` record to update",
+        isRequired: true,
+      },
+    },
+    {
+      type: "header",
+      details: {
+        name: "x-reduct-label-key",
+        description:
+          "Attachment key. Keys starting with `$` are reserved for internal use.",
+        isRequired: false,
+      },
+    },
+    {
+      type: "header",
+      details: {
+        name: "x-reduct-label-remove",
+        description: "Set to `true` to remove the attachment record",
+        isRequired: true,
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "The attachment record is removed",
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is invalid or empty",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token does not have write permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Bucket, entry, or record doesn't exist",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "The bucket is being deleted or the entry is being deleted",
+    },
+    {
+      status: "422",
+      message: "Unprocessable Entity",
+      summary: "Bad timestamp",
+    },
+  ]}
+/>
+
+## Delete `$meta` Entry Directly
+
+Direct deletion of the system `$meta` entry is not allowed.
+
+If you need to delete it, remove the parent entry instead. The `$meta` entry is removed together with its parent.
+
+`$meta` records are included in bucket size/usage accounting, and `$meta` is renamed automatically when its parent entry is renamed.
+
+<SwaggerComponent
+  method="DELETE"
+  path="/api/v1/b/:bucket_name/:entry_name/$meta"
+  summary="Remove a `$meta` entry directly (forbidden)"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: ":bucket_name",
+        description: "Name of bucket",
+        isRequired: true,
+      },
+    },
+    {
+      type: "path",
+      details: {
+        name: ":entry_name",
+        description:
+          "Name of the parent entry (without `/$meta` suffix). Can be hierarchical (for example, `a/b/c`).",
+        isRequired: true,
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "System `$meta` entry can be removed only with its parent entry",
+    },
+  ]}
+/>
+
+## Typical Flow
+
+In practice, attachment handling usually looks like this:
+
+1. Write attachment data to `<parent_entry_name>/$meta` with a `key`.
+2. Write a newer record with the same `key` when you need to update it.
+3. Query `<parent_entry_name>/$meta` by `key` if you need to find the attachment timestamp.
+4. Read the attachment record when needed.
+5. Remove it with `PATCH` and `x-reduct-label-remove: true`.

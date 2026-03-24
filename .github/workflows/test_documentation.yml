@@ -14,24 +14,23 @@ jobs:
     runs-on: ubuntu-latest
     name: Test examples
     strategy:
-      max-parallel: 8
       matrix:
         example: [python, rust, golang, curl, cpp, node, cli]
-        doc_version: [next, 1.17.x, 1.16.x]
+        doc_version: [next, 1.18.x, 1.17.x]
         include:
           - doc_version: next
-            reduct_version: main
+            image: reduct/pro:main
             example_root: docs/examples
 
+          - doc_version: 1.18.x
+            image: reduct/store:v1.18.3
+            example_root: versioned_docs/version-1.18.x/examples
+
           - doc_version: 1.17.x
-            reduct_version: latest
+            image: reduct/store:v1.17.10
             example_root: versioned_docs/version-1.17.x/examples
 
-          - doc_version: 1.16.x
-            reduct_version: v1.16.3
-            example_root: versioned_docs/version-1.16.x/examples
-
-          - language: python
+          - example: python
             cmd: python3
             path_prefix: py/src
 
@@ -65,16 +64,21 @@ jobs:
           submodules: true
           lfs: true
 
+      - name: Login Docker
+        run: docker login -u "${{ secrets.DOCKER_USER }}" -p "${{ secrets.DOCKER_TOKEN }}"
+
       - name: Install reduct-cli
         run: |
           wget https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.x86_64-unknown-linux-gnu.tar.gz
           tar -xvf reduct-cli.x86_64-unknown-linux-gnu.tar.gz
           chmod +x reduct-cli
           sudo mv reduct-cli /usr/local/bin
+          reduct-cli --version
 
       - name: Prepare ReductStore instance with data
         run: |
-          docker run -d --name reductstore-init -p 8384:8383  reduct/store:${{ matrix.reduct_version }}
+          docker pull ${{ matrix.image }}
+          docker run -d --name reductstore-init -p 8384:8383  ${{ matrix.image }}
           sleep 3
           reduct-cli cp https://reductstore@play.reduct.store/replica/datasets  http://my-token@127.0.0.1:8384/example-bucket --limit 100
 
@@ -122,7 +126,9 @@ jobs:
         if: matrix.example == 'golang'
         run: |
           cd ${{ matrix.example_root }}/${{ matrix.path_prefix }}/..
-          go get -u all
+          # Pin SDK from main in CI to validate unreleased Go features.
+          go get github.com/reductstore/reduct-go@main
+          go mod tidy
 
       - name: Build C++ examples
         if: matrix.example == 'cpp'
@@ -155,11 +161,33 @@ jobs:
             fi
 
             echo '${{secrets.LICENSE_KEY}}' > ./license.lic
-            docker run -d  -v ${PWD}:/misc \
-                --name reductstore -p 8383:8383 \
-                --env RS_LOG_LEVEL=debug \
-                --env RS_API_TOKEN="my-token"  \
-                --env RS_LICENSE_PATH=/misc/license.lic reduct/store:${{ matrix.reduct_version }}
+
+            IS_ZENOH=0
+            if [[ "$example" == *"/zenoh_"*".py" ]]; then
+              IS_ZENOH=1
+              docker run --init -d --name zenoh-router --network=host eclipse/zenoh
+              sleep 2
+            fi
+
+            if [ "$IS_ZENOH" -eq 1 ]; then
+              docker run -d --network=host -v ${PWD}:/misc \
+                  --name reductstore \
+                  --env RS_LOG_LEVEL=debug \
+                  --env RS_API_TOKEN="my-token"  \
+                  --env RS_LICENSE_PATH=/misc/license.lic \
+                  --env RS_ZENOH_ENABLED=1 \
+                  --env RS_ZENOH_CONFIG="mode=client;connect/endpoints=[tcp/127.0.0.1:7447]" \
+                  --env RS_ZENOH_SUB_KEYEXPRS="**" \
+                  --env RS_ZENOH_QUERY_KEYEXPRS="**" \
+                  "${{ matrix.image }}"
+            else
+              docker run -d  -v ${PWD}:/misc \
+                  --name reductstore -p 8383:8383 \
+                  --env RS_LOG_LEVEL=debug \
+                  --env RS_API_TOKEN="my-token"  \
+                  --env RS_LICENSE_PATH=/misc/license.lic "${{ matrix.image }}"
+            fi
+
             sleep 1
             reduct-cli cp http://my-token@127.0.0.1:8384/example-bucket  http://my-token@127.0.0.1:8383/example-bucket --limit 100
             reduct-cli bucket create http://my-token@127.0.0.1:8383/bucket-to-remove
@@ -181,6 +209,10 @@ jobs:
 
             docker stop reductstore
             docker rm reductstore
+            if [ "$IS_ZENOH" -eq 1 ]; then
+              docker stop zenoh-router
+              docker rm zenoh-router
+            fi
           done
       - name: Print Docker logs
         if: failure()

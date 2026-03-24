@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { JSX, useState } from "react";
 import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import Layout from "@theme/Layout";
 import InstallReductStore from "@site/src/components/docs/InstallReductStore";
@@ -6,6 +6,7 @@ import ClientSDKs from "@site/src/components/homepage/ClientSDKs";
 import InstallClientCLI from "@site/src/components/docs/InstallClientCLI";
 import Link from "@docusaurus/Link";
 import styles from "./styles.module.css";
+import PlaygroundOffer from "@site/src/components/promotional/PlaygroundOffer";
 
 export default function DownloadPage(): JSX.Element {
   return (
@@ -17,15 +18,20 @@ export default function DownloadPage(): JSX.Element {
       <main>
         <SimpleHeader pageTitle="Download ReductStore" />
         <div className="container">
-          <p className={styles.introText}>
-            ReductStore is available for Linux, Windows, and macOS. You can
-            download the latest version of ReductStore, as well as our client
-            SDKs and CLI. Once you have downloaded the software, follow the{" "}
-            <Link to="/docs/getting-started">
-              <b>Getting Started</b>
-            </Link>{" "}
-            guide to set up your first ReductStore instance.
-          </p>
+          <div className={styles.introSection}>
+            <p className={styles.introText}>
+              ReductStore is available for Linux, Windows, and macOS. You can
+              download the latest version of ReductStore, as well as our client
+              SDKs and CLI. Once you have downloaded the software, follow the{" "}
+              <Link to="/docs/getting-started">
+                <b>Getting Started</b>
+              </Link>{" "}
+              guide to set up your first ReductStore instance.
+            </p>
+            <div className={styles.offer}>
+              <PlaygroundOffer />
+            </div>
+          </div>
           <InstallReductStore />
           <hr />
           <ClientSDKs />

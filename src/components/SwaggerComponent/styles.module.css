@@ -10,7 +10,7 @@
 /* Header Styles */
 .swaggerHeader {
   padding: 10px 15px;
-  background-color: var(--reduct-background-gray-light);
+  background-color: var(--reduct-surface-1-light);
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -52,7 +52,7 @@
 /* Details Section Styles */
 .swaggerDetails {
   padding: 15px;
-  background-color: var(--reduct-background-gray-light);
+  background-color: var(--reduct-surface-1-light);
   border-top: 1px solid #e1e4e8;
 }
 
@@ -98,7 +98,7 @@
 
 /* State Styles */
 .open {
-  background-color: var(--reduct-background-gray);
+  background-color: var(--reduct-surface-1);
 }
 
 .clickable {

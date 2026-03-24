@@ -1,15 +1,15 @@
 import React from "react";
 import {
-  FaClock,
-  FaInfinity,
-  FaTachometerAlt,
-  FaTags,
-  FaLayerGroup,
-  FaSync,
-  FaSearch,
-  FaKey,
-  FaPuzzlePiece,
-} from "react-icons/fa";
+  LuTimer,
+  LuInfinity,
+  LuGauge,
+  LuTags,
+  LuLayers,
+  LuRefreshCw,
+  LuSearch,
+  LuKey,
+  LuPuzzle,
+} from "react-icons/lu";
 import styles from "./styles.module.css";
 
 function Feature({ IconComponent, title, description }) {
@@ -17,10 +17,7 @@ function Feature({ IconComponent, title, description }) {
     <div className="col col--4">
       <div className={styles.feature}>
         <div className={styles.featureIcon}>
-          <IconComponent
-            size="3em"
-            style={{ color: "var(--ifm-color-primary)" }}
-          />
+          <IconComponent />
         </div>
         <h3>{title}</h3>
         <p>{description}</p>
@@ -34,53 +31,55 @@ export default function HomepageFeatures() {
     <section className={styles.features}>
       <div className="row">
         <Feature
-          IconComponent={FaClock}
-          title="Time Series Blob Storage"
-          description="Capture and access blob data as time series, tailored for edge computing, computer vision, and IoT."
+          IconComponent={LuTimer}
+          title="Multimodal Time Series Storage"
+          description="Store time ordered records of any type and size: log files, images, video, LiDAR, ROS bags and more."
         />
         <Feature
-          IconComponent={FaInfinity}
-          title="No Size Limit for Blobs"
-          description="ReductStore handles blob data without size limits; your disk capacity is the only boundary."
+          IconComponent={LuTags}
+          title="Labels and Filtering"
+          description="Attach labels to records and filter reads and replication to keep only the data you need."
         />
         <Feature
-          IconComponent={FaTachometerAlt}
-          title="Real-Time FIFO Quota"
-          description="Ensure optimal storage management with FIFO quotas, preventing disk space shortages in real-time."
+          IconComponent={LuRefreshCw}
+          title="Selective Edge to Cloud Replication"
+          description="Replicate using rules based on labels or events, even with limited bandwidth and intermittent connectivity."
         />
       </div>
+
       <div className="row">
         <Feature
-          IconComponent={FaTags}
-          title="Data Labeling & Filtering"
-          description="Manage your time-series blob data with ease: annotate, filter, and save AI labels or meta-data."
+          IconComponent={LuLayers}
+          title="Batching for Lower Cloud Cost"
+          description="Batch records into fewer objects for S3 compatible storage to reduce API overhead and cloud cost."
         />
         <Feature
-          IconComponent={FaPuzzlePiece}
+          IconComponent={LuInfinity}
+          title="No Hard Size Limits"
+          description="Handle small sensor samples to large blobs like video clips, frames, point clouds, and files."
+        />
+        <Feature
+          IconComponent={LuGauge}
+          title="Retention and Quotas"
+          description="FIFO quotas based on volume keep edge disks from filling up and maintain a rolling window of recent data."
+        />
+      </div>
+
+      <div className="row">
+        <Feature
+          IconComponent={LuSearch}
+          title="Fast Event Retrieval"
+          description="Query exact time ranges and filter by labels to replay events and debug without scanning hour long logs."
+        />
+        <Feature
+          IconComponent={LuPuzzle}
           title="Extensible Query Engine"
-          description="Extend ReductStore with plugins that transform data during queries—filter CSVs, resize images, search text, and more."
+          description="Use extensions to transform data during queries, like resizing images, filtering CSV, or extracting ROS topics."
         />
         <Feature
-          IconComponent={FaLayerGroup}
-          title="Efficient Data Batching"
-          description="Minimize network overhead in areas with high latency by fetching records in batched HTTP responses."
-        />
-      </div>
-      <div className="row">
-        <Feature
-          IconComponent={FaSync}
-          title="Data Replication"
-          description="Synchronize data across buckets with replication for high availability and disaster recovery."
-        />
-        <Feature
-          IconComponent={FaSearch}
-          title="Iterative Data Querying"
-          description="Efficiently queries large datasets with minimal load for real-time and historical data processing."
-        />
-        <Feature
-          IconComponent={FaKey}
+          IconComponent={LuKey}
           title="Token Authorization"
-          description="Secure data access with token-based authorization to protect your data from unauthorized access."
+          description="Secure access for devices and services with token based authorization."
         />
       </div>
     </section>

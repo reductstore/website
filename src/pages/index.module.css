@@ -1,21 +1,46 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
-
 .heroBanner {
-  padding: 4rem 0;
+  padding: 5rem 0;
   text-align: center;
   position: relative;
-  overflow: hidden;
 }
 
 .heroTitle {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.heroAccent {
+  color: var(--reduct-accent);
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.heroAccent::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0.05em;
+  width: 100%;
+  height: 4px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--reduct-accent) 0px,
+    var(--reduct-accent) 8px,
+    transparent 8px,
+    transparent 12px
+  );
+  border-radius: 2px;
 }
 
 .heroSubTitle {
-  margin-bottom: 3rem;
+  margin-bottom: 3.5rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  color: var(--reduct-on-primary-muted);
 }
 
 .buttonContainer {
@@ -24,53 +49,136 @@
   align-items: center;
   justify-content: center;
   gap: 2rem;
+  flex-wrap: wrap;
 }
 
-.buttonPrimary {
-  width: 200px;
-  height: 50px;
-  background-color: var(--reduct-button-color-primary);
-  color: white;
+.buttonPrimary,
+.buttonSecondary {
+  width: 211px;
+  height: 52px;
+  border-radius: 8px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
+  gap: 0.5rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+/* Primary */
+.buttonPrimary {
+  background-color: var(--reduct-accent);
+  color: #fff;
+  border: 1px solid transparent;
 }
 
 .buttonPrimary:hover {
-  background-color: var(--reduct-button-color-primary-hover);
-  color: white;
+  background-color: var(--reduct-accent-hover);
+  color: #fff;
+  transform: translateY(-1px);
 }
 
+/* Secondary (White Paper) - tuned for purple hero */
 .buttonSecondary {
-  width: 200px;
-  height: 50px;
-  border: 2px solid var(--reduct-button-border-secondary);
-  color: var(--reduct-button-border-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  background-color: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .buttonSecondary:hover {
-  color: var(--reduct-button-border-secondary-hover);
-  border-color: var(--reduct-button-border-secondary-hover);
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.95);
+  color: rgba(255, 255, 255, 1);
+  transform: translateY(-1px);
+}
+
+/* Dark mode: hero matches page background + readable text */
+html[data-theme="dark"] .heroBanner {
+  background-color: var(--reduct-surface-0);
+}
+
+html[data-theme="dark"] .heroTitle {
+  color: var(--ifm-font-color-base);
+}
+
+html[data-theme="dark"] .heroAccent {
+  color: var(--reduct-accent);
+}
+
+html[data-theme="dark"] .heroAccent::after {
+  background: repeating-linear-gradient(
+    90deg,
+    var(--reduct-accent) 0px,
+    var(--reduct-accent) 8px,
+    transparent 8px,
+    transparent 12px
+  );
+}
+
+/* Dark mode: calm down primary + fix secondary hover for dark bg */
+html[data-theme="dark"] .buttonPrimary {
+  background-color: var(--reduct-accent-hover);
+}
+
+html[data-theme="dark"] .buttonPrimary:hover {
+  background-color: var(--reduct-accent);
+}
+
+html[data-theme="dark"] .buttonSecondary {
+  border-color: rgba(255, 255, 255, 0.28);
+  color: var(--ifm-font-color-base);
+}
+
+html[data-theme="dark"] .buttonSecondary:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: var(--ifm-font-color-base);
 }
 
 @media screen and (max-width: 600px) {
   .heroBanner {
-    padding-top: 2rem;
+    padding: 3rem 0;
   }
+
   .heroTitle {
     font-size: 2.2rem;
   }
+
   .heroSubTitle {
     font-size: 1rem;
   }
+
   .buttonContainer {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    width: 100%;
   }
+
+  .buttonPrimary,
+  .buttonSecondary {
+    width: min(320px, 100%);
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Industrial dashed hr divider */
+.industrialHr {
+  border: none;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--reduct-dimmed) 0px,
+    var(--reduct-dimmed) 6px,
+    transparent 6px,
+    transparent 10px
+  );
+  opacity: 0.5;
+  margin: 3rem 0;
 }
