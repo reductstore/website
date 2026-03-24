@@ -1,0 +1,105 @@
+---
+title: Visualize Robotics Data in Grafana with ReductStore
+description: Outline for a tutorial showing how to use ReductStore and the ReductROS extension to extract ROS 2 data to JSON and visualize it in Grafana dashboards.
+tags: [tutorial, grafana, ros]
+slug: grafana-visualization-ros-data
+date: 2026-03-24
+authors: alexey
+---
+
+Grafana is a powerful tool for visualizing time-series data and widely used for monitoring and analysis.
+However, it doesn't natively understand robotics data formats like ROS 2 messages since they are typically stored in binary formats (e.g., CDR).
+ReductStore, with its flexible query engine and extension system, can bridge this gap. By using the ReductROS extension, you can extract ROS 2 messages as JSON directly in Grafana queries, enabling you to build rich dashboards and alerts on your robotics data without needing to preprocess it into a different format.
+
+![Grafana query editor with ReductROS extension](./img/panel.webp)
+
+{/* truncate */}
+
+Im this tutorial, we'll create a Grafana dashboard backed by the ReductStore data source plugin.
+The dashboard will read ROS 2 messages to JSON on query using the ReductROS extension, allowing us to visualize and analyze the data directly in Grafana.
+
+## Prerequisites
+
+The tutorial assumes you have the following set up:
+
+- ReductStore instance with ROS 2 MCAP data (either your own or the demo instance). Some Robotics data is available on our **[demo ReductStore instance](https://play.reduct.store/replica)**.
+- Grafana 10+ instance (local or cloud) with the ReductStore data source plugin installed. You can use our Docker image or install Grafana separately and add the plugin manually following the [documentation]().
+
+## Setting up the ReductStore data source in Grafana
+
+Let's run Grafana locally using Docker and connect it to ReductStore:
+
+```bash
+docker run -d -p 3000:3000 reduct/grafana:latest
+```
+
+Open Grafana at `http://localhost:3000` and log in (default admin/admin). Go to "Data Sources" panel, where you can find the default ReductStore data source (if using our Docker image) or add it manually on the "Add new connection" page.
+
+Let's configure the ReductStore data source:
+
+- Name: reductstore-datasource
+- Server URL: https://play.reduct.store/replica (or your ReductStore instance URL)
+- API Token: `reductstore` for the demo instance (or your API token)
+
+![Grafana ReductStore data source](./img/datasource.webp)
+
+Click "Save & Test" to verify the connection. You should see a success message confirming that Grafana can connect to ReductStore.
+
+## Query and extract ROS 2 data to JSON
+
+Now we can create a new dashboard and add a panel to query ROS 2 data from ReductStore. Go to Dashboards -> New Dashboard -> Add new panel. In the query editor, select the ReductStore data source and provide the following query parameters to extract a ROS 2 topic as JSON:
+
+- Bucket: `orion`
+- Entry: any entry, you can use wildcards (e.g., `*`) to query multiple entries
+- Scope: LabelAndContent , which allows us to view both labels and content of the messages if it's JSON
+
+when the parameters are set, we can read data with the following query:
+
+```json
+{
+  "$each_t": "$__interval",
+  "#ext": {
+    "ros": {
+      "extract": {}
+    }
+  }
+}
+```
+
+The magic happens in the `#ext` section, where we activate the `ros` extension and specify that we want to extract data. The extension will read the serialized ROS content for the specified bucket/entry, decode the ROS 2 messages, and return them as JSON records with timestamps and labels. You can read more about the query format in the [ReductROS documentation](https://www.reduct.store/docs/extensions/official/ros-ext#query-format).
+
+## Scale and performance
+
+Your data may be large and data extraction can be computationally intensive, so here are some tips to ensure good performance:
+
+- Use Grafana `$__interval` with `$each_t` for interval-based queries
+- Add label filters to narrow down the data (e.g., filter by topic name or message type)
+- Start with a narrow time range and expand as needed
+
+## 10. Optional: Visualize binary topics (images)
+
+You might be interested in visualizing binary data like images or point clouds. The ReductROS extension can encode binary data into base64 strings or JPEG format, which can be displayed in Grafana using the "Text" panel with HTML rendering. For example, if you have a topic with raw images, you can specify the encoding in the query:
+
+```json
+{
+  "$each_t": "$__interval",
+  "#ext": {
+    "ros": {
+      "extract": {
+        "encode": { "data": "jpeg" }
+      }
+    }
+  }
+}
+```
+
+## Conclusion
+
+By using ReductStore and the ReductROS extension, you can easily extract and visualize ROS 2 data in Grafana without needing to preprocess it into a different format. This allows you to build rich dashboards and alerts on your robotics data, enabling better monitoring and analysis of your robotic systems.
+
+Very importantly, this approach keeps your data in its original format and allows you to query it flexibly without needing to set up additional pipelines or transformations. You can also combine this with other Grafana features like alerting and annotations to get even more insights from your robotics data.
+
+---
+
+I hope this tutorial gives you a good starting point for visualizing your ROS 2 data in Grafana using ReductStore.
+If you have questions or want to discuss which edition fits your use case, please reach out on the **[ReductStore Community](https://community.reduct.store)** forum or via our **[contact page](/contact)**.

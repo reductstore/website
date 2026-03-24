@@ -11,4 +11,4 @@ description: "API reference for Variable: ENABLED in the ReductStore Client SDK 
 
 &gt; `const` **ENABLED**: `"enabled"` = `"enabled"`
 
-Defined in: [messages/ReplicationMode.ts:19](https://github.com/reductstore/reduct-js/blob/7c4f0ec5aad1bcdd0498c0b040cba2ad9e6e689e/src/messages/ReplicationMode.ts#L19)
+Defined in: [messages/ReplicationMode.ts:19](https://github.com/reductstore/reduct-js/blob/6089b6b11423413542749f2e034cde610ee73189/src/messages/ReplicationMode.ts#L19)
