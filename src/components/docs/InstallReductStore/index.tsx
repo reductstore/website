@@ -8,7 +8,6 @@ import DockerInstall from "./DockerInstall";
 import LinuxInstall from "./LinuxInstall";
 import MacOSInstall from "./MacOSInstall";
 import WindowsInstall from "./WindowsInstall";
-import AzureInstall from "./AzureInstall";
 
 export default function InstallReductStore(props): JSX.Element {
   const [activeTab, setActiveTab] = useState("docker");
@@ -17,7 +16,7 @@ export default function InstallReductStore(props): JSX.Element {
     <>
       <h3>ReductStore Server</h3>
       <ul className={clsx("tabs", styles.tabs)}>
-        {["docker", "linux", "macOs", "windows", "azure"].map((tab) => (
+        {["docker", "linux", "macOs", "windows"].map((tab) => (
           <li
             key={tab}
             className={clsx(
@@ -35,7 +34,6 @@ export default function InstallReductStore(props): JSX.Element {
         {activeTab === "linux" && <LinuxInstall {...props} />}
         {activeTab === "macOs" && <MacOSInstall {...props} />}
         {activeTab === "windows" && <WindowsInstall {...props} />}
-        {activeTab === "azure" && <AzureInstall />}
       </div>
     </>
   );
