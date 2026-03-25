@@ -288,7 +288,7 @@ volumes:
 - For liveness health checks, use `GET /api/v1/alive`.
 - For routing only to the active node, use `GET /api/v1/ready`: the active node returns `200`, the standby returns `503` until it acquires the lock.
 
-For an end-to-end active-passive setup on S3, see **[S3 Integration](../integrations/s3#active-passive-with-s3)**.
+For an end-to-end active-passive setup on cloud storage, see **[Cloud Storage Integration](../integrations/cloud-storage#active-passive-on-cloud-storage-s3-example)**.
 
 ## Read-only Replicas
 
@@ -369,4 +369,4 @@ volumes:
   reduct-data:
 ```
 
-For a full walkthrough using S3, see **[S3 Integration](../integrations/s3#read-only-replica-on-s3)**.
+For a full walkthrough using cloud storage, see **[Cloud Storage Integration](../integrations/cloud-storage#read-only-replica-on-cloud-storage-s3-example)**.

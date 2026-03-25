@@ -147,7 +147,11 @@
         "id": "integrations/index"
       },
       "items": [
-        "integrations/s3",
+        {
+          "type": "doc",
+          "id": "integrations/cloud-storage",
+          "label": "Cloud Storage"
+        },
         "integrations/grafana/index",
         "integrations/ros2-agent",
         "integrations/zenoh"
