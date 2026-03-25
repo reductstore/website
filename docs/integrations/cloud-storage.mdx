@@ -61,8 +61,8 @@ To use Azure Blob Storage with the same topologies, keep the same role/topology 
 - Set `RS_REMOTE_BACKEND_TYPE=azure`
 - `RS_REMOTE_BUCKET` is the Azure **container** name
 - Authentication:
-    - Account key mode: `RS_REMOTE_ACCESS_KEY=<storage-account-name>` and `RS_REMOTE_SECRET_KEY=<storage-account-key>`
-    - SAS mode: `RS_REMOTE_ACCESS_KEY=<storage-account-name>` and `RS_REMOTE_SAS_TOKEN=<sas-token>`
+  - Account key mode: `RS_REMOTE_ACCESS_KEY=<storage-account-name>` and `RS_REMOTE_SECRET_KEY=<storage-account-key>`
+  - SAS mode: `RS_REMOTE_ACCESS_KEY=<storage-account-name>` and `RS_REMOTE_SAS_TOKEN=<sas-token>`
 - `RS_REMOTE_ENDPOINT` is optional (required for custom endpoints such as Azurite)
 - `RS_REMOTE_REGION` and `RS_REMOTE_SESSION_TOKEN` are S3-specific and not used for Azure
 
