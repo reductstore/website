@@ -23,7 +23,8 @@ const landingFaqs = [
         ReductStore is a time-series database for blob data—images, sensor
         readings, rosbags, logs—designed for robotics and industrial
         applications. Store data on edge devices or robots, then replicate to
-        on-prem servers or cloud with S3 backend. Learn more in the{" "}
+        on-prem servers or cloud with cloud object storage backend. Learn more
+        in the{" "}
         <strong>
           <Link to="/docs/how-does-it-work">How Does It Work</Link>
         </strong>{" "}
@@ -39,7 +40,9 @@ const landingFaqs = [
         instance—on-prem or cloud. Supports high availability setups and S3
         backends for cloud deployments. See the{" "}
         <strong>
-          <Link to="/docs/next/integrations/s3">S3 Integration</Link>
+          <Link to="/docs/next/integrations/cloud-storage">
+            Cloud Storage Integration
+          </Link>
         </strong>{" "}
         guide.
       </p>

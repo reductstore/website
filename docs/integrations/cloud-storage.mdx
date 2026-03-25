@@ -1,19 +1,24 @@
 ---
-title: S3 Backend
-description: Using S3 compatible storage as a backend for ReductStore.
+title: Cloud Object Storage Backend
+description: Using S3-compatible and Azure Blob storage as backends for ReductStore.
 ---
 
 import DemoLicenseNote from "@site/src/components/promotional/DemoLicenseNote";
 
 <head>
-  <link rel="canonical" href="https://www.reduct.store/docs/integrations/s3" />
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/integrations/cloud-storage"
+  />
 </head>
 
-This tutorial walks through using an S3-compatible backend for ReductStore in three deployment patterns:
+This tutorial walks through using a cloud object storage backend for ReductStore in three deployment patterns:
 
 - A single **standalone** instance that writes directly to S3 and uses a local cache for recent data
 - An **active-passive** pair where one node is active and the other waits to take over if the first one fails
 - **Read-only replicas** that serve data from S3 close to your consumers, while writes happen elsewhere
+
+The examples below use S3 variables and Docker Compose snippets. The same deployment patterns also work with Azure Blob Storage; see **Azure differences** for the exact variable mapping.
 
 This roughly matches a typical journey: you start with a standalone instance, move to active-passive when you need higher availability, and later add replicas for read scaling or geo-distribution. For each pattern, you will see when it makes sense, how to start the containers, and what to watch during operations. In the examples, we use simple Docker Compose snippets for demonstration, but you can apply the same environment variables to Kubernetes, systemd, or plain `docker run`. All scenarios rely on the remote backend settings described in the **[configuration reference](../configuration/settings.mdx#remote-backend-settings)**.
 
@@ -21,7 +26,7 @@ This roughly matches a typical journey: you start with a standalone instance, mo
 
 ## Prerequisites
 
-For all S3-based topologies, you need:
+For all cloud-storage topologies, you need:
 
 - An existing bucket in Amazon S3 or any S3-compatible service (MinIO, Ceph, Cloudflare R2, etc.)
 - Either access and secret keys that allow bucket-level read/write, list, and delete, or an AWS environment where the default credential provider chain can resolve credentials
@@ -30,7 +35,7 @@ For all S3-based topologies, you need:
 - A persistent cache path on the host (for example, a Docker volume) sized for your expected hot data
 - ReductStore v1.18+ container image and a TCP listener for port `8383`
 
-## Shared S3 configuration
+## Shared cloud-storage configuration (S3 examples)
 
 Use these variables for every topology and adjust values to your environment. When the S3 backend is enabled, `RS_DATA_PATH` is ignored and only the cache path is used locally. Think of S3 as your long-term storage and the cache as a local “hot tier” that keeps recent data close to the node.
 
@@ -49,9 +54,21 @@ RS_REMOTE_SYNC_INTERVAL=60        # Adjust based on ingestion rate
 
 If you run on AWS and want to use the default credential provider chain, omit `RS_REMOTE_ACCESS_KEY` and `RS_REMOTE_SECRET_KEY` entirely. If you provide one of them, you must provide the other one too. Use `RS_REMOTE_SESSION_TOKEN` only with temporary credentials.
 
-## Standalone on S3
+## Azure differences
 
-Standalone mode is the simplest way to combine ReductStore with S3. You run a single instance that writes data to S3 and keeps a local cache for fast access to recent records. There is no lock file or coordination with other nodes, so you only manage one container and one set of credentials. If you are not sure which pattern to pick, start here.
+To use Azure Blob Storage with the same topologies, keep the same role/topology variables and switch only the remote backend settings:
+
+- Set `RS_REMOTE_BACKEND_TYPE=azure`
+- `RS_REMOTE_BUCKET` is the Azure **container** name
+- Authentication:
+  - Account key mode: `RS_REMOTE_ACCESS_KEY=<storage-account-name>` and `RS_REMOTE_SECRET_KEY=<storage-account-key>`
+  - SAS mode: `RS_REMOTE_ACCESS_KEY=<storage-account-name>` and `RS_REMOTE_SAS_TOKEN=<sas-token>`
+- `RS_REMOTE_ENDPOINT` is optional (required for custom endpoints such as Azurite)
+- `RS_REMOTE_REGION` and `RS_REMOTE_SESSION_TOKEN` are S3-specific and not used for Azure
+
+## Standalone on cloud storage
+
+Standalone mode is the simplest way to combine ReductStore with cloud storage. You run a single instance that writes data to S3 and keeps a local cache for fast access to recent records. There is no lock file or coordination with other nodes, so you only manage one container and one set of credentials. If you are not sure which pattern to pick, start here.
 
 **When to use**: small teams or edge deployments that need S3 durability without coordination across multiple nodes. This setup is a good fit for pilot projects, development environments, or single-tenant services where short maintenance windows are fine.
 
@@ -86,7 +103,7 @@ volumes:
 - Scale cache size (`RS_REMOTE_CACHE_SIZE`) to keep the hottest blocks local and reduce S3 calls.
 - Keep `RS_REMOTE_SYNC_INTERVAL` above 10–30 seconds to avoid excessive S3 writes if you ingest at high rate.
 
-## Active-passive with S3
+## Active-passive on cloud storage
 
 Active-passive mode adds a second ReductStore instance as a standby. At any time, only one node is active and allowed to write to S3; the other node watches the same bucket and waits to take over if the first one disappears. From the client side, you still talk to a single virtual endpoint (for example, a load balancer), but behind the scenes traffic is routed to whichever node currently holds the lock.
 
@@ -148,7 +165,7 @@ volumes:
 - For a simple liveness check from the CLI (helpful when debugging connectivity), run `reduct-cli server alive http://127.0.0.1:8383`.
 - Set `RS_LOCK_FILE_TIMEOUT=0` on both nodes to make them wait indefinitely for the lock.
 
-## Read-only replica on S3
+## Read-only replica on cloud storage
 
 Read-only replicas attach to the same S3 bucket as your writer but never acquire the lock file or perform writes. They periodically refresh bucket metadata and indexes from S3, serve reads from their local cache, and fall back to S3 when needed. This gives you extra read capacity and better locality without introducing split-brain writes.
 

@@ -16,23 +16,34 @@ ReductStore can be configured using environment variables. The following section
 
 ## Remote Backend Settings
 
-ReductStore supports using a remote object storage as a backend to store data. You can configure the remote backend using the following environment variables:
+ReductStore supports using a remote object storage as a backend to store data.
 
-| Name                              | Default        | Description                                                                                                                                                         |
-| --------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `RS_REMOTE_BACKEND_TYPE`          | File system    | If it is set to `S3`, the storage uses an S3-compatible object storage as a backend                                                                                 |
-| `RS_REMOTE_ENDPOINT`              |                | URL of the S3-compatible object storage endpoint. It's ignored for the AWS S3 service.                                                                              |
-| `RS_REMOTE_REGION`                |                | Region of the S3-compatible object storage. It's ignored for on-premises storage like MinIO.                                                                        |
-| `RS_REMOTE_ACCESS_KEY`            |                | Access key for the S3-compatible object storage. Set it together with `RS_REMOTE_SECRET_KEY`, or leave both unset to use the default AWS credential provider chain. |
-| `RS_REMOTE_SECRET_KEY`            |                | Secret key for the S3-compatible object storage. Set it together with `RS_REMOTE_ACCESS_KEY`, or leave both unset to use the default AWS credential provider chain. |
-| `RS_REMOTE_SESSION_TOKEN`         |                | Optional session token for temporary S3 credentials. Use it together with `RS_REMOTE_ACCESS_KEY` and `RS_REMOTE_SECRET_KEY`.                                        |
-| `RS_REMOTE_BUCKET`                |                | Name of the bucket to store data. The bucket must be created before starting ReductStore.                                                                           |
-| `RS_REMOTE_CACHE_PATH`            |                | Path to a folder where the storage caches data before uploading it to the remote backend.                                                                           |
-| `RS_REMOTE_CACHE_SIZE`            | 1GB            | Maximum size of the cache folder. When the limit is reached, the oldest data is removed.                                                                            |
-| `RS_REMOTE_SYNC_INTERVAL`         | 0.1, 60 for S3 | Synchronization interval with the remote backend in seconds.                                                                                                        |
-| `RS_REMOTE_DEFAULT_STORAGE_CLASS` | STANDARD       | Default storage class for data blocks. See the list of **[supported S3 storage classes](#supported-s3-storage-classes)**.                                           |
+### Common settings
 
-By default, ReductStore uses the local file system to store data. To use a remote backend, set the `RS_REMOTE_BACKEND_TYPE` variable to S3 and configure the other variables accordingly.
+These settings are common for all supported remote backends:
+
+| Name                      | Default                  | Description                                                                                             |
+| ------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------- |
+| `RS_REMOTE_BACKEND_TYPE`  | File system              | Remote backend type: `s3` or `azure`.                                                                   |
+| `RS_REMOTE_ENDPOINT`      |                          | Object storage endpoint URL. Optional for public clouds; required for custom endpoints (MinIO/Azurite). |
+| `RS_REMOTE_BUCKET`        |                          | Storage container name. For `s3` this is a bucket; for `azure` this is a container. Must exist first.   |
+| `RS_REMOTE_CACHE_PATH`    |                          | Path to a local cache folder used before upload and for hot reads.                                      |
+| `RS_REMOTE_CACHE_SIZE`    | 1GB                      | Maximum size of local cache. Oldest data is removed when the limit is reached.                          |
+| `RS_REMOTE_SYNC_INTERVAL` | 0.1, 60 for S3 and Azure | Synchronization interval with the remote backend in seconds.                                            |
+
+### Backend-specific settings
+
+Every remote backend has its own specific settings. The following table describes the settings for S3 and Azure backends:
+
+| Name                      | S3                                                                                | Azure                                                                       |
+| ------------------------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `RS_REMOTE_REGION`        | S3 region (for example, `us-east-1`).                                             | Not used.                                                                   |
+| `RS_REMOTE_ACCESS_KEY`    | Access key ID. Optional when using the AWS default credential provider chain.     | Storage account name.                                                       |
+| `RS_REMOTE_SECRET_KEY`    | Secret access key. Optional when using the AWS default credential provider chain. | Storage account key. Optional if `RS_REMOTE_SAS_TOKEN` is set.              |
+| `RS_REMOTE_SESSION_TOKEN` | Optional session token for temporary credentials.                                 | Not used.                                                                   |
+| `RS_REMOTE_SAS_TOKEN`     | Not used.                                                                         | Optional SAS token. Use with `RS_REMOTE_ACCESS_KEY=<storage-account-name>`. |
+
+By default, ReductStore uses the local file system to store data. To use a remote backend, set `RS_REMOTE_BACKEND_TYPE` to `s3` or `azure` and configure the other variables accordingly.
 When the remote backend is enabled, ReductStore caches data in the folder specified by the `RS_REMOTE_CACHE_PATH` variable, thereby reducing the number of requests made to the remote backend.
 The `RS_DATA_PATH` variable is ignored when the remote backend is enabled.
 
@@ -41,26 +52,7 @@ For Amazon S3, you can omit `RS_REMOTE_ACCESS_KEY` and `RS_REMOTE_SECRET_KEY` en
 In this case, you can use any supported authentication method (e.g., environment variables starting with `AWS_`, EC2 instance roles, or ECS task roles) without needing to configure ReductStore specifically for AWS.
 :::
 
-For end-to-end deployment examples (standalone, active-passive, and read-only replicas) using S3, see the **[S3 integration guide](../integrations/s3)**.
-
-## Supported S3 Storage Classes
-
-A user can specify default storage class for data blocks stored in the S3-compatible object storage using the `RS_REMOTE_DEFAULT_STORAGE_CLASS` environment variable.
-The following storage classes are supported:
-
-| Name                  | Description                                                                                                                         |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `STANDARD`            | Standard storage class. Suitable for frequently accessed data.                                                                      |
-| `STANDARD_IA`         | Standard-Infrequent Access storage class. Suitable for data that is infrequently accessed but requires rapid access when needed.    |
-| `INTELLIGENT_TIERING` | Intelligent-Tiering storage class. Automatically moves data to the most cost-effective access tier based on usage patterns.         |
-| `ONEZONE_IA`          | One Zone-Infrequent Access storage class. Suitable for data that is infrequently accessed and stored in a single availability zone. |
-| `EXPRESS_ONEZONE`     | Express-One Zone storage class. Suitable for data that requires low latency access and is stored in a single availability zone.     |
-| `GLACIER_IR`          | Glacier Instant Retrieval storage class. Suitable for data that is rarely accessed and requires immediate access when needed.       |
-| `GLACIER`             | Glacier storage class. Suitable for data that is rarely accessed and can be retrieved within a few hours.                           |
-| `DEEP_ARCHIVE`        | Deep Archive storage class. Suitable for data that is rarely accessed and can be retrieved within 12 hours.                         |
-| `OUTPOSTS`            | Outposts storage class. Suitable for data that needs to be stored on AWS Outposts.                                                  |
-
-For more information about S3 storage classes, see the **[Amazon S3 Storage Classes documentation](https://aws.amazon.com/s3/storage-classes/)**.
+For end-to-end deployment examples (standalone, active-passive, and read-only replicas) using cloud storage, see the **[Cloud Storage integration guide](../integrations/cloud-storage)**.
 
 ## Zenoh API Settings
 

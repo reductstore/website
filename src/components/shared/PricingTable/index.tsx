@@ -72,9 +72,10 @@ export default function PricingTable() {
         titleDetail: "Official extension for MCAP (ROS2) data",
       },
       {
-        title: "S3-Compatible Backend",
+        title: "Cloud Object Storage Backend",
         available: plan !== "community",
-        titleDetail: "Store data in S3, MinIO, or any S3-compatible storage",
+        titleDetail:
+          "Store data in AWS S3, Azure Blob Storage, MinIO, or any S3-compatible storage",
       },
 
       // Deployment & Operations
