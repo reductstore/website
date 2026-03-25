@@ -41,6 +41,16 @@
       "statusCode": 301
     },
     {
+      "route": "/docs/integrations/s3",
+      "redirect": "/docs/integrations/cloud-storage",
+      "statusCode": 301
+    },
+    {
+      "route": "/docs/next/integrations/s3",
+      "redirect": "/docs/next/integrations/cloud-storage",
+      "statusCode": 301
+    },
+    {
       "route": "/configuration",
       "redirect": "/docs/configuration",
       "statusCode": 301
