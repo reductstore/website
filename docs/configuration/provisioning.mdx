@@ -75,6 +75,7 @@ You can provision replication tasks by setting environment variables. The follow
 | `RS_REPLICATION_<ID>_DST_TOKEN`  |         | Token for destination instance                                                                                     |
 | `RS_REPLICATION_<ID>_ENTRIES`    |         | List of entries to replicate. Separate entries with a comma. If the list is empty, all entries will be replicated. |
 | `RS_REPLICATION_<ID>_WHEN`       |         | Condition for replication. If not set, all entries will be replicated.                                             |
+| `RS_REPLICATION_<ID>_MODE`       | enabled | Replication mode. Accepted values: `enabled`, `paused`, `disabled` (case-insensitive).                           |
 
 For more information about the replication settings, see the **[Data Replication Guide](../guides/data-replication.mdx)**.
 
