@@ -153,7 +153,6 @@
           "label": "Cloud Storage"
         },
         "integrations/grafana/index",
-        "integrations/ros2-agent",
         "integrations/zenoh"
       ]
     },
