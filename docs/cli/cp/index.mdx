@@ -1,0 +1,77 @@
+---
+title: "cp"
+description: "Copy data between instances or between an instance and the local filesystem"
+---
+
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/cli/cp" />
+</head>
+
+# reduct-cli cp
+
+Copy data between instances or between an instance and the local filesystem
+
+## Arguments
+
+- `<SOURCE_BUCKET_OR_FOLDER>`: Source bucket or folder (e.g. SERVER_ALIAS/BUCKET, SERVER_ALIAS/\*, SERVER_ALIAS/test-\*, or ./folder)
+- `<DESTINATION_BUCKET_OR_FOLDER>`: Destination bucket, instance, or folder (e.g. SERVER_ALIAS/BUCKET, SERVER_ALIAS, or ./folder)
+
+## Options
+
+- `-b, --start <start>`: Start timestamp (inclusive) in ISO format or Unix timestamp in microseconds. If not specified, the export will start from the first record in each entry.
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `--from-last`: Copy records starting after the latest record in each destination entry.
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-e, --stop <stop>`: Stop timestamp (inclusive) in ISO format or Unix timestamp in microseconds. If not specified, the export will end at the last record in each entry.
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-n, --entries [<ENTRY_NAME>...]`: List of entries to export. If not specified, all entries will be requested. Prefix wildcards are supported (e.g. entry-\*).
+- `-w, --when <CONDITION>`: Filter records by a JSON condition. If not specified, all records will be requested.
+- `-s, --strict`: If set, `when` will fail if the condition is not met.
+- `-N, --each-n <NUMBER>`: (DEPRECATED) Export every nth record. If not specified, all records will be requested.
+- `-S, --each-s <NUMBER>`: (DEPRECATED) Export a record every n seconds. If not specified, all records will be requested.
+- `-l, --limit <NUMBER>`: The maximum number of records to export per entry. If not specified, all records will be exported.
+- `-x, --ext <TEXT>`: The file extension to use for the exported file. If not specified, the default be guessed from the content type of the records.
+- `-m, --with-meta`: Export the metadata of the records along with the records in JSON format. If not specified, only the records will be exported.
+- `-q, --quiet`: Only show errors and the final completion message.
+- `-X, --ext-params <EXT_PARAMETERS>`: Pass additional parameters to extensions in JSON format.
+- `-h, --help`: Print help
+
+## Help Output
+
+```text
+Copy data between instances or between an instance and the local filesystem
+
+Usage: reduct-cli cp [OPTIONS] <SOURCE_BUCKET_OR_FOLDER> <DESTINATION_BUCKET_OR_FOLDER>
+
+Arguments:
+  <SOURCE_BUCKET_OR_FOLDER>       Source bucket or folder (e.g. SERVER_ALIAS/BUCKET, SERVER_ALIAS/*, SERVER_ALIAS/test-*, or ./folder)
+  <DESTINATION_BUCKET_OR_FOLDER>  Destination bucket, instance, or folder (e.g. SERVER_ALIAS/BUCKET, SERVER_ALIAS, or ./folder)
+
+Options:
+  -b, --start <start>                Start timestamp (inclusive) in ISO format or Unix timestamp in microseconds.
+                                     If not specified, the export will start from the first record in each entry.
+  -i, --ignore-ssl                   Ignore SSL certificate verification
+      --from-last                    Copy records starting after the latest record in each destination entry.
+  -T, --timeout <SECONDS>            Timeout for requests [default: 30]
+  -e, --stop <stop>                  Stop timestamp (inclusive) in ISO format or Unix timestamp in microseconds.
+                                     If not specified, the export will end at the last record in each entry.
+  -p, --parallel <COUNT>             Number of parallel requests [default: 10]
+  -n, --entries [<ENTRY_NAME>...]    List of entries to export.
+                                     If not specified, all entries will be requested. Prefix wildcards are supported (e.g. entry-*).
+  -w, --when <CONDITION>             Filter records by a JSON condition.
+                                     If not specified, all records will be requested.
+  -s, --strict                       If set, `when` will fail if the condition is not met.
+  -N, --each-n <NUMBER>              (DEPRECATED) Export every nth record.
+                                     If not specified, all records will be requested.
+  -S, --each-s <NUMBER>              (DEPRECATED) Export a record every n seconds.
+                                     If not specified, all records will be requested.
+  -l, --limit <NUMBER>               The maximum number of records to export per entry.
+                                     If not specified, all records will be exported.
+  -x, --ext <TEXT>                   The file extension to use for the exported file.
+                                     If not specified, the default be guessed from the content type of the records.
+  -m, --with-meta                    Export the metadata of the records along with the records in JSON format.
+                                     If not specified, only the records will be exported.
+  -q, --quiet                        Only show errors and the final completion message.
+  -X, --ext-params <EXT_PARAMETERS>  Pass additional parameters to extensions in JSON format.
+  -h, --help                         Print help
+```
