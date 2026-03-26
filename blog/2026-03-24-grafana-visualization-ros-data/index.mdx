@@ -3,17 +3,17 @@ title: Visualize Robotics Data in Grafana with ReductStore
 description: Outline for a tutorial showing how to use ReductStore and the ReductROS extension to extract ROS 2 data to JSON and visualize it in Grafana dashboards.
 tags: [tutorial, grafana, ros]
 slug: grafana-visualization-ros-data
-date: 2026-03-24
+date: 2026-03-26
 authors: alexey
 ---
+
+![Grafana query editor with ReductROS extension](./img/panel.webp)
 
 **Grafana** is a powerful tool for visualizing time-series data, and it is widely used for monitoring and analysis.
 However, it does not natively understand robotics data formats, such as ROS 2 messages, since they are usually stored in binary formats (e.g., CDR).
 **[ReductStore's](/)** flexible query engine and extension system can bridge this gap. With the **[ReductROS](/docs/extensions/official/ros-ext)** extension,
 you can extract ROS 2 messages as JSON directly in Grafana queries.
 This enables you to build rich dashboards and alerts on your robotics data without preprocessing it into a different format.
-
-![Grafana query editor with ReductROS extension](./img/panel.webp)
 
 {/* truncate */}
 
@@ -24,7 +24,7 @@ Using the ReductROS extension, the dashboard will convert ROS 2 messages to JSON
 
 This tutorial assumes that you have the following set up:
 
-- A ReductStore instance with ROS 2 data (either your own or from the demo instance). Some robotics data is available on **[our demo ReductStore instance](https://play.reduct.store/replica)**.
+- A ReductStore instance with ROS 2 data (either your own or from the demo instance). Some robotics data is available on **[our demo ReductStore instance](https://play.reduct.store/replica/)**.
 - A Grafana 10+ instance (local or cloud) with the ReductStore data source plugin installed. You can use our Docker image, or install Grafana separately and add the plugin manually, following the documentation.
 
 ## Set up the ReductStore data source in Grafana
@@ -82,7 +82,7 @@ Since your data may be large and data extraction can be computationally intensiv
 - Add label filters to narrow down the data (e.g., filter by topic name or message type)
 - Start with a narrow time range and expand as needed
 
-## 10. Optional: Visualize binary topics (images)
+## Optional: Visualize binary topics (images)
 
 If you're interested in visualizing binary data, such as images or point clouds, you might be interested in the ReductROS extension.
 The ReductROS extension can encode binary data as base64 strings or in JPEG format.
