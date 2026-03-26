@@ -83,6 +83,16 @@ const config = {
         destination: "docs/reduct-bridge",
       },
     ],
+    [
+      require.resolve("./src/plugins/docusaurus-plugin-cli-docs-gen"),
+      {
+        repo: "https://github.com/reductstore/reduct-cli",
+        branch: "main",
+        downloadUrl:
+          "https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.x86_64-unknown-linux-gnu.tar.gz",
+        destination: "docs/cli",
+      },
+    ],
   ],
 
   // LaTex support

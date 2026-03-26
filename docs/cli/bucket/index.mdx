@@ -1,0 +1,264 @@
+---
+title: "bucket"
+description: "Manage buckets"
+---
+
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/cli/bucket" />
+</head>
+
+# reduct-cli bucket
+
+Manage buckets
+
+## Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-h, --help`: Print help
+
+## Help Output
+
+```text
+Manage buckets
+
+Usage: reduct-cli bucket [OPTIONS] [COMMAND]
+
+Commands:
+  ls      List buckets
+  show    Show bucket information
+  create  Create a bucket
+  update  Update bucket settings
+  rename  Rename a bucket or an entry
+  rm      Remove a bucket
+  help    Print this message or the help of the given subcommand(s)
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
+  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+  -h, --help               Print help
+```
+
+## Subcommands
+
+### `ls`
+
+List buckets
+
+#### Arguments
+
+- `<ALIAS_OR_URL>`: Alias or URL (e.g. http://token@localhost:8383) of the ReductStore instance to use
+
+#### Options
+
+- `-f, --full`: Show detailed bucket information
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+List buckets
+
+Usage: reduct-cli bucket ls [OPTIONS] <ALIAS_OR_URL>
+
+Arguments:
+  <ALIAS_OR_URL>  Alias or URL (e.g. http://token@localhost:8383) of the ReductStore instance to use
+
+Options:
+  -f, --full               Show detailed bucket information
+  -i, --ignore-ssl         Ignore SSL certificate verification
+  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
+  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+  -h, --help               Print help
+```
+
+### `show`
+
+Show bucket information
+
+#### Arguments
+
+- `<BUCKET_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+
+#### Options
+
+- `-f, --full`: Show detailed bucket information with entries
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Show bucket information
+
+Usage: reduct-cli bucket show [OPTIONS] <BUCKET_PATH>
+
+Arguments:
+  <BUCKET_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+
+Options:
+  -f, --full               Show detailed bucket information with entries
+  -i, --ignore-ssl         Ignore SSL certificate verification
+  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
+  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+  -h, --help               Print help
+```
+
+### `create`
+
+Create a bucket
+
+#### Arguments
+
+- `<BUCKET_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-Q, --quota-type <TEXT>`: Quota type. Must be NONE or FIFO
+- `-s, --quota-size <SIZE>`: Quota size in CI format e.g. 1Mb or 3TB
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-b, --block-size <SIZE>`: Max. bock size in CI format e.g 64MB
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-R, --block-records <NUMBER>`: Max. number of records in a block
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Create a bucket
+
+Usage: reduct-cli bucket create [OPTIONS] <BUCKET_PATH>
+
+Arguments:
+  <BUCKET_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+
+Options:
+  -i, --ignore-ssl              Ignore SSL certificate verification
+  -Q, --quota-type <TEXT>       Quota type. Must be NONE or FIFO
+  -s, --quota-size <SIZE>       Quota size in CI format e.g. 1Mb or 3TB
+  -T, --timeout <SECONDS>       Timeout for requests [default: 30]
+  -b, --block-size <SIZE>       Max. bock size in CI format e.g 64MB
+  -p, --parallel <COUNT>        Number of parallel requests [default: 10]
+  -R, --block-records <NUMBER>  Max. number of records in a block
+  -h, --help                    Print help
+```
+
+### `update`
+
+Update bucket settings
+
+#### Arguments
+
+- `<BUCKET_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-Q, --quota-type <TEXT>`: Quota type. Must be NONE or FIFO
+- `-s, --quota-size <SIZE>`: Quota size in CI format e.g. 1Mb or 3TB
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-b, --block-size <SIZE>`: Max. bock size in CI format e.g 64MB
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-R, --block-records <NUMBER>`: Max. number of records in a block
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Update bucket settings
+
+Usage: reduct-cli bucket update [OPTIONS] <BUCKET_PATH>
+
+Arguments:
+  <BUCKET_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+
+Options:
+  -i, --ignore-ssl              Ignore SSL certificate verification
+  -Q, --quota-type <TEXT>       Quota type. Must be NONE or FIFO
+  -s, --quota-size <SIZE>       Quota size in CI format e.g. 1Mb or 3TB
+  -T, --timeout <SECONDS>       Timeout for requests [default: 30]
+  -b, --block-size <SIZE>       Max. bock size in CI format e.g 64MB
+  -p, --parallel <COUNT>        Number of parallel requests [default: 10]
+  -R, --block-records <NUMBER>  Max. number of records in a block
+  -h, --help                    Print help
+```
+
+### `rename`
+
+Rename a bucket or an entry
+
+#### Arguments
+
+- `<BUCKET_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+- `<NEW_NAME>`: New name for the bucket or entry
+
+#### Options
+
+- `-e, --only-entry <ENTRY_NAME>`: Rename an entry instead of a bucket
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Rename a bucket or an entry
+
+Usage: reduct-cli bucket rename [OPTIONS] <BUCKET_PATH> <NEW_NAME>
+
+Arguments:
+  <BUCKET_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+  <NEW_NAME>     New name for the bucket or entry
+
+Options:
+  -e, --only-entry <ENTRY_NAME>  Rename an entry instead of a bucket
+  -i, --ignore-ssl               Ignore SSL certificate verification
+  -T, --timeout <SECONDS>        Timeout for requests [default: 30]
+  -p, --parallel <COUNT>         Number of parallel requests [default: 10]
+  -h, --help                     Print help
+```
+
+### `rm`
+
+Remove a bucket
+
+#### Arguments
+
+- `<BUCKET_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+
+#### Options
+
+- `-e, --only-entries <ENTRY_NAME>...`: Remove only the specified entry instead of the whole bucket. Wildcards are supported.
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-y, --yes`: Do not ask for confirmation
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Remove a bucket
+
+Usage: reduct-cli bucket rm [OPTIONS] <BUCKET_PATH>
+
+Arguments:
+  <BUCKET_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+
+Options:
+  -e, --only-entries <ENTRY_NAME>...  Remove only the specified entry instead of the whole bucket. Wildcards are supported.
+  -i, --ignore-ssl                    Ignore SSL certificate verification
+  -T, --timeout <SECONDS>             Timeout for requests [default: 30]
+  -y, --yes                           Do not ask for confirmation
+  -p, --parallel <COUNT>              Number of parallel requests [default: 10]
+  -h, --help                          Print help
+```

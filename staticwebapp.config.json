@@ -46,8 +46,18 @@
       "statusCode": 301
     },
     {
+      "route": "/docs/integrations/ros2-agent",
+      "redirect": "/docs/reduct-bridge/input/ros2",
+      "statusCode": 301
+    },
+    {
       "route": "/docs/next/integrations/s3",
       "redirect": "/docs/next/integrations/cloud-storage",
+      "statusCode": 301
+    },
+    {
+      "route": "/docs/next/integrations/ros2-agent",
+      "redirect": "/docs/next/reduct-bridge/input/ros2",
       "statusCode": 301
     },
     {

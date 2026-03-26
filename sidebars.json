@@ -153,85 +153,64 @@
           "label": "Cloud Storage"
         },
         "integrations/grafana/index",
-        "integrations/ros2-agent",
         "integrations/zenoh"
       ]
     },
     {
       "type": "category",
-      "label": "ReductBridge",
-      "link": {
-        "type": "doc",
-        "id": "reduct-bridge/index"
-      },
+      "label": "Tools",
       "items": [
         {
           "type": "category",
-          "label": "Inputs",
-          "collapsed": false,
+          "label": "CLI Client",
+          "link": {
+            "type": "doc",
+            "id": "cli/index"
+          },
           "items": [
-            "reduct-bridge/input/shell/index",
-            "reduct-bridge/input/ros1/index",
-            "reduct-bridge/input/ros2/index"
+            "cli/alias/index",
+            "cli/server/index",
+            "cli/bucket/index",
+            "cli/token/index",
+            "cli/replica/index",
+            "cli/cp/index",
+            "cli/rm/index"
           ]
         },
         {
           "type": "category",
-          "label": "Remotes",
-          "collapsed": false,
-          "items": ["reduct-bridge/remote/reduct/index"]
+          "label": "Reduct Bridge",
+          "link": {
+            "type": "doc",
+            "id": "reduct-bridge/index"
+          },
+          "items": [
+            {
+              "type": "category",
+              "label": "Inputs",
+              "collapsed": false,
+              "items": [
+                "reduct-bridge/input/shell/index",
+                "reduct-bridge/input/ros1/index",
+                "reduct-bridge/input/ros2/index"
+              ]
+            },
+            {
+              "type": "category",
+              "label": "Remotes",
+              "collapsed": false,
+              "items": ["reduct-bridge/remote/reduct/index"]
+            }
+          ]
+        },
+        {
+          "type": "link",
+          "label": "Web Console",
+          "href": "https://github.com/reductstore/web-console"
         }
       ]
     },
-    {
-      "type": "category",
-      "label": "HTTP API Reference",
-      "link": {
-        "type": "doc",
-        "id": "http-api/index"
-      },
-      "items": [
-        "http-api/server-api",
-        "http-api/bucket-api",
-        {
-          "type": "category",
-          "label": "Entry API",
-          "link": {
-            "type": "doc",
-            "id": "http-api/entry-api/index"
-          },
-          "collapsed": false,
-          "items": [
-            "http-api/entry-api/attachments",
-            "http-api/entry-api/run_query",
-            "http-api/entry-api/read_data",
-            "http-api/entry-api/write_data",
-            "http-api/entry-api/update_data",
-            "http-api/entry-api/delete_data"
-          ]
-        },
-        {
-          "type": "category",
-          "label": "I/O API",
-          "className": "io-api-experimental",
-          "link": {
-            "type": "doc",
-            "id": "http-api/io-api/index"
-          },
-          "collapsed": false,
-          "items": [
-            "http-api/io-api/run_query",
-            "http-api/io-api/read_data",
-            "http-api/io-api/write_data",
-            "http-api/io-api/update_data",
-            "http-api/io-api/delete_data"
-          ]
-        },
-        "http-api/token-authentication",
-        "http-api/replication-api",
-        "http-api/query-link-api"
-      ]
-    },
+
     {
       "type": "category",
       "label": "Client SDKs",
@@ -309,18 +288,51 @@
     },
     {
       "type": "category",
-      "label": "Tools",
+      "label": "HTTP API Reference",
+      "link": {
+        "type": "doc",
+        "id": "http-api/index"
+      },
       "items": [
+        "http-api/server-api",
+        "http-api/bucket-api",
         {
-          "type": "link",
-          "label": "CLI Client",
-          "href": "https://github.com/reductstore/reduct-cli"
+          "type": "category",
+          "label": "Entry API",
+          "link": {
+            "type": "doc",
+            "id": "http-api/entry-api/index"
+          },
+          "collapsed": false,
+          "items": [
+            "http-api/entry-api/attachments",
+            "http-api/entry-api/run_query",
+            "http-api/entry-api/read_data",
+            "http-api/entry-api/write_data",
+            "http-api/entry-api/update_data",
+            "http-api/entry-api/delete_data"
+          ]
         },
         {
-          "type": "link",
-          "label": "Web Console",
-          "href": "https://github.com/reductstore/web-console"
-        }
+          "type": "category",
+          "label": "I/O API",
+          "className": "io-api-experimental",
+          "link": {
+            "type": "doc",
+            "id": "http-api/io-api/index"
+          },
+          "collapsed": false,
+          "items": [
+            "http-api/io-api/run_query",
+            "http-api/io-api/read_data",
+            "http-api/io-api/write_data",
+            "http-api/io-api/update_data",
+            "http-api/io-api/delete_data"
+          ]
+        },
+        "http-api/token-authentication",
+        "http-api/replication-api",
+        "http-api/query-link-api"
       ]
     }
   ]
