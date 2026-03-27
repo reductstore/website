@@ -54,6 +54,8 @@ This approach works especially well with cost-efficient AWS S3 storage classes s
 To run ReductStore with an S3-compatible backend, use the following environment variables:
 
 ```bash
+mkdir -p ./data
+sudo chown -R 10001:10001 ./data
 docker run -p 8383:8383 \
     -e RS_REMOTE_BACKEND_TYPE=s3 \
     -e RS_REMOTE_BUCKET=<YOUR_S3_BUCKET_NAME> \

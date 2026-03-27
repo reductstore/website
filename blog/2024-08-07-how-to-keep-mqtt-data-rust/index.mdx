@@ -47,6 +47,7 @@ services:
   reduct-storage:
     image: reduct/store:latest
     volumes:
+      # Host prep: mkdir -p ./data && sudo chown -R 10001:10001 ./data
       - ./data:/data
     ports:
       - "8383:8383"

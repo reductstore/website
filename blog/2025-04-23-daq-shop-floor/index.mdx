@@ -70,6 +70,7 @@ services:
       RS_REPLICATION_1_WHEN: '{"&score": {"$$gt": 0.8}}' # we need $$ to escape $ in YAML
 
     volumes:
+      # Host prep: mkdir -p ./data && sudo chown -R 10001:10001 ./data
       - ./data:/data
     ports:
       - 8383:8383
