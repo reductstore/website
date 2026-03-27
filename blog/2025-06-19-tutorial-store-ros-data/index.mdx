@@ -460,7 +460,7 @@ sudo apt install snapd -y   # if snapd is not already installed
 sudo snap install reductstore
 ```
 
-This will install ReductStore from the Snap Store. The snap should set up ReductStore as a service listening on port 8383 by default. If using a different OS or if snap isn't desired, you can use Docker (e.g., `mkdir -p ~/reduct_data && sudo chown -R 10001:10001 ~/reduct_data && docker run -d -p 8383:8383 -v ~/reduct_data:/data reduct/store:latest`) to run ReductStore in a container.
+This will install ReductStore from the Snap Store. The snap should set up ReductStore as a service listening on port 8383 by default. If using a different OS or if snap isn't desired, you can use Docker (e.g., `docker run -d -p 8383:8383 -v ~/reduct_data:/data reduct/store:latest`) to run ReductStore in a container.
 
 > **Note:** The database will listen on `http://0.0.0.0:8383` (accessible to the LAN). Ensure this port is allowed through any firewall if you want external access.
 

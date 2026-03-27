@@ -164,12 +164,12 @@ reduct-store:
   ports:
     - "8383:8383"
   volumes:
-    # Host prep: mkdir -p ./data && sudo chown -R 10001:10001 ./data
+    user: "0:0" # Run as root with host bind mount in this example
     - ./data:/data
 ```
 
 - In this configuration, the container named `reduct-store` will use the latest ReductStore image and map port 8383 of your host to port 8383 inside the container, which is used by ReductStore.
-- The volume mapping `./data:/data` creates persistent storage by mapping a local directory (`./data`) to the `/data` directory inside the container. Since ReductStore v1.19 runs as a non-root user, prepare the host directory first: `mkdir -p ./data && sudo chown -R 10001:10001 ./data`.
+- The volume mapping `./data:/data` creates persistent storage by mapping a local directory (`./data`) to the `/data` directory inside the container.
 
 To deploy, navigate to your compose file's location in terminal and execute `docker-compose up -d`. This command starts ReductStore as a background service. You can then interact with it using its [**API**](https://www.reduct.store/docs/http-api) or through any [**client libraries available in the documentation**](https://www.reduct.store/docs/getting-started).
 

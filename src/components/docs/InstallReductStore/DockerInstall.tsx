@@ -6,8 +6,6 @@ export default function DockerContent() {
     <>
       <p>Runs on amd64, arm64, and arm32 platforms.</p>
       <CodeBlock className="language-bash">
-        mkdir -p ./data
-        sudo chown -R 10001:10001 ./data
         docker run -p 8383:8383 -v $&#123;PWD&#125;/data:/data
         reduct/store:latest
       </CodeBlock>
