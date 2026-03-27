@@ -15,11 +15,12 @@ They can be combined with other logical and comparison operators.
 
 The following aggregation operators are supported:
 
-| Operator  | ReductStore Version | Description                                                       |
-| --------- | ------------------- | ----------------------------------------------------------------- |
-| `$each_n` | v1.16               | Keeps each N-th record after previous condition                   |
-| `$each_t` | v1.16               | Keeps a record after the previous condition once in time interval |
-| `$limit`  | v1.16               | Limits the number of records to be processed in the query         |
+| Operator  | ReductStore Version | Description                                                                   |
+| --------- | ------------------- | ----------------------------------------------------------------------------- |
+| `$each_n` | v1.16               | Keeps each N-th record after previous condition                               |
+| `$each_t` | v1.16               | Keeps a record after the previous condition once in time interval             |
+| `$gate`   | v1.20               | Opens a fixed time window on `false -> true`, then forces `false` until reset |
+| `$limit`  | v1.16               | Limits the number of records to be processed in the query                     |
 
 :::info
 The order of operators affects the result. Conditions are applied sequentially, so placing an aggregation operator before or after a filter changes the outcome.
@@ -97,6 +98,46 @@ Keep only records at least 5 seconds apart, then filter for scores greater than 
 {
   "$each_t": "5s",
   "&score": { "$gt": 10 }
+}
+```
+
+## $gate
+
+The `$gate` operator opens a time-bounded gate when the input condition changes from `false` to `true`.
+While the gate is open, output mirrors the input condition. Once the time window expires, output is forced to `false` until the input is reset to `false` and a new `false -> true` edge occurs.
+
+### Syntax
+
+```
+{
+  "$gate": [ <duration> | <expression as float>, <condition> ]
+}
+```
+
+### Behavior
+
+- The first operand is the gate duration (`"10s"`, `"250ms"`, or `0.5` for seconds).
+- The second operand is a condition expression that evaluates to boolean.
+- On `false -> true`, the gate opens for the duration.
+- While open, output equals the input condition.
+- After timeout, output is always `false`.
+- The gate will not re-open while input remains `true`; input must return to `false` first.
+
+### Examples
+
+Open a 10-second window when `motion=true`, and pass only records during the active window:
+
+```json
+{
+  "$gate": ["10s", { "&motion": { "$eq": true } }]
+}
+```
+
+Open a 500ms gate after high anomaly score is first detected:
+
+```json
+{
+  "$gate": [0.5, { "@anomaly_score": { "$gt": 0.8 } }]
 }
 ```
 
