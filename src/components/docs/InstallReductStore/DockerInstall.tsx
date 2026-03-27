@@ -11,7 +11,8 @@ export default function DockerContent() {
       </CodeBlock>
       <p>
         Since v1.19, the container runs as a non-root user, so the mounted
-        directory must exist and be writable by UID/GID <code>10001:10001</code>.
+        directory must exist and be writable by UID/GID <code>10001:10001</code>
+        .
       </p>
     </>
   );
