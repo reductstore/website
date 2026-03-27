@@ -52,6 +52,7 @@ services:
       RS_BUCKET_1_QUOTA_TYPE: FIFO
       RS_BUCKET_1_QUOTA_SIZE: 10000000000 # 10 GB
     volumes:
+      user: "0:0" # Run as root with host bind mount in this example
       - ./data:/data
 ```
 
@@ -195,6 +196,7 @@ services:
           "#ctx_after": "10s"
         }
     volumes:
+      user: "0:0" # Run as root with host bind mount in this example
       - ./data:/data
 ```
 

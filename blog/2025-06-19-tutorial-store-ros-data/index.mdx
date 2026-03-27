@@ -630,6 +630,8 @@ On your laptop (assuming Ubuntu 22.04+ or any system with Docker or Snap):
 - **Option A: Docker** - run ReductStore in a container:
 
   ```bash
+  mkdir -p ~/reduct_data
+  sudo chown -R 10001:10001 ~/reduct_data
   docker run -d -p 8383:8383 -v ~/reduct_data:/data reduct/store:latest
   ```
 

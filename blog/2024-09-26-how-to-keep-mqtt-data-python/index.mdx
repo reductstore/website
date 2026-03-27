@@ -46,6 +46,7 @@ services:
   reduct-storage:
     image: reduct/store:latest
     volumes:
+      user: "0:0" # Run as root with host bind mount in this example
       - ./data:/data
     ports:
       - "8383:8383"
