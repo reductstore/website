@@ -74,6 +74,7 @@ services:
       RS_BUCKET_ROBOT_2_NAME: robot2-data
       # .. additional buckets as needed
     volumes:
+      # Host prep: mkdir -p ./cache && sudo chown -R 10001:10001 ./cache
       - ./cache:/data/cache
 ```
 
