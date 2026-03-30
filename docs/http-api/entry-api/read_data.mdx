@@ -122,6 +122,11 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
             message: "Unprocessable Entity",
             summary: "Bad timestamp",
         },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
     ]}
 
 />
@@ -213,6 +218,11 @@ If authentication is enabled, the method needs a valid API token with read acces
             message: "Unprocessable Entity",
             summary: "Bad timestamp",
         },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
     ]}
 
 />
@@ -399,6 +409,11 @@ Since version 1.13, the method is deprecated. Use the [**Query API**](/docs/http
       status: "422",
       message: "Unprocessable Entity",
       summary: "One or both timestamps are bad, or TTL is not a number",
+    },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
     },
   ]}
 />

@@ -133,6 +133,11 @@ Attachments can also be created with batch endpoints. The same rules apply: the 
       summary:
         "Bad timestamp, missing label `key`, or `remove=true` used in write",
     },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
   ]}
 />
 
@@ -211,6 +216,11 @@ If you don't know the timestamp of an attachment, query the `$meta` entry by `ke
       status: "409",
       message: "Conflict",
       summary: "The bucket is being deleted or the entry is being deleted",
+    },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
     },
   ]}
 />
@@ -304,6 +314,11 @@ The `PATCH` request must target an existing attachment record timestamp.
       message: "Unprocessable Entity",
       summary: "Bad timestamp",
     },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
   ]}
 />
 
@@ -343,6 +358,11 @@ If you need to delete it, remove the parent entry instead. The `$meta` entry is 
       status: "409",
       message: "Conflict",
       summary: "System `$meta` entry can be removed only with its parent entry",
+    },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
     },
   ]}
 />

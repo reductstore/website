@@ -71,6 +71,11 @@ If authentication is enabled, the method needs a valid API token.
       summary:
         "If authentication is enabled and access token is invalid or empty",
     },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
   ]}
 />
 
@@ -119,6 +124,11 @@ If authentication is enabled, the method needs a valid API token.
       summary:
         "If authentication is enabled and access token is invalid or empty",
     },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
   ]}
 />
 
@@ -136,6 +146,11 @@ environment. The method has anonymous access.
       status: "200",
       message: "OK",
     },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
   ]}
 />
 
@@ -147,6 +162,11 @@ environment. The method has anonymous access.
     {
       status: "200",
       message: "OK",
+    },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
     },
   ]}
 />
@@ -171,6 +191,11 @@ In this case, you can use GET and HEAD methods to check if the storage engine is
       summary:
         "If the storage engine is not active or has not acquired the lock file",
     },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
   ]}
 />
 
@@ -188,6 +213,11 @@ In this case, you can use GET and HEAD methods to check if the storage engine is
       message: "Service Unavailable",
       summary:
         "If the storage engine is not active or has not acquired the lock file",
+    },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
     },
   ]}
 />

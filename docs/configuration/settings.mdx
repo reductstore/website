@@ -81,6 +81,26 @@ When using TLS or user-password authentication with `RS_ZENOH_CONFIG`, Zenoh nor
 
 For usage examples, deployment patterns, and a full explanation of key expressions, selectors, and encoding, see the **[Zenoh API integration guide](../integrations/zenoh)**.
 
+## Instance Rate Limiting Settings
+
+ReductStore can enforce instance-level rate limits for both HTTP and Zenoh APIs. Limits are optional and disabled by default.
+
+| Name                    | Default | Description                                                                                             |
+| ----------------------- | ------- | ------------------------------------------------------------------------------------------------------- |
+| `RS_RATE_LIMIT_API`     |         | Maximum API request rate. Example: `100req/s`, `100000req/h`, or `1000` (defaults to per hour).         |
+| `RS_RATE_LIMIT_INGRESS` |         | Maximum ingress throughput (writes). Example: `10MB/s`, `10GB/h`, or `500MB` (defaults to per hour).    |
+| `RS_RATE_LIMIT_EGRESS`  |         | Maximum egress throughput (reads/replies). Example: `50MB/s`, `1GB/m`, or `2GB` (defaults to per hour). |
+
+Rate format: `<amount>/<period>`.
+
+- `amount`:
+  - `RS_RATE_LIMIT_API`: number of requests (optional `req` suffix)
+  - `RS_RATE_LIMIT_INGRESS` and `RS_RATE_LIMIT_EGRESS`: byte size (for example `KB`, `MB`, `GB`)
+- `period`: duration such as `s`, `m`, `h`, `ms` (or full duration strings like `60s`)
+- if `/period` is omitted, ReductStore treats the limit as **per hour**
+
+When a limit is exceeded, ReductStore returns **429 Too Many Requests** with a retry hint in the error details.
+
 ## I/O Settings
 
 In addition to general settings, you can configure I/O settings to optimize communication over HTTP with the storage engine. The following table describes the available environment variables:

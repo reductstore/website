@@ -65,6 +65,11 @@ The method returns a list of replication Task with their statuses.
       message: "Forbidden",
       summary: "Access token doesn't have enough permissions",
     },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
   ]}
 />
 
@@ -153,6 +158,11 @@ diagnostics and settings.
       status: "404",
       message: "Not Found",
       summary: "Replication with the given name does not exist",
+    },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
     },
   ]}
 />
@@ -311,6 +321,11 @@ The method creates a replication task with given settings.
       status: "422",
       message: "Unprocessable Entity",
       summary: "Validation error occurred",
+    },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
     },
   ]}
 />
@@ -476,6 +491,11 @@ this method, you need an access token with full access.
       message: "Unprocessable Entity",
       summary: "Validation error occurred",
     },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
   ]}
 />
 
@@ -542,6 +562,11 @@ Use this endpoint to switch a replication task between `enabled`, `paused`, and 
       message: "Unprocessable Entity",
       summary: "Validation error occurred",
     },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
   ]}
 />
 
@@ -592,6 +617,11 @@ The method deletes a replication task.
       status: "409",
       message: "Conflict",
       summary: "Replication is provisioned",
+    },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
     },
   ]}
 />
