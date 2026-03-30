@@ -139,11 +139,14 @@ The lock file is enabled when the `RS_INSTANCE_ROLE` variable is set to `PRIMARY
 
 A user can configure storage engine settings to change behavior of data storage and retrieval. The following table describes the available environment variables:
 
-| Name                                | Default | Description                                                                                                      |
-| ----------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
-| `RS_ENGINE_COMPACTION_INTERVAL`     | 60      | Interval in seconds between compaction WALs into blocks and synchronization of the storage state to the backend. |
-| `RS_ENGINE_REPLICA_UPDATE_INTERVAL` | 60      | Interval in seconds between updates of bucket, entry lists and indexes from the backend in the read-only mode.   |
-| `RS_ENGINE_ENABLE_INTEGRITY_CHECKS` | true    | If set to `false`, the storage engine skips integrity checks at startup to improve performance.                  |
+| Name                                | Default | Description                                                                                                                                             |
+| ----------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `RS_ENGINE_COMPACTION_INTERVAL`     | 60      | Interval in seconds between compaction WALs into blocks and synchronization of the storage state to the backend.                                        |
+| `RS_ENGINE_REPLICA_UPDATE_INTERVAL` | 60      | Interval in seconds between updates of bucket, entry lists and indexes from the backend in the read-only mode.                                          |
+| `RS_ENGINE_ENABLE_INTEGRITY_CHECKS` | true    | If set to `false`, the storage engine skips integrity checks at startup to improve performance.                                                         |
+| `RS_ENGINE_MAX_STORAGE_SIZE`        |         | Maximum total size of all buckets. Accepts SI units (`KB`, `MB`, `GB`, `TB`), for example `500GB` or `2TB`. If unset or invalid, the limit is disabled. |
+
+When the configured global limit is reached, ReductStore rejects new writes across all ingestion paths (HTTP and Zenoh) with a `500 Internal Server Error` and a `storage limit exceeded` message.
 
 ## Replication Settings
 
