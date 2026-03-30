@@ -122,6 +122,11 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
       message: "Unprocessable Entity",
       summary: "Bad timestamp",
     },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
   ]}
 />
 
@@ -178,6 +183,11 @@ client should describe the records in headers in the format of [the Batch Protoc
             message: "Unprocessable Entity",
             summary: "Bad timestamp or header format",
         },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
     ]}
 
 />

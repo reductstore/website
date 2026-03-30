@@ -67,6 +67,11 @@ The given query will be applied to the data when accessed via the link.
       summary:
         "Current access token doesn't have enough permissions to read the bucket",
     },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
   ]}
 />
 
@@ -156,6 +161,11 @@ The method applies the query specified when creating the link to filter the data
       status: "422",
       message: "Unprocessable Entity",
       summary: "Bad query parameters or expired link",
+    },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
     },
   ]}
 />

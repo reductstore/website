@@ -109,6 +109,11 @@ if authentication is enabled.
       message: "Unprocessable Entity",
       summary: "Bad timestamp",
     },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
   ]}
 />
 
@@ -164,6 +169,11 @@ Existing labels not mentioned in the request stay unchanged.
       status: "422",
       message: "Unprocessable Entity",
       summary: "Bad header format",
+    },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
     },
   ]}
 />
@@ -242,6 +252,11 @@ If authentication is enabled, the method needs a valid API token with full acces
       status: "422",
       message: "Unprocessable Entity",
       summary: "JSON request is invalid",
+    },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
     },
   ]}
 />

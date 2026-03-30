@@ -94,6 +94,11 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
             message: "Not Found",
             summary: "The bucket, entry or record doesn't exist",
         },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
     ]}
 
 />
@@ -324,6 +329,11 @@ Since version 1.13, the method is deprecated. Use the [**Query API**](/docs/http
             message: "Unprocessable Entity",
             summary: "Malformed request",
         },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
     ]}
 
 />

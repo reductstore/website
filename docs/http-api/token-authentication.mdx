@@ -56,6 +56,11 @@ this method, you need an **[access token](../glossary#access-token)** with full 
       message: "Forbidden",
       summary: "Access token doesn't have enough permissions",
     },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
   ]}
 />
 
@@ -111,6 +116,11 @@ method requires an access token with full access.
       status: "404",
       message: "Not Found",
       summary: "Token with the given name does not exist",
+    },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
     },
   ]}
 />
@@ -197,6 +207,11 @@ with full access.
       summary:
         "Specified bucket does not exist or another validation error occurred",
     },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
   ]}
 />
 
@@ -245,6 +260,11 @@ access token with full access.
       message: "Conflict",
       summary: "Token is provisioned",
     },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
   ]}
 />
 
@@ -280,6 +300,11 @@ name, permissions, and additional information.
       status: "401",
       message: "Unauthorized",
       summary: "API token is invalid",
+    },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
     },
   ]}
 />

@@ -100,6 +100,11 @@ If authentication is enabled, the method needs a valid API token.
       message: "Not Found",
       summary: "The bucket does not exist",
     },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
   ]}
 />
 
@@ -136,6 +141,11 @@ If authentication is enabled, the method needs a valid API token.
       status: "404",
       message: "Not Found",
       summary: "The bucket does not exist",
+    },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
     },
   ]}
 />
@@ -229,6 +239,11 @@ access.
       status: "422",
       message: "Unprocessable Entity",
       summary: "JSON request is invalid",
+    },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
     },
   ]}
 />
@@ -325,6 +340,11 @@ If authentication is enabled, the method needs a valid API token with full acces
       message: "Unprocessable Entity",
       summary: "JSON request is invalid",
     },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
   ]}
 />
 
@@ -392,6 +412,11 @@ If authentication is enabled, the method needs a valid API token with full acces
       message: "Unprocessable Entity",
       summary: "JSON request is invalid",
     },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
   ]}
 />
 
@@ -449,6 +474,11 @@ This operation is irreversible. All data in the bucket will be lost.
       status: "409",
       message: "Conflict",
       summary: "Bucket is provisioned or being deleted",
+    },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
     },
   ]}
 />
