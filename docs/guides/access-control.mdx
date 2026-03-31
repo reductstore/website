@@ -60,6 +60,7 @@ The table below shows the list of operations that can be performed for different
 | Remove Entry             | :x:                | :x:                | :x:                | :white_check_mark: | :white_check_mark: |
 | Manage Tokens            | :x:                | :x:                | :x:                | :x:                | :white_check_mark: |
 | Manage Replication Tasks | :x:                | :x:                | :x:                | :x:                | :white_check_mark: |
+| Access Audit Log         | :x:                | :x:                | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 :::note
 `Anonymous` refers to clients that don't send an **[access token](../glossary#access-token)** in the `Authorization` header.
@@ -278,3 +279,15 @@ import RemoveTokenCurl from "!!raw-loader!../examples/curl/access_control_remove
     </TabItem>
 
 </Tabs>
+
+## Audit Log
+
+All interactions are stored in aggregated form in the `$audit` bucket per token and available via the standard API.
+
+Read-only replicas do not have write access, so they forward the audit log to the primary instance.
+To enable auditing on a read-only replica, the variables `RS_PRIMARY_URL` and `RS_SECONDARY_URL` (for fault-tolerant replicas) must be set.
+The `RS_API_TOKEN` used by the replica must also have write access to the `$audit` bucket on the primary instance.
+
+:::info
+To access the audit log, the relevant token must include exact permissions for the `$audit` bucket, either for reading or writing (wildcards do not apply to system buckets).
+:::
