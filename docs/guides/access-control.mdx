@@ -41,6 +41,15 @@ Each token has a set of permissions that define what actions can be performed wi
 
 - `write`: Allows a client to write data to specific buckets, which includes adding new entries or deleting existing ones. The list of buckets that can be accessed for writing is defined when the token is created.
 
+### System buckets and audit access
+
+Buckets whose names start with `$` are treated as **system buckets** (for example, `$audit`).
+For system buckets, ReductStore requires an **exact bucket match** in token permissions:
+
+- wildcard permissions like `*` or `prod-*` do **not** grant access to `$...` buckets;
+- to access the audit bucket, include `$audit` explicitly in `read` and/or `write` permissions;
+- tokens with `full_access: true` can still access system buckets.
+
 The table below shows the list of operations that can be performed for different permissions:
 
 | Operation                | Anonymous          | No permissions     | Read               | Write              | Full Access        |

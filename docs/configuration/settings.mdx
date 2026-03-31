@@ -158,3 +158,5 @@ ReductStore supports **[data replication](../guides/data-replication.mdx)** betw
 | `RS_REPLICATION_LOG_SIZE`   | 1000000 | Maximum number of pending records in the replication log. The oldest records are overwritten when the limit is reached. |
 | `RS_REPLICATION_VERIFY_SSL` | true    | If set to `false`, the replication client skips TLS certificate verification for destination instances.                 |
 | `RS_REPLICATION_CA_PATH`    |         | Path to a PEM-encoded CA certificate used to verify destination TLS certificates during replication.                    |
+| `RS_PRIMARY_URL`            |         | Public URL of the primary ReductStore instance used by replicas when forwarding audit events.                           |
+| `RS_SECONDARY_URL`          |         | Optional fallback URL used for audit forwarding when the primary URL is unavailable.                                    |
