@@ -282,7 +282,8 @@ import RemoveTokenCurl from "!!raw-loader!../examples/curl/access_control_remove
 
 ## Audit Log
 
-All interactions are stored in aggregated form in the `$audit` bucket per token.
+All interactions are stored in aggregated form in the `$audit` bucket per token and available via the standard API.
+
 Read-only replicas do not have write access, so they forward the audit log to the primary instance.
 To enable auditing on a read-only replica, the variables `RS_PRIMARY_URL` and `RS_SECONDARY_URL` (for fault-tolerant replicas) must be set.
 The `RS_API_TOKEN` used by the replica must also have write access to the `$audit` bucket on the primary instance.
