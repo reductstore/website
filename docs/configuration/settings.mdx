@@ -170,7 +170,6 @@ ReductStore can persist aggregated API interactions in the `$audit` system bucke
 | `RS_AUDIT_REMOTE_VERIFY_SSL` | true    | For replica audit forwarding over HTTPS: verify TLS certificates of remote nodes.                                |
 | `RS_AUDIT_REMOTE_CA_PATH`    |         | For replica audit forwarding: path to a PEM-encoded CA certificate used to verify remote TLS certificates.       |
 | `RS_AUDIT_REMOTE_TIMEOUT`    | 5       | Timeout in seconds for replica audit HTTP communication with primary/secondary nodes.                            |
-| `RS_INSTANCE_NAME`           |         | Optional instance name used in audit record labels (`instance`). If unset, ReductStore uses OS hostname (or `unknown` if unavailable). |
 
 Notes:
 
