@@ -285,8 +285,6 @@ import RemoveTokenCurl from "!!raw-loader!../examples/curl/access_control_remove
 Audit is controlled by `RS_AUDIT_ENABLED` and is disabled by default.
 When `RS_AUDIT_ENABLED=true`, interactions are stored in aggregated form in the `$audit` bucket per token and available via the standard API.
 
-You can cap audit storage with `RS_AUDIT_QUOTA_SIZE`; when set, `$audit` uses FIFO rotation (oldest records are removed first).
-
 Read-only replicas do not have write access, so they forward the audit log to the primary/secondary instance.
 To enable auditing on a read-only replica, set `RS_PRIMARY_URL` (and optionally `RS_SECONDARY_URL` for failover).
 The `RS_API_TOKEN` used by the replica must also have write access to the `$audit` bucket on the destination instance.
