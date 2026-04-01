@@ -158,3 +158,21 @@ ReductStore supports **[data replication](../guides/data-replication.mdx)** betw
 | `RS_REPLICATION_LOG_SIZE`   | 1000000 | Maximum number of pending records in the replication log. The oldest records are overwritten when the limit is reached. |
 | `RS_REPLICATION_VERIFY_SSL` | true    | If set to `false`, the replication client skips TLS certificate verification for destination instances.                 |
 | `RS_REPLICATION_CA_PATH`    |         | Path to a PEM-encoded CA certificate used to verify destination TLS certificates during replication.                    |
+
+## Audit Settings
+
+ReductStore can persist aggregated API interactions in the `$audit` system bucket. You can configure audit behavior with the following environment variables:
+
+| Name                         | Default | Description                                                                                                      |
+| ---------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
+| `RS_AUDIT_ENABLED`           | false   | Enable or disable audit collection and persistence. When `false`, ReductStore skips audit writes.                |
+| `RS_AUDIT_QUOTA_SIZE`        |         | Optional size limit for the `$audit` bucket (for example `1GB`, `500MB`). When set, `$audit` uses FIFO eviction. |
+| `RS_AUDIT_REMOTE_VERIFY_SSL` | true    | For replica audit forwarding over HTTPS: verify TLS certificates of remote nodes.                                |
+| `RS_AUDIT_REMOTE_CA_PATH`    |         | For replica audit forwarding: path to a PEM-encoded CA certificate used to verify remote TLS certificates.       |
+| `RS_AUDIT_REMOTE_TIMEOUT`    | 5       | Timeout in seconds for replica audit HTTP communication with primary/secondary nodes.                            |
+
+Notes:
+
+- Audit is disabled by default (`RS_AUDIT_ENABLED=false`).
+- `RS_AUDIT_QUOTA_SIZE` is applied only when audit is enabled.
+- If `RS_AUDIT_QUOTA_SIZE` is unset, `$audit` capacity is unlimited.
