@@ -163,13 +163,13 @@ ReductStore supports **[data replication](../guides/data-replication.mdx)** betw
 
 ReductStore can persist aggregated API interactions in the `$audit` system bucket. You can configure audit behavior with the following environment variables:
 
-| Name                         | Default | Description                                                                                                      |
-| ---------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
+| Name                         | Default | Description                                                                                                                                                                         |
+| ---------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `RS_AUDIT_ENABLED`           | auto    | Enable or disable audit collection and persistence. If unset, audit defaults to `true` when `RS_API_TOKEN` is set, otherwise `false`. When `false`, ReductStore skips audit writes. |
-| `RS_AUDIT_QUOTA_SIZE`        |         | Optional size limit for the `$audit` bucket (for example `1GB`, `500MB`). When set, `$audit` uses FIFO eviction. |
-| `RS_AUDIT_REMOTE_VERIFY_SSL` | true    | For replica audit forwarding over HTTPS: verify TLS certificates of remote nodes.                                |
-| `RS_AUDIT_REMOTE_CA_PATH`    |         | For replica audit forwarding: path to a PEM-encoded CA certificate used to verify remote TLS certificates.       |
-| `RS_AUDIT_REMOTE_TIMEOUT`    | 5       | Timeout in seconds for replica audit HTTP communication with primary/secondary nodes.                            |
+| `RS_AUDIT_QUOTA_SIZE`        |         | Optional size limit for the `$audit` bucket (for example `1GB`, `500MB`). When set, `$audit` uses FIFO eviction.                                                                    |
+| `RS_AUDIT_REMOTE_VERIFY_SSL` | true    | For replica audit forwarding over HTTPS: verify TLS certificates of remote nodes.                                                                                                   |
+| `RS_AUDIT_REMOTE_CA_PATH`    |         | For replica audit forwarding: path to a PEM-encoded CA certificate used to verify remote TLS certificates.                                                                          |
+| `RS_AUDIT_REMOTE_TIMEOUT`    | 5       | Timeout in seconds for replica audit HTTP communication with primary/secondary nodes.                                                                                               |
 
 Notes:
 
