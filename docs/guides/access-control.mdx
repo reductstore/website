@@ -282,9 +282,10 @@ import RemoveTokenCurl from "!!raw-loader!../examples/curl/access_control_remove
 
 ## Audit Log
 
-Audit logging is controlled by the `RS_AUDIT_ENABLED` environment variable and is **disabled by default**.
-When `RS_AUDIT_ENABLED=true`, interactions are stored in an aggregated form in the `$audit` bucket, scoped per API token.
-The data can be accessed via the standard API.
+Audit logging is controlled by the `RS_AUDIT_ENABLED` environment variable.
+If `RS_AUDIT_ENABLED` is unset, audit defaults to `true` when `RS_API_TOKEN` is set, otherwise `false`.
+Setting `RS_AUDIT_ENABLED` explicitly overrides that default.
+When audit is enabled, interactions are stored in aggregated form in the `$audit` bucket, scoped per API token, and can be accessed via the standard API.
 
 ### Read-only Replica Behavior
 

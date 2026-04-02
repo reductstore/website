@@ -165,7 +165,7 @@ ReductStore can persist aggregated API interactions in the `$audit` system bucke
 
 | Name                         | Default | Description                                                                                                      |
 | ---------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
-| `RS_AUDIT_ENABLED`           | false   | Enable or disable audit collection and persistence. When `false`, ReductStore skips audit writes.                |
+| `RS_AUDIT_ENABLED`           | auto    | Enable or disable audit collection and persistence. If unset, audit defaults to `true` when `RS_API_TOKEN` is set, otherwise `false`. When `false`, ReductStore skips audit writes. |
 | `RS_AUDIT_QUOTA_SIZE`        |         | Optional size limit for the `$audit` bucket (for example `1GB`, `500MB`). When set, `$audit` uses FIFO eviction. |
 | `RS_AUDIT_REMOTE_VERIFY_SSL` | true    | For replica audit forwarding over HTTPS: verify TLS certificates of remote nodes.                                |
 | `RS_AUDIT_REMOTE_CA_PATH`    |         | For replica audit forwarding: path to a PEM-encoded CA certificate used to verify remote TLS certificates.       |
@@ -173,6 +173,7 @@ ReductStore can persist aggregated API interactions in the `$audit` system bucke
 
 Notes:
 
-- Audit is disabled by default (`RS_AUDIT_ENABLED=false`).
+- If `RS_AUDIT_ENABLED` is unset, audit defaults to `true` when `RS_API_TOKEN` is set, otherwise `false`.
+- `RS_AUDIT_ENABLED` explicitly overrides the token-based default.
 - `RS_AUDIT_QUOTA_SIZE` is applied only when audit is enabled.
 - If `RS_AUDIT_QUOTA_SIZE` is unset, `$audit` capacity is unlimited.
