@@ -215,6 +215,68 @@ with full access.
   ]}
 />
 
+## Rotate a Token
+
+This method rotates a token value (secret) in one explicit API call. The old value
+is invalidated immediately after rotation. To use it, a client should have an
+access token with full access.
+
+<SwaggerComponent
+  method="POST"
+  path="/api/v1/tokens/:token_name/rotate"
+  summary="Rotate a token"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: "token_name",
+        isRequired: true,
+        description: "Name of the token to rotate",
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "Returns new value and rotation timestamp",
+      description: (
+        <pre>
+          <code>{`{
+  "value": "string",
+  "created_at": "string"
+}`}</code>
+        </pre>
+      ),
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is empty or invalid",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have enough permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Token with the given name doesn't exist",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary: "Token cannot be rotated (for example init or provisioned token)",
+    },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
+  ]}
+/>
+
 ## Remove a Token
 
 This method removes or revokes a token. To use it, a client should have an
