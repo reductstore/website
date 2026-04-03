@@ -40,7 +40,8 @@ this method, you need an **[access token](../glossary#access-token)** with full 
     {
       "name": "string",
       "created_at": "string",
-      "last_access": "string | null"
+      "last_access": "string | null",
+      "is_expired": "bool"
     }
   ]
 }`}</code>
@@ -95,6 +96,7 @@ method requires an access token with full access.
   "name": "string",
   "created_at": "string",
   "last_access": "string | null",
+  "is_expired": "bool",
   "permissions": {
     "full_access": "bool",
     "read": [],
@@ -184,6 +186,16 @@ with full access.
           "A list of allowed client IP addresses for this token. Default: [] (no IP restriction)",
       },
     },
+    {
+      type: "body",
+      details: {
+        name: "ttl",
+        dataType: "Number",
+        isRequired: false,
+        description:
+          "Inactivity timeout in seconds. Token expires if not used for longer than ttl. Default: null (disabled)",
+      },
+    },
   ]}
   responses={[
     {
@@ -243,6 +255,17 @@ Token read endpoints include `last_access`:
 
 The value is populated from audit metadata and can be `null` for tokens that
 have not been used yet.
+
+### `ttl` and `is_expired` fields
+
+- `ttl` can be provided on `POST /api/v1/tokens/:token_name` to enable inactivity expiry.
+- When set, the token is considered expired if `now - last_access > ttl`.
+- Read endpoints include `is_expired` so clients can identify unusable tokens:
+  - `GET /api/v1/tokens`
+  - `GET /api/v1/tokens/:token_name`
+  - `GET /api/v1/me`
+
+`is_expired` is informational; authentication checks remain authoritative.
 
 ## Rotate a Token
 
@@ -379,6 +402,7 @@ name, permissions, and additional information.
   "name": "string",
   "created_at": "string",
   "last_access": "string | null",
+  "is_expired": "bool",
   "permissions": {
     "full_access": "bool",
     "read": [],
