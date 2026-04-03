@@ -19,11 +19,13 @@ func main() {
 		Write:      []string{"example-bucket"},
 	}
 
-	token, err := client.CreateToken(context.Background(), "new-token", permissions)
+	createResp, err := client.CreateTokenWithOptions(context.Background(), "new-token", model.TokenCreateOptions{
+		Permissions: permissions,
+	})
 	if err != nil {
 		panic(err)
 	}
 
 	// Print the generated token
-	println("generated token:", token)
+	println("generated token:", createResp.Value)
 }
