@@ -39,7 +39,8 @@ this method, you need an **[access token](../glossary#access-token)** with full 
   "tokens": [
     {
       "name": "string",
-      "created_at": "string"
+      "created_at": "string",
+      "last_access": "string | null"
     }
   ]
 }`}</code>
@@ -93,6 +94,7 @@ method requires an access token with full access.
           <code>{`{
   "name": "string",
   "created_at": "string",
+  "last_access": "string | null",
   "permissions": {
     "full_access": "bool",
     "read": [],
@@ -231,6 +233,17 @@ with full access.
 If `ip_allowlist` is set, the token can be used only from listed client IP addresses.
 Leave it empty to allow requests from any IP.
 
+### `last_access` field
+
+Token read endpoints include `last_access`:
+
+- `GET /api/v1/tokens`
+- `GET /api/v1/tokens/:token_name`
+- `GET /api/v1/me`
+
+The value is populated from audit metadata and can be `null` for tokens that
+have not been used yet.
+
 ## Rotate a Token
 
 This method rotates a token value (secret) in one explicit API call. The old value
@@ -365,6 +378,7 @@ name, permissions, and additional information.
           <code>{`{
   "name": "string",
   "created_at": "string",
+  "last_access": "string | null",
   "permissions": {
     "full_access": "bool",
     "read": [],
