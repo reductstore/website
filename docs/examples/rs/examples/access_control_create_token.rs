@@ -1,4 +1,4 @@
-use reduct_rs::{Permissions, ReductClient, ReductError};
+use reduct_rs::{Permissions, ReductClient, ReductError, TokenCreateOptions};
 use tokio;
 
 #[tokio::main]
@@ -15,8 +15,17 @@ async fn main() -> Result<(), ReductError> {
         read: vec![String::from("example-bucket")],
         write: vec![String::from("example-bucket")],
     };
-    let token = client.create_token("new-token", permissions).await;
 
-    println!("Generated token: {:?}", token);
+    let token = client
+        .create_token_with_options(
+            "new-token",
+            TokenCreateOptions {
+                permissions,
+                ..Default::default()
+            },
+        )
+        .await?;
+
+    println!("Generated token: {}", token.value);
     Ok(())
 }
