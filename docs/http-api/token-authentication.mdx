@@ -96,7 +96,8 @@ method requires an access token with full access.
   "permissions": {
     "full_access": "bool",
     "read": [],
-    "write": []
+    "write": [],
+    "ip_allowlist": []
   }
 }`}</code>
         </pre>
@@ -171,6 +172,16 @@ with full access.
         description: "A list of bucket names for write access. Default: []",
       },
     },
+    {
+      type: "body",
+      details: {
+        name: "ip_allowlist",
+        dataType: "String[]",
+        isRequired: false,
+        description:
+          "A list of allowed client IP addresses for this token. Default: [] (no IP restriction)",
+      },
+    },
   ]}
   responses={[
     {
@@ -214,6 +225,11 @@ with full access.
     },
   ]}
 />
+
+### IP allowlist behavior
+
+If `ip_allowlist` is set, the token can be used only from listed client IP addresses.
+Leave it empty to allow requests from any IP.
 
 ## Rotate a Token
 
@@ -352,7 +368,8 @@ name, permissions, and additional information.
   "permissions": {
     "full_access": "bool",
     "read": [],
-    "write": []
+    "write": [],
+    "ip_allowlist": []
   }
 }`}</code>
         </pre>
