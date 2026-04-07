@@ -22,8 +22,8 @@ func main() {
 
 	createResp, err := client.CreateTokenWithOptions(context.Background(), "new-token", model.TokenCreateOptions{
 		Permissions: permissions,
-		Ttl:         3600,
-		IpAllowlist: []string{"127.0.0.1", "::1"},
+		TTL:         3600,
+		IPAllowlist: []string{"127.0.0.1", "::1"},
 	})
 	if err != nil {
 		panic(err)
