@@ -22,8 +22,8 @@ The API is available only when the `RS_API_TOKEN` environment variable is set.
 
 ## Get a List of Tokens
 
-The method returns a list of tokens with names and creation dates. To use
-this method, you need an **[access token](../glossary#access-token)** with full access.
+This method returns a list of tokens and their metadata (it never returns token values). To use
+it, you need an **[access token](../glossary#access-token)** with full access.
 
 <SwaggerComponent
   method="GET"
@@ -39,7 +39,17 @@ this method, you need an **[access token](../glossary#access-token)** with full 
   "tokens": [
     {
       "name": "string",
-      "created_at": "string"
+      "created_at": "string",
+      "expires_at": "string | null",
+      "last_access": "string | null",
+      "is_expired": "bool",
+      "ttl": "number | null",
+      "ip_allowlist": [],
+      "permissions": {
+        "full_access": "bool",
+        "read": [],
+        "write": []
+      }
     }
   ]
 }`}</code>
@@ -66,7 +76,7 @@ this method, you need an **[access token](../glossary#access-token)** with full 
 
 ## Show Information about a Token
 
-This method provides full information about a token except its values. The
+This method provides full information about a token except its secret value. The
 method requires an access token with full access.
 
 <SwaggerComponent
@@ -93,6 +103,11 @@ method requires an access token with full access.
           <code>{`{
   "name": "string",
   "created_at": "string",
+  "expires_at": "string | null",
+  "last_access": "string | null",
+  "is_expired": "bool",
+  "ttl": "number | null",
+  "ip_allowlist": [],
   "permissions": {
     "full_access": "bool",
     "read": [],
@@ -127,9 +142,10 @@ method requires an access token with full access.
 
 ## Create a New Token
 
-The method creates a new access token with given permissions as a JSON
-document in the request body. To use this method, you need an access token
-with full access.
+The method creates a new access token from a JSON request body. The request can
+include permissions and additional token settings such as expiration, inactivity
+TTL, and an IP allowlist. To use this method, you need an access token with
+full access.
 
 <SwaggerComponent
   method="POST"
@@ -147,7 +163,17 @@ with full access.
     {
       type: "body",
       details: {
-        name: "full_access",
+        name: "permissions",
+        dataType: "Object",
+        isRequired: false,
+        description:
+          "Permissions for the token. Includes full_access, read, and write.",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "permissions.full_access",
         dataType: "Boolean",
         isRequired: false,
         description: "Create a token with full access. Default: false",
@@ -156,7 +182,7 @@ with full access.
     {
       type: "body",
       details: {
-        name: "read",
+        name: "permissions.read",
         dataType: "String[]",
         isRequired: false,
         description: "A list of bucket names for read access. Default: []",
@@ -165,10 +191,40 @@ with full access.
     {
       type: "body",
       details: {
-        name: "write",
+        name: "permissions.write",
         dataType: "String[]",
         isRequired: false,
         description: "A list of bucket names for write access. Default: []",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "ip_allowlist",
+        dataType: "String[]",
+        isRequired: false,
+        description:
+          "A list of allowed client IP addresses for this token. Default: [] (no IP restriction)",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "expires_at",
+        dataType: "String",
+        isRequired: false,
+        description:
+          "Absolute expiration time (RFC 3339 timestamp). Default: null (no absolute expiration)",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "ttl",
+        dataType: "Number",
+        isRequired: false,
+        description:
+          "Inactivity timeout in seconds. Token expires if not used for longer than ttl. Default: null (disabled)",
       },
     },
   ]}
@@ -206,6 +262,80 @@ with full access.
       message: "Unprocessable Entity",
       summary:
         "Specified bucket does not exist or another validation error occurred",
+    },
+    {
+      status: "429",
+      message: "Too Many Requests",
+      summary: "Request rate limit is exceeded",
+    },
+  ]}
+/>
+
+## Token Fields and Behavior
+
+Token read endpoints (`GET /api/v1/tokens`, `GET /api/v1/tokens/:token_name`, `GET /api/v1/me`) return additional fields:
+
+- `created_at`: Timestamp when the current token value was issued (created or rotated).
+- `expires_at`: Absolute expiration time. After this time, the token is unusable.
+- `ip_allowlist`: If non-empty, requests using this token are accepted only from the listed client IPs or CIDRs.
+- `last_access`: Timestamp of the most recent token usage, or `null` if the token has not been used yet. This value is derived from audit metadata (see **[Audit Log](../guides/access-control#audit-log)**) and may remain `null` if auditing is disabled.
+- `ttl`: Inactivity timeout (seconds). When set, the server can expire tokens that have not been used within the TTL.
+- `is_expired`: Server-computed indicator showing whether the token is currently expired (for example due to `expires_at` or `ttl`).
+
+## Rotate a Token
+
+This method rotates a token value (secret) in one explicit API call. The old value
+is invalidated immediately after rotation. To use it, a client should have an
+access token with full access.
+
+<SwaggerComponent
+  method="POST"
+  path="/api/v1/tokens/:token_name/rotate"
+  summary="Rotate a token"
+  parameters={[
+    {
+      type: "path",
+      details: {
+        name: "token_name",
+        isRequired: true,
+        description: "Name of the token to rotate",
+      },
+    },
+  ]}
+  responses={[
+    {
+      status: "200",
+      message: "OK",
+      summary: "Returns new value and rotation timestamp",
+      description: (
+        <pre>
+          <code>{`{
+  "value": "string",
+  "created_at": "string"
+}`}</code>
+        </pre>
+      ),
+    },
+    {
+      status: "401",
+      message: "Unauthorized",
+      summary: "Access token is empty or invalid",
+    },
+    {
+      status: "403",
+      message: "Forbidden",
+      summary: "Access token doesn't have enough permissions",
+    },
+    {
+      status: "404",
+      message: "Not Found",
+      summary: "Token with the given name doesn't exist",
+    },
+    {
+      status: "409",
+      message: "Conflict",
+      summary:
+        "Token cannot be rotated (for example init or provisioned token)",
     },
     {
       status: "429",
@@ -287,6 +417,11 @@ name, permissions, and additional information.
           <code>{`{
   "name": "string",
   "created_at": "string",
+  "expires_at": "string | null",
+  "last_access": "string | null",
+  "is_expired": "bool",
+  "ip_allowlist": [],
+  "ttl": "number | null",
   "permissions": {
     "full_access": "bool",
     "read": [],
