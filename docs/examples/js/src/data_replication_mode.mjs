@@ -1,4 +1,7 @@
-import { Client, ReplicationMode } from "reduct-js";
+// reduct-js is published as CommonJS; in Node ESM examples we import the default export.
+import reductJs from "reduct-js";
+
+const { Client, ReplicationMode } = reductJs;
 
 // Update replication mode without changing other settings
 const client = new Client("http://127.0.0.1:8383", { apiToken: "my-token" });
