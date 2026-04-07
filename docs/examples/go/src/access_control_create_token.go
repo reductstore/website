@@ -20,9 +20,10 @@ func main() {
 		Write:      []string{"example-bucket"},
 	}
 
+	ttl := uint64(3600)
 	createResp, err := client.CreateTokenWithOptions(context.Background(), "new-token", model.TokenCreateOptions{
 		Permissions: permissions,
-		TTL:         3600,
+		TTL:         &ttl,
 		IPAllowlist: []string{"127.0.0.1", "::1"},
 	})
 	if err != nil {
