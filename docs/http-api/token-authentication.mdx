@@ -142,9 +142,10 @@ method requires an access token with full access.
 
 ## Create a New Token
 
-The method creates a new access token with given permissions as a JSON
-document in the request body. To use this method, you need an access token
-with full access.
+The method creates a new access token from a JSON request body. The request can
+include permissions and additional token settings such as expiration, inactivity
+TTL, and an IP allowlist. To use this method, you need an access token with
+full access.
 
 <SwaggerComponent
   method="POST"
@@ -162,7 +163,17 @@ with full access.
     {
       type: "body",
       details: {
-        name: "full_access",
+        name: "permissions",
+        dataType: "Object",
+        isRequired: false,
+        description:
+          "Permissions for the token. Includes full_access, read, and write.",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "permissions.full_access",
         dataType: "Boolean",
         isRequired: false,
         description: "Create a token with full access. Default: false",
@@ -171,7 +182,7 @@ with full access.
     {
       type: "body",
       details: {
-        name: "read",
+        name: "permissions.read",
         dataType: "String[]",
         isRequired: false,
         description: "A list of bucket names for read access. Default: []",
@@ -180,7 +191,7 @@ with full access.
     {
       type: "body",
       details: {
-        name: "write",
+        name: "permissions.write",
         dataType: "String[]",
         isRequired: false,
         description: "A list of bucket names for write access. Default: []",

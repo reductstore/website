@@ -9,7 +9,7 @@ description: "API reference for TokenPermissions in the ReductStore Client SDK f
 
 # TokenPermissions
 
-Defined in: [messages/Token.ts:60](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/messages/Token.ts#L60)
+Defined in: [messages/Token.ts:60](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/Token.ts#L60)
 
 Token Permissions
 
@@ -29,7 +29,7 @@ Token Permissions
 
 &gt; `readonly` **fullAccess**: `boolean` = `false`
 
-Defined in: [messages/Token.ts:65](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/messages/Token.ts#L65)
+Defined in: [messages/Token.ts:65](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/Token.ts#L65)
 
 Full access
 The token allows to create, remove and update settings of buckets, manage tokens and read and write data.
@@ -40,7 +40,7 @@ The token allows to create, remove and update settings of buckets, manage tokens
 
 &gt; `readonly` `optional` **read**: `string`[] = `[]`
 
-Defined in: [messages/Token.ts:71](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/messages/Token.ts#L71)
+Defined in: [messages/Token.ts:71](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/Token.ts#L71)
 
 Read access
 List of buckets allowed to read
@@ -51,7 +51,7 @@ List of buckets allowed to read
 
 &gt; `readonly` `optional` **write**: `string`[] = `[]`
 
-Defined in: [messages/Token.ts:77](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/messages/Token.ts#L77)
+Defined in: [messages/Token.ts:77](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/Token.ts#L77)
 
 Write access
 List of buckets allowed to write
@@ -62,7 +62,7 @@ List of buckets allowed to write
 
 &gt; `static` **parse**(`data`): `TokenPermissions`
 
-Defined in: [messages/Token.ts:79](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/messages/Token.ts#L79)
+Defined in: [messages/Token.ts:79](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/Token.ts#L79)
 
 #### Parameters
 
@@ -80,7 +80,7 @@ Defined in: [messages/Token.ts:79](https://github.com/reductstore/reduct-js/blob
 
 &gt; `static` **serialize**(`data`): `OriginalTokenPermission`
 
-Defined in: [messages/Token.ts:87](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/messages/Token.ts#L87)
+Defined in: [messages/Token.ts:87](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/Token.ts#L87)
 
 #### Parameters
 

@@ -12,7 +12,8 @@ func main() {
 		APIToken: "my-token",
 	})
 
-	// Create a token with read/write access to the bucket "example-bucket"
+	// Create a token with read/write access, a 1 hour inactivity TTL,
+	// and an IP allowlist for local access.
 	permissions := model.TokenPermissions{
 		FullAccess: false,
 		Read:       []string{"example-bucket"},
@@ -21,6 +22,8 @@ func main() {
 
 	createResp, err := client.CreateTokenWithOptions(context.Background(), "new-token", model.TokenCreateOptions{
 		Permissions: permissions,
+		Ttl:         3600,
+		IpAllowlist: []string{"127.0.0.1", "::1"},
 	})
 	if err != nil {
 		panic(err)

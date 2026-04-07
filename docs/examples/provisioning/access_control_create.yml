@@ -13,3 +13,4 @@ services:
       - RS_TOKEN_1_FULL_ACCESS=false
       - RS_TOKEN_1_READ=example-bucket
       - RS_TOKEN_1_WRITE=example-bucket
+      - RS_TOKEN_1_EXPIRES_AT=2030-01-01T00:00:00Z
