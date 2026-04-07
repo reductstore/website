@@ -11,4 +11,4 @@ description: "API reference for Variable: PAUSED in the ReductStore Client SDK f
 
 &gt; `const` **PAUSED**: `"paused"` = `"paused"`
 
-Defined in: [messages/ReplicationMode.ts:20](https://github.com/reductstore/reduct-js/blob/6089b6b11423413542749f2e034cde610ee73189/src/messages/ReplicationMode.ts#L20)
+Defined in: [messages/ReplicationMode.ts:19](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/messages/ReplicationMode.ts#L19)

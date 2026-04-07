@@ -22,8 +22,8 @@ The API is available only when the `RS_API_TOKEN` environment variable is set.
 
 ## Get a List of Tokens
 
-The method returns a list of tokens with names and creation dates. To use
-this method, you need an **[access token](../glossary#access-token)** with full access.
+This method returns a list of tokens and their metadata (it never returns token values). To use
+it, you need an **[access token](../glossary#access-token)** with full access.
 
 <SwaggerComponent
   method="GET"
@@ -40,8 +40,16 @@ this method, you need an **[access token](../glossary#access-token)** with full 
     {
       "name": "string",
       "created_at": "string",
+      "expires_at": "string | null",
       "last_access": "string | null",
-      "is_expired": "bool"
+      "is_expired": "bool",
+      "ttl": "number | null",
+      "ip_allowlist": [],
+      "permissions": {
+        "full_access": "bool",
+        "read": [],
+        "write": []
+      }
     }
   ]
 }`}</code>
@@ -68,7 +76,7 @@ this method, you need an **[access token](../glossary#access-token)** with full 
 
 ## Show Information about a Token
 
-This method provides full information about a token except its values. The
+This method provides full information about a token except its secret value. The
 method requires an access token with full access.
 
 <SwaggerComponent
@@ -95,13 +103,15 @@ method requires an access token with full access.
           <code>{`{
   "name": "string",
   "created_at": "string",
+  "expires_at": "string | null",
   "last_access": "string | null",
   "is_expired": "bool",
+  "ttl": "number | null",
+  "ip_allowlist": [],
   "permissions": {
     "full_access": "bool",
     "read": [],
-    "write": [],
-    "ip_allowlist": []
+    "write": []
   }
 }`}</code>
         </pre>
@@ -189,6 +199,16 @@ with full access.
     {
       type: "body",
       details: {
+        name: "expires_at",
+        dataType: "String",
+        isRequired: false,
+        description:
+          "Absolute expiration time (RFC 3339 timestamp). Default: null (no absolute expiration)",
+      },
+    },
+    {
+      type: "body",
+      details: {
         name: "ttl",
         dataType: "Number",
         isRequired: false,
@@ -240,32 +260,16 @@ with full access.
   ]}
 />
 
-### IP allowlist behavior
+## Token Fields and Behavior
 
-If `ip_allowlist` is set, the token can be used only from listed client IP addresses.
-Leave it empty to allow requests from any IP.
+Token read endpoints (`GET /api/v1/tokens`, `GET /api/v1/tokens/:token_name`, `GET /api/v1/me`) return additional fields:
 
-### `last_access` field
-
-Token read endpoints include `last_access`:
-
-- `GET /api/v1/tokens`
-- `GET /api/v1/tokens/:token_name`
-- `GET /api/v1/me`
-
-The value is populated from audit metadata and can be `null` for tokens that
-have not been used yet.
-
-### `ttl` and `is_expired` fields
-
-- `ttl` can be provided on `POST /api/v1/tokens/:token_name` to enable inactivity expiry.
-- When set, the token is considered expired if `now - last_access > ttl`.
-- Read endpoints include `is_expired` so clients can identify unusable tokens:
-  - `GET /api/v1/tokens`
-  - `GET /api/v1/tokens/:token_name`
-  - `GET /api/v1/me`
-
-`is_expired` is informational; authentication checks remain authoritative.
+- `created_at`: Timestamp when the current token value was issued (created or rotated).
+- `expires_at`: Absolute expiration time. After this time, the token is unusable.
+- `ip_allowlist`: If non-empty, requests using this token are accepted only from the listed client IPs or CIDRs.
+- `last_access`: Timestamp of the most recent token usage, or `null` if the token has not been used yet. This value is derived from audit metadata (see **[Audit Log](../guides/access-control#audit-log)**) and may remain `null` if auditing is disabled.
+- `ttl`: Inactivity timeout (seconds). When set, the server can expire tokens that have not been used within the TTL.
+- `is_expired`: Server-computed indicator showing whether the token is currently expired (for example due to `expires_at` or `ttl`).
 
 ## Rotate a Token
 
@@ -319,7 +323,8 @@ access token with full access.
     {
       status: "409",
       message: "Conflict",
-      summary: "Token cannot be rotated (for example init or provisioned token)",
+      summary:
+        "Token cannot be rotated (for example init or provisioned token)",
     },
     {
       status: "429",
@@ -401,13 +406,15 @@ name, permissions, and additional information.
           <code>{`{
   "name": "string",
   "created_at": "string",
+  "expires_at": "string | null",
   "last_access": "string | null",
   "is_expired": "bool",
+  "ip_allowlist": [],
+  "ttl": "number | null",
   "permissions": {
     "full_access": "bool",
     "read": [],
-    "write": [],
-    "ip_allowlist": []
+    "write": []
   }
 }`}</code>
         </pre>

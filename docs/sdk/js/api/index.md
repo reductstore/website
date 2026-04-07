@@ -36,6 +36,7 @@ description: "API reference for reduct-js in the ReductStore Client SDK for Java
 - [ReplicationSettings](classes/ReplicationSettings.md)
 - [ServerInfo](classes/ServerInfo.md)
 - [Token](classes/Token.md)
+- [TokenCreateRequest](classes/TokenCreateRequest.md)
 - [TokenPermissions](classes/TokenPermissions.md)
 
 ## Interfaces

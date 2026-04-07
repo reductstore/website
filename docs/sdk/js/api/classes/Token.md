@@ -9,7 +9,7 @@ description: "API reference for Token in the ReductStore Client SDK for JavaScri
 
 # Token
 
-Defined in: [messages/Token.ts:62](https://github.com/reductstore/reduct-js/blob/6089b6b11423413542749f2e034cde610ee73189/src/messages/Token.ts#L62)
+Defined in: [messages/Token.ts:114](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/messages/Token.ts#L114)
 
 Information about an access token
 
@@ -29,9 +29,39 @@ Information about an access token
 
 &gt; `readonly` **createdAt**: `number` = `0`
 
-Defined in: [messages/Token.ts:71](https://github.com/reductstore/reduct-js/blob/6089b6b11423413542749f2e034cde610ee73189/src/messages/Token.ts#L71)
+Defined in: [messages/Token.ts:123](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/messages/Token.ts#L123)
 
 Creation time of the token as unix timestamp in milliseconds
+
+***
+
+### expiresAt?
+
+&gt; `readonly` `optional` **expiresAt**: `number`
+
+Defined in: [messages/Token.ts:143](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/messages/Token.ts#L143)
+
+Expiration time as unix timestamp in milliseconds
+
+***
+
+### ipAllowlist?
+
+&gt; `readonly` `optional` **ipAllowlist**: `string`[]
+
+Defined in: [messages/Token.ts:148](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/messages/Token.ts#L148)
+
+List of IP addresses and CIDR ranges allowed to use the token
+
+***
+
+### isExpired?
+
+&gt; `readonly` `optional` **isExpired**: `boolean`
+
+Defined in: [messages/Token.ts:138](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/messages/Token.ts#L138)
+
+True if the token is expired
 
 ***
 
@@ -39,9 +69,19 @@ Creation time of the token as unix timestamp in milliseconds
 
 &gt; `readonly` `optional` **isProvisioned**: `boolean` = `false`
 
-Defined in: [messages/Token.ts:76](https://github.com/reductstore/reduct-js/blob/6089b6b11423413542749f2e034cde610ee73189/src/messages/Token.ts#L76)
+Defined in: [messages/Token.ts:153](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/messages/Token.ts#L153)
 
 Is the token provisioned, and you can't remove it or change it
+
+***
+
+### lastAccess?
+
+&gt; `readonly` `optional` **lastAccess**: `number`
+
+Defined in: [messages/Token.ts:128](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/messages/Token.ts#L128)
+
+Last access time of the token as unix timestamp in milliseconds
 
 ***
 
@@ -49,7 +89,7 @@ Is the token provisioned, and you can't remove it or change it
 
 &gt; `readonly` **name**: `string` = `""`
 
-Defined in: [messages/Token.ts:66](https://github.com/reductstore/reduct-js/blob/6089b6b11423413542749f2e034cde610ee73189/src/messages/Token.ts#L66)
+Defined in: [messages/Token.ts:118](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/messages/Token.ts#L118)
 
 Name of the token
 
@@ -59,9 +99,19 @@ Name of the token
 
 &gt; `readonly` `optional` **permissions**: [`TokenPermissions`](TokenPermissions.md)
 
-Defined in: [messages/Token.ts:81](https://github.com/reductstore/reduct-js/blob/6089b6b11423413542749f2e034cde610ee73189/src/messages/Token.ts#L81)
+Defined in: [messages/Token.ts:158](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/messages/Token.ts#L158)
 
 Permissions of the token
+
+***
+
+### ttl?
+
+&gt; `readonly` `optional` **ttl**: `number`
+
+Defined in: [messages/Token.ts:133](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/messages/Token.ts#L133)
+
+Time to live in milliseconds
 
 ## Methods
 
@@ -69,7 +119,7 @@ Permissions of the token
 
 &gt; `static` **parse**(`data`): `Token`
 
-Defined in: [messages/Token.ts:83](https://github.com/reductstore/reduct-js/blob/6089b6b11423413542749f2e034cde610ee73189/src/messages/Token.ts#L83)
+Defined in: [messages/Token.ts:160](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/messages/Token.ts#L160)
 
 #### Parameters
 

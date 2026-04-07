@@ -70,6 +70,36 @@ creation time of token
 
 token is provisioned and can't be deleted or changed
 
+<a id="reduct.msg.token.Token.expires_at"></a>
+
+#### expires\_at
+
+absolute expiration time
+
+<a id="reduct.msg.token.Token.ttl"></a>
+
+#### ttl
+
+inactivity timeout in seconds
+
+<a id="reduct.msg.token.Token.last_access"></a>
+
+#### last\_access
+
+latest token usage timestamp
+
+<a id="reduct.msg.token.Token.is_expired"></a>
+
+#### is\_expired
+
+token is currently expired and unusable
+
+<a id="reduct.msg.token.Token.ip_allowlist"></a>
+
+#### ip\_allowlist
+
+list of allowed client IPs or CIDRs
+
 <a id="reduct.msg.token.FullTokenInfo"></a>
 
 ## FullTokenInfo
@@ -102,6 +132,40 @@ List of tokens
 
 list of tokens
 
+<a id="reduct.msg.token.TokenCreateRequest"></a>
+
+## TokenCreateRequest
+
+```python
+class TokenCreateRequest(BaseModel)
+```
+
+Request payload for creating a token
+
+<a id="reduct.msg.token.TokenCreateRequest.permissions"></a>
+
+#### permissions
+
+permissions of token
+
+<a id="reduct.msg.token.TokenCreateRequest.expires_at"></a>
+
+#### expires\_at
+
+absolute expiration time
+
+<a id="reduct.msg.token.TokenCreateRequest.ttl"></a>
+
+#### ttl
+
+inactivity timeout in seconds
+
+<a id="reduct.msg.token.TokenCreateRequest.ip_allowlist"></a>
+
+#### ip\_allowlist
+
+list of allowed client IPs or CIDRs
+
 <a id="reduct.msg.token.TokenCreateResponse"></a>
 
 ## TokenCreateResponse
@@ -117,5 +181,11 @@ Response from creating a token
 #### value
 
 token for authentication
+
+<a id="reduct.msg.token.TokenCreateResponse.created_at"></a>
+
+#### created\_at
+
+timestamp when a token value was created or rotated
 
 

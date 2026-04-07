@@ -9,7 +9,7 @@ description: "API reference for RecordBatchType in the ReductStore Client SDK fo
 
 # RecordBatchType
 
-Defined in: [RecordBatch.ts:25](https://github.com/reductstore/reduct-js/blob/6089b6b11423413542749f2e034cde610ee73189/src/RecordBatch.ts#L25)
+Defined in: [RecordBatch.ts:25](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/RecordBatch.ts#L25)
 
 ## Enumeration Members
 
@@ -17,7 +17,7 @@ Defined in: [RecordBatch.ts:25](https://github.com/reductstore/reduct-js/blob/60
 
 &gt; **REMOVE**: `2`
 
-Defined in: [RecordBatch.ts:28](https://github.com/reductstore/reduct-js/blob/6089b6b11423413542749f2e034cde610ee73189/src/RecordBatch.ts#L28)
+Defined in: [RecordBatch.ts:28](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/RecordBatch.ts#L28)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [RecordBatch.ts:28](https://github.com/reductstore/reduct-js/blob/60
 
 &gt; **UPDATE**: `1`
 
-Defined in: [RecordBatch.ts:27](https://github.com/reductstore/reduct-js/blob/6089b6b11423413542749f2e034cde610ee73189/src/RecordBatch.ts#L27)
+Defined in: [RecordBatch.ts:27](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/RecordBatch.ts#L27)
 
 ***
 
@@ -33,4 +33,4 @@ Defined in: [RecordBatch.ts:27](https://github.com/reductstore/reduct-js/blob/60
 
 &gt; **WRITE**: `0`
 
-Defined in: [RecordBatch.ts:26](https://github.com/reductstore/reduct-js/blob/6089b6b11423413542749f2e034cde610ee73189/src/RecordBatch.ts#L26)
+Defined in: [RecordBatch.ts:26](https://github.com/reductstore/reduct-js/blob/186831d5e0209ad40906eed9aba3e6042a8c6832/src/RecordBatch.ts#L26)
