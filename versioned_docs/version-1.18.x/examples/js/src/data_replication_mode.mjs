@@ -1,4 +1,3 @@
-// reduct-js is published as CommonJS; in Node ESM examples we import the default export.
 import reductJs from "reduct-js";
 
 const { Client, ReplicationMode } = reductJs;
