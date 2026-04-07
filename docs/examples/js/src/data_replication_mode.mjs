@@ -1,6 +1,4 @@
-import reductJs from "reduct-js";
-
-const { Client, ReplicationMode } = reductJs;
+import { Client, ReplicationMode } from "reduct-js";
 
 // Update replication mode without changing other settings
 const client = new Client("http://127.0.0.1:8383", { apiToken: "my-token" });
