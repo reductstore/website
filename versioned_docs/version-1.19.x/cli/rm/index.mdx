@@ -1,0 +1,62 @@
+---
+title: "rm"
+description: "Remove data from a bucket"
+---
+
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/cli/rm" />
+</head>
+
+# reduct-cli rm
+
+Remove data from a bucket
+
+## Arguments
+
+- `<BUCKET_PATH>`: Alias or URL (e.g. http://token@localhost:8383) of the ReductStore instance to use
+
+## Options
+
+- `-b, --start <start>`: Remove records with timestamps older than this time point in ISO format or Unix timestamp in microseconds. If not specified, the export will start from the first record in an entry.
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-e, --stop <stop>`: Remove records with timestamps newer than this time point in ISO format or Unix timestamp in microseconds. If not specified, the export will end at the last record in an entry.
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-n, --entries [<ENTRY_NAME>...]`: List of entries to export. If not specified, all entries will be requested. Prefix wildcards are supported (e.g. entry-\*).
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-N, --each-n <NUMBER>`: (DEPRECATED) Export every nth record. If not specified, all records will be requested.
+- `-S, --each-s <NUMBER>`: (DEPRECATED) Export a record every n seconds. If not specified, all records will be requested.
+- `-w, --when <CONDITION>`: Filter records by a JSON condition. If not specified, all records will be requested.
+- `-s, --strict`: If set, `when` will fail if the condition is not met.
+- `-t, --time [<TIMESTAMP>...]`: Remove a record with a certain timestamp in ISO format or Unix timestamp in microseconds.
+- `-h, --help`: Print help
+
+## Help Output
+
+```text
+Remove data from a bucket
+
+Usage: reduct-cli rm [OPTIONS] <BUCKET_PATH>
+
+Arguments:
+  <BUCKET_PATH>  Alias or URL (e.g. http://token@localhost:8383) of the ReductStore instance to use
+
+Options:
+  -b, --start <start>              Remove records  with timestamps older than this time point in ISO format or Unix timestamp in microseconds.
+                                   If not specified, the export will start from the first record in an entry.
+  -i, --ignore-ssl                 Ignore SSL certificate verification
+  -e, --stop <stop>                Remove records with timestamps newer than this time point in ISO format or Unix timestamp in microseconds.
+                                   If not specified, the export will end at the last record in an entry.
+  -T, --timeout <SECONDS>          Timeout for requests [default: 30]
+  -n, --entries [<ENTRY_NAME>...]  List of entries to export.
+                                   If not specified, all entries will be requested. Prefix wildcards are supported (e.g. entry-*).
+  -p, --parallel <COUNT>           Number of parallel requests [default: 10]
+  -N, --each-n <NUMBER>            (DEPRECATED) Export every nth record.
+                                   If not specified, all records will be requested.
+  -S, --each-s <NUMBER>            (DEPRECATED) Export a record every n seconds.
+                                   If not specified, all records will be requested.
+  -w, --when <CONDITION>           Filter records by a JSON condition.
+                                   If not specified, all records will be requested.
+  -s, --strict                     If set, `when` will fail if the condition is not met.
+  -t, --time [<TIMESTAMP>...]      Remove a record with a certain timestamp in ISO format or Unix timestamp in microseconds.
+  -h, --help                       Print help
+```
