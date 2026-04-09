@@ -9,7 +9,7 @@ description: "API reference for Client in the ReductStore Client SDK for JavaScr
 
 # Client
 
-Defined in: [Client.ts:43](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L43)
+Defined in: [Client.ts:43](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L43)
 
 ## Constructors
 
@@ -17,7 +17,7 @@ Defined in: [Client.ts:43](https://github.com/reductstore/reduct-js/blob/6af4865
 
 &gt; **new Client**(`url`, `options`): `Client`
 
-Defined in: [Client.ts:51](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L51)
+Defined in: [Client.ts:51](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L51)
 
 HTTP Client for ReductStore
 
@@ -43,7 +43,7 @@ URL to the storage
 
 &gt; **close**(): `Promise`\&lt;`void`\&gt;
 
-Defined in: [Client.ts:68](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L68)
+Defined in: [Client.ts:68](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L68)
 
 Close underlying HTTP resources (Node.js only).
 
@@ -57,7 +57,7 @@ Close underlying HTTP resources (Node.js only).
 
 &gt; **createBucket**(`name`, `settings?`): `Promise`\&lt;[`Bucket`](Bucket.md)\&gt;
 
-Defined in: [Client.ts:91](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L91)
+Defined in: [Client.ts:91](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L91)
 
 Create a new bucket
 
@@ -85,7 +85,7 @@ optional settings
 
 &gt; **createReplication**(`name`, `settings`): `Promise`\&lt;`void`\&gt;
 
-Defined in: [Client.ts:246](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L246)
+Defined in: [Client.ts:246](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L246)
 
 Create a new replication
 
@@ -113,7 +113,7 @@ settings of the replication
 
 &gt; **createToken**(`name`, `permissionsOrRequest`): `Promise`\&lt;`string`\&gt;
 
-Defined in: [Client.ts:141](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L141)
+Defined in: [Client.ts:141](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L141)
 
 Create a new access token
 
@@ -150,7 +150,7 @@ const client = new Client("https://play.storage-reduct.dev", {apiToken: token});
 
 &gt; **deleteReplication**(`name`): `Promise`\&lt;`void`\&gt;
 
-Defined in: [Client.ts:287](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L287)
+Defined in: [Client.ts:287](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L287)
 
 Delete a replication
 
@@ -172,7 +172,7 @@ name of the replication
 
 &gt; **deleteToken**(`name`): `Promise`\&lt;`void`\&gt;
 
-Defined in: [Client.ts:202](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L202)
+Defined in: [Client.ts:202](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L202)
 
 Delete a token by name
 
@@ -194,7 +194,7 @@ name of the token
 
 &gt; **getBucket**(`name`): `Promise`\&lt;[`Bucket`](Bucket.md)\&gt;
 
-Defined in: [Client.ts:104](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L104)
+Defined in: [Client.ts:104](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L104)
 
 Get a bucket by name
 
@@ -216,7 +216,7 @@ name of the bucket
 
 &gt; **getBucketList**(): `Promise`\&lt;[`BucketInfo`](BucketInfo.md)[]\&gt;
 
-Defined in: [Client.ts:78](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L78)
+Defined in: [Client.ts:78](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L78)
 
 Get list of buckets
 
@@ -236,7 +236,7 @@ BucketInfo
 
 &gt; **getInfo**(): `Promise`\&lt;[`ServerInfo`](ServerInfo.md)\&gt;
 
-Defined in: [Client.ts:60](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L60)
+Defined in: [Client.ts:60](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L60)
 
 Get server information
 
@@ -254,7 +254,7 @@ the data about the server
 
 &gt; **getOrCreateBucket**(`name`, `settings?`): `Promise`\&lt;[`Bucket`](Bucket.md)\&gt;
 
-Defined in: [Client.ts:115](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L115)
+Defined in: [Client.ts:115](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L115)
 
 Try to create a bucket and get it if it already exists
 
@@ -282,7 +282,7 @@ optional settings
 
 &gt; **getReplication**(`name`): `Promise`\&lt;[`FullReplicationInfo`](FullReplicationInfo.md)\&gt;
 
-Defined in: [Client.ts:233](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L233)
+Defined in: [Client.ts:233](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L233)
 
 Get full information about a replication
 
@@ -306,7 +306,7 @@ the replication
 
 &gt; **getReplicationList**(): `Promise`\&lt;[`ReplicationInfo`](ReplicationInfo.md)[]\&gt;
 
-Defined in: [Client.ts:219](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L219)
+Defined in: [Client.ts:219](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L219)
 
 Get the list of replications
 
@@ -322,7 +322,7 @@ the list of replications
 
 &gt; **getToken**(`name`): `Promise`\&lt;[`Token`](Token.md)\&gt;
 
-Defined in: [Client.ts:180](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L180)
+Defined in: [Client.ts:180](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L180)
 
 Get a token by name
 
@@ -346,7 +346,7 @@ the token
 
 &gt; **getTokenList**(): `Promise`\&lt;[`Token`](Token.md)[]\&gt;
 
-Defined in: [Client.ts:191](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L191)
+Defined in: [Client.ts:191](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L191)
 
 List all tokens
 
@@ -362,7 +362,7 @@ the list of tokens
 
 &gt; **me**(): `Promise`\&lt;[`Token`](Token.md)\&gt;
 
-Defined in: [Client.ts:210](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L210)
+Defined in: [Client.ts:210](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L210)
 
 Get current API token and its permissions
 
@@ -378,7 +378,7 @@ the token
 
 &gt; **rotateToken**(`name`): `Promise`\&lt;`string`\&gt;
 
-Defined in: [Client.ts:167](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L167)
+Defined in: [Client.ts:167](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L167)
 
 Rotate a token by name
 
@@ -402,7 +402,7 @@ new token value
 
 &gt; **setReplicationMode**(`name`, `mode`): `Promise`\&lt;`void`\&gt;
 
-Defined in: [Client.ts:278](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L278)
+Defined in: [Client.ts:278](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L278)
 
 Update replication mode without changing settings
 
@@ -430,7 +430,7 @@ new mode: enabled, paused, or disabled
 
 &gt; **updateReplication**(`name`, `settings`): `Promise`\&lt;`void`\&gt;
 
-Defined in: [Client.ts:262](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Client.ts#L262)
+Defined in: [Client.ts:262](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/Client.ts#L262)
 
 Update a replication
 

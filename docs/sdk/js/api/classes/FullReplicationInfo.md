@@ -9,7 +9,7 @@ description: "API reference for FullReplicationInfo in the ReductStore Client SD
 
 # FullReplicationInfo
 
-Defined in: [messages/ReplicationInfo.ts:66](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/ReplicationInfo.ts#L66)
+Defined in: [messages/ReplicationInfo.ts:66](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/messages/ReplicationInfo.ts#L66)
 
 Replication full info
 
@@ -29,7 +29,7 @@ Replication full info
 
 &gt; `readonly` **diagnostics**: `Diagnostics`
 
-Defined in: [messages/ReplicationInfo.ts:80](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/ReplicationInfo.ts#L80)
+Defined in: [messages/ReplicationInfo.ts:80](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/messages/ReplicationInfo.ts#L80)
 
 Replication statistics
 
@@ -39,7 +39,7 @@ Replication statistics
 
 &gt; `readonly` **info**: [`ReplicationInfo`](ReplicationInfo.md)
 
-Defined in: [messages/ReplicationInfo.ts:70](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/ReplicationInfo.ts#L70)
+Defined in: [messages/ReplicationInfo.ts:70](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/messages/ReplicationInfo.ts#L70)
 
 Replication info
 
@@ -49,7 +49,7 @@ Replication info
 
 &gt; `readonly` **settings**: [`ReplicationSettings`](ReplicationSettings.md)
 
-Defined in: [messages/ReplicationInfo.ts:75](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/ReplicationInfo.ts#L75)
+Defined in: [messages/ReplicationInfo.ts:75](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/messages/ReplicationInfo.ts#L75)
 
 Replication settings
 
@@ -59,7 +59,7 @@ Replication settings
 
 &gt; `static` **parse**(`data`): `FullReplicationInfo`
 
-Defined in: [messages/ReplicationInfo.ts:82](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/ReplicationInfo.ts#L82)
+Defined in: [messages/ReplicationInfo.ts:82](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/messages/ReplicationInfo.ts#L82)
 
 #### Parameters
 
