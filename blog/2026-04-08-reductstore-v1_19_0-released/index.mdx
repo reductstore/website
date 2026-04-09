@@ -9,35 +9,33 @@ image: ./img/release-v1-18.png
 
 ![ReductStore v1.19.0 Released](./img/release-v1-18.png)
 
-We are pleased to announce the release of the latest minor version of [**ReductStore**](/), [**1.19.0**](https://github.com/reductstore/reductstore/releases/tag/v1.19.0). ReductStore is a high-performance storage and streaming solution designed for storing and managing large volumes of historical data.
+ReductStore [**1.19.0**](https://github.com/reductstore/reductstore/releases/tag/v1.19.0) is now available. This release extends the storage model for robotics and telemetry workloads and introduces new integration points for ROS and Zenoh.
 
-To download the latest released version, please visit our [**Download Page**](/download).
+To download the latest release, visit the [**Download Page**](/download).
 
 ## What's new in 1.19.0?
 
-ReductStore v1.19.0 introduces a major shift toward robotics and ROS by making [**ReductStore Core open-source under Apache 2.0**](/blog/2026-03-16-apache-2-license/index.mdx), enabling broader adoption and integration.
-The data model now supports a nested entry structure similar to ROS topics, along with attachments for schemas and metadata, making it easier to organize and interpret complex robotics data.
+The first major change in v1.19 is licensing. [**ReductStore Core is now open source under Apache 2.0**](/blog/news/reductstore-core-apache-2-0), which makes the core database easier to evaluate, integrate, and extend in production systems.
 
-This release also adds a [**native Zenoh API**](/docs/integrations/zenoh) for efficient edge communication and distributed data flows.
+The second major change is the data model. ReductStore now supports hierarchical entry names, similar to ROS topics, and adds entry attachments for schemas and metadata. This makes it possible to represent structured robotics data without flattening topic hierarchies or moving context into external systems.
 
-Finally, [**ReductBridge**](/docs/reduct-bridge/index.mdx) simplifies integration with ROS1 and ROS2, allowing automatic data labeling and seamless connection between robotics pipelines and storage.
+The release also introduces a [**native Zenoh API**](/docs/integrations/zenoh) for direct ingestion and querying over Zenoh, and [**ReductBridge**](/docs/reduct-bridge) for ROS1 and ROS2 integration.
 
 {/* truncate */}
 
 ### Nested Data Model with Attachments
 
-The new hierarchical data model allows you to organize your data in a nested structure, similar to ROS/Zenoh/MQTT/ topics.
-Each entry can have attachments for schemas and metadata, making it easier to manage complex robotics data and ensure compatibility across different systems.
-Attachemnts are used by the ROS Extension to parse serialized ROS messages or export then to MCAP files.
+The new hierarchical data model lets you organize data in a path-based structure, similar to ROS topics, Zenoh key expressions, or MQTT topics. Instead of relying on a flat namespace, ReductStore can now store data in a form that matches the structure used by upstream systems.
+
+Each entry can also include attachments for schemas and metadata. These attachments preserve the context required by downstream tooling without changing the record payload itself. For example, the [**ROS Extension**](/docs/extensions/official/ros-ext) can use them to decode serialized ROS messages and export them to MCAP files.
 
 ![Web Console with Nested Data Model](./img/web-console-nested.png)
 
 ### Native Zenoh API
 
-Zenoh is gettig increasingly popular in the robotics community as a lightweight, efficient communication protocol for edge computing and distributed systems.
-With [**the new native Zenoh API**](/docs/integrations/zenoh.mdx), you can now directly interact with ReductStore using Zenoh, enabling seamless integration with other Zenoh-enabled systems and building distributed data flows at the edge.
+Zenoh is increasingly used in robotics and edge environments as a low-overhead protocol for distributed data exchange. With the [**native Zenoh API**](/docs/integrations/zenoh), ReductStore can participate directly in Zenoh-based systems without requiring an additional bridge or adapter.
 
-You can simply enable the Zenoh API in ReductStore and start recording and querying data using Zenoh topics, without needing to set up additional bridges or connectors.
+You can start ReductStore with the Zenoh API enabled using a minimal Docker configuration:
 
 ```shell
 docker pull reduct/store:v1.19.0
@@ -45,10 +43,10 @@ docker run --env "RS_ZENOH_ENABLED=ON" \
   --env "RS_ZENOH_CONFIG={}" \
   --env "RS_ZENOH_SUB_KEYEXPRS=**" \
   -p 8383:8383 -p 36597:36597 -p 7446:7446 \
-  reduct/store:main
+  reduct/store:v1.19.0
 ```
 
-Moreover, the API supports Zenoh attachments which can be use for labeling and query conditions in JSON format:
+Once enabled, the API allows you to write data to ReductStore directly over Zenoh. If a sample includes a JSON attachment, ReductStore stores it as record labels:
 
 ```python
 import json
@@ -66,26 +64,52 @@ with zenoh.open(zenoh.Config()) as session:
     )
 ```
 
+You can also query data through Zenoh. For conditional queries, pass a `when` expression in the query attachment. If you want all matching records returned individually, use `zenoh.ConsolidationMode.NONE`:
+
+```python
+import json
+import zenoh
+
+KEY = "factory/line1/when-query"
+CONSOLIDATION = zenoh.ConsolidationMode.NONE
+attachment = json.dumps({"when": {"&status": {"$eq": "ok"}}}).encode()
+
+with zenoh.open(zenoh.Config()) as session:
+    replies = [
+        reply
+        for reply in session.get(
+            KEY,
+            timeout=5.0,
+            attachment=attachment,
+            consolidation=CONSOLIDATION,
+        )
+        if reply.ok
+    ]
+
+    for reply in replies:
+        print(reply.ok.payload.to_bytes())
+```
+
+Data ingested through Zenoh is stored in ReductStore like data written through the HTTP API, so it remains available for querying, replication, and downstream tools and extensions.
+
 ### ReductBridge for ROS Integration
 
-We launched a new project called [**ReductBridge**](https://github.com/reductstore/reduct-bridge) that provides seamless integration between ReductStore and ROS1/ROS2.
-ReductBridge automatically labels ROS messages, create attahments with schema and metadata, so that it can be used to parse the raw ROS messages with the ROS Extension and export them to MCAP files.
+This release also introduces [**ReductBridge**](https://github.com/reductstore/reduct-bridge), a new project for integrating ReductStore with ROS1 and ROS2. ReductBridge automatically labels ROS messages and stores related schemas and metadata as attachments.
 
-ROS1/ROS2 is only beggine, we will extend so that you can ingest OS metrics, logs, and other data into ReductStore with automatic labeling and attachments, making it easier to build unified data pipelines for robotics applications.
+This makes raw ROS payloads usable after ingestion: they can be decoded later with the ROS Extension or exported to MCAP files. ROS support is the first target, but the same pattern can be extended to operating system metrics, logs, and other telemetry to build a unified storage layer with consistent labeling and metadata.
 
 ## What’s Next
 
-Our main focus for the next releases will be on improving data compression and storage efficiency in ReductStore, especially for robotics where the size of data and formats can vary widely. We are going to introduce compression on the backend side, that must be very efficient since we store many records in a single block.
+The next area of work is data compression and storage efficiency, especially for robotics workloads where payload sizes and formats vary significantly. We plan to introduce backend compression optimized for ReductStore's storage model, where many records are packed into a single block.
 
-We also going to adopt parquet storage format for metadata which is more efficient for querying and analytics and
-would allow you access the metada directly without reading the data blocks and connect with data lake tools.
+We also plan to store metadata in Parquet format. This should improve query efficiency, make metadata accessible without scanning the underlying data blocks, and simplify integration with analytics and data lake tooling.
 
 ## Compatibility and Migration
 
-Since security issues we stopped using root user in our Docker images, so if you are using ReductStore with Docker, please make sure to update your deployment to use the new image and set the appropriate permissions for the data directory.
+Starting with v1.19, ReductStore Docker images no longer run as `root` for security reasons. If you deploy with Docker, make sure the mounted data directory is writable by UID/GID `10001:10001` before upgrading.
 
 ---
 
-I hope you find those new features useful. If you have any questions or feedback, don’t hesitate to use the [**ReductStore Community**](https://community.reduct.store/signup) forum.
+If you have questions or feedback, join the [**ReductStore Community**](https://community.reduct.store/signup) forum.
 
 Thanks for using [**ReductStore**](/)!
