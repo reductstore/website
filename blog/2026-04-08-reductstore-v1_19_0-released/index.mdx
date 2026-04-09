@@ -18,7 +18,7 @@ To download the latest released version, please visit our [**Download Page**](/d
 ReductStore v1.19.0 introduces a major shift toward robotics and ROS by making [**ReductStore Core open-source under Apache 2.0**](/blog/2026-03-16-apache-2-license/index.mdx), enabling broader adoption and integration.
 The data model now supports a nested entry structure similar to ROS topics, along with attachments for schemas and metadata, making it easier to organize and interpret complex robotics data.
 
-This release also adds a [**native Zenoh API**](/docs/integrations/zenoh.mdx)  for efficient edge communication and distributed data flows.
+This release also adds a [**native Zenoh API**](/docs/integrations/zenoh) for efficient edge communication and distributed data flows.
 
 Finally, [**ReductBridge**](/docs/reduct-bridge/index.mdx) simplifies integration with ROS1 and ROS2, allowing automatic data labeling and seamless connection between robotics pipelines and storage.
 
@@ -26,7 +26,7 @@ Finally, [**ReductBridge**](/docs/reduct-bridge/index.mdx) simplifies integratio
 
 ### Nested Data Model with Attachments
 
-The new hierarchical data model allows you to organize your data in a nested structure, similar to ROS/Zenoh/MQTT/.. topics.
+The new hierarchical data model allows you to organize your data in a nested structure, similar to ROS/Zenoh/MQTT/ topics.
 Each entry can have attachments for schemas and metadata, making it easier to manage complex robotics data and ensure compatibility across different systems.
 Attachemnts are used by the ROS Extension to parse serialized ROS messages or export then to MCAP files.
 
@@ -68,11 +68,21 @@ with zenoh.open(zenoh.Config()) as session:
 
 ### ReductBridge for ROS Integration
 
-We launched a new project called [**ReductBridge**](x) that provides seamless integration between ReductStore and ROS1/ROS2. ReductBridge automatically labels ROS messages
+We launched a new project called [**ReductBridge**](https://github.com/reductstore/reduct-bridge) that provides seamless integration between ReductStore and ROS1/ROS2.
+ReductBridge automatically labels ROS messages, create attahments with schema and metadata, so that it can be used to parse the raw ROS messages with the ROS Extension and export them to MCAP files.
 
+ROS1/ROS2 is only beggine, we will extend so that you can ingest OS metrics, logs, and other data into ReductStore with automatic labeling and attachments, making it easier to build unified data pipelines for robotics applications.
 
 ## What’s Next
 
+Our main focus for the next releases will be on improving data compression and storage efficiency in ReductStore, especially for robotics where the size of data and formats can vary widely. We are going to introduce compression on the backend side, that must be very efficient since we store many records in a single block.
+
+We also going to adopt parquet storage format for metadata which is more efficient for querying and analytics and
+would allow you access the metada directly without reading the data blocks and connect with data lake tools.
+
+## Compatibility and Migration
+
+Since security issues we stopped using root user in our Docker images, so if you are using ReductStore with Docker, please make sure to update your deployment to use the new image and set the appropriate permissions for the data directory.
 
 ---
 

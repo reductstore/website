@@ -9,7 +9,7 @@ description: "API reference for QuotaType in the ReductStore Client SDK for Java
 
 # QuotaType
 
-Defined in: [messages/BucketSettings.ts:1](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/messages/BucketSettings.ts#L1)
+Defined in: [messages/BucketSettings.ts:1](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/messages/BucketSettings.ts#L1)
 
 ## Enumeration Members
 
@@ -17,7 +17,7 @@ Defined in: [messages/BucketSettings.ts:1](https://github.com/reductstore/reduct
 
 &gt; **FIFO**: `1`
 
-Defined in: [messages/BucketSettings.ts:3](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/messages/BucketSettings.ts#L3)
+Defined in: [messages/BucketSettings.ts:3](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/messages/BucketSettings.ts#L3)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [messages/BucketSettings.ts:3](https://github.com/reductstore/reduct
 
 &gt; **HARD**: `2`
 
-Defined in: [messages/BucketSettings.ts:4](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/messages/BucketSettings.ts#L4)
+Defined in: [messages/BucketSettings.ts:4](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/messages/BucketSettings.ts#L4)
 
 ***
 
@@ -33,4 +33,4 @@ Defined in: [messages/BucketSettings.ts:4](https://github.com/reductstore/reduct
 
 &gt; **NONE**: `0`
 
-Defined in: [messages/BucketSettings.ts:2](https://github.com/reductstore/reduct-js/blob/0ba222cb009ec7ac1d05ad403b39b66dc3bc7227/src/messages/BucketSettings.ts#L2)
+Defined in: [messages/BucketSettings.ts:2](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/messages/BucketSettings.ts#L2)
