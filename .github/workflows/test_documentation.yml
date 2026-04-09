@@ -16,19 +16,19 @@ jobs:
     strategy:
       matrix:
         example: [python, rust, golang, curl, cpp, node, cli]
-        doc_version: [next, 1.18.x, 1.17.x]
+        doc_version: [next, 1.19.x, 1.18.x]
         include:
           - doc_version: next
             image: reduct/pro:main
             example_root: docs/examples
 
-          - doc_version: 1.18.x
-            image: reduct/store:v1.18.3
-            example_root: versioned_docs/version-1.18.x/examples
+          - doc_version: 1.19.x
+            image: reduct/pro:latest
+            example_root: versioned_docs/version-1.19.x/examples
 
-          - doc_version: 1.17.x
-            image: reduct/store:v1.17.10
-            example_root: versioned_docs/version-1.17.x/examples
+          - doc_version: 1.18.x
+            image: reduct/store:v1.18.10
+            example_root: versioned_docs/version-1.18.x/examples
 
           - example: python
             cmd: python3

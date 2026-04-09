@@ -1,0 +1,338 @@
+---
+title: "replica"
+description: "Manage replication tasks"
+---
+
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/cli/replica" />
+</head>
+
+# reduct-cli replica
+
+Manage replication tasks
+
+## Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-h, --help`: Print help
+
+## Help Output
+
+```text
+Manage replication tasks
+
+Usage: reduct-cli replica [OPTIONS] [COMMAND]
+
+Commands:
+  create   Create a replication task
+  update   Update a replication task
+  ls       List replication tasks
+  show     Show details about a replication task
+  enable   Enable a replication task
+  disable  Disable a replication task
+  pause    Pause a replication task
+  rm       Remove a replication task
+  help     Print this message or the help of the given subcommand(s)
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
+  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+  -h, --help               Print help
+```
+
+## Subcommands
+
+### `create`
+
+Create a replication task
+
+#### Arguments
+
+- `<REPLICATION_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+- `<SOURCE_BUCKET_NAME>`: Source bucket on the replicated instance
+- `<DEST_BUCKET_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-n, --entries [<ENTRY_NAME>...]`: List of entries to export. If not specified, all entries will be requested. Prefix wildcards are supported (e.g. entry-\*).
+- `-N, --each-n <NUMBER>`: (DEPRECATED) Export every nth record. If not specified, all records will be requested.
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-S, --each-s <NUMBER>`: (DEPRECATED) Export a record every n seconds. If not specified, all records will be requested.
+- `-w, --when <CONDITION>`: Filter records by a JSON condition. If not specified, all records will be requested.
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Create a replication task
+
+Usage: reduct-cli replica create [OPTIONS] <REPLICATION_PATH> <SOURCE_BUCKET_NAME> <DEST_BUCKET_PATH>
+
+Arguments:
+  <REPLICATION_PATH>    Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+  <SOURCE_BUCKET_NAME>  Source bucket on the replicated instance
+  <DEST_BUCKET_PATH>    Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+
+Options:
+  -i, --ignore-ssl                 Ignore SSL certificate verification
+  -n, --entries [<ENTRY_NAME>...]  List of entries to export.
+                                   If not specified, all entries will be requested. Prefix wildcards are supported (e.g. entry-*).
+  -N, --each-n <NUMBER>            (DEPRECATED) Export every nth record.
+                                   If not specified, all records will be requested.
+  -T, --timeout <SECONDS>          Timeout for requests [default: 30]
+  -p, --parallel <COUNT>           Number of parallel requests [default: 10]
+  -S, --each-s <NUMBER>            (DEPRECATED) Export a record every n seconds.
+                                   If not specified, all records will be requested.
+  -w, --when <CONDITION>           Filter records by a JSON condition.
+                                   If not specified, all records will be requested.
+  -h, --help                       Print help
+```
+
+### `update`
+
+Update a replication task
+
+#### Arguments
+
+- `<REPLICATION_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+- `<DEST_BUCKET_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-s, --source-bucket <source-bucket>`: Source bucket on the replicated instance
+- `-n, --entries [<ENTRY_NAME>...]`: List of entries to export. If not specified, all entries will be requested. Prefix wildcards are supported (e.g. entry-\*).
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-N, --each-n <NUMBER>`: (DEPRECATED) Export every nth record. If not specified, all records will be requested.
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-S, --each-s <NUMBER>`: (DEPRECATED) Export a record every n seconds. If not specified, all records will be requested.
+- `-w, --when <CONDITION>`: Filter records by a JSON condition. If not specified, all records will be requested.
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Update a replication task
+
+Usage: reduct-cli replica update [OPTIONS] <REPLICATION_PATH> <DEST_BUCKET_PATH>
+
+Arguments:
+  <REPLICATION_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+  <DEST_BUCKET_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+
+Options:
+  -i, --ignore-ssl                     Ignore SSL certificate verification
+  -s, --source-bucket <source-bucket>  Source bucket on the replicated instance
+  -n, --entries [<ENTRY_NAME>...]      List of entries to export.
+                                       If not specified, all entries will be requested. Prefix wildcards are supported (e.g. entry-*).
+  -T, --timeout <SECONDS>              Timeout for requests [default: 30]
+  -N, --each-n <NUMBER>                (DEPRECATED) Export every nth record.
+                                       If not specified, all records will be requested.
+  -p, --parallel <COUNT>               Number of parallel requests [default: 10]
+  -S, --each-s <NUMBER>                (DEPRECATED) Export a record every n seconds.
+                                       If not specified, all records will be requested.
+  -w, --when <CONDITION>               Filter records by a JSON condition.
+                                       If not specified, all records will be requested.
+  -h, --help                           Print help
+```
+
+### `ls`
+
+List replication tasks
+
+#### Arguments
+
+- `<ALIAS_OR_URL>`: Alias or URL (e.g. http://token@localhost:8383) of the ReductStore instance to use
+
+#### Options
+
+- `-f, --full`: Show detailed replication information
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+List replication tasks
+
+Usage: reduct-cli replica ls [OPTIONS] <ALIAS_OR_URL>
+
+Arguments:
+  <ALIAS_OR_URL>  Alias or URL (e.g. http://token@localhost:8383) of the ReductStore instance to use
+
+Options:
+  -f, --full               Show detailed replication information
+  -i, --ignore-ssl         Ignore SSL certificate verification
+  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
+  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+  -h, --help               Print help
+```
+
+### `show`
+
+Show details about a replication task
+
+#### Arguments
+
+- `<REPLICATION_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Show details about a replication task
+
+Usage: reduct-cli replica show [OPTIONS] <REPLICATION_PATH>
+
+Arguments:
+  <REPLICATION_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
+  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+  -h, --help               Print help
+```
+
+### `enable`
+
+Enable a replication task
+
+#### Arguments
+
+- `<REPLICATION_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Enable a replication task
+
+Usage: reduct-cli replica enable [OPTIONS] <REPLICATION_PATH>
+
+Arguments:
+  <REPLICATION_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
+  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+  -h, --help               Print help
+```
+
+### `disable`
+
+Disable a replication task
+
+#### Arguments
+
+- `<REPLICATION_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Disable a replication task
+
+Usage: reduct-cli replica disable [OPTIONS] <REPLICATION_PATH>
+
+Arguments:
+  <REPLICATION_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
+  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+  -h, --help               Print help
+```
+
+### `pause`
+
+Pause a replication task
+
+#### Arguments
+
+- `<REPLICATION_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Pause a replication task
+
+Usage: reduct-cli replica pause [OPTIONS] <REPLICATION_PATH>
+
+Arguments:
+  <REPLICATION_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
+  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+  -h, --help               Print help
+```
+
+### `rm`
+
+Remove a replication task
+
+#### Arguments
+
+- `<REPLICATION_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-y, --yes`: Do not ask for confirmation
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Remove a replication task
+
+Usage: reduct-cli replica rm [OPTIONS] <REPLICATION_PATH>
+
+Arguments:
+  <REPLICATION_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+  -y, --yes                Do not ask for confirmation
+  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
+  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+  -h, --help               Print help
+```

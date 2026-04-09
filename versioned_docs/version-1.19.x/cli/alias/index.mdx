@@ -1,0 +1,134 @@
+---
+title: "alias"
+description: "Manage aliases for instance URLs"
+---
+
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/cli/alias" />
+</head>
+
+# reduct-cli alias
+
+Manage aliases for instance URLs
+
+## Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-h, --help`: Print help
+
+## Help Output
+
+```text
+Manage aliases for instance URLs
+
+Usage: reduct-cli alias [OPTIONS] [COMMAND]
+
+Commands:
+  add   Add an alias
+  ls    List all aliases
+  rm    Remove an alias
+  help  Print this message or the help of the given subcommand(s)
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
+  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+  -h, --help               Print help
+```
+
+## Subcommands
+
+### `add`
+
+Add an alias
+
+#### Arguments
+
+- `<NAME>`: The name of the alias to create
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-L, --url <URL>`: The URL of the ReductStore instance
+- `-t, --token <TOKEN>`: The token to use for authentication
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Add an alias
+
+Usage: reduct-cli alias add [OPTIONS] --url <URL> <NAME>
+
+Arguments:
+  <NAME>  The name of the alias to create
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+  -L, --url <URL>          The URL of the ReductStore instance
+  -t, --token <TOKEN>      The token to use for authentication
+  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
+  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+  -h, --help               Print help
+```
+
+### `ls`
+
+List all aliases
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+List all aliases
+
+Usage: reduct-cli alias ls [OPTIONS]
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
+  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+  -h, --help               Print help
+```
+
+### `rm`
+
+Remove an alias
+
+#### Arguments
+
+- `<NAME>`: The name of the alias to remove
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Remove an alias
+
+Usage: reduct-cli alias rm [OPTIONS] <NAME>
+
+Arguments:
+  <NAME>  The name of the alias to remove
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
+  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+  -h, --help               Print help
+```

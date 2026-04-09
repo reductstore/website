@@ -1,0 +1,357 @@
+---
+title: Bucket Module
+description: API reference for the Bucket Module Module of the ReductStore Client SDK for Python.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/sdk/py/msg/bucket"
+  />
+</head>
+
+# Bucket Module
+
+<a id="reduct.msg.bucket"></a>
+
+Message types for the Bucket API
+
+<a id="reduct.msg.bucket.QuotaType"></a>
+
+## QuotaType
+
+```python
+class QuotaType(Enum)
+```
+
+determines if database has a fixed size
+
+<a id="reduct.msg.bucket.Status"></a>
+
+## Status
+
+```python
+class Status(Enum)
+```
+
+Resource status during deletion
+
+<a id="reduct.msg.bucket.BucketSettings"></a>
+
+## BucketSettings
+
+```python
+class BucketSettings(BaseModel)
+```
+
+Configuration for a bucket
+
+<a id="reduct.msg.bucket.BucketSettings.max_block_size"></a>
+
+#### max_block_size
+
+max block size in bytes
+
+<a id="reduct.msg.bucket.BucketSettings.max_block_records"></a>
+
+#### max_block_records
+
+max number of records in a block
+
+<a id="reduct.msg.bucket.BucketSettings.quota_type"></a>
+
+#### quota_type
+
+quota type
+
+<a id="reduct.msg.bucket.BucketSettings.quota_size"></a>
+
+#### quota_size
+
+quota size in bytes
+
+<a id="reduct.msg.bucket.BucketInfo"></a>
+
+## BucketInfo
+
+```python
+class BucketInfo(BaseModel)
+```
+
+Information about each bucket
+
+<a id="reduct.msg.bucket.BucketInfo.name"></a>
+
+#### name
+
+name of bucket
+
+<a id="reduct.msg.bucket.BucketInfo.entry_count"></a>
+
+#### entry_count
+
+number of entries in the bucket
+
+<a id="reduct.msg.bucket.BucketInfo.size"></a>
+
+#### size
+
+size of bucket data in bytes
+
+<a id="reduct.msg.bucket.BucketInfo.oldest_record"></a>
+
+#### oldest_record
+
+UNIX timestamp of the oldest record in microseconds
+
+<a id="reduct.msg.bucket.BucketInfo.latest_record"></a>
+
+#### latest_record
+
+UNIX timestamp of the latest record in microseconds
+
+<a id="reduct.msg.bucket.BucketInfo.is_provisioned"></a>
+
+#### is_provisioned
+
+bucket is provisioned amd you can't remove it or change its settings
+
+<a id="reduct.msg.bucket.BucketInfo.status"></a>
+
+#### status
+
+current status of the bucket (READY or DELETING)
+
+<a id="reduct.msg.bucket.EntryInfo"></a>
+
+## EntryInfo
+
+```python
+class EntryInfo(BaseModel)
+```
+
+Entry of bucket
+
+<a id="reduct.msg.bucket.EntryInfo.name"></a>
+
+#### name
+
+name of entry
+
+<a id="reduct.msg.bucket.EntryInfo.size"></a>
+
+#### size
+
+size of stored data in bytes
+
+<a id="reduct.msg.bucket.EntryInfo.block_count"></a>
+
+#### block_count
+
+number of blocks
+
+<a id="reduct.msg.bucket.EntryInfo.record_count"></a>
+
+#### record_count
+
+number of records
+
+<a id="reduct.msg.bucket.EntryInfo.oldest_record"></a>
+
+#### oldest_record
+
+UNIX timestamp of the oldest record in microseconds
+
+<a id="reduct.msg.bucket.EntryInfo.latest_record"></a>
+
+#### latest_record
+
+UNIX timestamp of the latest record in microseconds
+
+<a id="reduct.msg.bucket.EntryInfo.status"></a>
+
+#### status
+
+current status of the entry (READY or DELETING)
+
+<a id="reduct.msg.bucket.BucketFullInfo"></a>
+
+## BucketFullInfo
+
+```python
+class BucketFullInfo(BaseModel)
+```
+
+Information about bucket and contained entries
+
+<a id="reduct.msg.bucket.BucketFullInfo.info"></a>
+
+#### info
+
+statistics about bucket
+
+<a id="reduct.msg.bucket.BucketFullInfo.settings"></a>
+
+#### settings
+
+settings of bucket
+
+<a id="reduct.msg.bucket.BucketFullInfo.entries"></a>
+
+#### entries
+
+information about entries of bucket
+
+<a id="reduct.msg.bucket.QueryType"></a>
+
+## QueryType
+
+```python
+class QueryType(Enum)
+```
+
+Query types
+
+<a id="reduct.msg.bucket.QueryType.QUERY"></a>
+
+#### QUERY
+
+query entries
+
+<a id="reduct.msg.bucket.QueryType.REMOVE"></a>
+
+#### REMOVE
+
+remove entries
+
+<a id="reduct.msg.bucket.QueryEntry"></a>
+
+## QueryEntry
+
+```python
+class QueryEntry(BaseModel)
+```
+
+Query entry
+
+<a id="reduct.msg.bucket.QueryEntry.query_type"></a>
+
+#### query_type
+
+query type
+
+<a id="reduct.msg.bucket.QueryEntry.entries"></a>
+
+#### entries
+
+list of entry names to query
+
+<a id="reduct.msg.bucket.QueryEntry.start"></a>
+
+#### start
+
+start time in microseconds
+
+<a id="reduct.msg.bucket.QueryEntry.stop"></a>
+
+#### stop
+
+end time in microseconds
+
+<a id="reduct.msg.bucket.QueryEntry.ttl"></a>
+
+#### ttl
+
+time to live of the query in seconds
+
+<a id="reduct.msg.bucket.QueryEntry.only_metadata"></a>
+
+#### only_metadata
+
+return only metadata
+
+<a id="reduct.msg.bucket.QueryEntry.continuous"></a>
+
+#### continuous
+
+continuous query, it doesn't stop until the TTL is reached
+
+<a id="reduct.msg.bucket.QueryEntry.when"></a>
+
+#### when
+
+conditional query to filter records
+
+<a id="reduct.msg.bucket.QueryEntry.strict"></a>
+
+#### strict
+
+strict mode for when clause
+
+<a id="reduct.msg.bucket.QueryEntry.ext"></a>
+
+#### ext
+
+additional parameters for extensions
+
+<a id="reduct.msg.bucket.CreateQueryLinkRequest"></a>
+
+## CreateQueryLinkRequest
+
+```python
+class CreateQueryLinkRequest(BaseModel)
+```
+
+Parameters for creating a query link
+
+<a id="reduct.msg.bucket.CreateQueryLinkRequest.bucket"></a>
+
+#### bucket
+
+bucket name
+
+<a id="reduct.msg.bucket.CreateQueryLinkRequest.entry"></a>
+
+#### entry
+
+entry name
+
+<a id="reduct.msg.bucket.CreateQueryLinkRequest.index"></a>
+
+#### index
+
+record index
+
+<a id="reduct.msg.bucket.CreateQueryLinkRequest.query"></a>
+
+#### query
+
+query
+
+<a id="reduct.msg.bucket.CreateQueryLinkRequest.expire_at"></a>
+
+#### expire_at
+
+expiration time as UNIX timestamp in seconds
+
+<a id="reduct.msg.bucket.CreateQueryLinkRequest.base_url"></a>
+
+#### base_url
+
+base URL for generating the link
+
+<a id="reduct.msg.bucket.CreateQueryLinkResponse"></a>
+
+## CreateQueryLinkResponse
+
+```python
+class CreateQueryLinkResponse(BaseModel)
+```
+
+Response from creating a query link
+
+<a id="reduct.msg.bucket.CreateQueryLinkResponse.link"></a>
+
+#### link
+
+query link
