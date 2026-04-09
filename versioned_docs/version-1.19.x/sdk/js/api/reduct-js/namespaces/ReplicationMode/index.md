@@ -19,7 +19,7 @@ This allows both TypeScript type usage and JavaScript runtime value access
 const mode: ReplicationMode = "enabled";
 
 // JavaScript runtime constant usage:
-import { ReplicationMode } from 'reduct-js';
+import { ReplicationMode } from "reduct-js";
 const mode = ReplicationMode.ENABLED; // "enabled"
 ```
 

@@ -3,6 +3,7 @@ sidebar_position: 0
 title: "ReductBridge"
 description: "Documentation for ReductBridge, the data bridge between live robotics and IIoT systems and ReductStore."
 ---
+
 # reduct-bridge
 
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/reductstore/reduct-bridge)](https://github.com/reductstore/reduct-bridge/releases/latest)
@@ -71,14 +72,14 @@ sudo snap install reduct-bridge-<build-type> --channel=edge   # or --channel=sta
 
 To run the service with an explicit config file path, set the `config-path` snap option:
 
-   ```bash
-   sudo cp path/to/config.toml /var/snap/reduct-bridge/reduct-bridge.toml
-   sudo chmod 640 /var/snap/reduct-bridge/reduct-bridge.toml
+```bash
+sudo cp path/to/config.toml /var/snap/reduct-bridge/reduct-bridge.toml
+sudo chmod 640 /var/snap/reduct-bridge/reduct-bridge.toml
 
-   sudo snap set reduct-bridge-<build-type> config-path=/var/snap/reduct-bridge/commont/reduct-bridge.toml
-   sudo snap get reduct-bridge-<build-type> config-path
-   sudo snap restart reduct-bridge-<build-type>.service
-   ```
+sudo snap set reduct-bridge-<build-type> config-path=/var/snap/reduct-bridge/commont/reduct-bridge.toml
+sudo snap get reduct-bridge-<build-type> config-path
+sudo snap restart reduct-bridge-<build-type>.service
+```
 
 Release CI builds snap package variants and publishes them to the standard channels.
 

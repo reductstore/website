@@ -51,7 +51,7 @@ Defined in: [APIError.ts:13](https://github.com/reductstore/reduct-js/blob/6af48
 
 Parsed message from the storage engine
 
-***
+---
 
 ### original?
 
@@ -61,7 +61,7 @@ Defined in: [APIError.ts:18](https://github.com/reductstore/reduct-js/blob/6af48
 
 Original error from HTTP client with the full information
 
-***
+---
 
 ### status?
 

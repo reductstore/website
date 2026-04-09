@@ -19,7 +19,7 @@ Defined in: [messages/BucketSettings.ts:1](https://github.com/reductstore/reduct
 
 Defined in: [messages/BucketSettings.ts:3](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/BucketSettings.ts#L3)
 
-***
+---
 
 ### HARD
 
@@ -27,7 +27,7 @@ Defined in: [messages/BucketSettings.ts:3](https://github.com/reductstore/reduct
 
 Defined in: [messages/BucketSettings.ts:4](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/BucketSettings.ts#L4)
 
-***
+---
 
 ### NONE
 

@@ -21,7 +21,7 @@ Options for writing records
 
 Defined in: [Bucket.ts:21](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Bucket.ts#L21)
 
-***
+---
 
 ### labels?
 
@@ -29,7 +29,7 @@ Defined in: [Bucket.ts:21](https://github.com/reductstore/reduct-js/blob/6af4865
 
 Defined in: [Bucket.ts:20](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Bucket.ts#L20)
 
-***
+---
 
 ### ts?
 

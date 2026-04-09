@@ -34,7 +34,7 @@ Defined in: [messages/Token.ts:65](https://github.com/reductstore/reduct-js/blob
 Full access
 The token allows to create, remove and update settings of buckets, manage tokens and read and write data.
 
-***
+---
 
 ### read?
 
@@ -45,7 +45,7 @@ Defined in: [messages/Token.ts:71](https://github.com/reductstore/reduct-js/blob
 Read access
 List of buckets allowed to read
 
-***
+---
 
 ### write?
 
@@ -74,7 +74,7 @@ Defined in: [messages/Token.ts:79](https://github.com/reductstore/reduct-js/blob
 
 `TokenPermissions`
 
-***
+---
 
 ### serialize()
 

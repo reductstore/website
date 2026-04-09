@@ -29,7 +29,7 @@ Defined in: [messages/ServerInfo.ts:7](https://github.com/reductstore/reduct-js/
 
 Defined in: [messages/ServerInfo.ts:17](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/ServerInfo.ts#L17)
 
-***
+---
 
 ### diskQuota
 
@@ -37,7 +37,7 @@ Defined in: [messages/ServerInfo.ts:17](https://github.com/reductstore/reduct-js
 
 Defined in: [messages/ServerInfo.ts:19](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/ServerInfo.ts#L19)
 
-***
+---
 
 ### expiryDate
 
@@ -45,7 +45,7 @@ Defined in: [messages/ServerInfo.ts:19](https://github.com/reductstore/reduct-js
 
 Defined in: [messages/ServerInfo.ts:13](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/ServerInfo.ts#L13)
 
-***
+---
 
 ### fingerprint
 
@@ -53,7 +53,7 @@ Defined in: [messages/ServerInfo.ts:13](https://github.com/reductstore/reduct-js
 
 Defined in: [messages/ServerInfo.ts:21](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/ServerInfo.ts#L21)
 
-***
+---
 
 ### invoice
 
@@ -61,7 +61,7 @@ Defined in: [messages/ServerInfo.ts:21](https://github.com/reductstore/reduct-js
 
 Defined in: [messages/ServerInfo.ts:11](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/ServerInfo.ts#L11)
 
-***
+---
 
 ### licensee
 
@@ -69,7 +69,7 @@ Defined in: [messages/ServerInfo.ts:11](https://github.com/reductstore/reduct-js
 
 Defined in: [messages/ServerInfo.ts:9](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/messages/ServerInfo.ts#L9)
 
-***
+---
 
 ### plan
 

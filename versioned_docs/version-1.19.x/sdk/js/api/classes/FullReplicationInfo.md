@@ -33,7 +33,7 @@ Defined in: [messages/ReplicationInfo.ts:80](https://github.com/reductstore/redu
 
 Replication statistics
 
-***
+---
 
 ### info
 
@@ -43,7 +43,7 @@ Defined in: [messages/ReplicationInfo.ts:70](https://github.com/reductstore/redu
 
 Replication info
 
-***
+---
 
 ### settings
 

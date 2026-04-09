@@ -2,6 +2,7 @@
 title: Token Module
 description: API reference for the Token Module of the ReductStore Client SDK for JavaScript.
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/msg/token" />
 </head>
@@ -36,7 +37,7 @@ Defined in: [messages/Token.ts:123](https://github.com/reductstore/reduct-js/blo
 
 Creation time of the token as unix timestamp in milliseconds
 
-***
+---
 
 #### expiresAt?
 
@@ -46,7 +47,7 @@ Defined in: [messages/Token.ts:143](https://github.com/reductstore/reduct-js/blo
 
 Expiration time as unix timestamp in milliseconds
 
-***
+---
 
 #### ipAllowlist?
 
@@ -56,7 +57,7 @@ Defined in: [messages/Token.ts:148](https://github.com/reductstore/reduct-js/blo
 
 List of IP addresses and CIDR ranges allowed to use the token
 
-***
+---
 
 #### isExpired?
 
@@ -66,7 +67,7 @@ Defined in: [messages/Token.ts:138](https://github.com/reductstore/reduct-js/blo
 
 True if the token is expired
 
-***
+---
 
 #### isProvisioned?
 
@@ -76,7 +77,7 @@ Defined in: [messages/Token.ts:153](https://github.com/reductstore/reduct-js/blo
 
 Is the token provisioned, and you can't remove it or change it
 
-***
+---
 
 #### lastAccess?
 
@@ -86,7 +87,7 @@ Defined in: [messages/Token.ts:128](https://github.com/reductstore/reduct-js/blo
 
 Last access time of the token as unix timestamp in milliseconds
 
-***
+---
 
 #### name
 
@@ -96,7 +97,7 @@ Defined in: [messages/Token.ts:118](https://github.com/reductstore/reduct-js/blo
 
 Name of the token
 
-***
+---
 
 #### permissions?
 
@@ -106,7 +107,7 @@ Defined in: [messages/Token.ts:158](https://github.com/reductstore/reduct-js/blo
 
 Permissions of the token
 
-***
+---
 
 #### ttl?
 
@@ -160,7 +161,7 @@ Defined in: [messages/Token.ts:32](https://github.com/reductstore/reduct-js/blob
 
 Expiration time as unix timestamp in milliseconds
 
-***
+---
 
 #### ipAllowlist?
 
@@ -170,7 +171,7 @@ Defined in: [messages/Token.ts:42](https://github.com/reductstore/reduct-js/blob
 
 List of IP addresses and CIDR ranges allowed to use the token
 
-***
+---
 
 #### permissions
 
@@ -180,7 +181,7 @@ Defined in: [messages/Token.ts:27](https://github.com/reductstore/reduct-js/blob
 
 Permissions for the token
 
-***
+---
 
 #### ttl?
 
@@ -235,7 +236,7 @@ Defined in: [messages/Token.ts:65](https://github.com/reductstore/reduct-js/blob
 Full access
 The token allows to create, remove and update settings of buckets, manage tokens and read and write data.
 
-***
+---
 
 #### read?
 
@@ -246,7 +247,7 @@ Defined in: [messages/Token.ts:71](https://github.com/reductstore/reduct-js/blob
 Read access
 List of buckets allowed to read
 
-***
+---
 
 #### write?
 
@@ -275,7 +276,7 @@ Defined in: [messages/Token.ts:79](https://github.com/reductstore/reduct-js/blob
 
 `TokenPermissions`
 
-***
+---
 
 #### serialize()
 
@@ -292,4 +293,3 @@ Defined in: [messages/Token.ts:87](https://github.com/reductstore/reduct-js/blob
 ##### Returns
 
 `OriginalTokenPermission`
-

@@ -2,6 +2,7 @@
 title: Bucket Module
 description: API reference for the Bucket Module of the ReductStore Client SDK for JavaScript.
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/bucket" />
 </head>
@@ -78,7 +79,7 @@ name of the entry
 
 Promise&lt;ReadableRecord&gt;
 
-***
+---
 
 #### beginRemoveBatch()
 
@@ -100,7 +101,7 @@ Remove a batch of records
 
 `Promise`&lt;[`Batch`](api/classes/Batch)&gt;
 
-***
+---
 
 #### beginRemoveRecordBatch()
 
@@ -114,7 +115,7 @@ Create a new batch for removing records across multiple entries.
 
 [`RecordBatch`](api/classes/RecordBatch)
 
-***
+---
 
 #### beginUpdateBatch()
 
@@ -134,7 +135,7 @@ Create a new batch for updating records in the database.
 
 `Promise`&lt;[`Batch`](api/classes/Batch)&gt;
 
-***
+---
 
 #### beginUpdateRecordBatch()
 
@@ -157,7 +158,7 @@ batch.addOnlyLabels("entry-2", 2000n, { label1: "value2" });
 await batch.send();
 ```
 
-***
+---
 
 #### beginWrite()
 
@@ -198,7 +199,7 @@ const record = await bucket.beginWrite("entry", {
 await record.write("Hello!");
 ```
 
-***
+---
 
 #### beginWriteBatch()
 
@@ -218,7 +219,7 @@ Create a new batch for writing records to the database.
 
 `Promise`&lt;[`Batch`](api/classes/Batch)&gt;
 
-***
+---
 
 #### beginWriteRecordBatch()
 
@@ -241,7 +242,7 @@ batch.add("entry-2", 2000n, "data");
 await batch.send();
 ```
 
-***
+---
 
 #### createQueryLink()
 
@@ -305,7 +306,7 @@ base url for link generation. If not set, the server's base url will be used
 
 `Promise`&lt;`string`&gt;
 
-***
+---
 
 #### getEntryList()
 
@@ -321,7 +322,7 @@ Get entry list
 
 ##### Async
 
-***
+---
 
 #### getInfo()
 
@@ -337,7 +338,7 @@ Get information about a bucket
 
 ##### Async
 
-***
+---
 
 #### getName()
 
@@ -349,7 +350,7 @@ Defined in: [Bucket.ts:350](https://github.com/reductstore/reduct-js/blob/6af486
 
 `string`
 
-***
+---
 
 #### getSettings()
 
@@ -365,7 +366,7 @@ Get bucket settings
 
 ##### Async
 
-***
+---
 
 #### query()
 
@@ -418,7 +419,7 @@ for await (const record in bucket.query("entry-1", start, stop)) {
 }
 ```
 
-***
+---
 
 #### readAttachments()
 
@@ -442,7 +443,7 @@ name of the source entry
 
 map of attachment key to decoded JSON value
 
-***
+---
 
 #### remove()
 
@@ -458,7 +459,7 @@ Remove bucket
 
 ##### Async
 
-***
+---
 
 #### removeAttachments()
 
@@ -488,7 +489,7 @@ list of keys to remove
 
 `Promise`&lt;`void`&gt;
 
-***
+---
 
 #### removeEntry()
 
@@ -512,7 +513,7 @@ Remove an entry
 
 ##### Async
 
-***
+---
 
 #### removeQuery()
 
@@ -552,7 +553,7 @@ Remove records by query
 
 `Promise`&lt;`number`&gt;
 
-***
+---
 
 #### removeRecord()
 
@@ -580,7 +581,7 @@ Remove a record
 
 `Promise`&lt;`void`&gt;
 
-***
+---
 
 #### rename()
 
@@ -602,7 +603,7 @@ new name of the bucket
 
 `Promise`&lt;`void`&gt;
 
-***
+---
 
 #### renameEntry()
 
@@ -630,7 +631,7 @@ new entry name
 
 `Promise`&lt;`void`&gt;
 
-***
+---
 
 #### setSettings()
 
@@ -654,7 +655,7 @@ Set bucket settings
 
 ##### Async
 
-***
+---
 
 #### update()
 
@@ -690,7 +691,7 @@ If a label has empty string value, it will be removed.
 
 `Promise`&lt;`void`&gt;
 
-***
+---
 
 #### writeAttachments()
 
@@ -720,7 +721,6 @@ map of attachment key to JSON-serializable content
 
 `Promise`&lt;`void`&gt;
 
-
 ## Interfaces
 
 ## WriteOptions
@@ -737,7 +737,7 @@ Options for writing records
 
 Defined in: [Bucket.ts:21](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Bucket.ts#L21)
 
-***
+---
 
 #### labels?
 
@@ -745,11 +745,10 @@ Defined in: [Bucket.ts:21](https://github.com/reductstore/reduct-js/blob/6af4865
 
 Defined in: [Bucket.ts:20](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Bucket.ts#L20)
 
-***
+---
 
 #### ts?
 
 &gt; `optional` **ts**: `bigint`
 
 Defined in: [Bucket.ts:19](https://github.com/reductstore/reduct-js/blob/6af4865c74b7835a84d71904de4c1e108e52ea01/src/Bucket.ts#L19)
-

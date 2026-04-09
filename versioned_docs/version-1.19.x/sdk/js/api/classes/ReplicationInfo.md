@@ -33,7 +33,7 @@ Defined in: [messages/ReplicationInfo.ts:35](https://github.com/reductstore/redu
 
 Remote instance is available and replication is active
 
-***
+---
 
 ### isProvisioned
 
@@ -43,7 +43,7 @@ Defined in: [messages/ReplicationInfo.ts:45](https://github.com/reductstore/redu
 
 Replication is provisioned
 
-***
+---
 
 ### mode
 
@@ -53,7 +53,7 @@ Defined in: [messages/ReplicationInfo.ts:40](https://github.com/reductstore/redu
 
 Replication mode
 
-***
+---
 
 ### name
 
@@ -63,7 +63,7 @@ Defined in: [messages/ReplicationInfo.ts:30](https://github.com/reductstore/redu
 
 Replication name
 
-***
+---
 
 ### pendingRecords
 

@@ -33,7 +33,7 @@ Defined in: [messages/Token.ts:123](https://github.com/reductstore/reduct-js/blo
 
 Creation time of the token as unix timestamp in milliseconds
 
-***
+---
 
 ### expiresAt?
 
@@ -43,7 +43,7 @@ Defined in: [messages/Token.ts:143](https://github.com/reductstore/reduct-js/blo
 
 Expiration time as unix timestamp in milliseconds
 
-***
+---
 
 ### ipAllowlist?
 
@@ -53,7 +53,7 @@ Defined in: [messages/Token.ts:148](https://github.com/reductstore/reduct-js/blo
 
 List of IP addresses and CIDR ranges allowed to use the token
 
-***
+---
 
 ### isExpired?
 
@@ -63,7 +63,7 @@ Defined in: [messages/Token.ts:138](https://github.com/reductstore/reduct-js/blo
 
 True if the token is expired
 
-***
+---
 
 ### isProvisioned?
 
@@ -73,7 +73,7 @@ Defined in: [messages/Token.ts:153](https://github.com/reductstore/reduct-js/blo
 
 Is the token provisioned, and you can't remove it or change it
 
-***
+---
 
 ### lastAccess?
 
@@ -83,7 +83,7 @@ Defined in: [messages/Token.ts:128](https://github.com/reductstore/reduct-js/blo
 
 Last access time of the token as unix timestamp in milliseconds
 
-***
+---
 
 ### name
 
@@ -93,7 +93,7 @@ Defined in: [messages/Token.ts:118](https://github.com/reductstore/reduct-js/blo
 
 Name of the token
 
-***
+---
 
 ### permissions?
 
@@ -103,7 +103,7 @@ Defined in: [messages/Token.ts:158](https://github.com/reductstore/reduct-js/blo
 
 Permissions of the token
 
-***
+---
 
 ### ttl?
 
