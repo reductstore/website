@@ -54,11 +54,6 @@ const services = [
 
 const demoLicenseFaqs = [
   {
-    question: "What does the demo license include?",
-    answer:
-      "Full access to all ReductStore Pro features for 30 days, including extensions, cloud storage backends, replication, and commercial support.",
-  },
-  {
     question: "How long is the demo license valid?",
     answer:
       "30 days by default. Contact us if you need more time for evaluation.",
