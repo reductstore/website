@@ -22,18 +22,18 @@ const services = [
   {
     icon: LuRadioTower,
     title: "Protocol Integration",
-    description: "MQTT, ROS, zenoh, and more.",
+    description: "MQTT, ROS1 and ROS2, zenoh, and custom protocols for robotics and IIoT data ingestion.",
   },
   {
     icon: LuTags,
-    title: "AI Labeling",
+    title: "AI Orchestration",
     description:
-      "Automated labeling workflows to process and annotate your data.",
+      "Automated orchestration workflows to process and annotate your data.",
   },
   {
     icon: LuMonitorDot,
     title: "Dashboards",
-    description: "Grafana, Foxglove, Wuntu, and Transitive Robotics.",
+    description: "Grafana and Foxglove dashboards for data visualization and monitoring.",
   },
   {
     icon: LuCloud,
@@ -71,12 +71,12 @@ const demoLicenseFaqs = [
   {
     question: "What is a co-development project?",
     answer:
-      "We work with your engineering team to set up a full data pipeline, from protocol integration and data ingestion to AI labeling workflows, dashboards, and cloud infrastructure.",
+      "We work with your engineering team to set up a full data pipeline, from protocol integration and data ingestion to AI orchestration workflows, dashboards, and cloud infrastructure.",
   },
   {
     question: "Which protocols and platforms do you support?",
     answer:
-      "MQTT, ROS, zenoh, and custom protocols. For visualization: Grafana, Foxglove, Wuntu, and Transitive Robotics. Infrastructure: AWS, Google Cloud, Azure, or Hetzner.",
+      "MQTT, ROS, zenoh, and custom protocols. For visualization: Grafana, Foxglove. Infrastructure: AWS, Google Cloud, Azure, or Hetzner.",
   },
   {
     question: "Do I need a demo license for ReductStore Core?",
