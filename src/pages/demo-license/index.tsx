@@ -158,12 +158,6 @@ export default function DemoLicensePage(): JSX.Element {
                   </BulletPointItem>
                 </ul>
                 <BulletPointItem>
-                  Replication between edge and cloud instances
-                </BulletPointItem>
-                <BulletPointItem>
-                  Web Console and CLI without license warnings
-                </BulletPointItem>
-                <BulletPointItem>
                   Commercial support with guaranteed response times
                 </BulletPointItem>
                 <BulletPointItem>Architecture review session</BulletPointItem>
