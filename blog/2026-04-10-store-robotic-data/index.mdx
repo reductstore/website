@@ -10,151 +10,145 @@ image: ./img/introduction_diagram.drawio.png
 
 ![Introduction Diagram](./img/introduction_diagram.drawio.png)
 
-Robots generate massive amounts of data that must be managed effectively. Challenges like limited on device storage, the need for real time processing, and high cloud storage costs make it essential to find efficient solutions. Balancing edge and cloud storage while keeping data synchronized is a key part of effective management.
+Robots generate _massive_ amounts of data, and managing it well is harder than it looks. Storage fills up fast, cloud transfer gets expensive, and real time ingestion is unforgiving when you're running cameras and sensors at high frequency.
 
-This article outlines those challenges and offers practical strategies, then introduces [**ReductStore**](/): a database built specifically for robotic systems. We also cover the latest ReductStore capabilities, including native ROS integration, Grafana dashboards, MCAP export for Foxglove, a Zenoh API, and direct cloud storage backends for S3 and Azure. Finally, we compare ReductStore with Rosbag and MongoDB to help you choose the right tool for your stack.
+This article covers practical strategies for handling robotic data, introduces [**ReductStore**](/), and walks through a hands on example. Along the way, we cover native ROS integration, Grafana dashboards, MCAP export for Foxglove, a Zenoh API, and native S3 and Azure backends. We also compare ReductStore against Rosbag and MongoDB so you can pick the right tool for each part of your stack.
 
 {/* truncate */}
 
 ## Challenges in Robotic Data Management
 
-Robots often operate in dynamic and unpredictable environments and continuously generate large amounts of data. Finding an efficient way to store and manage this data can be challenging, mainly because of the following factors:
+Robots operate in dynamic environments and continuously produce large volumes of data. The core challenges engineers run into are:
 
-- **High Frequency and Real Time Requirements**: Robots often operate in real time environments. A drone navigating through a city must process camera and sensor data in milliseconds to avoid obstacles and stay on track. Storage solutions must handle these high frequency streams and make data quickly accessible for fast analysis and good decision making.
+- **High frequency, real time requirements**: A drone navigating a city must process camera and sensor data in milliseconds. Storage solutions need to keep up with these streams and make data accessible fast enough for real time decision making.
 
-- **Limited On Device Storage**: Most robots cannot store all the data they generate due to size, weight, and power constraints. Engineers need effective data management strategies to retain important data without exceeding storage limits.
+- **Limited on device storage**: Most robots can't store everything they generate. Size, weight, and power constraints limit local capacity, so good data management strategies are essential.
 
-- **High Volume of Data**: An autonomous vehicle can produce up to [**5 terabytes of data every hour**](https://www.datacenterfrontier.com/connected-cars/article/11429212/rolling-zettabytes-quantifying-the-data-impact-of-connected-cars), including camera feeds, LiDAR scans, radar data, GPS logs, and sensor readings. Managing such large datasets requires systems built for scalability, which traditional relational databases often lack.
+- **High data volume**: An autonomous vehicle can produce up to [**5 terabytes per hour**](https://www.datacenterfrontier.com/connected-cars/article/11429212/rolling-zettabytes-quantifying-the-data-impact-of-connected-cars) across camera feeds, LiDAR, radar, GPS, and sensors. Most databases weren't designed around that kind of throughput.
 
-- **Cloud Storage Costs**: Sending all robotic data to the cloud is impractical and costly. Since robots generate many terabytes of data, costs can grow quickly. Balancing what to store locally and what to offload to the cloud is an important part of cost effective data management.
+- **Cloud storage costs**: Pushing everything to the cloud isn't practical. Providers charge per gigabyte stored and transferred, and with robots producing terabytes, the bill adds up fast. What you send to the cloud is a decision worth making deliberately.
 
-- **Data Reduction Challenges**: Good reduction strategies require balancing storage efficiency with keeping important information. Without a clear approach, valuable data might be lost, or storage fills up with unnecessary details.
+- **Data reduction complexity**: Filtering out irrelevant data without losing important information is tricky. Without a clear strategy, you either waste storage or throw away data you later need.
 
 ## General Strategies for Managing Robotic Data
 
-To build an effective data management system for robotic data, engineers need a clear strategy and the right specialized tools. The key is to handle high frequency data streams while optimizing storage space and costs.
+A few approaches that work well in practice:
 
-- **Time Series Object Stores**: Time series object stores, such as ReductStore, are designed for high frequency, timestamped unstructured data streams. They offer efficient storage, real time querying, and high performance data writing, keeping costs manageable.
+- **Use a time series object store**: Systems like ReductStore are designed specifically for high frequency, timestamped binary data. They offer fast writes, efficient querying, and manageable costs at scale.
 
-- **Balance Edge and Cloud Storage**: Keep critical data on edge devices for immediate access, while moving less time sensitive data to the cloud for long term analysis. This hybrid approach reduces cloud costs while keeping decision making data close to where it is needed.
+- **Balance edge and cloud storage**: Keep recent, critical data on the robot for fast access. Move older or lower priority data to the cloud for long term storage and analysis. Splitting storage this way cuts costs without adding much latency to what matters.
 
-- **Implement Retention Policies**: Retention policies automatically delete or archive outdated data. For edge devices with limited space, the best approach is a FIFO (first in, first out) quota based on storage volume, so older records are only removed when space is needed for new ones.
+- **Use volume based retention policies**: Rather than deleting data based on age, use a FIFO (first in, first out) quota. Data is only removed when the storage limit is reached, which avoids unnecessary deletion during downtime or low activity periods.
 
-- **Compress and Optimize Data**: Compress large datasets such as images or videos to reduce storage while maintaining usability. Advanced formats like H.265 for video and JPEG for images can save significant storage space.
+- **Compress where it makes sense**: H.265 for video, JPEG for images. The right format can cut storage by an order of magnitude without losing anything you actually need.
 
-- **Prioritize Data Relevance**: Not all robotic data holds the same value. Engineers must distinguish between critical data that should be kept and data that can be safely discarded.
+- **Prioritize what to keep**: Not all sensor data has equal value. Define what's critical upfront and discard the rest early in the pipeline.
 
-## ReductStore: A Purpose-Built Solution for Robotic Data
+## ReductStore: Built for Robotic Data
 
-ReductStore is a high performance time series database built for the complex data needs of robotics systems. It handles unstructured data and is optimized for real time ingestion, making it well suited for high frequency sensor readings and large data streams from autonomous vehicles, drones, industrial robots, and more.
+[**ReductStore**](/) is a time series database built specifically for unstructured, binary data. It's designed to handle high frequency sensor streams from autonomous vehicles, drones, industrial robots, and more. It stores data with timestamps and labels, supports fast real time ingestion, and comes with batching, filtering, and edge to cloud replication built in.
+
+Here's what's available today.
 
 ### ROS Integration with reduct-bridge
 
-Getting ROS data into ReductStore is straightforward with [**reduct-bridge**](https://github.com/reductstore/reduct-bridge). This open source tool connects live ROS 1 and ROS 2 systems directly to ReductStore. You configure it with a simple TOML file that defines your inputs (ROS topics), pipelines, and the ReductStore destination.
+[**reduct-bridge**](https://github.com/reductstore/reduct-bridge) connects live ROS 1 and ROS 2 systems directly to ReductStore. You configure it with a simple TOML file that defines your ROS topic inputs, pipelines, and the ReductStore destination. It subscribes to topics and stores each message as an individual record.
 
-reduct-bridge subscribes to ROS topics and stores each message as an individual record. It also writes a `$ros` attachment to each entry, containing the message schema, topic name, and encoding. This metadata powers advanced features like MCAP export and Grafana visualization, described below.
+It also writes a `$ros` attachment to each entry with the message schema, topic name, and encoding — that metadata is what powers MCAP export and Grafana visualization, both covered below. If your stack is already on ROS, setup takes minutes.
 
-For teams already running ROS, this is the fastest path to persistent, queryable storage for all robot data.
+### Cloud Storage: Native S3 and Azure
 
-### Cloud Storage Backend: S3 and Azure
+ReductStore supports native cloud storage backends for both [**Amazon S3 and Azure Blob Storage**](/docs/integrations/cloud-storage#azure-differences), no FUSE drivers needed. It uses a local cache for hot data and the cloud bucket for long term retention.
 
-ReductStore supports native cloud object storage backends for both [**Amazon S3 and Azure Blob Storage**](/docs/integrations/cloud-storage#azure-differences), without any FUSE drivers or intermediate file system layers. You run ReductStore with S3 or Azure as the actual storage backend, using a local cache for recent data and the cloud bucket for long term retention.
+| Option             | What it means                                                                              |
+| ------------------ | ------------------------------------------------------------------------------------------ |
+| S3 compatible      | Works with AWS S3, MinIO, Ceph, Cloudflare R2, and any S3 compatible service               |
+| Azure Blob Storage | Switch backends by changing a few environment variables. Same deployment patterns.         |
+| Tiered access      | Recent data stays in the local cache for fast reads. Older data lives in the cloud bucket. |
+| Read replicas      | Add read only replicas pointing at the same S3 bucket, close to your consumers.            |
 
-| Option             | What it means                                                                                   |
-| ------------------ | ----------------------------------------------------------------------------------------------- |
-| S3 compatible      | Works with AWS S3, MinIO, Ceph, Cloudflare R2, and any S3 compatible service                    |
-| Azure Blob Storage | Switch backends by changing a few environment variables. The deployment patterns are identical. |
-| Tiered access      | Recent data stays in the local cache for fast reads. Older data lives in the cloud bucket.      |
-| Read replicas      | Add read only replicas that serve data from the same S3 bucket, placed close to your consumers. |
+For records around 100KB (a typical robotics sensor episode), ReductStore can be 10 to 100x faster than traditional time series object stores at a fraction of the cost.
 
-ReductStore can achieve 10 to 100x better performance at a fraction of the cost compared to traditional time series object stores when working with records around 100KB in size, which is typical for robotics sensor episodes.
+### Visualize ROS Data in Grafana
 
-### Visualize Robotics Data in Grafana
+ReductStore has a [**native Grafana integration**](/blog/grafana-visualization-ros-data) through the ReductStore data source plugin and the ReductROS extension. You can query ROS 2 messages directly in Grafana without any preprocessing. The extension decodes binary CDR messages into JSON on the fly.
 
-ReductStore supports live monitoring through a [**native Grafana integration**](/blog/grafana-visualization-ros-data). Using the ReductStore data source plugin and the ReductROS extension, you can query ROS 2 messages directly in Grafana without preprocessing them into a different format. The extension decodes binary ROS messages (CDR format) into JSON on the fly, so you can build rich dashboards and set up alerts on your robot data as it arrives.
+You can monitor sensor streams live, compare data across multiple robots, and set up alerts when metrics drift. Our [**demo instance**](https://play.reduct.store/replica/) is public if you want to try it without any local setup.
 
-This is useful for monitoring sensor streams in real time during a robot run, comparing data across multiple robots or recording episodes, and setting alerts when metrics go out of range.
+### Export to MCAP for Foxglove
 
-To get started, run Grafana with the ReductStore plugin and point it at your ReductStore instance. You can also use the [**demo instance**](https://play.reduct.store/replica/) to explore a live dataset without any local setup.
+You can export raw ROS messages stored in ReductStore directly to MCAP and open them in [**Foxglove**](https://foxglove.dev). This is powered by the [**ReductROS extension**](/docs/extensions/official/ros-ext/raw).
 
-### Export ROS Data to MCAP for Foxglove
+When records are ingested via reduct-bridge, the `$ros` attachment carries the schema and topic information. The extension uses this to reconstruct valid MCAP files on demand. You can cover a full time range across multiple topics in a single query, and split by duration or file size for long recordings.
 
-If you want to replay or visually inspect recorded robot data, you can export raw ROS messages stored in ReductStore to MCAP format and open them directly in [**Foxglove**](https://foxglove.dev).
-
-This is powered by the [**ReductROS extension**](/docs/extensions/official/ros-ext/raw). When records are ingested via reduct-bridge, a `$ros` attachment is written to each entry with the message schema and topic. The extension uses this metadata to reconstruct valid MCAP files from individual records.
-
-You can export a time range spanning multiple ROS topics into a single MCAP file with a single query. The export also supports episode splitting by duration or file size, so long recordings can be broken into manageable chunks. You get fast, indexed storage in ReductStore for querying and analysis, and MCAP files for visual playback in Foxglove when needed.
+The data stays in ReductStore for fast querying, and you pull MCAP files from it on demand for visual inspection in Foxglove.
 
 ### Zenoh Native API
 
-ReductStore includes a [**Zenoh native API**](/docs/integrations/zenoh) alongside its HTTP API. Zenoh is a publish subscribe protocol designed for robotics and distributed systems, and it is widely used in next generation ROS 2 deployments. With the Zenoh API enabled, ReductStore opens a Zenoh session and registers both a subscriber (for writes) and a queryable (for reads), running in parallel with the HTTP API and sharing the same stored data.
+ReductStore now includes a [**Zenoh native API**](/docs/integrations/zenoh) alongside the existing HTTP API. Zenoh is a pub/sub protocol designed for robotics and distributed systems, and it's widely used in next generation ROS 2 deployments.
 
-This is a good fit for teams that already use Zenoh in their robot communication stack, want to avoid HTTP overhead for high frequency data streams, or need native pub/sub patterns for ingestion. Zenoh keys become ReductStore entry names, Zenoh encodings map to record content types, and Zenoh attachments map to record labels. Time range queries, conditional filters, and label based lookups all work through the Zenoh interface.
+When enabled, ReductStore opens a Zenoh session with a subscriber for writes and a queryable for reads, both running in parallel with HTTP and sharing the same data. Zenoh keys become entry names, encodings map to content types, and attachments map to labels. Time range queries, conditional filters, and label lookups all work the same way they do over HTTP.
+
+It's a natural fit if your robot stack already speaks Zenoh, or if you want to skip HTTP overhead on high frequency ingestion paths.
 
 ### Query Language and Batching
 
-ReductStore uses a flexible [**query language based on JSON syntax**](/docs/next/conditional-query#query-syntax), optimized for robotics data. It supports both real time and historical analysis, with filtering, aggregation, and dataset joining.
+ReductStore uses a [**JSON based query language**](/docs/next/conditional-query#query-syntax) that supports filtering, aggregation, and time range operations. You can query data from a specific robot within a time window, compare sensor streams across robots in parallel, or filter by any label.
 
-You can analyze sensor data over specified time windows, query vibration data from a specific robot within a defined timeframe, or compare sensor data from different robots in parallel. SDKs are available for Python, C++, JavaScript, and Rust.
-
-Data retrieval is optimized through **batching**, which groups multiple records into a single query based on a time range. This reduces the number of requests, improves performance, and lowers latency. For more details, visit the [**official guide on data querying**](/docs/guides/data-querying).
+Retrieval is optimized through **batching**: multiple records are grouped into a single response based on a time range, which cuts down on request overhead and improves throughput. SDKs are available for Python, C++, JavaScript, and Rust. More in the [**querying guide**](/docs/guides/data-querying).
 
 ### Replication and Edge to Cloud Syncing
 
 ![Replication Diagram](./img/replication.drawio.png)
 
-Industrial robots produce large amounts of data that gets stored locally at the edge. Replication then selectively pushes a subset of that data to the cloud. For instance, if sensor data is collected every second, only 1 in 10 records might be sent to the cloud, along with summary metrics useful for later analysis.
-
-ReductStore replicates at the bucket level, not the entire dataset. You can replicate only high priority sensor data or logs while leaving less important data on the edge. Replication is incremental, so only new or changed data is sent. Labels stored alongside each record make it easy to define fine grained replication rules based on data content.
+ReductStore replicates at the bucket level, not the full dataset. That means you can choose to send only high priority sensor data to the cloud while keeping the rest at the edge. Replication is incremental, so only new data is transferred. Labels stored alongside records let you define fine grained rules based on content, for example, only replicate records flagged as anomalies or sampled at 1 in 10 seconds.
 
 ### Retention Strategies
 
-[**ReductStore implements volume based retention policies**](/docs/guides/buckets#quota-type) that follow the FIFO (first in, first out) principle. Old data is only deleted when storage is full, making room for new data. These policies are customizable and can be set separately for each bucket.
-
-Most other databases implement retention based on time periods, which can delete data even when storage is not full. For example, after an outage where the system was idle and nothing new was written, a time based policy may still clear recent data unnecessarily.
+[**Volume based retention**](/docs/guides/buckets#quota-type) follows the FIFO principle: data is only deleted when storage is full, making room for new records. This is different from time based retention, which deletes data after a fixed age regardless of whether storage is full. After an outage, a time based policy might delete data the system never had the chance to process. Volume based retention avoids that.
 
 ### Example Applications
 
-| Application         | How ReductStore helps                                                                                                |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| Autonomous Vehicles | Handles high throughput sensor streams in real time, with efficient querying and selective edge to cloud replication |
-| Industrial Robots   | Stores and analyzes diagnostic data for predictive maintenance and continuous performance monitoring                 |
-| Drones and UAVs     | Supports offline operation in remote areas with limited connectivity, syncing data when a connection is available    |
+| Application         | How ReductStore helps                                                                                  |
+| ------------------- | ------------------------------------------------------------------------------------------------------ |
+| Autonomous Vehicles | Handles high throughput sensor streams with efficient querying and selective edge to cloud replication |
+| Industrial Robots   | Stores diagnostic data for predictive maintenance and continuous performance monitoring                |
+| Drones and UAVs     | Supports offline operation in remote areas and syncs data when connectivity is restored                |
 
 ## Comparing ReductStore with Rosbag and MongoDB
 
-When choosing how to store robot data, three tools come up most often: Rosbag and MCAP, MongoDB, and ReductStore. Each serves a different purpose, and understanding the differences helps you pick the right tool for each part of your pipeline.
+Three tools come up most often when robotics teams think about data storage: Rosbag and MCAP, MongoDB, and ReductStore. They're built for different things.
 
-|                                  | Rosbag / MCAP          | MongoDB                   | ReductStore                |
-| -------------------------------- | ---------------------- | ------------------------- | -------------------------- |
-| Data type                        | Binary ROS messages    | Semi structured documents | Binary timestamped records |
-| Query across recordings          | No                     | Yes                       | Yes                        |
-| Large binary payloads            | Yes                    | Slow via GridFS           | Yes, natively              |
-| Retention                        | Manual file management | Time based                | Volume based FIFO          |
-| ROS integration                  | Native                 | None                      | Via reduct-bridge          |
-| Cloud storage                    | No                     | Atlas                     | Native S3 and Azure        |
-| Write performance vs ReductStore | —                      | 9x slower                 | Baseline                   |
-| Read performance vs ReductStore  | —                      | 23x slower                | Baseline                   |
+|                            | Rosbag / MCAP          | MongoDB                   | ReductStore                |
+| -------------------------- | ---------------------- | ------------------------- | -------------------------- |
+| Data type                  | Binary ROS messages    | Semi structured documents | Binary timestamped records |
+| Query across recordings    | No                     | Yes                       | Yes                        |
+| Large binary payloads      | Yes                    | Slow via GridFS           | Yes, natively              |
+| Retention                  | Manual file management | Time based                | Volume based FIFO          |
+| ROS integration            | Native                 | None                      | Via reduct-bridge          |
+| Cloud storage              | No                     | Atlas                     | Native S3 and Azure        |
+| Write speed vs ReductStore | —                      | 9x slower                 | Baseline                   |
+| Read speed vs ReductStore  | —                      | 23x slower                | Baseline                   |
 
-**Rosbag and MCAP** are the standard formats for recording ROS data during a robot run. They are great for capturing a self contained snapshot of all topics during a test or deployment. However, they are file formats, not databases. You cannot query across many recordings without writing custom scripts, there is no built in indexing on data content, and managing thousands of bag files on disk becomes its own problem. They are the right choice for short term recording and local playback, not for long term storage or fleet wide analysis.
+**Rosbag and MCAP** are the standard for recording ROS sessions. They're great for capturing a snapshot during a test run. But they're file formats, not databases. Querying across many recordings requires custom scripts, there's no built in content indexing, and managing thousands of bag files quickly becomes its own problem. Use them for short recordings and local playback, not long term storage or fleet wide analysis.
 
-**MongoDB** is a flexible database for semi structured data. It works well for storing metadata, labels, and structured records. But it was not designed for large binary payloads. For large files, MongoDB relies on GridFS, which adds complexity and reduces performance. MongoDB also uses time based retention, which can delete data even when storage is not full.
+**MongoDB** is flexible and works well for structured metadata, labels, and event logs. But it wasn't built for large binary payloads. For blob data, it relies on GridFS, which adds complexity and hurts performance. It also uses time based retention, so data can be deleted during idle periods even when storage isn't full.
 
-**ReductStore** is designed specifically for the kind of data robots produce: large, binary, timestamped records at high frequency. It connects directly to ROS via reduct-bridge, exports to MCAP for Foxglove, streams to Grafana dashboards, and replicates selectively to S3 or Azure.
+**ReductStore** is designed specifically for the data robots actually produce: large, binary, timestamped records at high frequency. It connects to ROS via reduct-bridge, exports to MCAP for Foxglove, plugs into Grafana, and replicates selectively to S3 or Azure.
 
-A practical way to think about it: use Rosbag or MCAP for short recordings during testing, use MongoDB for structured metadata and event logs, and use ReductStore for raw sensor data that needs to be stored at scale, queried efficiently, and managed over time.
+In practice: use Rosbag or MCAP for short test recordings, MongoDB for structured metadata and event logs, and ReductStore for raw sensor data that needs to be stored at scale, queried efficiently, and managed over time.
 
-For a deeper comparison, read: [**MongoDB vs ReductStore: Choosing the Right Database for Robotics Applications**](/blog/robotics-mongodb-vs-reductstore).
+For a deeper look: [**MongoDB vs ReductStore: Choosing the Right Database for Robotics Applications**](/blog/robotics-mongodb-vs-reductstore).
 
-## Hands-On Example: Storing and Handling Robotic Data in ReductStore
+## Hands-On Example: Storing Robotic Data in ReductStore
 
-In this section, we will walk through a [**practical example of how to store and handle robotic data using ReductStore**](https://github.com/reductstore/reduct-robotics-example/blob/main/StoreQueryData.py). ReductStore is very efficient for storing episodes: for example, 10 second raw data with all the logs generated by a robot, around 100KB each. For simplicity, we will show how to store trajectory data, but in practice engineers work with larger and more diverse datasets.
+Let's walk through a [**practical example**](https://github.com/reductstore/reduct-robotics-example/blob/main/StoreQueryData.py) of storing and querying robotic data with ReductStore. We'll use trajectory data (coordinates, speed, orientation) to keep things simple, but the same approach works for any sensor stream.
 
-For this example, we will use Python, so make sure you have _Python 3.8+_ installed in your environment.
+You'll need _Python 3.8+_ installed.
 
 ### Setting Up ReductStore
 
-We will use Docker to set up ReductStore in a containerized environment. Create a folder on your system and inside it create a _docker-compose.yaml_ file with the following configuration:
+Create a folder and add a _docker-compose.yaml_ file:
 
 ```yaml
 version: "3.8"
@@ -174,31 +168,21 @@ volumes:
     driver: local
 ```
 
-Then start the container by running:
+Start it with:
 
 ```bash
 docker compose up -d
 ```
 
-Once running, ReductStore will be available at http://127.0.0.1:8383. You can check the container status with:
-
-```bash
-docker ps
-```
-
-Install the necessary Python libraries before we begin:
+ReductStore will be available at http://127.0.0.1:8383. Check the container is running with `docker ps`, then install the Python libraries:
 
 ```bash
 pip install reduct-py numpy
 ```
 
-### Store and Manage Data
+### Store and Query Data
 
-Now that ReductStore is running, let us look at how to store robotic data. In our example, we will work with trajectory data such as coordinates, speed, and orientation.
-
-#### Create (or Get) a Bucket
-
-First, create a new bucket for storing the robot trajectory data named _trajectory_data_.
+#### Create a Bucket
 
 ```python
 async def create_trajectory_bucket():
@@ -210,11 +194,9 @@ async def create_trajectory_bucket():
   await client.create_bucket("trajectory_data", settings, exist_ok=True)
 ```
 
-The quota type of this bucket will be FIFO and its size will be 1 GB. If no settings are defined, the bucket will be created with a default quota type of _NONE_.
+The bucket uses a FIFO quota of 1 GB. Old data is only deleted when the limit is reached.
 
 #### Generate Trajectory Data
-
-Now, let us create a _generate_trajectory_data_ function that simulates trajectory data points for a robot moving in a 2D space.
 
 ```python
 async def generate_trajectory_data(frequency: int = 10, duration: int = 1):
@@ -238,11 +220,9 @@ async def generate_trajectory_data(frequency: int = 10, duration: int = 1):
     await asyncio.sleep(interval)
 ```
 
-The frequency is the number of data points generated per second (default is 10 Hz), while the duration is the total time in seconds (default is 1 second). _X_ and _y_ are the robot position coordinates, _yaw_ is its orientation, _speed_ is its approximate speed based on position changes, and _timestamp_ is the current timestamp for the data point.
+This simulates a robot moving in 2D at 10 Hz for 1 second. _X_ and _y_ are position coordinates, _yaw_ is orientation, and _speed_ is derived from position changes.
 
 #### Calculate Metrics
-
-Now, we will calculate some important metrics for further analysis. In this example, we calculate the average speed and total distance of the robot:
 
 ```python
 def calculate_trajectory_metrics(trajectory: list) -> tuple:
@@ -258,7 +238,7 @@ def calculate_trajectory_metrics(trajectory: list) -> tuple:
   return total_distance, average_speed
 ```
 
-#### Storing Data in ReductStore
+#### Write to ReductStore
 
 ```python
 async def store_trajectory_data():
@@ -287,15 +267,13 @@ def pack_trajectory_data(trajectory: list) -> bytes:
   return json.dumps(trajectory).encode("utf-8")
 ```
 
-In the _store_trajectory_data_ function, we generate the data, calculate the metrics, pack the data into bytes, and write it to ReductStore. The labels (total distance and average speed) are stored alongside each record and can later be used for filtering and replication rules.
+The labels (total distance and average speed) are stored alongside each record. You can later filter or replicate records based on these values.
 
-Now, if we take a look at the **Buckets** section in ReductStore, we will see that our bucket has data inside.
+Once data is written, you'll see the bucket populate in ReductStore:
 
 ![ReductStore Bucket](./img/bucket.png)
 
-#### Retrieving Data
-
-The next step is to retrieve the data we just stored, queried by a specific label:
+#### Query by Label
 
 ```python
 async def query_by_label(bucket_name, entry_name, label_key, label_value):
@@ -311,11 +289,9 @@ async def query_by_label(bucket_name, entry_name, label_key, label_value):
       # Do something with the record
 ```
 
-To get all records without any filtering, simply remove the _'when'_ condition.
+Remove the _'when'_ condition to return all records with no filtering.
 
-#### Running Everything
-
-This is our main function, calling the bucket creation, data storage, and label based retrieval:
+#### Main Function
 
 ```python
 async def main():
@@ -330,11 +306,10 @@ asyncio.run(main())
 
 ## Conclusion
 
-Managing robotic data does not have to be complicated. With the right tools and strategies, you can handle large amounts of data efficiently while keeping costs low. ReductStore offers a practical solution for the unique needs of robotics systems: from real time processing to smart storage management, from Grafana dashboards to MCAP exports for Foxglove, and from native ROS ingestion via reduct-bridge to cloud storage backends on S3 and Azure.
+Robotics data pipelines don't have to be a mess of bag files, overpriced cloud storage, and custom scripts duct taped together. ReductStore covers ingestion, retention, replication, and querying in one place, with direct integrations into ROS, Foxglove, Grafana, S3, and Azure.
 
-By implementing these approaches, robotics teams can focus less on data management and more on building better robots.
+Start with what you need, and add the rest as your system grows. Check out [**reduct.store**](/) or read through the [**documentation**](/docs/how-does-it-work) to get going.
 
-Ready to improve your robotic data management? Try ReductStore today at [**reduct.store**](/) or check out our [**documentation**](/docs/how-does-it-work) to get started.
+---
 
-Thanks for reading.
 If you have any questions or comments, feel free to use the [**ReductStore Community Forum**](https://community.reduct.store/signup).
