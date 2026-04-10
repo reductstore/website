@@ -171,13 +171,13 @@ export default function DemoLicensePage(): JSX.Element {
               <p className={styles.bulletTitle}>Co-development</p>
               <ul className={styles.bulletPoints}>
                 <BulletPointItem>
-                  Available at a preferred rate during your evaluation
+                  Available at a preferred rate
                 </BulletPointItem>
                 <BulletPointItem>
                   Full pipeline setup from edge ingestion to cloud
                 </BulletPointItem>
                 <BulletPointItem>
-                  Protocol integration, AI labeling, dashboards
+                  Protocol integration, AI orchestration, dashboards
                 </BulletPointItem>
               </ul>
               <p className={styles.cloudNote}>
