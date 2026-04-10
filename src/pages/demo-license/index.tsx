@@ -22,7 +22,8 @@ const services = [
   {
     icon: LuRadioTower,
     title: "Protocol Integration",
-    description: "MQTT, ROS1 and ROS2, zenoh, and custom protocols for robotics and IIoT data ingestion.",
+    description:
+      "MQTT, ROS1 and ROS2, zenoh, and custom protocols for robotics and IIoT data ingestion.",
   },
   {
     icon: LuTags,
@@ -33,7 +34,8 @@ const services = [
   {
     icon: LuMonitorDot,
     title: "Dashboards",
-    description: "Grafana and Foxglove dashboards for data visualization and monitoring.",
+    description:
+      "Grafana and Foxglove dashboards for data visualization and monitoring.",
   },
   {
     icon: LuCloud,
@@ -159,9 +161,7 @@ export default function DemoLicensePage(): JSX.Element {
               </ul>
               <p className={styles.bulletTitle}>Co-development</p>
               <ul className={styles.bulletPoints}>
-                <BulletPointItem>
-                  Available at a preferred rate
-                </BulletPointItem>
+                <BulletPointItem>Available at a preferred rate</BulletPointItem>
                 <BulletPointItem>
                   Full pipeline setup from edge ingestion to cloud
                 </BulletPointItem>
