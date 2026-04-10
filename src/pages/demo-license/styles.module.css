@@ -1,0 +1,125 @@
+.pageContainer {
+  padding-top: 1rem;
+  margin-bottom: var(--reduct-bottom-page-margin);
+}
+
+/* Intro */
+.sectionTitle {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.introText {
+  max-width: 640px;
+  font-size: var(--reduct-font-size-subtitle);
+  color: var(--reduct-dimmed);
+  margin: 0 0 2rem;
+}
+
+/* Bullet points */
+.bulletTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.bulletSubtitle {
+  color: var(--reduct-dimmed);
+  margin-bottom: 1rem;
+}
+
+.bulletPoints {
+  list-style: none;
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+  padding: 0;
+}
+
+.subBulletPoints {
+  list-style: none;
+  margin-left: 2rem;
+  margin-bottom: 0.5rem;
+  padding: 0;
+}
+
+.cloudNote {
+  color: var(--reduct-dimmed);
+  font-size: 0.9rem;
+  margin-top: 1.5rem;
+}
+
+/* Form column */
+.formColumn {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: 100%;
+  padding-left: 2rem;
+}
+
+@media (max-width: 996px) {
+  .formColumn {
+    padding-left: 0;
+    margin-top: 2rem;
+  }
+}
+
+/* Service cards */
+.servicesSection {
+  margin-bottom: 4rem;
+}
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+@media (max-width: 996px) {
+  .servicesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .servicesGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.serviceCard {
+  background: var(--ifm-card-background-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.serviceCard h3 {
+  margin: 0.75rem 0 0.5rem;
+  font-size: 1.15rem;
+}
+
+.serviceCard p {
+  margin: 0;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.serviceIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1rem auto;
+  background: var(--ifm-color-primary);
+  color: var(--reduct-on-primary-text);
+  border-radius: 12px;
+}
+
+/* FAQ */
+.faqSection {
+  margin-bottom: 4rem;
+}
