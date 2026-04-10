@@ -19,7 +19,7 @@ const DemoLicenseNote = () => {
         </Link>
         <Link
           className="button button--secondary"
-          to="/contact?subject=DemoLicense"
+          to="/demo-license"
           style={{ textDecoration: "none" }}
         >
           Request Demo License
