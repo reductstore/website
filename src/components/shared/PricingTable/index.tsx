@@ -159,7 +159,7 @@ export default function PricingTable() {
           subtitle="Commercial Self-Hosted"
           description="Commercial components, support, proof-of-concept assistance, and long-term release support for self-hosted deployments. Any ReductStore instance linked through replication to Pro must also be covered by a Pro commercial license."
           categories={createFeatures("onpremise")}
-          buttonUrl="/contact?subject=DemoLicense"
+          buttonUrl="/demo-license"
           buttonLabel="Get Demo License"
           termsUrl="/terms"
         />
