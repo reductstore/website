@@ -65,11 +65,15 @@ For records around 100KB (a typical robotics sensor episode), ReductStore can be
 
 ReductStore has a [**native Grafana integration**](/blog/grafana-visualization-ros-data) through the ReductStore data source plugin and the ReductROS extension. You can query ROS 2 messages directly in Grafana without any preprocessing. The extension decodes binary CDR messages into JSON on the fly.
 
+![Grafana ROS Dashboard](./img/grafana.png)
+
 You can monitor sensor streams live, compare data across multiple robots, and set up alerts when metrics drift. Our [**demo instance**](https://play.reduct.store/replica/) is public if you want to try it without any local setup.
 
 ### Export to MCAP for Foxglove
 
 You can export raw ROS messages stored in ReductStore directly to MCAP and open them in [**Foxglove**](https://foxglove.dev). This is powered by the [**ReductROS extension**](/docs/extensions/official/ros-ext/raw).
+
+![MCAP Export](./img/mcap-export.png)
 
 When records are ingested via reduct-bridge, the `$ros` attachment carries the schema and topic information. The extension uses this to reconstruct valid MCAP files on demand. You can cover a full time range across multiple topics in a single query, and split by duration or file size for long recordings.
 
@@ -78,6 +82,8 @@ The data stays in ReductStore for fast querying, and you pull MCAP files from it
 ### Zenoh Native API
 
 ReductStore now includes a [**Zenoh native API**](/docs/integrations/zenoh) alongside the existing HTTP API. Zenoh is a pub/sub protocol designed for robotics and distributed systems, and it's widely used in next generation ROS 2 deployments.
+
+![Zenoh Native API](./img/zenoh.png)
 
 When enabled, ReductStore opens a Zenoh session with a subscriber for writes and a queryable for reads, both running in parallel with HTTP and sharing the same data. Zenoh keys become entry names, encodings map to content types, and attachments map to labels. Time range queries, conditional filters, and label lookups all work the same way they do over HTTP.
 
@@ -89,7 +95,7 @@ ReductStore uses a [**JSON based query language**](/docs/next/conditional-query#
 
 Retrieval is optimized through **batching**: multiple records are grouped into a single response based on a time range, which cuts down on request overhead and improves throughput. SDKs are available for Python, C++, JavaScript, and Rust. More in the [**querying guide**](/docs/guides/data-querying).
 
-### Replication and Edge to Cloud Syncing
+### Replication and Edge to Cloud Replication
 
 ![Replication Diagram](./img/replication.drawio.png)
 
