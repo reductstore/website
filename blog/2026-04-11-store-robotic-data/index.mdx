@@ -5,10 +5,10 @@ authors: [gracija, anthony]
 tags: [robotics]
 slug: store-robotic-data
 date: 2026-04-11
-image: ./img/introduction_diagram.drawio.png
+image: ./img/intro-picture.png
 ---
 
-![Introduction Diagram](./img/introduction_diagram.drawio.png)
+![Introduction Diagram](./img/intro-picture.png)
 
 Robots generate _massive_ amounts of data, and managing it well is harder than it looks. Storage fills up fast, cloud transfer gets expensive, and real time ingestion is unforgiving when you're running cameras and sensors at high frequency.
 
@@ -21,13 +21,9 @@ This article covers practical strategies for handling robotic data, introduces [
 Robots operate in dynamic environments and continuously produce large volumes of data. The core challenges engineers run into are:
 
 - **High frequency, real time requirements**: A drone navigating a city must process camera and sensor data in milliseconds. Storage solutions need to keep up with these streams and make data accessible fast enough for real time decision making.
-
 - **Limited on device storage**: Most robots can't store everything they generate. Size, weight, and power constraints limit local capacity, so good data management strategies are essential.
-
 - **High data volume**: An autonomous vehicle can produce up to [**5 terabytes per hour**](https://www.datacenterfrontier.com/connected-cars/article/11429212/rolling-zettabytes-quantifying-the-data-impact-of-connected-cars) across camera feeds, LiDAR, radar, GPS, and sensors. Most databases weren't designed around that kind of throughput.
-
 - **Cloud storage costs**: Pushing everything to the cloud isn't practical. Providers charge per gigabyte stored and transferred, and with robots producing terabytes, the bill adds up fast. What you send to the cloud is a decision worth making deliberately.
-
 - **Data reduction complexity**: Filtering out irrelevant data without losing important information is tricky. Without a clear strategy, you either waste storage or throw away data you later need.
 
 ## General Strategies for Managing Robotic Data
@@ -35,13 +31,9 @@ Robots operate in dynamic environments and continuously produce large volumes of
 A few approaches that work well in practice:
 
 - **Use a time series object store**: Systems like ReductStore are designed specifically for high frequency, timestamped binary data. They offer fast writes, efficient querying, and manageable costs at scale.
-
 - **Balance edge and cloud storage**: Keep recent, critical data on the robot for fast access. Move older or lower priority data to the cloud for long term storage and analysis. Splitting storage this way cuts costs without adding much latency to what matters.
-
 - **Use volume based retention policies**: Rather than deleting data based on age, use a FIFO (first in, first out) quota. Data is only removed when the storage limit is reached, which avoids unnecessary deletion during downtime or low activity periods.
-
 - **Compress where it makes sense**: H.265 for video, JPEG for images. The right format can cut storage by an order of magnitude without losing anything you actually need.
-
 - **Prioritize what to keep**: Not all sensor data has equal value. Define what's critical upfront and discard the rest early in the pipeline.
 
 ## ReductStore: Built for Robotic Data
@@ -258,8 +250,8 @@ async def store_trajectory_data():
   timestamp = datetime.now()
 
   async with Client("http://localhost:8383", api_token="my-token") as client:
-    bucket = await client.get_bucket("trajectory_data")
-    await bucket.write("trajectory_data", packed_data, timestamp, labels=labels)
+    bucket = await client.get_bucket("my-bucket")
+    await bucket.write("trajectory", packed_data, timestamp, labels=labels)
 
 
 def pack_trajectory_data(trajectory: list) -> bytes:
@@ -297,7 +289,7 @@ Remove the _'when'_ condition to return all records with no filtering.
 async def main():
   await create_trajectory_bucket()
     await store_trajectory_data()
-    label_query_result = await query_by_label("trajectory_data", "trajectory_data", "&total_distance", HIGH_DISTANCE)
+    label_query_result = await query_by_label("my-bucket", "trajectory", "&total_distance", HIGH_DISTANCE)
     if label_query_result:
       print(f"Data queried by label: {label_query_result}")
 
