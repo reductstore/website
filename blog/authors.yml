@@ -1,9 +1,9 @@
 alexey:
   name: Alexey Timin
-  title: Software Engineer - Database, Rust, C++
+  title: Co-founder & CTO - Database & Systems Engineering
   url: https://github.com/atimin
   image_url: https://github.com/atimin.png
-  description: A software engineer with a passion for databases, Rust, and C++, always looking for new challenges and opportunities to build efficient, scalable systems for managing large amounts of data.
+  description: Co-founder and CTO building the core database and data infrastructure. Focused on high-performance storage, low-latency systems, and scaling real-time data for industrial and robotics workloads.
   page: true
   socials:
     linkedin: atimin
@@ -11,10 +11,10 @@ alexey:
 
 anthony:
   name: Anthony Cavin
-  title: Data Scientist - ML/AI, Python, TypeScript
+  title: Co-founder & CEO - Data, ML & Robotics Systems
   url: https://github.com/AnthonyCvn
   image_url: https://github.com/AnthonyCvn.png
-  description: A data scientist specializing in machine learning, AI, Python, and TypeScript, with a strong interest in applying these technologies to data-driven projects and innovative AI solutions.
+  description: Co-founder and CEO working on data pipelines, machine learning, and robotics systems. Focused on real-time data processing and turning complex data into production-ready intelligence.
   page: true
   socials:
     linkedin: anthonycavin
