@@ -38,7 +38,7 @@ A few approaches that work well in practice:
 
 ## ReductStore: Built for Robotic Data
 
-[**ReductStore**](/) is a time series database built specifically for unstructured, binary data. It's designed to handle high frequency sensor streams from autonomous vehicles, drones, industrial robots, and more. It stores data with timestamps and labels, supports fast real time ingestion, and comes with batching, filtering, and edge to cloud replication built in.
+[**ReductStore**](/) is a time series database built specifically for unstructured, binary data. It's designed to handle high frequency sensor streams from autonomous vehicles, drones, industrial robots, and IoT. It stores data with timestamps and labels, supports fast real time ingestion, and comes with batching, filtering, and edge to cloud replication built in.
 
 Here's what's available today.
 
@@ -50,7 +50,7 @@ It also writes a `$ros` attachment to each entry with the message schema, topic 
 
 ### Cloud Storage: Native S3 and Azure
 
-ReductStore supports native cloud storage backends for both [**Amazon S3 and Azure Blob Storage**](/docs/integrations/cloud-storage#azure-differences), no FUSE drivers needed. It uses a local cache for hot data and the cloud bucket for long term retention.
+ReductStore supports native cloud storage backends for both [**Amazon S3 and Azure Blob Storage**](/docs/integrations/cloud-storage), no FUSE drivers needed. It uses a local cache for hot data and the cloud bucket for long term retention.
 
 | Option             | What it means                                                                              |
 | ------------------ | ------------------------------------------------------------------------------------------ |
@@ -63,21 +63,19 @@ For records around 100KB (a typical robotics sensor episode), ReductStore can be
 
 ### Visualize ROS Data in Grafana
 
-ReductStore has a [**native Grafana integration**](/blog/grafana-visualization-ros-data) through the ReductStore data source plugin and the ReductROS extension. You can query ROS 2 messages directly in Grafana without any preprocessing. The extension decodes binary CDR messages into JSON on the fly.
+ReductStore has a [**Grafana integration**](/blog/grafana-visualization-ros-data) through the ReductStore data source plugin. You can query ROS 2 messages directly in Grafana thanks to the [**ReductROS extension**](/docs/extensions/official/ros-ext/raw). The extension decodes binary CDR messages into JSON on the fly.
 
 ![Grafana ROS Dashboard](./img/grafana.png)
 
-You can monitor sensor streams live, compare data across multiple robots, and set up alerts when metrics drift. Our [**demo instance**](https://play.reduct.store/replica/) is public if you want to try it without any local setup.
+You can monitor sensor streams live, compare data across multiple robots, and set up alerts when metrics drift.
 
 ### Export to MCAP for Foxglove
 
-You can export raw ROS messages stored in ReductStore directly to MCAP and open them in [**Foxglove**](https://foxglove.dev). This is powered by the [**ReductROS extension**](/docs/extensions/official/ros-ext/raw).
+You can export raw ROS messages stored in ReductStore directly to MCAP and open them in Foxglove. This is powered by the [**ReductROS extension**](/docs/extensions/official/ros-ext/raw) as well, which reconstructs valid MCAP files on demand.
 
 ![MCAP Export](./img/mcap-export.png)
 
 When records are ingested via reduct-bridge, the `$ros` attachment carries the schema and topic information. The extension uses this to reconstruct valid MCAP files on demand. You can cover a full time range across multiple topics in a single query, and split by duration or file size for long recordings.
-
-The data stays in ReductStore for fast querying, and you pull MCAP files from it on demand for visual inspection in Foxglove.
 
 ### Zenoh Native API
 
@@ -93,13 +91,13 @@ It's a natural fit if your robot stack already speaks Zenoh, or if you want to s
 
 ReductStore uses a [**JSON based query language**](/docs/next/conditional-query#query-syntax) that supports filtering, aggregation, and time range operations. You can query data from a specific robot within a time window, compare sensor streams across robots in parallel, or filter by any label.
 
-Retrieval is optimized through **batching**: multiple records are grouped into a single response based on a time range, which cuts down on request overhead and improves throughput. SDKs are available for Python, C++, JavaScript, and Rust. More in the [**querying guide**](/docs/guides/data-querying).
+Retrieval is optimized through **batching**: multiple records are grouped into a single response based on a time range, which cuts down on request overhead and improves throughput. SDKs are available for Python, C++, JavaScript, Go, and Rust. More in the [**querying guide**](/docs/guides/data-querying).
 
 ### Replication and Edge to Cloud Replication
 
 ![Replication Diagram](./img/replication.drawio.png)
 
-ReductStore replicates at the bucket level, not the full dataset. That means you can choose to send only high priority sensor data to the cloud while keeping the rest at the edge. Replication is incremental, so only new data is transferred. Labels stored alongside records let you define fine grained rules based on content, for example, only replicate records flagged as anomalies or sampled at 1 in 10 seconds.
+ReductStore replicates at the bucket level based on conditions. That means you can choose to send only high priority sensor data to the cloud based on rules, labels, or events. Replication is incremental, so only new data is transferred. Labels stored alongside records let you define fine grained rules based on content, for example, only replicate records flagged as anomalies or sampled at 1 in 10 seconds.
 
 ### Retention Strategies
 
