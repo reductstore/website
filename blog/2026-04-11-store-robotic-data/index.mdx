@@ -115,16 +115,16 @@ ReductStore replicates at the bucket level based on conditions. That means you c
 
 Three tools come up most often when robotics teams think about data storage: Rosbag and MCAP, MongoDB, and ReductStore. They're built for different things.
 
-|                            | Rosbag / MCAP          | MongoDB                   | ReductStore                |
-| -------------------------- | ---------------------- | ------------------------- | -------------------------- |
-| Data type                  | Binary ROS messages    | Semi structured documents | Binary timestamped records |
-| Query across recordings    | No                     | Yes                       | Yes                        |
-| Large binary payloads      | Yes                    | Slow via GridFS           | Yes, natively              |
-| Retention                  | Manual file management | Time based                | Volume based FIFO          |
-| ROS integration            | Native                 | None                      | Via reduct-bridge          |
-| Cloud storage              | No                     | Atlas                     | Native S3 and Azure        |
-| Write speed vs ReductStore | —                      | 9x slower                 | Baseline                   |
-| Read speed vs ReductStore  | —                      | 23x slower                | Baseline                   |
+|                         | Rosbag / MCAP          | MongoDB                   | ReductStore                |
+| ----------------------- | ---------------------- | ------------------------- | -------------------------- |
+| Data type               | Binary ROS messages    | Semi structured documents | Binary timestamped records |
+| Query across recordings | No                     | Yes                       | Yes                        |
+| Large binary payloads   | Yes                    | Slow via GridFS           | Yes, natively              |
+| Retention               | Manual file management | Time based                | Volume based FIFO          |
+| ROS integration         | Native                 | None                      | Via reduct-bridge          |
+| Cloud storage           | No                     | Atlas                     | Native S3 and Azure        |
+| Write (100 KB blobs)    | —                      | 694 blob/s                | 3,612 blob/s (+420%)       |
+| Read (100 KB blobs)     | —                      | 1,730 blob/s              | 6,250 blob/s (+260%)       |
 
 **Rosbag and MCAP** are the standard for recording ROS sessions. They're great for capturing a snapshot during a test run. But they're file formats, not databases. Querying across many recordings requires custom scripts, there's no built in content indexing, and managing thousands of bag files quickly becomes its own problem. Use them for short recordings and local playback, not long term storage or fleet wide analysis.
 
