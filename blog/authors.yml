@@ -1,9 +1,9 @@
 alexey:
   name: Alexey Timin
-  title: Co-founder & CTO — Systems & Database Engineering
+  title: Co-founder & CTO - Database & Systems Engineering
   url: https://github.com/atimin
   image_url: https://github.com/atimin.png
-  description: Co-founder and CTO building high-performance database and data infrastructure. Focused on low-latency systems, efficient storage, and scaling real-time data for industrial and robotics workloads.
+  description: Co-founder and CTO building the core database and data infrastructure. Focused on high-performance storage, low-latency systems, and scaling real-time data for industrial and robotics workloads.
   page: true
   socials:
     linkedin: atimin
@@ -11,7 +11,7 @@ alexey:
 
 anthony:
   name: Anthony Cavin
-  title: Co-founder & CEO — Data, ML & Robotics Systems
+  title: Co-founder & CEO - Data, ML & Robotics Systems
   url: https://github.com/AnthonyCvn
   image_url: https://github.com/AnthonyCvn.png
   description: Co-founder and CEO working on data pipelines, machine learning, and robotics systems. Focused on real-time data processing and turning complex data into production-ready intelligence.
