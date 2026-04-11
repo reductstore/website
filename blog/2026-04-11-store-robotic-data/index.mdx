@@ -59,7 +59,7 @@ ReductStore supports native cloud storage backends for both [**Amazon S3 and Azu
 | Tiered access      | Recent data stays in the local cache for fast reads. Older data lives in the cloud bucket. |
 | Read replicas      | Add read only replicas pointing at the same S3 bucket, close to your consumers.            |
 
-For records around 100KB (a typical robotics sensor episode), ReductStore can be 10 to 100x faster than traditional time series object stores at a fraction of the cost.
+For records around 100KB (e.g. JPEG images), ReductStore can be >10x faster than traditional time series object stores at a fraction of the cost.
 
 ### Visualize ROS Data in Grafana
 
