@@ -23,6 +23,8 @@ You can use this method to create a query link for a specific bucket.
 The request body should include the bucket and endpoint, as well as a query parameter to filter the data.
 The given query will be applied to the data when accessed via the link.
 
+`record_entry` and `record_timestamp` are required in the payload. They bind the link preview to an exact record identity instead of positional index.
+
 <SwaggerComponent
   method="post"
   path="/api/v1/links/:file_name"
@@ -81,9 +83,10 @@ The method receives a JSON object in the request body with the following fields:
 {
   expire_at: "integer", // Expiration date in unix timestamp (seconds)
   bucket: "string", // Bucket name
-  entry: "string", // Entry name
+  entry: "string", // Entry name (kept for compatibility)
+  record_entry: "string", // Required record entry name for stable preview resolution
+  record_timestamp: "integer", // Required record timestamp for stable preview resolution
   query: "object", // Query object
-  index: "integer", // (Optional) Record index in the query result to be returned by default (r query parameter)
   base_url: "string", // (Optional) Base URL to use in the generated link
 }
 ```
@@ -92,6 +95,8 @@ The method receives a JSON object in the request body with the following fields:
 
 You can use this method to download data using a query link.
 The method applies the query specified when creating the link to filter the data and returns the content of the record along with metadata in the response headers.
+
+If both `e` and `ts` are passed, they override `record_entry`/`record_timestamp` from the encrypted payload for this request. You must provide both parameters together.
 
 <SwaggerComponent
   method="get"
@@ -133,11 +138,18 @@ The method applies the query specified when creating the link to filter the data
       description: "Name of the token used to create the link",
     },
     {
-      name: "r",
+      name: "e",
       type: "string",
       isRequired: false,
       description:
-        "Record number in the query result to download. If not provided, the first record matching the query will be returned.",
+        "Record entry name override. Must be provided together with ts.",
+    },
+    {
+      name: "ts",
+      type: "string",
+      isRequired: false,
+      description:
+        "Record timestamp override. Must be provided together with e.",
     },
   ]}
   responses={[
