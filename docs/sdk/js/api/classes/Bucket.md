@@ -9,7 +9,7 @@ description: "API reference for Bucket in the ReductStore Client SDK for JavaScr
 
 # Bucket
 
-Defined in: [Bucket.ts:27](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L27)
+Defined in: [Bucket.ts:27](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L27)
 
 Represents a bucket in ReductStore
 
@@ -19,7 +19,7 @@ Represents a bucket in ReductStore
 
 &gt; **new Bucket**(`name`, `httpClient`): `Bucket`
 
-Defined in: [Bucket.ts:38](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L38)
+Defined in: [Bucket.ts:38](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L38)
 
 Create a bucket. Use Client.creatBucket or Client.getBucket instead it
 
@@ -45,7 +45,7 @@ Create a bucket. Use Client.creatBucket or Client.getBucket instead it
 
 &gt; **beginRead**(`entry`, `ts?`, `head?`): `Promise`\&lt;`ReadableRecord`\&gt;
 
-Defined in: [Bucket.ts:233](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L233)
+Defined in: [Bucket.ts:233](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L233)
 
 Start reading a record from an entry
 
@@ -81,7 +81,7 @@ Promise&lt;ReadableRecord&gt;
 
 &gt; **beginRemoveBatch**(`entry`): `Promise`\&lt;[`Batch`](Batch.md)\&gt;
 
-Defined in: [Bucket.ts:121](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L121)
+Defined in: [Bucket.ts:121](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L121)
 
 Remove a batch of records
 
@@ -103,7 +103,7 @@ Remove a batch of records
 
 &gt; **beginRemoveRecordBatch**(): [`RecordBatch`](RecordBatch.md)
 
-Defined in: [Bucket.ts:478](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L478)
+Defined in: [Bucket.ts:478](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L478)
 
 Create a new batch for removing records across multiple entries.
 
@@ -117,7 +117,7 @@ Create a new batch for removing records across multiple entries.
 
 &gt; **beginUpdateBatch**(`entry`): `Promise`\&lt;[`Batch`](Batch.md)\&gt;
 
-Defined in: [Bucket.ts:459](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L459)
+Defined in: [Bucket.ts:459](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L459)
 
 Create a new batch for updating records in the database.
 
@@ -137,7 +137,7 @@ Create a new batch for updating records in the database.
 
 &gt; **beginUpdateRecordBatch**(): [`RecordBatch`](RecordBatch.md)
 
-Defined in: [Bucket.ts:471](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L471)
+Defined in: [Bucket.ts:471](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L471)
 
 Create a new batch for updating records across multiple entries.
 
@@ -160,7 +160,7 @@ await batch.send();
 
 &gt; **beginWrite**(`entry`, `options?`): `Promise`\&lt;`WritableRecord`\&gt;
 
-Defined in: [Bucket.ts:184](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L184)
+Defined in: [Bucket.ts:184](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L184)
 
 Start writing a record into an entry
 
@@ -201,7 +201,7 @@ await record.write("Hello!");
 
 &gt; **beginWriteBatch**(`entry`): `Promise`\&lt;[`Batch`](Batch.md)\&gt;
 
-Defined in: [Bucket.ts:439](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L439)
+Defined in: [Bucket.ts:439](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L439)
 
 Create a new batch for writing records to the database.
 
@@ -221,7 +221,7 @@ Create a new batch for writing records to the database.
 
 &gt; **beginWriteRecordBatch**(): [`RecordBatch`](RecordBatch.md)
 
-Defined in: [Bucket.ts:451](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L451)
+Defined in: [Bucket.ts:451](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L451)
 
 Create a new batch for writing records to multiple entries.
 
@@ -242,9 +242,9 @@ await batch.send();
 
 ### createQueryLink()
 
-&gt; **createQueryLink**(`entry`, `start?`, `stop?`, `query?`, `recordIndex?`, `expireAt?`, `fileName?`, `baseUrl?`): `Promise`\&lt;`string`\&gt;
+&gt; **createQueryLink**(`entry`, `start?`, `stop?`, `query?`, `record?`, `expireAt?`, `fileName?`, `baseUrl?`): `Promise`\&lt;`string`\&gt;
 
-Defined in: [Bucket.ts:493](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L493)
+Defined in: [Bucket.ts:495](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L495)
 
 Create a query link for downloading records
 
@@ -274,11 +274,13 @@ stop point of the time period for the query
 
 options for the query
 
-##### recordIndex?
+##### record?
 
-`number`
+selector for the record to download (required):
+- `number`: legacy record index (works only before ReductStore v1.19; removed from v1.19 API because broken, removed in SDK v1.21)
+- `&#123; entry, timestamp &#125;`: explicit record identity for ReductStore v1.19+
 
-index of the record to download (0 for the first record, 1 for the second, etc.)
+`number` | \&#123; `entry`: `string`; `timestamp`: `bigint`; \&#125;
 
 ##### expireAt?
 
@@ -290,7 +292,7 @@ expiration time of the link. Default is 24 hours from now
 
 `string`
 
-name of the file to download. Default is `$&#123;entry&#125;_$&#123;recordIndex&#125;.bin` or `$&#123;bucket&#125;_$&#123;recordIndex&#125;.bin` for multi-entry
+name of the file to download. Default is `$&#123;entry&#125;_&lt;selector&gt;.bin` or `$&#123;bucket&#125;_&lt;selector&gt;.bin` for multi-entry
 
 ##### baseUrl?
 
@@ -308,7 +310,7 @@ base url for link generation. If not set, the server's base url will be used
 
 &gt; **getEntryList**(): `Promise`\&lt;[`EntryInfo`](EntryInfo.md)[]\&gt;
 
-Defined in: [Bucket.ts:82](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L82)
+Defined in: [Bucket.ts:82](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L82)
 
 Get entry list
 
@@ -324,7 +326,7 @@ Get entry list
 
 &gt; **getInfo**(): `Promise`\&lt;[`BucketInfo`](BucketInfo.md)\&gt;
 
-Defined in: [Bucket.ts:72](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L72)
+Defined in: [Bucket.ts:72](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L72)
 
 Get information about a bucket
 
@@ -340,7 +342,7 @@ Get information about a bucket
 
 &gt; **getName**(): `string`
 
-Defined in: [Bucket.ts:350](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L350)
+Defined in: [Bucket.ts:350](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L350)
 
 #### Returns
 
@@ -352,7 +354,7 @@ Defined in: [Bucket.ts:350](https://github.com/reductstore/reduct-js/blob/ff0b2c
 
 &gt; **getSettings**(): `Promise`\&lt;[`BucketSettings`](BucketSettings.md)\&gt;
 
-Defined in: [Bucket.ts:50](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L50)
+Defined in: [Bucket.ts:50](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L50)
 
 Get bucket settings
 
@@ -368,7 +370,7 @@ Get bucket settings
 
 &gt; **query**(`entry`, `start?`, `stop?`, `options?`): `AsyncGenerator`\&lt;`ReadableRecord`\&gt;
 
-Defined in: [Bucket.ts:295](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L295)
+Defined in: [Bucket.ts:295](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L295)
 
 Query records for a time interval as generator
 
@@ -421,7 +423,7 @@ for await (const record in bucket.query("entry-1", start, stop)) {
 
 &gt; **readAttachments**(`entry`): `Promise`\&lt;`Record`\&lt;`string`, `unknown`\&gt;\&gt;
 
-Defined in: [Bucket.ts:580](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L580)
+Defined in: [Bucket.ts:616](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L616)
 
 Read attachments from an entry.
 
@@ -445,7 +447,7 @@ map of attachment key to decoded JSON value
 
 &gt; **remove**(): `Promise`\&lt;`void`\&gt;
 
-Defined in: [Bucket.ts:94](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L94)
+Defined in: [Bucket.ts:94](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L94)
 
 Remove bucket
 
@@ -461,7 +463,7 @@ Remove bucket
 
 &gt; **removeAttachments**(`entry`, `attachmentKeys?`): `Promise`\&lt;`void`\&gt;
 
-Defined in: [Bucket.ts:604](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L604)
+Defined in: [Bucket.ts:640](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L640)
 
 Remove attachments from an entry.
 
@@ -491,7 +493,7 @@ list of keys to remove
 
 &gt; **removeEntry**(`entry`): `Promise`\&lt;`void`\&gt;
 
-Defined in: [Bucket.ts:104](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L104)
+Defined in: [Bucket.ts:104](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L104)
 
 Remove an entry
 
@@ -515,7 +517,7 @@ Remove an entry
 
 &gt; **removeQuery**(`entry`, `start?`, `stop?`, `options?`): `Promise`\&lt;`number`\&gt;
 
-Defined in: [Bucket.ts:132](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L132)
+Defined in: [Bucket.ts:132](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L132)
 
 Remove records by query
 
@@ -555,7 +557,7 @@ Remove records by query
 
 &gt; **removeRecord**(`entry`, `ts`): `Promise`\&lt;`void`\&gt;
 
-Defined in: [Bucket.ts:113](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L113)
+Defined in: [Bucket.ts:113](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L113)
 
 Remove a record
 
@@ -583,7 +585,7 @@ Remove a record
 
 &gt; **rename**(`newName`): `Promise`\&lt;`void`\&gt;
 
-Defined in: [Bucket.ts:266](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L266)
+Defined in: [Bucket.ts:266](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L266)
 
 Rename a bucket
 
@@ -605,7 +607,7 @@ new name of the bucket
 
 &gt; **renameEntry**(`entry`, `newEntry`): `Promise`\&lt;`void`\&gt;
 
-Defined in: [Bucket.ts:250](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L250)
+Defined in: [Bucket.ts:250](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L250)
 
 Rename an entry
 
@@ -633,7 +635,7 @@ new entry name
 
 &gt; **setSettings**(`settings`): `Promise`\&lt;`void`\&gt;
 
-Defined in: [Bucket.ts:60](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L60)
+Defined in: [Bucket.ts:60](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L60)
 
 Set bucket settings
 
@@ -657,7 +659,7 @@ Set bucket settings
 
 &gt; **update**(`entry`, `ts`, `labels`): `Promise`\&lt;`void`\&gt;
 
-Defined in: [Bucket.ts:212](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L212)
+Defined in: [Bucket.ts:212](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L212)
 
 Update labels of an existing record
 
@@ -693,7 +695,7 @@ If a label has empty string value, it will be removed.
 
 &gt; **writeAttachments**(`entry`, `attachments`): `Promise`\&lt;`void`\&gt;
 
-Defined in: [Bucket.ts:551](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L551)
+Defined in: [Bucket.ts:587](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L587)
 
 Write attachments to an entry.
 

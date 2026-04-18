@@ -7,12 +7,13 @@ import InstallClientCLI from "@site/src/components/docs/InstallClientCLI";
 import Link from "@docusaurus/Link";
 import styles from "./styles.module.css";
 import PlaygroundOffer from "@site/src/components/promotional/PlaygroundOffer";
+import InstallReductBridge from "@site/src/components/docs/InstallReductBridge";
 
 export default function DownloadPage(): JSX.Element {
   return (
     <Layout
       title="Download for Linux, Windows, and macOS"
-      description="Get started with ReductStore by downloading our latest software and SDKs for Linux, Windows, and macOS. 
+      description="Get started with ReductStore by downloading our latest software and SDKs for Linux, Windows, and macOS.
       This page provides direct download links and step-by-step instructions to ensure a smooth installation process."
     >
       <main>
@@ -34,22 +35,11 @@ export default function DownloadPage(): JSX.Element {
           </div>
           <InstallReductStore />
           <hr />
-          <ClientSDKs />
-          <hr />
           <InstallClientCLI />
           <hr />
-          <p>
-            All the binaries and source code are available on{" "}
-            <strong>
-              <Link
-                href="https://github.com/reductstore/reductstore/releases"
-                target="_blank"
-              >
-                the release page
-              </Link>
-              .
-            </strong>
-          </p>
+          <InstallReductBridge />
+          <ClientSDKs />
+          <hr />
         </div>
       </main>
     </Layout>

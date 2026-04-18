@@ -9,7 +9,7 @@ description: "API reference for TokenCreateRequest in the ReductStore Client SDK
 
 # TokenCreateRequest
 
-Defined in: [messages/Token.ts:23](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/messages/Token.ts#L23)
+Defined in: [messages/Token.ts:23](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/messages/Token.ts#L23)
 
 Token create request
 
@@ -29,7 +29,7 @@ Token create request
 
 &gt; `readonly` `optional` **expiresAt**: `number`
 
-Defined in: [messages/Token.ts:32](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/messages/Token.ts#L32)
+Defined in: [messages/Token.ts:32](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/messages/Token.ts#L32)
 
 Expiration time as unix timestamp in milliseconds
 
@@ -39,7 +39,7 @@ Expiration time as unix timestamp in milliseconds
 
 &gt; `readonly` `optional` **ipAllowlist**: `string`[]
 
-Defined in: [messages/Token.ts:42](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/messages/Token.ts#L42)
+Defined in: [messages/Token.ts:42](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/messages/Token.ts#L42)
 
 List of IP addresses and CIDR ranges allowed to use the token
 
@@ -49,7 +49,7 @@ List of IP addresses and CIDR ranges allowed to use the token
 
 &gt; `readonly` **permissions**: [`TokenPermissions`](TokenPermissions.md)
 
-Defined in: [messages/Token.ts:27](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/messages/Token.ts#L27)
+Defined in: [messages/Token.ts:27](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/messages/Token.ts#L27)
 
 Permissions for the token
 
@@ -59,7 +59,7 @@ Permissions for the token
 
 &gt; `readonly` `optional` **ttl**: `number`
 
-Defined in: [messages/Token.ts:37](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/messages/Token.ts#L37)
+Defined in: [messages/Token.ts:37](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/messages/Token.ts#L37)
 
 Time to live in seconds
 
@@ -69,7 +69,7 @@ Time to live in seconds
 
 &gt; `static` **serialize**(`data`): `OriginalTokenCreateRequest`
 
-Defined in: [messages/Token.ts:44](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/messages/Token.ts#L44)
+Defined in: [messages/Token.ts:44](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/messages/Token.ts#L44)
 
 #### Parameters
 

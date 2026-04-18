@@ -14,8 +14,9 @@ Manage access tokens
 ## Options
 
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 ## Help Output
@@ -28,14 +29,16 @@ Usage: reduct-cli token [OPTIONS] [COMMAND]
 Commands:
   create  Create an access token
   ls      List access tokens
+  rotate  Rotate an access token value
   show    Show token details
   rm      Remove an access token
   help    Print this message or the help of the given subcommand(s)
 
 Options:
   -i, --ignore-ssl         Ignore SSL certificate verification
-  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
-  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
   -h, --help               Print help
 ```
 
@@ -53,10 +56,15 @@ Create an access token
 
 - `-A, --full-access`: Give full access to the token
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
 - `-r, --read-bucket <TEST>...`: Bucket to give read access to. Can be used multiple times
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-T, --timeout <SECONDS>`: Timeout for requests
 - `-w, --write-bucket <TEST>...`: Bucket to give write access to. Can be used multiple times
+- `-p, --parallel <COUNT>`: Number of parallel requests
+- `--ttl <DURATION>`: Inactivity TTL duration (e.g. 1h, 2d, 30m)
+- `--expires-at <RFC3339>`: Expiration date in RFC3339 format (e.g. 2026-04-05T12:00:00Z)
+- `--expires-in <DURATION>`: Relative expiry duration (e.g. 1h, 2d, 30m)
+- `--ip-allow <IP_OR_CIDR>...`: Allowed source IP or CIDR. Can be used multiple times
 - `-h, --help`: Print help
 
 #### Help Output
@@ -70,13 +78,18 @@ Arguments:
   <TOKEN_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
 
 Options:
-  -A, --full-access             Give full access to the token
-  -i, --ignore-ssl              Ignore SSL certificate verification
-  -r, --read-bucket <TEST>...   Bucket to give read access to. Can be used multiple times
-  -T, --timeout <SECONDS>       Timeout for requests [default: 30]
-  -p, --parallel <COUNT>        Number of parallel requests [default: 10]
-  -w, --write-bucket <TEST>...  Bucket to give write access to. Can be used multiple times
-  -h, --help                    Print help
+  -A, --full-access               Give full access to the token
+  -i, --ignore-ssl                Ignore SSL certificate verification
+      --ca-cert <PATH>            Path to a custom CA certificate bundle/file
+  -r, --read-bucket <TEST>...     Bucket to give read access to. Can be used multiple times
+  -T, --timeout <SECONDS>         Timeout for requests
+  -w, --write-bucket <TEST>...    Bucket to give write access to. Can be used multiple times
+  -p, --parallel <COUNT>          Number of parallel requests
+      --ttl <DURATION>            Inactivity TTL duration (e.g. 1h, 2d, 30m)
+      --expires-at <RFC3339>      Expiration date in RFC3339 format (e.g. 2026-04-05T12:00:00Z)
+      --expires-in <DURATION>     Relative expiry duration (e.g. 1h, 2d, 30m)
+      --ip-allow <IP_OR_CIDR>...  Allowed source IP or CIDR. Can be used multiple times
+  -h, --help                      Print help
 ```
 
 ### `ls`
@@ -89,9 +102,11 @@ List access tokens
 
 #### Options
 
+- `-f, --full`: Show detailed token information
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 #### Help Output
@@ -105,9 +120,45 @@ Arguments:
   <ALIAS_OR_URL>  Alias or URL (e.g. http://token@localhost:8383) of the ReductStore instance to use
 
 Options:
+  -f, --full               Show detailed token information
   -i, --ignore-ssl         Ignore SSL certificate verification
-  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
-  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
+  -h, --help               Print help
+```
+
+### `rotate`
+
+Rotate an access token value
+
+#### Arguments
+
+- `<TOKEN_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Rotate an access token value
+
+Usage: reduct-cli token rotate [OPTIONS] <TOKEN_PATH>
+
+Arguments:
+  <TOKEN_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
   -h, --help               Print help
 ```
 
@@ -122,8 +173,9 @@ Show token details
 #### Options
 
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 #### Help Output
@@ -138,8 +190,9 @@ Arguments:
 
 Options:
   -i, --ignore-ssl         Ignore SSL certificate verification
-  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
-  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
   -h, --help               Print help
 ```
 
@@ -155,8 +208,9 @@ Remove an access token
 
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
 - `-y, --yes`: Do not ask for confirmation
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 #### Help Output
@@ -172,7 +226,8 @@ Arguments:
 Options:
   -i, --ignore-ssl         Ignore SSL certificate verification
   -y, --yes                Do not ask for confirmation
-  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
-  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
   -h, --help               Print help
 ```

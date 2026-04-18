@@ -1,23 +1,18 @@
 import React, { useState } from "react";
-import SimpleHeader from "@site/src/components/shared/SimpleHeader";
-import Layout from "@theme/Layout";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 
-import DockerInstall from "./DockerInstall";
-import LinuxInstall from "./LinuxInstall";
-import MacOSInstall from "./MacOSInstall";
-import WindowsInstall from "./WindowsInstall";
 import Link from "@docusaurus/Link";
+import Ros2Install from "./Ros2Install";
 
-export default function InstallReductStore(props): JSX.Element {
+export default function InstallReductBridge(props): JSX.Element {
   const [activeTab, setActiveTab] = useState("docker");
 
   return (
     <>
-      <h3>ReductStore Server</h3>
+      <h3>Reduct Bridge</h3>
       <ul className={clsx("tabs", styles.tabs)}>
-        {["docker", "linux", "macOs", "windows"].map((tab) => (
+        {["ROS 2", "ROS 1"].map((tab) => (
           <li
             key={tab}
             className={clsx(
@@ -31,17 +26,16 @@ export default function InstallReductStore(props): JSX.Element {
         ))}
       </ul>
       <div className={styles.tabContent}>
-        {activeTab === "docker" && <DockerInstall />}
-        {activeTab === "linux" && <LinuxInstall {...props} />}
-        {activeTab === "macOs" && <MacOSInstall {...props} />}
-        {activeTab === "windows" && <WindowsInstall {...props} />}
+        {activeTab === "ROS 2" && <Ros2Install {...props} />}
+        {/*{activeTab === "snap" && <MacOSInstall {...props} />}*/}
+        {/*{activeTab === "cargo" && <WindowsInstall {...props} />}*/}
       </div>
 
       <p>
         All the binaries and source code are available on{" "}
         <strong>
           <Link
-            href="https://github.com/reductstore/reductstore/releases"
+            href="https://github.com/reductstore/reduct-bridge/releases"
             target="_blank"
           >
             the release page

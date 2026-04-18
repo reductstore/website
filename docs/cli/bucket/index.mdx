@@ -14,8 +14,9 @@ Manage buckets
 ## Options
 
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 ## Help Output
@@ -36,8 +37,9 @@ Commands:
 
 Options:
   -i, --ignore-ssl         Ignore SSL certificate verification
-  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
-  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
   -h, --help               Print help
 ```
 
@@ -55,8 +57,9 @@ List buckets
 
 - `-f, --full`: Show detailed bucket information
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 #### Help Output
@@ -72,8 +75,9 @@ Arguments:
 Options:
   -f, --full               Show detailed bucket information
   -i, --ignore-ssl         Ignore SSL certificate verification
-  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
-  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
   -h, --help               Print help
 ```
 
@@ -89,8 +93,9 @@ Show bucket information
 
 - `-f, --full`: Show detailed bucket information with entries
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 #### Help Output
@@ -106,8 +111,9 @@ Arguments:
 Options:
   -f, --full               Show detailed bucket information with entries
   -i, --ignore-ssl         Ignore SSL certificate verification
-  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
-  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
   -h, --help               Print help
 ```
 
@@ -123,10 +129,11 @@ Create a bucket
 
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
 - `-Q, --quota-type <TEXT>`: Quota type. Must be NONE or FIFO
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
 - `-s, --quota-size <SIZE>`: Quota size in CI format e.g. 1Mb or 3TB
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
 - `-b, --block-size <SIZE>`: Max. bock size in CI format e.g 64MB
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-R, --block-records <NUMBER>`: Max. number of records in a block
 - `-h, --help`: Print help
 
@@ -143,10 +150,11 @@ Arguments:
 Options:
   -i, --ignore-ssl              Ignore SSL certificate verification
   -Q, --quota-type <TEXT>       Quota type. Must be NONE or FIFO
+      --ca-cert <PATH>          Path to a custom CA certificate bundle/file
   -s, --quota-size <SIZE>       Quota size in CI format e.g. 1Mb or 3TB
-  -T, --timeout <SECONDS>       Timeout for requests [default: 30]
   -b, --block-size <SIZE>       Max. bock size in CI format e.g 64MB
-  -p, --parallel <COUNT>        Number of parallel requests [default: 10]
+  -T, --timeout <SECONDS>       Timeout for requests
+  -p, --parallel <COUNT>        Number of parallel requests
   -R, --block-records <NUMBER>  Max. number of records in a block
   -h, --help                    Print help
 ```
@@ -163,10 +171,11 @@ Update bucket settings
 
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
 - `-Q, --quota-type <TEXT>`: Quota type. Must be NONE or FIFO
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
 - `-s, --quota-size <SIZE>`: Quota size in CI format e.g. 1Mb or 3TB
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
 - `-b, --block-size <SIZE>`: Max. bock size in CI format e.g 64MB
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-R, --block-records <NUMBER>`: Max. number of records in a block
 - `-h, --help`: Print help
 
@@ -183,10 +192,11 @@ Arguments:
 Options:
   -i, --ignore-ssl              Ignore SSL certificate verification
   -Q, --quota-type <TEXT>       Quota type. Must be NONE or FIFO
+      --ca-cert <PATH>          Path to a custom CA certificate bundle/file
   -s, --quota-size <SIZE>       Quota size in CI format e.g. 1Mb or 3TB
-  -T, --timeout <SECONDS>       Timeout for requests [default: 30]
   -b, --block-size <SIZE>       Max. bock size in CI format e.g 64MB
-  -p, --parallel <COUNT>        Number of parallel requests [default: 10]
+  -T, --timeout <SECONDS>       Timeout for requests
+  -p, --parallel <COUNT>        Number of parallel requests
   -R, --block-records <NUMBER>  Max. number of records in a block
   -h, --help                    Print help
 ```
@@ -204,8 +214,9 @@ Rename a bucket or an entry
 
 - `-e, --only-entry <ENTRY_NAME>`: Rename an entry instead of a bucket
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 #### Help Output
@@ -222,8 +233,9 @@ Arguments:
 Options:
   -e, --only-entry <ENTRY_NAME>  Rename an entry instead of a bucket
   -i, --ignore-ssl               Ignore SSL certificate verification
-  -T, --timeout <SECONDS>        Timeout for requests [default: 30]
-  -p, --parallel <COUNT>         Number of parallel requests [default: 10]
+      --ca-cert <PATH>           Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>        Timeout for requests
+  -p, --parallel <COUNT>         Number of parallel requests
   -h, --help                     Print help
 ```
 
@@ -239,9 +251,10 @@ Remove a bucket
 
 - `-e, --only-entries <ENTRY_NAME>...`: Remove only the specified entry instead of the whole bucket. Wildcards are supported.
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
 - `-y, --yes`: Do not ask for confirmation
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 #### Help Output
@@ -257,8 +270,9 @@ Arguments:
 Options:
   -e, --only-entries <ENTRY_NAME>...  Remove only the specified entry instead of the whole bucket. Wildcards are supported.
   -i, --ignore-ssl                    Ignore SSL certificate verification
-  -T, --timeout <SECONDS>             Timeout for requests [default: 30]
+      --ca-cert <PATH>                Path to a custom CA certificate bundle/file
   -y, --yes                           Do not ask for confirmation
-  -p, --parallel <COUNT>              Number of parallel requests [default: 10]
+  -T, --timeout <SECONDS>             Timeout for requests
+  -p, --parallel <COUNT>              Number of parallel requests
   -h, --help                          Print help
 ```
