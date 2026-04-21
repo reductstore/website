@@ -16,7 +16,8 @@ jobs:
     strategy:
       matrix:
         example: [python, rust, golang, curl, cpp, node, cli]
-        doc_version: [next, 1.19.x, 1.18.x]
+        #        doc_version: [next, 1.19.x, 1.18.x]
+        doc_version: [next, 1.19.x] # 2 version because of brake in reduct-cp
         include:
           - doc_version: next
             image: reduct/pro:main
@@ -26,9 +27,9 @@ jobs:
             image: reduct/pro:latest
             example_root: versioned_docs/version-1.19.x/examples
 
-          - doc_version: 1.18.x
-            image: reduct/store:v1.18.10
-            example_root: versioned_docs/version-1.18.x/examples
+          #          - doc_version: 1.18.x
+          #            image: reduct/store:v1.18.10
+          #            example_root: versioned_docs/version-1.18.x/examples
 
           - example: python
             cmd: python3
