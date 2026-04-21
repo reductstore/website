@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         example: [python, rust, golang, curl, cpp, node, cli]
-#        doc_version: [next, 1.19.x, 1.18.x]
+        #        doc_version: [next, 1.19.x, 1.18.x]
         doc_version: [next, 1.19.x] # 2 version because of brake in reduct-cp
         include:
           - doc_version: next

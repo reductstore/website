@@ -86,7 +86,6 @@ For usage examples, deployment patterns, and a full explanation of key expressio
 ReductStore can enforce rate limits for both HTTP and Zenoh APIs. Limits are optional and disabled by default.
 The limits are applied per connection (IP address) for HTTP API and per instance for Zenoh API. The following table describes the available environment variables for rate limiting:
 
-
 | Name                    | Default | Description                                                                                             |
 | ----------------------- | ------- | ------------------------------------------------------------------------------------------------------- |
 | `RS_RATE_LIMIT_API`     |         | Maximum API request rate. Example: `100req/s`, `100000req/h`, or `1000` (defaults to per hour).         |
