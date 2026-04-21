@@ -27,9 +27,9 @@ jobs:
             image: reduct/pro:latest
             example_root: versioned_docs/version-1.19.x/examples
 
-#          - doc_version: 1.18.x
-#            image: reduct/store:v1.18.10
-#            example_root: versioned_docs/version-1.18.x/examples
+          #          - doc_version: 1.18.x
+          #            image: reduct/store:v1.18.10
+          #            example_root: versioned_docs/version-1.18.x/examples
 
           - example: python
             cmd: python3
