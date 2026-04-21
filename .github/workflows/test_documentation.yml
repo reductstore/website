@@ -16,11 +16,8 @@ jobs:
     strategy:
       matrix:
         example: [python, rust, golang, curl, cpp, node, cli]
-        doc_version: [next, 1.19.x, 1.18.x]
-        # v1.8.x is intentionally excluded from CI for now because reduct-cli `cp`
-        # semantics changed and break the old example bootstrap flow.
-        # Keep this note as a reminder to re-enable once examples are adapted.
-        # doc_version: [next, 1.19.x, 1.18.x, 1.8.x]
+#        doc_version: [next, 1.19.x, 1.18.x]
+        doc_version: [next, 1.19.x] # 2 version because of brake in reduct-cp
         include:
           - doc_version: next
             image: reduct/pro:main
