@@ -8,6 +8,9 @@ function HomepagePerformance() {
   return (
     <div className={styles.performanceSection}>
       <div className={clsx("row", styles.row)}>
+        <div className="col col--6">
+          <PerformanceComparison />
+        </div>
         <div className={"col col--6 text--center"}>
           <h2 className="hideOnMobile">High Performance</h2>
           <p>
@@ -20,9 +23,6 @@ function HomepagePerformance() {
           >
             See Benchmarks →
           </Link>
-        </div>
-        <div className="col col--6">
-          <PerformanceComparison />
         </div>
       </div>
     </div>

@@ -21,6 +21,7 @@ An `input` is a data source. It reads data from a system and produces records fo
 
 Supported input types include:
 
+- **[Metrics](./input/metrics/index.mdx)** - collect host CPU, memory, and disk metrics as JSON records.
 - **[Shell](./input/shell/index.mdx)** - run shell commands on a fixed interval and store output lines as records.
 - **[ROS1](./input/ros1/index.mdx)** - subscribe to ROS1 topics and store ROS messages as records.
 - **[ROS2](./input/ros2/index.mdx)** - subscribe to ROS2 topics and store serialized CDR payloads as records.
@@ -89,6 +90,7 @@ cargo install reduct-bridge
 ```
 
 `cargo install reduct-bridge` builds the default feature set, which includes only the `shell` input.
+For metrics-specific build and runtime guidance, see **[Metrics input documentation](./input/metrics/index.mdx)**.
 For ROS2-specific build and runtime guidance, see **[ROS2 input documentation](./input/ros2/index.mdx)**.
 
 To build additional inputs explicitly from source:

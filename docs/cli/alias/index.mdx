@@ -14,8 +14,9 @@ Manage aliases for instance URLs
 ## Options
 
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 ## Help Output
@@ -33,8 +34,9 @@ Commands:
 
 Options:
   -i, --ignore-ssl         Ignore SSL certificate verification
-  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
-  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
   -h, --help               Print help
 ```
 
@@ -52,9 +54,10 @@ Add an alias
 
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
 - `-L, --url <URL>`: The URL of the ReductStore instance
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
 - `-t, --token <TOKEN>`: The token to use for authentication
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 #### Help Output
@@ -70,9 +73,10 @@ Arguments:
 Options:
   -i, --ignore-ssl         Ignore SSL certificate verification
   -L, --url <URL>          The URL of the ReductStore instance
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
   -t, --token <TOKEN>      The token to use for authentication
-  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
-  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
   -h, --help               Print help
 ```
 
@@ -83,8 +87,9 @@ List all aliases
 #### Options
 
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 #### Help Output
@@ -96,8 +101,9 @@ Usage: reduct-cli alias ls [OPTIONS]
 
 Options:
   -i, --ignore-ssl         Ignore SSL certificate verification
-  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
-  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
   -h, --help               Print help
 ```
 
@@ -112,8 +118,9 @@ Remove an alias
 #### Options
 
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 #### Help Output
@@ -128,7 +135,8 @@ Arguments:
 
 Options:
   -i, --ignore-ssl         Ignore SSL certificate verification
-  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
-  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
   -h, --help               Print help
 ```

@@ -9,7 +9,7 @@ description: "API reference for WriteOptions in the ReductStore Client SDK for J
 
 # WriteOptions
 
-Defined in: [Bucket.ts:18](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L18)
+Defined in: [Bucket.ts:18](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L18)
 
 Options for writing records
 
@@ -19,7 +19,7 @@ Options for writing records
 
 &gt; `optional` **contentType**: `string`
 
-Defined in: [Bucket.ts:21](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L21)
+Defined in: [Bucket.ts:21](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L21)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [Bucket.ts:21](https://github.com/reductstore/reduct-js/blob/ff0b2cc
 
 &gt; `optional` **labels**: `LabelMap`
 
-Defined in: [Bucket.ts:20](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L20)
+Defined in: [Bucket.ts:20](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L20)
 
 ***
 
@@ -35,4 +35,4 @@ Defined in: [Bucket.ts:20](https://github.com/reductstore/reduct-js/blob/ff0b2cc
 
 &gt; `optional` **ts**: `bigint`
 
-Defined in: [Bucket.ts:19](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/Bucket.ts#L19)
+Defined in: [Bucket.ts:19](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/Bucket.ts#L19)

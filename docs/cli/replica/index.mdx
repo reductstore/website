@@ -14,8 +14,9 @@ Manage replication tasks
 ## Options
 
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 ## Help Output
@@ -38,8 +39,9 @@ Commands:
 
 Options:
   -i, --ignore-ssl         Ignore SSL certificate verification
-  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
-  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
   -h, --help               Print help
 ```
 
@@ -59,10 +61,11 @@ Create a replication task
 
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
 - `-n, --entries [<ENTRY_NAME>...]`: List of entries to export. If not specified, all entries will be requested. Prefix wildcards are supported (e.g. entry-\*).
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
 - `-N, --each-n <NUMBER>`: (DEPRECATED) Export every nth record. If not specified, all records will be requested.
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
 - `-S, --each-s <NUMBER>`: (DEPRECATED) Export a record every n seconds. If not specified, all records will be requested.
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-w, --when <CONDITION>`: Filter records by a JSON condition. If not specified, all records will be requested.
 - `-h, --help`: Print help
 
@@ -82,12 +85,13 @@ Options:
   -i, --ignore-ssl                 Ignore SSL certificate verification
   -n, --entries [<ENTRY_NAME>...]  List of entries to export.
                                    If not specified, all entries will be requested. Prefix wildcards are supported (e.g. entry-*).
+      --ca-cert <PATH>             Path to a custom CA certificate bundle/file
   -N, --each-n <NUMBER>            (DEPRECATED) Export every nth record.
                                    If not specified, all records will be requested.
-  -T, --timeout <SECONDS>          Timeout for requests [default: 30]
-  -p, --parallel <COUNT>           Number of parallel requests [default: 10]
   -S, --each-s <NUMBER>            (DEPRECATED) Export a record every n seconds.
                                    If not specified, all records will be requested.
+  -T, --timeout <SECONDS>          Timeout for requests
+  -p, --parallel <COUNT>           Number of parallel requests
   -w, --when <CONDITION>           Filter records by a JSON condition.
                                    If not specified, all records will be requested.
   -h, --help                       Print help
@@ -106,10 +110,11 @@ Update a replication task
 
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
 - `-s, --source-bucket <source-bucket>`: Source bucket on the replicated instance
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
 - `-n, --entries [<ENTRY_NAME>...]`: List of entries to export. If not specified, all entries will be requested. Prefix wildcards are supported (e.g. entry-\*).
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
 - `-N, --each-n <NUMBER>`: (DEPRECATED) Export every nth record. If not specified, all records will be requested.
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-S, --each-s <NUMBER>`: (DEPRECATED) Export a record every n seconds. If not specified, all records will be requested.
 - `-w, --when <CONDITION>`: Filter records by a JSON condition. If not specified, all records will be requested.
 - `-h, --help`: Print help
@@ -128,12 +133,13 @@ Arguments:
 Options:
   -i, --ignore-ssl                     Ignore SSL certificate verification
   -s, --source-bucket <source-bucket>  Source bucket on the replicated instance
+      --ca-cert <PATH>                 Path to a custom CA certificate bundle/file
   -n, --entries [<ENTRY_NAME>...]      List of entries to export.
                                        If not specified, all entries will be requested. Prefix wildcards are supported (e.g. entry-*).
-  -T, --timeout <SECONDS>              Timeout for requests [default: 30]
   -N, --each-n <NUMBER>                (DEPRECATED) Export every nth record.
                                        If not specified, all records will be requested.
-  -p, --parallel <COUNT>               Number of parallel requests [default: 10]
+  -T, --timeout <SECONDS>              Timeout for requests
+  -p, --parallel <COUNT>               Number of parallel requests
   -S, --each-s <NUMBER>                (DEPRECATED) Export a record every n seconds.
                                        If not specified, all records will be requested.
   -w, --when <CONDITION>               Filter records by a JSON condition.
@@ -153,8 +159,9 @@ List replication tasks
 
 - `-f, --full`: Show detailed replication information
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 #### Help Output
@@ -170,8 +177,9 @@ Arguments:
 Options:
   -f, --full               Show detailed replication information
   -i, --ignore-ssl         Ignore SSL certificate verification
-  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
-  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
   -h, --help               Print help
 ```
 
@@ -186,8 +194,9 @@ Show details about a replication task
 #### Options
 
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 #### Help Output
@@ -202,8 +211,9 @@ Arguments:
 
 Options:
   -i, --ignore-ssl         Ignore SSL certificate verification
-  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
-  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
   -h, --help               Print help
 ```
 
@@ -218,8 +228,9 @@ Enable a replication task
 #### Options
 
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 #### Help Output
@@ -234,8 +245,9 @@ Arguments:
 
 Options:
   -i, --ignore-ssl         Ignore SSL certificate verification
-  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
-  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
   -h, --help               Print help
 ```
 
@@ -250,8 +262,9 @@ Disable a replication task
 #### Options
 
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 #### Help Output
@@ -266,8 +279,9 @@ Arguments:
 
 Options:
   -i, --ignore-ssl         Ignore SSL certificate verification
-  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
-  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
   -h, --help               Print help
 ```
 
@@ -282,8 +296,9 @@ Pause a replication task
 #### Options
 
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 #### Help Output
@@ -298,8 +313,9 @@ Arguments:
 
 Options:
   -i, --ignore-ssl         Ignore SSL certificate verification
-  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
-  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
   -h, --help               Print help
 ```
 
@@ -315,8 +331,9 @@ Remove a replication task
 
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
 - `-y, --yes`: Do not ask for confirmation
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-h, --help`: Print help
 
 #### Help Output
@@ -332,7 +349,8 @@ Arguments:
 Options:
   -i, --ignore-ssl         Ignore SSL certificate verification
   -y, --yes                Do not ask for confirmation
-  -T, --timeout <SECONDS>  Timeout for requests [default: 30]
-  -p, --parallel <COUNT>   Number of parallel requests [default: 10]
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
   -h, --help               Print help
 ```

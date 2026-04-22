@@ -20,11 +20,12 @@ Copy data between instances or between an instance and the local filesystem
 
 - `-b, --start <start>`: Start timestamp (inclusive) in ISO format or Unix timestamp in microseconds. If not specified, the export will start from the first record in each entry.
 - `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
 - `--from-last`: Copy records starting after the latest record in each destination entry.
-- `-T, --timeout <SECONDS>`: Timeout for requests \[default: 30\]
 - `-e, --stop <stop>`: Stop timestamp (inclusive) in ISO format or Unix timestamp in microseconds. If not specified, the export will end at the last record in each entry.
-- `-p, --parallel <COUNT>`: Number of parallel requests \[default: 10\]
+- `-T, --timeout <SECONDS>`: Timeout for requests
 - `-n, --entries [<ENTRY_NAME>...]`: List of entries to export. If not specified, all entries will be requested. Prefix wildcards are supported (e.g. entry-\*).
+- `-p, --parallel <COUNT>`: Number of parallel requests
 - `-w, --when <CONDITION>`: Filter records by a JSON condition. If not specified, all records will be requested.
 - `-s, --strict`: If set, `when` will fail if the condition is not met.
 - `-N, --each-n <NUMBER>`: (DEPRECATED) Export every nth record. If not specified, all records will be requested.
@@ -51,13 +52,14 @@ Options:
   -b, --start <start>                Start timestamp (inclusive) in ISO format or Unix timestamp in microseconds.
                                      If not specified, the export will start from the first record in each entry.
   -i, --ignore-ssl                   Ignore SSL certificate verification
+      --ca-cert <PATH>               Path to a custom CA certificate bundle/file
       --from-last                    Copy records starting after the latest record in each destination entry.
-  -T, --timeout <SECONDS>            Timeout for requests [default: 30]
   -e, --stop <stop>                  Stop timestamp (inclusive) in ISO format or Unix timestamp in microseconds.
                                      If not specified, the export will end at the last record in each entry.
-  -p, --parallel <COUNT>             Number of parallel requests [default: 10]
+  -T, --timeout <SECONDS>            Timeout for requests
   -n, --entries [<ENTRY_NAME>...]    List of entries to export.
                                      If not specified, all entries will be requested. Prefix wildcards are supported (e.g. entry-*).
+  -p, --parallel <COUNT>             Number of parallel requests
   -w, --when <CONDITION>             Filter records by a JSON condition.
                                      If not specified, all records will be requested.
   -s, --strict                       If set, `when` will fail if the condition is not met.

@@ -25,7 +25,7 @@ sudo mv reduct-cli /usr/local/bin
       <p>Compatible with the amd64 and arm64 architectures.</p>
 
       <ul className={clsx("tabs", styles.tabs)}>
-        {["binary (amd64)", "binary (arm64)"].map((tab) => (
+        {["binary (amd64)", "binary (arm64)", "snap"].map((tab) => (
           <li
             key={tab}
             className={clsx(
@@ -45,6 +45,11 @@ sudo mv reduct-cli /usr/local/bin
         )}
         {activeTab === "binary (arm64)" && (
           <CodeBlock className="language-bash">{binaryInstallArm64}</CodeBlock>
+        )}
+        {activeTab === "snap" && (
+          <CodeBlock className="language-bash">
+            snap install reduct-cli
+          </CodeBlock>
         )}
       </div>
     </>

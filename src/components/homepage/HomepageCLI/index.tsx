@@ -54,7 +54,7 @@ function HomepageCLI() {
           <p>Command line interface to manage data and system configuration.</p>
           <Link
             className={clsx("button button--primary button--lg", styles.btn)}
-            to="/docs/getting-started"
+            to="/docs/cli"
           >
             Try CLI →
           </Link>

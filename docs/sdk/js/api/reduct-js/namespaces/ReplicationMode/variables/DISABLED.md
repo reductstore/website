@@ -11,4 +11,4 @@ description: "API reference for Variable: DISABLED in the ReductStore Client SDK
 
 &gt; `const` **DISABLED**: `"disabled"` = `"disabled"`
 
-Defined in: [messages/ReplicationMode.ts:20](https://github.com/reductstore/reduct-js/blob/ff0b2cc24fdcfa339b15cea2f6d6fdd510339ac0/src/messages/ReplicationMode.ts#L20)
+Defined in: [messages/ReplicationMode.ts:20](https://github.com/reductstore/reduct-js/blob/e2b7a718b68db625d48f717e9082216ff8a962ad/src/messages/ReplicationMode.ts#L20)

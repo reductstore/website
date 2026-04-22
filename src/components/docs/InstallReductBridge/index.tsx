@@ -1,23 +1,23 @@
 import React, { useState } from "react";
-import SimpleHeader from "@site/src/components/shared/SimpleHeader";
-import Layout from "@theme/Layout";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 
-import DockerInstall from "./DockerInstall";
-import LinuxInstall from "./LinuxInstall";
-import MacOSInstall from "./MacOSInstall";
-import WindowsInstall from "./WindowsInstall";
 import Link from "@docusaurus/Link";
+import Ros2Install from "./Ros2Install";
+import Ros1Install from "./Ros1Install";
 
-export default function InstallReductStore(props): JSX.Element {
-  const [activeTab, setActiveTab] = useState("docker");
+export default function InstallReductBridge(props): JSX.Element {
+  const [activeTab, setActiveTab] = useState("ROS2");
 
   return (
     <>
-      <h3>ReductStore Server</h3>
+      <h3>ReductBridge</h3>
+      <p>
+        ReductBridge binaries are provided as prebuilt packages for various use
+        cases, including ROS2 and ROS1.
+      </p>
       <ul className={clsx("tabs", styles.tabs)}>
-        {["docker", "linux", "macOs", "windows"].map((tab) => (
+        {["ROS2", "ROS1"].map((tab) => (
           <li
             key={tab}
             className={clsx(
@@ -31,17 +31,15 @@ export default function InstallReductStore(props): JSX.Element {
         ))}
       </ul>
       <div className={styles.tabContent}>
-        {activeTab === "docker" && <DockerInstall />}
-        {activeTab === "linux" && <LinuxInstall {...props} />}
-        {activeTab === "macOs" && <MacOSInstall {...props} />}
-        {activeTab === "windows" && <WindowsInstall {...props} />}
+        {activeTab === "ROS2" && <Ros2Install {...props} />}
+        {activeTab === "ROS1" && <Ros1Install {...props} />}
       </div>
 
       <p>
         All the binaries and source code are available on{" "}
         <strong>
           <Link
-            href="https://github.com/reductstore/reductstore/releases"
+            href="https://github.com/reductstore/reduct-bridge/releases"
             target="_blank"
           >
             the release page
