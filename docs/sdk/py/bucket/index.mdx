@@ -657,12 +657,15 @@ multiple entries. You can also use wildcards in entry names.
 - `start` - the beginning of the time interval.
   If None, then from the first record
 - `stop` - the end of the time interval. If None, then to the latest record
-- `when` - condtiion to filter records
+- `when` - condition to filter records
   
 
 **Arguments**:
 
 - `record_index` - if not None, the link will point to a specific record
+  (legacy API < 1.19 only)
+- `record_entry` - explicit entry name of the record (API >= 1.19)
+- `record_timestamp` - explicit timestamp of the record (API >= 1.19)
 - `expire_at` - if None, the link will expire in 24 hours
 - `file_name` - file name for download, if None: entry_name_index.bin
 - `base_url` - base URL for the link, if None: use server URL
