@@ -32,9 +32,7 @@ export default function Ros1Install(props) {
       <div className={styles.tabContent}>
         {activeTab === "binary (amd64)" && (
           <>
-            <CodeBlock className="language-bash">
-                {binaryInstall}
-            </CodeBlock>
+            <CodeBlock className="language-bash">{binaryInstall}</CodeBlock>
           </>
         )}
         {activeTab === "snap" && (

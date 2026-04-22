@@ -10,7 +10,6 @@ function HomepageObservability() {
   return (
     <div className={styles.observabilitySection}>
       <div className="row" style={{ display: "flex", alignItems: "center" }}>
-
         <div className={"col col--5 text--center"}>
           <h2 className="hideOnMobile">Observability</h2>
           <p>
@@ -25,7 +24,7 @@ function HomepageObservability() {
             Setup Grafana →
           </Link>
         </div>
-                <div className="col col--7 text--center">
+        <div className="col col--7 text--center">
           <img
             src={GrafanaImage}
             className={styles.grafanaImage}

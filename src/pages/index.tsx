@@ -87,7 +87,7 @@ export default function Home(): JSX.Element {
           <HomepageCLI />
           <hr className={styles.industrialHr} />
           <HomepageReductBridge />
-                <hr className={styles.industrialHr} />
+          <hr className={styles.industrialHr} />
 
           <HomepagePerformance />
           <hr className={styles.industrialHr} />

@@ -8,7 +8,7 @@ function HomepagePerformance() {
   return (
     <div className={styles.performanceSection}>
       <div className={clsx("row", styles.row)}>
-                <div className="col col--6">
+        <div className="col col--6">
           <PerformanceComparison />
         </div>
         <div className={"col col--6 text--center"}>
@@ -24,7 +24,6 @@ function HomepagePerformance() {
             See Benchmarks →
           </Link>
         </div>
-
       </div>
     </div>
   );

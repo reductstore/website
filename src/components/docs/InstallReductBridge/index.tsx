@@ -6,16 +6,16 @@ import Link from "@docusaurus/Link";
 import Ros2Install from "./Ros2Install";
 import Ros1Install from "./Ros1Install";
 
-
 export default function InstallReductBridge(props): JSX.Element {
   const [activeTab, setActiveTab] = useState("ROS2");
 
   return (
     <>
       <h3>ReductBridge</h3>
-        <p>
-            ReductBridge binaries are provided as prebuilt packages for various use cases, including ROS2 and ROS1.
-        </p>
+      <p>
+        ReductBridge binaries are provided as prebuilt packages for various use
+        cases, including ROS2 and ROS1.
+      </p>
       <ul className={clsx("tabs", styles.tabs)}>
         {["ROS2", "ROS1"].map((tab) => (
           <li
