@@ -22,6 +22,7 @@ import styles from "./index.module.css";
 import HomepageStats from "../components/homepage/HomepageStats";
 import HomepagePartners from "../components/homepage/HomepagePartners";
 import HomepageCompanies from "../components/homepage/HomepageCompanies";
+import HomepageReductBridge from "@site/src/components/homepage/HomepageReductBridge";
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -85,6 +86,9 @@ export default function Home(): JSX.Element {
           <hr className={styles.industrialHr} />
           <HomepageCLI />
           <hr className={styles.industrialHr} />
+          <HomepageReductBridge />
+                <hr className={styles.industrialHr} />
+
           <HomepagePerformance />
           <hr className={styles.industrialHr} />
           <HomepageObservability />
