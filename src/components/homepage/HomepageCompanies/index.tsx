@@ -27,7 +27,7 @@ const companies = [
     alt: "INSAION Logo",
   },
   {
-    image: require("@site/static/img/companies/caneduvdev.svg").default,
+    image: require("@site/static/img/companies/caneduvdev.webp").default,
     alt: "CanEduvDev Logo",
   },
 ];
