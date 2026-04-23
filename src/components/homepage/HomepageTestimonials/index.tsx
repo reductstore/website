@@ -45,6 +45,13 @@ const testimonials = [
     position: "Co-founder & CTO",
     company: "INSAION",
   },
+  {
+    message:
+      "Finding a storage solution that actually works well on resource-constrained edge devices is harder than it sounds. ReductStore fits perfectly due to the ease of deployment, multi-language SDK and low footprint.",
+    author: "Hashem Hashem",
+    position: "COO, Head of Engineering",
+    company: "CanEduvDev",
+  },
 ];
 
 const messageLengths = testimonials.map((t) => t.message.length);

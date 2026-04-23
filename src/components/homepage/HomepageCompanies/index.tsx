@@ -26,6 +26,10 @@ const companies = [
     image: require("@site/static/img/companies/insaion.webp").default,
     alt: "INSAION Logo",
   },
+  {
+    image: require("@site/static/img/companies/caneduvdev.svg").default,
+    alt: "CanEduvDev Logo",
+  },
 ];
 
 const loopCompanies = [...companies, ...companies];
