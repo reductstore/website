@@ -114,8 +114,12 @@ In addition to general settings, you can configure I/O settings to optimize comm
 | `RS_IO_BATCH_TIMEOUT`           | 5       | Maximum time in seconds for a batch of records to be prepared and sent to the client. If the batch is not full, it will be sent after the timeout. |
 | `RS_IO_BATCH_RECORD_TIMEOUT`    | 1       | Maximum time in seconds to wait for a record to be added to a batch. If the record is not added, the unfinished batch will be sent to the client.  |
 | `RS_IO_OPERATION_TIMEOUT`       | 60      | Maximum time in seconds for an I/O operation (e.g., read or write). If the operation takes longer, it will be aborted.                             |
+| `RS_IO_MAX_WRITERS_IN_FLIGHT`   |         | Optional maximum number of storage write operations that can run at the same time. Positive integers enable the limit; unset or `0` disables it.   |
+| `RS_IO_MAX_READERS_IN_FLIGHT`   |         | Optional maximum number of storage read operations that can run at the same time. Positive integers enable the limit; unset or `0` disables it.    |
 
 Most of the I/O settings are related to **[batching](../glossary#batching)** and specify the size of the batch, the number of records in the batch, and the timeout for preparing and sending the batch on the server side.
+
+The in-flight reader and writer limits are optional and disabled by default. They are useful for exposed or multi-tenant deployments where you need to bound concurrent storage I/O and protect disk or remote-backend resources from overload. If all reader or writer slots are busy, ReductStore waits up to `RS_IO_OPERATION_TIMEOUT`; if no slot becomes available, the request fails with **429 Too Many Requests**.
 
 However, if a client is using the HTTP/1.1 protocol, the `RS_IO_BATCH_MAX_METADATA_SIZE` and `RS_IO_BATCH_MAX_RECORDS` settings are used to limit the size of the headers in the HTTP request from the client.
 This means that the client can't send more records in a single batch than specified by the `RS_IO_BATCH_MAX_RECORDS` and the size of the headers in the request can't exceed the value of the `RS_IO_BATCH_MAX_METADATA_SIZE` setting.
