@@ -1,0 +1,155 @@
+---
+title: ReductVideo
+description: Extension for ReductStore that exports raw video chunks as playable files, with automatic parameter detection and episode splitting.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/extensions/official/video-ext"
+  />
+</head>
+
+# ReductVideo Extension
+
+The **ReductVideo** [**extension**](../../glossary#extension) exports raw video chunks stored in ReductStore as playable video files.
+It accumulates encoded records, detects stream parameters automatically, and muxes them into independently decodable episodes.
+
+import DemoLicenseNote from "@site/src/components/promotional/DemoLicenseNote";
+
+<DemoLicenseNote />
+
+## Storage Contract
+
+### H.264
+
+Each record is a segment of H.264 encoded video in **Annex B** byte-stream format (start codes `00 00 01` or `00 00 00 01`).
+A record contains one or more NAL units (access units / frames).
+Not every record needs to contain a keyframe (IDR) — most will be inter-frames (P/B).
+Concatenating all records in timestamp order must produce a valid H.264 elementary stream.
+
+Records must have `content_type: video/h264`.
+Timestamps must be the chunk's capture/presentation start time in **microseconds**.
+
+### Labels
+
+| Label | Type     | Mandatory | Description                            |
+| ----- | -------- | --------- | -------------------------------------- |
+| `fps` | `string` | No        | Frames per second of the stored stream |
+
+Resolution is auto-detected from SPS NAL units in the stream.
+If `fps` is not set on records and not overridden via the query parameter, the export will fail with an error.
+
+### Episodes
+
+An **episode** is an output MP4 produced by the exporter. At the start of each episode, the exporter
+skips records until it finds one containing an IDR, because an H.264 decoder cannot start without a keyframe.
+
+Episodes can cover the entire query range or be split by `duration` / `size` limits.
+Splitting always happens at the next keyframe boundary so that each episode is independently decodable.
+
+### Gap detection
+
+If the timestamp of a record is more than one frame duration beyond the expected next timestamp,
+the exporter treats it as a discontinuity. The current episode is finalized and a new one begins,
+again waiting for an IDR before accumulating frames.
+
+## Query format
+
+The extension is activated by passing a `video` object inside the `#ext` block of a conditional query:
+
+```python
+{
+    "#ext": {
+        "video": {
+            "export": {
+                "fps": 30,          # optional: override playback frame rate
+                "duration": "1m",   # optional: split episodes by duration
+                "size": "100MB"     # optional: split episodes by size
+            }
+        }
+    }
+}
+```
+
+### Parameters
+
+| Parameter  | Type     | Mandatory | Description                                                                                   |
+| ---------- | -------- | --------- | --------------------------------------------------------------------------------------------- |
+| `fps`      | `number` | No        | Playback frame rate. Overrides the `fps` label on records.                                    |
+| `duration` | `string` | No        | Maximum episode duration (e.g. `"30s"`, `"1m"`, `"1h 30m"`). Split at next keyframe boundary. |
+| `size`     | `string` | No        | Maximum episode size (e.g. `"100MB"`, `"1GB"`). Split at next keyframe boundary.              |
+
+:::info
+When both `duration` and `size` are specified, the episode is finalized as soon as **either** limit is reached.
+:::
+
+## Output
+
+Each output record is a playable MP4 file with `content_type: video/mp4`.
+Resolution is extracted from the H.264 SPS NAL unit — no manual configuration is needed.
+
+## Examples
+
+The following examples demonstrate how to use the **ReductVideo** extension to export H.264 data as MP4.
+Although written in Python, the same queries work with any of the official SDKs.
+
+import CodeBlock from "@theme/CodeBlock";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+### Exporting as MP4
+
+This example stores an H.264 Annex B stream in ReductStore and exports it as a single MP4 video using the video extension.
+
+import VideoExportPy from "!!raw-loader!../../../examples/py/src/ext_video_export.py";
+
+<Tabs>
+  <TabItem value="Python">
+    <CodeBlock language="python">{VideoExportPy}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+#### Expected output
+
+```
+Record timestamp: 1749797653273752
+Content type: video/mp4
+MP4 size: 198545 bytes
+```
+
+#### Explanation
+
+- Pre-made H.264 chunks (one per keyframe interval) are stored with `content_type: video/h264` and the `fps` label.
+- The query activates the `video` extension with an empty `export` object — no splitting, no fps override.
+- The extension accumulates all frames and produces one MP4 episode covering the full range.
+- FPS is taken from the `fps` label; resolution is parsed from the SPS NAL unit in the first keyframe.
+
+### Splitting into episodes by duration
+
+This example exports the same H.264 stream as multiple MP4 episodes, each at most 2 seconds long.
+Splits always happen at keyframe boundaries so each episode is independently decodable.
+
+import VideoEpisodeSplitPy from "!!raw-loader!../../../examples/py/src/ext_video_episode_split.py";
+
+<Tabs>
+  <TabItem value="Python">
+    <CodeBlock language="python">{VideoEpisodeSplitPy}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+#### Expected output
+
+```
+Episode 1: timestamp=1749797653273752, size=73106 bytes
+Episode 2: timestamp=1749797655273752, size=75771 bytes
+Episode 3: timestamp=1749797657273752, size=50994 bytes
+Total episodes: 3
+```
+
+#### Explanation
+
+- The `duration: "2s"` parameter tells the extension to start a new episode after 2 seconds of video.
+- Each episode is finalized at the next keyframe boundary after the limit is reached.
+- Gap detection is also active: if there is a timestamp discontinuity, the current episode ends and a new one begins.
+- Each output record is a self-contained MP4 that can be played independently.

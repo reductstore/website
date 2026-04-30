@@ -122,6 +122,7 @@
           },
           "items": [
             "extensions/official/select-ext",
+            "extensions/official/video-ext",
             {
               "type": "category",
               "label": "ReductROS",
@@ -211,7 +212,6 @@
         }
       ]
     },
-
     {
       "type": "category",
       "label": "Client SDKs",
