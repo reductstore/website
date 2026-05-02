@@ -56,9 +56,10 @@ The extension is activated by passing a `video` object inside the `#ext` block o
     "#ext": {
         "video": {
             "export": {
-                "fps": 30,          # optional: override frame rate
-                "duration": "1m",   # optional: split episodes by duration
-                "size": "100MB"     # optional: split episodes by size
+                "fps": 30,              # optional: override frame rate
+                "duration": "1m",       # optional: split episodes by duration
+                "size": "100MB",        # optional: split episodes by size
+                "gap_detection": true   # optional: enable/disable gap detection (default: true)
             }
         }
     }
@@ -67,11 +68,12 @@ The extension is activated by passing a `video` object inside the `#ext` block o
 
 ### Parameters
 
-| Parameter  | Type     | Mandatory | Description                                                                                   |
-| ---------- | -------- | --------- | --------------------------------------------------------------------------------------------- |
-| `fps`      | `number` | No        | Output frame rate. Also used as fallback if no `fps` label is set on records.                 |
-| `duration` | `string` | No        | Maximum episode duration (e.g. `"30s"`, `"1m"`, `"1h 30m"`). Split at next keyframe boundary. |
-| `size`     | `string` | No        | Maximum episode size (e.g. `"100MB"`, `"1GB"`). Split at next keyframe boundary.              |
+| Parameter       | Type     | Mandatory | Description                                                                                   |
+| --------------- | -------- | --------- | --------------------------------------------------------------------------------------------- |
+| `fps`           | `number` | No        | Output frame rate. Also used as fallback if no `fps` label is set on records.                 |
+| `duration`      | `string` | No        | Maximum episode duration (e.g. `"30s"`, `"1m"`, `"1h 30m"`). Split at next keyframe boundary. |
+| `size`          | `string` | No        | Maximum episode size (e.g. `"100MB"`, `"1GB"`). Split at next keyframe boundary.              |
+| `gap_detection` | `bool`   | No        | Enable automatic episode splitting on timestamp gaps. Default: `true`.                        |
 
 :::info
 When both `duration` and `size` are specified, the episode is finalized as soon as **either** limit is reached.
@@ -94,6 +96,9 @@ because a decoder cannot start without one.
 
 If the timestamp gap between two consecutive records exceeds one frame duration, the exporter
 treats it as a discontinuity: the current episode is finalized and a new one begins.
+
+Gap detection is **enabled by default**. Set `"gap_detection": false` to disable it and
+combine all frames into a single episode regardless of timestamp gaps.
 
 The frame duration used for gap detection is derived from the **recording frame rate**, resolved in this order:
 
