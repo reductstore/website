@@ -604,6 +604,7 @@ export default async function (context, opts) {
           "--validation.notExported false",
           "--blockTags @async",
           "--blockTags @constructor",
+          `--gitRevision ${opts.sdkBranch}`,
         ].join(" "),
         { cwd: process.cwd() },
       );
@@ -623,6 +624,7 @@ export default async function (context, opts) {
           "--validation.notExported false",
           "--blockTags @async",
           "--blockTags @constructor",
+          `--gitRevision ${opts.sdkBranch}`,
         ].join(" "),
         { cwd: process.cwd() },
       );

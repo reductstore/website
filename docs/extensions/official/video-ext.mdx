@@ -1,0 +1,168 @@
+---
+title: ReductVideo
+description: Extension for ReductStore that exports raw video chunks as playable files with automatic parameter detection and episode splitting.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/extensions/official/video-ext"
+  />
+</head>
+
+# ReductVideo Extension
+
+The **ReductVideo** [**extension**](../../glossary#extension) exports raw video chunks stored in ReductStore as playable video files.
+It detects stream parameters from the bitstream and can split the output into episodes by duration or size.
+
+import DemoLicenseNote from "@site/src/components/promotional/DemoLicenseNote";
+
+<DemoLicenseNote />
+
+## Storage Contract
+
+Each record is a segment of encoded video. Records must be stored with the appropriate `content_type` for the codec.
+Timestamps must represent the chunk's capture time in **microseconds**.
+Concatenating all records in timestamp order must produce a valid elementary stream.
+
+Currently, the extension supports **H.264 to MP4** export.
+
+### Labels
+
+| Label | Type     | Mandatory | Description                                                        |
+| ----- | -------- | --------- | ------------------------------------------------------------------ |
+| `fps` | `string` | No        | Frame rate of the stored stream, used for muxing and gap detection |
+
+:::warning
+If no `fps` is available from either labels or the query parameter, the export will fail with an error.
+:::
+
+### H.264
+
+- **Content type:** `video/h264`
+- **Encoding:** Annex B byte-stream format (start codes `00 00 01` or `00 00 00 01`)
+- **Output:** playable MP4 with `content_type: video/mp4`
+
+Each record contains one or more NAL units (access units).
+Not every record needs to contain a keyframe (IDR) as most will be inter-frames (P/B).
+Resolution is detected automatically from SPS NAL units in the stream.
+
+## Query Format
+
+The extension is activated by passing a `video` object inside the `#ext` block of a conditional query:
+
+```python
+{
+    "#ext": {
+        "video": {
+            "export": {
+                "fps": 30,              # optional: override frame rate
+                "duration": "1m",       # optional: split episodes by duration
+                "size": "100MB",        # optional: split episodes by size
+                "gap_detection": true   # optional: enable/disable gap detection (default: true)
+            }
+        }
+    }
+}
+```
+
+### Parameters
+
+| Parameter       | Type     | Mandatory | Description                                                                                   |
+| --------------- | -------- | --------- | --------------------------------------------------------------------------------------------- |
+| `fps`           | `number` | No        | Output frame rate. Also used as fallback if no `fps` label is set on records.                 |
+| `duration`      | `string` | No        | Maximum episode duration (e.g. `"30s"`, `"1m"`, `"1h 30m"`). Split at next keyframe boundary. |
+| `size`          | `string` | No        | Maximum episode size (e.g. `"100MB"`, `"1GB"`). Split at next keyframe boundary.              |
+| `gap_detection` | `bool`   | No        | Enable automatic episode splitting on timestamp gaps. Default: `true`.                        |
+
+:::info
+When both `duration` and `size` are specified, the episode is finalized as soon as **either** limit is reached.
+:::
+
+## Output
+
+Each output record is a playable video file with `content_type: video/mp4`.
+
+### Episodes
+
+An **episode** is a single output file. By default the extension produces one episode covering the entire query range.
+When `duration` or `size` is set, the output is split into multiple episodes.
+Splitting always happens at the next keyframe boundary so each episode can be played on its own.
+
+At the start of each episode, the exporter skips records until it finds a keyframe
+because a decoder cannot start without one.
+
+### Gap Detection
+
+If the timestamp gap between two consecutive records exceeds one frame duration, the exporter
+treats it as a discontinuity: the current episode is finalized and a new one begins.
+
+Gap detection is **enabled by default**. Set `"gap_detection": false` to disable it and
+combine all frames into a single episode regardless of timestamp gaps.
+
+The frame duration used for gap detection is derived from the **recording frame rate**, resolved in this order:
+
+1. `fps` label on the records
+2. `fps` query parameter (fallback)
+3. If neither is available, gap detection is **disabled**
+
+## Examples
+
+The following examples demonstrate how to use the **ReductVideo** extension with H.264 data.
+Although written in Python, the same queries work with any of the official SDKs.
+
+import CodeBlock from "@theme/CodeBlock";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+### Exporting as MP4
+
+This example stores H.264 chunks in ReductStore and exports them as a single MP4 using the video extension.
+
+import VideoExportPy from "!!raw-loader!../../examples/py/src/ext_video_export.py";
+
+<Tabs>
+  <TabItem value="Python">
+    <CodeBlock language="python">{VideoExportPy}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+#### Expected output
+
+```
+Record timestamp: 1749797653273752
+Content type: video/mp4
+MP4 size: 198545 bytes
+```
+
+#### Explanation
+
+- H.264 chunks (one per keyframe interval) are stored with `content_type: video/h264` and the `fps` label.
+- The query uses an empty `export` object, so no splitting or fps override.
+- The extension combines all frames into a single MP4.
+
+### Splitting into Episodes by Duration
+
+This example exports the same H.264 stream as multiple MP4 episodes, each at most 2 seconds long.
+
+import VideoEpisodeSplitPy from "!!raw-loader!../../examples/py/src/ext_video_episode_split.py";
+
+<Tabs>
+  <TabItem value="Python">
+    <CodeBlock language="python">{VideoEpisodeSplitPy}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+#### Expected output
+
+```
+Episode 1: timestamp=1749797653273752, size=73106 bytes
+Episode 2: timestamp=1749797655273752, size=75771 bytes
+Episode 3: timestamp=1749797657273752, size=50994 bytes
+Total episodes: 3
+```
+
+#### Explanation
+
+- The `duration: "2s"` parameter splits the output after 2 seconds of video.
+- Each split happens at the next keyframe boundary, so every episode can be played on its own.
