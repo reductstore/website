@@ -15,13 +15,6 @@
       }
     },
     {
-      "route": "/docs/*/img/*",
-      "headers": {
-        "X-Robots-Tag": "googlebot: noindex, nofollow, bingbot: noindex, nofollow",
-        "Cache-Control": "public, max-age=86400, immutable"
-      }
-    },
-    {
       "route": "/blog/page/*",
       "headers": {
         "X-Robots-Tag": "noindex"
