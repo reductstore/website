@@ -47,7 +47,12 @@ const config = {
   },
 
   plugins: [
-    require.resolve("docusaurus-markdown-source-plugin"),
+    [
+      require.resolve("docusaurus-markdown-source-plugin"),
+      {
+        docsPath: "/docs/",
+      },
+    ],
     require.resolve("./src/plugins/docusaurus-plugin-consent-manager"),
     require.resolve("./src/plugins/docusaurus-plugin-stream"),
     [
