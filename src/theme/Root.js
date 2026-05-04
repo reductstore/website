@@ -6,8 +6,7 @@ import MarkdownActionsDropdown from "docusaurus-markdown-source-plugin/component
 
 export default function Root({ children }) {
   const { pathname } = useLocation();
-  const { docsPath = "/docs/" } =
-    usePluginData("markdown-source-plugin") || {};
+  const { docsPath = "/docs/" } = usePluginData("markdown-source-plugin") || {};
   const dropdownRootRef = useRef(null);
   const containerRef = useRef(null);
 
@@ -33,7 +32,8 @@ export default function Root({ children }) {
     const injectDropdown = () => {
       const articleHeader = document.querySelector("article .markdown header");
       if (!articleHeader) return false;
-      if (articleHeader.querySelector(".markdown-actions-container")) return true;
+      if (articleHeader.querySelector(".markdown-actions-container"))
+        return true;
 
       if (dropdownRootRef.current) {
         dropdownRootRef.current.unmount();
