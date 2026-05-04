@@ -47,6 +47,7 @@ const config = {
   },
 
   plugins: [
+    "docusaurus-markdown-source-plugin",
     require.resolve("./src/plugins/docusaurus-plugin-consent-manager"),
     require.resolve("./src/plugins/docusaurus-plugin-stream"),
     [
