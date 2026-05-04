@@ -7,6 +7,55 @@ function getMarkdownUrl(routePath) {
   return routePath.endsWith("/") ? `${routePath}index.md` : `${routePath}.md`;
 }
 
+function stripFrontMatterAndCanonical(markdown) {
+  let clean = markdown;
+
+  clean = clean.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "");
+  clean = clean.replace(/^\s*canonical:\s*.*$/gim, "");
+  clean = clean.replace(/<link[^>]*rel=["']canonical["'][^>]*>/gim, "");
+  clean = clean.replace(/\n{3,}/g, "\n\n");
+
+  return clean.trimStart();
+}
+
+function getRenderedCodeBlocks() {
+  if (typeof document === "undefined") return [];
+
+  const blocks = Array.from(
+    document.querySelectorAll("article .markdown pre code"),
+  );
+
+  return blocks
+    .map((el) => {
+      const className = el.className || "";
+      const match = className.match(/language-([\w-]+)/);
+      const language = match ? match[1] : "text";
+      const code = (el.textContent || "").replace(/\n+$/, "");
+
+      if (!code.trim()) return null;
+
+      return { language, code };
+    })
+    .filter(Boolean);
+}
+
+function appendMissingCodeBlocks(markdown) {
+  const renderedBlocks = getRenderedCodeBlocks();
+  if (renderedBlocks.length === 0) return markdown;
+
+  const missing = renderedBlocks.filter(({ code }) => !markdown.includes(code));
+  if (missing.length === 0) return markdown;
+
+  const addition = missing
+    .map(({ language, code }, index) => {
+      const title = `Code snippet ${index + 1}`;
+      return `### ${title}\n\n\`\`\`${language}\n${code}\n\`\`\``;
+    })
+    .join("\n\n");
+
+  return `${markdown.trimEnd()}\n\n---\n\n${addition}`;
+}
+
 function CopyMarkdownButton() {
   const [copied, setCopied] = useState(false);
   const resetTimerRef = useRef(null);
@@ -35,7 +84,9 @@ function CopyMarkdownButton() {
       }
 
       const markdown = await response.text();
-      await navigator.clipboard.writeText(markdown);
+      const cleanedMarkdown = stripFrontMatterAndCanonical(markdown);
+      const finalMarkdown = appendMissingCodeBlocks(cleanedMarkdown);
+      await navigator.clipboard.writeText(finalMarkdown);
 
       setCopied(true);
       resetTimerRef.current = setTimeout(() => {
