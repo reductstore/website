@@ -53,7 +53,7 @@ function CopyMarkdownButton() {
       className="button button--outline button--secondary button--sm markdown-copy-button"
       onClick={handleCopyMarkdown}
     >
-      {copied ? "Copied!" : "Copy page as Markdown"}
+      {copied ? "Copied!" : "Copy"}
     </button>
   );
 }
