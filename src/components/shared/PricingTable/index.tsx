@@ -50,14 +50,14 @@ export default function PricingTable() {
       {
         title:
           plan === "community" ? (
-            "CSV & JSON Extensions"
+            "SQL over CSV, JSON & Parquet"
           ) : (
             <Link href="/docs/extensions/official/select-ext">
-              <b>CSV & JSON Extensions</b>
+              <b>SQL over CSV, JSON & Parquet</b>
             </Link>
           ),
         available: plan !== "community",
-        titleDetail: "Official extensions for structured data formats",
+        titleDetail: "Official extension for querying structured data formats",
       },
       {
         title:

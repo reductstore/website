@@ -11,25 +11,26 @@ async def main():
         )
         # Write some JSON data with timestamps
         now = time_ns() // 1000
-        await bucket.write("data", json.dumps({"temp": {"value": 10.0, "status": "ok"}, "src": "#1"}), timestamp=now,
-                           content_type="application/json")
-        await bucket.write("data", json.dumps({"temp": {"value": -4.0, "status": "bad"}, "src": "#1"}),
-                           timestamp=now + 1000, content_type="application/json")
+        await bucket.write(
+            "data",
+            json.dumps({"temp": {"value": 10.0, "status": "ok"}, "src": "#1"}),
+            timestamp=now,
+            content_type="application/json",
+        )
+        await bucket.write(
+            "data",
+            json.dumps({"temp": {"value": -4.0, "status": "bad"}, "src": "#1"}),
+            timestamp=now + 1000,
+            content_type="application/json",
+        )
 
         # Prepare the query with the 'select' extension
         condition = {
             "#ext": {
                 "select": {  # name of the extension to use
                     "json": {},  # Specify JSON format for the data
-                    "columns": [
-                        # Select temperature data
-                        {"name": "temp"},
-                        # Select status of the temperature sensor
-                        {"name": "temp.status", "as_label": "status"},
-                    ],
-                },
-                "when": {
-                    "@status": {"$eq": "ok"},  # Filter records where status is 'ok'
+                    # Select nested JSON fields with SQL.
+                    "sql": "SELECT temp.status AS status, temp.value AS value FROM ENTRY() WHERE temp.status = 'ok'",
                 },
             }
         }

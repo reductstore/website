@@ -71,6 +71,6 @@ const pricingFaqs = [
   {
     question: "What are Extensions?",
     answer:
-      "Server-side data processing during queries—e.g., CSV column selection, image scaling, rosbag topic filtering.",
+      "Server-side data processing during queries—e.g., SQL over CSV, JSON, and Parquet; image scaling; rosbag topic filtering.",
   },
 ];

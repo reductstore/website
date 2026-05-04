@@ -10,10 +10,18 @@ async def main():
         )
         # Write some CSV data with timestamps
         now = time_ns() // 1000
-        await bucket.write("csv", "a,b,c,d,e\n1,2,3,4,5\n6,7,8,9,10\n11,12,13,14,15\n", timestamp=now,
-                           content_type="text/csv")
-        await bucket.write("csv", "a,b,c,d,e\n1,2,3,4,5\n6,7,8,9,10\n11,12,13,14,15\n", timestamp=now + 1,
-                           content_type="text/csv")
+        await bucket.write(
+            "csv",
+            "a,b,c,d,e\n1,2,3,4,5\n6,7,8,9,10\n11,12,13,14,15\n",
+            timestamp=now,
+            content_type="text/csv",
+        )
+        await bucket.write(
+            "csv",
+            "a,b,c,d,e\n1,2,3,4,5\n6,7,8,9,10\n11,12,13,14,15\n",
+            timestamp=now + 1,
+            content_type="text/csv",
+        )
 
         # Prepare the query with the 'select' extension
         condition = {
@@ -22,13 +30,8 @@ async def main():
                     "csv": {
                         "has_headers": True,  # Indicate that the CSV data has headers
                     },
-                    "columns": [
-                        # Select columns corresponding to the "e" header and map it to a label "col_e"
-                        {"name": "e", "as_label": "col_e"},
-                    ],
-                },
-                "when": {
-                    "@col_e": {"$lt": 10},  # Filter out rows where the "e" column is greater than or equal to 10
+                    # Select the "e" column and filter out rows where it is 10 or more.
+                    "sql": "SELECT e FROM ENTRY() WHERE e < 10",
                 },
             }
         }
