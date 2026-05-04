@@ -58,8 +58,18 @@ function getRenderedCodeBlocks() {
       const className = el.className || "";
       const match = className.match(/language-([\w-]+)/);
       const language = match ? match[1] : "text";
-      const raw = (el.innerText || el.textContent || "").replace(/\r\n/g, "\n");
-      const code = raw.replace(/\n+$/, "");
+
+      const tokenLines = Array.from(el.querySelectorAll(".token-line"));
+      let raw;
+      if (tokenLines.length > 0) {
+        raw = tokenLines
+          .map((line) => (line.textContent || "").replace(/\u200B/g, ""))
+          .join("\n");
+      } else {
+        raw = el.textContent || "";
+      }
+
+      const code = raw.replace(/\r\n/g, "\n").replace(/\n+$/, "");
 
       if (!code.trim()) return null;
 
