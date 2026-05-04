@@ -1,13 +1,67 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "@docusaurus/router";
 import { createRoot } from "react-dom/client";
 import { usePluginData } from "@docusaurus/useGlobalData";
-import MarkdownActionsDropdown from "docusaurus-markdown-source-plugin/components/MarkdownActionsDropdown";
+
+function getMarkdownUrl(routePath) {
+  return routePath.endsWith("/") ? `${routePath}index.md` : `${routePath}.md`;
+}
+
+function CopyMarkdownButton() {
+  const [copied, setCopied] = useState(false);
+  const resetTimerRef = useRef(null);
+
+  useEffect(
+    () => () => {
+      if (resetTimerRef.current) {
+        clearTimeout(resetTimerRef.current);
+        resetTimerRef.current = null;
+      }
+    },
+    [],
+  );
+
+  const handleCopyMarkdown = async () => {
+    if (resetTimerRef.current) {
+      clearTimeout(resetTimerRef.current);
+      resetTimerRef.current = null;
+    }
+
+    try {
+      const markdownUrl = getMarkdownUrl(window.location.pathname);
+      const response = await fetch(markdownUrl);
+      if (!response.ok) {
+        throw new Error("Failed to fetch markdown");
+      }
+
+      const markdown = await response.text();
+      await navigator.clipboard.writeText(markdown);
+
+      setCopied(true);
+      resetTimerRef.current = setTimeout(() => {
+        setCopied(false);
+        resetTimerRef.current = null;
+      }, 2000);
+    } catch (error) {
+      console.error("Failed to copy markdown:", error);
+      alert("Failed to copy markdown. Please try again.");
+    }
+  };
+
+  return (
+    <button
+      className="button button--outline button--secondary button--sm markdown-copy-button"
+      onClick={handleCopyMarkdown}
+    >
+      {copied ? "Copied!" : "Copy page as Markdown"}
+    </button>
+  );
+}
 
 export default function Root({ children }) {
   const { pathname } = useLocation();
   const { docsPath = "/docs/" } = usePluginData("markdown-source-plugin") || {};
-  const dropdownRootRef = useRef(null);
+  const buttonRootRef = useRef(null);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -19,9 +73,9 @@ export default function Root({ children }) {
     if (!isDocsPage) return;
 
     const cleanup = () => {
-      if (dropdownRootRef.current) {
-        dropdownRootRef.current.unmount();
-        dropdownRootRef.current = null;
+      if (buttonRootRef.current) {
+        buttonRootRef.current.unmount();
+        buttonRootRef.current = null;
       }
       if (containerRef.current) {
         containerRef.current.remove();
@@ -29,35 +83,34 @@ export default function Root({ children }) {
       }
     };
 
-    const injectDropdown = () => {
+    const injectButton = () => {
       const articleHeader = document.querySelector("article .markdown header");
       if (!articleHeader) return false;
-      if (articleHeader.querySelector(".markdown-actions-container"))
-        return true;
+      if (articleHeader.querySelector(".markdown-copy-container")) return true;
 
-      if (dropdownRootRef.current) {
-        dropdownRootRef.current.unmount();
-        dropdownRootRef.current = null;
+      if (buttonRootRef.current) {
+        buttonRootRef.current.unmount();
+        buttonRootRef.current = null;
       }
 
       const container = document.createElement("div");
-      container.className = "markdown-actions-container";
-      articleHeader.appendChild(container);
+      container.className = "markdown-copy-container";
+      articleHeader.prepend(container);
       containerRef.current = container;
 
       const root = createRoot(container);
-      root.render(<MarkdownActionsDropdown />);
-      dropdownRootRef.current = root;
+      root.render(<CopyMarkdownButton />);
+      buttonRootRef.current = root;
 
       return true;
     };
 
-    injectDropdown();
+    injectButton();
 
     const observer = new MutationObserver(() => {
       const header = document.querySelector("article .markdown header");
-      if (header && !header.querySelector(".markdown-actions-container")) {
-        injectDropdown();
+      if (header && !header.querySelector(".markdown-copy-container")) {
+        injectButton();
       }
     });
 
