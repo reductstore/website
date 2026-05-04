@@ -20,6 +20,32 @@ function stripFrontMatterAndCanonical(markdown) {
   return clean.trimStart();
 }
 
+function toAbsoluteMarkdownLinks(markdown, origin, pathname) {
+  const base = new URL(pathname, origin);
+
+  return markdown.replace(
+    /(!?\[[^\]]*\]\()([^\s)]+)(\))/g,
+    (full, pre, url, post) => {
+      if (
+        /^https?:\/\//i.test(url) ||
+        /^mailto:/i.test(url) ||
+        /^tel:/i.test(url) ||
+        /^data:/i.test(url) ||
+        /^#/i.test(url)
+      ) {
+        return full;
+      }
+
+      try {
+        const absolute = new URL(url, base).href;
+        return `${pre}${absolute}${post}`;
+      } catch {
+        return full;
+      }
+    },
+  );
+}
+
 function getRenderedCodeBlocks() {
   if (typeof document === "undefined") return [];
 
@@ -32,7 +58,8 @@ function getRenderedCodeBlocks() {
       const className = el.className || "";
       const match = className.match(/language-([\w-]+)/);
       const language = match ? match[1] : "text";
-      const code = (el.textContent || "").replace(/\n+$/, "");
+      const raw = (el.innerText || el.textContent || "").replace(/\r\n/g, "\n");
+      const code = raw.replace(/\n+$/, "");
 
       if (!code.trim()) return null;
 
@@ -87,7 +114,12 @@ function CopyMarkdownButton() {
 
       const markdown = await response.text();
       const cleanedMarkdown = stripFrontMatterAndCanonical(markdown);
-      const finalMarkdown = appendMissingCodeBlocks(cleanedMarkdown);
+      const absoluteMarkdown = toAbsoluteMarkdownLinks(
+        cleanedMarkdown,
+        window.location.origin,
+        window.location.pathname,
+      );
+      const finalMarkdown = appendMissingCodeBlocks(absoluteMarkdown);
       await navigator.clipboard.writeText(finalMarkdown);
 
       setCopied(true);
