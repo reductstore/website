@@ -13,6 +13,8 @@ function stripFrontMatterAndCanonical(markdown) {
   clean = clean.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "");
   clean = clean.replace(/^\s*canonical:\s*.*$/gim, "");
   clean = clean.replace(/<link[^>]*rel=["']canonical["'][^>]*>/gim, "");
+  clean = clean.replace(/<head\b[^>]*>[\s\S]*?<\/head>/gim, "");
+  clean = clean.replace(/<\/?head\b[^>]*>/gim, "");
   clean = clean.replace(/\n{3,}/g, "\n\n");
 
   return clean.trimStart();
