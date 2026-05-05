@@ -10,22 +10,26 @@ async def main():
         )
         # Write some CSV data with timestamps
         now = time_ns() // 1000
-        await bucket.write("csv", "1,2,3,4,5\n6,7,8,9,10\n11,12,13,14,15\n", timestamp=now, content_type="text/csv")
-        await bucket.write("csv", "1,2,3,4,5\n6,7,8,9,10\n11,12,13,14,15\n", timestamp=now+1, content_type="text/csv")
+        await bucket.write(
+            "csv",
+            "1,2,3,4,5\n6,7,8,9,10\n11,12,13,14,15\n",
+            timestamp=now,
+            content_type="text/csv",
+        )
+        await bucket.write(
+            "csv",
+            "1,2,3,4,5\n6,7,8,9,10\n11,12,13,14,15\n",
+            timestamp=now + 1,
+            content_type="text/csv",
+        )
 
         # Prepare the query with the 'select' extension
         condition = {
             "#ext": {
                 "select": {  # name of the extension to use
-                    "columns": [
-                        # Select the first column and label it as 'col1'
-                        {"index": 0, "as_label": "col1"},
-                        # Select columns from 2nd to 4th column without labeling
-                        {"from": 2, "to": 4},
-                    ],
-                },
-                "when": {
-                    "@col1": {"$lt": 10},  # Filter out rows where the first column is greater than or equal to 10
+                    # Select columns and filter rows with SQL. CSV columns without
+                    # headers are exposed as column_0, column_1, and so on.
+                    "sql": "SELECT column_0, column_2, column_3 FROM ENTRY() WHERE column_0 < 10",
                 },
             }
         }
