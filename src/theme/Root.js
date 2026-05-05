@@ -83,7 +83,7 @@ function buildMarkdownFromRenderedPage() {
     replacement: (_content, node) => {
       const pre = node;
       const codeEl = pre.querySelector("code");
-      const className = codeEl?.className || "";
+      const className = `${codeEl?.className || ""} ${pre.className || ""}`;
       const match = className.match(/language-([\w-]+)/);
       const language = match ? match[1] : "";
       const code = extractCodeText(codeEl);
