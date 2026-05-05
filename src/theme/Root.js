@@ -61,6 +61,9 @@ function buildMarkdownFromRenderedPage() {
     .querySelectorAll(".markdown-copy-container")
     .forEach((el) => el.remove());
   clone.querySelectorAll(".hash-link").forEach((el) => el.remove());
+  clone
+    .querySelectorAll("[hidden], [aria-hidden='true']")
+    .forEach((el) => el.remove());
 
   // Filter obvious promo/cta blocks while keeping docs content.
   clone
