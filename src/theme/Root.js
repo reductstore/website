@@ -2,97 +2,103 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "@docusaurus/router";
 import { createRoot } from "react-dom/client";
 import { usePluginData } from "@docusaurus/useGlobalData";
+import TurndownService from "turndown";
+import { gfm } from "turndown-plugin-gfm";
 
-function getMarkdownUrl(routePath) {
-  return routePath.endsWith("/") ? `${routePath}index.md` : `${routePath}.md`;
+function extractCodeText(codeEl) {
+  if (!codeEl) return "";
+
+  const tokenLines = Array.from(codeEl.querySelectorAll(".token-line"));
+  if (tokenLines.length > 0) {
+    return tokenLines
+      .map((line) => (line.textContent || "").replace(/\u200B/g, ""))
+      .join("\n")
+      .replace(/\n+$/, "");
+  }
+
+  return (codeEl.textContent || "").replace(/\n+$/, "");
 }
 
-function stripFrontMatterAndCanonical(markdown) {
-  let clean = markdown;
+function absolutizeLinks(rootEl) {
+  rootEl.querySelectorAll("a[href]").forEach((a) => {
+    const href = a.getAttribute("href");
+    if (
+      !href ||
+      href.startsWith("#") ||
+      href.startsWith("mailto:") ||
+      href.startsWith("tel:")
+    ) {
+      return;
+    }
 
-  clean = clean.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "");
-  clean = clean.replace(/^\s*canonical:\s*.*$/gim, "");
-  clean = clean.replace(/<link[^>]*rel=["']canonical["'][^>]*>/gim, "");
-  clean = clean.replace(/<head\b[^>]*>[\s\S]*?<\/head>/gim, "");
-  clean = clean.replace(/<\/?head\b[^>]*>/gim, "");
-  clean = clean.replace(/\n{3,}/g, "\n\n");
+    try {
+      a.setAttribute("href", new URL(href, window.location.href).href);
+    } catch {
+      // keep original href
+    }
+  });
 
-  return clean.trimStart();
+  rootEl.querySelectorAll("img[src]").forEach((img) => {
+    const src = img.getAttribute("src");
+    if (!src || src.startsWith("data:")) return;
+
+    try {
+      img.setAttribute("src", new URL(src, window.location.href).href);
+    } catch {
+      // keep original src
+    }
+  });
 }
 
-function toAbsoluteMarkdownLinks(markdown, origin, pathname) {
-  const base = new URL(pathname, origin);
+function buildMarkdownFromRenderedPage() {
+  const article = document.querySelector("article .markdown");
+  if (!article) return "";
 
-  return markdown.replace(
-    /(!?\[[^\]]*\]\()([^\s)]+)(\))/g,
-    (full, pre, url, post) => {
-      if (
-        /^https?:\/\//i.test(url) ||
-        /^mailto:/i.test(url) ||
-        /^tel:/i.test(url) ||
-        /^data:/i.test(url) ||
-        /^#/i.test(url)
-      ) {
-        return full;
-      }
+  const clone = article.cloneNode(true);
 
-      try {
-        const absolute = new URL(url, base).href;
-        return `${pre}${absolute}${post}`;
-      } catch {
-        return full;
-      }
-    },
-  );
-}
+  clone.querySelector("header")?.remove();
+  clone
+    .querySelectorAll(".markdown-copy-container")
+    .forEach((el) => el.remove());
+  clone.querySelectorAll(".hash-link").forEach((el) => el.remove());
 
-function getRenderedCodeBlocks() {
-  if (typeof document === "undefined") return [];
+  // Filter obvious promo/cta blocks while keeping docs content.
+  clone
+    .querySelectorAll(
+      "[class*='promo'], [class*='cta'], [class*='banner'], [data-copy-exclude='true']",
+    )
+    .forEach((el) => el.remove());
 
-  const blocks = Array.from(
-    document.querySelectorAll("article .markdown pre code"),
-  );
+  absolutizeLinks(clone);
 
-  return blocks
-    .map((el) => {
-      const className = el.className || "";
+  const turndown = new TurndownService({
+    headingStyle: "atx",
+    codeBlockStyle: "fenced",
+    bulletListMarker: "-",
+  });
+  turndown.use(gfm);
+
+  turndown.addRule("codeBlocksWithLanguage", {
+    filter: (node) => node.nodeName === "PRE",
+    replacement: (_content, node) => {
+      const pre = node;
+      const codeEl = pre.querySelector("code");
+      const className = codeEl?.className || "";
       const match = className.match(/language-([\w-]+)/);
-      const language = match ? match[1] : "text";
+      const language = match ? match[1] : "";
+      const code = extractCodeText(codeEl);
 
-      const tokenLines = Array.from(el.querySelectorAll(".token-line"));
-      let raw;
-      if (tokenLines.length > 0) {
-        raw = tokenLines
-          .map((line) => (line.textContent || "").replace(/\u200B/g, ""))
-          .join("\n");
-      } else {
-        raw = el.textContent || "";
-      }
+      if (!code.trim()) return "\n\n";
+      return `\n\n\`\`\`${language}\n${code}\n\`\`\`\n\n`;
+    },
+  });
 
-      const code = raw.replace(/\r\n/g, "\n").replace(/\n+$/, "");
+  turndown.addRule("removeHeadArtifacts", {
+    filter: (node) => node.nodeName === "HEAD",
+    replacement: () => "",
+  });
 
-      if (!code.trim()) return null;
-
-      return { language, code };
-    })
-    .filter(Boolean);
-}
-
-function appendMissingCodeBlocks(markdown) {
-  const renderedBlocks = getRenderedCodeBlocks();
-  if (renderedBlocks.length === 0) return markdown;
-
-  const missing = renderedBlocks.filter(({ code }) => !markdown.includes(code));
-  if (missing.length === 0) return markdown;
-
-  const addition = missing
-    .map(({ language, code }, index) => {
-      const title = `Code snippet ${index + 1}`;
-      return `### ${title}\n\n\`\`\`${language}\n${code}\n\`\`\``;
-    })
-    .join("\n\n");
-
-  return `${markdown.trimEnd()}\n\n---\n\n${addition}`;
+  return turndown.turndown(clone.innerHTML).trim();
 }
 
 function CopyMarkdownButton() {
@@ -116,21 +122,12 @@ function CopyMarkdownButton() {
     }
 
     try {
-      const markdownUrl = getMarkdownUrl(window.location.pathname);
-      const response = await fetch(markdownUrl);
-      if (!response.ok) {
-        throw new Error("Failed to fetch markdown");
+      const markdown = buildMarkdownFromRenderedPage();
+      if (!markdown) {
+        throw new Error("Failed to build markdown from page");
       }
 
-      const markdown = await response.text();
-      const cleanedMarkdown = stripFrontMatterAndCanonical(markdown);
-      const absoluteMarkdown = toAbsoluteMarkdownLinks(
-        cleanedMarkdown,
-        window.location.origin,
-        window.location.pathname,
-      );
-      const finalMarkdown = appendMissingCodeBlocks(absoluteMarkdown);
-      await navigator.clipboard.writeText(finalMarkdown);
+      await navigator.clipboard.writeText(markdown);
 
       setCopied(true);
       resetTimerRef.current = setTimeout(() => {
