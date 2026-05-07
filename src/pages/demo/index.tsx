@@ -24,7 +24,7 @@ export default function DemoPage(): JSX.Element {
               src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ0EzCQdUMPoFPbQtg_mgTC-JzreF1gC2YYwFqboP0x8axTr_ufjFmK_sp3_39Po9ioc865qiZWo?gv=true"
               style={{ border: 0 }}
               width="100%"
-              height="600"
+              height="780"
               frameBorder="0"
               title="Book a ReductStore demo"
             />

@@ -20,6 +20,15 @@ anthony:
     linkedin: anthonycavin
     github: AnthonyCvn
 
+leif:
+  name: Leif-Birger Hundt
+  title: Partner - Operational Scaling for Technology Teams
+  image_url: /img/team/leif.png
+  description: Partner with deep experience in scaling technology operations from early traction to reliable production execution.
+  page: true
+  socials:
+    linkedin: leif-birger-hundt
+
 max:
   name: Max Filippov
   title: ML Software Developer - C++, Python, R, Matlab
@@ -52,12 +61,3 @@ ekaterina:
   socials:
     linkedin: ekaterina-marova
     github: EkaterinaMarova
-
-leif:
-  name: Leif-Birger Hundt
-  title: Partner - Operational Scaling for Technology Teams
-  image_url: /img/team/leif.png
-  description: Partner with deep experience in scaling technology operations from early traction to reliable production execution.
-  page: true
-  socials:
-    linkedin: leif-birger-hundt
