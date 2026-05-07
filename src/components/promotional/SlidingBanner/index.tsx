@@ -6,10 +6,26 @@ import useBannertStore from "@site/src/store/useBannertStore";
 
 const whitePaperImage =
   require("@site/static/img/whitepaper/whitepaper.png").default;
+const checklistImage =
+  require("@site/static/img/checklist/checklist.png").default;
 
 const MIN_MOBILE_WIDTH = 1300;
 
-const SlidingBanner: React.FC = () => {
+interface SlidingBannerProps {
+  image?: string;
+  title?: string;
+  subtitle?: string;
+  linkTo?: string;
+  linkText?: string;
+}
+
+const SlidingBanner: React.FC<SlidingBannerProps> = ({
+  image,
+  title,
+  subtitle,
+  linkTo,
+  linkText,
+}) => {
   const [visible, setVisible] = useState(false);
   const { wasBannerShown, setBannerShown } = useBannertStore();
 
@@ -66,17 +82,23 @@ const SlidingBanner: React.FC = () => {
   return (
     <div className={styles.banner}>
       <div className={styles.bannerContent}>
-        <img src={whitePaperImage} alt="White Paper" className={styles.image} />
+        <img
+          src={image || whitePaperImage}
+          alt={title || "White Paper"}
+          className={styles.image}
+        />
         <div className={styles.textBlock}>
-          <div className={styles.title}>White Paper</div>
-          <div className={styles.subtitle}>Faster Storage, Lower Costs</div>
+          <div className={styles.title}>{title || "White Paper"}</div>
+          <div className={styles.subtitle}>
+            {subtitle || "Faster Storage, Lower Costs"}
+          </div>
           <Link
             id="whitepaper-banner-button"
-            to="/whitepaper"
+            to={linkTo || "/whitepaper"}
             className="button button--primary button--lg"
             onClick={handleDownloadClick}
           >
-            Read Now →
+            {linkText || "Read Now →"}
           </Link>
         </div>
       </div>
