@@ -79,9 +79,11 @@ function buildMarkdownFromRenderedPage() {
     const label = labelId ? clone.ownerDocument.getElementById(labelId) : null;
     const text = label?.textContent?.trim();
     if (text) {
-      const heading = clone.ownerDocument.createElement("h4");
-      heading.textContent = text;
-      panel.prepend(heading);
+      const labelLine = clone.ownerDocument.createElement("p");
+      const strong = clone.ownerDocument.createElement("strong");
+      strong.textContent = `${text}:`;
+      labelLine.appendChild(strong);
+      panel.prepend(labelLine);
     }
   });
 
