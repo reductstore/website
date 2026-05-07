@@ -2,18 +2,9 @@
   "mimeTypes": {
     ".xml": "application/xml; charset=utf-8",
     ".html": "text/html; charset=utf-8",
-    ".txt": "text/plain",
-    ".md": "text/plain; charset=utf-8"
+    ".txt": "text/plain"
   },
   "routes": [
-    {
-      "route": "/*.md",
-      "headers": {
-        "X-Content-Type-Options": "nosniff",
-        "X-Robots-Tag": "googlebot: noindex, nofollow, bingbot: noindex, nofollow",
-        "Cache-Control": "public, max-age=3600, must-revalidate"
-      }
-    },
     {
       "route": "/blog/page/*",
       "headers": {

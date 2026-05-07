@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "@docusaurus/router";
 import { createRoot } from "react-dom/client";
-import { usePluginData } from "@docusaurus/useGlobalData";
 import TurndownService from "turndown";
 import { gfm } from "turndown-plugin-gfm";
 
@@ -220,15 +219,11 @@ function CopyMarkdownButton() {
 
 export default function Root({ children }) {
   const { pathname } = useLocation();
-  const { docsPath = "/docs/" } = usePluginData("markdown-source-plugin") || {};
   const buttonRootRef = useRef(null);
   const containerRef = useRef(null);
 
   useEffect(() => {
-    const isDocsPage =
-      docsPath === "/" ||
-      pathname.startsWith(docsPath) ||
-      pathname === docsPath.slice(0, -1);
+    const isDocsPage = pathname.startsWith("/docs");
 
     if (!isDocsPage) return;
 
@@ -280,7 +275,7 @@ export default function Root({ children }) {
       observer.disconnect();
       cleanup();
     };
-  }, [pathname, docsPath]);
+  }, [pathname]);
 
   return <>{children}</>;
 }
