@@ -22,9 +22,9 @@ anthony:
 
 leif:
   name: Leif-Birger Hundt
-  title: Partner - Operational Scaling for Technology Teams
+  title: Building the data layer for scalable robotics & industrial AI
   image_url: /img/team/leif.jpg
-  description: Partner with deep experience in scaling technology operations from early traction to reliable production execution.
+  description: Deep experience in scaling technology operations from early traction to reliable production execution.
   page: true
   socials:
     linkedin: leif-birger-hundt
