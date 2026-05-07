@@ -7,80 +7,110 @@ slug: cra-compliant-robotics-data-storage
 date: 2026-05-07
 ---
 
-The EU Cyber Resilience Act (CRA) is becoming a hard operational deadline for robotics operators in Europe. For ROS-based fleets, storage is no longer just an engineering choice — it is part of your compliance posture.
+**The CRA Deadline Every German Robot Operator Must Face**
+
+The EU Cyber Resilience Act (Regulation (EU) 2024/2847) is the “GDPR for connected products.” It entered into force on 10 December 2024, with critical milestones approaching fast:
+
+- **11 September 2026**: Mandatory reporting of actively exploited vulnerabilities and severe incidents (24-hour early warning, 72-hour full notification).
+
+- **11 December 2027**: Full compliance — Security by Design, lifecycle support (minimum 5 years), technical documentation, and CE marking.
+
+For robotics fleets (AMRs, cobots, autonomous systems, and ROS 2-based platforms) the stakes are particularly high. These systems are “products with digital elements” (often Class II or critical), generating massive multimodal data streams (camera feeds, LiDAR, IMU, logs, ROS bags) under real production constraints: intermittent connectivity, edge hardware limits, and high physical safety risks.
+
+Generic storage solutions force painful trade-offs: either accept data loss and compliance gaps, or accept exploding costs and slow performance. ReductStore eliminates this trade-off.
 
 {/* truncate */}
 
-## The CRA deadline every robotics operator should prepare for
+### **Why Common Storage Solutions Fall Short for CRA in Production Robotics**
 
-The CRA (Regulation (EU) 2024/2847) entered into force on 10 December 2024 with major milestones approaching:
+Most robotics teams still rely on a patchwork of **rosbag2**, **MinIO/S3**, **InfluxDB**, or **TimescaleDB**. While these tools can technically meet some basic CRA requirements with significant custom development, they create substantial challenges when applied to real-world ROS production fleets:
 
-- **11 September 2026**: mandatory reporting of actively exploited vulnerabilities and severe incidents
-- **11 December 2027**: full compliance obligations, including secure-by-design expectations, lifecycle support, technical documentation, and CE-related evidence
+- **rosbag2** is excellent for local single-robot recording, but it is not designed for fleet-scale edge-to-cloud architectures, selective replication, or long-term auditability. It lacks native mechanisms for data minimisation, granular access control, and automated compliance reporting.
+- **MinIO/S3 and general-purpose object stores** provide scalable blob storage, but they offer no built-in time-series indexing, label-based filtering, or efficient selective replication. Achieving CRA-compliant audit trails and data minimisation usually requires complex additional layers and custom glue code.
+- **InfluxDB and TimescaleDB** are strong for structured metrics, but they have limited native support for large binary objects (images, LiDAR, ROS bags) and are not optimized for high-throughput multimodal ingestion or production-grade edge-to-cloud workflows under intermittent connectivity.
 
-For AMRs, cobots, autonomous systems, and ROS 2 platforms, the pressure is higher because these systems generate large multimodal streams (camera, LiDAR, IMU, logs, ROS bags) under constrained edge hardware and unreliable connectivity.
+In practice, these solutions force teams to invest heavily in custom engineering to achieve CRA compliance — often at the expense of performance, simplicity, and cost efficiency. Most importantly, this custom-built approach increases the risk of documentation gaps during a CRA conformity assessment.
 
-## Why common storage setups struggle with CRA in production
-
-Many teams still rely on combinations of rosbag2, generic object stores (MinIO/S3), and TSDBs like InfluxDB or TimescaleDB. While workable for parts of the stack, they usually require extensive custom glue for:
-
-- complete auditability
-- selective data minimization
-- robust integrity verification
-- compliance-ready reporting evidence
-
-That added complexity increases both delivery cost and the risk of documentation gaps during conformity assessments.
-
-### Practical comparison
-
-| Requirement (CRA Annex I)                     | Generic TSDB / Object Store | ReductStore advantage                            |
-| --------------------------------------------- | --------------------------- | ------------------------------------------------ |
-| Protection from unauthorized access + logging | Basic or bolt-on            | Native token auth + per-record audit trail       |
+| Requirement (CRA Annex I)                     | Generic TSDB / Object Store | ReductStore Advantage                            |
+| :-------------------------------------------- | :-------------------------- | :----------------------------------------------- |
+| Protection from unauthorised access + logging | Basic or bolt-on            | Native token auth + per-record audit trail       |
 | Integrity protection & corruption reporting   | Manual or expensive         | Label-based hash verification + automatic alerts |
-| Data minimization                             | All-or-nothing replication  | Conditional, label-based selective replication   |
-| Secure-by-design defaults                     | Often add-on layer          | Built into edge-first architecture               |
-| Lifecycle support paths                       | Complex versioning          | Versioned replication + dedicated security paths |
+| Data minimisation                             | All-or-nothing replication  | Conditional, label-based selective replication   |
+| Secure by design & default                    | Add-on layer                | Built into edge-first architecture               |
+| Lifecycle support & updates                   | Complex versioning          | Versioned replication + dedicated security paths |
 
-## ReductStore’s CRA-aligned architecture for ROS fleets
+The result? Many operators risk non-compliance, higher insurance premiums, or blocked EU market access after 2027.
 
-ReductStore is built for time-series binary robotics data and maps well to CRA-oriented operational controls.
+**ReductStore’s CRA-Native Architecture for ROS Fleets**
 
-### Key capabilities
+ReductStore is purpose-built as a time-series blob storage engine for multimodal robotics data. It turns compliance from a burden into a competitive advantage.
 
-- **Token-based authentication and scoped access**
-  - Per-device/service tokens and traceable access history
-- **Integrity controls with record labels**
-  - Hash labels and corruption detection workflows
-- **Selective edge-to-cloud replication**
-  - Replicate only security-relevant or condition-matched records
-- **Encryption compatibility**
-  - TLS in transit, cloud backend options at rest, and ROS 2 Security compatibility
-- **Audit logging and observability**
-  - Read/write/replication visibility suitable for compliance evidence
-- **Version-aware update workflows**
-  - Better supportability for long lifecycle robotics deployments
+**Key CRA-Aligned Features:**
 
-## Production outcomes teams care about
+1. **Token-Based Authentication & Granular Access Control**
 
-Across real deployments, robotics teams report better operational reliability and less storage friction at scale. Selective replication in particular can significantly reduce cloud transfer/storage volume while retaining auditability for incident review.
+   Every device, service, or user receives scoped tokens. Access is logged at Bucket/Entry/Record level with timestamps. Perfect for proving “who accessed what data and when” — a core CRA requirement.
 
-## Free CRA checklist for ROS operators
+2. **Label-Based Integrity Protection**
 
-We prepared a practical checklist focused on data integrity and the storage layer, including:
+   Attach cryptographic labels or hashes to records. The engine supports automatic corruption detection and reporting. Write-once-append-only semantics ensure data cannot be silently altered.
 
-- immediate actions before the September 2026 reporting milestone
-- mapping storage controls to CRA Annex I expectations
-- migration guidance for existing ROS fleet architectures
-- risk-assessment structure for multimodal robotics data
+3. **Selective Edge-to-Cloud Replication with Data Minimisation**
 
-[**Download CRA Checklist for ROS Fleets (PDF)**](/cra-checklist)
+   Replicate only records matching specific labels or conditions (e.g., “security-critical”, “anomaly detected”, or specific ROS topics). This dramatically reduces attack surface and cloud costs while meeting CRA’s data-minimisation principle.
 
-## Need a fast readiness review?
+4. **Encryption at Rest and in Transit**
 
-If you want a concrete plan for your current stack, we can review your data pipeline and discuss an implementation path.
+   ReductStore enables strong data confidentiality through multiple proven approaches. Sensitive payloads can be encrypted client-side before ingestion and server-side (e.g., via S3 backend options), while preserving its high-performance batching architecture. All network communication is secured via HTTPS/TLS. The system is fully compatible with ROS 2 Security (SROS2). Native built-in client- and server-side encryption is on the near-term roadmap.
 
-[**→ Schedule Your Free Fleet Audit**](/demo)
+5. **Extended Audit Logging & Grafana Integration**
 
-## Final note
+   Detailed logs of all read/write/replication events. Visualize compliance status directly in Grafana dashboards — ready for technical documentation and conformity assessment.
 
-The safest path to CRA readiness is to make data integrity, traceability, and selective control first-class operational capabilities now — before reporting pressure and assessment timelines peak.
+6. **SBOM Export & Versioned Updates**
+
+   Generate Software Bill of Materials for ReductStore itself. Security updates are delivered via dedicated channels without disrupting production data flows.
+
+These capabilities are already running in 100+ production deployments managing over 1 PB of multimodal robotics data.
+
+**Real-World Results from Production Fleets**
+
+Operators using ReductStore report:
+
+- “We have forgotten about disk overrun problems on our edge devices.” — Ingo Kaiser, PANDA GmbH
+
+- “ReductStore handles terabytes of unstructured data in a production environment.” — Michael Welsch, Metric Space UG
+
+- “We can stop worrying about data collection and focus entirely on building our robots and autonomous layers.” — Victor Massagué Respall, INSAION
+
+In one fleet deployment, selective replication reduced cloud data volume by approximately 85% while maintaining full auditability for CRA preparedness.
+
+**Free CRA Checklist for ROS Operators (Focus: Data Integrity & Storage Layer)**
+
+Download our practical checklist covering:
+
+- Immediate actions before September 2026 reporting deadline
+
+- Mapping ReductStore features to specific CRA Annex I requirements
+
+- Step-by-step migration guide for existing ROS fleets
+
+- Risk assessment template for multimodal robotics data
+
+**[Download CRA Checklist for ROS Fleets (PDF)](/cra-checklist)**
+
+**Ready to Make Your Data Streaming And Storage CRA-Ready Without Compromising Performance?**
+
+The September 2026 reporting deadline is approaching fast. Don’t wait until conformity assessment bodies are fully operational in mid-2026.
+
+**Book a 20-minute production fleet audit** with our team. We will:
+
+- Analyze your current data pipeline against CRA requirements
+
+- Run a live benchmark with your own ROS data
+
+- Show exactly how ReductStore delivers compliance + 10x performance at lower cost
+
+→ **[Schedule Your Free Fleet Audit](/demo)**
+
+**Next up in this series:** Physical AI Training Data at Scale: Why Foundation Models Need Specialized Edge-to-Cloud Storage
