@@ -64,6 +64,11 @@ function buildMarkdownFromRenderedPage() {
     .forEach((el) => el.remove());
   clone.querySelectorAll(".hash-link").forEach((el) => el.remove());
 
+  const tabLabels = new Map();
+  clone.querySelectorAll("[role='tab'][id]").forEach((tab) => {
+    tabLabels.set(tab.id, tab.textContent?.trim() || "");
+  });
+
   clone.querySelectorAll("[hidden], [aria-hidden='true']").forEach((el) => {
     if (el.getAttribute("role") === "tabpanel") {
       el.removeAttribute("hidden");
@@ -76,8 +81,7 @@ function buildMarkdownFromRenderedPage() {
   // Preserve all code languages in tab panels by expanding them with labels.
   clone.querySelectorAll("[role='tabpanel']").forEach((panel) => {
     const labelId = panel.getAttribute("aria-labelledby");
-    const label = labelId ? clone.ownerDocument.getElementById(labelId) : null;
-    const text = label?.textContent?.trim();
+    const text = labelId ? tabLabels.get(labelId) : null;
     if (text) {
       const labelLine = clone.ownerDocument.createElement("p");
       const strong = clone.ownerDocument.createElement("strong");
