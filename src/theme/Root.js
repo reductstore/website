@@ -56,13 +56,39 @@ function buildMarkdownFromRenderedPage() {
 
   const clone = article.cloneNode(true);
 
-  clone.querySelector("header")?.remove();
+  const header = clone.querySelector("header");
+  const pageTitle = header?.querySelector("h1")?.textContent?.trim() || "";
+  header?.remove();
+
   clone
     .querySelectorAll(".markdown-copy-container")
     .forEach((el) => el.remove());
   clone.querySelectorAll(".hash-link").forEach((el) => el.remove());
+
+  clone.querySelectorAll("[hidden], [aria-hidden='true']").forEach((el) => {
+    if (el.getAttribute("role") === "tabpanel") {
+      el.removeAttribute("hidden");
+      el.removeAttribute("aria-hidden");
+      return;
+    }
+    el.remove();
+  });
+
+  // Preserve all code languages in tab panels by expanding them with labels.
+  clone.querySelectorAll("[role='tabpanel']").forEach((panel) => {
+    const labelId = panel.getAttribute("aria-labelledby");
+    const label = labelId ? clone.ownerDocument.getElementById(labelId) : null;
+    const text = label?.textContent?.trim();
+    if (text) {
+      const heading = clone.ownerDocument.createElement("h4");
+      heading.textContent = text;
+      panel.prepend(heading);
+    }
+  });
+
+  // Remove tab controls from output after panel expansion.
   clone
-    .querySelectorAll("[hidden], [aria-hidden='true']")
+    .querySelectorAll("[role='tablist'], [role='tab']")
     .forEach((el) => el.remove());
 
   // Filter obvious promo/cta blocks while keeping docs content.
@@ -101,7 +127,10 @@ function buildMarkdownFromRenderedPage() {
     replacement: () => "",
   });
 
-  return turndown.turndown(clone.innerHTML).trim();
+  const bodyMarkdown = turndown.turndown(clone.innerHTML).trim();
+  if (!pageTitle) return bodyMarkdown;
+  if (bodyMarkdown.startsWith("# ")) return bodyMarkdown;
+  return `# ${pageTitle}\n\n${bodyMarkdown}`;
 }
 
 function CopyMarkdownButton() {
