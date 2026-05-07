@@ -139,7 +139,7 @@ function buildMarkdownFromRenderedPage() {
 }
 
 function CopyMarkdownButton() {
-  const [copied, setCopied] = useState(false);
+  const [status, setStatus] = useState("idle");
   const resetTimerRef = useRef(null);
 
   useEffect(
@@ -153,36 +153,50 @@ function CopyMarkdownButton() {
   );
 
   const handleCopyMarkdown = async () => {
+    if (status === "copying") return;
+
     if (resetTimerRef.current) {
       clearTimeout(resetTimerRef.current);
       resetTimerRef.current = null;
     }
 
-    try {
-      const markdown = buildMarkdownFromRenderedPage();
-      if (!markdown) {
-        throw new Error("Failed to build markdown from page");
+    setStatus("copying");
+
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      try {
+        const markdown = buildMarkdownFromRenderedPage();
+        if (markdown && markdown.trim().length > 20) {
+          await navigator.clipboard.writeText(markdown);
+          setStatus("copied");
+          resetTimerRef.current = setTimeout(() => {
+            setStatus("idle");
+            resetTimerRef.current = null;
+          }, 2000);
+          return;
+        }
+      } catch {
+        // Retry silently; page might still be hydrating.
       }
 
-      await navigator.clipboard.writeText(markdown);
-
-      setCopied(true);
-      resetTimerRef.current = setTimeout(() => {
-        setCopied(false);
-        resetTimerRef.current = null;
-      }, 2000);
-    } catch (error) {
-      console.error("Failed to copy markdown:", error);
-      alert("Failed to copy markdown. Please try again.");
+      await sleep(300);
     }
+
+    setStatus("not-ready");
+    resetTimerRef.current = setTimeout(() => {
+      setStatus("idle");
+      resetTimerRef.current = null;
+    }, 1500);
   };
 
   return (
     <button
       className="button button--outline button--secondary button--sm markdown-copy-button"
       onClick={handleCopyMarkdown}
+      disabled={status === "copying"}
     >
-      {copied ? (
+      {status === "copied" ? (
         <>
           <svg
             width="14"
@@ -216,7 +230,11 @@ function CopyMarkdownButton() {
               d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"
             />
           </svg>
-          Copy page
+          {status === "copying"
+            ? "Copying..."
+            : status === "not-ready"
+              ? "Not ready"
+              : "Copy page"}
         </>
       )}
     </button>
