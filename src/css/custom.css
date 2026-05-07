@@ -243,3 +243,38 @@ body {
   font-weight: 600;
   letter-spacing: 0.02em;
 }
+
+/* docusaurus-markdown-source-plugin styles */
+article .markdown header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  overflow: visible;
+}
+
+article .markdown header h1 {
+  flex: 1 1 auto;
+  margin: 0;
+}
+
+.markdown-copy-container {
+  flex: 0 0 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 0.2rem;
+  margin-bottom: 1rem;
+}
+
+.markdown-copy-button {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .markdown-copy-container {
+    margin-top: 0.35rem;
+    margin-bottom: 0.85rem;
+  }
+}
