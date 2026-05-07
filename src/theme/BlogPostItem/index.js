@@ -42,7 +42,7 @@ export default function BlogPostItemWrapper(props) {
             <SlidingBanner
               image="/img/checklist/checklist.png"
               title="CRA Compliance Checklist"
-              subtitle="For ROS-Based Robotics Fleets"
+              subtitle="For Robotics Fleets"
               linkTo="/cra-checklist"
               linkText="Download Now →"
             />
