@@ -21,7 +21,7 @@ export default function DemoPage(): JSX.Element {
 
           <div className={styles.calendarWrapper}>
             <iframe
-              src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ0EzCQdUMPoFPbQtg_mgTC-JzreF1gC2YYwFqboP0x8axTr_ufjFmK_sp3_39Po9ioc865qiZWo?gv=true"
+              src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3kZddaxQGWWPyFXzdgh5c3S151bCObkRQMnp5KcpeeVGUewaiTr6EKo_8dbZhBdZPnhk9MytZ6?gv=true"
               style={{ border: 0 }}
               width="100%"
               height="780"
