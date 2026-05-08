@@ -81,3 +81,34 @@ For more information about the replication settings, see the **[Data Replication
 
 TLS verification for replication destinations is configured globally for the source instance with `RS_REPLICATION_VERIFY_SSL` and `RS_REPLICATION_CA_PATH`.
 These settings apply to all replication tasks created through provisioning, the HTTP API, SDKs, CLI, or the Web Console.
+
+## Lifecycle Provisioning
+
+You can provision lifecycle policies by setting environment variables. Lifecycle policies run in the background and currently support deleting old records from a bucket.
+
+| Name                         | Default | Description                                                                                                       |
+| ---------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
+| `RS_LIFECYCLE_<ID>_NAME`     |         | Provisioned lifecycle policy name (required)                                                                      |
+| `RS_LIFECYCLE_<ID>_TYPE`     | delete  | Lifecycle action type. Currently only `delete` is supported.                                                      |
+| `RS_LIFECYCLE_<ID>_BUCKET`   |         | Bucket to apply the lifecycle policy to (required)                                                                |
+| `RS_LIFECYCLE_<ID>_MAX_AGE`  |         | Maximum record age before deletion, for example `30d`, `24h`, or `3600s` (required)                              |
+| `RS_LIFECYCLE_<ID>_INTERVAL` | -   | Interval between lifecycle runs, for example `10m`, `1h`, or `3600s`                                              |
+| `RS_LIFECYCLE_<ID>_ENTRIES`  |         | Comma-separated list of entries to clean. If empty, all entries are matched. Prefix wildcards are supported.     |
+| `RS_LIFECYCLE_<ID>_WHEN`     |         | JSON condition for records to delete. Uses the same condition syntax as queries, but `#ext` is not supported.    |
+| `RS_LIFECYCLE_<ID>_MODE`     | enabled | Policy mode: `enabled` or `disabled`.                                                                 |
+
+Example:
+
+```env
+RS_LIFECYCLE_A_NAME=purge-sensors-30d
+RS_LIFECYCLE_A_TYPE=delete
+RS_LIFECYCLE_A_BUCKET=telemetry
+RS_LIFECYCLE_A_ENTRIES=sensors/*,env/temp,env/humidity
+RS_LIFECYCLE_A_MAX_AGE=30d
+RS_LIFECYCLE_A_INTERVAL=10m
+RS_LIFECYCLE_A_WHEN={"$eq":["&label","true"]}
+```
+
+Provisioned lifecycle policies cannot be updated or removed through the API. Change their environment variables and restart ReductStore to update them.
+
+For more information about lifecycle policies, see the **[Lifecycle Policies Guide](../guides/lifecycle-policies.mdx)**.

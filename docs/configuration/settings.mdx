@@ -177,7 +177,10 @@ ReductStore can persist aggregated API interactions in the `$audit` system bucke
 
 Notes:
 
-- If `RS_AUDIT_ENABLED` is unset, audit defaults to `true` when `RS_API_TOKEN` is set, otherwise `false`.
+- If `RS_AUDIT_ENABLED` is unset, audit defaults to `true` when `RS_API_TOKEN` is set or lifecycle policies are configured, otherwise `false`.
 - `RS_AUDIT_ENABLED` explicitly overrides the token-based default.
 - `RS_AUDIT_QUOTA_SIZE` is applied only when audit is enabled.
 - If `RS_AUDIT_QUOTA_SIZE` is unset, `$audit` capacity is unlimited.
+- Audit records are stored as structured events with common fields: `type`, `timestamp`, `instance`, `entry_name`, `status`, `message`, and `payload`.
+- API audit events use `type: "api_call"` and keep request details (`token_name`, `method`, `path`, `client_ip`, `call_count`, and `duration`) in `payload`.
+- Lifecycle audit events use `type: "lifecycle_run"` and keep run details (`policy_name`, `action_type`, `bucket`, `duration`, `processed_records`, `error_code`, and `error_message`) in `payload`.

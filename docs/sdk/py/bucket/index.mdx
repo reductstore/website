@@ -675,7 +675,9 @@ multiple entries. You can also use wildcards in entry names.
 #### write\_attachments
 
 ```python
-async def write_attachments(entry_name: str, attachments: dict[str, dict])
+async def write_attachments(entry_name: str,
+                            attachments: dict[str, dict],
+                            content_type: str = None)
 ```
 
 Write attachments to an entry
