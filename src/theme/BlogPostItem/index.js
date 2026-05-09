@@ -22,6 +22,7 @@ export default function BlogPostItemWrapper(props) {
     !isBlogPage &&
     !isAuthorPage &&
     !isTagPage;
+  const isCraBlog = pagePath.includes("cra-compliant-robotics-data-storage");
   return (
     <>
       <BlogPostItem {...props} />
@@ -37,7 +38,17 @@ export default function BlogPostItemWrapper(props) {
               embedUrl={`https://www.reduct.store${pagePath}`}
             />
           </div>
-          <SlidingBanner />
+          {isCraBlog ? (
+            <SlidingBanner
+              image="/img/checklist/checklist.png"
+              title="CRA Compliance Checklist"
+              subtitle="For Robotics Fleets"
+              linkTo="/cra-checklist"
+              linkText="Download Now →"
+            />
+          ) : (
+            <SlidingBanner />
+          )}
         </>
       )}
     </>
