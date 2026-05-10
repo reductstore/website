@@ -86,16 +86,16 @@ These settings apply to all replication tasks created through provisioning, the 
 
 You can provision lifecycle policies by setting environment variables. Lifecycle policies run in the background and currently support deleting old records from a bucket.
 
-| Name                         | Default | Description                                                                                                       |
-| ---------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
-| `RS_LIFECYCLE_<ID>_NAME`     |         | Provisioned lifecycle policy name (required)                                                                      |
-| `RS_LIFECYCLE_<ID>_TYPE`     | delete  | Lifecycle action type. Currently only `delete` is supported.                                                      |
-| `RS_LIFECYCLE_<ID>_BUCKET`   |         | Bucket to apply the lifecycle policy to (required)                                                                |
-| `RS_LIFECYCLE_<ID>_MAX_AGE`  |         | Maximum record age before deletion, for example `30d`, `24h`, or `3600s` (required)                              |
-| `RS_LIFECYCLE_<ID>_INTERVAL` | -   | Interval between lifecycle runs, for example `10m`, `1h`, or `3600s`                                              |
-| `RS_LIFECYCLE_<ID>_ENTRIES`  |         | Comma-separated list of entries to clean. If empty, all entries are matched. Prefix wildcards are supported.     |
-| `RS_LIFECYCLE_<ID>_WHEN`     |         | JSON condition for records to delete. Uses the same condition syntax as queries, but `#ext` is not supported.    |
-| `RS_LIFECYCLE_<ID>_MODE`     | enabled | Policy mode: `enabled` or `disabled`.                                                                 |
+| Name                         | Default | Description                                                                                                   |
+| ---------------------------- | ------- | ------------------------------------------------------------------------------------------------------------- |
+| `RS_LIFECYCLE_<ID>_NAME`     |         | Provisioned lifecycle policy name (required)                                                                  |
+| `RS_LIFECYCLE_<ID>_TYPE`     | delete  | Lifecycle action type. Currently only `delete` is supported.                                                  |
+| `RS_LIFECYCLE_<ID>_BUCKET`   |         | Bucket to apply the lifecycle policy to (required)                                                            |
+| `RS_LIFECYCLE_<ID>_MAX_AGE`  |         | Maximum record age before deletion, for example `30d`, `24h`, or `3600s` (required). Minimum value is `1h`.   |
+| `RS_LIFECYCLE_<ID>_INTERVAL` | 3600s   | Interval between lifecycle runs, for example `10m`, `1h`, or `3600s`. Minimum value is `10m`.                 |
+| `RS_LIFECYCLE_<ID>_ENTRIES`  |         | Comma-separated list of entries to clean. If empty, all entries are matched. Prefix wildcards are supported.  |
+| `RS_LIFECYCLE_<ID>_WHEN`     |         | JSON condition for records to delete. Uses the same condition syntax as queries, but `#ext` is not supported. |
+| `RS_LIFECYCLE_<ID>_MODE`     | enabled | Policy mode: `enabled`, `disabled`, or `dry_run`.                                                             |
 
 Example:
 
@@ -107,8 +107,11 @@ RS_LIFECYCLE_A_ENTRIES=sensors/*,env/temp,env/humidity
 RS_LIFECYCLE_A_MAX_AGE=30d
 RS_LIFECYCLE_A_INTERVAL=10m
 RS_LIFECYCLE_A_WHEN={"$eq":["&label","true"]}
+RS_LIFECYCLE_A_MODE=dry_run
 ```
 
-Provisioned lifecycle policies cannot be updated or removed through the API. Change their environment variables and restart ReductStore to update them.
+Use `dry_run` mode to count matching records and write lifecycle audit events without deleting data. This is useful for validating `max_age`, `entries`, and `when` filters before switching the policy to `enabled`.
+
+Provisioned lifecycle policies cannot be updated or removed through the API. Change their environment variables and restart ReductStore to update them. If `RS_LIFECYCLE_<ID>_MODE` is not set, ReductStore preserves the existing stored mode for an already provisioned lifecycle policy.
 
 For more information about lifecycle policies, see the **[Lifecycle Policies Guide](../guides/lifecycle-policies.mdx)**.
