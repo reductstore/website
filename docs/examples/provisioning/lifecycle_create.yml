@@ -1,0 +1,22 @@
+version: "3"
+services:
+  reductstore:
+    image: reduct/store:latest
+    ports:
+      - "8383:8383"
+    volumes:
+      - ./data:/data
+    environment:
+      RS_API_TOKEN: my-api-token
+      RS_BUCKET_1_NAME: telemetry
+      RS_LIFECYCLE_1_NAME: purge-sensors-30d
+      RS_LIFECYCLE_1_BUCKET: telemetry
+      RS_LIFECYCLE_1_TYPE: delete
+      RS_LIFECYCLE_1_MAX_AGE: 30d
+      RS_LIFECYCLE_1_INTERVAL: 10m
+      RS_LIFECYCLE_1_ENTRIES: "sensor-1,sensor-2"
+
+      RS_LIFECYCLE_1_WHEN: |
+        {
+          "&sensor_type": { "$eq": "temperature" }
+        }

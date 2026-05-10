@@ -1,0 +1,80 @@
+---
+title: Lifecycle Policies
+description: Complete guide to managing lifecycle policies in ReductStore
+---
+
+import CodeBlock from "@theme/CodeBlock";
+import lifecycleCreate from "!!raw-loader!@site/docs/examples/provisioning/lifecycle_create.yml";
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/guides/lifecycle-policies"
+  />
+</head>
+
+# Lifecycle Policies
+
+**[Lifecycle policies](../glossary#lifecycle-policy)** are background tasks that automatically clean up old records from your **[buckets](../glossary#bucket)**. They help you manage storage efficiently by removing outdated data based on rules you define.
+
+## How It Works
+
+A lifecycle policy runs at a configurable interval and scans the target bucket for records older than `max_age`. It removes these records and logs the operation in the `$audit` system bucket. You can optionally scope policies to specific **[entries](../glossary#entry)** or filter records using conditions.
+
+Policies are stored on disk and remain active after restarts. However, read-only (replica) instances cannot execute lifecycle policies. Every policy run is recorded as a `lifecycle_run` event in the `$audit` bucket for transparency and debugging.
+
+## Supported Actions
+
+Currently, ReductStore supports one action type for lifecycle policies:
+
+| Type    | Description                                      |
+|---------|--------------------------------------------------|
+| `delete` | Removes records older than `max_age` from the bucket |
+
+More action types may be added in future releases.
+
+## Policy Settings
+
+You can configure lifecycle policies using the following settings:
+
+| Setting   | Description                                                                                     | Required | Default  |
+|-----------|-------------------------------------------------------------------------------------------------|----------|----------|
+| `type`    | Action type (e.g., `delete`)                                                                    | No       | `delete` |
+| `bucket`  | Target bucket name                                                                              | Yes      | -        |
+| `entries` | List of entries to scope the policy (wildcard `*` supported)                                   | No       | -        |
+| `max_age` | Maximum age of records before action is applied (e.g., `30d`, `1h`, `5m`)                     | Yes      | -        |
+| `interval`| Policy execution interval (e.g., `3600s`, `10m`)                                               | No       | `3600s`  |
+| `when`    | JSON condition to filter records (see **[Conditional Query Reference](/docs/conditional-query/index.mdx)**) | No       | -        |
+| `mode`    | Policy mode: `enabled` (default) or `disabled`                                     | No       | `enabled`|
+
+## Conditional Policies
+
+You can refine lifecycle policies using the `entries` and `when` parameters:
+
+- **`entries`**: Limit the policy to specific entries (e.g., `sensor-1,sensor-2` or `sensor-*`)
+- **`when`**: Apply the policy only to records matching a condition (e.g., `{"&sensor_type": {"$eq": "temperature"}}`)
+
+For more details, see the **[Conditional Query Reference](/docs/conditional-query/index.mdx)**.
+
+## Example
+
+Imagine you store telemetry data from temperature sensors in a bucket called `telemetry`. You want to automatically delete records older than 30 days, but only for specific sensors (`sensor-1` and `sensor-2`) and only if the `sensor_type` label equals `temperature`. Here’s how you’d configure the policy:
+
+<CodeBlock language="yaml">{lifecycleCreate}</CodeBlock>
+
+## Managing Policies
+
+Currently, lifecycle policies can only be provisioned using environment variables. They cannot be updated or removed via the API.
+
+:::info
+Provisioned policies cannot be modified or deleted through the API. To make changes, update the environment variables and restart the ReductStore instance.
+:::
+
+## Audit Logs
+
+Every lifecycle run generates a `lifecycle_run` event in the `$audit` bucket. The event includes:
+
+- Policy name and action type
+- Target bucket and duration of the run
+- Number of records processed
+- Error details (if any)
