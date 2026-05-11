@@ -41,3 +41,6 @@ package-lock.json
 
 # local indexing artifacts
 .ai/
+
+
+.kilo
