@@ -89,6 +89,7 @@ import CreateLifecycleCurl from "!!raw-loader!../examples/curl/lifecycle_policy_
     <CodeBlock language="bash">{CreateLifecycleCli}</CodeBlock>
   </TabItem>
   <TabItem value="Web Console">
+
     Steps to create a lifecycle policy using the Web Console:
       1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
       2. Enter the API token if authorization is enabled.
@@ -96,6 +97,7 @@ import CreateLifecycleCurl from "!!raw-loader!../examples/curl/lifecycle_policy_
       4. Click the plus icon in the top-right corner.
       5. Fill in the lifecycle name, bucket, `max_age`, optional `interval`, and optional filters (`entries` and `when`).
       6. Click **"Create Lifecycle"**.
+
   </TabItem>
   <TabItem value="Python">
     <CodeBlock language="python">{CreateLifecyclePy}</CodeBlock>
@@ -134,11 +136,13 @@ import BrowseLifecycleCurl from "!!raw-loader!../examples/curl/lifecycle_policy_
     <CodeBlock language="bash">{BrowseLifecycleCli}</CodeBlock>
   </TabItem>
   <TabItem value="Web Console">
+  
     Steps to browse lifecycle policies in the Web Console:
       1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
       2. Enter the API token if authorization is enabled.
       3. Click **"Lifecycles"** in the left sidebar.
       4. Open any lifecycle policy in the list to inspect settings and status.
+
   </TabItem>
   <TabItem value="Python">
     <CodeBlock language="python">{BrowseLifecyclePy}</CodeBlock>
@@ -175,6 +179,15 @@ import UpdateLifecycleModeCurl from "!!raw-loader!../examples/curl/lifecycle_pol
 <Tabs>
   <TabItem value="CLI">
     <CodeBlock language="bash">{UpdateLifecycleModeCli}</CodeBlock>
+  </TabItem>
+  <TabItem value="Web Console">
+
+    Steps to update lifecycle policy mode using the Web Console:
+      1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
+      2. Enter the API token if authorization is enabled.
+      3. Click **"Lifecycles"** in the left sidebar.
+      4. Update the policy mode by clicking the dropdown button next to the policy name and selecting the desired mode (`enabled`, `dry_run`, or `disabled`).
+
   </TabItem>
   <TabItem value="Python">
     <CodeBlock language="python">{UpdateLifecycleModePy}</CodeBlock>
@@ -217,12 +230,14 @@ import RemoveLifecycleCurl from "!!raw-loader!../examples/curl/lifecycle_policy_
     <CodeBlock language="bash">{RemoveLifecycleCli}</CodeBlock>
   </TabItem>
   <TabItem value="Web Console">
-    Steps to remove a lifecycle policy using the Web Console: 
+
+    Steps to remove a lifecycle policy using the Web Console:
       1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
       2. Enter the API token if authorization is enabled.
       3. Click **"Lifecycles"** in the left sidebar.
       4. Open the lifecycle policy details.
       5. Click the trash icon in the bottom-right corner and confirm by typing the policy name.
+
   </TabItem>
   <TabItem value="Python">
     <CodeBlock language="python">{RemoveLifecyclePy}</CodeBlock>
