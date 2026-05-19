@@ -80,15 +80,15 @@ Nested JSON and Parquet fields can be referenced with dotted paths, for example 
 
 ### Parameters
 
-| Parameter     | Type   | Mandatory | Default                    | Description                                                                                                                        |
-| ------------- | ------ | --------- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `csv`         | object | No        | Inferred from content type | Enables CSV-specific parsing options. Cannot be used together with `json`, `parquet`, or `protobuf`.                               |
-| `json`        | object | No        | Inferred from content type | Selects JSON input parsing. Cannot be used together with `csv`, `parquet`, or `protobuf`.                                          |
-| `parquet`     | object | No        | Inferred from content type | Selects Parquet input parsing. Cannot be used together with `csv`, `json`, or `protobuf`.                                          |
-| `protobuf`    | object | No        | Inferred from content type | Selects Protobuf input parsing. Cannot be used together with `csv`, `json`, or `parquet`. See [Protobuf Support](#protobuf-support) for sub-parameters. |
-| `sql`         | string | No        | `SELECT * FROM ENTRY()`    | SQL query executed against the current input record.                                                                               |
-| `export`      | object | No        | Format-specific            | Controls output format and batching.                                                                                               |
-| `as_label`    | object | No        | `{}`                       | Maps SQL result columns to computed labels using `{"label_name": "column_name"}`. Only primitive values are accepted.              |
+| Parameter  | Type   | Mandatory | Default                    | Description                                                                                                                                             |
+| ---------- | ------ | --------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `csv`      | object | No        | Inferred from content type | Enables CSV-specific parsing options. Cannot be used together with `json`, `parquet`, or `protobuf`.                                                    |
+| `json`     | object | No        | Inferred from content type | Selects JSON input parsing. Cannot be used together with `csv`, `parquet`, or `protobuf`.                                                               |
+| `parquet`  | object | No        | Inferred from content type | Selects Parquet input parsing. Cannot be used together with `csv`, `json`, or `protobuf`.                                                               |
+| `protobuf` | object | No        | Inferred from content type | Selects Protobuf input parsing. Cannot be used together with `csv`, `json`, or `parquet`. See [Protobuf Support](#protobuf-support) for sub-parameters. |
+| `sql`      | string | No        | `SELECT * FROM ENTRY()`    | SQL query executed against the current input record.                                                                                                    |
+| `export`   | object | No        | Format-specific            | Controls output format and batching.                                                                                                                    |
+| `as_label` | object | No        | `{}`                       | Maps SQL result columns to computed labels using `{"label_name": "column_name"}`. Only primitive values are accepted.                                   |
 
 #### Export Parameters
 
@@ -260,11 +260,11 @@ Decoded fields are converted to JSON internally before SQL processing, so all st
 By default, `protobuf: {}` reads the message schema from a `$schema` [**attachment**](../../../glossary#attachment) on the queried entry.
 The attachment must contain the following fields:
 
-| Field          | Type   | Description                                                                                             |
-| -------------- | ------ | ------------------------------------------------------------------------------------------------------- |
-| `encoding`     | string | Must be `"protobuf"`.                                                                                   |
-| `schema_name`  | string | Fully qualified message type name, e.g. `pkg.SensorReading`.                                           |
-| `schema`       | string | Base64-encoded `FileDescriptorSet` (generated with `protoc --descriptor_set_out --include_imports`).    |
+| Field         | Type   | Description                                                                                          |
+| ------------- | ------ | ---------------------------------------------------------------------------------------------------- |
+| `encoding`    | string | Must be `"protobuf"`.                                                                                |
+| `schema_name` | string | Fully qualified message type name, e.g. `pkg.SensorReading`.                                         |
+| `schema`      | string | Base64-encoded `FileDescriptorSet` (generated with `protoc --descriptor_set_out --include_imports`). |
 
 **Example `$schema` attachment**
 
@@ -280,11 +280,11 @@ The attachment must contain the following fields:
 
 The `protobuf` object accepts the following optional sub-parameters to override attachment-based schema resolution:
 
-| Parameter      | Type   | Mandatory | Description                                                                                                                     |
-| -------------- | ------ | --------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `message_name` | string | No        | Overrides the message type name from the attachment. Required when `schema` is provided inline.                                 |
-| `schema`       | string | No        | Inline base64-encoded `FileDescriptorSet`, bypassing the attachment. Requires `message_name`. Cannot be used with `fields`.     |
-| `fields`       | object | No        | Wire-level field extraction by field number. No descriptor needed. Cannot be combined with `message_name` or `schema`.          |
+| Parameter      | Type   | Mandatory | Description                                                                                                                 |
+| -------------- | ------ | --------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `message_name` | string | No        | Overrides the message type name from the attachment. Required when `schema` is provided inline.                             |
+| `schema`       | string | No        | Inline base64-encoded `FileDescriptorSet`, bypassing the attachment. Requires `message_name`. Cannot be used with `fields`. |
+| `fields`       | object | No        | Wire-level field extraction by field number. No descriptor needed. Cannot be combined with `message_name` or `schema`.      |
 
 **Example: attachment-based (default)**
 
@@ -312,16 +312,16 @@ The `protobuf` object accepts the following optional sub-parameters to override 
 The `fields` option extracts specific top-level scalar fields by their Protobuf field number without a full descriptor.
 Each entry maps a SQL column name to `id` (field number) and `type`:
 
-| Sub-field | Type   | Description                                                                                                                                                                            |
-| --------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`      | number | Protobuf field number as defined in the `.proto` file.                                                                                                                                 |
+| Sub-field | Type   | Description                                                                                                                                                                                        |
+| --------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`      | number | Protobuf field number as defined in the `.proto` file.                                                                                                                                             |
 | `type`    | string | Scalar field type. Supported values: `string`, `bytes`, `double`, `float`, `fixed64`, `sfixed64`, `fixed32`, `sfixed32`, `sint32`, `sint64`, `uint64`, `uint32`, `int64`, `int32`, `bool`, `enum`. |
 
 ```json
 {
   "protobuf": {
     "fields": {
-      "device_id":   { "id": 1, "type": "string" },
+      "device_id": { "id": 1, "type": "string" },
       "temperature": { "id": 3, "type": "double" }
     }
   },
