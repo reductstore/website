@@ -80,15 +80,15 @@ Nested JSON and Parquet fields can be referenced with dotted paths, for example 
 
 ### Parameters
 
-| Parameter  | Type   | Mandatory | Default                    | Description                                                                                                                                             |
-| ---------- | ------ | --------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `csv`      | object | No        | Inferred from content type | Enables CSV-specific parsing options. Cannot be used together with `json`, `parquet`, or `protobuf`.                                                    |
-| `json`     | object | No        | Inferred from content type | Selects JSON input parsing. Cannot be used together with `csv`, `parquet`, or `protobuf`.                                                               |
-| `parquet`  | object | No        | Inferred from content type | Selects Parquet input parsing. Cannot be used together with `csv`, `json`, or `protobuf`.                                                               |
-| `protobuf` | object | No        | Inferred from content type | Selects Protobuf input parsing. Cannot be used together with `csv`, `json`, or `parquet`. See [Protobuf Support](#protobuf-support) for sub-parameters. |
-| `sql`      | string | No        | `SELECT * FROM ENTRY()`    | SQL query executed against the current input record.                                                                                                    |
-| `export`   | object | No        | Format-specific            | Controls output format and batching.                                                                                                                    |
-| `as_label` | object | No        | `{}`                       | Maps SQL result columns to computed labels using `{"label_name": "column_name"}`. Only primitive values are accepted.                                   |
+| Parameter  | Type   | Mandatory | Default                    | Description                                                                                                           |
+| ---------- | ------ | --------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `csv`      | object | No        | Inferred from content type | Enables CSV-specific parsing options. Cannot be used together with `json`, `parquet`, or `protobuf`.                  |
+| `json`     | object | No        | Inferred from content type | Selects JSON input parsing. Cannot be used together with `csv`, `parquet`, or `protobuf`.                             |
+| `parquet`  | object | No        | Inferred from content type | Selects Parquet input parsing. Cannot be used together with `csv`, `json`, or `protobuf`.                             |
+| `protobuf` | object | No        | Inferred from content type | Selects Protobuf input parsing. Cannot be used together with `csv`, `json`, or `parquet`.                             |
+| `sql`      | string | No        | `SELECT * FROM ENTRY()`    | SQL query executed against the current input record.                                                                  |
+| `export`   | object | No        | Format-specific            | Controls output format and batching.                                                                                  |
+| `as_label` | object | No        | `{}`                       | Maps SQL result columns to computed labels using `{"label_name": "column_name"}`. Only primitive values are accepted. |
 
 #### Export Parameters
 
