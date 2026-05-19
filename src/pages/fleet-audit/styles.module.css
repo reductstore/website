@@ -1,0 +1,16 @@
+.container {
+  padding-top: 1rem;
+  margin-bottom: var(--reduct-bottom-page-margin);
+}
+
+.intro {
+  margin-bottom: 1.25rem;
+  max-width: 900px;
+}
+
+.calendarWrapper {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--ifm-background-surface-color);
+}

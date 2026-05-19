@@ -20,6 +20,11 @@ jobs:
           submodules: true
           lfs: false
 
+      - name: Fetch LFS assets required for site
+        run: |
+          git lfs install --local
+          git lfs pull --include="static/pdf/**"
+
       # Set environment variable for production
       - name: Set Production Environment Variable
         if: github.ref == 'refs/heads/main'

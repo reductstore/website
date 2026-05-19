@@ -193,6 +193,8 @@
               "label": "Inputs",
               "collapsed": false,
               "items": [
+                "reduct-bridge/input/metrics/index",
+                "reduct-bridge/input/mqtt/index",
                 "reduct-bridge/input/shell/index",
                 "reduct-bridge/input/ros1/index",
                 "reduct-bridge/input/ros2/index"
