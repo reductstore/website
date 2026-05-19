@@ -11,6 +11,8 @@ description: "API reference for reduct-js in the ReductStore Client SDK for Java
 
 ## Namespaces
 
+- [LifecycleMode](reduct-js/namespaces/LifecycleMode/index.md)
+- [LifecycleType](reduct-js/namespaces/LifecycleType/index.md)
 - [ReplicationMode](reduct-js/namespaces/ReplicationMode/index.md)
 
 ## Enumerations
@@ -28,8 +30,11 @@ description: "API reference for reduct-js in the ReductStore Client SDK for Java
 - [BucketSettings](classes/BucketSettings.md)
 - [Client](classes/Client.md)
 - [EntryInfo](classes/EntryInfo.md)
+- [FullLifecycleInfo](classes/FullLifecycleInfo.md)
 - [FullReplicationInfo](classes/FullReplicationInfo.md)
 - [LicenseInfo](classes/LicenseInfo.md)
+- [LifecycleInfo](classes/LifecycleInfo.md)
+- [LifecycleSettings](classes/LifecycleSettings.md)
 - [QueryOptions](classes/QueryOptions.md)
 - [RecordBatch](classes/RecordBatch.md)
 - [ReplicationInfo](classes/ReplicationInfo.md)
@@ -45,4 +50,6 @@ description: "API reference for reduct-js in the ReductStore Client SDK for Java
 
 ## Type Aliases
 
+- [LifecycleMode](type-aliases/LifecycleMode.md)
+- [LifecycleType](type-aliases/LifecycleType.md)
 - [ReplicationMode](type-aliases/ReplicationMode.md)
