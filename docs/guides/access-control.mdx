@@ -64,6 +64,7 @@ The table below shows the list of operations that can be performed for different
 | Manage Tokens            | :x:                | :x:                | :x:                | :x:                | :white_check_mark: |
 | Manage Replication Tasks | :x:                | :x:                | :x:                | :x:                | :white_check_mark: |
 | Access Audit Log         | :x:                | :x:                | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Access System Events     | :x:                | :x:                | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 :::note
 `Anonymous` refers to clients that don't send an **[access token](../glossary#access-token)** in the `Authorization` header.
@@ -288,6 +289,8 @@ import RemoveTokenCurl from "!!raw-loader!../examples/curl/access_control_remove
 ReductStore provides an audit log that records HTTP API requests, including successful and failed requests.
 The audit log is stored in a separate bucket and can be accessed using the standard API.
 
+API audit events are stored in `$audit`. Non-API system diagnostics, such as lifecycle worker results, are stored separately in `$system`.
+
 The audit bucket `$audit` has the following structure:
 
 ```
@@ -343,4 +346,35 @@ To access the audit log, the relevant token must include exact permissions for t
 
 :::info
 Zenoh API operations are not currently recorded in the audit log (you will not see Zenoh calls in `$audit`).
+:::
+
+## System Events
+
+ReductStore also stores internal system diagnostics in the `$system` bucket.
+This currently includes lifecycle worker results written as `lifecycle_run` records under the `__lifecycle_tasks/<policy-name>` entry path.
+
+A typical lifecycle system event looks like this:
+
+```json
+{
+  "timestamp": 1775270571819933,
+  "instance": "reductstore",
+  "status": 200,
+  "message": "",
+  "policy_name": "purge-old-data",
+  "action_type": "delete",
+  "bucket": "sensor-data",
+  "duration": 0.25,
+  "processed_records": 42
+}
+```
+
+If a lifecycle run fails, the payload also includes `error_code` and `error_message`.
+
+System event persistence is controlled by the `RS_SYSTEM_EVENTS_ENABLED` environment variable. You can optionally limit `$system` growth with `RS_SYSTEM_EVENTS_QUOTA_SIZE`.
+
+On read-only replicas, `$system` events are forwarded through the shared system logging layer instead of being stored locally.
+
+:::info
+To access system events, the relevant token must include exact permissions for the `$system` bucket, either for reading or writing (wildcards do not apply to system buckets).
 :::

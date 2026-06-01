@@ -181,3 +181,18 @@ Notes:
 - `RS_AUDIT_ENABLED` explicitly overrides the token-based default.
 - `RS_AUDIT_QUOTA_SIZE` is applied only when audit is enabled.
 - If `RS_AUDIT_QUOTA_SIZE` is unset, `$audit` capacity is unlimited.
+
+## System Event Settings
+
+ReductStore can persist non-API system events in the `$system` bucket. Lifecycle workers use this bucket for `lifecycle_run` diagnostics, while API audit records continue to stay in `$audit`.
+
+| Name                            | Default | Description                                                                                                                        |
+| ------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `RS_SYSTEM_EVENTS_ENABLED`      | true    | Enable or disable persistence of system events in `$system`. When `false`, ReductStore skips writes for lifecycle diagnostics and other system events. |
+| `RS_SYSTEM_EVENTS_QUOTA_SIZE`   |         | Optional size limit for the `$system` bucket (for example `1GB`, `500MB`). When set, `$system` uses FIFO eviction.               |
+
+Notes:
+
+- `lifecycle_run` records are written to `$system` under the `__lifecycle_tasks/<policy-name>` entry path.
+- If `RS_SYSTEM_EVENTS_QUOTA_SIZE` is unset, `$system` capacity is unlimited.
+- On read-only replicas, system events are forwarded through the shared system logging layer instead of being stored locally.
