@@ -213,7 +213,13 @@ reduct-cli cp primary/<bucket_name> backup/<bucket_name> \
   --stop <OPTIONAL end timestamp>
 ```
 
-This command supports copying data for a full bucket or within a specific time range, enabling incremental or scheduled backups.
+If you need to back up all buckets from the latest backup data, you can use this more convenient command:
+
+```bash
+reduct-cli cp primary/* backup --from-last
+```
+
+These commands support copying a full bucket or all buckets, as well as limiting the copy to a specific time range for incremental or scheduled backups.
 
 ### Restore Process
 
