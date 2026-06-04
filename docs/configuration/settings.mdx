@@ -165,19 +165,24 @@ ReductStore supports **[data replication](../guides/data-replication.mdx)** betw
 
 ## Audit Settings
 
-ReductStore can persist aggregated API interactions in the `$audit` system bucket. You can configure audit behavior with the following environment variables:
+:::warning
+Since 1.20 version, $audit bucket is deprecated. The audit events are stored in `$system/audit` entry.
+:::
 
-| Name                         | Default | Description                                                                                                                                                                         |
-| ---------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `RS_AUDIT_ENABLED`           | auto    | Enable or disable audit collection and persistence. If unset, audit defaults to `true` when `RS_API_TOKEN` is set, otherwise `false`. When `false`, ReductStore skips audit writes. |
-| `RS_AUDIT_QUOTA_SIZE`        |         | Optional size limit for the `$audit` bucket (for example `1GB`, `500MB`). When set, `$audit` uses FIFO eviction.                                                                    |
-| `RS_AUDIT_REMOTE_VERIFY_SSL` | true    | For replica audit forwarding over HTTPS: verify TLS certificates of remote nodes.                                                                                                   |
-| `RS_AUDIT_REMOTE_CA_PATH`    |         | For replica audit forwarding: path to a PEM-encoded CA certificate used to verify remote TLS certificates.                                                                          |
-| `RS_AUDIT_REMOTE_TIMEOUT`    | 5       | Timeout in seconds for replica audit HTTP communication with primary/secondary nodes.                                                                                               |
+## System Event Settings
+
+ReductStore can persist audit and system events in the `$system` bucket.
+
+| Name                          | Default | Description                                                                                                        |
+| ----------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
+| `RS_SYSTEM_EVENTS_ENABLED`    | true    | Enable or disable persistence of system events in `$system`.                                                       |
+| `RS_SYSTEM_EVENTS_QUOTA_SIZE` |         | Optional size limit for the `$system` bucket (for example `1GB`, `500MB`). When set, `$system` uses FIFO eviction. |
+| `RS_SYSTEM_EVENTS_VERIFY_SSL` | true    | For replica event forwarding over HTTPS: verify TLS certificates of remote nodes.                                  |
+| `RS_SYSTEM_EVENTS_CA_PATH`    |         | For replica event forwarding: path to a PEM-encoded CA certificate used to verify remote TLS certificates.         |
+| `RS_SYSTEM_EVENTS_TIMEOUT`    | 5       | Timeout in seconds for replica system event HTTP communication with primary/secondary nodes.                       |
 
 Notes:
 
-- If `RS_AUDIT_ENABLED` is unset, audit defaults to `true` when `RS_API_TOKEN` is set, otherwise `false`.
-- `RS_AUDIT_ENABLED` explicitly overrides the token-based default.
-- `RS_AUDIT_QUOTA_SIZE` is applied only when audit is enabled.
-- If `RS_AUDIT_QUOTA_SIZE` is unset, `$audit` capacity is unlimited.
+- `lifecycle_run` records are written to `$system` under the `__lifecycle_tasks/<policy-name>` entry path.
+- If `RS_SYSTEM_EVENTS_QUOTA_SIZE` is unset, `$system` capacity is unlimited.
+- On read-only replicas, system events are forwarded through the shared system logging layer instead of being stored locally.
