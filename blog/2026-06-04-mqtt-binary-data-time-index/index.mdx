@@ -14,7 +14,7 @@ They also publish JPEG frames, vibration waveforms, audio clips, protobuf messag
 This is where a regular MQTT broker or a traditional time-series database starts to fall short.
 Brokers are designed for message delivery, not long-term historical storage, and many databases either expect structured numeric fields or make it hard to keep large binary records tied to accurate timestamps.
 
-In this tutorial, we will use ReductBridge to subscribe to MQTT topics and write the raw binary payloads into ReductStore with a time index.
+In this tutorial, we will use [**ReductBridge**](https://github.com/reductstore/reduct-bridge) to subscribe to MQTT topics and write the raw binary payloads into [**ReductStore**](https://github.com/reductstore/reductstore) with a time index.
 This lets you keep camera frames and sensor payloads as they are, while still querying them by time range, labels, and entry name for replay, debugging, and offline analysis.
 
 {/* truncate */}
@@ -130,14 +130,232 @@ The bridge can remember this label and apply it to camera frames or sensor buffe
 ReductStore stores the resulting records as append-only time-indexed data.
 It keeps the original binary payload, stores labels for filtering, applies FIFO quota rules to control disk usage, and can optionally replicate selected data to another storage node.
 
-## Prerequisites
+## Install ReductStore and ReductBridge
 
-## Run MQTT Broker and ReductStore with Docker Compose
+This tutorial assumes that your MQTT v5 broker is already running and that your producers already publish binary payloads to it.
+The broker can be Mosquitto, EMQX, HiveMQ, or another MQTT v5-compatible broker.
+We only need to add two components: ReductStore for storage and ReductBridge for moving MQTT messages into the store.
+
+The quickest way to start ReductStore is with Docker:
+
+```bash
+mkdir -p ./reduct-data
+sudo chown -R 10001:10001 ./reduct-data
+
+docker run -d --name reductstore \
+  -p 8383:8383 \
+  -e RS_API_TOKEN="my-token" \
+  -v "$PWD/reduct-data:/data" \
+  reduct/store:latest
+```
+
+ReductStore will listen on `http://127.0.0.1:8383` and store data in `./reduct-data`.
+The `RS_API_TOKEN` value is used later by ReductBridge and `reduct-cli`.
+
+For ReductBridge, use the `iot` build because it includes the MQTT input:
+
+```bash
+docker pull reduct/bridge:latest-iot
+```
+
+After creating the configuration file in the next section, run the bridge with:
+
+```bash
+docker run --rm --network host \
+  -v "$PWD/bridge.toml:/etc/reduct-bridge/config.toml:ro" \
+  reduct/bridge:latest-iot /etc/reduct-bridge/config.toml
+```
+
+The `--network host` option keeps the example short because the container can reach `127.0.0.1:8383` and a broker running on the host.
+In production, you can run ReductStore and ReductBridge as systemd services or in your own container stack.
+
+If you do not use Docker, download a ReductStore binary from the [**ReductStore releases**](https://github.com/reductstore/reductstore/releases/latest) and the `iot` ReductBridge build from the [**ReductBridge releases**](https://github.com/reductstore/reduct-bridge/releases/latest).
+Then run them with the same data path, API token, and config file:
+
+```bash
+RS_DATA_PATH=./reduct-data RS_API_TOKEN="my-token" ./reductstore
+reduct-bridge ./bridge.toml
+```
 
 ## Configure ReductBridge for Binary Payloads
 
-## Publish Binary Data to MQTT
+Create `bridge.toml` with the MQTT input, a pipeline, and a ReductStore remote:
+
+```toml
+# MQTT input named "factory". It connects to the existing broker and
+# subscribes to the topics declared below.
+[inputs.mqtt.factory]
+broker = "mqtt://127.0.0.1:1883"
+client_id = "reduct-bridge-mqtt-binary"
+version = "v5"
+qos = 1
+
+# Camera frames are binary JPEG payloads. The MQTT topic becomes the source,
+# while entry_name controls where records are stored in ReductStore.
+[[inputs.mqtt.factory.topics]]
+name = "factory/camera/+"
+entry_name = "camera_frames"
+content_type = "image/jpeg"
+timestamp = { property = "event_time", format = "unix_us" }
+labels = [
+  { property = "device_id", label = "device_id" },
+  { property = "line", label = "line" },
+  { static = { source = "mqtt", kind = "camera" } }
+]
+
+# Vibration messages are also stored as raw bytes. Only MQTT v5 properties are
+# read for timestamp and labels, so the waveform payload is not decoded.
+[[inputs.mqtt.factory.topics]]
+name = "factory/vibration/+"
+entry_name = "vibration"
+content_type = "application/octet-stream"
+timestamp = { property = "event_time", format = "unix_us" }
+labels = [
+  { property = "device_id", label = "device_id" },
+  { property = "line", label = "line" },
+  { static = { source = "mqtt", kind = "vibration" } }
+]
+
+# Automation state is a lightweight JSON stream. The state label is extracted
+# from the JSON payload and can be copied to other entries by the pipeline.
+[[inputs.mqtt.factory.topics]]
+name = "factory/automation/state"
+entry_name = "automation_state"
+content_type = "application/json"
+timestamp = { property = "event_time", format = "unix_us" }
+labels = [
+  { property = "line", label = "line" },
+  { field = "state", label = "state" },
+  { static = { source = "mqtt", kind = "automation" } }
+]
+
+# Pipeline routes records from the MQTT input to the ReductStore remote.
+# The label rule copies the latest JSON-derived automation state to records.
+[pipelines.mqtt_to_store]
+remote = "local"
+inputs = ["factory"]
+labels = [
+  { from = "automation_state", labels = ["state"], to = "*" },
+]
+
+# ReductStore remote. All records are written to this bucket, and the prefix is
+# prepended to each entry name, for example mqtt/camera_frames.
+[remotes.reduct.local]
+url = "http://127.0.0.1:8383"
+token_api = "my-token"
+bucket = "mqtt-binary"
+prefix = "mqtt/"
+
+# Create the bucket on startup with a FIFO quota so the edge node keeps the
+# newest data when the storage budget is reached.
+[remotes.reduct.local.create_bucket]
+quota_type = "FIFO"
+quota_size = "20GB"
+```
+
+The camera and vibration topics are treated as binary streams.
+ReductBridge does not decode their payloads.
+It writes the MQTT payload bytes as the ReductStore record body and uses metadata from MQTT v5 properties.
+
+The important part is the `timestamp` line:
+
+```toml
+timestamp = { property = "event_time", format = "unix_us" }
+```
+
+This tells ReductBridge to read the MQTT v5 user property `event_time` and use it as the ReductStore record timestamp.
+The value must be Unix time in microseconds.
+Other supported formats include `unix_s`, `unix_ms`, `unix_ns`, `iso8601`, and `ros_stamp`.
+If the property is missing or cannot be parsed, ReductBridge falls back to ingest time.
+
+The `labels` arrays copy metadata into ReductStore labels.
+For binary topics, labels come from MQTT v5 properties so the payload remains untouched.
+For the automation topic, `state` comes from the JSON payload field:
+
+```toml
+{ field = "state", label = "state" }
+```
+
+For example, a camera publisher can send these user properties with each JPEG frame:
+
+```text
+event_time=1780582163840000
+device_id=cam-01
+line=line-a
+```
+
+ReductBridge stores that frame in the `mqtt/camera_frames` entry because the remote adds the `mqtt/` prefix.
+It also stores labels such as `device_id=cam-01`, `line=line-a`, and `kind=camera`.
+The record content type is handled separately by the topic-level `content_type = "image/jpeg"` setting.
+
+The pipeline-level `labels` rules show the enrichment pattern from the architecture section.
+When the `automation_state` entry receives a `state` label extracted from JSON, the pipeline can copy the latest value to later records.
+That lets you query camera frames not only by time and device, but also by process state.
+
+The remote section creates the `mqtt-binary` bucket automatically with a FIFO quota.
+With this setting, ReductStore keeps accepting new records and removes the oldest data when the bucket reaches `20GB`.
+Adjust this value to the disk budget of your edge node.
 
 ## Query Data by Time Range
 
+After ReductBridge is running and messages are arriving, use the Python SDK to verify the entries and query records by time range and labels:
+
+```python
+import asyncio
+from pathlib import Path
+
+from reduct import Client
+
+
+async def main():
+    async with Client("http://127.0.0.1:8383", api_token="my-token") as client:
+        bucket = await client.get_bucket("mqtt-binary")
+
+        entries = await bucket.get_entry_list()
+        print("Entries:", [entry.name for entry in entries])
+
+        output_dir = Path("frames")
+        output_dir.mkdir(exist_ok=True)
+
+        async for record in bucket.query(
+            "mqtt/camera_frames",
+            start="2026-06-04T10:00:00Z",
+            stop="2026-06-04T10:05:00Z",
+            when={
+                "&device_id": {"$eq": "cam-01"},
+                "&line": {"$eq": "line-a"},
+                "&state": {"$eq": "running"},
+            },
+        ):
+            frame = await record.read_all()
+            filename = output_dir / f"frame-{record.timestamp}.jpg"
+            with open(filename, "wb") as output:
+                output.write(frame)
+            print(filename, record.labels)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+You should see entries such as `mqtt/camera_frames`, `mqtt/vibration`, and `mqtt/automation_state`.
+The timestamps should match the producer-provided `event_time` property when it is present.
+The query selects records by time range and labels, then saves each binary body as a `.jpg` file without decoding or re-encoding it.
+For vibration buffers, use the `mqtt/vibration` entry and write the bytes to the format expected by your analysis pipeline.
+
 ## Next Steps
+
+This tutorial focused on the bridge configuration because the MQTT broker and data sources were assumed to exist.
+From here, you can adapt the same pattern to your own topics, labels, and retention policy.
+
+- Learn how to store MQTT data with the [**Python MQTT tutorial**](/blog/tutorials/iot/how-to-keep-mqtt-data-python).
+- See a Rust implementation in the [**Rust MQTT tutorial**](/blog/tutorials/iot/how-to-keep-mqtt-data-rust).
+- Compare storage choices in [**How to Choose the Right MQTT Database**](/blog/advice/database/mqtt-data-storage).
+- Review the [**ReductBridge documentation**](/docs/next/reduct-bridge) and the [**MQTT input reference**](/docs/next/reduct-bridge/input/mqtt).
+- Read about ReductStore [**data querying**](/docs/guides/data-querying), [**bucket quotas**](/docs/guides/buckets), and [**data replication**](/docs/guides/data-replication).
+
+---
+
+I hope you found this article helpful. If you have any questions or feedback, don't hesitate to use the [**ReductStore Community**](https://community.reduct.store/signup) forum.
+
+Thanks for reading!
