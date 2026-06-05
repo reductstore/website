@@ -21,8 +21,9 @@ This lets you keep camera frames and sensor payloads as they are, while still qu
 
 ## Why Existing Stacks Fail for Binary MQTT Payloads
 
-Most storage tutorials for MQTT assume that a message is a small JSON document with a few numbers and strings.
-This works for temperature, pressure, or status values, but it is not enough when the same MQTT broker also carries camera frames, audio chunks, vibration buffers, or other binary data.
+Most MQTT storage solutions work well for small structured telemetry: temperature, pressure, status values, or JSON events.
+They start to break down when the same system needs to store camera frames, audio chunks, vibration buffers, protobuf messages, or other binary payloads.
+These records are larger, often opaque to the storage layer, and still need to be queried later by time, device, topic, and process metadata.
 
 Traditional SQL databases can store binary objects, but they are not a good default for this workload.
 Large blobs quickly make tables heavy, backups slow, and queries expensive.
@@ -290,11 +291,23 @@ The record content type is handled separately by the topic-level `content_type =
 
 The pipeline-level `labels` rules show the enrichment pattern from the architecture section.
 When the `automation_state` entry receives a `state` label extracted from JSON, the pipeline can copy the latest value to later records.
-That lets you query camera frames not only by time and device, but also by process state.
+That lets you query camera frames not only by time and device, but also by process state:
+
+```toml
+labels = [
+  { from = "automation_state", labels = ["state"], to = "*" },
+]
+```
 
 The remote section creates the `mqtt-binary` bucket automatically with a FIFO quota.
 With this setting, ReductStore keeps accepting new records and removes the oldest data when the bucket reaches `20GB`.
-Adjust this value to the disk budget of your edge node.
+Adjust this value to the disk budget of your edge node:
+
+```toml
+[remotes.reduct.local.create_bucket]
+quota_type = "FIFO"
+quota_size = "20GB"
+```
 
 ## Query Data by Time Range
 
@@ -311,27 +324,27 @@ async def main():
     async with Client("http://127.0.0.1:8383", api_token="my-token") as client:
         bucket = await client.get_bucket("mqtt-binary")
 
-        entries = await bucket.get_entry_list()
-        print("Entries:", [entry.name for entry in entries])
-
-        output_dir = Path("frames")
+        output_dir = Path("records")
         output_dir.mkdir(exist_ok=True)
 
         async for record in bucket.query(
-            "mqtt/camera_frames",
+            "mqtt/*",
             start="2026-06-04T10:00:00Z",
             stop="2026-06-04T10:05:00Z",
             when={
-                "&device_id": {"$eq": "cam-01"},
-                "&line": {"$eq": "line-a"},
                 "&state": {"$eq": "running"},
             },
         ):
-            frame = await record.read_all()
-            filename = output_dir / f"frame-{record.timestamp}.jpg"
+            payload = await record.read_all()
+            entry = record.entry.replace("/", "_")
+            extension = {
+                "image/jpeg": ".jpg",
+                "application/json": ".json",
+            }.get(record.content_type, ".bin")
+            filename = output_dir / f"{entry}-{record.timestamp}{extension}"
             with open(filename, "wb") as output:
-                output.write(frame)
-            print(filename, record.labels)
+                output.write(payload)
+            print(filename, record.content_type, record.labels)
 
 
 if __name__ == "__main__":
@@ -340,8 +353,8 @@ if __name__ == "__main__":
 
 You should see entries such as `mqtt/camera_frames`, `mqtt/vibration`, and `mqtt/automation_state`.
 The timestamps should match the producer-provided `event_time` property when it is present.
-The query selects records by time range and labels, then saves each binary body as a `.jpg` file without decoding or re-encoding it.
-For vibration buffers, use the `mqtt/vibration` entry and write the bytes to the format expected by your analysis pipeline.
+The query uses the `mqtt/*` wildcard to select all entries, then filters records by time range and the copied `state=running` label.
+Each payload is saved as-is, with the file extension selected from the record content type where possible.
 
 ## Next Steps
 
