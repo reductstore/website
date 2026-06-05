@@ -1,0 +1,38 @@
+---
+title: "How to Store MQTT Camera Frames and Binary Sensor Data with a Time Index"
+description: "A tutorial on how to store binary MQTT payloads — camera frames, waveforms, audio clips — with a proper time index using ReductBridge and ReductStore, enabling time-range queries and replay."
+authors: alexey
+tags: [tutorials, iot, mqtt]
+slug: tutorials/iot/mqtt-binary-data-time-index
+date: 2026-06-04
+---
+
+MQTT is a common choice for the communication stack in IoT and robotics applications because it is lightweight and easy to integrate.
+But many of those applications do not send only small JSON telemetry messages.
+They also publish JPEG frames, vibration waveforms, audio clips, protobuf messages, and other binary payloads that need to be stored and queried later.
+
+This is where a regular MQTT broker or a traditional time-series database starts to fall short.
+Brokers are designed for message delivery, not long-term historical storage, and many databases either expect structured numeric fields or make it hard to keep large binary records tied to accurate timestamps.
+
+In this tutorial, we will use ReductBridge to subscribe to MQTT topics and write the raw binary payloads into ReductStore with a time index.
+This lets you keep camera frames and sensor payloads as they are, while still querying them by time range, labels, and entry name for replay, debugging, and offline analysis.
+
+{/* truncate */}
+
+## Why Existing Stacks Fail for Binary MQTT Payloads
+
+## The Timestamp Problem: MQTT Does Not Timestamp Messages
+
+## Architecture Overview
+
+## Prerequisites
+
+## Run MQTT Broker and ReductStore with Docker Compose
+
+## Configure ReductBridge for Binary Payloads
+
+## Publish Binary Data to MQTT
+
+## Query Data by Time Range
+
+## Next Steps
