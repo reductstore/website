@@ -55,7 +55,27 @@ Without all three, the system becomes a collection of workarounds instead of a q
 
 ## The Timestamp Problem: MQTT Does Not Timestamp Messages
 
+MQTT is good at moving messages between devices and services, but it does not define when the data inside a message was created.
+A broker may know when it received a publish packet, and a subscriber may know when it processed the message.
+For historical storage, however, you usually need a different timestamp: when the camera captured the frame, when the waveform was sampled, or when the sensor event happened.
+
+If you store MQTT data by arrival time, the history can look correct but still be shifted from reality.
+Network delay, broker queues, reconnects, QoS retries, batching, and slow consumers can all move the stored timestamp away from the capture time.
+This may be acceptable for simple monitoring, but it becomes a problem when you need to replay data or compare several streams.
+
+For example, you may need to match a camera frame with a PLC state, a vibration buffer with a machine alarm, or an audio clip with a robot event.
+If each stream uses a different idea of time, the correlation becomes unreliable.
+
+For binary MQTT payloads, the timestamp should usually come from the producer and stay outside the payload.
+You should not need to decode a JPEG frame, waveform buffer, or protobuf message only to find its time.
+It is better to pass the timestamp as metadata, for example in an MQTT user property, a topic convention, or another field that can be mapped to the stored record.
+
+When the producer cannot provide a timestamp, using ingestion time is still useful.
+But it should be treated as the time when the bridge received the message, not necessarily the time when the data was captured.
+
 ## Architecture Overview
+
+
 
 ## Prerequisites
 
