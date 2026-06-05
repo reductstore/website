@@ -278,3 +278,42 @@ article .markdown header h1 {
     margin-bottom: 0.85rem;
   }
 }
+
+/* svgbob diagrams generated from ```svgbob code fences */
+article .markdown svg {
+  max-width: 100%;
+  height: auto;
+}
+
+article .markdown svg .backdrop {
+  fill: transparent;
+}
+
+article .markdown svg .solid,
+article .markdown svg .nofill {
+  fill: none;
+  stroke: var(--ifm-font-color-base);
+  stroke-width: 2;
+}
+
+article .markdown svg .dashed {
+  fill: none;
+  stroke: var(--ifm-font-color-base);
+  stroke-width: 2;
+  stroke-dasharray: 4 4;
+}
+
+article .markdown svg .filled {
+  fill: var(--ifm-font-color-base);
+  stroke: var(--ifm-font-color-base);
+}
+
+article .markdown svg .bg_filled {
+  fill: var(--ifm-background-color);
+  stroke: var(--ifm-font-color-base);
+}
+
+article .markdown svg text {
+  fill: var(--ifm-font-color-base);
+  font-family: var(--ifm-font-family-monospace);
+}

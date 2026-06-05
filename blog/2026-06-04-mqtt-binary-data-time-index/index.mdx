@@ -75,7 +75,60 @@ But it should be treated as the time when the bridge received the message, not n
 
 ## Architecture Overview
 
+In this tutorial, we use MQTT as the transport layer and ReductStore as the historical storage layer.
+ReductBridge connects them together and converts MQTT messages into time-indexed records.
 
+The data flow looks like this:
+
+```svgbob
+                                             .----------------------.
+                                            /      ReductStore       \
+                                           /--------------------------\
+                                           | * FIFO quota             |
+                                           | * queries                |
+                                           | * replication            |
+                                           +--------------------------+
+                                                         ^
+                                                         |
+                                                         |
+                                     "raw data + timestamp + labels"
+                                                         |
+                                                         |
+                         .-----------.        +----------+---------+
+                        /             \       |                    |
+                       +  MQTT broker  +----->|  ReductBridge      |
+                        \             /       |                    |
+                         '-----------'        +--------------------+
+                               ^
+                               |
+                               |
+             "MQTT v5 payload + user properties"
+             +-----------------+-------------------+
+             |                 |                   |
+             |                 |                   |
+        +----+----+     +------+------+     +------+-------+
+        | Camera  |     | Vibration   |     | Automation   |
+        | frames  |     | waveforms   |     |"state/events"|
+        +---------+     +-------------+     +--------------+
+```
+
+Several producers can publish different types of data to the same broker.
+A camera may publish JPEG frames, a vibration sensor may publish waveform buffers, and an automation system may publish the current machine state or events.
+
+We use MQTT v5 because it can attach user properties to every message.
+The binary payload stays unchanged, while metadata travels next to it.
+For example, a camera frame can include properties such as `device_id`, `line`, `content_type`, and `event_time`.
+
+The `event_time` property contains the original capture timestamp as Unix time with microsecond resolution.
+ReductBridge reads this property and uses it as the timestamp of the ReductStore record.
+Other MQTT user properties are mapped to ReductStore labels, so the data can be filtered later without decoding the binary payload.
+
+ReductBridge can also use metadata from one topic to enrich data from another topic.
+For example, an automation topic may publish the current machine `state`.
+The bridge can remember this label and apply it to camera frames or sensor buffers, so later you can query data by both time and process state.
+
+ReductStore stores the resulting records as append-only time-indexed data.
+It keeps the original binary payload, stores labels for filtering, applies FIFO quota rules to control disk usage, and can optionally replicate selected data to another storage node.
 
 ## Prerequisites
 
