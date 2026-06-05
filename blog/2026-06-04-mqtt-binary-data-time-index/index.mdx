@@ -21,6 +21,38 @@ This lets you keep camera frames and sensor payloads as they are, while still qu
 
 ## Why Existing Stacks Fail for Binary MQTT Payloads
 
+Most storage tutorials for MQTT assume that a message is a small JSON document with a few numbers and strings.
+This works for temperature, pressure, or status values, but it is not enough when the same MQTT broker also carries camera frames, audio chunks, vibration buffers, or other binary data.
+
+Traditional SQL databases can store binary objects, but they are not a good default for this workload.
+Large blobs quickly make tables heavy, backups slow, and queries expensive.
+They also do not give you a natural way to keep an append-only history of records by topic and timestamp.
+You can build this model yourself, but then you need to manage schema, indexes, retention, and cleanup logic on top of the database.
+
+Time-series databases are closer to the problem, but they are usually designed for metrics.
+They work best when each record is a small set of numeric fields with tags.
+Binary MQTT payloads do not fit that shape.
+If you base64-encode a frame into JSON, the payload becomes larger and harder to process.
+If you store only a file path in the time-series database and put the binary data somewhere else, you now have two systems that must stay in sync.
+
+Object storage and local files solve the blob part, but not the history part.
+They are good at storing large objects, but they do not provide a proper time index for range queries.
+Putting timestamps into file names or object keys works for a demo, but it becomes fragile when you need to ask practical questions such as: give me all frames from this camera between two timestamps, only for this production line, and only when this label was present.
+
+Disk usage is another problem.
+Binary data can fill a disk very quickly, and the rate is not always predictable.
+A camera may switch to a higher resolution, a sensor may start publishing faster, or a fault may produce more events than usual.
+For this kind of workload, retention based only on time is not always safe.
+You often need retention based on storage size too, for example keeping the newest records while the bucket stays under a fixed disk limit.
+
+Replication also needs a different model.
+For MQTT binary data at the edge, copying the whole database or mirroring all files is usually too expensive.
+Most teams need to stream only new records that match metadata: a site, a device, a topic, a camera, an event type, or an error label.
+That way, important data can be moved to another node or to the cloud, while raw high-volume data can stay close to the device.
+
+So the storage layer needs to handle three things together: raw binary payloads, a time index, and metadata for filtering.
+Without all three, the system becomes a collection of workarounds instead of a queryable history of MQTT data.
+
 ## The Timestamp Problem: MQTT Does Not Timestamp Messages
 
 ## Architecture Overview
