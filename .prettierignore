@@ -14,3 +14,4 @@ versioned_docs/version-1.18.x
 cmake-*
 target/
 docs/reduct-bridge
+venv/
