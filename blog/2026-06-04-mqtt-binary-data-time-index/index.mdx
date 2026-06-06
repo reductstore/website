@@ -27,28 +27,31 @@ Most MQTT storage solutions work well for small structured telemetry: temperatur
 They start to break down when the same system needs to store camera frames, audio chunks, vibration buffers, protobuf messages, or other binary payloads.
 These records are larger, often opaque to the storage layer, and still need to be queried later by time, device, topic, and process metadata.
 
-Traditional SQL databases can store binary objects, but they are not a good default for this workload.
+**Traditional SQL databases** can store binary objects, but they are not a good default for this workload.
 Large blobs quickly make tables heavy, backups slow, and queries expensive.
 They also do not give you a natural way to keep an append-only history of records by topic and timestamp.
 You can build this model yourself, but then you need to manage schema, indexes, retention, and cleanup logic on top of the database.
 
-Time-series databases are closer to the problem, but they are usually designed for metrics.
+**Time-series databases** are closer to the problem, but they are usually designed for metrics.
 They work best when each record is a small set of numeric fields with tags.
 Binary MQTT payloads do not fit that shape.
-If you base64-encode a frame into JSON, the payload becomes larger and harder to process.
 If you store only a file path in the time-series database and put the binary data somewhere else, you now have two systems that must stay in sync.
 
-Object storage and local files solve the blob part, but not the history part.
+**Object storage and local files** solve the blob part, but not the history part.
 They are good at storing large objects, but they do not provide a proper time index for range queries.
 Putting timestamps into file names or object keys works for a demo, but it becomes fragile when you need to ask practical questions such as: give me all frames from this camera between two timestamps, only for this production line, and only when this label was present.
 
-Disk usage is another problem.
+**Disk usage** is another problem.
 Binary data can fill a disk very quickly, and the rate is not always predictable.
 A camera may switch to a higher resolution, a sensor may start publishing faster, or a fault may produce more events than usual.
-For this kind of workload, retention based only on time is not always safe.
-You often need retention based on storage size too, for example keeping the newest records while the bucket stays under a fixed disk limit.
+Time-series databases usually have retention based on time, but that is not always enough when the data volume can spike.
+That can lead to out-of-disk errors, data loss, and downtime.
 
-Replication also needs a different model.
+FIFO (first-in-first-out) quota is a better fit for this workload because it removes the oldest data when the disk budget is reached
+and guarantees that the newest data is always accepted and stored.
+This way, you can keep a rolling history of the most recent data without worrying about disk management
+
+**Data replication** also needs a different model.
 For MQTT binary data at the edge, copying the whole database or mirroring all files is usually too expensive.
 Most teams need to stream only new records that match metadata: a site, a device, a topic, a camera, an event type, or an error label.
 That way, important data can be moved to another node or to the cloud, while raw high-volume data can stay close to the device.
