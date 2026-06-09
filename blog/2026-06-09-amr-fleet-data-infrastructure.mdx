@@ -11,8 +11,6 @@ You deployed ten robots. The system worked. Now you have a hundred, and your eng
 
 This is a predictable consequence of crossing a scaling threshold that almost every AMR operator hits.
 
----
-
 ## The Inflection Point
 
 A single AMR collecting camera frames, LiDAR scans, and control logs generates somewhere between 30 and 100 GB per shift, depending on sensor configuration and logging frequency. At ten robots, that's manageable. A custom script, a shared drive, maybe an S3 bucket — it works well enough that nobody questions it.
@@ -25,8 +23,6 @@ Some teams sidestep this entirely by processing at the edge by extracting metric
 
 The infrastructure problem described below is the cost of doing something valuable: keeping the raw data that makes your fleet improvable over time.
 
----
-
 ## Four Problems That Grow With the Fleet
 
 **Storage overflow at the edge.** Most AMR deployments use some form of local storage on the robot itself to buffer data before it transfers to a central server or cloud. When that buffer fills and there is no intelligent retention policy, robots start dropping records. The newest data overwrites the oldest without any selection logic. By the time an incident occurs and someone asks for the sensor data from the previous three shifts, it is gone.
@@ -37,8 +33,6 @@ The infrastructure problem described below is the cost of doing something valuab
 
 **Audit gaps when incidents happen.** Regulatory and insurance requirements for autonomous systems are tightening, particularly in the EU under the Cyber Resilience Act and related frameworks. An incident investigation requires a continuous, tamper-evident record: what the robot saw, what it decided, what happened next. If records were dropped because local storage filled, or if the audit trail has gaps because replication wasn't reliable, that investigation stalls — or produces a conclusion that is hard to defend.
 
----
-
 ## What the Infrastructure Actually Needs to Do
 
 A requirements framework for AMR data infrastructure has three layers, and most off-the-shelf tools cover at most one of them.
@@ -48,8 +42,6 @@ A requirements framework for AMR data infrastructure has three layers, and most 
 **Selective replication, not full sync.** Sending everything to the cloud is how you generate the cost explosion described above. The alternative is conditional replication: a filter that runs on labels attached to records at ingest time, and sends only the subset that matches. Fault events go through. Routine navigation frames from uneventful shifts stay on the edge until the FIFO rolls them off. The bandwidth bill reflects the operational value of the data, not its raw volume.
 
 **Time-indexed auditability across tiers.** Every record needs a precise timestamp and an immutable chain from the sensor to wherever it ends up. When an incident investigation asks "what did robot 47 see at 14:23:07 on Thursday," the answer should be retrievable in seconds — not reconstructed from fragmented logs across three storage systems.
-
----
 
 ## A Self-Assessment for Operations Teams
 
