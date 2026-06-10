@@ -50,6 +50,7 @@
     "reduct-js": "^1.17.1",
     "rehype-katex": "7",
     "remark-math": "6",
+    "remark-svgbob": "^2.0.0",
     "search-insights": "^2.10.0",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
