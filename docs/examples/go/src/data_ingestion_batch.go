@@ -26,22 +26,27 @@ func main() {
 		panic(err)
 	}
 
-	// Send a record to the "go-example" entry with the current timestamp
-	batch := bucket.BeginWriteBatch(context.Background(), "go-example")
+	ctx := context.Background()
 
-	batch.Add(toTimestamp("2024-02-02T10:00:00Z"), []byte("Records #1"), "application/octet-stream", nil)
-	batch.Add(toTimestamp("2024-02-02T10:00:01Z"), []byte("Records #2"), "application/octet-stream", nil)
-	batch.Add(toTimestamp("2024-02-02T10:00:02Z"), []byte("Records #3"), "application/octet-stream", nil)
+	// Prepare a batch of records for different entries
+	batch := bucket.BeginWriteRecordBatch(ctx)
 
-	errMap, err := batch.Write(context.Background())
+	batch.Add("sensor-1", toTimestamp("2024-02-02T10:00:00Z"), []byte("Temperature: 20.5"), "text/plain", reduct.LabelMap{"unit": "C"})
+	batch.Add("sensor-1", toTimestamp("2024-02-02T10:00:01Z"), []byte("Temperature: 20.6"), "text/plain", reduct.LabelMap{"unit": "C"})
+	batch.Add("camera-1", toTimestamp("2024-02-02T10:00:02Z"), []byte("Frame #1"), "text/plain", nil)
+
+	// Write records from multiple entries in one request
+	errMap, err := batch.Send(ctx)
 	if err != nil {
 		panic(err)
 	}
 
 	// Check statuses and raise first error
 	if len(errMap) > 0 {
-		for timestamp, err := range errMap {
-			panic("Error writing record at timestamp " + time.UnixMicro(timestamp).Format(time.RFC3339) + ": " + err.Error())
+		for entry, entryErrors := range errMap {
+			for timestamp, err := range entryErrors {
+				panic("Error writing record to " + entry + " at timestamp " + time.UnixMicro(timestamp).Format(time.RFC3339) + ": " + err.Error())
+			}
 		}
 	}
 

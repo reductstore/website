@@ -30,6 +30,10 @@ The API uses the following endpoints:
 
 Batch Protocol v2 encodes record metadata in headers and concatenates record bodies without separators.
 
+:::caution HTTP/1.1 header limits
+Batch metadata is encoded in HTTP headers. For HTTP/1.1 clients, keep the number of records and metadata size within `RS_IO_BATCH_MAX_RECORDS` and `RS_IO_BATCH_MAX_METADATA_SIZE`. If a batch has many records, labels, or long entry names, reduce the batch size or adjust these [**I/O settings**](../configuration/settings#io-settings).
+:::
+
 ### Metadata headers
 
 - `x-reduct-entries`: comma-separated, percent-encoded entry names (index == position).

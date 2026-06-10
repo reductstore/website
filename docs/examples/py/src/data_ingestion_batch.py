@@ -1,8 +1,6 @@
-import time
 import asyncio
-from typing import Dict
 
-from reduct import Client, Bucket, Batch, ReductError
+from reduct import Client, Bucket, RecordBatch
 
 
 async def main():
@@ -10,27 +8,36 @@ async def main():
     async with Client("http://127.0.0.1:8383", api_token="my-token") as client:
         bucket: Bucket = await client.create_bucket("my-bucket", exist_ok=True)
 
-        # Prepare a batch of records
-        batch = Batch()
+        # Prepare a batch of records for different entries
+        batch = RecordBatch()
         batch.add(
+            "sensor-1",
             "2024-02-02T10:00:00",
-            b"Records #1",
+            b"Temperature: 20.5",
+            content_type="text/plain",
+            labels={"unit": "C"},
         )
         batch.add(
+            "sensor-1",
             "2024-02-02T10:00:01",
-            b"Records #2",
+            b"Temperature: 20.6",
+            content_type="text/plain",
+            labels={"unit": "C"},
         )
         batch.add(
+            "camera-1",
             "2024-02-02T10:00:02",
-            b"Records #3",
+            b"Frame #1",
+            content_type="text/plain",
         )
 
-        # Write the batch to the "py-example" entry of the bucket
-        errors: Dict[int, ReductError] = await bucket.write_batch("py-example", batch)
+        # Write records from multiple entries in one request
+        errors = await bucket.write_record_batch(batch)
 
         # Check statuses and raise first error
-        for timestamp, err in errors.items():
-            raise err
+        for entry_errors in errors.values():
+            for _timestamp, err in entry_errors.items():
+                raise err
 
 
 loop = asyncio.get_event_loop()
