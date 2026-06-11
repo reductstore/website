@@ -15,17 +15,20 @@ int main() {
     assert(create_err == Error::kOk);
 
 
-    // Send a batch of records to the "cpp-example" entry
-    auto [record_errors, http_err] = bucket->WriteBatch("cpp-example", [](auto batch) {
+    // Prepare a batch of records for different entries
+    auto [record_errors, http_err] = bucket->WriteBatch([](auto batch) {
         IBucket::Time ts = IBucket::Time::clock::now();
-        batch->AddRecord(ts, "Records #1");
-        batch->AddRecord(ts + 1s, "Records #2");
+        batch->AddRecord("sensor-1", ts, "Temperature: 20.5", "text/plain", {{"unit", "C"}});
+        batch->AddRecord("sensor-1", ts + 1s, "Temperature: 20.6", "text/plain", {{"unit", "C"}});
+        batch->AddRecord("camera-1", ts + 2s, "Frame #1", "text/plain");
     });
     assert(http_err == Error::kOk);
 
     // Check if all records were sent successfully
-    for (auto& [ts, err] : record_errors) {
-        assert(err == Error::kOk);
+    for (auto& [entry, entry_errors] : record_errors) {
+        for (auto& [ts, err] : entry_errors) {
+            assert(err == Error::kOk);
+        }
     }
 
     return 0;
