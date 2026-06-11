@@ -22,7 +22,7 @@ async def main():
         sample = records[0]
         payload = (DATA / sample['file']).read_bytes()
 
-        await bucket.write_attachments(entry, {'$ros': ros_attachment})
+        await bucket.write_attachments(entry, {'$schema': ros_attachment})
         await bucket.write(
             entry,
             payload,

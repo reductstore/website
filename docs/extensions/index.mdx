@@ -53,7 +53,7 @@ For example, ReductROS can extract raw ROS messages as JSON and map a decoded fi
 }
 ```
 
-The `ros` extension reads ROS schema and topic metadata from each entry's `$ros` attachment, emits `application/json` records, and exposes the decoded `speed` field as the computed label `@speed`.
+The `ros` extension reads ROS schema and topic metadata from each entry's `$schema` attachment, emits `application/json` records, and exposes the decoded `speed` field as the computed label `@speed`.
 The extension `when` condition then filters the extracted output records by that computed label.
 
 :::info
