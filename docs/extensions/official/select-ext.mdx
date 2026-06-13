@@ -37,6 +37,14 @@ A user can specify the SQL query and other parameters in the `#ext.select` objec
     # Switch to Parquet format
     "parquet": {
     },
+    # Switch to Protobuf format (schema resolved from $schema attachment by default)
+    "protobuf": {
+        "message_name": "string",  # Override message type name, e.g. "pkg.SensorReading"
+        "schema": "string",        # Inline base64-encoded FileDescriptorSet; requires message_name
+        "fields": {                # Wire-level extraction by field number; cannot be used with message_name/schema
+            "column_name": { "id": "number", "type": "string" }
+        }
+    },
     # SQL query to run against the current record. Default is "SELECT * FROM ENTRY()"
     "sql": "string",
     # Optional output controls
@@ -74,9 +82,10 @@ Nested JSON and Parquet fields can be referenced with dotted paths, for example 
 
 | Parameter  | Type   | Mandatory | Default                    | Description                                                                                                           |
 | ---------- | ------ | --------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `csv`      | object | No        | Inferred from content type | Enables CSV-specific parsing options. Cannot be used together with `json` or `parquet`.                               |
-| `json`     | object | No        | Inferred from content type | Selects JSON input parsing. Cannot be used together with `csv` or `parquet`.                                          |
-| `parquet`  | object | No        | Inferred from content type | Selects Parquet input parsing. Cannot be used together with `csv` or `json`.                                          |
+| `csv`      | object | No        | Inferred from content type | Enables CSV-specific parsing options. Cannot be used together with `json`, `parquet`, or `protobuf`.                  |
+| `json`     | object | No        | Inferred from content type | Selects JSON input parsing. Cannot be used together with `csv`, `parquet`, or `protobuf`.                             |
+| `parquet`  | object | No        | Inferred from content type | Selects Parquet input parsing. Cannot be used together with `csv`, `json`, or `protobuf`.                             |
+| `protobuf` | object | No        | Inferred from content type | Selects Protobuf input parsing. Cannot be used together with `csv`, `json`, or `parquet`.                             |
 | `sql`      | string | No        | `SELECT * FROM ENTRY()`    | SQL query executed against the current input record.                                                                  |
 | `export`   | object | No        | Format-specific            | Controls output format and batching.                                                                                  |
 | `as_label` | object | No        | `{}`                       | Maps SQL result columns to computed labels using `{"label_name": "column_name"}`. Only primitive values are accepted. |
@@ -145,7 +154,7 @@ When an output record contains multiple rows, computed labels use the values fro
 
 ## Data Formats
 
-Currently, the extension supports JSON, comma-separated CSV, and Parquet data.
+Currently, the extension supports JSON, comma-separated CSV, Parquet, and Protobuf data.
 
 ### CSV Support
 
@@ -240,6 +249,93 @@ The extension reads the Parquet schema and exposes its fields as SQL columns.
 ```
 
 Parquet input supports the same SQL processing as CSV and JSON, including nested field selection when the source schema contains nested structures.
+
+### Protobuf Support
+
+ReductSelect processes Protobuf records when the record content type is `application/protobuf`, `application/x-protobuf`, or `application/vnd.google.protobuf`, or when the query explicitly contains a `protobuf` object.
+Decoded fields are converted to JSON internally before SQL processing, so all standard SQL field selection and filtering applies.
+
+#### Required `$schema` attachment
+
+By default, `protobuf: {}` reads the message schema from a `$schema` [**attachment**](../../../glossary#attachment) on the queried entry.
+The attachment must contain the following fields:
+
+| Field         | Type   | Description                                                                                          |
+| ------------- | ------ | ---------------------------------------------------------------------------------------------------- |
+| `encoding`    | string | Must be `"protobuf"`.                                                                                |
+| `schema_name` | string | Fully qualified message type name, e.g. `pkg.SensorReading`.                                         |
+| `schema`      | string | Base64-encoded `FileDescriptorSet` (generated with `protoc --descriptor_set_out --include_imports`). |
+
+**Example `$schema` attachment**
+
+```json
+{
+  "encoding": "protobuf",
+  "schema_name": "pkg.SensorReading",
+  "schema": "<base64-encoded FileDescriptorSet>"
+}
+```
+
+#### Parameters
+
+The `protobuf` object accepts the following optional sub-parameters to override attachment-based schema resolution:
+
+| Parameter      | Type   | Mandatory | Description                                                                                                                 |
+| -------------- | ------ | --------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `message_name` | string | No        | Overrides the message type name from the attachment. Required when `schema` is provided inline.                             |
+| `schema`       | string | No        | Inline base64-encoded `FileDescriptorSet`, bypassing the attachment. Requires `message_name`. Cannot be used with `fields`. |
+| `fields`       | object | No        | Wire-level field extraction by field number. No descriptor needed. Cannot be combined with `message_name` or `schema`.      |
+
+**Example: attachment-based (default)**
+
+```json
+{
+  "protobuf": {},
+  "sql": "SELECT device_id, temperature FROM ENTRY() WHERE temperature > 20"
+}
+```
+
+**Example: inline descriptor**
+
+```json
+{
+  "protobuf": {
+    "message_name": "pkg.SensorReading",
+    "schema": "<base64-encoded FileDescriptorSet>"
+  },
+  "sql": "SELECT device_id, temperature FROM ENTRY() WHERE temperature > 20"
+}
+```
+
+#### Wire-Level Field Extraction
+
+The `fields` option extracts specific top-level scalar fields by their Protobuf field number without a full descriptor.
+Each entry maps a SQL column name to `id` (field number) and `type`:
+
+| Sub-field | Type   | Description                                                                                                                                                                                        |
+| --------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`      | number | Protobuf field number as defined in the `.proto` file.                                                                                                                                             |
+| `type`    | string | Scalar field type. Supported values: `string`, `bytes`, `double`, `float`, `fixed64`, `sfixed64`, `fixed32`, `sfixed32`, `sint32`, `sint64`, `uint64`, `uint32`, `int64`, `int32`, `bool`, `enum`. |
+
+```json
+{
+  "protobuf": {
+    "fields": {
+      "device_id": { "id": 1, "type": "string" },
+      "temperature": { "id": 3, "type": "double" }
+    }
+  },
+  "sql": "SELECT device_id, temperature FROM ENTRY() WHERE temperature > 20"
+}
+```
+
+:::note
+The `fields` extraction mode (without a full protobuf descriptor) only supports **top-level scalar fields**. Nested messages, packed repeated fields, maps, and extensions cannot be extracted.
+
+Fields that are absent or whose wire type does not match the declared `type` are silently omitted rather than causing an error.
+
+For full protobuf support including nested structures, use `message_name` + `schema` instead.
+:::
 
 ## Examples
 

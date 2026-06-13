@@ -5,7 +5,7 @@ description: Parameters and examples for working with MCAP files in ReductROS.
 
 # MCAP
 
-MCAP is a container format for recorded robotics data. It can store ROS1 and ROS2 messages across many topics together with timestamps, schemas, and channel metadata. ReductROS can extract and transform ROS1 and ROS2 messages from MCAP files stored in ReductStore (content type `application/mcap`).
+MCAP is a container format for recorded robotics data. It can store ROS1, ROS2, and Protobuf messages across many topics together with timestamps, schemas, and channel metadata. ReductROS can extract and transform ROS1, ROS2, and Protobuf messages from MCAP files stored in ReductStore (content type `application/mcap`).
 
 import DemoLicenseNote from "@site/src/components/promotional/DemoLicenseNote";
 
@@ -49,7 +49,7 @@ The extension reads the MCAP file, selects the parser from the schema encoding o
 | `as_label`       | `object` | No        | An object that specifies dynamic computed labels that will be delivered to the client. Can be a basis for output filtering.                                  |
 
 :::info
-MCAP extraction supports both ROS1 (`ros1msg`) and ROS2 (`cdr`) schema encodings. Mixed MCAP files are supported, so ROS1 and ROS2 topics can coexist in the same input file and still be extracted correctly topic by topic.
+MCAP extraction supports ROS1 (`ros1msg`), ROS2 (`cdr`), and Protobuf (`protobuf`) schema encodings. Mixed MCAP files are supported, so topics using different encodings can coexist in the same input file and still be extracted correctly topic by topic. For Protobuf channels, the schema must be a `FileDescriptorSet` and the `schema` label in the output is the fully qualified message type, for example `factory.EnvironmentReading`.
 :::
 
 #### Encoding binary data

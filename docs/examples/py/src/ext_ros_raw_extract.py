@@ -19,7 +19,7 @@ async def main():
         with open(DATA / 'raw_ros_point_records.json', 'r', encoding='utf-8') as f:
             records = json.load(f)
 
-        await bucket.write_attachments(entry, {'$ros': ros_attachment})
+        await bucket.write_attachments(entry, {'$schema': ros_attachment})
 
         for sample in records:
             payload = (DATA / sample['file']).read_bytes()
