@@ -27,30 +27,30 @@ This post shows another way. By the end you'll have a Python publisher sending d
 Zenoh ships official storage backends too: a built-in `memory` volume, plus S3, InfluxDB, RocksDB, and filesystem via the `zenoh-plugin-storage-manager`. Point one at a set of key expressions and, per Zenoh's own docs, other nodes can then "query the most recent values associated with these keys."
 
 ```svgbob
-                          +-----------------+
-                          |    Publisher    |
-                          +-----------------+
-                                   |
-                                   |
-                           "put(key, value)"
-                                   |
-                                   v
-                     +---------------------------+
-                     |          zenohd           |
-                     |    * "storage manager"    |
-                     +---------------------------+
-                                   |
-                                   |
-                         "latest value per key"
-                                   |
-                                   v
-                         +--------------------+
-                         |       Volume       |
-                         |    * S3            |
-                         |    * InfluxDB      |
-                         |    * RocksDB       |
-                         |    * filesystem    |
-                         +--------------------+
+        +-----------------+       +--------------+
+        |    Publisher    |       |    Client    |
+        +-----------------+       +--------------+
+                 |                       |
+                 |                       |
+         "put(key, value)"          "get latest"
+                 |                       |
+                 v                       v
+               +-+-----------------------+-+
+               |          zenohd           |
+               |    * "storage manager"    |
+               +-------------+-------------+
+                             |
+                             |
+                   "latest value per key"
+                             |
+                             v
+                   +--------------------+
+                   |       Volume       |
+                   |    * S3            |
+                   |    * InfluxDB      |
+                   |    * RocksDB       |
+                   |    * filesystem    |
+                   +--------------------+
 ```
 
 _Zenoh's storage manager plugin aligns the latest value per key into a backend volume._
@@ -70,27 +70,27 @@ Either way, you're building and maintaining a component just to get time-range q
 Starting with version 1.19, [**ReductStore**](/) (an open source time series object store built for robotics and industrial data) ships a native Zenoh API. It keeps every sample, not just the latest, indexed by time and label, so the queries above just work. A ReductStore instance joins your Zenoh network as a regular peer: it registers a **subscriber** for writes and a **queryable** for reads, talking directly to the storage engine. No bridge process, no extra protocol, no custom Rust backend to maintain.
 
 ```svgbob
-                        +-----------------+
-                        |    Publisher    |
-                        +-----------------+
-                                 |
-                                 |
-                          "pub: robot/alpha"
-                                 |
-                                 v
-                     +-----------------------+
-                     |    "Zenoh network"    |
-                     +-----------------------+
-                                 |
-                                 |
-                          "sub + queryable"
-                                 |
-                                 v
-                       +--------------------+
-                       |    ReductStore     |
-                       |    * subscriber    |
-                       |    * queryable     |
-                       +--------------------+
+        +-----------------+    +--------------------+
+        |    Publisher    |    |    Query Client    |
+        +-----------------+    +--------------------+
+                 |                       |
+                 |                       |
+         "pub: robot/alpha"      "get: time range"
+                 |                       |
+                 v                       v
+               +-+-----------------------+-+
+               |      "Zenoh network"      |
+               +-------------+-------------+
+                             |
+                             |
+                     "sub + queryable"
+                             |
+                             v
+                   +--------------------+
+                   |    ReductStore     |
+                   |    * subscriber    |
+                   |    * queryable     |
+                   +--------------------+
 ```
 
 _A publisher sends data over Zenoh; ReductStore joins as a peer with a subscriber for writes and a queryable for reads; a query client reads time ranges back out._
