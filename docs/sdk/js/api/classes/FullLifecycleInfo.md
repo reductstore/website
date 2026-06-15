@@ -9,7 +9,7 @@ description: "API reference for FullLifecycleInfo in the ReductStore Client SDK 
 
 # FullLifecycleInfo
 
-Defined in: [messages/LifecycleInfo.ts:58](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L58)
+Defined in: [messages/LifecycleInfo.ts:77](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L77)
 
 Lifecycle full info.
 
@@ -29,7 +29,7 @@ Lifecycle full info.
 
 &gt; `readonly` **info**: [`LifecycleInfo`](LifecycleInfo.md)
 
-Defined in: [messages/LifecycleInfo.ts:62](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L62)
+Defined in: [messages/LifecycleInfo.ts:81](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L81)
 
 Lifecycle info.
 
@@ -39,7 +39,7 @@ Lifecycle info.
 
 &gt; `readonly` **settings**: [`LifecycleSettings`](LifecycleSettings.md)
 
-Defined in: [messages/LifecycleInfo.ts:67](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L67)
+Defined in: [messages/LifecycleInfo.ts:86](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L86)
 
 Lifecycle settings.
 
@@ -49,7 +49,7 @@ Lifecycle settings.
 
 &gt; `static` **parse**(`data`): `FullLifecycleInfo`
 
-Defined in: [messages/LifecycleInfo.ts:69](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L69)
+Defined in: [messages/LifecycleInfo.ts:88](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L88)
 
 #### Parameters
 

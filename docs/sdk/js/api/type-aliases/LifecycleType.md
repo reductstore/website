@@ -9,7 +9,7 @@ description: "API reference for LifecycleType in the ReductStore Client SDK for 
 
 # LifecycleType
 
-&gt; **LifecycleType** = `"delete"`
+&gt; **LifecycleType** = `"delete"` \| `"compress"`
 
 Defined in: [messages/LifecycleType.ts:4](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleType.ts#L4)
 
