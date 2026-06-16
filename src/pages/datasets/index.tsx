@@ -78,9 +78,7 @@ export default function RemoteDatasetsPage(): JSX.Element {
             </b>{" "}
             or join our{" "}
             <b>
-              <Link href="https://community.reduct.store">
-                community forum
-              </Link>
+              <Link href="https://community.reduct.store">community forum</Link>
             </b>
             .
           </p>

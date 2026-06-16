@@ -438,10 +438,6 @@ const config = {
                 to: "/contact",
               },
               {
-                label: "Careers",
-                to: "/careers",
-              },
-              {
                 label: "About",
                 to: "/about",
               },
