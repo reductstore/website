@@ -11,7 +11,7 @@ async def main():
             type=LifecycleType.DELETE,
             bucket="my-bucket",
             entries=["py-example"],
-            max_age="30d",
+            older_than="30d",
             interval="1h",
             when={"&anomaly": {"$eq": 1}},
         )

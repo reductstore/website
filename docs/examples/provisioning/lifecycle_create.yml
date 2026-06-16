@@ -12,7 +12,7 @@ services:
       RS_LIFECYCLE_1_NAME: purge-sensors-30d
       RS_LIFECYCLE_1_BUCKET: telemetry
       RS_LIFECYCLE_1_TYPE: delete
-      RS_LIFECYCLE_1_MAX_AGE: 30d
+      RS_LIFECYCLE_1_OLDER_THAN: 30d
       RS_LIFECYCLE_1_INTERVAL: 10m
       RS_LIFECYCLE_1_ENTRIES: "sensor-1,sensor-2"
 

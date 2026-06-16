@@ -57,21 +57,11 @@ Interval between lifecycle runs, e.g. "10m", "1h", or "3600s".
 
 ### lifecycleType?
 
-&gt; `readonly` `optional` **lifecycleType**: `"delete"`
+&gt; `readonly` `optional` **lifecycleType**: [`LifecycleType`](../type-aliases/LifecycleType.md)
 
 Defined in: [messages/LifecycleSettings.ts:29](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L29)
 
 Lifecycle action type.
-
-***
-
-### maxAge
-
-&gt; `readonly` **maxAge**: `string` = `""`
-
-Defined in: [messages/LifecycleSettings.ts:44](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L44)
-
-Maximum record age, e.g. "30d", "24h", or "3600s".
 
 ***
 
@@ -82,6 +72,16 @@ Maximum record age, e.g. "30d", "24h", or "3600s".
 Defined in: [messages/LifecycleSettings.ts:59](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L59)
 
 Lifecycle mode.
+
+***
+
+### olderThan
+
+&gt; `readonly` **olderThan**: `string` = `""`
+
+Defined in: [messages/LifecycleSettings.ts:44](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L44)
+
+Maximum record age, e.g. "30d", "24h", or "3600s".
 
 ***
 

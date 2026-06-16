@@ -17,23 +17,29 @@ import lifecycleCreate from "!!raw-loader!@site/docs/examples/provisioning/lifec
 
 # Lifecycle Policies
 
-**[Lifecycle policies](../glossary#lifecycle-policy)** are background tasks that automatically clean up old records from your **[buckets](../glossary#bucket)**. They help you manage storage efficiently by removing outdated data based on rules you define.
+**[Lifecycle policies](../glossary#lifecycle-policy)** are background tasks that automatically delete or compress old records from your **[buckets](../glossary#bucket)**.
+You can configure policies to run at specific intervals and target records based on age, entry names, or custom conditions. This helps use your storage efficiently while keeping relevant data accessible.
 
 ## How It Works
 
-A lifecycle policy runs at a configurable interval and scans the target bucket for records older than `max_age`. It removes these records and logs the operation in the `$audit` system bucket. You can optionally scope policies to specific **[entries](../glossary#entry)** or filter records using conditions.
+A lifecycle policy runs at a configurable interval and scans the target bucket for records older than `older_than`. It applies the configured action to matching records and logs run diagnostics in the `$system/lifecycle` system entry. Delete policies remove matching records, while compress policies compress old persisted blocks with zstd. Compressed blocks remain transparently readable and are decompressed first if new writes target them. You can optionally scope policies to specific **[entries](../glossary#entry)** or filter records using conditions.
 
-Policies are stored on disk and remain active after restarts. However, read-only (replica) instances cannot execute lifecycle policies. Every policy run is recorded as a `lifecycle_run` event in the `$audit` bucket for transparency and debugging.
+Policies are stored on disk and remain active after restarts. However, read-only (replica) instances cannot execute lifecycle policies. Every policy run is recorded in the `$system/lifecycle` system entry for transparency and debugging.
 
 ## Supported Actions
 
-Currently, ReductStore supports one action type for lifecycle policies:
+ReductStore supports these action types for lifecycle policies:
 
-| Type     | Description                                          |
-| -------- | ---------------------------------------------------- |
-| `delete` | Removes records older than `max_age` from the bucket |
+| Type       | Description                                                                 |
+| ---------- | --------------------------------------------------------------------------- |
+| `delete`   | Removes records older than `older_than` from the bucket                     |
+| `compress` | Compresses persisted blocks containing records older than `older_than` with zstd |
 
-More action types may be added in future releases.
+Compress policies do not delete records. A common retention pattern is to compress old data first, then delete very old data later with a separate `delete` policy.
+
+:::info
+Compression is applied per storage block for efficiency, not per individual record. Because of this block-level behavior, the `when` condition is not supported for `compress` policies.
+:::
 
 ## Policy Settings
 
@@ -41,10 +47,10 @@ You can configure lifecycle policies using the following settings:
 
 | Setting    | Description                                                                                                 | Required | Default   |
 | ---------- | ----------------------------------------------------------------------------------------------------------- | -------- | --------- |
-| `type`     | Action type (e.g., `delete`)                                                                                | No       | `delete`  |
+| `type`     | Action type (e.g., `delete` or `compress`)                                                                  | Yes      | -         |
 | `bucket`   | Target bucket name                                                                                          | Yes      | -         |
 | `entries`  | List of entries to scope the policy (wildcard `*` supported)                                                | No       | -         |
-| `max_age`  | Maximum age of records before action is applied (e.g., `30d`, `1h`, `5m`)                                   | Yes      | -         |
+| `older_than`  | Maximum age of records before action is applied (e.g., `30d`, `1h`, `5m`)                                   | Yes      | -         |
 | `interval` | Policy execution interval (e.g., `3600s`, `10m`)                                                            | No       | `3600s`   |
 | `when`     | JSON condition to filter records (see **[Conditional Query Reference](/docs/conditional-query/index.mdx)**) | No       | -         |
 | `mode`     | Policy mode: `enabled` (default), `dry_run`, or `disabled`                                                  | No       | `enabled` |
@@ -54,7 +60,7 @@ You can configure lifecycle policies using the following settings:
 You can refine lifecycle policies using the `entries` and `when` parameters:
 
 - **`entries`**: Limit the policy to specific entries (e.g., `sensor-1,sensor-2` or `sensor-*`)
-- **`when`**: Apply the policy only to records matching a condition (e.g., `{"&sensor_type": {"$eq": "temperature"}}`)
+- **`when`**: Apply a `delete` policy only to records matching a condition (e.g., `{"&sensor_type": {"$eq": "temperature"}}`). This condition is not supported for `compress` policies.
 
 For more details, see the **[Conditional Query Reference](/docs/conditional-query/index.mdx)**.
 
@@ -74,7 +80,7 @@ For more information on setting up a local ReductStore instance, see the **[Gett
 
 ### Creating a Lifecycle Policy
 
-To create a lifecycle policy, you must provide at least the target bucket and `max_age`. The examples below also include optional filters (`entries` and `when`) and a custom `interval`.
+To create a lifecycle policy, you must provide at least the action type, target bucket, and `older_than`. The examples below also include optional filters (`entries` and `when`) and a custom `interval`.
 
 import CreateLifecycleCli from "!!raw-loader!../examples/cli/lifecycle_policy_create.sh";
 import CreateLifecyclePy from "!!raw-loader!../examples/py/src/lifecycle_policy_create.py";
@@ -95,7 +101,7 @@ import CreateLifecycleCurl from "!!raw-loader!../examples/curl/lifecycle_policy_
       2. Enter the API token if authorization is enabled.
       3. Click **"Lifecycles"** in the left sidebar.
       4. Click the plus icon in the top-right corner.
-      5. Fill in the lifecycle name, bucket, `max_age`, optional `interval`, and optional filters (`entries` and `when`).
+      5. Fill in the lifecycle name, type, bucket, `older_than`, optional `interval`, and optional filters (`entries` and `when`).
       6. Click **"Create Lifecycle"**.
 
   </TabItem>
@@ -121,7 +127,7 @@ import CreateLifecycleCurl from "!!raw-loader!../examples/curl/lifecycle_policy_
 
 ### Browsing Lifecycle Policies
 
-You can list all lifecycle policies and inspect full settings/details of a specific policy.
+You can list all lifecycle policies and inspect full settings/details of a specific policy. Lifecycle list responses include the action type and the last run timestamp when available.
 
 import BrowseLifecycleCli from "!!raw-loader!../examples/cli/lifecycle_policy_browse.sh";
 import BrowseLifecyclePy from "!!raw-loader!../examples/py/src/lifecycle_policy_browse.py";
@@ -259,11 +265,24 @@ import RemoveLifecycleCurl from "!!raw-loader!../examples/curl/lifecycle_policy_
   </TabItem>
 </Tabs>
 
-## Audit Logs
+## Run Diagnostics
 
-Every lifecycle run generates a `lifecycle_run` event in the `$audit` bucket. The event includes:
+Every lifecycle run writes a diagnostic record to the `$system` bucket under the `lifecycle/<instance>/<policy-name>` entry. For example, diagnostics for a policy named `purge-sensors-30d` on instance `node-1` are stored in `$system/lifecycle/node-1/purge-sensors-30d`.
 
-- Policy name and action type
-- Target bucket and duration of the run
-- Number of records processed
-- Error details (if any)
+Lifecycle diagnostics are written as `lifecycle_run` system events. The stored JSON record contains these fields:
+
+| Field               | Description                                                                 |
+| ------------------- | --------------------------------------------------------------------------- |
+| `timestamp`         | Event timestamp in Unix microseconds.                                       |
+| `instance`          | ReductStore instance name that emitted the diagnostic record.               |
+| `status`            | HTTP-style status code for the lifecycle run result.                        |
+| `message`           | Error message for the lifecycle run, or an empty string on success.         |
+| `policy_name`       | Lifecycle policy name.                                                      |
+| `action_type`       | Lifecycle action type, such as `delete` or `compress`.                      |
+| `bucket`            | Target bucket name.                                                         |
+| `duration`          | Lifecycle run duration in seconds.                                          |
+| `processed_records` | Number of records processed by the lifecycle action, or `null` on failure.  |
+| `error_code`        | Error status code. Present only when the lifecycle run fails.               |
+| `error_message`     | Error details. Present only when the lifecycle run fails.                   |
+
+The record also has a `status` label with the same value as the `status` field, so you can filter diagnostics by result code.

@@ -18,7 +18,7 @@ func main() {
 		LifecycleType: model.LifecycleTypeDelete,
 		Bucket:        "my-bucket",
 		Entries:       []string{"go-example"},
-		MaxAge:        "30d",
+		OlderThan:     "30d",
 		Interval:      "1h",
 		When: map[string]any{
 			"&anomaly": map[string]any{"$eq": 1},

@@ -18,7 +18,7 @@ async fn main() -> Result<(), ReductError> {
         .lifecycle_type(LifecycleType::Delete)
         .bucket("my-bucket")
         .entries(vec!["rs-example".to_string()])
-        .max_age("30d")
+        .older_than("30d")
         .interval("1h")
         .when(condition!({ "&anomaly": { "$eq": 1 } }))
         .send()

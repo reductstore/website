@@ -131,7 +131,7 @@ You can do this using the Client SDKs, the Reduct CLI, or the HTTP API.
 ### Automatic Deletion With Lifecycle Policies
 
 For automatic cleanup, use lifecycle policies. A delete lifecycle policy periodically
-removes records older than `max_age` from a bucket. You can limit cleanup to selected
+removes records older than `older_than` from a bucket. You can limit cleanup to selected
 entries with `entries` and to matching records with a `when` condition. Use `dry_run`
 mode to preview how many records match before enabling deletion.
 

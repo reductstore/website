@@ -9,7 +9,7 @@ description: "API reference for WriteOptions in the ReductStore Client SDK for J
 
 # WriteOptions
 
-Defined in: [Bucket.ts:19](https://github.com/reductstore/reduct-js/blob/main/src/Bucket.ts#L19)
+Defined in: [Bucket.ts:18](https://github.com/reductstore/reduct-js/blob/main/src/Bucket.ts#L18)
 
 Options for writing records
 
@@ -19,7 +19,7 @@ Options for writing records
 
 &gt; `optional` **contentType**: `string`
 
-Defined in: [Bucket.ts:22](https://github.com/reductstore/reduct-js/blob/main/src/Bucket.ts#L22)
+Defined in: [Bucket.ts:21](https://github.com/reductstore/reduct-js/blob/main/src/Bucket.ts#L21)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [Bucket.ts:22](https://github.com/reductstore/reduct-js/blob/main/sr
 
 &gt; `optional` **labels**: `LabelMap`
 
-Defined in: [Bucket.ts:21](https://github.com/reductstore/reduct-js/blob/main/src/Bucket.ts#L21)
+Defined in: [Bucket.ts:20](https://github.com/reductstore/reduct-js/blob/main/src/Bucket.ts#L20)
 
 ***
 
@@ -35,4 +35,4 @@ Defined in: [Bucket.ts:21](https://github.com/reductstore/reduct-js/blob/main/sr
 
 &gt; `optional` **ts**: `bigint`
 
-Defined in: [Bucket.ts:20](https://github.com/reductstore/reduct-js/blob/main/src/Bucket.ts#L20)
+Defined in: [Bucket.ts:19](https://github.com/reductstore/reduct-js/blob/main/src/Bucket.ts#L19)

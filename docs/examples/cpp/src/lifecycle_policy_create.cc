@@ -14,7 +14,7 @@ int main() {
       .type = IClient::LifecycleType::kDelete,
       .bucket = "my-bucket",
       .entries = {"cpp-example"},
-      .max_age = "30d",
+      .older_than = "30d",
       .interval = "1h",
       .when = R"({"&anomaly":{"$eq":1}})",
   });

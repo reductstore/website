@@ -9,7 +9,7 @@ description: "API reference for LifecycleInfo in the ReductStore Client SDK for 
 
 # LifecycleInfo
 
-Defined in: [messages/LifecycleInfo.ts:24](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L24)
+Defined in: [messages/LifecycleInfo.ts:31](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L31)
 
 Lifecycle info.
 
@@ -29,7 +29,7 @@ Lifecycle info.
 
 &gt; `readonly` **isProvisioned**: `boolean` = `false`
 
-Defined in: [messages/LifecycleInfo.ts:38](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L38)
+Defined in: [messages/LifecycleInfo.ts:55](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L55)
 
 Lifecycle policy is provisioned.
 
@@ -39,9 +39,19 @@ Lifecycle policy is provisioned.
 
 &gt; `readonly` **isRunning**: `boolean` = `false`
 
-Defined in: [messages/LifecycleInfo.ts:43](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L43)
+Defined in: [messages/LifecycleInfo.ts:60](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L60)
 
 Lifecycle worker is running.
+
+***
+
+### lastRun?
+
+&gt; `readonly` `optional` **lastRun**: `Date`
+
+Defined in: [messages/LifecycleInfo.ts:50](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L50)
+
+Last lifecycle run time.
 
 ***
 
@@ -49,7 +59,7 @@ Lifecycle worker is running.
 
 &gt; `readonly` **mode**: [`LifecycleMode`](../type-aliases/LifecycleMode.md) = `DEFAULT_LIFECYCLE_MODE`
 
-Defined in: [messages/LifecycleInfo.ts:33](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L33)
+Defined in: [messages/LifecycleInfo.ts:40](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L40)
 
 Lifecycle mode.
 
@@ -59,9 +69,19 @@ Lifecycle mode.
 
 &gt; `readonly` **name**: `string` = `""`
 
-Defined in: [messages/LifecycleInfo.ts:28](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L28)
+Defined in: [messages/LifecycleInfo.ts:35](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L35)
 
 Lifecycle policy name.
+
+***
+
+### type
+
+&gt; `readonly` **type**: [`LifecycleType`](../type-aliases/LifecycleType.md) = `DEFAULT_LIFECYCLE_TYPE`
+
+Defined in: [messages/LifecycleInfo.ts:45](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L45)
+
+Lifecycle action type.
 
 ## Methods
 
@@ -69,7 +89,7 @@ Lifecycle policy name.
 
 &gt; `static` **parse**(`data`): `LifecycleInfo`
 
-Defined in: [messages/LifecycleInfo.ts:45](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L45)
+Defined in: [messages/LifecycleInfo.ts:62](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleInfo.ts#L62)
 
 #### Parameters
 

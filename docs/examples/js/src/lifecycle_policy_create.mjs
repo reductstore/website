@@ -7,7 +7,7 @@ const settings = {
   lifecycleType: LifecycleType.DELETE,
   bucket: "my-bucket",
   entries: ["js-example"],
-  maxAge: "30d",
+  olderThan: "30d",
   interval: "1h",
   when: { "&anomaly": { $eq: 1 } },
 };

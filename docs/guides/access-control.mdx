@@ -286,26 +286,24 @@ import RemoveTokenCurl from "!!raw-loader!../examples/curl/access_control_remove
 ## Audit Log
 
 ReductStore provides an audit log that records HTTP API requests, including successful and failed requests.
-The audit log is stored in the `$system` bucket and can be accessed using the standard API.
+Audit log records are stored in the `$system` bucket under the `audit/<instance>/<token-name>` entry. For example, audit records for token `init-token` on instance `reductstore` are stored in `$system/audit/reductstore/init-token`.
 
-API audit events are stored in `$syste/audit` entry. The audit entry has the following structure:
+API audit logs are written as `api_call` system events. The stored JSON record contains these fields:
 
-```
-$system/audit/
-    |-- <instance-name>
-          |-- <token-name>
-                |-- <UNIX-timestamp>-<JSON record>
-```
+| Field        | Description                                                                 |
+| ------------ | --------------------------------------------------------------------------- |
+| `timestamp`  | Event timestamp in Unix microseconds.                                       |
+| `instance`   | ReductStore instance name that emitted the audit record.                    |
+| `status`     | HTTP response status code for the aggregated API calls.                     |
+| `message`    | Error message for failed calls, or an empty string on success.              |
+| `token_name` | Token name used for the API calls.                                          |
+| `method`     | HTTP method.                                                                |
+| `path`       | HTTP API path.                                                              |
+| `client_ip`  | Client IP address, or `null` when the client IP is unavailable.             |
+| `call_count` | Number of matching API calls aggregated into this record.                   |
+| `duration`   | Total duration in seconds for the aggregated API calls.                     |
 
-Audit log records contain aggregated information about API requests, grouped by endpoint and time interval. Each record includes:
-
-- Request timestamp
-- Client IP address
-- HTTP method and path
-- Response HTTP status code
-- Error message (if the request failed)
-- Call count for the endpoint
-- Total duration of the requests (seconds)
+The record also has a `status` label with the same value as the `status` field, so you can filter audit logs by result code. Consecutive API calls with the same instance, token, method, path, status, message, and client IP are aggregated and flushed when the aggregation window becomes idle or reaches its time cap.
 
 Example:
 
