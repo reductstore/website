@@ -30,9 +30,9 @@ Policies are stored on disk and remain active after restarts. However, read-only
 
 ReductStore supports these action types for lifecycle policies:
 
-| Type       | Description                                                                 |
-| ---------- | --------------------------------------------------------------------------- |
-| `delete`   | Removes records older than `older_than` from the bucket                     |
+| Type       | Description                                                                      |
+| ---------- | -------------------------------------------------------------------------------- |
+| `delete`   | Removes records older than `older_than` from the bucket                          |
 | `compress` | Compresses persisted blocks containing records older than `older_than` with zstd |
 
 Compress policies do not delete records. A common retention pattern is to compress old data first, then delete very old data later with a separate `delete` policy.
@@ -45,15 +45,15 @@ Compression is applied per storage block for efficiency, not per individual reco
 
 You can configure lifecycle policies using the following settings:
 
-| Setting    | Description                                                                                                 | Required | Default   |
-| ---------- | ----------------------------------------------------------------------------------------------------------- | -------- | --------- |
-| `type`     | Action type (e.g., `delete` or `compress`)                                                                  | Yes      | -         |
-| `bucket`   | Target bucket name                                                                                          | Yes      | -         |
-| `entries`  | List of entries to scope the policy (wildcard `*` supported)                                                | No       | -         |
-| `older_than`  | Maximum age of records before action is applied (e.g., `30d`, `1h`, `5m`)                                   | Yes      | -         |
-| `interval` | Policy execution interval (e.g., `3600s`, `10m`)                                                            | No       | `3600s`   |
-| `when`     | JSON condition to filter records (see **[Conditional Query Reference](/docs/conditional-query/index.mdx)**) | No       | -         |
-| `mode`     | Policy mode: `enabled` (default), `dry_run`, or `disabled`                                                  | No       | `enabled` |
+| Setting      | Description                                                                                                 | Required | Default   |
+| ------------ | ----------------------------------------------------------------------------------------------------------- | -------- | --------- |
+| `type`       | Action type (e.g., `delete` or `compress`)                                                                  | Yes      | -         |
+| `bucket`     | Target bucket name                                                                                          | Yes      | -         |
+| `entries`    | List of entries to scope the policy (wildcard `*` supported)                                                | No       | -         |
+| `older_than` | Maximum age of records before action is applied (e.g., `30d`, `1h`, `5m`)                                   | Yes      | -         |
+| `interval`   | Policy execution interval (e.g., `3600s`, `10m`)                                                            | No       | `3600s`   |
+| `when`       | JSON condition to filter records (see **[Conditional Query Reference](/docs/conditional-query/index.mdx)**) | No       | -         |
+| `mode`       | Policy mode: `enabled` (default), `dry_run`, or `disabled`                                                  | No       | `enabled` |
 
 ## Conditional Policies
 
@@ -271,18 +271,18 @@ Every lifecycle run writes a diagnostic record to the `$system` bucket under the
 
 Lifecycle diagnostics are written as `lifecycle_run` system events. The stored JSON record contains these fields:
 
-| Field               | Description                                                                 |
-| ------------------- | --------------------------------------------------------------------------- |
-| `timestamp`         | Event timestamp in Unix microseconds.                                       |
-| `instance`          | ReductStore instance name that emitted the diagnostic record.               |
-| `status`            | HTTP-style status code for the lifecycle run result.                        |
-| `message`           | Error message for the lifecycle run, or an empty string on success.         |
-| `policy_name`       | Lifecycle policy name.                                                      |
-| `action_type`       | Lifecycle action type, such as `delete` or `compress`.                      |
-| `bucket`            | Target bucket name.                                                         |
-| `duration`          | Lifecycle run duration in seconds.                                          |
-| `processed_records` | Number of records processed by the lifecycle action, or `null` on failure.  |
-| `error_code`        | Error status code. Present only when the lifecycle run fails.               |
-| `error_message`     | Error details. Present only when the lifecycle run fails.                   |
+| Field               | Description                                                                |
+| ------------------- | -------------------------------------------------------------------------- |
+| `timestamp`         | Event timestamp in Unix microseconds.                                      |
+| `instance`          | ReductStore instance name that emitted the diagnostic record.              |
+| `status`            | HTTP-style status code for the lifecycle run result.                       |
+| `message`           | Error message for the lifecycle run, or an empty string on success.        |
+| `policy_name`       | Lifecycle policy name.                                                     |
+| `action_type`       | Lifecycle action type, such as `delete` or `compress`.                     |
+| `bucket`            | Target bucket name.                                                        |
+| `duration`          | Lifecycle run duration in seconds.                                         |
+| `processed_records` | Number of records processed by the lifecycle action, or `null` on failure. |
+| `error_code`        | Error status code. Present only when the lifecycle run fails.              |
+| `error_message`     | Error details. Present only when the lifecycle run fails.                  |
 
 The record also has a `status` label with the same value as the `status` field, so you can filter diagnostics by result code.

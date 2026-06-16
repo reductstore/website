@@ -290,18 +290,18 @@ Audit log records are stored in the `$system` bucket under the `audit/<instance>
 
 API audit logs are written as `api_call` system events. The stored JSON record contains these fields:
 
-| Field        | Description                                                                 |
-| ------------ | --------------------------------------------------------------------------- |
-| `timestamp`  | Event timestamp in Unix microseconds.                                       |
-| `instance`   | ReductStore instance name that emitted the audit record.                    |
-| `status`     | HTTP response status code for the aggregated API calls.                     |
-| `message`    | Error message for failed calls, or an empty string on success.              |
-| `token_name` | Token name used for the API calls.                                          |
-| `method`     | HTTP method.                                                                |
-| `path`       | HTTP API path.                                                              |
-| `client_ip`  | Client IP address, or `null` when the client IP is unavailable.             |
-| `call_count` | Number of matching API calls aggregated into this record.                   |
-| `duration`   | Total duration in seconds for the aggregated API calls.                     |
+| Field        | Description                                                     |
+| ------------ | --------------------------------------------------------------- |
+| `timestamp`  | Event timestamp in Unix microseconds.                           |
+| `instance`   | ReductStore instance name that emitted the audit record.        |
+| `status`     | HTTP response status code for the aggregated API calls.         |
+| `message`    | Error message for failed calls, or an empty string on success.  |
+| `token_name` | Token name used for the API calls.                              |
+| `method`     | HTTP method.                                                    |
+| `path`       | HTTP API path.                                                  |
+| `client_ip`  | Client IP address, or `null` when the client IP is unavailable. |
+| `call_count` | Number of matching API calls aggregated into this record.       |
+| `duration`   | Total duration in seconds for the aggregated API calls.         |
 
 The record also has a `status` label with the same value as the `status` field, so you can filter audit logs by result code. Consecutive API calls with the same instance, token, method, path, status, message, and client IP are aggregated and flushed when the aggregation window becomes idle or reaches its time cap.
 
