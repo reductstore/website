@@ -9,7 +9,7 @@ import (
 func main() {
 	client := reduct.NewClient("http://localhost:8383", reduct.ClientOptions{APIToken: "my-token"})
 
-	if err := client.DeleteLifecycle(context.Background(), "lifecycle-to-remove"); err != nil {
+	if err := client.RemoveLifecycle(context.Background(), "lifecycle-to-remove"); err != nil {
 		panic(err)
 	}
 }
