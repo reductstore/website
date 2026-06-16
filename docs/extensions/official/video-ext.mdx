@@ -33,8 +33,11 @@ Currently, the extension supports **H.264 to MP4** export.
 | ----- | -------- | --------- | ------------------------------------------------------------------ |
 | `fps` | `string` | No        | Frame rate of the stored stream, used for muxing and gap detection |
 
+The frame rate can also be provided through a `$video` [**attachment**](../../glossary#attachment) on the
+entry (see [Resolving the frame rate](#resolving-the-frame-rate)), so records do not need to carry an `fps` label.
+
 :::warning
-If no `fps` is available from either labels or the query parameter, the export will fail with an error.
+If no `fps` is available from the records, the `$video` attachment, or the query parameter, the export will fail with an error.
 :::
 
 ### H.264
@@ -70,7 +73,7 @@ The extension is activated by passing a `video` object inside the `#ext` block o
 
 | Parameter       | Type     | Mandatory | Description                                                                                   |
 | --------------- | -------- | --------- | --------------------------------------------------------------------------------------------- |
-| `fps`           | `number` | No        | Output frame rate. Also used as fallback if no `fps` label is set on records.                 |
+| `fps`           | `number` | No        | Output frame rate. Used as fallback if no `fps` label or `$video` attachment is available.    |
 | `duration`      | `string` | No        | Maximum episode duration (e.g. `"30s"`, `"1m"`, `"1h 30m"`). Split at next keyframe boundary. |
 | `size`          | `string` | No        | Maximum episode size (e.g. `"100MB"`, `"1GB"`). Split at next keyframe boundary.              |
 | `gap_detection` | `bool`   | No        | Enable automatic episode splitting on timestamp gaps. Default: `true`.                        |
@@ -92,6 +95,16 @@ Splitting always happens at the next keyframe boundary so each episode can be pl
 At the start of each episode, the exporter skips records until it finds a keyframe
 because a decoder cannot start without one.
 
+### Resolving the frame rate
+
+The **recording frame rate** is used for muxing and gap detection. It is resolved in this order:
+
+1. `fps` label on the records
+2. `fps` field of the `$video` attachment on the entry
+3. `fps` query parameter (fallback)
+
+If none of these is available, muxing fails and gap detection is **disabled**.
+
 ### Gap Detection
 
 If the timestamp gap between two consecutive records exceeds one frame duration, the exporter
@@ -100,11 +113,8 @@ treats it as a discontinuity: the current episode is finalized and a new one beg
 Gap detection is **enabled by default**. Set `"gap_detection": false` to disable it and
 combine all frames into a single episode regardless of timestamp gaps.
 
-The frame duration used for gap detection is derived from the **recording frame rate**, resolved in this order:
-
-1. `fps` label on the records
-2. `fps` query parameter (fallback)
-3. If neither is available, gap detection is **disabled**
+The frame duration is derived from the [recording frame rate](#resolving-the-frame-rate).
+If the frame rate cannot be resolved, gap detection is **disabled**.
 
 ## Examples
 
