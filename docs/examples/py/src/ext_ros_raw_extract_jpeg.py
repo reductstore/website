@@ -1,3 +1,4 @@
+import base64
 import json
 from pathlib import Path
 from time import time_ns
@@ -49,7 +50,11 @@ async def main():
             print(f"Record labels: {dict(sorted(record.labels.items()))}")
 
             message = json.loads((await record.read_all()).decode('utf-8'))
-            image_info = {k: v for k, v in message.items() if k != 'data'}
+            payload = message[0]
+            with open('output.jpg', 'wb') as f:
+                f.write(base64.decodebytes(payload['data'].encode('ascii')))
+
+            image_info = {k: v for k, v in payload.items() if k != 'data'}
             print(f'Image parameters: {json.dumps(image_info, sort_keys=True)}')
 
 

@@ -47,17 +47,15 @@ async def main():
             print(f"Record timestamp: {record.timestamp}")
             print(f"Record labels: {record.labels}")
             content = await record.read_all()
-            # Record content is a JSON object with metadata and base64-encoded data
-            obj = json.loads(content)
-            # Decode the base64-encoded data and save it as a JPEG file
+            # Record content is a JSON list with metadata and base64-encoded data
+            payload = json.loads(content)[0]
             with open("output.jpg", "wb") as f:
-                # Decode the base64-encoded data
-                encoded = base64.decodebytes(obj["data"].encode("ascii"))
+                encoded = base64.decodebytes(payload["data"].encode("ascii"))
                 f.write(encoded)
 
             # Print the image parameters without the data field
-            del obj["data"]
-            print(f"Image parameters: {obj}")
+            image_info = {k: v for k, v in payload.items() if k != "data"}
+            print(f"Image parameters: {image_info}")
 
 
 # 5. Run the main function

@@ -1,0 +1,288 @@
+---
+title: Lifecycle Policies
+description: Complete guide to managing lifecycle policies in ReductStore
+---
+
+import CodeBlock from "@theme/CodeBlock";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import lifecycleCreate from "!!raw-loader!@site/docs/examples/provisioning/lifecycle_create.yml";
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/guides/lifecycle-policies"
+  />
+</head>
+
+# Lifecycle Policies
+
+**[Lifecycle policies](../glossary#lifecycle-policy)** are background tasks that automatically delete or compress old records from your **[buckets](../glossary#bucket)**.
+You can configure policies to run at specific intervals and target records based on age, entry names, or custom conditions. This helps use your storage efficiently while keeping relevant data accessible.
+
+## How It Works
+
+A lifecycle policy runs at a configurable interval and scans the target bucket for records older than `older_than`. It applies the configured action to matching records and logs run diagnostics in the `$system/lifecycle` system entry. Delete policies remove matching records, while compress policies compress old persisted blocks with zstd. Compressed blocks remain transparently readable and are decompressed first if new writes target them. You can optionally scope policies to specific **[entries](../glossary#entry)** or filter records using conditions.
+
+Policies are stored on disk and remain active after restarts. However, read-only (replica) instances cannot execute lifecycle policies. Every policy run is recorded in the `$system/lifecycle` system entry for transparency and debugging.
+
+## Supported Actions
+
+ReductStore supports these action types for lifecycle policies:
+
+| Type       | Description                                                                      |
+| ---------- | -------------------------------------------------------------------------------- |
+| `delete`   | Removes records older than `older_than` from the bucket                          |
+| `compress` | Compresses persisted blocks containing records older than `older_than` with zstd |
+
+Compress policies do not delete records. A common retention pattern is to compress old data first, then delete very old data later with a separate `delete` policy.
+
+:::info
+Compression is applied per storage block for efficiency, not per individual record. Because of this block-level behavior, the `when` condition is not supported for `compress` policies.
+:::
+
+## Policy Settings
+
+You can configure lifecycle policies using the following settings:
+
+| Setting      | Description                                                                                                 | Required | Default   |
+| ------------ | ----------------------------------------------------------------------------------------------------------- | -------- | --------- |
+| `type`       | Action type (e.g., `delete` or `compress`)                                                                  | Yes      | -         |
+| `bucket`     | Target bucket name                                                                                          | Yes      | -         |
+| `entries`    | List of entries to scope the policy (wildcard `*` supported)                                                | No       | -         |
+| `older_than` | Maximum age of records before action is applied (e.g., `30d`, `1h`, `5m`)                                   | Yes      | -         |
+| `interval`   | Policy execution interval (e.g., `3600s`, `10m`)                                                            | No       | `3600s`   |
+| `when`       | JSON condition to filter records (see **[Conditional Query Reference](/docs/conditional-query/index.mdx)**) | No       | -         |
+| `mode`       | Policy mode: `enabled` (default), `dry_run`, or `disabled`                                                  | No       | `enabled` |
+
+## Conditional Policies
+
+You can refine lifecycle policies using the `entries` and `when` parameters:
+
+- **`entries`**: Limit the policy to specific entries (e.g., `sensor-1,sensor-2` or `sensor-*`)
+- **`when`**: Apply a `delete` policy only to records matching a condition (e.g., `{"&sensor_type": {"$eq": "temperature"}}`). This condition is not supported for `compress` policies.
+
+For more details, see the **[Conditional Query Reference](/docs/conditional-query/index.mdx)**.
+
+## Example
+
+Imagine you store telemetry data from temperature sensors in a bucket called `telemetry`. You want to automatically delete records older than 30 days, but only for specific sensors (`sensor-1` and `sensor-2`) and only if the `sensor_type` label equals `temperature`. Here’s how you’d configure the policy:
+
+<CodeBlock language="yaml">{lifecycleCreate}</CodeBlock>
+
+## Managing Lifecycle Policies
+
+Here you will find examples of how to create, list, retrieve, update modes, and delete lifecycle policies using the ReductStore SDKs, REST API, **[CLI](../glossary#cli)** and **[Web Console](../glossary#web-console)**.
+
+All examples are written for a local ReductStore instance available at **`http://127.0.0.1:8383`** with API token `my-token`.
+
+For more information on setting up a local ReductStore instance, see the **[Getting Started](../getting-started/index.mdx)** guide.
+
+### Creating a Lifecycle Policy
+
+To create a lifecycle policy, you must provide at least the action type, target bucket, and `older_than`. The examples below also include optional filters (`entries` and `when`) and a custom `interval`.
+
+import CreateLifecycleCli from "!!raw-loader!../examples/cli/lifecycle_policy_create.sh";
+import CreateLifecyclePy from "!!raw-loader!../examples/py/src/lifecycle_policy_create.py";
+import CreateLifecycleJs from "!!raw-loader!../examples/js/src/lifecycle_policy_create.mjs";
+import CreateLifecycleGo from "!!raw-loader!../examples/go/src/lifecycle_policy_create.go";
+import CreateLifecycleRs from "!!raw-loader!../examples/rs/examples/lifecycle_policy_create.rs";
+import CreateLifecycleCpp from "!!raw-loader!../examples/cpp/src/lifecycle_policy_create.cc";
+import CreateLifecycleCurl from "!!raw-loader!../examples/curl/lifecycle_policy_create.sh";
+
+<Tabs>
+  <TabItem value="CLI">
+    <CodeBlock language="bash">{CreateLifecycleCli}</CodeBlock>
+  </TabItem>
+  <TabItem value="Web Console">
+
+    Steps to create a lifecycle policy using the Web Console:
+      1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
+      2. Enter the API token if authorization is enabled.
+      3. Click **"Lifecycles"** in the left sidebar.
+      4. Click the plus icon in the top-right corner.
+      5. Fill in the lifecycle name, type, bucket, `older_than`, optional `interval`, and optional filters (`entries` and `when`).
+      6. Click **"Create Lifecycle"**.
+
+  </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">{CreateLifecyclePy}</CodeBlock>
+  </TabItem>
+  <TabItem value="JavaScript">
+    <CodeBlock language="javascript">{CreateLifecycleJs}</CodeBlock>
+  </TabItem>
+  <TabItem value="Go">
+    <CodeBlock language="go">{CreateLifecycleGo}</CodeBlock>
+  </TabItem>
+  <TabItem value="Rust">
+    <CodeBlock language="rust">{CreateLifecycleRs}</CodeBlock>
+  </TabItem>
+  <TabItem value="C++">
+    <CodeBlock language="cpp">{CreateLifecycleCpp}</CodeBlock>
+  </TabItem>
+  <TabItem value="cURL">
+    <CodeBlock language="bash">{CreateLifecycleCurl}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+### Browsing Lifecycle Policies
+
+You can list all lifecycle policies and inspect full settings/details of a specific policy. Lifecycle list responses include the action type and the last run timestamp when available.
+
+import BrowseLifecycleCli from "!!raw-loader!../examples/cli/lifecycle_policy_browse.sh";
+import BrowseLifecyclePy from "!!raw-loader!../examples/py/src/lifecycle_policy_browse.py";
+import BrowseLifecycleJs from "!!raw-loader!../examples/js/src/lifecycle_policy_browse.mjs";
+import BrowseLifecycleGo from "!!raw-loader!../examples/go/src/lifecycle_policy_browse.go";
+import BrowseLifecycleRs from "!!raw-loader!../examples/rs/examples/lifecycle_policy_browse.rs";
+import BrowseLifecycleCpp from "!!raw-loader!../examples/cpp/src/lifecycle_policy_browse.cc";
+import BrowseLifecycleCurl from "!!raw-loader!../examples/curl/lifecycle_policy_browse.sh";
+
+<Tabs>
+  <TabItem value="CLI">
+    <CodeBlock language="bash">{BrowseLifecycleCli}</CodeBlock>
+  </TabItem>
+  <TabItem value="Web Console">
+  
+    Steps to browse lifecycle policies in the Web Console:
+      1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
+      2. Enter the API token if authorization is enabled.
+      3. Click **"Lifecycles"** in the left sidebar.
+      4. Open any lifecycle policy in the list to inspect settings and status.
+
+  </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">{BrowseLifecyclePy}</CodeBlock>
+  </TabItem>
+  <TabItem value="JavaScript">
+    <CodeBlock language="javascript">{BrowseLifecycleJs}</CodeBlock>
+  </TabItem>
+  <TabItem value="Go">
+    <CodeBlock language="go">{BrowseLifecycleGo}</CodeBlock>
+  </TabItem>
+  <TabItem value="Rust">
+    <CodeBlock language="rust">{BrowseLifecycleRs}</CodeBlock>
+  </TabItem>
+  <TabItem value="C++">
+    <CodeBlock language="cpp">{BrowseLifecycleCpp}</CodeBlock>
+  </TabItem>
+  <TabItem value="cURL">
+    <CodeBlock language="bash">{BrowseLifecycleCurl}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+### Lifecycle Modes
+
+Lifecycle policies can be switched between modes without recreating the policy.
+
+import UpdateLifecycleModeCli from "!!raw-loader!../examples/cli/lifecycle_policy_mode.sh";
+import UpdateLifecycleModePy from "!!raw-loader!../examples/py/src/lifecycle_policy_mode.py";
+import UpdateLifecycleModeJs from "!!raw-loader!../examples/js/src/lifecycle_policy_mode.mjs";
+import UpdateLifecycleModeGo from "!!raw-loader!../examples/go/src/lifecycle_policy_mode.go";
+import UpdateLifecycleModeRs from "!!raw-loader!../examples/rs/examples/lifecycle_policy_mode.rs";
+import UpdateLifecycleModeCpp from "!!raw-loader!../examples/cpp/src/lifecycle_policy_mode.cc";
+import UpdateLifecycleModeCurl from "!!raw-loader!../examples/curl/lifecycle_policy_mode.sh";
+
+<Tabs>
+  <TabItem value="CLI">
+    <CodeBlock language="bash">{UpdateLifecycleModeCli}</CodeBlock>
+  </TabItem>
+  <TabItem value="Web Console">
+
+    Steps to update lifecycle policy mode using the Web Console:
+      1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
+      2. Enter the API token if authorization is enabled.
+      3. Click **"Lifecycles"** in the left sidebar.
+      4. Update the policy mode by clicking the dropdown button next to the policy name and selecting the desired mode (`enabled`, `dry_run`, or `disabled`).
+
+  </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">{UpdateLifecycleModePy}</CodeBlock>
+  </TabItem>
+  <TabItem value="JavaScript">
+    <CodeBlock language="javascript">{UpdateLifecycleModeJs}</CodeBlock>
+  </TabItem>
+  <TabItem value="Go">
+    <CodeBlock language="go">{UpdateLifecycleModeGo}</CodeBlock>
+  </TabItem>
+  <TabItem value="Rust">
+    <CodeBlock language="rust">{UpdateLifecycleModeRs}</CodeBlock>
+  </TabItem>
+  <TabItem value="C++">
+    <CodeBlock language="cpp">{UpdateLifecycleModeCpp}</CodeBlock>
+  </TabItem>
+  <TabItem value="cURL">
+    <CodeBlock language="bash">{UpdateLifecycleModeCurl}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+### Removing a Lifecycle Policy
+
+You can remove a lifecycle policy when it is no longer needed.
+
+:::info
+Provisioned lifecycle policies cannot be modified or deleted through the API. To change or remove them, update environment variables and restart ReductStore.
+:::
+
+import RemoveLifecycleCli from "!!raw-loader!../examples/cli/lifecycle_policy_remove.sh";
+import RemoveLifecyclePy from "!!raw-loader!../examples/py/src/lifecycle_policy_remove.py";
+import RemoveLifecycleJs from "!!raw-loader!../examples/js/src/lifecycle_policy_remove.mjs";
+import RemoveLifecycleGo from "!!raw-loader!../examples/go/src/lifecycle_policy_remove.go";
+import RemoveLifecycleRs from "!!raw-loader!../examples/rs/examples/lifecycle_policy_remove.rs";
+import RemoveLifecycleCpp from "!!raw-loader!../examples/cpp/src/lifecycle_policy_remove.cc";
+import RemoveLifecycleCurl from "!!raw-loader!../examples/curl/lifecycle_policy_remove.sh";
+
+<Tabs>
+  <TabItem value="CLI">
+    <CodeBlock language="bash">{RemoveLifecycleCli}</CodeBlock>
+  </TabItem>
+  <TabItem value="Web Console">
+
+    Steps to remove a lifecycle policy using the Web Console:
+      1. Open the Web Console at `http://127.0.0.1:8383` in your browser.
+      2. Enter the API token if authorization is enabled.
+      3. Click **"Lifecycles"** in the left sidebar.
+      4. Open the lifecycle policy details.
+      5. Click the trash icon in the bottom-right corner and confirm by typing the policy name.
+
+  </TabItem>
+  <TabItem value="Python">
+    <CodeBlock language="python">{RemoveLifecyclePy}</CodeBlock>
+  </TabItem>
+  <TabItem value="JavaScript">
+    <CodeBlock language="javascript">{RemoveLifecycleJs}</CodeBlock>
+  </TabItem>
+  <TabItem value="Go">
+    <CodeBlock language="go">{RemoveLifecycleGo}</CodeBlock>
+  </TabItem>
+  <TabItem value="Rust">
+    <CodeBlock language="rust">{RemoveLifecycleRs}</CodeBlock>
+  </TabItem>
+  <TabItem value="C++">
+    <CodeBlock language="cpp">{RemoveLifecycleCpp}</CodeBlock>
+  </TabItem>
+  <TabItem value="cURL">
+    <CodeBlock language="bash">{RemoveLifecycleCurl}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+## Run Diagnostics
+
+Every lifecycle run writes a diagnostic record to the `$system` bucket under the `lifecycle/<instance>/<policy-name>` entry. For example, diagnostics for a policy named `purge-sensors-30d` on instance `node-1` are stored in `$system/lifecycle/node-1/purge-sensors-30d`.
+
+Lifecycle diagnostics are written as `lifecycle_run` system events. The stored JSON record contains these fields:
+
+| Field               | Description                                                                |
+| ------------------- | -------------------------------------------------------------------------- |
+| `timestamp`         | Event timestamp in Unix microseconds.                                      |
+| `instance`          | ReductStore instance name that emitted the diagnostic record.              |
+| `status`            | HTTP-style status code for the lifecycle run result.                       |
+| `message`           | Error message for the lifecycle run, or an empty string on success.        |
+| `policy_name`       | Lifecycle policy name.                                                     |
+| `action_type`       | Lifecycle action type, such as `delete` or `compress`.                     |
+| `bucket`            | Target bucket name.                                                        |
+| `duration`          | Lifecycle run duration in seconds.                                         |
+| `processed_records` | Number of records processed by the lifecycle action, or `null` on failure. |
+| `error_code`        | Error status code. Present only when the lifecycle run fails.              |
+| `error_message`     | Error details. Present only when the lifecycle run fails.                  |
+
+The record also has a `status` label with the same value as the `status` field, so you can filter diagnostics by result code.

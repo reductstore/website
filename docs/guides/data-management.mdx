@@ -128,6 +128,16 @@ Attachment keys starting with `$` are reserved for official ReductStore plugins 
 The ReductStore API allows you to delete specific records from an entry, an entire entry, or an entire **[bucket](../glossary#bucket)**.
 You can do this using the Client SDKs, the Reduct CLI, or the HTTP API.
 
+### Automatic Deletion With Lifecycle Policies
+
+For automatic cleanup, use lifecycle policies. A delete lifecycle policy periodically
+removes records older than `older_than` from a bucket. You can limit cleanup to selected
+entries with `entries` and to matching records with a `when` condition. Use `dry_run`
+mode to preview how many records match before enabling deletion.
+
+For a full explanation and provisioning examples, see the
+**[Lifecycle Policies](lifecycle-policies.mdx)** guide.
+
 ### Deleting Entry or Bucket
 
 The following examples show how to delete the entire entry or the entire bucket:

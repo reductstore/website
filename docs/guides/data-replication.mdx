@@ -318,3 +318,23 @@ import ManualReplica from "!!raw-loader!../examples/cli/data_replication_manual.
     <CodeBlock language="bash">{ManualReplica}</CodeBlock>
   </TabItem>
 </Tabs>
+
+## Run Diagnostics
+
+Each replication task writes aggregated run diagnostics to the `$system` bucket under the `replications/<instance>/<replication-name>` entry. For example, diagnostics for a task named `mirror-sensors` on instance `node-1` are stored in `$system/replications/node-1/mirror-sensors`.
+
+Replication diagnostics are written as `replication_sync` system events. The stored JSON record contains these fields:
+
+| Field                  | Description                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------- |
+| `timestamp`            | Event timestamp in Unix microseconds.                                        |
+| `instance`             | ReductStore instance name that emitted the diagnostic record.                |
+| `status`               | HTTP-style status code for the aggregated replication result.                |
+| `message`              | Last error message for the aggregated result, or an empty string on success. |
+| `pending_records`      | Number of records still waiting in the replication transaction logs.         |
+| `written_records`      | Number of records successfully written to the target bucket.                 |
+| `failed_records`       | Number of records that failed to replicate.                                  |
+| `replicated_data_size` | Total replicated payload size in bytes for successful writes.                |
+| `duration`             | Total replication pass duration in seconds for the aggregated event.         |
+
+The record also has a `status` label with the same value as the `status` field, so you can filter diagnostics by result code. Consecutive replication passes with the same status are aggregated and flushed when the status changes, the aggregation window becomes idle, or the aggregation reaches its time cap.

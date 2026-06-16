@@ -124,3 +124,9 @@ A special instruction in a conditional query that modifies how the query engine 
 ## query link
 
 A secure way to share data from ReductStore without using access tokens. Query links can be created with a specific query and expiration time, allowing controlled access to data.
+
+## lifecycle policy
+
+A background task that periodically applies an action, such as deleting old records, to a bucket. Lifecycle policies can be scoped to specific entries, filtered with a conditional query, disabled, or run in `dry_run` preview mode.
+
+_Related entries:_ bucket, record, conditional query

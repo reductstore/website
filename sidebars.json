@@ -63,6 +63,7 @@
         "guides/data-ingestion",
         "guides/data-querying",
         "guides/data-management",
+        "guides/lifecycle-policies",
         "guides/data-replication",
         "guides/access-control",
         "guides/disaster-recovery"

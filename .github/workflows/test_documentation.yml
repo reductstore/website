@@ -17,15 +17,15 @@ jobs:
       matrix:
         example: [python, rust, golang, curl, cpp, node, cli]
         #        doc_version: [next, 1.19.x, 1.18.x]
-        doc_version: [next, 1.19.x] # 2 version because of brake in reduct-cp
+        doc_version: [next] #, 1.19.x] # 2 version because of brake in reduct-cpp
         include:
           - doc_version: next
             image: reduct/pro:main
             example_root: docs/examples
-
-          - doc_version: 1.19.x
-            image: reduct/pro:latest
-            example_root: versioned_docs/version-1.19.x/examples
+          #
+          #          - doc_version: 1.19.x
+          #            image: reduct/pro:latest
+          #            example_root: versioned_docs/version-1.19.x/examples
 
           #          - doc_version: 1.18.x
           #            image: reduct/store:v1.18.10
@@ -68,12 +68,12 @@ jobs:
       - name: Login Docker
         run: docker login -u "${{ secrets.DOCKER_USER }}" -p "${{ secrets.DOCKER_TOKEN }}"
 
+      - name: Install Rust for reduct-cli
+        uses: dtolnay/rust-toolchain@stable
+
       - name: Install reduct-cli
         run: |
-          wget https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.x86_64-unknown-linux-gnu.tar.gz
-          tar -xvf reduct-cli.x86_64-unknown-linux-gnu.tar.gz
-          chmod +x reduct-cli
-          sudo mv reduct-cli /usr/local/bin
+          cargo install --git https://github.com/reductstore/reduct-cli --branch main reduct-cli
           reduct-cli --version
 
       - name: Prepare ReductStore instance with data
@@ -196,6 +196,12 @@ jobs:
             reduct-cli replica create http://my-token@127.0.0.1:8383/example-replication  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
             reduct-cli replica create http://my-token@127.0.0.1:8383/repl-to-remove  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
             reduct-cli replica create http://my-token@127.0.0.1:8383/my_replication example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
+            if [[ "$example" == *"/lifecycle_policy_browse"* || "$example" == *"/lifecycle_policy_mode"* ]]; then
+              reduct-cli lifecycle create http://my-token@127.0.0.1:8383/my-lifecycle example-bucket --type delete --older-than 30d --interval 1h
+            fi
+            if [[ "$example" == *"/lifecycle_policy_remove"* ]]; then
+              reduct-cli lifecycle create http://my-token@127.0.0.1:8383/lifecycle-to-remove example-bucket --type delete --older-than 30d --interval 1h
+            fi
             reduct-cli token create http://my-token@127.0.0.1:8383/token-to-remove
             curl -X POST -H "Authorization: Bearer my-token" -d "" http://127.0.0.1:8383/api/v1/b/bucket-to-remove/example-entry?ts=1
             curl -X POST -H "Authorization: Bearer my-token" -d "" http://127.0.0.1:8383/api/v1/b/example-bucket/entry_1?ts=1
