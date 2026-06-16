@@ -33,7 +33,7 @@ Defined in: [messages/LifecycleInfo.ts:81](https://github.com/reductstore/reduct
 
 Lifecycle info.
 
-***
+---
 
 ### settings
 

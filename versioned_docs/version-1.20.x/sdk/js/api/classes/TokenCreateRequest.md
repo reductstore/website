@@ -33,7 +33,7 @@ Defined in: [messages/Token.ts:32](https://github.com/reductstore/reduct-js/blob
 
 Expiration time as unix timestamp in milliseconds
 
-***
+---
 
 ### ipAllowlist?
 
@@ -43,7 +43,7 @@ Defined in: [messages/Token.ts:42](https://github.com/reductstore/reduct-js/blob
 
 List of IP addresses and CIDR ranges allowed to use the token
 
-***
+---
 
 ### permissions
 
@@ -53,7 +53,7 @@ Defined in: [messages/Token.ts:27](https://github.com/reductstore/reduct-js/blob
 
 Permissions for the token
 
-***
+---
 
 ### ttl?
 

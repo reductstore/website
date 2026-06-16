@@ -21,7 +21,7 @@ Resource status during deletion
 
 Defined in: [messages/Status.ts:6](https://github.com/reductstore/reduct-js/blob/main/src/messages/Status.ts#L6)
 
-***
+---
 
 ### READY
 

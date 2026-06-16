@@ -14,5 +14,5 @@ LifecycleMode namespace providing constant values for runtime usage.
 ## Variables
 
 - [DISABLED](variables/DISABLED.md)
-- [DRY\_RUN](variables/DRY_RUN.md)
+- [DRY_RUN](variables/DRY_RUN.md)
 - [ENABLED](variables/ENABLED.md)

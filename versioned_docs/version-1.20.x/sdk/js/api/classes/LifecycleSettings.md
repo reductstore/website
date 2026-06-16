@@ -33,7 +33,7 @@ Defined in: [messages/LifecycleSettings.ts:34](https://github.com/reductstore/re
 
 Bucket to apply lifecycle policy.
 
-***
+---
 
 ### entries
 
@@ -43,7 +43,7 @@ Defined in: [messages/LifecycleSettings.ts:39](https://github.com/reductstore/re
 
 List of entries to process. If empty, all matching entries are processed.
 
-***
+---
 
 ### interval?
 
@@ -53,7 +53,7 @@ Defined in: [messages/LifecycleSettings.ts:49](https://github.com/reductstore/re
 
 Interval between lifecycle runs, e.g. "10m", "1h", or "3600s".
 
-***
+---
 
 ### lifecycleType?
 
@@ -63,7 +63,7 @@ Defined in: [messages/LifecycleSettings.ts:29](https://github.com/reductstore/re
 
 Lifecycle action type.
 
-***
+---
 
 ### mode?
 
@@ -73,7 +73,7 @@ Defined in: [messages/LifecycleSettings.ts:59](https://github.com/reductstore/re
 
 Lifecycle mode.
 
-***
+---
 
 ### olderThan
 
@@ -83,7 +83,7 @@ Defined in: [messages/LifecycleSettings.ts:44](https://github.com/reductstore/re
 
 Maximum record age, e.g. "30d", "24h", or "3600s".
 
-***
+---
 
 ### when?
 
@@ -111,7 +111,7 @@ Defined in: [messages/LifecycleSettings.ts:61](https://github.com/reductstore/re
 
 `LifecycleSettings`
 
-***
+---
 
 ### serialize()
 

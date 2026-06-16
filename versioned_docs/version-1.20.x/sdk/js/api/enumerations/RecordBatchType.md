@@ -19,7 +19,7 @@ Defined in: [RecordBatch.ts:25](https://github.com/reductstore/reduct-js/blob/ma
 
 Defined in: [RecordBatch.ts:28](https://github.com/reductstore/reduct-js/blob/main/src/RecordBatch.ts#L28)
 
-***
+---
 
 ### UPDATE
 
@@ -27,7 +27,7 @@ Defined in: [RecordBatch.ts:28](https://github.com/reductstore/reduct-js/blob/ma
 
 Defined in: [RecordBatch.ts:27](https://github.com/reductstore/reduct-js/blob/main/src/RecordBatch.ts#L27)
 
-***
+---
 
 ### WRITE
 

@@ -51,7 +51,7 @@ Close underlying HTTP resources (Node.js only).
 
 `Promise`\&lt;`void`\&gt;
 
-***
+---
 
 ### createBucket()
 
@@ -79,7 +79,7 @@ optional settings
 
 `Promise`\&lt;[`Bucket`](Bucket.md)\&gt;
 
-***
+---
 
 ### createLifecycle()
 
@@ -107,7 +107,7 @@ settings of the lifecycle policy
 
 `Promise`\&lt;`void`\&gt;
 
-***
+---
 
 ### createReplication()
 
@@ -135,7 +135,7 @@ settings of the replication
 
 `Promise`\&lt;`void`\&gt;
 
-***
+---
 
 ### createToken()
 
@@ -168,11 +168,13 @@ the token
 #### Example
 
 ```ts
-const token = await client.createToken("my-token", {fullAccess: true});
-const client = new Client("https://play.storage-reduct.dev", {apiToken: token});
+const token = await client.createToken("my-token", { fullAccess: true });
+const client = new Client("https://play.storage-reduct.dev", {
+  apiToken: token,
+});
 ```
 
-***
+---
 
 ### deleteLifecycle()
 
@@ -194,7 +196,7 @@ name of the lifecycle policy
 
 `Promise`\&lt;`void`\&gt;
 
-***
+---
 
 ### deleteReplication()
 
@@ -216,7 +218,7 @@ name of the replication
 
 `Promise`\&lt;`void`\&gt;
 
-***
+---
 
 ### deleteToken()
 
@@ -238,7 +240,7 @@ name of the token
 
 `Promise`\&lt;`void`\&gt;
 
-***
+---
 
 ### getBucket()
 
@@ -260,7 +262,7 @@ name of the bucket
 
 `Promise`\&lt;[`Bucket`](Bucket.md)\&gt;
 
-***
+---
 
 ### getBucketList()
 
@@ -280,7 +282,7 @@ Get list of buckets
 
 BucketInfo
 
-***
+---
 
 ### getInfo()
 
@@ -298,7 +300,7 @@ the data about the server
 
 #### Async
 
-***
+---
 
 ### getLifecycle()
 
@@ -322,7 +324,7 @@ name of the lifecycle policy
 
 the lifecycle policy
 
-***
+---
 
 ### getLifecycleList()
 
@@ -338,7 +340,7 @@ Get the list of lifecycle policies
 
 the list of lifecycle policies
 
-***
+---
 
 ### getOrCreateBucket()
 
@@ -366,7 +368,7 @@ optional settings
 
 `Promise`\&lt;[`Bucket`](Bucket.md)\&gt;
 
-***
+---
 
 ### getReplication()
 
@@ -390,7 +392,7 @@ name of the replication
 
 the replication
 
-***
+---
 
 ### getReplicationList()
 
@@ -406,7 +408,7 @@ Get the list of replications
 
 the list of replications
 
-***
+---
 
 ### getToken()
 
@@ -430,7 +432,7 @@ name of the token
 
 the token
 
-***
+---
 
 ### getTokenList()
 
@@ -446,7 +448,7 @@ List all tokens
 
 the list of tokens
 
-***
+---
 
 ### me()
 
@@ -462,7 +464,7 @@ Get current API token and its permissions
 
 the token
 
-***
+---
 
 ### rotateToken()
 
@@ -486,7 +488,7 @@ name of the token
 
 new token value
 
-***
+---
 
 ### setLifecycleMode()
 
@@ -514,7 +516,7 @@ new mode: enabled, disabled, or dry_run
 
 `Promise`\&lt;`void`\&gt;
 
-***
+---
 
 ### setReplicationMode()
 
@@ -542,7 +544,7 @@ new mode: enabled, paused, or disabled
 
 `Promise`\&lt;`void`\&gt;
 
-***
+---
 
 ### updateLifecycle()
 
@@ -570,7 +572,7 @@ settings of the lifecycle policy
 
 `Promise`\&lt;`void`\&gt;
 
-***
+---
 
 ### updateReplication()
 

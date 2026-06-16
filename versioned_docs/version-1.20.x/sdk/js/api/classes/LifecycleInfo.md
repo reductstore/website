@@ -33,7 +33,7 @@ Defined in: [messages/LifecycleInfo.ts:55](https://github.com/reductstore/reduct
 
 Lifecycle policy is provisioned.
 
-***
+---
 
 ### isRunning
 
@@ -43,7 +43,7 @@ Defined in: [messages/LifecycleInfo.ts:60](https://github.com/reductstore/reduct
 
 Lifecycle worker is running.
 
-***
+---
 
 ### lastRun?
 
@@ -53,7 +53,7 @@ Defined in: [messages/LifecycleInfo.ts:50](https://github.com/reductstore/reduct
 
 Last lifecycle run time.
 
-***
+---
 
 ### mode
 
@@ -63,7 +63,7 @@ Defined in: [messages/LifecycleInfo.ts:40](https://github.com/reductstore/reduct
 
 Lifecycle mode.
 
-***
+---
 
 ### name
 
@@ -73,7 +73,7 @@ Defined in: [messages/LifecycleInfo.ts:35](https://github.com/reductstore/reduct
 
 Lifecycle policy name.
 
-***
+---
 
 ### type
 

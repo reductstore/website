@@ -2,6 +2,7 @@
 title: "MQTT input"
 description: "Documentation for MQTT input in ReductBridge."
 ---
+
 # MQTT input
 
 The MQTT input subscribes to one or more MQTT topics and forwards messages into a pipeline.
@@ -14,8 +15,9 @@ Labels are applied with the following rules:
 3. This ordering behavior applies to all rule types: `static`, `field`, and `property`.
 4. Payload field labels (`field = "..."`) work with JSON and protobuf payloads.
 5. MQTT v5 property labels:
-  - `property = "content_type"` reads the built-in MQTT v5 `content_type` property.
-  - `property = "<name>"` reads the MQTT v5 user property named `<name>`.
+
+- `property = "content_type"` reads the built-in MQTT v5 `content_type` property.
+- `property = "<name>"` reads the MQTT v5 user property named `<name>`.
 
 Record timestamps can be mapped per topic with `timestamp`:
 
@@ -120,8 +122,8 @@ labels = [
 ]
 ```
 
-`entry_name`, `content_type`, and `labels` are configured per topic. `content_type` 
-is used as the default record content type when an MQTT v5 publish does not provide 
+`entry_name`, `content_type`, and `labels` are configured per topic. `content_type`
+is used as the default record content type when an MQTT v5 publish does not provide
 a `content_type` property; for MQTT v3 it is used directly. Use bare names such as
 `tenant`, `status`, or `id` for MQTT v5 user properties.
 `schema_path` and `schema_name` must be set together.
