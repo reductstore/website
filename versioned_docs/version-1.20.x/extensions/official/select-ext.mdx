@@ -1,0 +1,453 @@
+---
+title: ReductSelect
+description: Extension for ReductStore that allows you to manipulate data in columnar formats on the storage side.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/extensions/official/select-ext"
+  />
+</head>
+
+# ReductSelect Extension
+
+The **ReductSelect** [**extension**](../../glossary#extension) is a powerful tool that enables you to manipulate columnar data on the storage side.
+It allows you to select specific columns, filter data and perform various operations before returning it to the client.
+
+import DemoLicenseNote from "@site/src/components/promotional/DemoLicenseNote";
+
+<DemoLicenseNote />
+
+## Query Format
+
+ReductSelect uses SQL to select, filter, aggregate, and reorder rows.
+
+A user can specify the SQL query and other parameters in the `#ext.select` object of the conditional query in the JSON format:
+
+```python
+{
+    # CSV specific parameters
+    "csv": {
+        "has_headers": "boolean"  # Indicates if the CSV data has headers, by default inferred from content type
+    },
+    # Switch to JSON format
+    "json": {
+    },
+    # Switch to Parquet format
+    "parquet": {
+    },
+    # Switch to Protobuf format (schema resolved from $schema attachment by default)
+    "protobuf": {
+        "message_name": "string",  # Override message type name, e.g. "pkg.SensorReading"
+        "schema": "string",        # Inline base64-encoded FileDescriptorSet; requires message_name
+        "fields": {                # Wire-level extraction by field number; cannot be used with message_name/schema
+            "column_name": { "id": "number", "type": "string" }
+        }
+    },
+    # SQL query to run against the current record. Default is "SELECT * FROM ENTRY()"
+    "sql": "string",
+    # Optional output controls
+    "export": {
+        # Output format: "csv", "json", or "parquet"
+        "format": "string",
+        # Batching: group SQL result rows into output records with at most this many rows each. Must be greater than 0.
+        "rows": "number",
+        # Batching: group SQL result rows into output records by source timestamp span, as microseconds or a duration string such as "1s", "1.5s", or "1m".
+        "duration": "number|string"
+    },
+    # Map SQL result columns to computed labels: label name -> SQL column name
+    "as_label": {
+        "label_name": "column_name"
+    }
+}
+```
+
+### SQL Source
+
+The `sql` field contains the query to run against the current record.
+The current input record is available through the case-sensitive `ENTRY()` table function.
+
+If it is not specified, ReductSelect uses:
+
+```sql
+SELECT * FROM ENTRY()
+```
+
+For CSV data without headers, columns are exposed as `column_0`, `column_1`, and so on.
+For CSV data with headers, JSON objects, and Parquet data, SQL columns use the original field names.
+Nested JSON and Parquet fields can be referenced with dotted paths, for example `vector.z` or `temp.status`.
+
+### Parameters
+
+| Parameter  | Type   | Mandatory | Default                    | Description                                                                                                           |
+| ---------- | ------ | --------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `csv`      | object | No        | Inferred from content type | Enables CSV-specific parsing options. Cannot be used together with `json`, `parquet`, or `protobuf`.                  |
+| `json`     | object | No        | Inferred from content type | Selects JSON input parsing. Cannot be used together with `csv`, `parquet`, or `protobuf`.                             |
+| `parquet`  | object | No        | Inferred from content type | Selects Parquet input parsing. Cannot be used together with `csv`, `json`, or `protobuf`.                             |
+| `protobuf` | object | No        | Inferred from content type | Selects Protobuf input parsing. Cannot be used together with `csv`, `json`, or `parquet`.                             |
+| `sql`      | string | No        | `SELECT * FROM ENTRY()`    | SQL query executed against the current input record.                                                                  |
+| `export`   | object | No        | Format-specific            | Controls output format and batching.                                                                                  |
+| `as_label` | object | No        | `{}`                       | Maps SQL result columns to computed labels using `{"label_name": "column_name"}`. Only primitive values are accepted. |
+
+#### Export Parameters
+
+| Parameter  | Type             | Mandatory | Default         | Description                                                                                                                               |
+| ---------- | ---------------- | --------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`   | string           | No        | Input-dependent | Output format. Supported values are `csv`, `json`, and `parquet`.                                                                         |
+| `rows`     | number           | No        | All rows        | Batches SQL result rows into output records with at most this many rows per output record. Must be greater than 0.                        |
+| `duration` | number or string | No        | Not set         | Batches SQL result rows into output records by source timestamp span, as microseconds or a duration string such as `1s`, `1.5s`, or `1m`. |
+
+### Computed Labels
+
+The `as_label` object maps SQL result columns to [**computed labels**](../../glossary#computed-label).
+Use `{"label_name": "column_name"}` to expose a SQL result column as `@label_name`.
+Only primitive values like strings, numbers, and booleans can be mapped to computed labels.
+
+For example, for the following query:
+
+<div>
+    <div style={{width: '50%', float: 'left'}}>
+        ```json
+        {
+            "#ext": {
+                "select": {
+                    "sql": "SELECT col1 FROM ENTRY() WHERE col1 > 10",
+                    "as_label": {
+                        "col1": "col1"
+                    }
+                }
+            }
+        }
+        ```
+
+    </div>
+    <div style={{width: '50%', float: 'right', padding: '0 20px'}}>
+
+        The following CSV record:
+
+        | col1 | col2 | col3 |
+        | --- | ----- | ------------------- |
+        | 20 | false | another message |
+        | 0 | false | message string |
+        | 30 | true | yet another message |
+
+        will be transformed to:
+
+        | col1 |
+        | --- |
+        | 20 |
+        | 30 |
+
+        and the output record has the computed label `@col1`.
+
+    </div>
+
+</div>
+<div style={{clear: 'both'}}></div>
+
+You can find more information about the conditional queries in the [**Conditional Query Reference**](../../conditional-query) documentation.
+
+:::info
+When an output record contains multiple rows, computed labels use the values from the last row in that output record.
+:::
+
+## Data Formats
+
+Currently, the extension supports JSON, comma-separated CSV, Parquet, and Protobuf data.
+
+### CSV Support
+
+ReductSelect processes CSV records when the record content type is `text/csv` or when the query explicitly contains a `csv` object.
+Stored CSV data can be single- or multi-line and can contain any number of columns.
+The extension converts CSV rows into a SQL table before running the query.
+
+The CSV format example:
+
+```
+header1,header2,header3
+100,true,message string
+200,false,another message
+300,true,yet another message
+```
+
+#### Parameters
+
+The `csv` object contains parameters that specify how to handle CSV data.
+It can also be used to force CSV parsing when the record content type is not `text/csv`.
+
+| Parameter     | Type    | Mandatory | Default           | Description                                                                                                                                    |
+| ------------- | ------- | --------- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `has_headers` | boolean | No        | From content type | Indicates if the CSV data has headers. If set, it overrides content-type inference and controls whether the first row is used as column names. |
+
+If `has_headers` is `false`, SQL columns are generated as `column_0`, `column_1`, and so on.
+If `has_headers` is `true`, SQL columns use the names from the first CSV row.
+
+#### SQL Examples
+
+For CSV data without headers, select generated column names:
+
+```json
+{
+  "sql": "SELECT column_0, column_2, column_3 FROM ENTRY() WHERE column_0 < 10"
+}
+```
+
+For CSV data with headers, enable `csv.has_headers` and select by header name:
+
+```json
+{
+  "csv": {
+    "has_headers": true
+  },
+  "sql": "SELECT e FROM ENTRY() WHERE e < 10"
+}
+```
+
+:::info
+If the stored record content type includes `header=present`, ReductSelect treats the first CSV row as headers.
+For example, records with the content type `text/csv; header=present` do not need the explicit `csv.has_headers` query parameter.
+:::
+
+### JSON Support
+
+#### Parameters
+
+ReductSelect processes JSON records when the record content type is `application/json` or when the query explicitly contains a `json` object.
+The `json` object can be used to force JSON parsing when the record content type is different.
+
+#### Field Selection
+
+The extension converts JSON objects into a SQL table before running the query.
+Use SQL to select JSON fields.
+Nested fields can be addressed with dotted paths.
+
+```json
+{
+  "json": {},
+  "sql": "SELECT temp.status AS status, temp.value AS value FROM ENTRY() WHERE temp.status = 'ok'"
+}
+```
+
+### Parquet Support
+
+#### Parameters
+
+ReductSelect processes Parquet records when the record content type is `application/vnd.apache.parquet` or when the query explicitly contains a `parquet` object.
+The `parquet` object can be used to force Parquet parsing when the record content type is different.
+The extension reads the Parquet schema and exposes its fields as SQL columns.
+
+```json
+{
+  "parquet": {},
+  "sql": "SELECT name, value FROM ENTRY() WHERE value > 10",
+  "export": {
+    "format": "parquet",
+    "rows": 100
+  }
+}
+```
+
+Parquet input supports the same SQL processing as CSV and JSON, including nested field selection when the source schema contains nested structures.
+
+### Protobuf Support
+
+ReductSelect processes Protobuf records when the record content type is `application/protobuf`, `application/x-protobuf`, or `application/vnd.google.protobuf`, or when the query explicitly contains a `protobuf` object.
+Decoded fields are converted to JSON internally before SQL processing, so all standard SQL field selection and filtering applies.
+
+#### Required `$schema` attachment
+
+By default, `protobuf: {}` reads the message schema from a `$schema` [**attachment**](../../../glossary#attachment) on the queried entry.
+The attachment must contain the following fields:
+
+| Field         | Type   | Description                                                                                          |
+| ------------- | ------ | ---------------------------------------------------------------------------------------------------- |
+| `encoding`    | string | Must be `"protobuf"`.                                                                                |
+| `schema_name` | string | Fully qualified message type name, e.g. `pkg.SensorReading`.                                         |
+| `schema`      | string | Base64-encoded `FileDescriptorSet` (generated with `protoc --descriptor_set_out --include_imports`). |
+
+**Example `$schema` attachment**
+
+```json
+{
+  "encoding": "protobuf",
+  "schema_name": "pkg.SensorReading",
+  "schema": "<base64-encoded FileDescriptorSet>"
+}
+```
+
+#### Parameters
+
+The `protobuf` object accepts the following optional sub-parameters to override attachment-based schema resolution:
+
+| Parameter      | Type   | Mandatory | Description                                                                                                                 |
+| -------------- | ------ | --------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `message_name` | string | No        | Overrides the message type name from the attachment. Required when `schema` is provided inline.                             |
+| `schema`       | string | No        | Inline base64-encoded `FileDescriptorSet`, bypassing the attachment. Requires `message_name`. Cannot be used with `fields`. |
+| `fields`       | object | No        | Wire-level field extraction by field number. No descriptor needed. Cannot be combined with `message_name` or `schema`.      |
+
+**Example: attachment-based (default)**
+
+```json
+{
+  "protobuf": {},
+  "sql": "SELECT device_id, temperature FROM ENTRY() WHERE temperature > 20"
+}
+```
+
+**Example: inline descriptor**
+
+```json
+{
+  "protobuf": {
+    "message_name": "pkg.SensorReading",
+    "schema": "<base64-encoded FileDescriptorSet>"
+  },
+  "sql": "SELECT device_id, temperature FROM ENTRY() WHERE temperature > 20"
+}
+```
+
+#### Wire-Level Field Extraction
+
+The `fields` option extracts specific top-level scalar fields by their Protobuf field number without a full descriptor.
+Each entry maps a SQL column name to `id` (field number) and `type`:
+
+| Sub-field | Type   | Description                                                                                                                                                                                        |
+| --------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`      | number | Protobuf field number as defined in the `.proto` file.                                                                                                                                             |
+| `type`    | string | Scalar field type. Supported values: `string`, `bytes`, `double`, `float`, `fixed64`, `sfixed64`, `fixed32`, `sfixed32`, `sint32`, `sint64`, `uint64`, `uint32`, `int64`, `int32`, `bool`, `enum`. |
+
+```json
+{
+  "protobuf": {
+    "fields": {
+      "device_id": { "id": 1, "type": "string" },
+      "temperature": { "id": 3, "type": "double" }
+    }
+  },
+  "sql": "SELECT device_id, temperature FROM ENTRY() WHERE temperature > 20"
+}
+```
+
+:::note
+The `fields` extraction mode (without a full protobuf descriptor) only supports **top-level scalar fields**. Nested messages, packed repeated fields, maps, and extensions cannot be extracted.
+
+Fields that are absent or whose wire type does not match the declared `type` are silently omitted rather than causing an error.
+
+For full protobuf support including nested structures, use `message_name` + `schema` instead.
+:::
+
+## Examples
+
+The following examples demonstrate how to use the **ReductSelect** extension to select specific columns from a CSV file and filter its rows based on these columns.
+Although this example is written in Python, it can be run using any of the official SDKs.
+
+import CodeBlock from "@theme/CodeBlock";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+### Selecting Columns from CSV Data
+
+This example demonstrates how to use the select extension to extract specific columns from CSV data stored in ReductStore, apply filtering based on column values, and return a transformed dataset.
+
+import SelectQueryPy from "!!raw-loader!../../examples/py/src/ext_select_csv_query.py";
+
+<Tabs>
+  <TabItem value="Python">
+    <CodeBlock language="python">{SelectQueryPy}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+#### Expected Output
+
+The expected output of the above code is as follows:
+
+```
+Record timestamp: 1749797653273752
+Record labels: {}
+column_0,column_2,column_3
+1,3,4
+6,8,9
+Record timestamp: 1749797653273753
+Record labels: {}
+column_0,column_2,column_3
+1,3,4
+6,8,9
+```
+
+#### Explanation
+
+- CSV data without headers is exposed to SQL as generated columns: `column_0`, `column_1`, and so on.
+- The SQL query selects `column_0`, `column_2`, and `column_3`.
+- The SQL `WHERE` clause filters out rows where `column_0 >= 10`, removing the row `11,12,13,14,15`.
+- The result includes only the selected columns of the remaining rows:
+  - From `1,2,3,4,5` to `1,3,4`
+  - From `6,7,8,9,10` to `6,8,9`
+- The query runs over two records, so the same filtered output appears twice, once per record timestamp.
+
+### Selecting Columns from CSV Data with Headers
+
+This example demonstrates how to use the select extension to work with CSV data that includes a header row.
+You can extract specific columns by their header names and apply filters based on their values.
+
+import SelectQueryHeadersPy from "!!raw-loader!../../examples/py/src/ext_select_csv_query_with_headers.py";
+
+<Tabs>
+  <TabItem value="Python">
+    <CodeBlock language="python">{SelectQueryHeadersPy}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+#### Expected Output
+
+The expected output of the above code is as follows:
+
+```
+Record timestamp: 1749797694120873
+Record labels: {}
+e
+5
+Record timestamp: 1749797694120874
+Record labels: {}
+e
+5
+```
+
+#### Explanation
+
+- The input CSV includes a header row: a,b,c,d,e.
+- The `csv.has_headers=true` option tells the extension to use the first row as column headers.
+- The SQL query selects only the column named `e`.
+- The SQL `WHERE` clause filters out any row where column `e` is 10 or more, so the rows with `e=10` and `e=15` are excluded.
+- Only the row 1,2,3,4,5 remains, where e=5.
+- The query runs over two records, so the same filtered output appears twice, once per record timestamp.
+
+### Selecting Fields from JSON Data
+
+This example demonstrates how to use the select extension to extract specific fields from JSON data stored in ReductStore, apply filtering based on field values, and return a transformed dataset.
+
+import SelectQueryJsonPy from "!!raw-loader!../../examples/py/src/ext_select_json_query.py";
+
+<Tabs>
+  <TabItem value="Python">
+    <CodeBlock language="python">{SelectQueryJsonPy}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+#### Expected Output
+
+The expected output of the above code is as follows:
+
+```
+Record timestamp: 1753776773034850
+Record labels: {}
+JSON data: [{'status': 'ok', 'value': 10.0}]
+```
+
+#### Explanation
+
+- The `json` object specifies that the data is in JSON format.
+- The SQL query selects the nested fields `temp.status` and `temp.value`.
+- The SQL `WHERE` clause filters out any record where `temp.status` is not equal to `ok`.
+- The result includes only the selected field of the remaining records:
+  - The record with `temp.status` equal to `ok` is returned as a JSON object with `status` and `value` fields.

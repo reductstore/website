@@ -1,0 +1,190 @@
+---
+title: "attachment"
+description: "Manage entry attachments"
+---
+
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/cli/attachment" />
+</head>
+
+# reduct-cli attachment
+
+Manage entry attachments
+
+## Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
+- `-h, --help`: Print help
+
+## Help Output
+
+```text
+Manage entry attachments
+
+Usage: reduct-cli attachment [OPTIONS] [COMMAND]
+
+Commands:
+  ls     List attachment keys of an entry
+  read   Read attachments of an entry
+  rm     Remove attachments from an entry
+  write  Write an attachment to an entry
+  help   Print this message or the help of the given subcommand(s)
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
+  -h, --help               Print help
+```
+
+## Subcommands
+
+### `ls`
+
+List attachment keys of an entry
+
+#### Arguments
+
+- `<ENTRY_PATH>`: Path to an entry (e.g. SERVER_ALIAS/BUCKET/ENTRY_NAME or http://token@localhost:8383/BUCKET/ENTRY_NAME)
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+List attachment keys of an entry
+
+Usage: reduct-cli attachment ls [OPTIONS] <ENTRY_PATH>
+
+Arguments:
+  <ENTRY_PATH>  Path to an entry (e.g. SERVER_ALIAS/BUCKET/ENTRY_NAME or http://token@localhost:8383/BUCKET/ENTRY_NAME)
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
+  -h, --help               Print help
+```
+
+### `read`
+
+Read attachments of an entry
+
+#### Arguments
+
+- `<ENTRY_PATH>`: Path to an entry (e.g. SERVER_ALIAS/BUCKET/ENTRY_NAME or http://token@localhost:8383/BUCKET/ENTRY_NAME)
+- `[KEY]...`: Attachment keys to read
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Read attachments of an entry
+
+Usage: reduct-cli attachment read [OPTIONS] <ENTRY_PATH> [KEY]...
+
+Arguments:
+  <ENTRY_PATH>  Path to an entry (e.g. SERVER_ALIAS/BUCKET/ENTRY_NAME or http://token@localhost:8383/BUCKET/ENTRY_NAME)
+  [KEY]...      Attachment keys to read
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
+  -h, --help               Print help
+```
+
+### `rm`
+
+Remove attachments from an entry
+
+#### Arguments
+
+- `<ENTRY_PATH>`: Path to an entry (e.g. SERVER_ALIAS/BUCKET/ENTRY_NAME or http://token@localhost:8383/BUCKET/ENTRY_NAME)
+- `[KEY]...`: Attachment keys to remove
+
+#### Options
+
+- `--all`: Remove all attachments
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Remove attachments from an entry
+
+Usage: reduct-cli attachment rm [OPTIONS] <KEY|--all> <ENTRY_PATH>
+
+Arguments:
+  <ENTRY_PATH>  Path to an entry (e.g. SERVER_ALIAS/BUCKET/ENTRY_NAME or http://token@localhost:8383/BUCKET/ENTRY_NAME)
+  [KEY]...      Attachment keys to remove
+
+Options:
+      --all                Remove all attachments
+  -i, --ignore-ssl         Ignore SSL certificate verification
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
+  -h, --help               Print help
+```
+
+### `write`
+
+Write an attachment to an entry
+
+#### Arguments
+
+- `<ENTRY_PATH>`: Path to an entry (e.g. SERVER_ALIAS/BUCKET/ENTRY_NAME or http://token@localhost:8383/BUCKET/ENTRY_NAME)
+- `<KEY>`: Attachment key
+- `<JSON>`: Attachment value in JSON format
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Write an attachment to an entry
+
+Usage: reduct-cli attachment write [OPTIONS] <ENTRY_PATH> <KEY> <JSON>
+
+Arguments:
+  <ENTRY_PATH>  Path to an entry (e.g. SERVER_ALIAS/BUCKET/ENTRY_NAME or http://token@localhost:8383/BUCKET/ENTRY_NAME)
+  <KEY>         Attachment key
+  <JSON>        Attachment value in JSON format
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
+  -h, --help               Print help
+```

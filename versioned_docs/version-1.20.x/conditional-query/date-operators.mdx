@@ -1,0 +1,82 @@
+---
+title: Date Operators
+description: Extract UTC or timezone-aware date parts from timestamps in conditional queries.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/conditional-query/date-operators"
+  />
+</head>
+
+Date operators extract calendar parts from timestamps (microseconds since Unix epoch).
+They are useful for time-of-day/day-of-week filtering and scheduling-style conditions.
+
+All date operators support:
+
+- one operand: `<timestamp>`
+- two operands: `<timestamp>, <timezone>` where timezone is an IANA name like `"Europe/Berlin"`
+
+If timezone is omitted, UTC is used.
+
+:::info
+`$weekday` uses Monday-based indexing: `0 = Monday`, ..., `6 = Sunday`.
+:::
+
+## Supported operators
+
+| Operator   | ReductStore Version | Return value                        |
+| ---------- | ------------------- | ----------------------------------- |
+| `$second`  | v1.19               | `0..59`                             |
+| `$minute`  | v1.19               | `0..59`                             |
+| `$hour`    | v1.19               | `0..23`                             |
+| `$day`     | v1.19               | `1..31`                             |
+| `$month`   | v1.19               | `1..12`                             |
+| `$year`    | v1.19               | 4-digit year                        |
+| `$weekday` | v1.19               | `0..6` (`0 = Monday`, `6 = Sunday`) |
+
+## Syntax
+
+```
+{
+  "$operator": [ <timestamp>, <optional timezone> ]
+}
+```
+
+Use `"$timestamp"` to read the current record timestamp.
+
+## Examples
+
+Records that happened during office hours in Berlin:
+
+```json
+{
+  "$and": [
+    { "$gte": [{ "$hour": ["$timestamp", "Europe/Berlin"] }, 9] },
+    { "$lt": [{ "$hour": ["$timestamp", "Europe/Berlin"] }, 18] }
+  ]
+}
+```
+
+Weekday filter (Monday to Friday, UTC):
+
+```json
+{
+  "$lt": [{ "$weekday": ["$timestamp"] }, 5]
+}
+```
+
+Filter for records from January:
+
+```json
+{
+  "$eq": [{ "$month": ["$timestamp"] }, 1]
+}
+```
+
+### Notes
+
+- Timestamp input is in microseconds.
+- Invalid timezone names return an error.
+- Use these operators with comparison/logical operators to build calendar-aware filters.
