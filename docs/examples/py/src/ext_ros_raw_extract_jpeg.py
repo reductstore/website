@@ -50,11 +50,11 @@ async def main():
             print(f"Record labels: {dict(sorted(record.labels.items()))}")
 
             message = json.loads((await record.read_all()).decode('utf-8'))
-            for index, item in enumerate(message):
-                with open(f'output-{index}.jpg', 'wb') as f:
-                    f.write(base64.decodebytes(item['data'].encode('ascii')))
+            payload = message[0]
+            with open('output.jpg', 'wb') as f:
+                f.write(base64.decodebytes(payload['data'].encode('ascii')))
 
-            image_info = [{k: v for k, v in item.items() if k != 'data'} for item in message]
+            image_info = {k: v for k, v in payload.items() if k != 'data'}
             print(f'Image parameters: {json.dumps(image_info, sort_keys=True)}')
 
 
