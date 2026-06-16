@@ -56,7 +56,7 @@ In this case, the conditional replication settings will be:
 
 ```yaml
 entries: ["sensor-1"]
-where: { "&rms": { "$gt": 2.0 }, "&quality": { "$eq": "ok" } }
+when: { "&rms": { "$gt": 2.0 }, "&quality": { "$eq": "ok" } }
 ```
 
 See the next section for more information on how to create a replication task with conditional replication settings.

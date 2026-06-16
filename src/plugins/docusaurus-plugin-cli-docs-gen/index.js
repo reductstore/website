@@ -21,7 +21,6 @@ function escapeMdxText(value) {
   return value
     .replace(/\\/g, "\\\\")
     .replace(/\*/g, "\\*")
-    .replace(/_/g, "\\_")
     .replace(/\[/g, "\\[")
     .replace(/\]/g, "\\]")
     .replace(/&/g, "&amp;")
@@ -29,6 +28,10 @@ function escapeMdxText(value) {
     .replace(/>/g, "&gt;")
     .replace(/{/g, "&#123;")
     .replace(/}/g, "&#125;");
+}
+
+function normalizeDescription(value) {
+  return value.replace(/\s+/g, " ").trim();
 }
 
 function normalizeHelpText(helpText) {
@@ -64,14 +67,16 @@ function parseEntries(lines) {
     if (match) {
       current = {
         label: match[1].trim(),
-        description: match[2].trim(),
+        description: normalizeDescription(match[2]),
       };
       entries.push(current);
       continue;
     }
 
     if (current && line.trim() !== "") {
-      current.description = `${current.description} ${line.trim()}`;
+      current.description = normalizeDescription(
+        `${current.description} ${line.trim()}`,
+      );
     }
   }
 
@@ -172,7 +177,15 @@ function getReadmeContent(readmePath) {
     lines.shift();
   }
 
-  return lines.join("\n").trim();
+  return lines
+    .join("\n")
+    .trim()
+    .replace(/^\* /gm, "- ")
+    .replace(/\n{3,}/g, "\n\n")
+    .replace(
+      "import DocCardList from '@theme/DocCardList';",
+      'import DocCardList from "@theme/DocCardList";',
+    );
 }
 
 function renderUsage(parsed, level = "##") {
@@ -298,6 +311,62 @@ function writeDocs(node, destination, opts) {
   }
 }
 
+function listFiles(dir) {
+  if (!fs.existsSync(dir)) {
+    return [];
+  }
+
+  const files = [];
+  const stack = [""];
+
+  while (stack.length) {
+    const relativeDir = stack.pop();
+    const absoluteDir = path.join(dir, relativeDir);
+
+    for (const entry of fs.readdirSync(absoluteDir, { withFileTypes: true })) {
+      const relativePath = path.join(relativeDir, entry.name);
+      if (entry.isDirectory()) {
+        stack.push(relativePath);
+        continue;
+      }
+
+      if (entry.isFile()) {
+        files.push(relativePath);
+      }
+    }
+  }
+
+  return files.sort();
+}
+
+function syncGeneratedDocs(source, destination) {
+  const sourceFiles = new Set(listFiles(source));
+
+  for (const relativePath of sourceFiles) {
+    const sourcePath = path.join(source, relativePath);
+    const destinationPath = path.join(destination, relativePath);
+    const generated = fs.readFileSync(sourcePath, "utf8");
+    const existing = fs.existsSync(destinationPath)
+      ? fs.readFileSync(destinationPath, "utf8")
+      : null;
+
+    if (existing === generated) {
+      continue;
+    }
+
+    fs.mkdirSync(path.dirname(destinationPath), { recursive: true });
+    fs.writeFileSync(destinationPath, generated);
+  }
+
+  for (const relativePath of listFiles(destination)) {
+    if (sourceFiles.has(relativePath)) {
+      continue;
+    }
+
+    fs.rmSync(path.join(destination, relativePath), { force: true });
+  }
+}
+
 export default async function createPlugin(context, opts) {
   return {
     name: "docusaurus-plugin-cli-docs-gen",
@@ -311,10 +380,10 @@ export default async function createPlugin(context, opts) {
         opts.binaryPathInArchive || "reduct-cli",
       );
       const destination = path.join(process.cwd(), opts.destination);
+      const generatedDestination = path.join(tmpDir, "generated-docs");
       const readmePath = path.join(repoDir, "README.md");
 
       fs.rmSync(tmpDir, { recursive: true, force: true });
-      fs.rmSync(destination, { recursive: true, force: true });
       fs.mkdirSync(tmpDir, { recursive: true });
 
       console.log(
@@ -329,7 +398,8 @@ export default async function createPlugin(context, opts) {
       );
 
       const tree = buildTree(binaryPath);
-      writeDocs(tree, destination, { ...opts, readmePath });
+      writeDocs(tree, generatedDestination, { ...opts, readmePath });
+      syncGeneratedDocs(generatedDestination, destination);
     },
   };
 }

@@ -1,13 +1,13 @@
 ---
 title: Raw Messages
-description: Extract raw ROS 1 and ROS 2 records as JSON or export them as MCAP using `$ros` entry attachments.
+description: Extract raw ROS 1, ROS 2, and Protobuf records as JSON or export them as MCAP using `$schema` entry attachments.
 ---
 
 # Raw Messages
 
 Raw Messages mode lets ReductROS decode ROS messages that are stored as individual records rather
-than as MCAP or rosbag archives. It supports both ROS 1 and ROS 2 pipelines that store schema
-metadata in the `$ros` [**attachment**](../../../glossary#attachment) of each entry.
+than as MCAP or rosbag archives. It supports ROS 1, ROS 2, and Protobuf pipelines that store schema
+metadata in the `$schema` [**attachment**](../../../glossary#attachment) of each entry.
 
 import DemoLicenseNote from "@site/src/components/promotional/DemoLicenseNote";
 import CodeBlock from "@theme/CodeBlock";
@@ -20,28 +20,28 @@ import TabItem from "@theme/TabItem";
 
 Raw Messages expects:
 
-- one ROS 1 (`application/ros1`) or ROS 2 (`application/cdr`) message per record
+- one ROS 1 (`application/ros1`), ROS 2 (`application/cdr`), or Protobuf (`application/protobuf`) message per record
 - one or more queried entries
-- a `$ros` attachment on each queried entry that provides the schema metadata
+- a `$schema` attachment on each queried entry that provides the schema metadata
 
 Unlike the MCAP and rosbag archive modes, Raw Messages works directly with individual records. It
 supports **extraction** to JSON and **export** to MCAP.
 
-## Required `$ros` attachment
+## Required `$schema` attachment
 
-Raw Messages uses an attachment named `$ros` on each queried entry. The attachment must contain the
+Raw Messages uses an attachment named `$schema` on each queried entry. The attachment must contain the
 following JSON fields:
 
-| Field         | Type     | Description                                                |
-| ------------- | -------- | ---------------------------------------------------------- |
-| `encoding`    | `string` | Must be `ros1` (ROS 1) or `cdr` (ROS 2).                   |
-| `schema`      | `string` | Full message definition used to decode the binary payload. |
-| `topic`       | `string` | Topic name associated with the stored records.             |
-| `schema_name` | `string` | ROS message type, for example `std_msgs/String`.           |
+| Field         | Type     | Description                                                                                              |
+| ------------- | -------- | -------------------------------------------------------------------------------------------------------- |
+| `encoding`    | `string` | Must be `ros1` (ROS 1), `cdr` (ROS 2), or `protobuf`.                                                    |
+| `schema`      | `string` | For `ros1`/`cdr`, the full ROS message definition. For `protobuf`, a base64-encoded `FileDescriptorSet`. |
+| `topic`       | `string` | Topic name associated with the stored records.                                                           |
+| `schema_name` | `string` | Message type, for example `std_msgs/String` (ROS) or `pkg.SensorReading` (Protobuf).                     |
 
 If the records were ingested with `reduct-bridge`, this attachment is written automatically.
 
-**Example `$ros` metadata (ROS 1)**
+**Example `$schema` metadata (ROS 1)**
 
 ```json
 {
@@ -52,7 +52,7 @@ If the records were ingested with `reduct-bridge`, this attachment is written au
 }
 ```
 
-**Example `$ros` metadata (ROS 2)**
+**Example `$schema` metadata (ROS 2)**
 
 ```json
 {
@@ -62,6 +62,19 @@ If the records were ingested with `reduct-bridge`, this attachment is written au
   "schema_name": "std_msgs/msg/String"
 }
 ```
+
+**Example `$schema` metadata (Protobuf)**
+
+```json
+{
+  "encoding": "protobuf",
+  "schema": "<base64-encoded FileDescriptorSet>",
+  "topic": "/sensors/env",
+  "schema_name": "factory.EnvironmentReading"
+}
+```
+
+For `protobuf`, store records with content type `application/protobuf` containing the raw serialized message bytes.
 
 ## Query format
 
@@ -87,7 +100,7 @@ If the records were ingested with `reduct-bridge`, this attachment is written au
 
 :::info
 Specify exactly one of `extract` or `export`. Both operations resolve schema and topic information
-from the `$ros` attachment of each queried entry.
+from the `$schema` attachment of each queried entry.
 :::
 
 ## Data extraction
@@ -95,14 +108,14 @@ from the `$ros` attachment of each queried entry.
 The `extract` property tells ReductROS how to decode each raw ROS record and how to shape the
 resulting JSON output.
 
-| Parameter        | Type     | Mandatory | Description                                                                                            |
-| ---------------- | -------- | --------- | ------------------------------------------------------------------------------------------------------ |
-| `topic`          | `string` | No        | Filter decoded records by ROS topic from the `$ros` attachment. Useful when querying multiple entries. |
-| `encode`         | `object` | No        | A map of binary fields to conversion formats.                                                          |
-| `encode.<field>` | `string` | No        | Conversion format for the field. Supported values are `base64` and `jpeg`.                             |
-| `as_label`       | `object` | No        | Computed labels extracted from the decoded JSON payload. Use JSON paths without the `$.` prefix.       |
+| Parameter        | Type     | Mandatory | Description                                                                                               |
+| ---------------- | -------- | --------- | --------------------------------------------------------------------------------------------------------- |
+| `topic`          | `string` | No        | Filter decoded records by ROS topic from the `$schema` attachment. Useful when querying multiple entries. |
+| `encode`         | `object` | No        | A map of binary fields to conversion formats.                                                             |
+| `encode.<field>` | `string` | No        | Conversion format for the field. Supported values are `base64` and `jpeg`.                                |
+| `as_label`       | `object` | No        | Computed labels extracted from the decoded JSON payload. Use JSON paths without the `$.` prefix.          |
 
-If `topic` is omitted, Raw Messages extracts all queried entries that have a valid `$ros` attachment.
+If `topic` is omitted, Raw Messages extracts all queried entries that have a valid `$schema` attachment.
 
 ### Encoding binary fields
 
@@ -128,7 +141,7 @@ timestamp.
 
 The `export` property converts raw ROS records into MCAP episodes. It can aggregate data from
 multiple ReductStore entries into a single MCAP output stream, using the topic and schema from the
-`$ros` attachment of each entry.
+`$schema` attachment of each entry.
 
 | Parameter  | Type     | Mandatory | Description                                                                                       |
 | ---------- | -------- | --------- | ------------------------------------------------------------------------------------------------- |
@@ -139,7 +152,7 @@ multiple ReductStore entries into a single MCAP output stream, using the topic a
 When `export` is provided, the extension:
 
 1. Reads raw ROS records from the queried entries.
-2. Resolves schema and topic metadata for each entry from its `$ros` attachment.
+2. Resolves schema and topic metadata for each entry from its `$schema` attachment.
 3. Streams all matching messages into a new MCAP file.
 4. Starts a new MCAP episode whenever `duration` or `size` is reached.
 
@@ -163,7 +176,7 @@ examples are written in Python, the same query structure works with any official
 
 ### Extracting messages as JSON
 
-This example writes raw `geometry_msgs/Point` records, stores the schema metadata in the `$ros`
+This example writes raw `geometry_msgs/Point` records, stores the schema metadata in the `$schema`
 attachment, and then extracts them as JSON. It also creates a computed label from the decoded `x`
 field.
 
@@ -186,7 +199,7 @@ Record labels: {'@coord_x': '2.0', '@encoding': 'ros1', '@schema': 'geometry_msg
 #### Explanation
 
 - The example uploads three raw ROS 1 records to a new entry.
-- It writes the matching `$ros` attachment before querying the entry.
+- It writes the matching `$schema` attachment before querying the entry.
 - The extractor decodes the binary payload into a JSON `geometry_msgs/Point` message.
 - The `as_label` option exposes the decoded `x` field as `@coord_x`.
 - The `when` filter returns only the record where `@coord_x` equals `2.0`.
@@ -214,7 +227,7 @@ Image parameters: {"encoding": "rgb8", "header": {"frame_id": "", "seq": 1, "sta
 
 #### Explanation
 
-- The example uploads a raw ROS 1 image record and writes the matching `$ros` attachment.
+- The example uploads a raw ROS 1 image record and writes the matching `$schema` attachment.
 - The `encode.data = jpeg` option converts the binary image buffer into a JPEG string.
 - The script prints only the decoded image metadata to keep the output readable.
 - The output timestamp comes from the ROS header stamp rather than the original record timestamp.
@@ -235,7 +248,7 @@ import RawRosExportPy from "!!raw-loader!../../../examples/py/src/ext_ros_raw_ex
 #### Explanation
 
 - The example writes raw ROS 1 point messages into two ReductStore entries.
-- Each entry gets its own `$ros` attachment with the topic and schema metadata.
+- Each entry gets its own `$schema` attachment with the topic and schema metadata.
 - `export.format = mcap` tells ReductROS to emit MCAP instead of JSON.
 - Because the query targets `*`, both entries are aggregated into the same exported MCAP episode.
 - `duration = 1m` enables splitting if the exported stream grows beyond one minute of source data.

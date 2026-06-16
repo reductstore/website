@@ -120,10 +120,10 @@ Most of the I/O settings are related to **[batching](../glossary#batching)** and
 
 The in-flight writer limit is optional and disabled by default. It is useful for exposed or multi-tenant deployments where you need to bound concurrent storage writes and protect disk or remote-backend resources from overload. If all writer slots are busy, ReductStore waits up to `RS_IO_OPERATION_TIMEOUT`; if no slot becomes available, the request fails with **429 Too Many Requests**.
 
-However, if a client is using the HTTP/1.1 protocol, the `RS_IO_BATCH_MAX_METADATA_SIZE` and `RS_IO_BATCH_MAX_RECORDS` settings are used to limit the size of the headers in the HTTP request from the client.
-This means that the client can't send more records in a single batch than specified by the `RS_IO_BATCH_MAX_RECORDS` and the size of the headers in the request can't exceed the value of the `RS_IO_BATCH_MAX_METADATA_SIZE` setting.
+Batch protocols send record metadata in HTTP headers. If a client uses HTTP/1.1, the `RS_IO_BATCH_MAX_METADATA_SIZE` and `RS_IO_BATCH_MAX_RECORDS` settings limit the size of the metadata headers in the HTTP request.
+This means that the client can't send more records in a single batch than specified by `RS_IO_BATCH_MAX_RECORDS`, and the request metadata headers can't exceed `RS_IO_BATCH_MAX_METADATA_SIZE`.
 
-Read more about batching in the **[HTTP API Reference](../http-api/entry-api#batch-protocol)**.
+Read more about batching in the **[I/O API Batch Protocol v2](../http-api/io-api#batch-protocol-v2)** and the legacy **[Entry API Batch Protocol](../http-api/entry-api#batch-protocol)**.
 
 ## Lock File Settings
 
@@ -165,22 +165,25 @@ ReductStore supports **[data replication](../guides/data-replication.mdx)** betw
 
 ## Audit Settings
 
-ReductStore can persist aggregated API interactions in the `$audit` system bucket. You can configure audit behavior with the following environment variables:
+:::warning
+Since 1.20 version, $audit bucket is deprecated. The audit events are stored in `$system/audit` entry.
+:::
 
-| Name                         | Default | Description                                                                                                                                                                         |
-| ---------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `RS_AUDIT_ENABLED`           | auto    | Enable or disable audit collection and persistence. If unset, audit defaults to `true` when `RS_API_TOKEN` is set, otherwise `false`. When `false`, ReductStore skips audit writes. |
-| `RS_AUDIT_QUOTA_SIZE`        |         | Optional size limit for the `$audit` bucket (for example `1GB`, `500MB`). When set, `$audit` uses FIFO eviction.                                                                    |
-| `RS_AUDIT_REMOTE_VERIFY_SSL` | true    | For replica audit forwarding over HTTPS: verify TLS certificates of remote nodes.                                                                                                   |
-| `RS_AUDIT_REMOTE_CA_PATH`    |         | For replica audit forwarding: path to a PEM-encoded CA certificate used to verify remote TLS certificates.                                                                          |
-| `RS_AUDIT_REMOTE_TIMEOUT`    | 5       | Timeout in seconds for replica audit HTTP communication with primary/secondary nodes.                                                                                               |
+## System Event Settings
+
+ReductStore can persist audit and system events in the `$system` bucket.
+
+| Name                          | Default | Description                                                                                                        |
+| ----------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
+| `RS_SYSTEM_EVENTS_ENABLED`    | true    | Enable or disable persistence of system events in `$system`.                                                       |
+| `RS_SYSTEM_EVENTS_QUOTA_SIZE` |         | Optional size limit for the `$system` bucket (for example `1GB`, `500MB`). When set, `$system` uses FIFO eviction. |
+| `RS_SYSTEM_EVENTS_VERIFY_SSL` | true    | For replica event forwarding over HTTPS: verify TLS certificates of remote nodes.                                  |
+| `RS_SYSTEM_EVENTS_CA_PATH`    |         | For replica event forwarding: path to a PEM-encoded CA certificate used to verify remote TLS certificates.         |
+| `RS_SYSTEM_EVENTS_TIMEOUT`    | 5       | Timeout in seconds for replica system event HTTP communication with primary/secondary nodes.                       |
 
 Notes:
 
-- If `RS_AUDIT_ENABLED` is unset, audit defaults to `true` when `RS_API_TOKEN` is set or lifecycle policies are configured, otherwise `false`.
-- `RS_AUDIT_ENABLED` explicitly overrides the token-based default.
-- `RS_AUDIT_QUOTA_SIZE` is applied only when audit is enabled.
-- If `RS_AUDIT_QUOTA_SIZE` is unset, `$audit` capacity is unlimited.
-- Audit records are stored as structured events with common fields: `type`, `timestamp`, `instance`, `entry_name`, `status`, `message`, and `payload`.
-- API audit events use `type: "api_call"` and keep request details (`token_name`, `method`, `path`, `client_ip`, `call_count`, and `duration`) in `payload`.
-- Lifecycle audit events use `type: "lifecycle_run"` and keep run details (`policy_name`, `action_type`, `bucket`, `duration`, `processed_records`, `error_code`, and `error_message`) in `payload`.
+
+- `lifecycle_run` records are written to `$system` under the `__lifecycle_tasks/<policy-name>` entry path.
+- If `RS_SYSTEM_EVENTS_QUOTA_SIZE` is unset, `$system` capacity is unlimited.
+- On read-only replicas, system events are forwarded through the shared system logging layer instead of being stored locally.

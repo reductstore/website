@@ -63,7 +63,7 @@ The table below shows the list of operations that can be performed for different
 | Remove Entry             | :x:                | :x:                | :x:                | :white_check_mark: | :white_check_mark: |
 | Manage Tokens            | :x:                | :x:                | :x:                | :x:                | :white_check_mark: |
 | Manage Replication Tasks | :x:                | :x:                | :x:                | :x:                | :white_check_mark: |
-| Access Audit Log         | :x:                | :x:                | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Access System Events     | :x:                | :x:                | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 :::note
 `Anonymous` refers to clients that don't send an **[access token](../glossary#access-token)** in the `Authorization` header.
@@ -286,15 +286,15 @@ import RemoveTokenCurl from "!!raw-loader!../examples/curl/access_control_remove
 ## Audit Log
 
 ReductStore provides an audit log that records HTTP API requests, including successful and failed requests.
-The audit log is stored in a separate bucket and can be accessed using the standard API.
+The audit log is stored in the `$system` bucket and can be accessed using the standard API.
 
-The audit bucket `$audit` has the following structure:
+API audit events are stored in `$syste/audit` entry. The audit entry has the following structure:
 
 ```
-$audit
-|-- <instance-name>
-      |-- <token-name>
-            |-- <UNIX-timestamp>-<JSON record>
+$system/audit/
+    |-- <instance-name>
+          |-- <token-name>
+                |-- <UNIX-timestamp>-<JSON record>
 ```
 
 Audit log records contain aggregated information about API requests, grouped by endpoint and time interval. Each record includes:
@@ -324,9 +324,7 @@ Example:
 }
 ```
 
-Audit logging is controlled by the `RS_AUDIT_ENABLED` environment variable.
-If `RS_AUDIT_ENABLED` is unset, audit defaults to `true` when `RS_API_TOKEN` is set, otherwise `false`.
-Setting `RS_AUDIT_ENABLED` explicitly overrides that default.
+Audit logging is controlled by the `RS_SYSTEM_EVENTS_ENABLED` environment variable and enabled by default.
 
 ### Read-only Replica Behavior
 
@@ -338,9 +336,9 @@ To enable auditing on a read-only replica, configure:
 - `RS_SECONDARY_URL` (optional, for failover)
 
 :::info
-To access the audit log, the relevant token must include exact permissions for the `$audit` bucket, either for reading or writing (wildcards do not apply to system buckets).
+To access the audit log, the relevant token must include exact permissions for the `$system` bucket, either for reading or writing (wildcards do not apply to system buckets).
 :::
 
 :::info
-Zenoh API operations are not currently recorded in the audit log (you will not see Zenoh calls in `$audit`).
+Zenoh API operations are not currently recorded in the audit log (you will not see Zenoh calls in `$system/audit`).
 :::
