@@ -196,10 +196,10 @@ jobs:
             reduct-cli replica create http://my-token@127.0.0.1:8383/example-replication  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
             reduct-cli replica create http://my-token@127.0.0.1:8383/repl-to-remove  example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
             reduct-cli replica create http://my-token@127.0.0.1:8383/my_replication example-bucket http://my-token@127.0.0.1:8383/bucket-to-remove
-            if [ "${{ matrix.example }}" == "cli" ] && [[ "$example" == *"/lifecycle_policy_browse.sh" || "$example" == *"/lifecycle_policy_mode.sh" ]]; then
+            if [[ "$example" == *"/lifecycle_policy_browse"* || "$example" == *"/lifecycle_policy_mode"* ]]; then
               reduct-cli lifecycle create http://my-token@127.0.0.1:8383/my-lifecycle example-bucket --type delete --older-than 30d --interval 1h
             fi
-            if [ "${{ matrix.example }}" == "cli" ] && [[ "$example" == *"/lifecycle_policy_remove.sh" ]]; then
+            if [[ "$example" == *"/lifecycle_policy_remove"* ]]; then
               reduct-cli lifecycle create http://my-token@127.0.0.1:8383/lifecycle-to-remove example-bucket --type delete --older-than 30d --interval 1h
             fi
             reduct-cli token create http://my-token@127.0.0.1:8383/token-to-remove
