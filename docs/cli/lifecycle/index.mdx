@@ -1,0 +1,352 @@
+---
+title: "lifecycle"
+description: "Manage lifecycle policies"
+---
+
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/cli/lifecycle" />
+</head>
+
+# reduct-cli lifecycle
+
+Manage lifecycle policies
+
+## Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
+- `-h, --help`: Print help
+
+## Help Output
+
+```text
+Manage lifecycle policies
+
+Usage: reduct-cli lifecycle [OPTIONS] [COMMAND]
+
+Commands:
+  create   Create a lifecycle policy
+  update   Update a lifecycle policy
+  ls       List lifecycle policies
+  show     Show details about a lifecycle policy
+  enable   Enable a lifecycle policy
+  disable  Disable a lifecycle policy
+  dry-run  Set lifecycle policy mode to dry run
+  rm       Remove a lifecycle policy
+  help     Print this message or the help of the given subcommand(s)
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
+  -h, --help               Print help
+```
+
+## Subcommands
+
+### `create`
+
+Create a lifecycle policy
+
+#### Arguments
+
+- `<LIFECYCLE_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+- `<BUCKET_NAME>`: Bucket to apply lifecycle policy
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `--type <ACTION>`: Lifecycle action type: delete or compress \[default: delete\]
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `--older-than <DURATION>`: Match records older than this duration (e.g. 1h, 30d, 3600s)
+- `--interval <DURATION>`: Interval between lifecycle runs (e.g. 10m, 1h)
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-n, --entries [<ENTRY_NAME>...]`: List of entries to export. If not specified, all entries will be requested. Prefix wildcards are supported (e.g. entry-\*).
+- `-p, --parallel <COUNT>`: Number of parallel requests
+- `-w, --when <CONDITION>`: Filter records by a JSON condition. If not specified, all records will be requested.
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Create a lifecycle policy
+
+Usage: reduct-cli lifecycle create [OPTIONS] --older-than <DURATION> <LIFECYCLE_PATH> <BUCKET_NAME>
+
+Arguments:
+  <LIFECYCLE_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+  <BUCKET_NAME>     Bucket to apply lifecycle policy
+
+Options:
+  -i, --ignore-ssl                 Ignore SSL certificate verification
+      --type <ACTION>              Lifecycle action type: delete or compress [default: delete]
+      --ca-cert <PATH>             Path to a custom CA certificate bundle/file
+      --older-than <DURATION>      Match records older than this duration (e.g. 1h, 30d, 3600s)
+      --interval <DURATION>        Interval between lifecycle runs (e.g. 10m, 1h)
+  -T, --timeout <SECONDS>          Timeout for requests
+  -n, --entries [<ENTRY_NAME>...]  List of entries to export.
+                                   If not specified, all entries will be requested. Prefix wildcards are supported (e.g. entry-*).
+  -p, --parallel <COUNT>           Number of parallel requests
+  -w, --when <CONDITION>           Filter records by a JSON condition.
+                                   If not specified, all records will be requested.
+  -h, --help                       Print help
+```
+
+### `update`
+
+Update a lifecycle policy
+
+#### Arguments
+
+- `<LIFECYCLE_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+
+#### Options
+
+- `--bucket <BUCKET_NAME>`: Bucket to apply lifecycle policy
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `--type <ACTION>`: Lifecycle action type: delete or compress
+- `--older-than <DURATION>`: Match records older than this duration (e.g. 1h, 30d, 3600s)
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `--interval <DURATION>`: Interval between lifecycle runs (e.g. 10m, 1h)
+- `-p, --parallel <COUNT>`: Number of parallel requests
+- `-n, --entries [<ENTRY_NAME>...]`: List of entries to export. If not specified, all entries will be requested. Prefix wildcards are supported (e.g. entry-\*).
+- `-w, --when <CONDITION>`: Filter records by a JSON condition. If not specified, all records will be requested.
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Update a lifecycle policy
+
+Usage: reduct-cli lifecycle update [OPTIONS] <LIFECYCLE_PATH>
+
+Arguments:
+  <LIFECYCLE_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+
+Options:
+      --bucket <BUCKET_NAME>       Bucket to apply lifecycle policy
+  -i, --ignore-ssl                 Ignore SSL certificate verification
+      --ca-cert <PATH>             Path to a custom CA certificate bundle/file
+      --type <ACTION>              Lifecycle action type: delete or compress
+      --older-than <DURATION>      Match records older than this duration (e.g. 1h, 30d, 3600s)
+  -T, --timeout <SECONDS>          Timeout for requests
+      --interval <DURATION>        Interval between lifecycle runs (e.g. 10m, 1h)
+  -p, --parallel <COUNT>           Number of parallel requests
+  -n, --entries [<ENTRY_NAME>...]  List of entries to export.
+                                   If not specified, all entries will be requested. Prefix wildcards are supported (e.g. entry-*).
+  -w, --when <CONDITION>           Filter records by a JSON condition.
+                                   If not specified, all records will be requested.
+  -h, --help                       Print help
+```
+
+### `ls`
+
+List lifecycle policies
+
+#### Arguments
+
+- `<ALIAS_OR_URL>`: Alias or URL (e.g. http://token@localhost:8383) of the ReductStore instance to use
+
+#### Options
+
+- `-f, --full`: Show detailed lifecycle information
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+List lifecycle policies
+
+Usage: reduct-cli lifecycle ls [OPTIONS] <ALIAS_OR_URL>
+
+Arguments:
+  <ALIAS_OR_URL>  Alias or URL (e.g. http://token@localhost:8383) of the ReductStore instance to use
+
+Options:
+  -f, --full               Show detailed lifecycle information
+  -i, --ignore-ssl         Ignore SSL certificate verification
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
+  -h, --help               Print help
+```
+
+### `show`
+
+Show details about a lifecycle policy
+
+#### Arguments
+
+- `<LIFECYCLE_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Show details about a lifecycle policy
+
+Usage: reduct-cli lifecycle show [OPTIONS] <LIFECYCLE_PATH>
+
+Arguments:
+  <LIFECYCLE_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
+  -h, --help               Print help
+```
+
+### `enable`
+
+Enable a lifecycle policy
+
+#### Arguments
+
+- `<LIFECYCLE_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Enable a lifecycle policy
+
+Usage: reduct-cli lifecycle enable [OPTIONS] <LIFECYCLE_PATH>
+
+Arguments:
+  <LIFECYCLE_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
+  -h, --help               Print help
+```
+
+### `disable`
+
+Disable a lifecycle policy
+
+#### Arguments
+
+- `<LIFECYCLE_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Disable a lifecycle policy
+
+Usage: reduct-cli lifecycle disable [OPTIONS] <LIFECYCLE_PATH>
+
+Arguments:
+  <LIFECYCLE_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
+  -h, --help               Print help
+```
+
+### `dry-run`
+
+Set lifecycle policy mode to dry run
+
+#### Arguments
+
+- `<LIFECYCLE_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Set lifecycle policy mode to dry run
+
+Usage: reduct-cli lifecycle dry-run [OPTIONS] <LIFECYCLE_PATH>
+
+Arguments:
+  <LIFECYCLE_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
+  -h, --help               Print help
+```
+
+### `rm`
+
+Remove a lifecycle policy
+
+#### Arguments
+
+- `<LIFECYCLE_PATH>`: Path to a resource to use (e.g. SERVER_ALIAS/&lt;RESOURCE_NAME&gt; or http://token@localhost:8383/RESOURCE_NAME)
+
+#### Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-y, --yes`: Do not ask for confirmation
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
+- `-h, --help`: Print help
+
+#### Help Output
+
+```text
+Remove a lifecycle policy
+
+Usage: reduct-cli lifecycle rm [OPTIONS] <LIFECYCLE_PATH>
+
+Arguments:
+  <LIFECYCLE_PATH>  Path to a resource to use (e.g. SERVER_ALIAS/<RESOURCE_NAME> or http://token@localhost:8383/RESOURCE_NAME)
+
+Options:
+  -i, --ignore-ssl         Ignore SSL certificate verification
+  -y, --yes                Do not ask for confirmation
+      --ca-cert <PATH>     Path to a custom CA certificate bundle/file
+  -T, --timeout <SECONDS>  Timeout for requests
+  -p, --parallel <COUNT>   Number of parallel requests
+  -h, --help               Print help
+```
