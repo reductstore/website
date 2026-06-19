@@ -24,50 +24,15 @@ This post shows another way. By the end you'll have a Python publisher sending d
 
 ## What the existing storage backends leave out
 
-Zenoh ships official storage backends: a built-in `memory` volume, plus S3, InfluxDB, RocksDB, and filesystem via the `zenoh-plugin-storage-manager`. Point one at a set of key expressions and, per Zenoh's own docs, other nodes can then "query the most recent values associated with these keys."
-
-```svgbob
-+-----------------+       +--------------+
-|    Publisher    |       |    Client    |
-+-----------------+       +--------------+
-         |                       |
-         |                       |
- "put(key, value)"          "get latest"
-         |                       |
-         v                       v
-       +-+-----------------------+-+
-       |          zenohd           |
-       |    * "storage manager"    |
-       +-------------+-------------+
-                     |
-                     |
-           "latest value per key"
-                     |
-                     v
-           +--------------------+
-           |       Volume       |
-           |    * S3            |
-           |    * InfluxDB      |
-           |    * RocksDB       |
-           |    * filesystem    |
-           +--------------------+
-```
-
-_A publisher writes via `put(key, value)` to zenohd's storage manager, which persists into a backend volume. A client's `get` is routed to the storage. By default, queries against storage-managed volumes return the latest stored value for each matching key. The InfluxDB backend additionally supports historical queries through the `_time` selector._
-
-The closest thing to a turnkey solution is the InfluxDB backend. Because InfluxDB is a time-series database, the storage manager adds a `_time` selector argument that lets you query historical data over Zenoh:
+Zenoh ships official storage backends: memory, S3, InfluxDB, RocksDB, and filesystem via the `zenoh-plugin-storage-manager`. By default, queries return the latest stored value for each matching key. The InfluxDB backend goes further with a `_time` selector for historical queries:
 
 ```
-robot/alpha/**?_time=[..]                                            # full history
-robot/alpha/**?_time=[2020-01-01T00:00:00Z..2020-01-02T00:00:00Z]  # fixed range
-robot/alpha/**?_time=[now(-2d)..now(-1d)]                           # relative range
+robot/alpha/**?_time=[now(-30d)..now()]
 ```
 
-For structured telemetry where every sample is a number or a short string, that works well. The friction shows up with the data types that dominate robotics workloads. InfluxDB stores each value as a field in a measurement; binary payloads (camera frames, LiDAR point clouds, compressed IMU bursts) get base64-encoded into a string field. Wildcard key expressions (`**`) only work with InfluxDB v1.x; the v2 API dropped support for the approach the backend uses. The Zenoh sample attachment, the natural place to carry per-sample metadata for filtering, doesn't map to InfluxDB tags automatically.
+That works for structured numeric telemetry. The problem is that InfluxDB stores binary payloads as base64-encoded strings, wildcard queries only work with v1.x, and sample attachments don't map to InfluxDB tags. The memory, RocksDB, filesystem, and S3 backends do not expose a documented time-range query mechanism comparable to InfluxDB's `_time` selector.
 
-Unlike the InfluxDB backend, the memory, RocksDB, filesystem, and S3 backends do not expose a documented time-range query mechanism comparable to `_time`. They are designed around latest-value retrieval rather than historical time-range queries.
-
-That's the gap: no backend that stores every sample, as-is regardless of size or encoding, indexed by time, with queryable metadata, and where the data model maps cleanly to Zenoh's own model. ReductStore's architecture fits naturally. It's a time-series object store that keeps every record, indexed by timestamp and labels, with no constraint on payload type or size. Adding a native Zenoh API meant registering a subscriber for writes and a queryable for reads, so ReductStore joins your network as a regular peer rather than a bridge process sitting beside it.
+What was missing was a backend built for binary time-series data: one that stores every sample as-is, indexes it by time and label, and fits Zenoh's data model without a translation layer. That's what led to building a native Zenoh API in ReductStore.
 
 ## New in 1.19: a storage backend that speaks Zenoh natively
 
@@ -96,8 +61,6 @@ Starting with version 1.19, [**ReductStore**](/) (an open source time series obj
            |    * queryable     |
            +--------------------+
 ```
-
-_A publisher writes to the Zenoh network with `pub: robot/alpha`. ReductStore joins as a peer with a subscriber for writes and a queryable for reads, indexing every sample by time and label. A query client sends `get: time range` over the same network and gets back the matching records, not just the latest value._
 
 The mapping between Zenoh and ReductStore's data model is close to one-to-one:
 
