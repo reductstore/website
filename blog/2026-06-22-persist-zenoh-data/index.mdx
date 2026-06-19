@@ -53,7 +53,7 @@ Zenoh ships official storage backends: a built-in `memory` volume, plus S3, Infl
            +--------------------+
 ```
 
-_A publisher writes via `put(key, value)` to zenohd's storage manager, which persists into a backend volume. A client's `get` is answered from that stored value. By default all backends return only the latest value per key; the InfluxDB backend can return a time range when a `_time` selector is added._
+_A publisher writes via `put(key, value)` to zenohd's storage manager, which persists into a backend volume. A client's `get` is routed to the storage. By default, queries against storage-managed volumes return the latest stored value for each matching key. The InfluxDB backend additionally supports historical queries through the `_time` selector._
 
 The closest thing to a turnkey solution is the InfluxDB backend. Because InfluxDB is a time-series database, the storage manager adds a `_time` selector argument that lets you query historical data over Zenoh:
 
@@ -65,7 +65,7 @@ robot/alpha/**?_time=[now(-2d)..now(-1d)]                           # relative r
 
 For structured telemetry where every sample is a number or a short string, that works well. The friction shows up with the data types that dominate robotics workloads. InfluxDB stores each value as a field in a measurement; binary payloads (camera frames, LiDAR point clouds, compressed IMU bursts) get base64-encoded into a string field. Wildcard key expressions (`**`) only work with InfluxDB v1.x; the v2 API dropped support for the approach the backend uses. The Zenoh sample attachment, the natural place to carry per-sample metadata for filtering, doesn't map to InfluxDB tags automatically.
 
-The other backends (memory, RocksDB, filesystem, S3) don't have a `_time` equivalent at all. They return the latest value per key on GET, nothing more.
+Unlike the InfluxDB backend, the memory, RocksDB, filesystem, and S3 backends do not expose a documented time-range query mechanism comparable to `_time`. They are designed around latest-value retrieval rather than historical time-range queries.
 
 That's the gap: no backend that stores every sample, as-is regardless of size or encoding, indexed by time, with queryable metadata, and where the data model maps cleanly to Zenoh's own model. ReductStore's architecture fits naturally. It's a time-series object store that keeps every record, indexed by timestamp and labels, with no constraint on payload type or size. Adding a native Zenoh API meant registering a subscriber for writes and a queryable for reads, so ReductStore joins your network as a regular peer rather than a bridge process sitting beside it.
 
