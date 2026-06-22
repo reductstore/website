@@ -27,39 +27,45 @@ This post shows another way. By the end you'll have a Python publisher sending d
 Zenoh ships official storage backends: memory, S3, InfluxDB, RocksDB, and filesystem via the `zenoh-plugin-storage-manager`. By default, queries return the latest stored value for each matching key. The InfluxDB backend goes further with a `_time` selector for historical queries:
 
 ```
-robot/alpha/**?_time=[now(-30d)..now()]
+robot/alpha/**?_time=[now(-5d)..now()]
 ```
 
-That works for structured numeric telemetry. The problem is that InfluxDB stores binary payloads as base64-encoded strings, wildcard queries only work with v1.x, and sample attachments don't map to InfluxDB tags. The memory, RocksDB, filesystem, and S3 backends do not expose a documented time-range query mechanism comparable to InfluxDB's `_time` selector.
+That works for structured numeric telemetry. The problem is that InfluxDB stores binary payloads as base64-encoded strings, wildcard queries only work with v1.x, and sample attachments don't map to InfluxDB tags. The memory, RocksDB, filesystem, and S3 backends don't have a time-range query mechanism at all.
 
-What was missing was a backend built for binary time-series data: one that stores every sample as-is, indexes it by time and label, and fits Zenoh's data model without a translation layer. That's what led to building a native Zenoh API in ReductStore.
+What was missing was a backend built for binary time-series data: one that stores every sample as-is, indexes it by time, and fits Zenoh's data model without a translation layer. That's what led to building a native Zenoh API in ReductStore.
 
-## New in 1.19: a storage backend that speaks Zenoh natively
+## A storage backend that speaks Zenoh natively
 
-Starting with version 1.19, [**ReductStore**](/) (an open source time series object store built for robotics and edge data) ships a native Zenoh API. It keeps every sample, not just the latest, indexed by time and label, so the queries above just work. A ReductStore instance joins your Zenoh network as a regular peer: it registers a **subscriber** for writes and a **queryable** for reads, talking directly to the storage engine. No bridge process, no extra protocol, no custom Rust backend to maintain.
+Starting with version 1.19, [**ReductStore**](/) (an open source time series object store built for robotics and edge data) ships a native Zenoh API. It keeps every sample, not just the latest, indexed by time, so the queries above just work. A ReductStore instance joins your Zenoh network as a regular peer: it registers a **subscriber** for writes and a **queryable** for reads, talking directly to the storage engine. No bridge process, no extra protocol, no custom backend to maintain.
 
 ```svgbob
-+-----------------+    +--------------------+
-|    Publisher    |    |    Query Client    |
-+-----------------+    +--------------------+
-         |                       |
-         |                       |
- "pub: robot/alpha"      "get: time range"
-         |                       |
-         v                       v
-       +-+-----------------------+-+
-       |      "Zenoh network"      |
-       +-------------+-------------+
-                     |
-                     |
-             "sub + queryable"
-                     |
-                     v
-           +--------------------+
-           |    ReductStore     |
-           |    * subscriber    |
-           |    * queryable     |
-           +--------------------+
+     +-------------------------+     +-------------------------+
+     |      "robot-alpha"      |     |      "robot-beta"       |
+     |    "robot/alpha/**"     |     |    "robot/beta/**"      |
+     +-------------------------+     +-------------------------+
+                |                                |
+               "pub"                            "pub"
+                |                                |
+                v                                v
+        +-------+--------------------------------+-----------+
+        |                   "zenoh-router"                   |
+        +-------------+---------------------------+----------+
+                      ^                           |
+                      |                           |
+                 "sub/query"        "get(...?start=…;stop=…)"
+                      |                           |
+                      v                           v
+        +-------------+---------------+ +---------+----------+
+        |         ReductStore         | |    "remote app"    |
+        |     "fleet (1 GB FIFO)"     | +--------------------+
+        +-----------------------------+
+                       |
+                  "HTTP 8383"
+                       |
+                       v
+              +---------------------+
+              |    "web console"    |
+              +---------------------+
 ```
 
 The mapping between Zenoh and ReductStore's data model is close to one-to-one:
@@ -85,26 +91,29 @@ The entire integration is configuration, with no code changes to ReductStore its
 services:
   zenoh-router:
     image: eclipse/zenoh:latest
-    command: ["--no-multicast-scouting"]
     ports:
       - "7447:7447"
 
   reductstore:
     image: reduct/store:latest # v1.19+ has a native Zenoh API
     environment:
-      RS_API_TOKEN: "my-token"
+      RS_API_TOKEN: "reductstore"
+      RS_BUCKET_0_NAME: "fleet"
+      RS_BUCKET_0_QUOTA_TYPE: "FIFO"
+      RS_BUCKET_0_QUOTA_SIZE: "1 GB"
       RS_ZENOH_ENABLED: "true"
       RS_ZENOH_CONFIG: "mode=client;connect/endpoints=[tcp/zenoh-router:7447]"
       RS_ZENOH_BUCKET: "fleet"
       RS_ZENOH_SUB_KEYEXPRS: "robot/**"
       RS_ZENOH_QUERY_KEYEXPRS: "robot/**"
+      RS_ZENOH_QUERY_LOCALITY: "Any"
     ports:
       - "8383:8383"
     depends_on:
       - zenoh-router
 ```
 
-`RS_ZENOH_SUB_KEYEXPRS` and `RS_ZENOH_QUERY_KEYEXPRS` are key expressions, wildcard patterns like `robot/**`, that define which keys ReductStore subscribes to and answers queries for. The `fleet` bucket is created automatically on first write.
+`RS_ZENOH_SUB_KEYEXPRS` and `RS_ZENOH_QUERY_KEYEXPRS` are key expressions, wildcard patterns like `robot/**`, that define which keys ReductStore subscribes to and answers queries for. The `fleet` bucket is created automatically on startup, and the quota settings make it a rolling store that keeps the most recent 1 GB of data.
 
 ### 2. Publish from your ROS 2 / Zenoh node
 
@@ -180,7 +189,7 @@ with zenoh.open(zenoh.Config()) as session:
 
 ### 5. Replay and inspect with the Python SDK
 
-For replay, debugging, or building a training set, you don't have to stay on the Zenoh API. The same data is available over plain HTTP via the `reduct-py` SDK (or the JS, Go, Rust, and C++ SDKs):
+For replay, debugging, or building a training set, you don't have to stay on the Zenoh API. The same data is available over HTTP via the `reduct-py` SDK (or the JS, Go, Rust, and C++ SDKs):
 
 ```python
 import asyncio
@@ -188,12 +197,7 @@ from reduct import Client, BucketSettings, QuotaType
 
 async def main():
     async with Client("http://localhost:8383", api_token="my-token") as client:
-        # The "fleet" bucket already exists (created by the Zenoh writes above)
-        bucket = await client.create_bucket(
-            "fleet",
-            BucketSettings(quota_type=QuotaType.FIFO, quota_size=50_000_000_000),
-            exist_ok=True,
-        )
+        bucket = await client.get_bucket("fleet")
 
         async for record in bucket.query(
             "robot/alpha/camera",
@@ -233,12 +237,12 @@ For retention, ReductStore buckets support a size-based FIFO quota: set a limit,
 
 ```yaml
 environment:
-  RS_BUCKET_1_NAME: "fleet"
-  RS_BUCKET_1_QUOTA_TYPE: "FIFO"
-  RS_BUCKET_1_QUOTA_SIZE: "50GB"
+  RS_BUCKET_0_NAME: "fleet"
+  RS_BUCKET_0_QUOTA_TYPE: "FIFO"
+  RS_BUCKET_0_QUOTA_SIZE: "1 GB"
 ```
 
-This is more robust at the edge than a time-based "keep the last 24 hours" policy: if a robot goes offline for a few days, a time-based rule would silently wipe everything by the time it reconnects. A size-based policy just keeps the most recent 50 GB, however long that takes to fill.
+This is more robust at the edge than a time-based "keep the last 24 hours" policy: if a robot goes offline for a few days, a time-based rule would silently wipe everything by the time it reconnects. A size-based policy just keeps the most recent 1 GB, however long that takes to fill.
 
 For replication, you can forward a filtered subset to a cloud instance using the same conditional query syntax, for example, only frames and telemetry around a "warn" event:
 
@@ -283,4 +287,4 @@ If you're running `rmw_zenoh` in production or evaluating it for a fleet, the ga
 
 For the full configuration reference, including all `RS_ZENOH_*` settings, key expression syntax, and current limitations (single-bucket mode, no deletion via the Zenoh API), see the [**ReductStore Zenoh integration docs**](/docs/integrations/zenoh). For label-based filtering across queries, retention, and replication, see the [**Conditional Query Reference**](/docs/conditional-query) and the [**Data Replication guide**](/docs/guides/data-replication).
 
-If you have any questions or comments, feel free to use the [**ReductStore Community Forum**](https://community.reduct.store/signup).
+If you have any questions or comments, feel free to use the [**ReductStore Community Forum**](https://community.reduct.store).
