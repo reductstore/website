@@ -183,6 +183,7 @@ ReductStore can persist audit and system events in the `$system` bucket.
 
 Notes:
 
-- `lifecycle_run` records are written to `$system` under the `__lifecycle_tasks/<policy-name>` entry path.
+- `lifecycle_run` records are written to `$system` under the `lifecycle/<instance-name>/<policy-name>` entry path.
+- Lifecycle run payloads always include `processed_records`, `processed_blocks`, and `caught_up`. When available, they also include `last_processed_ts`, which ReductStore uses to resume bounded lifecycle progress between runs.
 - If `RS_SYSTEM_EVENTS_QUOTA_SIZE` is unset, `$system` capacity is unlimited.
 - On read-only replicas, system events are forwarded through the shared system logging layer instead of being stored locally.
