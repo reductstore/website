@@ -289,11 +289,3 @@ The stored JSON record contains these fields:
 | `last_processed_ts` | Last processed timestamp in microseconds. Present when lifecycle progress is available. |
 | `error_code`        | Error status code. Present only when the lifecycle run fails.                           |
 | `error_message`     | Error details. Present only when the lifecycle run fails.                               |
-
-Notes:
-
-- `processed_records`, `processed_blocks`, and `caught_up` are always included in lifecycle diagnostics.
-- On failed runs, ReductStore writes `processed_records = 0`, `processed_blocks = 0`, and `caught_up = false`.
-- `last_processed_ts` is included when available and is used internally to resume bounded lifecycle progress on later runs.
-
-The record also has a `status` label with the same value as the `status` field, so you can filter diagnostics by result code.
