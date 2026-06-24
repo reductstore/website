@@ -180,9 +180,3 @@ ReductStore can persist audit and system events in the `$system` bucket.
 | `RS_SYSTEM_EVENTS_VERIFY_SSL` | true    | For replica event forwarding over HTTPS: verify TLS certificates of remote nodes.                                  |
 | `RS_SYSTEM_EVENTS_CA_PATH`    |         | For replica event forwarding: path to a PEM-encoded CA certificate used to verify remote TLS certificates.         |
 | `RS_SYSTEM_EVENTS_TIMEOUT`    | 5       | Timeout in seconds for replica system event HTTP communication with primary/secondary nodes.                       |
-
-Notes:
-
-- `lifecycle_run` records are written to `$system` under the `__lifecycle_tasks/<policy-name>` entry path.
-- If `RS_SYSTEM_EVENTS_QUOTA_SIZE` is unset, `$system` capacity is unlimited.
-- On read-only replicas, system events are forwarded through the shared system logging layer instead of being stored locally.

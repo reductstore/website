@@ -269,20 +269,23 @@ import RemoveLifecycleCurl from "!!raw-loader!../examples/curl/lifecycle_policy_
 
 Every lifecycle run writes a diagnostic record to the `$system` bucket under the `lifecycle/<instance>/<policy-name>` entry. For example, diagnostics for a policy named `purge-sensors-30d` on instance `node-1` are stored in `$system/lifecycle/node-1/purge-sensors-30d`.
 
-Lifecycle diagnostics are written as `lifecycle_run` system events. The stored JSON record contains these fields:
+Lifecycle diagnostics are written as `lifecycle_run` system events. They are useful both for troubleshooting and for understanding how far a policy has progressed through eligible historical data.
 
-| Field               | Description                                                                |
-| ------------------- | -------------------------------------------------------------------------- |
-| `timestamp`         | Event timestamp in Unix microseconds.                                      |
-| `instance`          | ReductStore instance name that emitted the diagnostic record.              |
-| `status`            | HTTP-style status code for the lifecycle run result.                       |
-| `message`           | Error message for the lifecycle run, or an empty string on success.        |
-| `policy_name`       | Lifecycle policy name.                                                     |
-| `action_type`       | Lifecycle action type, such as `delete` or `compress`.                     |
-| `bucket`            | Target bucket name.                                                        |
-| `duration`          | Lifecycle run duration in seconds.                                         |
-| `processed_records` | Number of records processed by the lifecycle action, or `null` on failure. |
-| `error_code`        | Error status code. Present only when the lifecycle run fails.              |
-| `error_message`     | Error details. Present only when the lifecycle run fails.                  |
+The stored JSON record contains these fields:
 
-The record also has a `status` label with the same value as the `status` field, so you can filter diagnostics by result code.
+| Field               | Description                                                                             |
+| ------------------- | --------------------------------------------------------------------------------------- |
+| `timestamp`         | Event timestamp in Unix microseconds.                                                   |
+| `instance`          | ReductStore instance name that emitted the diagnostic record.                           |
+| `status`            | HTTP-style status code for the lifecycle run result.                                    |
+| `message`           | Error message for the lifecycle run, or an empty string on success.                     |
+| `policy_name`       | Lifecycle policy name.                                                                  |
+| `action_type`       | Lifecycle action type, such as `delete` or `compress`.                                  |
+| `bucket`            | Target bucket name.                                                                     |
+| `duration`          | Lifecycle run duration in seconds.                                                      |
+| `processed_records` | Number of records processed during the run.                                             |
+| `processed_blocks`  | Number of storage blocks processed during the run.                                      |
+| `caught_up`         | `true` when the run reached the current effective cutoff for visible data.              |
+| `last_processed_ts` | Last processed timestamp in microseconds. Present when lifecycle progress is available. |
+| `error_code`        | Error status code. Present only when the lifecycle run fails.                           |
+| `error_message`     | Error details. Present only when the lifecycle run fails.                               |
