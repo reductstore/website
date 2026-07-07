@@ -39,10 +39,21 @@ It doesn't replicate deletions or existing records in the source bucket.
 
 A replication task can filter records before replicating them to the target bucket. You can specify the following filters:
 
-| Parameter | Description                                                                                                                                                                                                                                                 | Type             |
-| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `entries` | A list of entries that the replication task will use to filter records. Only records with these entries will be replicated. If the list is empty, all records will be replicated. You can use the `*` wildcard to match any **[entry](../glossary#entry)**. | List of strings  |
-| `when`    | A set of conditions that the record must meet to be replicated. The conditions are based on the record labels. For more information on conditional queries, see the **[Conditional Query Reference](/docs/conditional-query/index.mdx)**                    | JSON-like object |
+| Parameter | Description                                                                                                                                                                                              | Type             |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `entries` | A list of entry names or patterns that the replication task will use to filter records. If the list is empty, all records are replicated. See [Entry patterns](#entry-patterns).                         | List of strings  |
+| `when`    | A set of conditions that the record must meet to be replicated. The conditions are based on the record labels. For more information, see the **[Conditional Query Reference](/docs/conditional-query)**. | JSON-like object |
+
+#### Entry patterns
+
+Replication uses the same entry pattern semantics as multi-entry queries:
+
+- Exact entry names match unchanged.
+- Include patterns are resolved first, then patterns prefixed with `!` exclude matching entries.
+- If `entries` contains only exclusions, all entries are included first.
+- `*` matches any characters inside one path segment, so `/a/*/b` matches `/a/x/b` but not `/a/x/d/b`.
+- `**` matches recursively across path segments, so `/a/**/b` matches both `/a/x/b` and `/a/x/d/b`.
+- For flat names, a trailing `*` matches names that start with the same prefix, so `cam-*` matches `cam-1` and `cam-left`.
 
 ### Usage Example
 
@@ -57,6 +68,12 @@ In this case, the conditional replication settings will be:
 ```yaml
 entries: ["sensor-1"]
 when: { "&rms": { "$gt": 2.0 }, "&quality": { "$eq": "ok" } }
+```
+
+For path-like entry names, you can combine recursive includes with exclusions:
+
+```yaml
+entries: ["/factory/**/vibration", "!/factory/private/**", "cam-*"]
 ```
 
 See the next section for more information on how to create a replication task with conditional replication settings.

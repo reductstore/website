@@ -182,8 +182,12 @@ import ReadRecordCurl from "!!raw-loader!../examples/curl/data_querying_timestam
   </TabItem>
 </Tabs>
 
-:::info[Experemtal Feature]
-Starting with version 1.18, you can also query records across multiple entries by providing the 'entry' parameter with a list of entry names or a wildcard pattern.
+:::info
+You can query records across multiple entries by providing the `entries` parameter with a list of entry names or patterns.
+Exact entry names match as written.
+For flat names, a trailing `*` matches names that start with the same prefix, so `cam-*` matches `cam-1` and `cam-left`.
+For path-like names, `*` matches one segment, `**` matches recursively across segments, and patterns prefixed with `!` exclude entries after includes are resolved.
+For example, `["/a/**/b", "!/a/private/**", "cam-*"]` queries entries such as `/a/x/b` and `cam-1`, but excludes `/a/private/x/b`.
 :::
 
 ### Using Labels to Filter Data

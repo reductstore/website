@@ -75,7 +75,7 @@ The request body is the same query model as the Entry API, with an additional `e
   // Required. Possible values: "QUERY", "REMOVE".
   query_type: 'string';
 
-  // Optional. Specific entries to query or delete records from.
+  // Optional. Entry patterns to query or delete records from.
   entries?: 'string[]';
 
   // Optional. The start UNIX timestamp of the query in microseconds.
@@ -108,10 +108,21 @@ For `query_type: "REMOVE"`, define at least one query parameter (for example `en
 ## Entry filtering
 
 - If `entries` is omitted, the query applies to all entries in the bucket.
-- `entries` supports wildcards:
-- `["*"]` selects all entries.
-- `["prefix-*"]` selects all entries with names starting with `prefix-`.
-- You can mix exact names and prefix wildcards (for example `["cam-1", "cam-*", "room/*"]`).
+- If `entries` contains only exclusions, the query first selects all entries and then removes the excluded matches.
+- Include patterns are resolved first. Patterns prefixed with `!` exclude matching entries after includes are resolved.
+- Exact names continue to work unchanged.
+- `*` matches any characters inside one path segment. For example, `/a/*/b` matches `/a/x/b` but not `/a/x/d/b`.
+- `**` matches recursively across path segments. For example, `/a/**/b` matches both `/a/x/b` and `/a/x/d/b`.
+- For flat names, a trailing `*` matches names that start with the same prefix, so `cam-*` matches `cam-1` and `cam-left`.
+
+For example, this query includes every entry below `/a` that ends with `/b`, excludes the private subtree, and also includes flat camera entries:
+
+```json
+{
+  "query_type": "QUERY",
+  "entries": ["/a/**/b", "!/a/private/**", "cam-*"]
+}
+```
 
 ## Responses
 
