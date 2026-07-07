@@ -129,7 +129,7 @@ diagnostics and settings.
             "src_bucket": "string",       // name of source bucket
             "dst_bucket": "string",       // name of destination bucket
             "dst_host": "string",         // url of destination host e.g https://play.reduct.store
-            "entries": [],                // list of entry names or patterns. If empty, all records will be replicated
+            "entries": [],                // list of replication entries. If empty, all records will be replicated. Wildcards are supported
             "include": {
                  "string": "string"       // DEPRECATED. Key-value pairs to include records that should be replicated. If empty, all records will be replicated
             },
@@ -234,7 +234,7 @@ The method creates a replication task with given settings.
         dataType: "String[]",
         isRequired: false,
         description:
-          "List of replication entry names or patterns. If empty, all records will be replicated.",
+          "List of replication entries. If empty, all records will be replicated. Wildcards are supported",
       },
     },
     {
@@ -398,7 +398,7 @@ this method, you need an access token with full access.
         dataType: "String[]",
         isRequired: false,
         description:
-          "List of replication entry names or patterns. If empty, all records will be replicated.",
+          "List of replication entries. If empty, all records will be replicated. Wildcards are supported",
       },
     },
     {

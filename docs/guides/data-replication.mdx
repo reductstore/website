@@ -53,7 +53,7 @@ Replication uses the same entry pattern semantics as multi-entry queries:
 - If `entries` contains only exclusions, all entries are included first.
 - `*` matches any characters inside one path segment, so `/a/*/b` matches `/a/x/b` but not `/a/x/d/b`.
 - `**` matches recursively across path segments, so `/a/**/b` matches both `/a/x/b` and `/a/x/d/b`.
-- Flat trailing-prefix patterns such as `cam-*` keep the earlier behavior for backward compatibility.
+- For flat names, a trailing `*` matches names that start with the same prefix, so `cam-*` matches `cam-1` and `cam-left`.
 
 ### Usage Example
 

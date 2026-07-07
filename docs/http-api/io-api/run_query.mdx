@@ -113,9 +113,9 @@ For `query_type: "REMOVE"`, define at least one query parameter (for example `en
 - Exact names continue to work unchanged.
 - `*` matches any characters inside one path segment. For example, `/a/*/b` matches `/a/x/b` but not `/a/x/d/b`.
 - `**` matches recursively across path segments. For example, `/a/**/b` matches both `/a/x/b` and `/a/x/d/b`.
-- Flat trailing-prefix patterns such as `cam-*` keep the earlier behavior for backward compatibility.
+- For flat names, a trailing `*` matches names that start with the same prefix, so `cam-*` matches `cam-1` and `cam-left`.
 
-For example, this query includes every entry below `/a` that ends with `/b`, excludes the private subtree, and also includes legacy flat camera entries:
+For example, this query includes every entry below `/a` that ends with `/b`, excludes the private subtree, and also includes flat camera entries:
 
 ```json
 {
