@@ -93,7 +93,7 @@ You can provision lifecycle policies by setting environment variables. Lifecycle
 | `RS_LIFECYCLE_<ID>_BUCKET`     |         | Bucket to apply the lifecycle policy to (required)                                                                                                  |
 | `RS_LIFECYCLE_<ID>_OLDER_THAN` |         | Maximum record age before the action is applied, for example `30d`, `24h`, or `3600s` (required). Minimum value is `1h`.                            |
 | `RS_LIFECYCLE_<ID>_INTERVAL`   | 3600s   | Interval between lifecycle runs, for example `10m`, `1h`, or `3600s`. Minimum value is `10m`.                                                       |
-| `RS_LIFECYCLE_<ID>_ENTRIES`    |         | Comma-separated list of entries to clean. If empty, all entries are matched. Prefix wildcards are supported.                                        |
+| `RS_LIFECYCLE_<ID>_ENTRIES`    |         | Comma-separated entry names or patterns to clean. If empty, all entries are matched. Supports `*`, `**`, and `!` exclusions.                        |
 | `RS_LIFECYCLE_<ID>_WHEN`       |         | JSON condition for records to delete. Supported only for `delete` policies. Uses the same condition syntax as queries, but `#ext` is not supported. |
 | `RS_LIFECYCLE_<ID>_MODE`       | enabled | Policy mode: `enabled`, `disabled`, or `dry_run`.                                                                                                   |
 
@@ -103,7 +103,7 @@ Example:
 RS_LIFECYCLE_A_NAME=purge-sensors-30d
 RS_LIFECYCLE_A_TYPE=delete
 RS_LIFECYCLE_A_BUCKET=telemetry
-RS_LIFECYCLE_A_ENTRIES=sensors/*,env/temp,env/humidity
+RS_LIFECYCLE_A_ENTRIES=sensors/**,!sensors/private/**,env/temp,env/humidity
 RS_LIFECYCLE_A_OLDER_THAN=30d
 RS_LIFECYCLE_A_INTERVAL=10m
 RS_LIFECYCLE_A_WHEN={"$eq":["&label","true"]}
