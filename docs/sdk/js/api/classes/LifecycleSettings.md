@@ -41,7 +41,7 @@ Bucket to apply lifecycle policy.
 
 Defined in: [messages/LifecycleSettings.ts:39](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L39)
 
-List of entries to process. If empty, all matching entries are processed.
+List of entry names or patterns to process. If empty, all matching entries are processed. Supports `*`, `**`, and `!` exclusions.
 
 ***
 

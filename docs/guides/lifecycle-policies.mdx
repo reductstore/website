@@ -49,7 +49,7 @@ You can configure lifecycle policies using the following settings:
 | ------------ | ----------------------------------------------------------------------------------------------------------- | -------- | --------- |
 | `type`       | Action type (e.g., `delete` or `compress`)                                                                  | Yes      | -         |
 | `bucket`     | Target bucket name                                                                                          | Yes      | -         |
-| `entries`    | List of entries to scope the policy (wildcard `*` supported)                                                | No       | -         |
+| `entries`    | List of entry names or patterns to scope the policy. See [Entry patterns](#entry-patterns).                 | No       | -         |
 | `older_than` | Maximum age of records before action is applied (e.g., `30d`, `1h`, `5m`)                                   | Yes      | -         |
 | `interval`   | Policy execution interval (e.g., `3600s`, `10m`)                                                            | No       | `3600s`   |
 | `when`       | JSON condition to filter records (see **[Conditional Query Reference](/docs/conditional-query/index.mdx)**) | No       | -         |
@@ -59,14 +59,25 @@ You can configure lifecycle policies using the following settings:
 
 You can refine lifecycle policies using the `entries` and `when` parameters:
 
-- **`entries`**: Limit the policy to specific entries (e.g., `sensor-1,sensor-2` or `sensor-*`)
+- **`entries`**: Limit the policy to specific entries or patterns (e.g., `sensor-1,sensor-2` or `sensors/**,!sensors/private/**`)
 - **`when`**: Apply a `delete` policy only to records matching a condition (e.g., `{"&sensor_type": {"$eq": "temperature"}}`). This condition is not supported for `compress` policies.
 
 For more details, see the **[Conditional Query Reference](/docs/conditional-query/index.mdx)**.
 
+### Entry patterns
+
+Lifecycle policies use the same entry pattern semantics as multi-entry queries and replications:
+
+- Exact entry names match unchanged.
+- Include patterns are resolved first, then patterns prefixed with `!` exclude matching entries.
+- If `entries` contains only exclusions, all entries are included first.
+- `*` matches any characters inside one path segment, so `/a/*/b` matches `/a/x/b` but not `/a/x/d/b`.
+- `**` matches recursively across path segments, so `/a/**/b` matches both `/a/x/b` and `/a/x/d/b`.
+- For flat names, a trailing `*` matches names that start with the same prefix, so `cam-*` matches `cam-1` and `cam-left`.
+
 ## Example
 
-Imagine you store telemetry data from temperature sensors in a bucket called `telemetry`. You want to automatically delete records older than 30 days, but only for specific sensors (`sensor-1` and `sensor-2`) and only if the `sensor_type` label equals `temperature`. Here’s how you’d configure the policy:
+Imagine you store telemetry data from temperature sensors in a bucket called `telemetry`. You want to automatically delete records older than 30 days, but only for entries under `sensors/` while excluding private sensor paths, and only if the `sensor_type` label equals `temperature`. Here’s how you’d configure the policy:
 
 <CodeBlock language="yaml">{lifecycleCreate}</CodeBlock>
 
