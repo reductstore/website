@@ -80,7 +80,7 @@ jobs:
           docker pull ${{ matrix.image }}
           docker run -d --name reductstore-init -p 8384:8383  ${{ matrix.image }}
           sleep 3
-          reduct-cli cp https://reductstore@play.reduct.store/replica/datasets  http://my-token@127.0.0.1:8384/example-bucket --limit 100
+          reduct-cli cp https://reductstore@play.reduct.store/datasets  http://my-token@127.0.0.1:8384/example-bucket --limit 100
 
       - name: Install Python
         uses: actions/setup-python@v5

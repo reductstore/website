@@ -177,7 +177,7 @@ ReductStore can persist internal events in the `$system` bucket, including audit
 | ------------------------------------ | ------- | ------------------------------------------------------------------------------------------------------------------- |
 | `RS_SYSTEM_EVENTS_ENABLED`           | true    | Enable or disable persistence of system events in `$system`.                                                        |
 | `RS_SYSTEM_EVENTS_LOG_LEVEL`         | WARN    | Minimum ReductStore log level persisted to `$system/logs/<instance>/messages`. Set to `OFF` to disable log capture. |
-| `RS_SYSTEM_EVENTS_QUOTA_SIZE`        |         | Optional size limit for the `$system` bucket (for example `1GB`, `500MB`). When set, `$system` uses FIFO eviction. |
+| `RS_SYSTEM_EVENTS_QUOTA_SIZE`        |         | Optional size limit for the `$system` bucket (for example `1GB`, `500MB`). When set, `$system` uses FIFO eviction.  |
 | `RS_SYSTEM_EVENTS_REMOTE_VERIFY_SSL` | true    | For replica event forwarding over HTTPS: verify TLS certificates of remote nodes.                                   |
 | `RS_SYSTEM_EVENTS_REMOTE_CA_PATH`    |         | For replica event forwarding: path to a PEM-encoded CA certificate used to verify remote TLS certificates.          |
 | `RS_SYSTEM_EVENTS_REMOTE_TIMEOUT`    | 5       | Timeout in seconds for replica system event HTTP communication with primary/secondary nodes.                        |
