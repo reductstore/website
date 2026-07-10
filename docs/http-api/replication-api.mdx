@@ -83,6 +83,7 @@ diagnostics and settings.
 - v1.8: The endpoint was added
 - v1.14: The `when` field was added with **[conditional query](../glossary#conditional-query)** to filter records
 - v1.18: Added the `mode` field to the replication info and settings
+- Unreleased: Added the `dst_prefix` field to prepend a prefix to destination entry names
 
 <SwaggerComponent
   method="GET"
@@ -130,6 +131,7 @@ diagnostics and settings.
             "dst_bucket": "string",       // name of destination bucket
             "dst_host": "string",         // url of destination host e.g https://play.reduct.store
             "entries": [],                // list of entry names or patterns. If empty, all records will be replicated
+            "dst_prefix": "string",       // prefix prepended to destination entry names. If empty, destination entry names are unchanged
             "include": {
                  "string": "string"       // DEPRECATED. Key-value pairs to include records that should be replicated. If empty, all records will be replicated
             },
@@ -176,6 +178,7 @@ The method creates a replication task with given settings.
 - v1.8: The endpoint was added
 - v1.14: The `when` field was added with conditional query to filter records
 - v1.18: Added optional `mode` to start replications as `enabled`, `paused`, or `disabled`
+- Unreleased: Added optional `dst_prefix` to prepend a prefix to destination entry names
 
 <SwaggerComponent
   method="POST"
@@ -235,6 +238,16 @@ The method creates a replication task with given settings.
         isRequired: false,
         description:
           "List of replication entry names or patterns. If empty, all records will be replicated.",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "dst_prefix",
+        dataType: "String",
+        isRequired: false,
+        description:
+          "Prefix prepended to destination entry names. For example, source entry camera/front with dst_prefix robot-1 is replicated as robot-1/camera/front. If empty or omitted, destination entry names are unchanged.",
       },
     },
     {
@@ -340,6 +353,7 @@ this method, you need an access token with full access.
 - v1.8: The endpoint was added
 - v1.14: The `when` field was added with conditional query to filter records
 - v1.18: Added optional `mode` to switch between `enabled`, `paused`, and `disabled`
+- Unreleased: Added optional `dst_prefix` to prepend a prefix to destination entry names
 
 <SwaggerComponent
   method="PUT"
@@ -399,6 +413,16 @@ this method, you need an access token with full access.
         isRequired: false,
         description:
           "List of replication entry names or patterns. If empty, all records will be replicated.",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "dst_prefix",
+        dataType: "String",
+        isRequired: false,
+        description:
+          "Prefix prepended to destination entry names. For example, source entry camera/front with dst_prefix robot-1 is replicated as robot-1/camera/front. If empty or omitted, destination entry names are unchanged.",
       },
     },
     {
