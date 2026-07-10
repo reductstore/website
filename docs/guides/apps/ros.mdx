@@ -1,0 +1,97 @@
+---
+title: ROS Applications
+description: Complete guide to building data flow pipelines with ReductStore in ROS applications.
+---
+
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/guides/apps/ros" />
+</head>
+
+# Using ReductStore in ROS applications
+
+ReductStore can be used as a time series storage backend for ROS applications.
+It stores ROS messages, sensor payloads, and recorded robotics data as
+timestamped records with labels and attachments.
+
+This guide explains how to collect ROS data on a robot with ReductBridge and
+store it in a local ReductStore instance. The same stored data can then be used
+for replication, querying, visualization, and export workflows.
+
+:::info
+Some features described in this guide are available only in ReductStore Pro,
+including the **[ReductROS](/docs/extensions/official/ros-ext)** and
+**[ReductSelect](/docs/extensions/official/select-ext)** extensions. Check the
+**[pricing page](/pricing)** for more information about available features and
+extensions.
+:::
+
+## Overview
+
+ReductStore stores data as binary records and indexes each record by timestamp.
+This makes it suitable for ROS data because messages do not need to be converted
+to tabular rows before they are stored. The payload can remain in its original
+format, while labels provide metadata for filtering and attachments store shared
+metadata such as ROS message schemas.
+
+The ROS workflow uses the following components:
+
+- **[ReductBridge](/docs/reduct-bridge)** subscribes to ROS topics on the robot,
+  writes messages to ReductStore, assigns labels, and stores the schema metadata
+  required to decode raw ROS messages.
+- **[ReductStore](/docs)** stores the message payloads as timestamped records in
+  a bucket. In the robot-only setup, it runs locally on the same robot or edge
+  computer.
+- **[ReductROS](/docs/extensions/official/ros-ext)** decodes stored ROS data when
+  it is queried. It can extract raw ROS 1 or ROS 2 messages as JSON, read MCAP or
+  rosbag files, and export filtered data back to robotics formats.
+
+The diagram below shows only the robot-side part of the pipeline. ROS nodes
+publish topics, ReductBridge subscribes to selected topics, and local
+ReductStore stores one entry per topic with the raw payload, labels, and `$ros`
+schema attachment.
+
+```svgbob
++------------------------------------------------------------------------------+
+| Robot                                                                        |
+|                                                                              |
+|   ROS graph                                                                  |
+|                                                                              |
+|   +-------------------+                                                      |
+|   | /camera/image_raw |----+                                                 |
+|   +-------------------+    |                                                 |
+|                            |                                                 |
+|   +-------------------+    |    +-------------------------------+            |
+|   | /gps/fix          |----+--->| ReductBridge                  |            |
+|   +-------------------+    |    |                               |            |
+|                            |    | * subscribes to ROS topics    |            |
+|   +-------------------+    |    | * stores raw message payloads |            |
+|   | /imu/data         |----+    | * applies labels              |            |
+|   +-------------------+         | * attaches ROS schemas        |            |
+|                                 +---------------+---------------+            |
+|                                                 |                            |
+|                                                 | records + labels + $ros    |
+|                                                 v                            |
+|                                 +-------------------------------+            |
+|                                 | Local ReductStore             |            |
+|                                 |                               |            |
+|                                 | bucket: robot-data            |            |
+|                                 | entries: one per topic        |            |
+|                                 | content: application/cdr      |            |
+|                                 +-------------------------------+            |
+|                                                                              |
++------------------------------------------------------------------------------+
+```
+
+## Data Collection
+
+## Data Replication
+
+## Data Querying and Visualization
+
+### Using SDKs
+
+### Using Grafana
+
+### Using Foxglove
+
+## Export Data

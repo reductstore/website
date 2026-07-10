@@ -13,4 +13,5 @@ LifecycleType namespace providing constant values for runtime usage.
 
 ## Variables
 
+- [COMPRESS](variables/COMPRESS.md)
 - [DELETE](variables/DELETE.md)
