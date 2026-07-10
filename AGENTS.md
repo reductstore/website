@@ -29,6 +29,11 @@
 - For content changes, open the dev server and manually verify navigation, code blocks, and external links (lychee config exists in `lychee.toml` if you run link checks locally).
 - When modifying UI, verify responsive layout and dark/light modes where applicable.
 
+## Agent Workflow
+
+- Agents should only edit the requested text/content and must not run builds, checks, tests, or formatting commands.
+- Humans are responsible for running `yarn build`, `yarn typecheck`, `yarn fmt`, `yarn fmt:check`, and other validation commands.
+
 ## Commit & Pull Request Guidelines
 
 - Follow the existing history pattern: concise subject with scope or ticket; prefer present tense and include issue/PR IDs when available.

@@ -11,6 +11,7 @@ versioned_docs/version-1.15.x
 versioned_docs/version-1.16.x
 versioned_docs/version-1.17.x
 versioned_docs/version-1.18.x
+versioned_docs/version-1.19.x
 cmake-*
 target/
 docs/reduct-bridge

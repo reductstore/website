@@ -185,9 +185,64 @@ function collectReadmes(rootDir) {
   return readmes.sort();
 }
 
+function listFiles(dir) {
+  if (!fs.existsSync(dir)) {
+    return [];
+  }
+
+  const files = [];
+  const stack = [""];
+
+  while (stack.length) {
+    const relativeDir = stack.pop();
+    const absoluteDir = path.join(dir, relativeDir);
+
+    for (const entry of fs.readdirSync(absoluteDir, { withFileTypes: true })) {
+      const relativePath = path.join(relativeDir, entry.name);
+      if (entry.isDirectory()) {
+        stack.push(relativePath);
+        continue;
+      }
+
+      if (entry.isFile()) {
+        files.push(relativePath);
+      }
+    }
+  }
+
+  return files.sort();
+}
+
+function syncGeneratedDocs(source, destination) {
+  const sourceFiles = new Set(listFiles(source));
+
+  for (const relativePath of sourceFiles) {
+    const sourcePath = path.join(source, relativePath);
+    const destinationPath = path.join(destination, relativePath);
+    const generated = fs.readFileSync(sourcePath, "utf8");
+    const existing = fs.existsSync(destinationPath)
+      ? fs.readFileSync(destinationPath, "utf8")
+      : null;
+
+    if (existing === generated) {
+      continue;
+    }
+
+    fs.mkdirSync(path.dirname(destinationPath), { recursive: true });
+    fs.writeFileSync(destinationPath, generated);
+  }
+
+  for (const relativePath of listFiles(destination)) {
+    if (sourceFiles.has(relativePath)) {
+      continue;
+    }
+
+    fs.rmSync(path.join(destination, relativePath), { force: true });
+  }
+}
+
 function writeDocs(rootDir, destination, repoUrl, branch) {
   const readmes = collectReadmes(rootDir);
-  fs.rmSync(destination, { recursive: true, force: true });
 
   for (const relativeReadmePath of readmes) {
     const sourcePath = path.join(rootDir, relativeReadmePath);
@@ -218,6 +273,7 @@ export default async function createPlugin(context, opts) {
     async loadContent() {
       const tmpDir = path.join(os.tmpdir(), "build", "reduct-bridge");
       const destination = path.join(process.cwd(), opts.destination);
+      const generatedDestination = path.join(tmpDir, "generated-docs");
 
       fs.rmSync(tmpDir, { recursive: true, force: true });
       fs.mkdirSync(path.dirname(tmpDir), { recursive: true });
@@ -227,7 +283,8 @@ export default async function createPlugin(context, opts) {
       );
       run(`git clone --depth 1 --branch ${opts.branch} ${opts.repo} ${tmpDir}`);
 
-      writeDocs(tmpDir, destination, opts.repo, opts.branch);
+      writeDocs(tmpDir, generatedDestination, opts.repo, opts.branch);
+      syncGeneratedDocs(generatedDestination, destination);
     },
   };
 }

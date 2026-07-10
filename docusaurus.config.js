@@ -314,7 +314,7 @@ const config = {
               },
               {
                 label: "Community",
-                href: "https://community.reduct.store/signup",
+                href: "https://community.reduct.store",
               },
             ],
           },
@@ -438,10 +438,6 @@ const config = {
                 to: "/contact",
               },
               {
-                label: "Careers",
-                to: "/careers",
-              },
-              {
                 label: "About",
                 to: "/about",
               },
@@ -464,7 +460,7 @@ const config = {
             items: [
               {
                 label: "Discourse",
-                href: "https://community.reduct.store/signup",
+                href: "https://community.reduct.store",
               },
               {
                 label: "LinkedIn",

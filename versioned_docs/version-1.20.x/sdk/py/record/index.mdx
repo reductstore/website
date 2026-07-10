@@ -1,0 +1,97 @@
+---
+title: Record Module
+description: API reference for the Record Module Module of the ReductStore Client SDK for Python.
+---
+
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/sdk/py/record" />
+</head>
+
+# Record Module
+
+<a id="reduct.record"></a>
+
+Record module
+
+<a id="reduct.record.Record"></a>
+
+## Record
+
+```python
+@dataclass
+class Record()
+```
+
+Record in a query
+
+<a id="reduct.record.Record.timestamp"></a>
+
+#### timestamp
+
+UNIX timestamp in microseconds
+
+<a id="reduct.record.Record.entry"></a>
+
+#### entry
+
+entry name
+
+<a id="reduct.record.Record.size"></a>
+
+#### size
+
+size of data
+
+<a id="reduct.record.Record.last"></a>
+
+#### last
+
+last record in the query. Deprecated: doesn't work for some cases
+
+<a id="reduct.record.Record.content_type"></a>
+
+#### content_type
+
+content type of data
+
+<a id="reduct.record.Record.read_all"></a>
+
+#### read_all
+
+read all data
+
+<a id="reduct.record.Record.read"></a>
+
+#### read
+
+read data in chunks where each chunk has size less than or equal to n
+
+<a id="reduct.record.Record.labels"></a>
+
+#### labels
+
+labels of record
+
+<a id="reduct.record.Record.get_datetime"></a>
+
+#### get_datetime
+
+```python
+def get_datetime() -> datetime
+```
+
+Get timestamp of record as datetime
+
+**Returns**:
+
+- `datetime` - timestamp as datetime
+
+<a id="reduct.record.parse_record"></a>
+
+#### parse_record
+
+```python
+def parse_record(resp: ClientResponse, entry_name: str, last=True) -> Record
+```
+
+Parse record from response
