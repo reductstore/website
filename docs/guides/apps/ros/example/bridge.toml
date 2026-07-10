@@ -1,0 +1,51 @@
+[inputs.ros2.robot]
+domain_id = 0
+node_name = "reduct_bridge_robot"
+queue_size = 128
+schema_paths = ["/opt/ros/jazzy"]
+
+[[inputs.ros2.robot.topics]]
+name = "/camera/image_raw"
+entry_name = "/camera/image_raw"
+timestamp = { field = "header.stamp", format = "ros_stamp" }
+labels = [
+  { static = { source = "ros2", topic = "/camera/image_raw", sensor = "camera" } }
+]
+
+[[inputs.ros2.robot.topics]]
+name = "/gps/fix"
+entry_name = "/gps/fix"
+timestamp = { field = "header.stamp", format = "ros_stamp" }
+labels = [
+  { field = "latitude", label = "x" },
+  { field = "longitude", label = "y" },
+  { field = "altitude", label = "z" },
+  { static = { source = "ros2", topic = "/gps/fix", sensor = "gps" } }
+]
+
+[[inputs.ros2.robot.topics]]
+name = "/imu/data"
+entry_name = "/imu/data"
+timestamp = { field = "header.stamp", format = "ros_stamp" }
+labels = [
+  { static = { source = "ros2", topic = "/imu/data", sensor = "imu" } }
+]
+
+[pipelines.ros_to_reductstore]
+remote = "local"
+inputs = ["robot"]
+labels = [
+  { from = "/gps/fix", labels = ["x", "y", "z"], to = "/camera/image_raw" },
+  { from = "/gps/fix", labels = ["x", "y", "z"], to = "/imu/data" },
+  { static = { robot = "robot-1" }, to = "*" }
+]
+
+[remotes.reduct.local]
+url = "http://127.0.0.1:8383"
+token_api = "my-token"
+bucket = "robot-data"
+prefix = ""
+
+[remotes.reduct.local.create_bucket]
+quota_type = "FIFO"
+quota_size = "20GB"

@@ -241,3 +241,66 @@ jobs:
             docker compose -f $example up -d
             docker compose -f $example down
           done
+
+  test_ros_compose_example:
+    runs-on: ubuntu-latest
+    name: Test ROS compose example
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          lfs: false
+
+      - name: Pull images
+        working-directory: docs/guides/apps/ros/example
+        run: docker compose pull
+
+      - name: Start ROS compose example
+        working-directory: docs/guides/apps/ros/example
+        run: |
+          set -euo pipefail
+
+          docker compose up -d reductstore
+
+          for attempt in {1..60}; do
+            if curl -fsS http://127.0.0.1:8383/api/v1/alive >/dev/null; then
+              break
+            fi
+
+            if [ "$attempt" -eq 60 ]; then
+              docker compose logs --no-color
+              exit 1
+            fi
+
+            sleep 1
+          done
+
+          docker compose up -d reductbridge
+          sleep 15
+
+          docker compose ps
+
+          for container in $(docker compose ps -q); do
+            status=$(docker inspect -f '{{.State.Status}}' "$container")
+            if [ "$status" != "running" ]; then
+              docker compose logs --no-color
+              exit 1
+            fi
+          done
+
+          logs=$(docker compose logs --no-color)
+          if printf '%s\n' "$logs" | grep -Eiq '(error|panic|fatal|failed|failure|backtrace)'; then
+            printf '%s\n' "$logs"
+            exit 1
+          fi
+
+      - name: Print Docker logs
+        if: failure()
+        continue-on-error: true
+        working-directory: docs/guides/apps/ros/example
+        run: docker compose logs --no-color
+
+      - name: Stop ROS compose example
+        if: always()
+        working-directory: docs/guides/apps/ros/example
+        run: docker compose down -v --remove-orphans

@@ -1,0 +1,26 @@
+services:
+  reductstore:
+    image: reduct/store:latest
+    restart: unless-stopped
+    ports:
+      - "8383:8383"
+    environment:
+      RS_API_TOKEN: my-token
+    volumes:
+      - reduct-data:/data
+
+  reductbridge:
+    image: reduct/bridge:latest-ros2-jazzy
+    restart: unless-stopped
+    depends_on:
+      - reductstore
+    network_mode: host
+    environment:
+      ROS_HOME: /tmp/ros
+      FASTDDS_BUILTIN_TRANSPORTS: UDPv4
+    volumes:
+      - ./bridge.toml:/etc/reduct-bridge/config.toml:ro
+    command: ["/etc/reduct-bridge/config.toml"]
+
+volumes:
+  reduct-data:
