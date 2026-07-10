@@ -44,6 +44,14 @@ A replication task can filter records before replicating them to the target buck
 | `entries` | A list of entry names or patterns that the replication task will use to filter records. If the list is empty, all records are replicated. See [Entry patterns](#entry-patterns).                         | List of strings  |
 | `when`    | A set of conditions that the record must meet to be replicated. The conditions are based on the record labels. For more information, see the **[Conditional Query Reference](/docs/conditional-query)**. | JSON-like object |
 
+### Destination Entry Prefix
+
+Use `dst_prefix` when several source buckets, devices, or robots replicate into the same destination bucket and you want their entries separated by a destination path prefix.
+The prefix is applied only to the destination entry name; it does not filter source entries and does not change the source bucket.
+
+For example, a source entry `camera/front` with `dst_prefix: "robot-1"` is written to the destination as `robot-1/camera/front`.
+If `dst_prefix` is empty or omitted, ReductStore keeps the destination entry name unchanged.
+
 #### Entry patterns
 
 Replication uses the same entry pattern semantics as multi-entry queries:
@@ -94,6 +102,7 @@ To spin up a new replication task, you must provide the following information:
 - **Remote Bucket**: The name of the bucket in the target database to which data will be replicated.
 - **Remote URL**: The URL of the target database.
 - **Remote Token**: The API token of the target database.
+- **Destination Entry Prefix**: An optional `dst_prefix` prepended to destination entry names.
 - **Filter Settings**: See the **[Conditional Replication](#conditional-replication)** section for more information.
 
 If the destination instance uses HTTPS, ReductStore verifies its TLS certificate by default.
