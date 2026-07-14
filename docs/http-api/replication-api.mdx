@@ -84,6 +84,7 @@ diagnostics and settings.
 - v1.14: The `when` field was added with **[conditional query](../glossary#conditional-query)** to filter records
 - v1.18: Added the `mode` field to the replication info and settings
 - v1.21: Added the `dst_prefix` field to prepend a prefix to destination entry names
+- v1.21: Added the `compression` field to compress replication batch transfers
 
 <SwaggerComponent
   method="GET"
@@ -132,6 +133,7 @@ diagnostics and settings.
             "dst_host": "string",         // url of destination host e.g https://play.reduct.store
             "entries": [],                // list of entry names or patterns. If empty, all records will be replicated
             "dst_prefix": "string",       // prefix prepended to destination entry names. If empty, destination entry names are unchanged
+            "compression": "string",      // transfer compression: none (default), gzip, or zstd
             "include": {
                  "string": "string"       // DEPRECATED. Key-value pairs to include records that should be replicated. If empty, all records will be replicated
             },
@@ -179,6 +181,7 @@ The method creates a replication task with given settings.
 - v1.14: The `when` field was added with conditional query to filter records
 - v1.18: Added optional `mode` to start replications as `enabled`, `paused`, or `disabled`
 - v1.21: Added optional `dst_prefix` to prepend a prefix to destination entry names
+- v1.21: Added optional `compression` to compress replication batch transfers
 
 <SwaggerComponent
   method="POST"
@@ -248,6 +251,16 @@ The method creates a replication task with given settings.
         isRequired: false,
         description:
           "Prefix prepended to destination entry names. For example, source entry camera/front with dst_prefix robot-1 is replicated as robot-1/camera/front. If empty or omitted, destination entry names are unchanged.",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "compression",
+        dataType: "String",
+        isRequired: false,
+        description:
+          'Transfer compression for replication batch payloads. Accepted values are "none", "gzip", and "zstd". Default is "none".',
       },
     },
     {
@@ -354,6 +367,7 @@ this method, you need an access token with full access.
 - v1.14: The `when` field was added with conditional query to filter records
 - v1.18: Added optional `mode` to switch between `enabled`, `paused`, and `disabled`
 - v1.21: Added optional `dst_prefix` to prepend a prefix to destination entry names
+- v1.21: Added optional `compression` to compress replication batch transfers
 
 <SwaggerComponent
   method="PUT"
@@ -423,6 +437,16 @@ this method, you need an access token with full access.
         isRequired: false,
         description:
           "Prefix prepended to destination entry names. For example, source entry camera/front with dst_prefix robot-1 is replicated as robot-1/camera/front. If empty or omitted, destination entry names are unchanged.",
+      },
+    },
+    {
+      type: "body",
+      details: {
+        name: "compression",
+        dataType: "String",
+        isRequired: false,
+        description:
+          'Transfer compression for replication batch payloads. Accepted values are "none", "gzip", and "zstd". Default is "none".',
       },
     },
     {
