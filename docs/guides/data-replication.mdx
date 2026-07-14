@@ -52,6 +52,15 @@ The prefix is applied only to the destination entry name; it does not filter sou
 For example, a source entry `camera/front` with `dst_prefix: "robot-1"` is written to the destination as `robot-1/camera/front`.
 If `dst_prefix` is empty or omitted, ReductStore keeps the destination entry name unchanged.
 
+### Transfer Compression
+
+Use `compression` to reduce bandwidth used by replication batch transfers between ReductStore instances.
+The setting is optional and accepts `none`, `gzip`, or `zstd`.
+The default is `none`, so existing replication tasks continue sending uncompressed batches unless you enable compression.
+
+When compression is enabled, ReductStore compresses each replication batch payload and sends it with the standard HTTP `Content-Encoding` header.
+If the destination ReductStore version does not support compressed request bodies, the source falls back to uncompressed transfer.
+
 #### Entry patterns
 
 Replication uses the same entry pattern semantics as multi-entry queries:
@@ -103,6 +112,7 @@ To spin up a new replication task, you must provide the following information:
 - **Remote URL**: The URL of the target database.
 - **Remote Token**: The API token of the target database.
 - **Destination Entry Prefix**: An optional `dst_prefix` prepended to destination entry names.
+- **Transfer Compression**: Optional `compression` for replication batch payloads. Accepted values are `none`, `gzip`, and `zstd`.
 - **Filter Settings**: See the **[Conditional Replication](#conditional-replication)** section for more information.
 
 If the destination instance uses HTTPS, ReductStore verifies its TLS certificate by default.
