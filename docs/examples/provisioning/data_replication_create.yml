@@ -16,7 +16,6 @@ services:
       RS_REPLICATION_1_DST_TOKEN: reductstore
       RS_REPLICATION_1_ENTRIES: exampl-*
       RS_REPLICATION_1_MODE: paused
-      RS_REPLICATION_1_COMPRESSION: zstd
       RS_REPLICATION_1_WHEN: |
         {
           "&anomaly": { "$$eq": true }
