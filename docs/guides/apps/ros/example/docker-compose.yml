@@ -9,18 +9,32 @@ services:
     volumes:
       - reduct-data:/data
 
+  ros2publisher:
+    image: ros:jazzy-ros-base
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      ROS_DOMAIN_ID: "0"
+      ROS_HOME: /tmp/ros
+      FASTDDS_BUILTIN_TRANSPORTS: UDPv4
+    volumes:
+      - ./publisher.py:/app/publisher.py:ro
+    command: ["python3", "/app/publisher.py"]
+
   reductbridge:
     image: reduct/bridge:latest-ros2-jazzy
     restart: unless-stopped
     depends_on:
       - reductstore
+      - ros2publisher
     network_mode: host
     environment:
+      ROS_DOMAIN_ID: "0"
       ROS_HOME: /tmp/ros
       FASTDDS_BUILTIN_TRANSPORTS: UDPv4
     volumes:
       - ./bridge.toml:/etc/reduct-bridge/config.toml:ro
-    command: ["/etc/reduct-bridge/config.toml"]
+    command: ["reduct-bridge", "/etc/reduct-bridge/config.toml"]
 
 volumes:
   reduct-data:
