@@ -28,14 +28,14 @@ Unlike other blob storage or file systems, ReductStore has a flat hierarchy. It 
 
 Each bucket has settings that determine how data is stored and accessed. These settings include:
 
-- **Quota Type**: You can choose between NONE, which means there is no quota, and FIFO (First In, First Out), where the oldest data is removed to make space for new data. The default setting is NONE.
-- **Quota Size**: This represents the quota size in bytes. Only enforced with FIFO Quota.
+- **Quota Type**: You can choose between NONE, which means there is no quota, FIFO (First In, First Out), where the oldest data is removed to make space for new data, and HARD, where new records are rejected when the quota is reached. The default setting is NONE.
+- **Quota Size**: This represents the quota size in bytes. Only enforced with FIFO and HARD quotas.
 - **Max Block Size**: This is the maximum allowable size of a block, in bytes. The default size is 64MB.
 - **Maximal Number of Records**: This is the maximum number of records that can be contained in a block. The default number is 1024.
 
 ### Quota Type
 
-The quota type determines the method of quota enforcement and can be set to either NONE, FIFO or HARD.
+The quota type determines the method of quota enforcement and can be set to either NONE, FIFO, or HARD.
 
 NONE implies no quota, allowing data to be stored without any restrictions.
 
