@@ -118,7 +118,7 @@ Run the container with a mounted config file:
 ```bash
 docker run --rm \
   -v "$PWD/config.toml:/etc/reduct-bridge/config.toml:ro" \
-  reduct/bridge:main-iot reduct-bridge /etc/reduct-bridge/config.toml
+  reduct/bridge:main-iot /etc/reduct-bridge/config.toml
 ```
 
 ### Snap (Ubuntu 22.04+)

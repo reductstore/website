@@ -21,7 +21,8 @@ services:
       - ./publisher.py:/app/publisher.py:ro
     command: ["python3", "/app/publisher.py"]
 
-  reductbridge:
+  # reduct-bridge-start
+  reduct-bridge:
     image: reduct/bridge:latest-ros2-jazzy
     restart: unless-stopped
     depends_on:
@@ -35,6 +36,7 @@ services:
     volumes:
       - ./bridge.toml:/etc/reduct-bridge/config.toml:ro
     command: ["reduct-bridge", "/etc/reduct-bridge/config.toml"]
+  # reduct-bridge-end
 
 volumes:
   reduct-data:

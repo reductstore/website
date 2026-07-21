@@ -21,6 +21,7 @@
 - Use Prettier defaults (2-space indent, single quotes as configured); run `yarn fmt` before pushing.
 - Prefer TypeScript/TSX in `src/`; keep React components PascalCase (e.g., `HeroBanner.tsx`) and hooks camelCase (`useFeatureFlag`).
 - MDX/Markdown files should start with frontmatter and use sentence-case headings; place images under `static/img/` and reference with relative paths.
+- Format links in MDX/Markdown content in bold (`**[link text](URL)**`).
 - Keep copy and config near their consumers (e.g., component-specific data in `src/data/<feature>.ts`).
 
 ## Testing Guidelines

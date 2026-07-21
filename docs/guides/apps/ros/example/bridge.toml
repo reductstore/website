@@ -1,21 +1,29 @@
+# ROS 2 input named "robot".
 [inputs.ros2.robot]
+# Use the same domain as the publishers.
 domain_id = 0
 node_name = "reduct_bridge_robot"
 queue_size = 128
+# Resolve ROS message schemas from this installation.
 schema_paths = ["/opt/ros/jazzy"]
 
+# Subscribe to camera images.
 [[inputs.ros2.robot.topics]]
 name = "/camera/image_raw"
 entry_name = "/camera/image_raw"
+# Use the message acquisition time.
 timestamp = { field = "header.stamp", format = "ros_stamp" }
+# Add labels that are constant for this topic.
 labels = [
   { static = { source = "ros2", topic = "/camera/image_raw", sensor = "camera" } }
 ]
 
+# Subscribe to GPS fixes.
 [[inputs.ros2.robot.topics]]
 name = "/gps/fix"
 entry_name = "/gps/fix"
 timestamp = { field = "header.stamp", format = "ros_stamp" }
+# Extract coordinates and add constant labels.
 labels = [
   { field = "latitude", label = "x" },
   { field = "longitude", label = "y" },
@@ -23,6 +31,7 @@ labels = [
   { static = { source = "ros2", topic = "/gps/fix", sensor = "gps" } }
 ]
 
+# Subscribe to IMU measurements.
 [[inputs.ros2.robot.topics]]
 name = "/imu/data"
 entry_name = "/imu/data"
@@ -31,21 +40,25 @@ labels = [
   { static = { source = "ros2", topic = "/imu/data", sensor = "imu" } }
 ]
 
+# Route the ROS input to the local remote.
 [pipelines.ros_to_reductstore]
 remote = "local"
 inputs = ["robot"]
+# Copy the latest GPS coordinates and identify the robot.
 labels = [
   { from = "/gps/fix", labels = ["x", "y", "z"], to = "/camera/image_raw" },
   { from = "/gps/fix", labels = ["x", "y", "z"], to = "/imu/data" },
   { static = { robot = "robot-1" }, to = "*" }
 ]
 
+# Write records to the local ReductStore instance.
 [remotes.reduct.local]
 url = "http://127.0.0.1:8383"
 token_api = "my-token"
 bucket = "robot-data"
 prefix = ""
 
+# Create a rolling bucket when it is missing.
 [remotes.reduct.local.create_bucket]
 quota_type = "FIFO"
 quota_size = "20GB"
