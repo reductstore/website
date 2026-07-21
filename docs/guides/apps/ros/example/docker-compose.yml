@@ -1,4 +1,5 @@
 services:
+  # reductstore-start
   reductstore:
     image: reduct/store:latest
     restart: unless-stopped
@@ -6,8 +7,29 @@ services:
       - "8383:8383"
     environment:
       RS_API_TOKEN: my-token
+
+      # Keep the newest 20 GB of robot data on local disk.
+      RS_BUCKET_1_NAME: robot-data
+      RS_BUCKET_1_QUOTA_TYPE: FIFO
+      RS_BUCKET_1_QUOTA_SIZE: 20GB
+
+      # Send selected topics to the central ReductStore instance.
+      RS_REPLICATION_1_NAME: robot-to-central
+      RS_REPLICATION_1_SRC_BUCKET: robot-data
+      RS_REPLICATION_1_DST_BUCKET: fleet-data
+      RS_REPLICATION_1_DST_HOST: ${CENTRAL_REDUCTSTORE_URL}
+      RS_REPLICATION_1_DST_TOKEN: ${CENTRAL_REDUCTSTORE_TOKEN}
+      RS_REPLICATION_1_ENTRIES: "/camera/image_raw,/imu/data"
+
+      # Compress local data after one day.
+      RS_LIFECYCLE_1_NAME: compress-robot-data
+      RS_LIFECYCLE_1_TYPE: compress
+      RS_LIFECYCLE_1_BUCKET: robot-data
+      RS_LIFECYCLE_1_OLDER_THAN: 1d
+      RS_LIFECYCLE_1_INTERVAL: 1h
     volumes:
       - reduct-data:/data
+  # reductstore-end
 
   ros2publisher:
     image: ros:jazzy-ros-base

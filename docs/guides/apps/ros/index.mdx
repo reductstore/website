@@ -118,7 +118,7 @@ ReductStore instance.
 
 ## Data Collection with ReductBridge
 
-Let's start with data ingestion on the robot and see how ReductBridge simplifies
+Let's setup data ingestion on the robot and see how ReductBridge simplifies
 collecting, labeling, and storing ROS data in ReductStore.
 
 ### Installing ReductBridge
@@ -175,20 +175,66 @@ import DocCardList from "@theme/DocCardList";
 
 <DocCardList />
 
-## Data Replication
+## Data Buffering and Replication
 
-Create a **[replication task](../../data-replication.mdx)** on the robot-side
-ReductStore instance. The task reads from the local `robot-data` bucket and
-writes to a bucket on the cloud or central on-prem ReductStore instance.
+ReductBridge handles data collection, but it needs a ReductStore instance for
+persistent storage. In a ROS application, the robot-side ReductStore has two
+roles: it buffers robotics data on local disk and continuously replicates
+selected records to a cloud or central on-prem instance.
 
-Use replication filters to avoid copying every record from the robot. For
-example, filter by `entries` to replicate only selected topics such as camera
-frames or navigation data, or use the `when` condition to replicate records with
-specific labels such as `event=collision`, `quality=good`, or
-`dataset=training`.
+### Installing ReductStore
 
-This keeps the robot deployment lightweight while making the useful subset of
-data available from a central endpoint.
+The Docker Compose example runs ReductStore on the robot, publishes its HTTP API
+on port `8383`, and mounts a named volume at `/data`. The volume keeps records,
+bucket settings, and replication progress across container restarts.
+
+Before starting the stack, set the URL and API token for the destination
+ReductStore instance:
+
+```bash
+export CENTRAL_REDUCTSTORE_URL=https://reductstore.example.com
+export CENTRAL_REDUCTSTORE_TOKEN=replace-with-central-token
+docker compose up -d
+```
+
+The destination must already contain a `fleet-data` bucket, and its token must
+have permission to write to that bucket. Use HTTPS for communication outside a
+trusted network. The local API token is `my-token`, matching the ReductBridge
+configuration from the previous section.
+
+### Configuring buffering and replication
+
+ReductStore supports startup provisioning through environment variables. The
+`reductstore` service provisions the local bucket, replication task, and
+compression lifecycle policy when the container starts:
+
+```yaml file=./example/docker-compose.yml start=reductstore-start end=reductstore-end
+
+```
+
+The `robot-data` bucket uses a 20 GB FIFO quota, so the robot can continue
+recording without unbounded disk growth. When the bucket reaches its quota,
+ReductStore removes its oldest blocks to make room for new data. ReductBridge
+also requests the same bucket settings when it connects, making the bucket
+available even when the bridge and store start concurrently.
+
+The `robot-to-central` replication task watches new records in `robot-data` and
+sends `/camera/image_raw` and `/imu/data` to the `fleet-data` bucket. ReductStore
+batches transfers and tracks pending records in a transaction log, so a network
+interruption does not stop local ingestion and replication resumes when the
+destination becomes available. Replication starts with records written after
+the task is created; it does not backfill older records or replicate deletions.
+
+The `compress-robot-data` lifecycle policy checks once per hour and compresses
+persisted blocks older than one day with zstd. Compression reduces local disk
+usage without deleting records, and reads remain transparent. The FIFO quota is
+still the final storage bound, so size it for the longest expected network
+outage and data rate to avoid evicting records before they are replicated.
+
+See **[ReductStore provisioning](../../../configuration/provisioning.mdx)** for
+all environment variables, **[data replication](../../../guides/data-replication.mdx)**
+for entry and label filters, and **[lifecycle policies](../../../guides/lifecycle-policies.mdx)**
+for compression and retention options.
 
 ## Data Querying and Visualization
 
