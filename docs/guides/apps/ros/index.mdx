@@ -23,8 +23,8 @@ architecture and then diving into setup, replication, querying, and export.
 
 :::info
 Some features described in this guide are available only in ReductStore Pro,
-including the **[ReductROS](/docs/extensions/official/ros-ext)** and
-**[ReductSelect](/docs/extensions/official/select-ext)** extensions. Check the
+including the **[ReductROS](../../../extensions/official/ros-ext/index.mdx)** and
+**[ReductSelect](../../../extensions/official/select-ext.mdx)** extensions. Check the
 **[pricing page](/pricing)** for more information about available features and
 extensions.
 :::
@@ -38,10 +38,10 @@ as ROS message schemas.
 
 The ROS workflow uses the following components:
 
-- **[ReductBridge](/docs/reduct-bridge)** subscribes to ROS topics on the robot,
+- **[ReductBridge](../../../reduct-bridge/index.mdx)** subscribes to ROS topics on the robot,
   writes messages to ReductStore, assigns labels, and stores the schema metadata
   required to decode raw ROS messages.
-- **[ReductStore](/docs)** stores the message payloads as timestamped records in
+- **[ReductStore](../../../how-does-it-work.mdx)** stores the message payloads as timestamped records in
   a bucket. On the robot side, it runs locally on the same robot or edge
   computer.
 - **Replication tasks** run on the robot-side ReductStore instance and copy only
@@ -50,7 +50,7 @@ The ROS workflow uses the following components:
 - **Cloud or central on-prem ReductStore** stores replicated data from one or
   more robots and provides the main query and visualization endpoint for
   operators, dashboards, and analytics tools.
-- **[ReductROS](/docs/extensions/official/ros-ext)** decodes stored ROS data when
+- **[ReductROS](../../../extensions/official/ros-ext/index.mdx)** decodes stored ROS data when
   it is queried. It can extract raw ROS 1 or ROS 2 messages as JSON, read MCAP or
   rosbag files, and export filtered data back to robotics formats.
 
@@ -126,7 +126,7 @@ collecting, labeling, and storing ROS data in ReductStore.
 ReductBridge is an open-source project that can be installed on the robot or
 edge computer. It is available as a prebuilt binary for Linux, macOS, and
 Windows, or as a Docker container. You can find the installation instructions
-in the **[ReductBridge documentation](/docs/reduct-bridge/index.mdx#installation)**.
+in the **[ReductBridge documentation](../../../reduct-bridge/index.mdx#installation)**.
 This example uses the Docker container with Docker Compose:
 
 ```yaml file=./example/docker-compose.yml start=reduct-bridge-start end=reduct-bridge-end
@@ -162,173 +162,22 @@ them to ReductStore. Save the following file as `bridge.toml` next to
 
 The source is also available as the **[full bridge.toml example](https://github.com/reductstore/website/blob/main/docs/guides/apps/ros/example/bridge.toml)**.
 
-### Connecting the ROS 2 input
+At a high level, this configuration subscribes to camera, GPS, and IMU topics;
+stores their original CDR payloads and ROS schemas; assigns sensor timestamps
+and labels; propagates the latest GPS coordinates to camera and IMU records; and
+writes everything to a rolling `robot-data` bucket.
 
-The `[inputs.ros2.robot]` table creates a ROS 2 input named `robot`.
-`domain_id = 0` must match the domain used by the publishers, while `node_name`
-is the unique ROS node name used by ReductBridge. `queue_size = 128` configures
-the keep-last depth of each subscription.
+For a field-by-field explanation of subscriptions, schema attachments,
+timestamp assignment, static and dynamic labels, cross-topic label propagation,
+and ReductStore output, use the detailed guide below.
 
-ReductBridge needs the ROS message definitions to decode fields and attach
-schemas to stored entries. `schema_paths = ["/opt/ros/jazzy"]` tells it to look
-under `/opt/ros/jazzy/share/<package>/msg/`, which is the ROS installation in
-the Jazzy Docker image. Add a workspace install prefix to this list when topics
-use custom message types. See the **[ROS 2 input reference](/docs/reduct-bridge/input/ros2)**
-for schema lookup and runtime details.
+import DocCardList from "@theme/DocCardList";
 
-### Subscribing to topics
-
-Every `[[inputs.ros2.robot.topics]]` block creates a subscription. This example
-subscribes to `/camera/image_raw`, `/gps/fix`, and `/imu/data`. `name` is the ROS
-topic, while `entry_name` is the ReductStore entry that receives its records.
-They are deliberately identical here, producing one entry per topic in the
-`robot-data` bucket.
-
-Topic names can also contain `*`, for example `/camera/*`, when the same rules
-should apply to several discovered topics. If `entry_name` is omitted,
-ReductBridge uses the resolved topic name. Each payload is kept in its original
-serialized CDR form with content type `application/cdr`.
-
-### Handling ROS schemas
-
-When ReductBridge subscribes to a topic, it discovers the ROS message type and
-resolves its `.msg` definition from `schema_paths` or the ROS environment. It
-also resolves dependent message definitions, so nested types can be decoded.
-The original message remains a binary CDR record; schema handling does not
-convert or replace the stored payload.
-
-ReductBridge automatically stores the resolved metadata in the `$schema`
-attachment of the destination entry. This is an entry-level attachment shared
-by all records in that entry, so the schema is stored once alongside the data
-rather than repeated in every record. It contains:
-
-- `encoding`: `cdr` for ROS 2 records.
-- `topic`: the original ROS topic name.
-- `schema_name`: the ROS message type, such as `sensor_msgs/msg/Image`.
-- `schema`: the full message definition needed to decode the payload.
-
-The same resolved schema is used during ingestion when a timestamp or dynamic
-label refers to a message field. ReductBridge decodes the CDR payload in memory,
-reads paths such as `header.stamp` or `latitude`, and stores the selected values
-as the record timestamp or labels. Only the configured values are extracted;
-the record content written to ReductStore remains the original CDR bytes.
-
-The `$schema` attachment also keeps the raw records self-describing for later
-queries. The **[ReductROS Raw Messages extension](/docs/extensions/official/ros-ext/raw)**
-uses it to select the correct decoder, return individual ROS messages as JSON,
-or export records from one or more entries into MCAP episodes. This allows the
-same stored data to support filtering and inspection as JSON as well as export
-to standard robotics tooling without converting it during ingestion.
-
-### Assigning record timestamps
-
-Each topic uses the same timestamp mapping:
-
-```toml
-timestamp = { field = "header.stamp", format = "ros_stamp" }
-```
-
-The `field` path selects the standard ROS header timestamp, and `ros_stamp`
-converts its `sec` and `nanosec` fields into the timestamp indexed by
-ReductStore. This records when the sensor message was produced rather than when
-ReductBridge received it. In the example publisher, all three messages in a
-cycle share one header timestamp, which makes time-range queries across the
-entries consistent.
-
-:::note
-Timestamp extraction requires ReductBridge to decode the CDR payload using the
-resolved schema. If the field cannot be decoded, ReductBridge logs a warning and
-falls back to the timestamp supplied by the ROS middleware, or the ingest time
-when no middleware timestamp is available.
-:::
-
-### Adding static and dynamic labels
-
-Static labels assign known values to every record from a topic. For example,
-camera records receive `source=ros2`, `topic=/camera/image_raw`, and
-`sensor=camera`:
-
-```toml
-{ static = { source = "ros2", topic = "/camera/image_raw", sensor = "camera" } }
-```
-
-Dynamic labels read values from the decoded message. The GPS subscription maps
-the `latitude`, `longitude`, and `altitude` fields to labels named `x`, `y`, and
-`z`:
-
-```toml
-{ field = "latitude", label = "x" }
-{ field = "longitude", label = "y" }
-{ field = "altitude", label = "z" }
-```
-
-Field paths use dot notation for nested values and numeric segments for array
-indexes. ReductBridge applies static labels first and dynamic field labels
-afterward, so a field label overrides a static label with the same name. If a
-field is absent or cannot be decoded, that dynamic label is omitted while the
-static labels are still stored.
-
-:::note
-Configuring dynamic field labels enables CDR payload parsing for that topic.
-ReductBridge needs a valid ROS message schema to resolve and read the configured
-field paths, just as it does for timestamp assignment.
-:::
-
-### Propagating labels between topics
-
-The pipeline connects the `robot` input to the ReductStore remote named `local`:
-
-```toml
-[pipelines.ros_to_reductstore]
-remote = "local"
-inputs = ["robot"]
-```
-
-Pipeline label rules can enrich one topic with context extracted from another.
-These two rules remember the latest `x`, `y`, and `z` labels seen on the GPS
-entry and add them to subsequent camera and IMU records:
-
-```toml
-{ from = "/gps/fix", labels = ["x", "y", "z"], to = "/camera/image_raw" }
-{ from = "/gps/fix", labels = ["x", "y", "z"], to = "/imu/data" }
-```
-
-The `from` and `to` patterns match `entry_name`, not the original topic name.
-The rule is stateful: when a `/gps/fix` record arrives, the pipeline caches its
-selected labels; when a matching target record arrives later, the pipeline
-copies the cached values onto it. This is a last-seen-value operation, not a
-timestamp join. Target records received before the first GPS record have no
-copied coordinates, and a target record may receive coordinates from the
-previous publishing cycle when it arrives before the current GPS update.
-
-The final pipeline rule adds a robot identifier to every entry because `*`
-matches all entry names:
-
-```toml
-{ static = { robot = "robot-1" }, to = "*" }
-```
-
-This combination makes camera and IMU records directly filterable by robot and
-the latest known position without changing their original payloads.
-
-### Writing to ReductStore
-
-The `[remotes.reduct.local]` table defines the `local` destination referenced by
-the pipeline. It connects through the host port exposed by Docker Compose,
-authenticates with `my-token`, and writes every topic to the `robot-data` bucket.
-An empty `prefix` preserves the configured entry names; set it to a value such
-as `robot-1/` to place all entries under that path.
-
-The `[remotes.reduct.local.create_bucket]` table creates the bucket if it does
-not exist. `quota_type = "FIFO"` with `quota_size = "20GB"` makes it a rolling
-20 GB store: after the quota is reached, ReductStore removes the oldest records
-to make room for new data. Existing bucket settings are not changed. See the
-**[ReductStore remote reference](/docs/reduct-bridge/remote/reduct)** for batching
-and attachment options.
+<DocCardList />
 
 ## Data Replication
 
-Create a **[replication task](/docs/guides/data-replication)** on the robot-side
+Create a **[replication task](../../data-replication.mdx)** on the robot-side
 ReductStore instance. The task reads from the local `robot-data` bucket and
 writes to a bucket on the cloud or central on-prem ReductStore instance.
 

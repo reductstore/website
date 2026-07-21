@@ -12,10 +12,14 @@ schema_paths = ["/opt/ros/jazzy"]
 name = "/camera/image_raw"
 entry_name = "/camera/image_raw"
 # Use the message acquisition time.
+# timestamp-start
 timestamp = { field = "header.stamp", format = "ros_stamp" }
+# timestamp-end
 # Add labels that are constant for this topic.
 labels = [
+  # camera-static-start
   { static = { source = "ros2", topic = "/camera/image_raw", sensor = "camera" } }
+  # camera-static-end
 ]
 
 # Subscribe to GPS fixes.
@@ -25,9 +29,11 @@ entry_name = "/gps/fix"
 timestamp = { field = "header.stamp", format = "ros_stamp" }
 # Extract coordinates and add constant labels.
 labels = [
+  # gps-dynamic-start
   { field = "latitude", label = "x" },
   { field = "longitude", label = "y" },
   { field = "altitude", label = "z" },
+  # gps-dynamic-end
   { static = { source = "ros2", topic = "/gps/fix", sensor = "gps" } }
 ]
 
@@ -41,14 +47,20 @@ labels = [
 ]
 
 # Route the ROS input to the local remote.
+# pipeline-route-start
 [pipelines.ros_to_reductstore]
 remote = "local"
 inputs = ["robot"]
+# pipeline-route-end
 # Copy the latest GPS coordinates and identify the robot.
 labels = [
+  # gps-propagation-start
   { from = "/gps/fix", labels = ["x", "y", "z"], to = "/camera/image_raw" },
   { from = "/gps/fix", labels = ["x", "y", "z"], to = "/imu/data" },
+  # gps-propagation-end
+  # robot-label-start
   { static = { robot = "robot-1" }, to = "*" }
+  # robot-label-end
 ]
 
 # Write records to the local ReductStore instance.

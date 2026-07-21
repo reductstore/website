@@ -67,7 +67,24 @@
         "guides/data-replication",
         "guides/access-control",
         "guides/disaster-recovery",
-        "guides/apps/ros/index"
+        {
+          "type": "category",
+          "label": "Applications",
+          "collapsed": false,
+          "collapsible": false,
+          "items": [
+            {
+              "type": "category",
+              "label": "ROS",
+              "collapsed": true,
+              "link": {
+                "type": "doc",
+                "id": "guides/apps/ros/index"
+              },
+              "items": ["guides/apps/ros/reduct-bridge"]
+            }
+          ]
+        }
       ]
     },
     {
