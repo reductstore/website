@@ -81,7 +81,10 @@
                 "type": "doc",
                 "id": "guides/apps/ros/index"
               },
-              "items": ["guides/apps/ros/reduct-bridge"]
+              "items": [
+                "guides/apps/ros/data-collection",
+                "guides/apps/ros/buffering-replication-monitoring"
+              ]
             }
           ]
         }

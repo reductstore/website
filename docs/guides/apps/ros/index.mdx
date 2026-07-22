@@ -9,6 +9,14 @@ description: Complete guide to building data flow pipelines with ReductStore in 
 
 # Using ReductStore in ROS applications
 
+:::info
+Some features described in this guide are available only in ReductStore Pro,
+including the **[ReductROS](../../../extensions/official/ros-ext/index.mdx)** and
+**[ReductSelect](../../../extensions/official/select-ext.mdx)** extensions. Check the
+**[pricing page](/pricing)** for more information about available features and
+extensions.
+:::
+
 ReductStore is designed for robotics applications. It makes ROS messages, sensor
 payloads, and recorded robotics data queryable by storing them as timestamped
 records with labels and attachments.
@@ -21,18 +29,15 @@ instance, and querying, visualizing, and exporting the data from there.
 The following sections walk through each step, starting with an overview of the
 architecture and then diving into setup, replication, querying, and export.
 
-:::info
-Some features described in this guide are available only in ReductStore Pro,
-including the **[ReductROS](../../../extensions/official/ros-ext/index.mdx)** and
-**[ReductSelect](../../../extensions/official/select-ext.mdx)** extensions. Check the
-**[pricing page](/pricing)** for more information about available features and
-extensions.
+:::info How to read this guide
+Use this page for a quick, runnable walkthrough of the complete ROS data flow,
+then follow the linked standalone guides for in-depth configuration and concepts.
 :::
 
 ## Overview
 
 ReductStore stores data as binary records and indexes each record by timestamp.
-It allows you to store a history of the robotics data in original format, while
+It allows you to store a history of robotics data in its original format, while
 labels provide metadata for filtering and attachments store shared metadata such
 as ROS message schemas.
 
@@ -57,7 +62,7 @@ The ROS workflow uses the following components:
 The diagram below shows the robot-side pipeline and the central storage layer.
 ROS nodes publish topics, ReductBridge subscribes to selected topics, and local
 ReductStore stores one entry per topic with the raw payload, labels, and
-`$schema` schema attachment. A replication task on the robot copies only the
+`$schema` attachment. A replication task on the robot copies only the
 selected entries or label-matched records to the cloud or central on-prem
 ReductStore instance.
 
@@ -69,7 +74,7 @@ ReductStore instance.
                         |                                      |
                         |   +-------------------------------+  |
                         |   | "ReductStore"                 |  |
-                        |   | "bucket: fleet-data"          |  |
+                        |   | "bucket: demo"                |  |
                         |   | "replicated robot data"       |  |
                         |   +-------------------------------+  |
                         |                   ^                  |
@@ -84,7 +89,7 @@ ReductStore instance.
           |                 |               |               |                    |
           |                 |   +-----------+-----------+   |                    |
           |                 |   | "replication task"    |   |                    |
-          |                 |   | "label-a > 0.95"      |   |                    |
+          |                 |   | "camera + IMU entries"|   |                    |
           |                 |   +-----------+-----------+   |                    |
           |                 |               |               |                    |
           |                 |   +-----------+-----------+   |                    |
@@ -105,7 +110,7 @@ ReductStore instance.
           |   +---------------------+   |   | * "subscribes to topics"        |  |
           |   | "/gps/fix"          |---+-->| * "stores message payloads"     |  |
           |   +---------------------+   |   | * "applies labels"              |  |
-          |                             |   | * "attaches ROS schemas"        |  |
+          |                             |   | * "attaches ROS schema"         |  |
           |   +---------------------+   |   |                                 |  |
           |   | "/imu/data"         |---+   |                                 |  |
           |   +---------------------+       +---------------------------------+  |
@@ -116,12 +121,19 @@ ReductStore instance.
 
 </div>
 
-## Data Collection with ReductBridge
+## Data collection
 
-Let's setup data ingestion on the robot and see how ReductBridge simplifies
+Let's set up data ingestion on the robot and see how ReductBridge simplifies
 collecting, labeling, and storing ROS data in ReductStore.
 
-### Installing ReductBridge
+From the example directory, start the complete stack, including the ROS
+publisher, ReductBridge, and ReductStore:
+
+```bash
+docker compose up -d
+```
+
+### Running ReductBridge
 
 ReductBridge is an open-source project that can be installed on the robot or
 edge computer. It is available as a prebuilt binary for Linux, macOS, and
@@ -137,16 +149,13 @@ See the **[full Docker Compose example](https://github.com/reductstore/website/b
 
 The publisher and ReductBridge containers use the same ROS 2 environment:
 
-- `ROS_DOMAIN_ID: "0"` places both processes in DDS domain 0 so they can
-  discover and communicate with each other. Use a different domain ID to
-  isolate this ROS graph, but keep the value identical in every participating
-  container.
-- `ROS_HOME: /tmp/ros` gives ROS 2 a writable directory for logs and other
-  runtime files. Using `/tmp` is suitable here because these files do not need
-  to persist after the container stops.
-- `FASTDDS_BUILTIN_TRANSPORTS: UDPv4` makes Fast DDS use its UDP/IPv4 transport
-  instead of shared memory. This avoids shared-memory transport errors between
-  isolated containers and allows discovery over the host network.
+- `ROS_DOMAIN_ID: "0"` places both processes in the same DDS domain.
+- `ROS_HOME: /tmp/ros` provides a writable directory for ROS runtime files.
+- `FASTDDS_BUILTIN_TRANSPORTS: UDPv4` enables UDP/IPv4 transport between the
+  isolated containers.
+
+See the **[Data collection guide](./data-collection.mdx#deployment)** for details
+about these variables.
 
 ### Configuring ReductBridge
 
@@ -169,74 +178,51 @@ writes everything to a rolling `robot-data` bucket.
 
 For a field-by-field explanation of subscriptions, schema attachments,
 timestamp assignment, static and dynamic labels, cross-topic label propagation,
-and ReductStore output, use the detailed guide below.
+and ReductStore output, see the standalone
+**[Data Collection guide](./data-collection.mdx)**.
 
-import DocCardList from "@theme/DocCardList";
-
-<DocCardList />
-
-## Data Buffering and Replication
+## Buffering, replication, and monitoring
 
 ReductBridge handles data collection, but it needs a ReductStore instance for
-persistent storage. In a ROS application, the robot-side ReductStore has two
-roles: it buffers robotics data on local disk and continuously replicates
-selected records to a cloud or central on-prem instance.
+persistent storage. In a ROS application, the robot-side ReductStore has three
+roles: it buffers robotics data on local disk, replicates selected records to a
+cloud or central on-prem instance, and records operational diagnostics.
 
-### Installing ReductStore
+### Running ReductStore
 
-The Docker Compose example runs ReductStore on the robot, publishes its HTTP API
-on port `8383`, and mounts a named volume at `/data`. The volume keeps records,
-bucket settings, and replication progress across container restarts.
-
-Before starting the stack, set the URL and API token for the destination
-ReductStore instance:
-
-```bash
-export CENTRAL_REDUCTSTORE_URL=https://reductstore.example.com
-export CENTRAL_REDUCTSTORE_TOKEN=replace-with-central-token
-docker compose up -d
-```
-
-The destination must already contain a `fleet-data` bucket, and its token must
-have permission to write to that bucket. Use HTTPS for communication outside a
-trusted network. The local API token is `my-token`, matching the ReductBridge
-configuration from the previous section.
-
-### Configuring buffering and replication
-
-ReductStore supports startup provisioning through environment variables. The
-`reductstore` service provisions the local bucket, replication task, and
-compression lifecycle policy when the container starts:
+ReductStore is available as a Docker image, a Snap package, and prebuilt
+binaries for Linux, macOS, and Windows. See the
+**[Getting Started guide](../../../getting-started/index.mdx)** for all
+installation options. This example runs ReductStore with Docker Compose:
 
 ```yaml file=./example/docker-compose.yml start=reductstore-start end=reductstore-end
 
 ```
 
-The `robot-data` bucket uses a 20 GB FIFO quota, so the robot can continue
-recording without unbounded disk growth. When the bucket reaches its quota,
-ReductStore removes its oldest blocks to make room for new data. ReductBridge
-also requests the same bucket settings when it connects, making the bucket
-available even when the bridge and store start concurrently.
+The Docker Compose example runs ReductStore on the robot, publishes its HTTP API
+on port `8383`, and mounts a named volume at `/data`. The volume keeps records,
+bucket settings, and replication progress across container restarts.
 
-The `robot-to-central` replication task watches new records in `robot-data` and
-sends `/camera/image_raw` and `/imu/data` to the `fleet-data` bucket. ReductStore
-batches transfers and tracks pending records in a transaction log, so a network
-interruption does not stop local ingestion and replication resumes when the
-destination becomes available. Replication starts with records written after
-the task is created; it does not backfill older records or replicate deletions.
+:::warning Public demo server
+The example replicates data to the `demo` bucket on the public
+**[Play server](https://play.reduct.store)** using its `reductstore` demo token.
+Do not send sensitive data to this shared server.
+:::
 
-The `compress-robot-data` lifecycle policy checks once per hour and compresses
-persisted blocks older than one day with zstd. Compression reduces local disk
-usage without deleting records, and reads remain transparent. The FIFO quota is
-still the final storage bound, so size it for the longest expected network
-outage and data rate to avoid evicting records before they are replicated.
+For production, replace these values with your destination URL, bucket, and a
+token that has permission to write to that bucket. The local API token is
+`my-token`, matching the ReductBridge configuration from the previous section.
 
-See **[ReductStore provisioning](../../../configuration/provisioning.mdx)** for
-all environment variables, **[data replication](../../../guides/data-replication.mdx)**
-for entry and label filters, and **[lifecycle policies](../../../guides/lifecycle-policies.mdx)**
-for compression and retention options.
+At startup, the service provisions a rolling 20 GB `robot-data` bucket, a task
+that replicates camera and IMU records under an `awesome-robot` destination
+prefix, and a lifecycle policy that compresses local data after one day. It also
+records replication, lifecycle, usage, and log events in the `$system` bucket.
 
-## Data Querying and Visualization
+For a complete explanation of local buffering, selective fleet replication,
+compression, failure behavior, and monitoring, see the standalone
+**[Buffering, Replication, and Monitoring guide](./buffering-replication-monitoring.mdx)**.
+
+## Data querying and visualization
 
 Query and visualization tools should normally connect to the cloud or central
 on-prem ReductStore instance instead of the robot. The central instance is more

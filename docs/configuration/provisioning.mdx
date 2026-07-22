@@ -73,6 +73,7 @@ You can provision replication tasks by setting environment variables. The follow
 | `RS_REPLICATION_<ID>_DST_BUCKET` |         | Remote bucket name (required). It must be created before replication                                                                |
 | `RS_REPLICATION_<ID>_DST_HOST`   |         | URL of destination instance (required). For example, https://play.reduct.store or http://localhost:8383                             |
 | `RS_REPLICATION_<ID>_DST_TOKEN`  |         | Token for destination instance                                                                                                      |
+| `RS_REPLICATION_<ID>_DST_PREFIX` |         | Prefix added to destination entry names. For example, `robot-1` writes `/camera/image` as `robot-1/camera/image`.                   |
 | `RS_REPLICATION_<ID>_ENTRIES`    |         | Comma-separated entry names or patterns to replicate. If empty, all entries are replicated. Supports `*`, `**`, and `!` exclusions. |
 | `RS_REPLICATION_<ID>_WHEN`       |         | Condition for replication. If not set, all entries will be replicated.                                                              |
 | `RS_REPLICATION_<ID>_MODE`       | enabled | Replication mode. Accepted values: `enabled`, `paused`, `disabled` (case-insensitive).                                              |

@@ -1,34 +1,28 @@
 ---
-title: ReductBridge and ROS Data
+title: Data Collection
 description: Configure ReductBridge to subscribe to ROS 2 topics, preserve schemas, assign timestamps and labels, and write data to ReductStore.
 ---
 
 <head>
   <link
     rel="canonical"
-    href="https://www.reduct.store/docs/guides/apps/ros/reduct-bridge"
+    href="https://www.reduct.store/docs/guides/apps/ros/data-collection"
   />
 </head>
 
-# Collecting ROS data with ReductBridge
+# Data collection
 
-This guide explains how the `bridge.toml` configuration from the
-**[ROS applications guide](./index.mdx#data-collection-with-reductbridge)** turns ROS 2 topics into
-time-indexed ReductStore records. The complete configuration is available as
-the **[bridge.toml example](https://github.com/reductstore/website/blob/main/docs/guides/apps/ros/example/bridge.toml)**.
+This guide explains how ReductBridge uses the `bridge.toml` configuration from
+the **[ROS applications guide](./index.mdx#data-collection)** to turn ROS 2
+topics into time-indexed ReductStore records.
 
-ReductBridge connects three layers: a ROS 2 input subscribes to topics, a
-pipeline enriches and routes records, and a ReductStore remote writes them to a
-bucket.
-
-```toml file=./example/bridge.toml
-
-```
+Data flows from ROS 2 topic subscriptions through a pipeline that enriches and
+routes records to a ReductStore destination.
 
 ## Data flow
 
-The configuration moves each ROS message through the input, pipeline, and
-remote stages before writing it to the local ReductStore bucket.
+ReductBridge moves each ROS message through the input, pipeline, and remote
+stages before writing it to the local ReductStore bucket.
 
 <div style={{ textAlign: "center" }}>
 
@@ -67,7 +61,55 @@ remote stages before writing it to the local ReductStore bucket.
 
 </div>
 
-## Connecting the ROS 2 input
+## Deployment
+
+ReductBridge is available as a Docker image and prebuilt binaries for Linux,
+macOS, and Windows. See the
+**[ReductBridge documentation](../../../reduct-bridge/index.mdx#installation)**
+for all installation options.
+
+The ROS example uses the following `reduct-bridge` service from the example
+`docker-compose.yml`:
+
+```yaml file=./example/docker-compose.yml start=reduct-bridge-start end=reduct-bridge-end
+
+```
+
+The service runs the ROS 2 Jazzy image of ReductBridge on the host network so it
+can discover the example ROS publisher. It mounts `bridge.toml` at
+`/etc/reduct-bridge/config.toml` and passes that file to ReductBridge when the
+container starts.
+
+The publisher and ReductBridge containers use the same ROS 2 environment:
+
+- `ROS_DOMAIN_ID: "0"` places both processes in DDS domain 0 so they can
+  discover and communicate with each other. Use a different domain ID to
+  isolate this ROS graph, but keep the value identical in every participating
+  container.
+- `ROS_HOME: /tmp/ros` gives ROS 2 a writable directory for logs and other
+  runtime files. These files do not need to persist after the container stops.
+- `FASTDDS_BUILTIN_TRANSPORTS: UDPv4` makes Fast DDS use UDP/IPv4 instead of
+  shared memory, avoiding shared-memory transport errors between isolated
+  containers and allowing discovery over the host network.
+
+The service is part of the
+**[complete Docker Compose example](https://github.com/reductstore/website/blob/main/docs/guides/apps/ros/example/docker-compose.yml)**.
+From the example directory, start the stack with:
+
+```bash
+docker compose up -d
+```
+
+## Configuration
+
+The complete configuration is available as the
+**[bridge.toml example](https://github.com/reductstore/website/blob/main/docs/guides/apps/ros/example/bridge.toml)**:
+
+```toml file=./example/bridge.toml
+
+```
+
+## ROS 2 input
 
 The `[inputs.ros2.robot]` table creates a ROS 2 input named `robot`.
 `domain_id = 0` must match the domain used by the publishers, while `node_name`
@@ -81,7 +123,7 @@ the Jazzy Docker image. Add a workspace install prefix to this list when topics
 use custom message types. See the **[ROS 2 input reference](../../../reduct-bridge/input/ros2/index.mdx)**
 for schema lookup and runtime details.
 
-## Subscribing to topics
+### Topic subscriptions
 
 Every `[[inputs.ros2.robot.topics]]` block creates a subscription. This example
 subscribes to `/camera/image_raw`, `/gps/fix`, and `/imu/data`. `name` is the ROS
@@ -94,7 +136,7 @@ should apply to several discovered topics. If `entry_name` is omitted,
 ReductBridge uses the resolved topic name. Each payload is kept in its original
 serialized CDR form with content type `application/cdr`.
 
-## Handling ROS schemas
+### Schema resolution and storage
 
 When ReductBridge subscribes to a topic, it discovers the ROS message type and
 resolves its `.msg` definition from `schema_paths` or the ROS environment. It
@@ -116,7 +158,8 @@ The same resolved schema is used during ingestion when a timestamp or dynamic
 label refers to a message field. ReductBridge decodes the CDR payload in memory,
 reads paths such as `header.stamp` or `latitude`, and stores the selected values
 as the record timestamp or labels. Only the configured values are extracted;
-the record content written to ReductStore remains the original CDR bytes.
+the record content written to ReductStore remains the original CDR bytes. The
+timestamp and label sections below explain how these field paths work.
 
 The `$schema` attachment also keeps the raw records self-describing for later
 queries. The **[ReductROS Raw Messages extension](../../../extensions/official/ros-ext/raw.mdx)**
@@ -125,7 +168,7 @@ or export records from one or more entries into MCAP episodes. This allows the
 same stored data to support filtering and inspection as JSON as well as export
 to standard robotics tooling without converting it during ingestion.
 
-## Assigning record timestamps
+### Timestamp assignment
 
 Each topic uses the same timestamp mapping:
 
@@ -135,10 +178,10 @@ Each topic uses the same timestamp mapping:
 
 The `field` path selects the standard ROS header timestamp, and `ros_stamp`
 converts its `sec` and `nanosec` fields into the timestamp indexed by
-ReductStore. This records when the sensor message was produced rather than when
-ReductBridge received it. In the example publisher, all three messages in a
-cycle share one header timestamp, which makes time-range queries across the
-entries consistent.
+ReductStore. Using the header timestamp records when the sensor produced the
+message rather than when ReductBridge received it. In the example publisher,
+all three messages in a cycle share one header timestamp, which makes time-range
+queries across the entries consistent.
 
 :::note
 Timestamp extraction requires ReductBridge to decode the CDR payload using the
@@ -147,7 +190,9 @@ falls back to the timestamp supplied by the ROS middleware, or the ingest time
 when no middleware timestamp is available.
 :::
 
-## Adding static and dynamic labels
+## Labels
+
+### Static and dynamic labels
 
 Static labels assign known values to every record from a topic. For example,
 camera records receive `source=ros2`, `topic=/camera/image_raw`, and
@@ -177,7 +222,7 @@ ReductBridge needs a valid ROS message schema to resolve and read the configured
 field paths, just as it does for timestamp assignment.
 :::
 
-## Propagating labels between topics
+### Cross-topic label propagation
 
 The pipeline connects the `robot` input to the ReductStore remote named `local`:
 
@@ -211,7 +256,7 @@ matches all entry names:
 This combination makes camera and IMU records directly filterable by robot and
 the latest known position without changing their original payloads.
 
-## Writing to ReductStore
+## Output to ReductStore
 
 The `[remotes.reduct.local]` table defines the `local` destination referenced by
 the pipeline. It connects through the host port exposed by Docker Compose,
@@ -219,15 +264,28 @@ authenticates with `my-token`, and writes every topic to the `robot-data` bucket
 An empty `prefix` preserves the configured entry names; set it to a value such
 as `robot-1/` to place all entries under that path.
 
+```toml file=./example/bridge.toml start=remote-start end=remote-end
+
+```
+
 ReductBridge batches records before sending them to ReductStore over HTTP.
 Combining multiple records into fewer requests reduces HTTP overhead and makes
 communication more efficient, especially for high-rate ROS topics. A batch is
 flushed when its configured record count, payload size, or time interval is
 reached.
 
+The example uses default batch settings. See the
+**[ReductStore remote reference](../../../reduct-bridge/remote/reduct/index.mdx)**
+to tune them.
+
 The `[remotes.reduct.local.create_bucket]` table creates the bucket if it does
 not exist. `quota_type = "FIFO"` with `quota_size = "20GB"` makes it a rolling
 20 GB store: after the quota is reached, ReductStore removes the oldest records
-to make room for new data. Existing bucket settings are not changed. See the
-**[ReductStore remote reference](../../../reduct-bridge/remote/reduct/index.mdx)** for batching
-and attachment options.
+to make room for new data. Existing bucket settings are not changed.
+
+:::note
+The `create_bucket` table is not required in this Docker Compose example because
+the `robot-data` bucket is already provisioned through the ReductStore service's
+environment variables. It is useful when running ReductBridge independently and
+the destination bucket might not exist yet.
+:::

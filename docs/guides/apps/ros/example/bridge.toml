@@ -64,6 +64,7 @@ labels = [
 ]
 
 # Write records to the local ReductStore instance.
+# remote-start
 [remotes.reduct.local]
 url = "http://127.0.0.1:8383"
 token_api = "my-token"
@@ -74,3 +75,4 @@ prefix = ""
 [remotes.reduct.local.create_bucket]
 quota_type = "FIFO"
 quota_size = "20GB"
+# remote-end

@@ -187,7 +187,7 @@ Notes:
 - Audit events are written under `$system/audit/<instance>/<token-name>`.
 - Lifecycle diagnostics are written under `$system/lifecycle/<instance>/<policy-name>`.
 - Replication diagnostics are written under `$system/replications/<instance>/<replication-name>`.
-- Usage snapshots are written under `$system/usage/<instance>/total`.
+- Usage snapshots are written under `$system/usage/<instance>/total` and `$system/usage/<instance>/<bucket>`.
 - Captured ReductStore logs are written under `$system/logs/<instance>/messages`.
 - If `RS_SYSTEM_EVENTS_QUOTA_SIZE` is unset, `$system` capacity is unlimited.
 - On read-only replicas, system events are forwarded through the shared system logging layer instead of being stored locally, but captured logs remain node-local and are not forwarded.

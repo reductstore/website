@@ -1,0 +1,202 @@
+---
+title: Buffering, Replication, and Monitoring
+description: Configure ReductStore to buffer ROS data on a robot, replicate selected topics, compress local data, and expose operational diagnostics.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/guides/apps/ros/buffering-replication-monitoring"
+  />
+</head>
+
+# Buffering, replication, and monitoring
+
+This guide explains how to configure a robot-side ReductStore instance to keep a
+bounded local history, replicate selected ROS topics to a shared destination
+bucket, compress older local data, and record operational diagnostics. It uses
+Docker Compose and startup provisioning, but the same ReductStore settings apply
+when another application writes the records instead of ReductBridge.
+
+The complete example stores ROS records in a local `robot-data` bucket,
+replicates camera and IMU entries to the public Play server under an
+`awesome-robot` prefix, and writes replication, lifecycle, usage, and log events
+to the `$system` bucket.
+
+## Data flow
+
+ReductBridge continues writing to local storage when the network is unavailable.
+When connectivity returns, the replication task resumes sending queued camera
+and IMU records. A lifecycle policy compresses older local blocks, while system
+events expose the state of each background operation.
+
+<div style={{ textAlign: "center" }}>
+
+```svgbob
+  +------------------+     +----------------------+     +----------------------+
+  | "ReductBridge"   |---->| "robot-data"         |---->| "replication task"   |
+  | "ROS records"    |     | "20 GB FIFO buffer"  |     | "camera + IMU only"  |
+  +------------------+     +----------+-----------+     +----------+-----------+
+                                      |                            |
+                                      |                            | "HTTPS"
+                                      v                            v
+                           +----------------------+     +----------------------+
+                           | "compression policy" |     | "Play server"        |
+                           | "zstd after one day" |     | "bucket: demo"       |
+                           +----------+-----------+     | "awesome-robot/*"    |
+                                      |                 +----------------------+
+                                      v
+  +---------------------------------------------------------------------------+
+  | "$system bucket"                                                          |
+  | "replication + lifecycle diagnostics | usage | warnings and errors"       |
+  +---------------------------------------------------------------------------+
+```
+
+</div>
+
+## Deployment
+
+ReductStore is available as a Docker image, a Snap package, and prebuilt
+binaries for Linux, macOS, and Windows. See the
+**[Getting Started guide](../../../getting-started/index.mdx)** for all
+installation options.
+
+The ROS example uses the following `reductstore` service from the example
+`docker-compose.yml`:
+
+```yaml file=./example/docker-compose.yml start=reductstore-start end=reductstore-end
+
+```
+
+The service publishes the ReductStore HTTP API on port `8383` and mounts the
+`reduct-data` volume at `/data`. This volume preserves records, bucket settings,
+replication progress, lifecycle state, and system events across container
+restarts. The local API token is `my-token`; ReductBridge or any other writer
+must use this token when connecting to the local instance.
+
+The service is part of the
+**[complete Docker Compose example](https://github.com/reductstore/website/blob/main/docs/guides/apps/ros/example/docker-compose.yml)**.
+From the example directory, start the stack with:
+
+```bash
+docker compose up -d
+```
+
+:::warning Public demo server
+The example replicates data to the `demo` bucket on the public
+**[Play server](https://play.reduct.store)** using its `reductstore` demo token.
+Do not send sensitive data to this shared server.
+:::
+
+For production, replace the destination URL, bucket, and token with values for
+your own ReductStore instance. The destination token must have permission to
+write to the target bucket, and communication outside a trusted network should
+use HTTPS.
+
+## Configuration
+
+:::info
+You can create and manage ReductStore resources through the
+**[HTTP API](../../../glossary.mdx#http-api)**,
+**[SDKs](../../../glossary.mdx#sdk)**,
+**[CLI](../../../glossary.mdx#cli)**, or
+**[Web Console](../../../glossary.mdx#web-console)**. For robot deployments,
+provisioning resources with environment variables is often more convenient
+because the same configuration can be applied consistently across an entire
+fleet. This example uses environment-variable provisioning.
+:::
+
+ReductStore reads provisioning variables when the container starts. At startup,
+ReductStore creates the `robot-data` bucket, the `robot-to-central` replication
+task, and the `compress-robot-data` lifecycle policy. Provisioned resources
+cannot be removed through the API while their environment variables remain
+configured.
+
+### Local buffer
+
+The following bucket settings create a bounded local buffer:
+
+```yaml file=./example/docker-compose.yml start=bucket-buffering-start end=bucket-buffering-end
+
+```
+
+The `robot-data` bucket uses a 20 GB FIFO quota, so the robot can continue
+recording without unbounded disk growth. When the bucket reaches its quota,
+ReductStore removes its oldest data to make room for new records. ReductStore
+guarantees that stored data does not exceed the quota: if old data cannot be
+removed or there is still insufficient space, it rejects new records instead of
+exceeding the limit.
+
+ReductBridge can request the same bucket settings when it connects, but bucket
+creation is not required in this deployment because the ReductStore service
+already provisions `robot-data` at startup.
+
+### Selective replication
+
+The replication settings connect the local bucket to the public demo instance,
+limit transfers to the camera and IMU entries, and identify the source robot:
+
+```yaml file=./example/docker-compose.yml start=replication-start end=replication-end
+
+```
+
+The `robot-to-central` task watches new records in `robot-data` and sends
+`/camera/image_raw` and `/imu/data` to the `demo` bucket. The `awesome-robot`
+destination prefix stores them as `awesome-robot/camera/image_raw` and
+`awesome-robot/imu/data`. Assign each robot a unique prefix so an entire fleet
+can replicate into one bucket without entry-name collisions.
+
+ReductStore batches transfers and tracks pending records in a transaction log.
+A network interruption does not stop local ingestion, and replication resumes
+when the destination becomes available. Replication starts with records written
+after the task is created; it does not automatically backfill older records or
+replicate deletions.
+
+The FIFO quota and replication log are separate limits. Size both for the
+longest expected network outage and data rate to avoid dropping pending records
+from the log or evicting local data before it has been replicated.
+
+### Compression
+
+The lifecycle settings reduce the size of older data while it remains in the
+local buffer:
+
+```yaml file=./example/docker-compose.yml start=compression-start end=compression-end
+
+```
+
+The `compress-robot-data` policy runs once per hour and compresses persisted
+blocks older than one day with zstd. Compression does not delete records, and
+reads automatically decompress the data, so clients do not need to handle
+compression. The FIFO quota remains the final storage bound.
+
+See **[ReductStore provisioning](../../../configuration/provisioning.mdx)** for
+startup environment variables,
+**[replication settings](../../../configuration/settings.mdx#replication-settings)**
+for transaction-log limits and TLS options,
+**[data replication](../../../guides/data-replication.mdx)** for entry and label
+filters, and
+**[lifecycle policies](../../../guides/lifecycle-policies.mdx)** for compression
+and retention options.
+
+## Monitoring
+
+ReductStore records operational events as time-indexed records in the `$system`
+bucket. These events let you monitor replication and lifecycle execution, track
+storage and traffic usage, and investigate warnings or errors without adding a
+separate logging pipeline.
+
+| Entry                                              | What it provides                                                                                               |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `$system/replications/<instance>/robot-to-central` | Replication status and errors, pending and failed record counts, transferred data size, and execution duration |
+| `$system/lifecycle/<instance>/compress-robot-data` | Compression-policy status and errors, processed records and blocks, progress, and execution duration           |
+| `$system/usage/<instance>/total`                   | Instance-wide storage, record, and read/write traffic statistics                                               |
+| `$system/usage/<instance>/robot-data`              | The same usage statistics for the local `robot-data` bucket                                                    |
+| `$system/logs/<instance>/messages`                 | Captured ReductStore warnings and errors                                                                       |
+
+System events are enabled by default and can be queried like other records with
+the HTTP API, SDKs, CLI, or Web Console. See
+**[replication diagnostics](../../../guides/data-replication.mdx#run-diagnostics)**,
+**[lifecycle diagnostics](../../../guides/lifecycle-policies.mdx#run-diagnostics)**,
+and **[system event settings](../../../configuration/settings.mdx#system-event-settings)**
+for event fields, retention, and log-level configuration.
