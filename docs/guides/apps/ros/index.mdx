@@ -29,7 +29,7 @@ instance, and querying, visualizing, and exporting the data from there.
 The following sections walk through each step, starting with an overview of the
 architecture and then diving into setup, replication, querying, and export.
 
-:::info How to read this guide
+:::note How to read this guide
 Use this page for a quick, runnable walkthrough of the complete ROS data flow,
 then follow the linked standalone guides for in-depth configuration and concepts.
 :::
@@ -58,13 +58,18 @@ The ROS workflow uses the following components:
 - **[ReductROS](../../../extensions/official/ros-ext/index.mdx)** decodes stored ROS data when
   it is queried. It can extract raw ROS 1 or ROS 2 messages as JSON, read MCAP or
   rosbag files, and export filtered data back to robotics formats.
+- **[ReductSelect](../../../extensions/official/select-ext.mdx)** runs after ReductROS in the
+  query pipeline. It treats the extracted JSON fields as SQL columns so queries
+  can select, filter, aggregate, and reorder the decoded message data.
 
-The diagram below shows the robot-side pipeline and the central storage layer.
+The diagram below shows the robot-side pipeline and the central storage and
+query layer.
 ROS nodes publish topics, ReductBridge subscribes to selected topics, and local
 ReductStore stores one entry per topic with the raw payload, labels, and
 `$schema` attachment. A replication task on the robot copies only the
 selected entries or label-matched records to the cloud or central on-prem
-ReductStore instance.
+ReductStore instance. When users query that data, ReductROS extracts the messages
+as JSON before ReductSelect runs SQL over the decoded fields.
 
 <div style={{ textAlign: "center" }}>
 
@@ -72,11 +77,15 @@ ReductStore instance.
                         +--------------------------------------+
                         | "Cloud or central on-prem"           |
                         |                                      |
-                        |   +-------------------------------+  |
+                        |   .-------------------------------.  |
                         |   | "ReductStore"                 |  |
                         |   | "bucket: demo"                |  |
                         |   | "replicated robot data"       |  |
-                        |   +-------------------------------+  |
+                        |   |                               |  |
+                        |   | "query pipeline"              |  |
+                        |   | "ReductROS: messages -> JSON" |  |
+                        |   | "ReductSelect: SQL over JSON" |  |
+                        |   `-------------------------------'  |
                         |                   ^                  |
                         +-------------------|------------------+
                                             |
@@ -84,42 +93,48 @@ ReductStore instance.
           +---------------------------------+------------------------------------+
           |  "Awesome Robot"                |                                    |
           |                                 |                                    |
-          |                 +---------------+---------------+                    |
+          |                 .-------------------------------.                    |
           |                 | "Local ReductStore"           |                    |
           |                 |               |               |                    |
-          |                 |   +-----------+-----------+   |                    |
+          |                 |   .-----------+-----------.   |                    |
           |                 |   | "replication task"    |   |                    |
           |                 |   | "camera + IMU entries"|   |                    |
-          |                 |   +-----------+-----------+   |                    |
+          |                 |   `-----------+-----------'   |                    |
           |                 |               |               |                    |
-          |                 |   +-----------+-----------+   |                    |
+          |                 |   .-----------+-----------.   |                    |
           |                 |   | "bucket: robot-data"  |   |                    |
           |                 |   | "entries + labels"    |   |                    |
-          |                 |   +-----------+-----------+   |                    |
+          |                 |   `-----------+-----------'   |                    |
           |                 |               ^               |                    |
-          |                 +---------------|---------------+                    |
+          |                 `---------------|---------------'                    |
           |                                 |                                    |
           |                                 | "records + labels + $schema"       |
           |                                 +---------------+                    |
           |   "ROS topics"                                  |                    |
           |                                                 |                    |
-          |   +---------------------+                       |                    |
-          |   | "/camera/image_raw" |---+   +---------------+-----------------+  |
-          |   +---------------------+   |   | "ReductBridge"                  |  |
+          |   .---------------------.                       |                    |
+          |   | "/camera/image_raw" |---+   .---------------+-----------------.  |
+          |   `---------------------'   |   | "ReductBridge"                  |  |
           |                             |   |                                 |  |
-          |   +---------------------+   |   | * "subscribes to topics"        |  |
+          |   .---------------------.   |   | * "subscribes to topics"        |  |
           |   | "/gps/fix"          |---+-->| * "stores message payloads"     |  |
-          |   +---------------------+   |   | * "applies labels"              |  |
+          |   `---------------------'   |   | * "applies labels"              |  |
           |                             |   | * "attaches ROS schema"         |  |
-          |   +---------------------+   |   |                                 |  |
+          |   .---------------------.   |   |                                 |  |
           |   | "/imu/data"         |---+   |                                 |  |
-          |   +---------------------+       +---------------------------------+  |
+          |   `---------------------'       `---------------------------------'  |
           |                                                                      |
           |                                                                      |
           +----------------------------------------------------------------------+
 ```
 
 </div>
+
+<small style={{ textAlign: "right" }}>
+  ROS data collection, replication, and query workflow with ReductStore
+</small>
+
+That was a lot of new information at once. Let’s split it into smaller parts.
 
 ## Data collection
 
@@ -224,16 +239,130 @@ compression, failure behavior, and monitoring, see the standalone
 
 ## Data querying and visualization
 
-Query and visualization tools should normally connect to the cloud or central
-on-prem ReductStore instance instead of the robot. The central instance is more
-available for operators and downstream services, can aggregate replicated data
-from multiple robots, and avoids depending on a robot being online when users
-inspect historical data.
+ROS 2 messages are stored as binary CDR payloads, which preserves the original
+data but cannot be plotted or analyzed directly. ReductStore processes only the
+records selected by the query and decodes them on the server, so an application
+does not need a matching ROS installation or message package to read historical
+data.
+
+A typical query follows four stages:
+
+1. Select entries and a time range, such as `/gps/fix` for the last hour.
+2. Filter records by stored labels such as `robot`, `sensor`, `x`, or `y` before
+   reading their payloads.
+3. Use **[ReductROS](../../../extensions/official/ros-ext/raw.mdx)** to resolve the
+   entry's `$schema` attachment and decode matching CDR messages as JSON. Binary
+   fields can remain arrays, be encoded as base64, or be converted to JPEG for
+   supported image messages.
+4. Return the decoded records to an SDK or Grafana. When only selected fields are
+   required, **[ReductSelect](../../../extensions/official/select-ext.mdx)** can
+   apply SQL to the extracted JSON before it leaves the server.
+
+This order is important for large robotics datasets: time, entry, and stored-label
+filters reduce the input first; only the remaining payloads are read, decoded, and
+transferred. See the **[Data Querying guide](../../data-querying.mdx)** and
+**[Conditional Query Reference](../../../conditional-query/index.mdx)** for the
+common time-range, entry-pattern, and label-filtering options.
 
 ### Using SDKs
 
+Official SDKs expose queries as iterators, allowing applications to process long
+time ranges without loading the complete result into memory. The same query
+object works through the SDKs and HTTP API, so filters and extension settings can
+be reused by analytics jobs, notebooks, and backend services.
+
+For example, query the `/camera/image_raw` entry over a bounded time range and
+pass the following condition as the query's `when` parameter:
+
+```json
+{
+  "&robot": { "$eq": "robot-1" },
+  "#ext": {
+    "ros": {
+      "extract": {
+        "topic": "/camera/image_raw",
+        "encode": {
+          "data": "jpeg"
+        }
+      }
+    }
+  }
+}
+```
+
+The stored `robot` label is checked before the CDR payload is read. ReductROS then
+uses the entry's `$schema` attachment to return each matching
+`sensor_msgs/msg/Image` message as JSON, with `data` represented as a
+base64-encoded JPEG. For GPS or IMU analytics, omit `encode`, extract the message
+as JSON, and use ReductSelect SQL to return only fields such as `latitude`,
+`longitude`, `altitude`, or `angular_velocity.z`.
+
+ReductROS can also expose decoded fields as computed labels. A condition inside
+`#ext.when` can then filter on those values after decoding, while regular label
+conditions continue to filter records before decoding. This is useful when a
+field was not promoted to a stored label during collection. The complete query
+shape, image limitations, and examples are documented in
+**[Raw Messages](../../../extensions/official/ros-ext/raw.mdx#data-extraction)**.
+
 ### Using Grafana
 
+The **[ReductStore Grafana data source](../../../integrations/grafana/index.mdx)**
+connects directly to the central ReductStore instance. In a dashboard panel,
+select the `robot-data` bucket, an entry, and the dashboard time range, then choose
+whether the query should return labels, content, or both.
+
+Use the query modes according to the data you need:
+
+- **Labels only** is the most efficient mode for the example configuration.
+  Camera and IMU records already carry the latest GPS coordinates as `x`, `y`,
+  and `z` labels, so Grafana can plot position without transferring image or IMU
+  payloads.
+- **Content only** can run ReductROS from the JSON query editor and return decoded
+  ROS fields. Add ReductSelect when a panel needs only a small subset of the JSON
+  object.
+- **Labels and content** combines operational metadata with decoded values when a
+  panel or alert needs both.
+
+For wide dashboard ranges, use Grafana's `$__interval` macro with the `$each_t`
+conditional-query operator. Grafana adjusts the interval to the panel resolution,
+and ReductStore returns at most one matching record per interval instead of
+sending every high-frequency sample:
+
+```json
+{
+  "&robot": { "$eq": "robot-1" },
+  "$each_t": "$__interval"
+}
+```
+
+This keeps dashboards responsive without changing the stored data. The plugin
+installation, data-source configuration, query modes, and macro behavior are
+covered in the **[Grafana integration guide](../../../integrations/grafana/index.mdx)**.
+
 ### Using Foxglove
+
+Foxglove Studio and other MCAP-compatible tools are useful when engineers need to
+replay synchronized topics, inspect a scene, or use robotics-specific panels.
+ReductROS can build MCAP episodes on demand from the raw records collected by
+ReductBridge.
+
+An export query can select:
+
+- a bounded `start` and `stop` time;
+- only the required entries, for example `/camera/image_raw` and `/imu/data`;
+- records from one robot, run, location, or event using labels;
+- a maximum episode `duration` or `size` for manageable output files.
+
+ReductROS reads each selected entry's `$schema` attachment, restores its topic and
+message type, merges the records by timestamp, and returns
+`application/mcap` episodes. Download those query results and open them in an
+MCAP-compatible viewer.
+
+Generating MCAP at query time avoids keeping every recording as one large,
+preassembled archive. The same labeled records remain available for dashboards
+and SDK queries, while engineers can export only the topics and time window
+needed for a specific investigation. See
+**[Exporting raw messages as MCAP](../../../extensions/official/ros-ext/raw.mdx#data-export)**
+for the export parameters and a multi-entry example.
 
 ## Export Data
