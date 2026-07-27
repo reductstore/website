@@ -45,15 +45,24 @@ Compression is applied per storage block for efficiency, not per individual reco
 
 You can configure lifecycle policies using the following settings:
 
-| Setting      | Description                                                                                                 | Required | Default   |
-| ------------ | ----------------------------------------------------------------------------------------------------------- | -------- | --------- |
-| `type`       | Action type (e.g., `delete` or `compress`)                                                                  | Yes      | -         |
-| `bucket`     | Target bucket name                                                                                          | Yes      | -         |
-| `entries`    | List of entry names or patterns to scope the policy. See [Entry patterns](#entry-patterns).                 | No       | -         |
-| `older_than` | Maximum age of records before action is applied (e.g., `30d`, `1h`, `5m`)                                   | Yes      | -         |
-| `interval`   | Policy execution interval (e.g., `3600s`, `10m`)                                                            | No       | `3600s`   |
-| `when`       | JSON condition to filter records (see **[Conditional Query Reference](/docs/conditional-query/index.mdx)**) | No       | -         |
-| `mode`       | Policy mode: `enabled` (default), `dry_run`, or `disabled`                                                  | No       | `enabled` |
+| Setting               | Description                                                                                                 | Required | Default         |
+| --------------------- | ----------------------------------------------------------------------------------------------------------- | -------- | --------------- |
+| `type`                | Action type (e.g., `delete` or `compress`)                                                                  | Yes      | -               |
+| `bucket`              | Target bucket name                                                                                          | Yes      | -               |
+| `entries`             | List of entry names or patterns to scope the policy. See [Entry patterns](#entry-patterns).                 | No       | -               |
+| `older_than`          | Maximum age of records before action is applied (e.g., `30d`, `1h`, `5m`)                                   | Yes      | -               |
+| `interval`            | Policy execution interval (e.g., `3600s`, `10m`)                                                            | No       | `3600s`         |
+| `processing_interval` | Maximum span of data time processed by one run (e.g., `6h`, `12h`, `1d`). Must be a positive duration.      | No       | `24 * interval` |
+| `when`                | JSON condition to filter records (see **[Conditional Query Reference](/docs/conditional-query/index.mdx)**) | No       | -               |
+| `mode`                | Policy mode: `enabled` (default), `dry_run`, or `disabled`                                                  | No       | `enabled`       |
+
+## Processing Window
+
+Each lifecycle run processes a bounded span of data time. By default, ReductStore uses a window of `24 * interval` so a policy does not process an unlimited backlog in one run.
+
+Set `processing_interval` to choose that per-run data-time window explicitly. For example, a policy with `interval: "10m"` and `processing_interval: "6h"` runs every 10 minutes but processes at most 6 hours of eligible data time per run. Successive runs continue advancing through the backlog until they reach the current `older_than` cutoff.
+
+When system events are disabled, ReductStore cannot persist lifecycle progress, but `processing_interval` still clamps the full eligible range processed by each run. Records handled by a previous run become ineligible, so later runs continue moving forward.
 
 ## Conditional Policies
 
@@ -91,7 +100,7 @@ For more information on setting up a local ReductStore instance, see the **[Gett
 
 ### Creating a Lifecycle Policy
 
-To create a lifecycle policy, you must provide at least the action type, target bucket, and `older_than`. The examples below also include optional filters (`entries` and `when`) and a custom `interval`.
+To create a lifecycle policy, you must provide at least the action type, target bucket, and `older_than`. The examples below also include optional filters (`entries` and `when`), a custom `interval`, and a `processing_interval`.
 
 import CreateLifecycleCli from "!!raw-loader!../examples/cli/lifecycle_policy_create.sh";
 import CreateLifecyclePy from "!!raw-loader!../examples/py/src/lifecycle_policy_create.py";
