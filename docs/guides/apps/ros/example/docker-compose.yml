@@ -67,5 +67,22 @@ services:
     command: ["reduct-bridge", "/etc/reduct-bridge/config.toml"]
   # reduct-bridge-end
 
+  query-orion:
+    image: python:3.12-slim
+    working_dir: /workspace
+    environment:
+      PYTHONDONTWRITEBYTECODE: "1"
+      OUTPUT_DIR: /tmp/orion-images
+    volumes:
+      - ..:/workspace:ro
+      - ./orion-images:/tmp/orion-images
+    command:
+      - /bin/sh
+      - -c
+      - |
+        set -eu
+        pip install --no-cache-dir reduct-py
+        python example/query_orion.py
+
 volumes:
   reduct-data:

@@ -240,10 +240,10 @@ compression, failure behavior, and monitoring, see the standalone
 ## Data querying and visualization
 
 ROS 2 messages are stored as binary CDR payloads, which preserves the original
-data but cannot be plotted or analyzed directly. ReductStore processes only the
-records selected by the query and decodes them on the server, so an application
-does not need a matching ROS installation or message package to read historical
-data.
+data but cannot be plotted or analyzed directly. ReductROS uses the stored
+`$schema` attachment to decode selected messages on the server and return JSON.
+The querying application therefore does not need ROS or the original message
+packages installed locally.
 
 A typical query follows four stages:
 
@@ -267,42 +267,35 @@ common time-range, entry-pattern, and label-filtering options.
 ### Using SDKs
 
 Official SDKs expose queries as iterators, allowing applications to process long
-time ranges without loading the complete result into memory. The same query
-object works through the SDKs and HTTP API, so filters and extension settings can
-be reused by analytics jobs, notebooks, and backend services.
+time ranges without loading the complete result into memory. The following
+Python example queries the public Orion robotics dataset hosted at
+`https://play.reduct.store/replica`:
 
-For example, query the `/camera/image_raw` entry over a bounded time range and
-pass the following condition as the query's `when` parameter:
+```python file=./example/query_orion.py
 
-```json
-{
-  "&robot": { "$eq": "robot-1" },
-  "#ext": {
-    "ros": {
-      "extract": {
-        "topic": "/camera/image_raw",
-        "encode": {
-          "data": "jpeg"
-        }
-      }
-    }
-  }
-}
 ```
 
-The stored `robot` label is checked before the CDR payload is read. ReductROS then
-uses the entry's `$schema` attachment to return each matching
-`sensor_msgs/msg/Image` message as JSON, with `data` represented as a
-base64-encoded JPEG. For GPS or IMU analytics, omit `encode`, extract the message
-as JSON, and use ReductSelect SQL to return only fields such as `latitude`,
-`longitude`, `altitude`, or `angular_velocity.z`.
+The script connects with the public `reductstore` token, opens the `orion` bucket,
+and queries the `right_ir/rotated/image_raw` entry. It calculates one `now` value
+and uses it as the exclusive `stop` boundary, with `start` set exactly one hour
+earlier. The `$and` condition applies the strict range `100 < gps_z < 120` to the
+stored `gps_z` label before the payload is decoded. The `$each_t` operator keeps
+at most one matching image every 30 seconds, reducing decoding work and network
+traffic. The `#ext.ros.extract` object then asks ReductROS to decode each matching
+CDR image using its stored `$schema` attachment and encode the raw `data` field as
+JPEG.
 
-ReductROS can also expose decoded fields as computed labels. A condition inside
-`#ext.when` can then filter on those values after decoding, while regular label
-conditions continue to filter records before decoding. This is useful when a
-field was not promoted to a stored label during collection. The complete query
-shape, image limitations, and examples are documented in
-**[Raw Messages](../../../extensions/official/ros-ext/raw.mdx#data-extraction)**.
+For each matching result, the script reads the decoded JSON array, base64-decodes
+the JPEG from the first item's `data` field, and saves it as
+`orion-images/<timestamp>.jpg`. It also prints the entry name, timestamp, `gps_z`
+value, output path, and image parameters. To run it, install the
+**[Python SDK](../../../sdk/py/index.mdx)** with `pip install reduct-py`, then
+execute `python query_orion.py`. See
+**[Python bucket queries](../../../sdk/py/bucket/index.mdx#query)** for the complete
+API and **[comparison operators](../../../conditional-query/comparison-operators.mdx)**
+for additional label conditions.
+
+For more query patterns, see the **[ReductROS examples](../../../extensions/official/ros-ext/raw.mdx#examples)**.
 
 ### Using Grafana
 
