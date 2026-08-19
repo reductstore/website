@@ -2,10 +2,14 @@
 title: "FullReplicationInfo"
 description: "API reference for FullReplicationInfo in the ReductStore Client SDK for JavaScript."
 ---
-
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/FullReplicationInfo" />
 </head>
+
+
+&lt;head&gt;
+  &lt;link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/FullReplicationInfo" /&gt;
+&lt;/head&gt;
 
 # FullReplicationInfo
 

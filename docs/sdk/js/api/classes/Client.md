@@ -2,10 +2,14 @@
 title: "Client"
 description: "API reference for Client in the ReductStore Client SDK for JavaScript."
 ---
-
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/Client" />
 </head>
+
+
+&lt;head&gt;
+  &lt;link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/Client" /&gt;
+&lt;/head&gt;
 
 # Client
 

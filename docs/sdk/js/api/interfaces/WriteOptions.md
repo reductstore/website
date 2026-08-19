@@ -2,10 +2,14 @@
 title: "WriteOptions"
 description: "API reference for WriteOptions in the ReductStore Client SDK for JavaScript."
 ---
-
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/interfaces/WriteOptions" />
 </head>
+
+
+&lt;head&gt;
+  &lt;link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/interfaces/WriteOptions" /&gt;
+&lt;/head&gt;
 
 # WriteOptions
 

@@ -2,14 +2,18 @@
 title: "LifecycleSettings"
 description: "API reference for LifecycleSettings in the ReductStore Client SDK for JavaScript."
 ---
-
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/LifecycleSettings" />
 </head>
 
+
+&lt;head&gt;
+  &lt;link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/LifecycleSettings" /&gt;
+&lt;/head&gt;
+
 # LifecycleSettings
 
-Defined in: [messages/LifecycleSettings.ts:25](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L25)
+Defined in: [messages/LifecycleSettings.ts:26](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L26)
 
 Lifecycle settings.
 
@@ -29,7 +33,7 @@ Lifecycle settings.
 
 &gt; `readonly` **bucket**: `string` = `""`
 
-Defined in: [messages/LifecycleSettings.ts:34](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L34)
+Defined in: [messages/LifecycleSettings.ts:35](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L35)
 
 Bucket to apply lifecycle policy.
 
@@ -39,7 +43,7 @@ Bucket to apply lifecycle policy.
 
 &gt; `readonly` **entries**: `string`[] = `[]`
 
-Defined in: [messages/LifecycleSettings.ts:39](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L39)
+Defined in: [messages/LifecycleSettings.ts:40](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L40)
 
 List of entries to process. If empty, all matching entries are processed.
 
@@ -49,7 +53,7 @@ List of entries to process. If empty, all matching entries are processed.
 
 &gt; `readonly` `optional` **interval**: `string`
 
-Defined in: [messages/LifecycleSettings.ts:49](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L49)
+Defined in: [messages/LifecycleSettings.ts:50](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L50)
 
 Interval between lifecycle runs, e.g. "10m", "1h", or "3600s".
 
@@ -59,7 +63,7 @@ Interval between lifecycle runs, e.g. "10m", "1h", or "3600s".
 
 &gt; `readonly` `optional` **lifecycleType**: [`LifecycleType`](../type-aliases/LifecycleType.md)
 
-Defined in: [messages/LifecycleSettings.ts:29](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L29)
+Defined in: [messages/LifecycleSettings.ts:30](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L30)
 
 Lifecycle action type.
 
@@ -69,7 +73,7 @@ Lifecycle action type.
 
 &gt; `readonly` `optional` **mode**: [`LifecycleMode`](../type-aliases/LifecycleMode.md)
 
-Defined in: [messages/LifecycleSettings.ts:59](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L59)
+Defined in: [messages/LifecycleSettings.ts:65](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L65)
 
 Lifecycle mode.
 
@@ -79,9 +83,19 @@ Lifecycle mode.
 
 &gt; `readonly` **olderThan**: `string` = `""`
 
-Defined in: [messages/LifecycleSettings.ts:44](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L44)
+Defined in: [messages/LifecycleSettings.ts:45](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L45)
 
 Maximum record age, e.g. "30d", "24h", or "3600s".
+
+***
+
+### processingInterval?
+
+&gt; `readonly` `optional` **processingInterval**: `string`
+
+Defined in: [messages/LifecycleSettings.ts:55](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L55)
+
+Maximum data-time span processed by one lifecycle run, e.g. "6h", "12h", or "1d".
 
 ***
 
@@ -89,7 +103,7 @@ Maximum record age, e.g. "30d", "24h", or "3600s".
 
 &gt; `readonly` `optional` **when**: `any`
 
-Defined in: [messages/LifecycleSettings.ts:54](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L54)
+Defined in: [messages/LifecycleSettings.ts:60](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L60)
 
 Conditional query.
 
@@ -99,7 +113,7 @@ Conditional query.
 
 &gt; `static` **parse**(`data`): `LifecycleSettings`
 
-Defined in: [messages/LifecycleSettings.ts:61](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L61)
+Defined in: [messages/LifecycleSettings.ts:67](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L67)
 
 #### Parameters
 
@@ -117,7 +131,7 @@ Defined in: [messages/LifecycleSettings.ts:61](https://github.com/reductstore/re
 
 &gt; `static` **serialize**(`data`): `OriginalLifecycleSettings`
 
-Defined in: [messages/LifecycleSettings.ts:73](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L73)
+Defined in: [messages/LifecycleSettings.ts:80](https://github.com/reductstore/reduct-js/blob/main/src/messages/LifecycleSettings.ts#L80)
 
 #### Parameters
 

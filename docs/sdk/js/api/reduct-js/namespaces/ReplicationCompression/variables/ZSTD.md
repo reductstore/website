@@ -2,10 +2,10 @@
 title: "Variable: ZSTD"
 description: "API reference for Variable: ZSTD in the ReductStore Client SDK for JavaScript."
 ---
-
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/reduct-js/namespaces/ReplicationCompression/variables/ZSTD" />
 </head>
+
 
 # Variable: ZSTD
 

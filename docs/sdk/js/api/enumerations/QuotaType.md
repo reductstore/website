@@ -2,10 +2,14 @@
 title: "QuotaType"
 description: "API reference for QuotaType in the ReductStore Client SDK for JavaScript."
 ---
-
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/enumerations/QuotaType" />
 </head>
+
+
+&lt;head&gt;
+  &lt;link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/enumerations/QuotaType" /&gt;
+&lt;/head&gt;
 
 # QuotaType
 

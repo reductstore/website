@@ -2,10 +2,14 @@
 title: "LifecycleInfo"
 description: "API reference for LifecycleInfo in the ReductStore Client SDK for JavaScript."
 ---
-
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/LifecycleInfo" />
 </head>
+
+
+&lt;head&gt;
+  &lt;link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/LifecycleInfo" /&gt;
+&lt;/head&gt;
 
 # LifecycleInfo
 

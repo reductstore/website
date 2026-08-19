@@ -2,10 +2,14 @@
 title: "APIError"
 description: "API reference for APIError in the ReductStore Client SDK for JavaScript."
 ---
-
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/APIError" />
 </head>
+
+
+&lt;head&gt;
+  &lt;link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/APIError" /&gt;
+&lt;/head&gt;
 
 # APIError
 

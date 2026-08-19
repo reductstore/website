@@ -2,10 +2,10 @@
 title: "Variable: COMPRESS"
 description: "API reference for Variable: COMPRESS in the ReductStore Client SDK for JavaScript."
 ---
-
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/reduct-js/namespaces/LifecycleType/variables/COMPRESS" />
 </head>
+
 
 # Variable: COMPRESS
 

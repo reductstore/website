@@ -2,10 +2,14 @@
 title: "TokenCreateRequest"
 description: "API reference for TokenCreateRequest in the ReductStore Client SDK for JavaScript."
 ---
-
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/TokenCreateRequest" />
 </head>
+
+
+&lt;head&gt;
+  &lt;link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/TokenCreateRequest" /&gt;
+&lt;/head&gt;
 
 # TokenCreateRequest
 

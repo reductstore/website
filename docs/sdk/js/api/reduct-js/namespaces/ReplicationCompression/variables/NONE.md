@@ -2,10 +2,10 @@
 title: "Variable: NONE"
 description: "API reference for Variable: NONE in the ReductStore Client SDK for JavaScript."
 ---
-
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/reduct-js/namespaces/ReplicationCompression/variables/NONE" />
 </head>
+
 
 # Variable: NONE
 

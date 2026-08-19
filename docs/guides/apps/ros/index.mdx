@@ -254,7 +254,7 @@ A typical query follows four stages:
    entry's `$schema` attachment and decode matching CDR messages as JSON. Binary
    fields can remain arrays, be encoded as base64, or be converted to JPEG for
    supported image messages.
-4. Return the decoded records to an SDK or Grafana. When only selected fields are
+4. Return the decoded records to an SDK or Grafana. When more complex processing is
    required, **[ReductSelect](../../../extensions/official/select-ext.mdx)** can
    apply SQL to the extracted JSON before it leaves the server.
 
@@ -266,36 +266,12 @@ common time-range, entry-pattern, and label-filtering options.
 
 ### Using SDKs
 
-Official SDKs expose queries as iterators, allowing applications to process long
-time ranges without loading the complete result into memory. The following
-Python example queries the public Orion robotics dataset hosted at
-`https://play.reduct.store/replica`:
-
-```python file=./example/query_orion.py
-
-```
-
-The script connects with the public `reductstore` token, opens the `orion` bucket,
-and queries the `right_ir/rotated/image_raw` entry. It calculates one `now` value
-and uses it as the exclusive `stop` boundary, with `start` set exactly one hour
-earlier. The `$and` condition applies the strict range `100 < gps_z < 120` to the
-stored `gps_z` label before the payload is decoded. The `$each_t` operator keeps
-at most one matching image every 30 seconds, reducing decoding work and network
-traffic. The `#ext.ros.extract` object then asks ReductROS to decode each matching
-CDR image using its stored `$schema` attachment and encode the raw `data` field as
-JPEG.
-
-For each matching result, the script reads the decoded JSON array, base64-decodes
-the JPEG from the first item's `data` field, and saves it as
-`orion-images/<timestamp>.jpg`. It also prints the entry name, timestamp, `gps_z`
-value, output path, and image parameters. To run it, install the
-**[Python SDK](../../../sdk/py/index.mdx)** with `pip install reduct-py`, then
-execute `python query_orion.py`. See
-**[Python bucket queries](../../../sdk/py/bucket/index.mdx#query)** for the complete
-API and **[comparison operators](../../../conditional-query/comparison-operators.mdx)**
-for additional label conditions.
-
-For more query patterns, see the **[ReductROS examples](../../../extensions/official/ros-ext/raw.mdx#examples)**.
+Official SDKs can use
+**[ReductROS](../../../extensions/official/ros-ext/index.mdx)** to query stored
+robotics data and receive decoded ROS messages as JSON. Applications and
+browser-based tools can then process the JSON directly. See the standalone
+**[Using SDKs guide](./using-sdks.mdx)** for a runnable Python example using the
+public ROS dataset.
 
 ### Using Grafana
 
