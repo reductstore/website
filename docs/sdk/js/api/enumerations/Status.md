@@ -2,14 +2,10 @@
 title: "Status"
 description: "API reference for Status in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/enumerations/Status" />
 </head>
-
-
-&lt;head&gt;
-  &lt;link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/enumerations/Status" /&gt;
-&lt;/head&gt;
 
 # Status
 

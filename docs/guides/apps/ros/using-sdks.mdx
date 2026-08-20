@@ -1,0 +1,62 @@
+---
+title: Querying Data with SDKs
+description: Query and decode ROS data from ReductStore with the official client SDKs.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/guides/apps/ros/using-sdks"
+  />
+</head>
+
+# Using SDKs
+
+This guide explains how to query and decode ROS data with the official
+ReductStore client SDKs. It expands on the SDK workflow introduced in the
+**[ROS applications guide](./index.mdx#using-sdks)**.
+
+The example queries filtered infrared images from the
+**[public ROS dataset](https://play.reduct.store/)**, samples one image
+every 30 seconds, and saves the results as JPEG files. It uses the
+**[ReductROS](../../../extensions/official/ros-ext/index.mdx)** extension, which
+parses ROS 1 and ROS 2 messages into JSON and can encode raw image data as JPEG:
+
+```python file=./example/query_orion.py
+
+```
+
+:::note
+This guide uses Python only as a representative example; the same workflow
+and ReductROS options are available with the other official SDKs.
+:::
+
+The script connects with the public `reductstore` token, opens the `orion` bucket,
+and queries the `right_ir/rotated/image_raw` entry. It calculates one `now` value
+and uses it as the exclusive `stop` boundary, with `start` set exactly one hour
+earlier. The `$and` condition applies the strict range `100 < gps_z < 120` to the
+stored `gps_z` label before the payload is decoded. The `$each_t` operator keeps
+at most one matching image every 30 seconds, reducing decoding work and network
+traffic. The `#ext.ros.extract` object then asks ReductROS to decode each matching
+CDR image using its stored `$schema` attachment and encode the raw `data` field as
+JPEG.
+
+For each matching result, the script reads the decoded JSON array, base64-decodes
+the JPEG from the first item's `data` field, and saves it as
+`orion-images/<timestamp>.jpg`. It also prints the entry name, timestamp, `gps_z`
+value, output path, and image parameters.
+
+To run this implementation, install the
+**[Python SDK](../../../sdk/py/index.mdx)** and execute the script:
+
+```bash
+pip install reduct-py
+python query_orion.py
+```
+
+See **[Python bucket queries](../../../sdk/py/bucket/index.mdx#query)** for the
+Python API used in this implementation,
+**[comparison operators](../../../conditional-query/comparison-operators.mdx)**
+for additional label conditions, and the
+**[ReductROS examples](../../../extensions/official/ros-ext/raw.mdx#examples)**
+for more query patterns.

@@ -2,14 +2,10 @@
 title: "Token"
 description: "API reference for Token in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/Token" />
 </head>
-
-
-&lt;head&gt;
-  &lt;link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/Token" /&gt;
-&lt;/head&gt;
 
 # Token
 

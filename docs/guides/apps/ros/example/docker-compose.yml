@@ -38,6 +38,16 @@ services:
       - reduct-data:/data
   # reductstore-end
 
+  # grafana-start
+  grafana:
+    image: reduct/grafana:latest
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
+  # grafana-end
+
   ros2publisher:
     image: ros:jazzy-ros-base
     restart: unless-stopped

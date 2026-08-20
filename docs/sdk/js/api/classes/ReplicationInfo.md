@@ -2,14 +2,10 @@
 title: "ReplicationInfo"
 description: "API reference for ReplicationInfo in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/ReplicationInfo" />
 </head>
-
-
-&lt;head&gt;
-  &lt;link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/ReplicationInfo" /&gt;
-&lt;/head&gt;
 
 # ReplicationInfo
 

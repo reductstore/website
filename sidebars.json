@@ -84,7 +84,8 @@
               "items": [
                 "guides/apps/ros/data-collection",
                 "guides/apps/ros/buffering-replication-monitoring",
-                "guides/apps/ros/using-sdks"
+                "guides/apps/ros/using-sdks",
+                "guides/apps/ros/using-grafana"
               ]
             }
           ]

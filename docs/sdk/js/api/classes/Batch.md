@@ -2,14 +2,10 @@
 title: "Batch"
 description: "API reference for Batch in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/Batch" />
 </head>
-
-
-&lt;head&gt;
-  &lt;link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/Batch" /&gt;
-&lt;/head&gt;
 
 # Batch
 

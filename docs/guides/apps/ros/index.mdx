@@ -275,38 +275,10 @@ public ROS dataset.
 
 ### Using Grafana
 
-The **[ReductStore Grafana data source](../../../integrations/grafana/index.mdx)**
-connects directly to the central ReductStore instance. In a dashboard panel,
-select the `robot-data` bucket, an entry, and the dashboard time range, then choose
-whether the query should return labels, content, or both.
-
-Use the query modes according to the data you need:
-
-- **Labels only** is the most efficient mode for the example configuration.
-  Camera and IMU records already carry the latest GPS coordinates as `x`, `y`,
-  and `z` labels, so Grafana can plot position without transferring image or IMU
-  payloads.
-- **Content only** can run ReductROS from the JSON query editor and return decoded
-  ROS fields. Add ReductSelect when a panel needs only a small subset of the JSON
-  object.
-- **Labels and content** combines operational metadata with decoded values when a
-  panel or alert needs both.
-
-For wide dashboard ranges, use Grafana's `$__interval` macro with the `$each_t`
-conditional-query operator. Grafana adjusts the interval to the panel resolution,
-and ReductStore returns at most one matching record per interval instead of
-sending every high-frequency sample:
-
-```json
-{
-  "&robot": { "$eq": "robot-1" },
-  "$each_t": "$__interval"
-}
-```
-
-This keeps dashboards responsive without changing the stored data. The plugin
-installation, data-source configuration, query modes, and macro behavior are
-covered in the **[Grafana integration guide](../../../integrations/grafana/index.mdx)**.
+The ReductStore Grafana data source can visualize decoded ROS fields directly
+from a ReductStore query. See the standalone
+**[Using Grafana guide](./using-grafana.mdx)** for a runnable example that plots
+interval-averaged GPS latitude and longitude from the public ROS dataset.
 
 ### Using Foxglove
 

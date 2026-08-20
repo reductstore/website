@@ -2,14 +2,10 @@
 title: "ReplicationCompression"
 description: "API reference for ReplicationCompression in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/type-aliases/ReplicationCompression" />
 </head>
-
-
-&lt;head&gt;
-  &lt;link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/type-aliases/ReplicationCompression" /&gt;
-&lt;/head&gt;
 
 # ReplicationCompression
 

@@ -2,14 +2,10 @@
 title: "QueryOptions"
 description: "API reference for QueryOptions in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/QueryOptions" />
 </head>
-
-
-&lt;head&gt;
-  &lt;link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/classes/QueryOptions" /&gt;
-&lt;/head&gt;
 
 # QueryOptions
 

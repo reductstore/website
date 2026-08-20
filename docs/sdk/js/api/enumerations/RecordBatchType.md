@@ -2,14 +2,10 @@
 title: "RecordBatchType"
 description: "API reference for RecordBatchType in the ReductStore Client SDK for JavaScript."
 ---
+
 <head>
   <link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/enumerations/RecordBatchType" />
 </head>
-
-
-&lt;head&gt;
-  &lt;link rel="canonical" href="https://www.reduct.store/docs/sdk/js/api/enumerations/RecordBatchType" /&gt;
-&lt;/head&gt;
 
 # RecordBatchType
 

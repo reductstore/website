@@ -170,68 +170,9 @@ This makes it easy to create dynamic dashboards that adapt to different time ran
 
 ## Visualize ROS GPS data
 
-This example plots interval-averaged latitude and longitude from individual ROS GPS messages. Before you begin, make sure that:
-
-- the selected entry contains individual ROS GPS messages with `latitude` and `longitude` fields;
-- the entry has the `$schema` attachment required by [**ReductROS raw-message extraction**](/docs/extensions/official/ros-ext/raw), which ReductBridge normally creates automatically;
-- ReductROS and [**ReductSelect**](/docs/extensions/official/select-ext) are installed on the ReductStore server; and
-- the Grafana [**data source is configured**](#data-source-configuration).
-
-To configure the panel:
-
-1. Create or edit a Grafana panel and select the ReductStore data source.
-2. Select the bucket and the entry containing the GPS messages.
-3. Set **Scope** to **Content Only**.
-4. Enable **Combined frame** to return the latitude and longitude fields together for the time-series panel.
-5. Paste the following JSON into the condition editor and run the query:
-
-```json
-{
-  "#ext": [
-    {
-      "ros": {
-        "extract": {}
-      }
-    },
-    {
-      "select": {
-        "sql": "SELECT latitude, longitude FROM ENTRY()",
-        "export": {
-          "duration": "$__interval"
-        }
-      }
-    },
-    {
-      "select": {
-        "sql": "SELECT AVG(latitude) as lat, AVG(longitude) as long FROM ENTRY()"
-      }
-    }
-  ]
-}
-```
-
-The `#ext` array runs the extensions as an ordered pipeline:
-
-- `ros.extract` decodes each stored ROS message to JSON using the entry's `$schema` attachment.
-- The first `select` keeps only `latitude` and `longitude`, then batches the source rows using Grafana's dynamically resolved [**`$__interval` macro**](#grafana-__interval-macro).
-- The second `select` averages each batch and aliases the numeric outputs as `lat` and `long`, producing two plot-ready time series.
-
-Changing the dashboard time range or panel width changes `$__interval`. This reduces the number of points over wide time ranges while preserving more detail over narrow ranges.
-
-import GrafanaRosGpsQuery from "./img/grafana-ros-gps-query.png";
-
-<img
-  src={GrafanaRosGpsQuery}
-  alt="Grafana ROS GPS query editor and latitude and longitude time-series chart"
-  style={{
-    width: "100%",
-    maxWidth: "1100px",
-    height: "auto",
-    borderRadius: "10px",
-  }}
-/>
-
-Grafana displays the `lat` and `long` outputs as separate numeric series over the selected dashboard time range. Because the plugin flattens the combined JSON result, their legend paths can appear as `$[0].lat` and `$[0].long`, as shown above. If either series is missing, first verify the ROS message field names and the entry's `$schema` attachment.
+For a complete example that starts a preconfigured Grafana container, queries the
+public ROS dataset, and plots interval-averaged GPS coordinates, see the
+**[Using Grafana with ROS guide](../../guides/apps/ros/using-grafana.mdx)**.
 
 ## Automated Provisioning
 
