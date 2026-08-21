@@ -11,7 +11,8 @@ reduct-cli cp \
   https://reductstore@play.reduct.store/replica/orion \
   ./orion-native \
   --entries 'right_ir/rotated/*' \
-  --start 'now-1h'
+  --start 'now-1h' \
+  --limit 1
 # ros-native-export-end
 
 native_file=$(find ./orion-native -type f -print -quit)
@@ -24,6 +25,7 @@ reduct-cli cp \
   ./orion-mcap \
   --entries 'right_ir/rotated/image_raw' \
   --start 'now-1h' \
+  --limit 1 \
   --when '{"#ext":{"ros":{"export":{"format":"mcap"}}}}'
 # ros-mcap-export-end
 
