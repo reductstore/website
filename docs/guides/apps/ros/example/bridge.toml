@@ -16,11 +16,11 @@ entry_name = "/camera/image_raw"
 timestamp = { field = "header.stamp", format = "ros_stamp" }
 # timestamp-end
 # Add labels that are constant for this topic.
+# camera-static-start
 labels = [
-  # camera-static-start
   { static = { source = "ros2", topic = "/camera/image_raw", sensor = "camera" } }
-  # camera-static-end
 ]
+# camera-static-end
 
 # Subscribe to GPS fixes.
 [[inputs.ros2.robot.topics]]
@@ -28,14 +28,14 @@ name = "/gps/fix"
 entry_name = "/gps/fix"
 timestamp = { field = "header.stamp", format = "ros_stamp" }
 # Extract coordinates and add constant labels.
+# gps-dynamic-start
 labels = [
-  # gps-dynamic-start
   { field = "latitude", label = "x" },
   { field = "longitude", label = "y" },
   { field = "altitude", label = "z" },
-  # gps-dynamic-end
   { static = { source = "ros2", topic = "/gps/fix", sensor = "gps" } }
 ]
+# gps-dynamic-end
 
 # Subscribe to IMU measurements.
 [[inputs.ros2.robot.topics]]
@@ -53,15 +53,13 @@ remote = "local"
 inputs = ["robot"]
 # pipeline-route-end
 # Copy the latest GPS coordinates and identify the robot.
+# pipeline-labels-start
 labels = [
-  # gps-propagation-start
   { from = "/gps/fix", labels = ["x", "y", "z"], to = "/camera/image_raw" },
   { from = "/gps/fix", labels = ["x", "y", "z"], to = "/imu/data" },
-  # gps-propagation-end
-  # robot-label-start
   { static = { robot = "robot-1" }, to = "*" }
-  # robot-label-end
 ]
+# pipeline-labels-end
 
 # Write records to the local ReductStore instance.
 # remote-start

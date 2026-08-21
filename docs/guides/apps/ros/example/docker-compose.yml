@@ -4,9 +4,11 @@ services:
     image: reduct/store:latest
     restart: unless-stopped
     ports:
-      - "8383:8383"
+      - "127.0.0.1:8383:8383"
     environment:
       RS_API_TOKEN: my-token
+      # Keep diagnostic entry paths stable across container recreation.
+      RS_INSTANCE_NAME: ${ROBOT_NAME:-awesome-robot}
 
       # bucket-buffering-start
       # Keep the newest 20 GB of robot data on local disk.
@@ -22,7 +24,7 @@ services:
       RS_REPLICATION_1_DST_BUCKET: demo
       RS_REPLICATION_1_DST_HOST: https://play.reduct.store
       RS_REPLICATION_1_DST_TOKEN: reductstore
-      RS_REPLICATION_1_DST_PREFIX: awesome-robot
+      RS_REPLICATION_1_DST_PREFIX: ${ROBOT_NAME:-awesome-robot}
       RS_REPLICATION_1_ENTRIES: "/camera/image_raw,/imu/data"
       # replication-end
 
@@ -43,7 +45,7 @@ services:
     image: reduct/grafana:latest
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     volumes:
       - ./grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
   # grafana-end

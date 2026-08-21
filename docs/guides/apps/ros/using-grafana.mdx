@@ -1,5 +1,5 @@
 ---
-title: Querying ROS Data with Grafana
+title: Querying ROS data with Grafana
 description: Query and visualize ROS GPS data from ReductStore with Grafana.
 ---
 
@@ -12,7 +12,7 @@ description: Query and visualize ROS GPS data from ReductStore with Grafana.
 
 import GrafanaRosGpsQuery from "./img/grafana-ros-gps-query.png";
 
-# Querying ROS Data with Grafana
+# Querying ROS data with Grafana
 
 This guide explains how to query ROS data directly from ReductStore and
 visualize it in Grafana. It expands on the visualization workflow introduced in
@@ -20,17 +20,26 @@ the **[ROS applications guide](./index.mdx#using-grafana)**.
 
 The example queries individual GPS messages from the
 **[public ROS dataset](https://play.reduct.store/)** and plots
-interval-averaged latitude and longitude. Before you begin, you need:
+interval-averaged latitude and longitude.
 
-- Docker with Docker Compose;
-- Grafana 10 or newer with the ReductStore data source plugin; and
+To run the preconfigured example, you need Docker with Docker Compose.
+
+The Compose service uses the `reduct/grafana:latest` image, which includes
+Grafana and the ReductStore data source plugin. The public Play server provides
+the required ReductROS and ReductSelect extensions.
+
+For a custom deployment, you need:
+
+- Grafana 10 or newer;
+- version 1.3.0 or newer of the ReductStore data source plugin; and
 - a ReductStore server with the
   **[ReductROS](../../../extensions/official/ros-ext/index.mdx)** and
   **[ReductSelect](../../../extensions/official/select-ext.mdx)** extensions.
 
+Both extensions are available with ReductStore Pro.
+
 See the **[Grafana integration guide](../../../integrations/grafana/index.mdx)**
-for plugin installation and compatibility requirements. The preconfigured
-container used below already includes Grafana and the plugin.
+for plugin installation and compatibility requirements.
 
 ## Start Grafana
 
@@ -47,9 +56,12 @@ data source to query the public Play server:
 
 ```
 
-From `docs/guides/apps/ros/example`, start Grafana:
+Clone the documentation repository, enter the example directory, and start
+Grafana:
 
 ```bash
+git clone https://github.com/reductstore/website.git
+cd website/docs/guides/apps/ros/example
 docker compose up -d grafana
 ```
 
@@ -104,7 +116,7 @@ Create or edit a time-series panel, then configure its query:
 
 The `#ext` array runs an ordered server-side pipeline:
 
-- `ros.extract` uses each record's `$schema` attachment to decode its CDR message
+- `ros.extract` uses the entry's `$schema` attachment to decode each CDR message
   into JSON.
 - The first `select` stage projects the `latitude` and `longitude` fields. Its
   `export.duration` setting batches rows according to their source timestamp span,

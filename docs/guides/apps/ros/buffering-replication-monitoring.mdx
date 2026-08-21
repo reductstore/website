@@ -1,5 +1,5 @@
 ---
-title: Buffering, Replication, and Monitoring
+title: Buffering, replication, and monitoring
 description: Configure ReductStore to buffer ROS data on a robot, replicate selected topics, compress local data, and expose operational diagnostics.
 ---
 
@@ -19,8 +19,8 @@ Docker Compose and startup provisioning, but the same ReductStore settings apply
 when another application writes the records instead of ReductBridge.
 
 The complete example stores ROS records in a local `robot-data` bucket,
-replicates camera and IMU entries to the public Play server under an
-`awesome-robot` prefix, and writes replication, lifecycle, usage, and log events
+replicates camera and IMU entries to the public Play server under a
+robot-specific prefix, and writes replication, lifecycle, usage, and log events
 to the `$system` bucket.
 
 ## Data flow
@@ -43,7 +43,7 @@ events expose the state of each background operation.
                            +----------------------+     +----------------------+
                            | "compression policy" |     | "Play server"        |
                            | "zstd after one day" |     | "bucket: demo"       |
-                           +----------+-----------+     | "awesome-robot/*"    |
+                           +----------+-----------+     | "<robot-name>/*"     |
                                       |                 +----------------------+
                                       v
   +---------------------------------------------------------------------------+
@@ -68,18 +68,41 @@ The ROS example uses the following `reductstore` service from the example
 
 ```
 
-The service publishes the ReductStore HTTP API on port `8383` and mounts the
-`reduct-data` volume at `/data`. This volume preserves records, bucket settings,
-replication progress, lifecycle state, and system events across container
-restarts. The local API token is `my-token`; ReductBridge or any other writer
-must use this token when connecting to the local instance.
+The service publishes the ReductStore HTTP API on `127.0.0.1:8383` and mounts
+the `reduct-data` volume at `/data`. Binding the port to the loopback interface
+keeps the example API off external network interfaces. The volume preserves
+records, bucket settings, replication progress, lifecycle state, and system
+events across container restarts. The local API token is `my-token`;
+ReductBridge or any other writer must use this token when connecting to the
+local instance.
+
+`RS_INSTANCE_NAME` uses the `ROBOT_NAME` environment variable to keep system
+event paths stable when Docker Compose recreates the container. The same value
+is used as the destination prefix, separating records from different robots.
+If `ROBOT_NAME` is unset, both settings default to `awesome-robot`.
 
 The service is part of the
 **[complete Docker Compose example](https://github.com/reductstore/website/blob/main/docs/guides/apps/ros/example/docker-compose.yml)**.
-From the example directory, start the stack with:
+The complete ROS pipeline requires Docker with Docker Compose and host
+networking. On Docker Desktop, enable host networking before starting the
+containers. See Docker's
+**[host networking documentation](https://docs.docker.com/engine/network/drivers/host/)**
+for platform requirements and configuration.
+
+Clone the documentation repository and enter the example directory:
 
 ```bash
-docker compose up -d
+git clone https://github.com/reductstore/website.git
+cd website/docs/guides/apps/ros/example
+```
+
+Choose a unique robot name and start ReductBridge. Docker Compose also starts
+its ReductStore and ROS publisher dependencies, but not the unrelated Grafana
+and query services:
+
+```bash
+export ROBOT_NAME="awesome-robot-$(hostname)"
+docker compose up -d reduct-bridge
 ```
 
 :::warning Public demo server
@@ -89,9 +112,11 @@ Do not send sensitive data to this shared server.
 :::
 
 For production, replace the destination URL, bucket, and token with values for
-your own ReductStore instance. The destination token must have permission to
-write to the target bucket, and communication outside a trusted network should
-use HTTPS.
+your own ReductStore instance. Also replace the local `my-token` value in both
+`docker-compose.yml` and `bridge.toml`. The destination token must have
+permission to write to the target bucket. Keep the local API bound to a trusted
+interface or protect it with a firewall, and use HTTPS for communication outside
+a trusted network.
 
 ## Configuration
 
@@ -141,10 +166,11 @@ limit transfers to the camera and IMU entries, and identify the source robot:
 ```
 
 The `robot-to-central` task watches new records in `robot-data` and sends
-`/camera/image_raw` and `/imu/data` to the `demo` bucket. The `awesome-robot`
-destination prefix stores them as `awesome-robot/camera/image_raw` and
-`awesome-robot/imu/data`. Assign each robot a unique prefix so an entire fleet
-can replicate into one bucket without entry-name collisions.
+`/camera/image_raw` and `/imu/data` to the `demo` bucket. With
+`ROBOT_NAME=awesome-robot-01`, the destination prefix stores them as
+`awesome-robot-01/camera/image_raw` and `awesome-robot-01/imu/data`. Assign each
+robot a unique name so an entire fleet can replicate into one bucket without
+entry-name collisions. This is especially important on the shared Play server.
 
 ReductStore batches transfers and tracks pending records in a transaction log.
 A network interruption does not stop local ingestion, and replication resumes
@@ -186,13 +212,17 @@ bucket. These events let you monitor replication and lifecycle execution, track
 storage and traffic usage, and investigate warnings or errors without adding a
 separate logging pipeline.
 
-| Entry                                              | What it provides                                                                                               |
-| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `$system/replications/<instance>/robot-to-central` | Replication status and errors, pending and failed record counts, transferred data size, and execution duration |
-| `$system/lifecycle/<instance>/compress-robot-data` | Compression-policy status and errors, processed records and blocks, progress, and execution duration           |
-| `$system/usage/<instance>/total`                   | Instance-wide storage, record, and read/write traffic statistics                                               |
-| `$system/usage/<instance>/robot-data`              | The same usage statistics for the local `robot-data` bucket                                                    |
-| `$system/logs/<instance>/messages`                 | Captured ReductStore warnings and errors                                                                       |
+In the paths below, `<robot-name>` is the `ROBOT_NAME` value supplied when the
+stack starts. Configuring this stable instance name keeps diagnostics grouped
+under the same entries after container recreation.
+
+| Entry                                                | What it provides                                                                                               |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `$system/replications/<robot-name>/robot-to-central` | Replication status and errors, pending and failed record counts, transferred data size, and execution duration |
+| `$system/lifecycle/<robot-name>/compress-robot-data` | Compression-policy status and errors, processed records and blocks, progress, and execution duration           |
+| `$system/usage/<robot-name>/total`                   | Instance-wide storage, record, and read/write traffic statistics                                               |
+| `$system/usage/<robot-name>/robot-data`              | The same usage statistics for the local `robot-data` bucket                                                    |
+| `$system/logs/<robot-name>/messages`                 | Captured ReductStore warnings and errors                                                                       |
 
 System events are enabled by default and can be queried like other records with
 the HTTP API, SDKs, CLI, or Web Console. See

@@ -1,5 +1,5 @@
 ---
-title: Querying Data with SDKs
+title: Querying ROS data with SDKs
 description: Query and decode ROS data from ReductStore with the official client SDKs.
 ---
 
@@ -10,7 +10,7 @@ description: Query and decode ROS data from ReductStore with the official client
   />
 </head>
 
-# Querying Data with SDKs
+# Querying ROS data with SDKs
 
 This guide explains how to query and decode ROS data with the official
 ReductStore client SDKs. It expands on the SDK workflow introduced in the
@@ -31,6 +31,17 @@ This guide uses Python only as a representative example; the same workflow
 and ReductROS options are available with the other official SDKs.
 :::
 
+:::info ReductROS availability
+Server-side ROS decoding requires the ReductROS extension, which is available
+with ReductStore Pro. The public Play server used in this guide already provides
+the extension.
+:::
+
+:::warning Shared demo resources
+The Play server and its `reductstore` token are shared demo resources. Do not
+upload private data to this server or use the demo token in production.
+:::
+
 The script connects with the public `reductstore` token, opens the `orion` bucket,
 and queries the `right_ir/rotated/image_raw` entry. It calculates one `now` value
 and uses it as the exclusive `stop` boundary, with `start` set exactly one hour
@@ -46,10 +57,13 @@ the JPEG from the first item's `data` field, and saves it as
 `orion-images/<timestamp>.jpg`. It also prints the entry name, timestamp, `gps_z`
 value, output path, and image parameters.
 
-To run this implementation, install the
-**[Python SDK](../../../sdk/py/index.mdx)** and execute the script:
+To run this implementation, clone the documentation repository, enter the
+example directory, install the **[Python SDK](../../../sdk/py/index.mdx)**, and
+execute the script:
 
 ```bash
+git clone https://github.com/reductstore/website.git
+cd website/docs/guides/apps/ros/example
 pip install reduct-py
 python query_orion.py
 ```

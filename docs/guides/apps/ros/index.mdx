@@ -23,8 +23,9 @@ records with labels and attachments.
 
 This guide covers everything you need to know to use ReductStore in a ROS
 application: collecting data on a robot with ReductBridge, storing it in a local
-ReductStore instance, selectively replicating it to a cloud or central on-prem
-instance, and querying, visualizing, and exporting the data from there.
+ReductStore instance, selectively replicating it to a cloud or central
+on-premises instance, and querying, visualizing, and exporting the data from
+there.
 
 The following sections walk through each step, starting with an overview of the
 architecture and then diving into setup, replication, querying, and export.
@@ -50,14 +51,14 @@ The ROS workflow uses the following components:
   a bucket. On the robot side, it runs locally on the same robot or edge
   computer.
 - **Replication tasks** run on the robot-side ReductStore instance and copy only
-  selected entries or records with matching labels to a cloud or central on-prem
-  ReductStore instance.
-- **Cloud or central on-prem ReductStore** stores replicated data from one or
+  selected entries or records with matching labels to a cloud or central
+  on-premises ReductStore instance.
+- **Cloud or central on-premises ReductStore** stores replicated data from one or
   more robots and provides the main query and visualization endpoint for
   operators, dashboards, and analytics tools.
 - **[ReductROS](../../../extensions/official/ros-ext/index.mdx)** decodes stored ROS data when
-  it is queried. It can extract raw ROS 1 or ROS 2 messages as JSON, read MCAP or
-  rosbag files, and export filtered data back to robotics formats.
+  it is queried. It can extract messages from raw ROS records, MCAP files, and
+  rosbag archives, and export filtered raw ROS data as MCAP.
 - **[ReductSelect](../../../extensions/official/select-ext.mdx)** runs after ReductROS in the
   query pipeline. It treats the extracted JSON fields as SQL columns so queries
   can select, filter, aggregate, and reorder the decoded message data.
@@ -67,7 +68,7 @@ query layer.
 ROS nodes publish topics, ReductBridge subscribes to selected topics, and local
 ReductStore stores one entry per topic with the raw payload, labels, and
 `$schema` attachment. A replication task on the robot copies only the
-selected entries or label-matched records to the cloud or central on-prem
+selected entries or label-matched records to the cloud or central on-premises
 ReductStore instance. When users query that data, ReductROS extracts the messages
 as JSON before ReductSelect runs SQL over the decoded fields.
 
@@ -75,7 +76,7 @@ as JSON before ReductSelect runs SQL over the decoded fields.
 
 ```svgbob
                         +--------------------------------------+
-                        | "Cloud or central on-prem"           |
+                        | "Cloud or central on-premises"       |
                         |                                      |
                         |   .-------------------------------.  |
                         |   | "ReductStore"                 |  |
@@ -134,17 +135,19 @@ as JSON before ReductSelect runs SQL over the decoded fields.
   ROS data collection, replication, and query workflow with ReductStore
 </small>
 
-That was a lot of new information at once. Let’s split it into smaller parts.
+The following sections examine each part of the workflow in more detail.
 
 ## Data collection
 
-Let's set up data ingestion on the robot and see how ReductBridge simplifies
-collecting, labeling, and storing ROS data in ReductStore.
+Start by setting up data ingestion on the robot to see how ReductBridge
+simplifies collecting, labeling, and storing ROS data in ReductStore.
 
-From the example directory, start the complete stack, including the ROS
-publisher, ReductBridge, and ReductStore:
+Clone the documentation repository, enter the example directory, and start the
+complete stack, including the ROS publisher, ReductBridge, and ReductStore:
 
 ```bash
+git clone https://github.com/reductstore/website.git
+cd website/docs/guides/apps/ros/example
 docker compose up -d
 ```
 
@@ -201,7 +204,7 @@ and ReductStore output, see the standalone
 ReductBridge handles data collection, but it needs a ReductStore instance for
 persistent storage. In a ROS application, the robot-side ReductStore has three
 roles: it buffers robotics data on local disk, replicates selected records to a
-cloud or central on-prem instance, and records operational diagnostics.
+cloud or central on-premises instance, and records operational diagnostics.
 
 ### Running ReductStore
 
@@ -287,7 +290,7 @@ inspection in Foxglove. See the standalone
 **[Using Foxglove guide](./using-foxglove.mdx)** for a runnable workflow using
 the public ROS dataset, a temporary query link, and an infrared Image panel.
 
-## Export Data
+## Export data
 
 For scripted or local exports, install the
 **[ReductStore CLI](../../../cli/index.mdx#installing)** and use its
@@ -305,7 +308,7 @@ records:
 ```
 
 The CLI creates a directory for each selected entry under `./orion-native` and
-writes the original record payload without converting it. Each filename uses
+writes each original record payload without converting it. Each filename uses
 the record timestamp, and its extension is inferred from the content type. Add
 `--with-meta` to write record labels, content type, and content length to a JSON
 file alongside each payload.
@@ -331,8 +334,10 @@ The `#ext` directive runs ReductROS as part of the conditional query. You can
 open the downloaded MCAP file directly in Foxglove.
 
 :::info Offboarding without vendor lock-in
-You can use either export workflow to offboard data from ReductStore. Native
-export preserves the original record payloads without conversion, while MCAP
-packages ROS data in an open format supported by robotics tools. Both options
-let you move data without depending on a proprietary export format.
+Both export options support offboarding from ReductStore. Native export preserves
+each record's original bytes; use `--with-meta` to retain record metadata, and
+export the `$schema` entry attachment separately with the
+**[CLI attachment command](../../../cli/attachment/index.mdx#read)** when the
+destination must decode raw ROS payloads. MCAP packages ROS messages, topics, and
+schemas in an open format supported by robotics tools.
 :::

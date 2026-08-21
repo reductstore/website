@@ -1,5 +1,5 @@
 ---
-title: Collecting ROS 2 Data with ReductBridge
+title: Collecting ROS 2 data with ReductBridge
 description: Configure ReductBridge to subscribe to ROS 2 topics, preserve schemas, assign timestamps and labels, and write data to ReductStore.
 ---
 
@@ -10,14 +10,12 @@ description: Configure ReductBridge to subscribe to ROS 2 topics, preserve schem
   />
 </head>
 
-# Collecting ROS 2 Data with ReductBridge
+# Collecting ROS 2 data with ReductBridge
 
-This guide explains how ReductBridge uses the `bridge.toml` configuration from
-the **[ROS applications guide](./index.mdx#data-collection)** to turn ROS 2
-topics into time-indexed ReductStore records.
-
-Data flows from ROS 2 topic subscriptions through a pipeline that enriches and
-routes records to a ReductStore destination.
+This guide explains how to configure ReductBridge to collect ROS 2 messages as
+time-indexed ReductStore records. The example preserves serialized CDR payloads
+and ROS schemas, assigns timestamps and labels, and writes the records to a
+local ReductStore instance.
 
 ## Data flow
 
@@ -63,10 +61,15 @@ stages before writing it to the local ReductStore bucket.
 
 ## Deployment
 
-ReductBridge is available as a Docker image and prebuilt binaries for Linux,
-macOS, and Windows. See the
+ReductBridge is available as Docker images, prebuilt Linux binaries, and Snap
+packages for Ubuntu 22.04 and later. You can also build it from source. See the
 **[ReductBridge documentation](../../../reduct-bridge/index.mdx#installation)**
 for all installation options.
+
+The Docker example requires Docker with Docker Compose and host networking. On
+Docker Desktop, enable host networking before starting the stack. See Docker's
+**[host networking documentation](https://docs.docker.com/engine/network/drivers/host/)**
+for platform requirements and configuration.
 
 The ROS example uses the following `reduct-bridge` service from the example
 `docker-compose.yml`:
@@ -75,8 +78,8 @@ The ROS example uses the following `reduct-bridge` service from the example
 
 ```
 
-The service runs the ROS 2 Jazzy image of ReductBridge on the host network so it
-can discover the example ROS publisher. It mounts `bridge.toml` at
+The service runs the ReductBridge image for ROS 2 Jazzy on the host network so
+it can discover the example ROS publisher. It mounts `bridge.toml` at
 `/etc/reduct-bridge/config.toml` and passes that file to ReductBridge when the
 container starts.
 
@@ -94,10 +97,13 @@ The publisher and ReductBridge containers use the same ROS 2 environment:
 
 The service is part of the
 **[complete Docker Compose example](https://github.com/reductstore/website/blob/main/docs/guides/apps/ros/example/docker-compose.yml)**.
-From the example directory, start the stack with:
+Clone the documentation repository, enter the example directory, and start
+ReductBridge with its ReductStore and ROS publisher dependencies:
 
 ```bash
-docker compose up -d
+git clone https://github.com/reductstore/website.git
+cd website/docs/guides/apps/ros/example
+docker compose up -d reduct-bridge
 ```
 
 ## Configuration
@@ -165,8 +171,8 @@ The `$schema` attachment also keeps the raw records self-describing for later
 queries. The **[ReductROS Raw Messages extension](../../../extensions/official/ros-ext/raw.mdx)**
 uses it to select the correct decoder, return individual ROS messages as JSON,
 or export records from one or more entries into MCAP episodes. This allows the
-same stored data to support filtering and inspection as JSON as well as export
-to standard robotics tooling without converting it during ingestion.
+same stored data to be decoded and inspected as JSON or exported to MCAP without
+conversion during ingestion.
 
 ### Timestamp assignment
 
@@ -230,13 +236,16 @@ The pipeline connects the `robot` input to the ReductStore remote named `local`:
 
 ```
 
-Pipeline label rules can enrich one topic with context extracted from another.
-These two rules remember the latest `x`, `y`, and `z` labels seen on the GPS
-entry and add them to subsequent camera and IMU records:
+Pipeline label rules can enrich records from one topic with context extracted
+from another. The pipeline's label configuration contains two propagation rules
+and one static rule:
 
-```toml file=./example/bridge.toml start=gps-propagation-start end=gps-propagation-end
+```toml file=./example/bridge.toml start=pipeline-labels-start end=pipeline-labels-end
 
 ```
+
+The first two rules remember the latest `x`, `y`, and `z` labels seen on the GPS
+entry and add them to subsequent camera and IMU records.
 
 The `from` and `to` patterns match `entry_name`, not the original topic name.
 The rule is stateful: when a `/gps/fix` record arrives, the pipeline caches its
@@ -246,12 +255,8 @@ timestamp join. Target records received before the first GPS record have no
 copied coordinates, and a target record may receive coordinates from the
 previous publishing cycle when it arrives before the current GPS update.
 
-The final pipeline rule adds a robot identifier to every entry because `*`
-matches all entry names:
-
-```toml file=./example/bridge.toml start=robot-label-start end=robot-label-end
-
-```
+The final rule adds a robot identifier to every entry because `*` matches all
+entry names.
 
 This combination makes camera and IMU records directly filterable by robot and
 the latest known position without changing their original payloads.
@@ -260,9 +265,10 @@ the latest known position without changing their original payloads.
 
 The `[remotes.reduct.local]` table defines the `local` destination referenced by
 the pipeline. It connects through the host port exposed by Docker Compose,
-authenticates with `my-token`, and writes every topic to the `robot-data` bucket.
+authenticates with `my-token`, and writes records from every configured topic to
+the `robot-data` bucket.
 An empty `prefix` preserves the configured entry names; set it to a value such
-as `robot-1/` to place all entries under that path.
+as `robot-1` to place all entries under that path.
 
 ```toml file=./example/bridge.toml start=remote-start end=remote-end
 
@@ -289,3 +295,12 @@ the `robot-data` bucket is already provisioned through the ReductStore service's
 environment variables. It is useful when running ReductBridge independently and
 the destination bucket might not exist yet.
 :::
+
+## Expected result
+
+After the stack starts, the `robot-data` bucket contains the
+`/camera/image_raw`, `/gps/fix`, and `/imu/data` entries. Each entry stores the
+original CDR payloads and a `$schema` attachment. Records include their
+topic-specific static labels and the `robot=robot-1` label. GPS records also
+contain the extracted `x`, `y`, and `z` coordinates, while subsequent camera and
+IMU records receive the latest known coordinates from the pipeline.
