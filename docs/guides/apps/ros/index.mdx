@@ -288,3 +288,51 @@ inspection in Foxglove. See the standalone
 the public ROS dataset, a temporary query link, and an infrared Image panel.
 
 ## Export Data
+
+For scripted or local exports, install the
+**[ReductStore CLI](../../../cli/index.mdx#installing)** and use its
+**[`cp` command](../../../cli/cp/index.mdx)**. The examples use the public
+`orion` dataset and include the Play server's public `reductstore` token. Do not
+use the demo token for private or production data.
+
+### Export records in their native format
+
+This command selects entries with a prefix wildcard and copies their recent
+records:
+
+```bash file=../../../examples/cli/ros_export.sh start=ros-native-export-start end=ros-native-export-end
+
+```
+
+The CLI creates a directory for each selected entry under `./orion-native` and
+writes the original record payload without converting it. Each filename uses
+the record timestamp, and its extension is inferred from the content type. Add
+`--with-meta` to write record labels, content type, and content length to a JSON
+file alongside each payload.
+
+Keep wildcard arguments quoted so that the shell passes them to `reduct-cli`
+instead of expanding them as local filenames. Adjust the entry prefix, time
+range, and destination for your dataset.
+
+### Export records as MCAP
+
+To convert raw ROS records while downloading them, pass the ReductROS `#ext`
+directive as the `--when` condition:
+
+```bash file=../../../examples/cli/ros_export.sh start=ros-mcap-export-start end=ros-mcap-export-end
+
+```
+
+ReductROS reads the entry's `$schema` attachment and returns an
+`application/mcap` result. The CLI recognizes that content type and writes the
+result with an `.mcap` extension under `./orion-mcap`.
+
+The `#ext` directive runs ReductROS as part of the conditional query. You can
+open the downloaded MCAP file directly in Foxglove.
+
+:::info Offboarding without vendor lock-in
+You can use either export workflow to offboard data from ReductStore. Native
+export preserves the original record payloads without conversion, while MCAP
+packages ROS data in an open format supported by robotics tools. Both options
+let you move data without depending on a proprietary export format.
+:::
