@@ -300,8 +300,8 @@ use the demo token for private or production data.
 
 ### Export records in their native format
 
-This command selects entries with a prefix wildcard and copies their recent
-records:
+This command selects entries with a prefix wildcard and copies one record from
+each entry:
 
 ```bash file=../../../examples/cli/ros_export.sh start=ros-native-export-start end=ros-native-export-end
 
@@ -314,8 +314,9 @@ the record timestamp, and its extension is inferred from the content type. Add
 file alongside each payload.
 
 Keep wildcard arguments quoted so that the shell passes them to `reduct-cli`
-instead of expanding them as local filenames. Adjust the entry prefix, time
-range, and destination for your dataset.
+instead of expanding them as local filenames. Adjust the entry prefix, limit,
+and destination for your dataset. Add `--start` and `--stop` to bound the time
+range when needed.
 
 ### Export records as MCAP
 
