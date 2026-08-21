@@ -282,28 +282,9 @@ interval-averaged GPS latitude and longitude from the public ROS dataset.
 
 ### Using Foxglove
 
-Foxglove Studio and other MCAP-compatible tools are useful when engineers need to
-replay synchronized topics, inspect a scene, or use robotics-specific panels.
-ReductROS can build MCAP episodes on demand from the raw records collected by
-ReductBridge.
-
-An export query can select:
-
-- a bounded `start` and `stop` time;
-- only the required entries, for example `/camera/image_raw` and `/imu/data`;
-- records from one robot, run, location, or event using labels;
-- a maximum episode `duration` or `size` for manageable output files.
-
-ReductROS reads each selected entry's `$schema` attachment, restores its topic and
-message type, merges the records by timestamp, and returns
-`application/mcap` episodes. Download those query results and open them in an
-MCAP-compatible viewer.
-
-Generating MCAP at query time avoids keeping every recording as one large,
-preassembled archive. The same labeled records remain available for dashboards
-and SDK queries, while engineers can export only the topics and time window
-needed for a specific investigation. See
-**[Exporting raw messages as MCAP](../../../extensions/official/ros-ext/raw.mdx#data-export)**
-for the export parameters and a multi-entry example.
+ReductROS can export a bounded selection of raw ROS records as MCAP for remote
+inspection in Foxglove. See the standalone
+**[Using Foxglove guide](./using-foxglove.mdx)** for a runnable workflow using
+the public ROS dataset, a temporary query link, and an infrared Image panel.
 
 ## Export Data
