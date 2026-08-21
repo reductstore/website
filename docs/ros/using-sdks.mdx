@@ -13,16 +13,6 @@ This guide explains how to query and decode ROS data with the official
 ReductStore client SDKs. It expands on the SDK workflow introduced in the
 **[ROS applications guide](./index.mdx#using-sdks)**.
 
-The example queries filtered infrared images from the
-**[public ROS dataset](https://play.reduct.store/)**, samples one image
-every 30 seconds, and saves the results as JPEG files. It uses the
-**[ReductROS](../extensions/official/ros-ext/index.mdx)** extension, which
-parses ROS 1 and ROS 2 messages into JSON and can encode raw image data as JPEG:
-
-```python file=./example/query_orion.py
-
-```
-
 :::note
 This guide uses Python only as a representative example; the same workflow
 and ReductROS options are available with the other official SDKs.
@@ -39,20 +29,32 @@ The Play server and its `reductstore` token are shared demo resources. Do not
 upload private data to this server or use the demo token in production.
 :::
 
-The script connects with the public `reductstore` token, opens the `orion` bucket,
-and queries the `right_ir/rotated/image_raw` entry. It calculates one `now` value
-and uses it as the exclusive `stop` boundary, with `start` set exactly one hour
-earlier. The `$and` condition applies the strict range `100 < gps_z < 120` to the
-stored `gps_z` label before the payload is decoded. The `$each_t` operator keeps
-at most one matching image every 30 seconds, reducing decoding work and network
-traffic. The `#ext.ros.extract` object then asks ReductROS to decode each matching
-CDR image using its stored `$schema` attachment and encode the raw `data` field as
-JPEG.
+## Query and save images
 
-For each matching result, the script reads the decoded JSON array, base64-decodes
-the JPEG from the first item's `data` field, and saves it as
-`orion-images/<timestamp>.jpg`. It also prints the entry name, timestamp, `gps_z`
-value, output path, and image parameters.
+The example queries filtered infrared images from the
+**[public ROS dataset](https://play.reduct.store/)**, samples one image every 30
+seconds, and saves the results as JPEG files. It uses the
+**[ReductROS](../extensions/official/ros-ext/index.mdx)** extension to decode ROS
+messages and encode raw image data as JPEG.
+
+The script performs the following steps:
+
+- Connect to the public Play server with the `reductstore` token and open the
+  `orion` bucket.
+- Query the `/right_ir/rotated/image_raw` entry for the previous hour.
+- Apply the strict range `100 < gps_z < 120` to the stored `gps_z` label before
+  decoding payloads.
+- Use `$each_t` to keep at most one matching image every 30 seconds, reducing
+  decoding work and network traffic.
+- Ask ReductROS through `#ext.ros.extract` to decode each
+  **[CDR](../glossary.mdx#cdr)** image using its
+  `$schema` attachment and encode the raw `data` field as JPEG.
+- Base64-decode each result and save it as
+  `orion-images/<timestamp>.jpg`.
+
+```python file=./example/query_orion.py
+
+```
 
 To run this implementation, clone the documentation repository, enter the
 example directory, install the **[Python SDK](../sdk/py/index.mdx)**, and

@@ -17,7 +17,7 @@ class TestOrionQuery(unittest.TestCase):
         self.assertEqual(query_orion.SERVER_URL, 'https://play.reduct.store/replica')
         self.assertEqual(query_orion.API_TOKEN, 'reductstore')
         self.assertEqual(query_orion.BUCKET_NAME, 'orion')
-        self.assertEqual(query_orion.ENTRY_NAME, 'right_ir/rotated/image_raw')
+        self.assertEqual(query_orion.ENTRY_NAME, '/right_ir/rotated/image_raw')
 
     def test_queries_previous_hour(self):
         now = datetime(2026, 8, 3, 12, 30, tzinfo=timezone.utc)

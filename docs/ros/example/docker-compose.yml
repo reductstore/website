@@ -8,7 +8,7 @@ services:
     environment:
       RS_API_TOKEN: my-token
       # Keep diagnostic entry paths stable across container recreation.
-      RS_INSTANCE_NAME: ${ROBOT_NAME:-awesome-robot}
+      RS_INSTANCE_NAME: ${ROBOT_NAME:-robot-1}
 
       # bucket-buffering-start
       # Keep the newest 20 GB of robot data on local disk.
@@ -24,7 +24,7 @@ services:
       RS_REPLICATION_1_DST_BUCKET: demo
       RS_REPLICATION_1_DST_HOST: https://play.reduct.store
       RS_REPLICATION_1_DST_TOKEN: reductstore
-      RS_REPLICATION_1_DST_PREFIX: ${ROBOT_NAME:-awesome-robot}
+      RS_REPLICATION_1_DST_PREFIX: ${ROBOT_NAME:-robot-1}
       RS_REPLICATION_1_ENTRIES: "/camera/image_raw,/imu/data"
       # replication-end
 

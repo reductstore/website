@@ -116,8 +116,8 @@ Create or edit a time-series panel, then configure its query:
 
 The `#ext` array runs an ordered server-side pipeline:
 
-- `ros.extract` uses the entry's `$schema` attachment to decode each CDR message
-  into JSON.
+- `ros.extract` uses the entry's `$schema` attachment to decode each
+  **[CDR](../glossary.mdx#cdr)** message into JSON.
 - The first `select` stage projects the `latitude` and `longitude` fields. Its
   `export.duration` setting batches rows according to their source timestamp span,
   using Grafana's resolved `$__interval` value.

@@ -13,8 +13,9 @@ description: Configure ReductBridge to subscribe to ROS 2 topics, preserve schem
 # Collecting ROS 2 data with ReductBridge
 
 This guide explains how to configure ReductBridge to collect ROS 2 messages as
-time-indexed ReductStore records. The example preserves serialized CDR payloads
-and ROS schemas, assigns timestamps and labels, and writes the records to a
+time-indexed ReductStore records. The example preserves payloads serialized
+using the **[Common Data Representation (CDR)](../glossary.mdx#cdr)** format and
+their ROS schemas, assigns timestamps and labels, and writes the records to a
 local ReductStore instance.
 
 ## Data flow

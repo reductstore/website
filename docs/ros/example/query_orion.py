@@ -11,7 +11,7 @@ from reduct import Client
 SERVER_URL = 'https://play.reduct.store/'
 API_TOKEN = 'reductstore'
 BUCKET_NAME = 'orion'
-ENTRY_NAME = 'right_ir/rotated/image_raw'
+ENTRY_NAME = '/right_ir/rotated/image_raw'
 OUTPUT_DIR = Path(os.environ.get('OUTPUT_DIR', 'orion-images'))
 
 

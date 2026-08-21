@@ -190,9 +190,9 @@ them to ReductStore. Save the following file as `bridge.toml` next to
 The source is also available as the **[full bridge.toml example](https://github.com/reductstore/website/blob/main/docs/ros/example/bridge.toml)**.
 
 At a high level, this configuration subscribes to camera, GPS, and IMU topics;
-stores their original CDR payloads and ROS schemas; assigns sensor timestamps
-and labels; propagates the latest GPS coordinates to camera and IMU records; and
-writes everything to a rolling `robot-data` bucket.
+stores their original **[CDR](../glossary.mdx#cdr)** payloads and ROS schemas;
+assigns sensor timestamps and labels; propagates the latest GPS coordinates to
+camera and IMU records; and writes everything to a rolling `robot-data` bucket.
 
 For a field-by-field explanation of subscriptions, schema attachments,
 timestamp assignment, static and dynamic labels, cross-topic label propagation,
@@ -232,9 +232,9 @@ token that has permission to write to that bucket. The local API token is
 `my-token`, matching the ReductBridge configuration from the previous section.
 
 At startup, the service provisions a rolling 20 GB `robot-data` bucket, a task
-that replicates camera and IMU records under an `awesome-robot` destination
-prefix, and a lifecycle policy that compresses local data after one day. It also
-records replication, lifecycle, usage, and log events in the `$system` bucket.
+that replicates camera and IMU records under a `robot-1` destination prefix, and
+a lifecycle policy that compresses local data after one day. It also records
+replication, lifecycle, usage, and log events in the `$system` bucket.
 
 For a complete explanation of local buffering, selective fleet replication,
 compression, failure behavior, and monitoring, see the standalone

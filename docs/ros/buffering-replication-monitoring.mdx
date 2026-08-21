@@ -79,7 +79,7 @@ local instance.
 `RS_INSTANCE_NAME` uses the `ROBOT_NAME` environment variable to keep system
 event paths stable when Docker Compose recreates the container. The same value
 is used as the destination prefix, separating records from different robots.
-If `ROBOT_NAME` is unset, both settings default to `awesome-robot`.
+If `ROBOT_NAME` is unset, both settings default to `robot-1`.
 
 The service is part of the
 **[complete Docker Compose example](https://github.com/reductstore/website/blob/main/docs/ros/example/docker-compose.yml)**.
@@ -101,7 +101,7 @@ its ReductStore and ROS publisher dependencies, but not the unrelated Grafana
 and query services:
 
 ```bash
-export ROBOT_NAME="awesome-robot-$(hostname)"
+export ROBOT_NAME="robot-1"
 docker compose up -d reduct-bridge
 ```
 
@@ -167,10 +167,11 @@ limit transfers to the camera and IMU entries, and identify the source robot:
 
 The `robot-to-central` task watches new records in `robot-data` and sends
 `/camera/image_raw` and `/imu/data` to the `demo` bucket. With
-`ROBOT_NAME=awesome-robot-01`, the destination prefix stores them as
-`awesome-robot-01/camera/image_raw` and `awesome-robot-01/imu/data`. Assign each
-robot a unique name so an entire fleet can replicate into one bucket without
-entry-name collisions. This is especially important on the shared Play server.
+`ROBOT_NAME=robot-1`, the destination prefix stores them as
+`robot-1/camera/image_raw` and `robot-1/imu/data`. Assign each robot a unique
+name, such as `robot-1`, `robot-2`, and so on, so an entire fleet can replicate
+into one bucket without entry-name collisions. This is especially important on
+the shared Play server.
 
 ReductStore batches transfers and tracks pending records in a transaction log.
 A network interruption does not stop local ingestion, and replication resumes
