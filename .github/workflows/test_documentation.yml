@@ -79,7 +79,20 @@ jobs:
         run: |
           docker pull ${{ matrix.image }}
           docker run -d --name reductstore-init -p 8384:8383  ${{ matrix.image }}
-          sleep 3
+
+          for attempt in {1..60}; do
+            if curl -fsS http://127.0.0.1:8384/api/v1/alive >/dev/null; then
+              break
+            fi
+
+            if [ "$attempt" -eq 60 ]; then
+              docker logs reductstore-init
+              exit 1
+            fi
+
+            sleep 1
+          done
+
           reduct-cli cp https://reductstore@play.reduct.store/datasets  http://my-token@127.0.0.1:8384/example-bucket --limit 100
 
       - name: Install Python
@@ -224,7 +237,8 @@ jobs:
         if: failure()
         continue-on-error: true
         run: |
-          docker logs reductstore
+          docker logs reductstore-init || true
+          docker logs reductstore || true
 
   test_provisioning:
     runs-on: ubuntu-latest
@@ -275,7 +289,7 @@ jobs:
             sleep 1
           done
 
-          docker compose up -d reductbridge
+          docker compose up -d reduct-bridge
           sleep 15
 
           docker compose ps
