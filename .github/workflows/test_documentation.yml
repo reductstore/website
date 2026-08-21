@@ -78,11 +78,18 @@ jobs:
       - name: Prepare ReductStore instance with data
         run: |
           docker pull ${{ matrix.image }}
-          docker run -d --name reductstore-init -p 8384:8383  ${{ matrix.image }}
+          docker run -d --name reductstore-init -p 8384:8383 \
+            --env RS_API_TOKEN="my-token" \
+            ${{ matrix.image }}
 
           for attempt in {1..60}; do
             if curl -fsS http://127.0.0.1:8384/api/v1/alive >/dev/null; then
               break
+            fi
+
+            if [ "$(docker inspect -f '{{.State.Running}}' reductstore-init)" != "true" ]; then
+              docker logs reductstore-init
+              exit 1
             fi
 
             if [ "$attempt" -eq 60 ]; then
