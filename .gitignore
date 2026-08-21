@@ -31,7 +31,7 @@ private/
 docs/examples/cpp/build/
 docs/examples/rs/build/
 docs/examples/py/src/__pycache__/
-docs/guides/apps/ros/example/orion-images/
+docs/ros/example/orion-images/
 
 
 # Go

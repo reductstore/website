@@ -66,31 +66,23 @@
         "guides/lifecycle-policies",
         "guides/data-replication",
         "guides/access-control",
-        "guides/disaster-recovery",
-        {
-          "type": "category",
-          "label": "Applications",
-          "collapsed": false,
-          "collapsible": false,
-          "items": [
-            {
-              "type": "category",
-              "label": "ROS",
-              "collapsed": true,
-              "link": {
-                "type": "doc",
-                "id": "guides/apps/ros/index"
-              },
-              "items": [
-                "guides/apps/ros/data-collection",
-                "guides/apps/ros/buffering-replication-monitoring",
-                "guides/apps/ros/using-sdks",
-                "guides/apps/ros/using-grafana",
-                "guides/apps/ros/using-foxglove"
-              ]
-            }
-          ]
-        }
+        "guides/disaster-recovery"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "\uD83E\uDD16 ROS",
+      "collapsed": true,
+      "link": {
+        "type": "doc",
+        "id": "ros/index"
+      },
+      "items": [
+        "ros/data-collection",
+        "ros/buffering-replication-monitoring",
+        "ros/using-sdks",
+        "ros/using-grafana",
+        "ros/using-foxglove"
       ]
     },
     {

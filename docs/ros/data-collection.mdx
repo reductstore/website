@@ -6,7 +6,7 @@ description: Configure ReductBridge to subscribe to ROS 2 topics, preserve schem
 <head>
   <link
     rel="canonical"
-    href="https://www.reduct.store/docs/guides/apps/ros/data-collection"
+    href="https://www.reduct.store/docs/ros/data-collection"
   />
 </head>
 
@@ -63,7 +63,7 @@ stages before writing it to the local ReductStore bucket.
 
 ReductBridge is available as Docker images, prebuilt Linux binaries, and Snap
 packages for Ubuntu 22.04 and later. You can also build it from source. See the
-**[ReductBridge documentation](../../../reduct-bridge/index.mdx#installation)**
+**[ReductBridge documentation](../reduct-bridge/index.mdx#installation)**
 for all installation options.
 
 The Docker example requires Docker with Docker Compose and host networking. On
@@ -96,20 +96,20 @@ The publisher and ReductBridge containers use the same ROS 2 environment:
   containers and allowing discovery over the host network.
 
 The service is part of the
-**[complete Docker Compose example](https://github.com/reductstore/website/blob/main/docs/guides/apps/ros/example/docker-compose.yml)**.
+**[complete Docker Compose example](https://github.com/reductstore/website/blob/main/docs/ros/example/docker-compose.yml)**.
 Clone the documentation repository, enter the example directory, and start
 ReductBridge with its ReductStore and ROS publisher dependencies:
 
 ```bash
 git clone https://github.com/reductstore/website.git
-cd website/docs/guides/apps/ros/example
+cd website/docs/ros/example
 docker compose up -d reduct-bridge
 ```
 
 ## Configuration
 
 The complete configuration is available as the
-**[bridge.toml example](https://github.com/reductstore/website/blob/main/docs/guides/apps/ros/example/bridge.toml)**:
+**[bridge.toml example](https://github.com/reductstore/website/blob/main/docs/ros/example/bridge.toml)**:
 
 ```toml file=./example/bridge.toml
 
@@ -126,7 +126,7 @@ ReductBridge needs the ROS message definitions to decode fields and attach
 schemas to stored entries. `schema_paths = ["/opt/ros/jazzy"]` tells it to look
 under `/opt/ros/jazzy/share/<package>/msg/`, which is the ROS installation in
 the Jazzy Docker image. Add a workspace install prefix to this list when topics
-use custom message types. See the **[ROS 2 input reference](../../../reduct-bridge/input/ros2/index.mdx)**
+use custom message types. See the **[ROS 2 input reference](../reduct-bridge/input/ros2/index.mdx)**
 for schema lookup and runtime details.
 
 ### Topic subscriptions
@@ -168,7 +168,7 @@ the record content written to ReductStore remains the original CDR bytes. The
 timestamp and label sections below explain how these field paths work.
 
 The `$schema` attachment also keeps the raw records self-describing for later
-queries. The **[ReductROS Raw Messages extension](../../../extensions/official/ros-ext/raw.mdx)**
+queries. The **[ReductROS Raw Messages extension](../extensions/official/ros-ext/raw.mdx)**
 uses it to select the correct decoder, return individual ROS messages as JSON,
 or export records from one or more entries into MCAP episodes. This allows the
 same stored data to be decoded and inspected as JSON or exported to MCAP without
@@ -281,7 +281,7 @@ flushed when its configured record count, payload size, or time interval is
 reached.
 
 The example uses default batch settings. See the
-**[ReductStore remote reference](../../../reduct-bridge/remote/reduct/index.mdx)**
+**[ReductStore remote reference](../reduct-bridge/remote/reduct/index.mdx)**
 to tune them.
 
 The `[remotes.reduct.local.create_bucket]` table creates the bucket if it does

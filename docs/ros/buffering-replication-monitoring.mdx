@@ -6,7 +6,7 @@ description: Configure ReductStore to buffer ROS data on a robot, replicate sele
 <head>
   <link
     rel="canonical"
-    href="https://www.reduct.store/docs/guides/apps/ros/buffering-replication-monitoring"
+    href="https://www.reduct.store/docs/ros/buffering-replication-monitoring"
   />
 </head>
 
@@ -58,7 +58,7 @@ events expose the state of each background operation.
 
 ReductStore is available as a Docker image, a Snap package, and prebuilt
 binaries for Linux, macOS, and Windows. See the
-**[Getting Started guide](../../../getting-started/index.mdx)** for all
+**[Getting Started guide](../getting-started/index.mdx)** for all
 installation options.
 
 The ROS example uses the following `reductstore` service from the example
@@ -82,7 +82,7 @@ is used as the destination prefix, separating records from different robots.
 If `ROBOT_NAME` is unset, both settings default to `awesome-robot`.
 
 The service is part of the
-**[complete Docker Compose example](https://github.com/reductstore/website/blob/main/docs/guides/apps/ros/example/docker-compose.yml)**.
+**[complete Docker Compose example](https://github.com/reductstore/website/blob/main/docs/ros/example/docker-compose.yml)**.
 The complete ROS pipeline requires Docker with Docker Compose and host
 networking. On Docker Desktop, enable host networking before starting the
 containers. See Docker's
@@ -93,7 +93,7 @@ Clone the documentation repository and enter the example directory:
 
 ```bash
 git clone https://github.com/reductstore/website.git
-cd website/docs/guides/apps/ros/example
+cd website/docs/ros/example
 ```
 
 Choose a unique robot name and start ReductBridge. Docker Compose also starts
@@ -122,10 +122,10 @@ a trusted network.
 
 :::info
 You can create and manage ReductStore resources through the
-**[HTTP API](../../../glossary.mdx#http-api)**,
-**[SDKs](../../../glossary.mdx#sdk)**,
-**[CLI](../../../glossary.mdx#cli)**, or
-**[Web Console](../../../glossary.mdx#web-console)**. For robot deployments,
+**[HTTP API](../glossary.mdx#http-api)**,
+**[SDKs](../glossary.mdx#sdk)**,
+**[CLI](../glossary.mdx#cli)**, or
+**[Web Console](../glossary.mdx#web-console)**. For robot deployments,
 provisioning resources with environment variables is often more convenient
 because the same configuration can be applied consistently across an entire
 fleet. This example uses environment-variable provisioning.
@@ -196,13 +196,13 @@ blocks older than one day with zstd. Compression does not delete records, and
 reads automatically decompress the data, so clients do not need to handle
 compression. The FIFO quota remains the final storage bound.
 
-See **[ReductStore provisioning](../../../configuration/provisioning.mdx)** for
+See **[ReductStore provisioning](../configuration/provisioning.mdx)** for
 startup environment variables,
-**[replication settings](../../../configuration/settings.mdx#replication-settings)**
+**[replication settings](../configuration/settings.mdx#replication-settings)**
 for transaction-log limits and TLS options,
-**[data replication](../../../guides/data-replication.mdx)** for entry and label
+**[data replication](../guides/data-replication.mdx)** for entry and label
 filters, and
-**[lifecycle policies](../../../guides/lifecycle-policies.mdx)** for compression
+**[lifecycle policies](../guides/lifecycle-policies.mdx)** for compression
 and retention options.
 
 ## Monitoring
@@ -226,7 +226,7 @@ under the same entries after container recreation.
 
 System events are enabled by default and can be queried like other records with
 the HTTP API, SDKs, CLI, or Web Console. See
-**[replication diagnostics](../../../guides/data-replication.mdx#run-diagnostics)**,
-**[lifecycle diagnostics](../../../guides/lifecycle-policies.mdx#run-diagnostics)**,
-and **[system event settings](../../../configuration/settings.mdx#system-event-settings)**
+**[replication diagnostics](../guides/data-replication.mdx#run-diagnostics)**,
+**[lifecycle diagnostics](../guides/lifecycle-policies.mdx#run-diagnostics)**,
+and **[system event settings](../configuration/settings.mdx#system-event-settings)**
 for event fields, retention, and log-level configuration.

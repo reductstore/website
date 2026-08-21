@@ -6,7 +6,7 @@ description: Export raw ROS records from ReductStore as MCAP and inspect them in
 <head>
   <link
     rel="canonical"
-    href="https://www.reduct.store/docs/guides/apps/ros/using-foxglove"
+    href="https://www.reduct.store/docs/ros/using-foxglove"
   />
 </head>
 
@@ -31,7 +31,7 @@ you begin, you need:
   **[Foxglove web app](https://app.foxglove.dev/)**;
 - access to the ReductStore Web Console;
 - a ReductStore server with the
-  **[ReductROS](../../../extensions/official/ros-ext/index.mdx)** extension; and
+  **[ReductROS](../extensions/official/ros-ext/index.mdx)** extension; and
 - raw ROS entries with a valid `$schema` attachment containing their encoding,
   schema, topic, and schema name. ReductBridge writes this attachment
   automatically.
@@ -115,7 +115,7 @@ the output into manageable episodes:
 ```
 
 A new episode starts when either threshold is reached. See
-**[Exporting raw messages as MCAP](../../../extensions/official/ros-ext/raw.mdx#data-export)**
+**[Exporting raw messages as MCAP](../extensions/official/ros-ext/raw.mdx#data-export)**
 for the authoritative parameter reference.
 
 ## Create a temporary query link
@@ -151,7 +151,7 @@ available. The dialog also provides a **Copy** action.
 
 The link applies the saved query again when it is accessed and resolves the
 selected output record. It does not point to a persisted export. See the
-**[Query Link API](../../../http-api/query-link-api.mdx)** for details.
+**[Query Link API](../http-api/query-link-api.mdx)** for details.
 
 :::warning Temporary credential
 Anyone with the URL can read the query result without an API token until the
@@ -214,6 +214,6 @@ for connection and panel options.
   redirects can fail under CORS.
 - **A private deployment generates an unreachable URL:** Configure
   `RS_PUBLIC_URL` as the externally reachable ReductStore URL. See
-  **[ReductStore configuration](../../../configuration/index.mdx)**.
+  **[ReductStore configuration](../configuration/index.mdx)**.
 - **Playback is slow:** Shorten the time range, select fewer topics, or split the
   output with `duration` and `size`.

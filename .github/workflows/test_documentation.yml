@@ -273,11 +273,11 @@ jobs:
           lfs: false
 
       - name: Pull images
-        working-directory: docs/guides/apps/ros/example
+        working-directory: docs/ros/example
         run: docker compose pull
 
       - name: Start ROS compose example
-        working-directory: docs/guides/apps/ros/example
+        working-directory: docs/ros/example
         run: |
           set -euo pipefail
 
@@ -318,10 +318,10 @@ jobs:
       - name: Print Docker logs
         if: failure()
         continue-on-error: true
-        working-directory: docs/guides/apps/ros/example
+        working-directory: docs/ros/example
         run: docker compose logs --no-color
 
       - name: Stop ROS compose example
         if: always()
-        working-directory: docs/guides/apps/ros/example
+        working-directory: docs/ros/example
         run: docker compose down -v --remove-orphans

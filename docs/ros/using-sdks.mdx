@@ -4,10 +4,7 @@ description: Query and decode ROS data from ReductStore with the official client
 ---
 
 <head>
-  <link
-    rel="canonical"
-    href="https://www.reduct.store/docs/guides/apps/ros/using-sdks"
-  />
+  <link rel="canonical" href="https://www.reduct.store/docs/ros/using-sdks" />
 </head>
 
 # Querying ROS data with SDKs
@@ -19,7 +16,7 @@ ReductStore client SDKs. It expands on the SDK workflow introduced in the
 The example queries filtered infrared images from the
 **[public ROS dataset](https://play.reduct.store/)**, samples one image
 every 30 seconds, and saves the results as JPEG files. It uses the
-**[ReductROS](../../../extensions/official/ros-ext/index.mdx)** extension, which
+**[ReductROS](../extensions/official/ros-ext/index.mdx)** extension, which
 parses ROS 1 and ROS 2 messages into JSON and can encode raw image data as JPEG:
 
 ```python file=./example/query_orion.py
@@ -58,19 +55,19 @@ the JPEG from the first item's `data` field, and saves it as
 value, output path, and image parameters.
 
 To run this implementation, clone the documentation repository, enter the
-example directory, install the **[Python SDK](../../../sdk/py/index.mdx)**, and
+example directory, install the **[Python SDK](../sdk/py/index.mdx)**, and
 execute the script:
 
 ```bash
 git clone https://github.com/reductstore/website.git
-cd website/docs/guides/apps/ros/example
+cd website/docs/ros/example
 pip install reduct-py
 python query_orion.py
 ```
 
-See **[Python bucket queries](../../../sdk/py/bucket/index.mdx#query)** for the
+See **[Python bucket queries](../sdk/py/bucket/index.mdx#query)** for the
 Python API used in this implementation,
-**[comparison operators](../../../conditional-query/comparison-operators.mdx)**
+**[comparison operators](../conditional-query/comparison-operators.mdx)**
 for additional label conditions, and the
-**[ReductROS examples](../../../extensions/official/ros-ext/raw.mdx#examples)**
+**[ReductROS examples](../extensions/official/ros-ext/raw.mdx#examples)**
 for more query patterns.
