@@ -14,6 +14,7 @@ services:
       RS_LIFECYCLE_1_TYPE: delete
       RS_LIFECYCLE_1_OLDER_THAN: 30d
       RS_LIFECYCLE_1_INTERVAL: 10m
+      RS_LIFECYCLE_1_PROCESSING_INTERVAL: 6h
       RS_LIFECYCLE_1_ENTRIES: "sensors/**,!sensors/private/**"
 
       RS_LIFECYCLE_1_WHEN: |

@@ -44,6 +44,23 @@ A replication task can filter records before replicating them to the target buck
 | `entries` | A list of entry names or patterns that the replication task will use to filter records. If the list is empty, all records are replicated. See [Entry patterns](#entry-patterns).                         | List of strings  |
 | `when`    | A set of conditions that the record must meet to be replicated. The conditions are based on the record labels. For more information, see the **[Conditional Query Reference](/docs/conditional-query)**. | JSON-like object |
 
+### Destination Entry Prefix
+
+Use `dst_prefix` when several source buckets, devices, or robots replicate into the same destination bucket and you want their entries separated by a destination path prefix.
+The prefix is applied only to the destination entry name; it does not filter source entries and does not change the source bucket.
+
+For example, a source entry `camera/front` with `dst_prefix: "robot-1"` is written to the destination as `robot-1/camera/front`.
+If `dst_prefix` is empty or omitted, ReductStore keeps the destination entry name unchanged.
+
+### Transfer Compression
+
+Use `compression` to reduce bandwidth used by replication batch transfers between ReductStore instances.
+The setting is optional and accepts `none`, `gzip`, or `zstd`.
+The default is `none`, so existing replication tasks continue sending uncompressed batches unless you enable compression.
+
+When compression is enabled, ReductStore compresses each replication batch payload and sends it with the standard HTTP `Content-Encoding` header.
+If the destination ReductStore version does not support compressed request bodies, the source falls back to uncompressed transfer.
+
 #### Entry patterns
 
 Replication uses the same entry pattern semantics as multi-entry queries:
@@ -94,6 +111,8 @@ To spin up a new replication task, you must provide the following information:
 - **Remote Bucket**: The name of the bucket in the target database to which data will be replicated.
 - **Remote URL**: The URL of the target database.
 - **Remote Token**: The API token of the target database.
+- **Destination Entry Prefix**: An optional `dst_prefix` prepended to destination entry names.
+- **Transfer Compression**: Optional `compression` for replication batch payloads. Accepted values are `none`, `gzip`, and `zstd`.
 - **Filter Settings**: See the **[Conditional Replication](#conditional-replication)** section for more information.
 
 If the destination instance uses HTTPS, ReductStore verifies its TLS certificate by default.

@@ -6,5 +6,5 @@ AUTH_HEADER="Authorization: Bearer my-token"
 
 curl -X POST \
   -H "${AUTH_HEADER}" \
-  -d '{"bucket":"my-bucket","entries":["curl-example"],"older_than":"30d","interval":"1h","when":{"&anomaly":{"$eq":1}}}' \
+  -d '{"bucket":"my-bucket","entries":["curl-example"],"older_than":"30d","interval":"1h","processing_interval":"6h","when":{"&anomaly":{"$eq":1}}}' \
   "${API_PATH}"/lifecycles/my-lifecycle
