@@ -118,7 +118,7 @@ const config = {
           remarkPlugins: [codeImport, [remarkSVGBob, { useMdx: true }]],
         },
         blog: {
-          blogTitle: "Blog | Time Series Object Storage for AI Infrastructure",
+          blogTitle: "Blog | Time-Indexed Object Storage for AI Infrastructure",
           blogDescription:
             "ReductStore's Blog - Expert articles, updates, and discussions on managing and leveraging time series data in edge and cloud computing, robotics, computer vision, and IoT.",
           blogSidebarTitle: "Recent posts",

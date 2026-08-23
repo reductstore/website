@@ -46,11 +46,11 @@ Each method of storing ROS topics has its strengths, so let’s dive into the th
 
 [**The Bag Database**](https://github.com/swri-robotics/bag-database), an open-source tool, addresses the challenges of working with Rosbag files by offering a user-friendly, web-based user interface for managing bag files. This tool makes it easier to search for specific bags, download them, or run post-processing scripts. Additionally, the Bag Database provides a REST API, allowing engineers to automate tasks like indexing or organizing bag files.
 
-## Method 2: Store Rosbag Data in Time-Series Object Storage
+## Method 2: Store Rosbag Data in Time-Indexed Object Storage
 
 ![Method 2 Diagram](./img/method2.png)
 
-Another option is to store compressed Rosbag files in a _time-series object storage solution_ like [**ReductStore**](/). Time-series storage works really well for ROS data because it sorts and retrieves information by time, which fits naturally with how robots process and use data. This approach also lets you add helpful labels to the files, like AI labels, sensor types, or recording locations, making it easier to manage and access your data.
+Another option is to store compressed Rosbag files in a _time-indexed object storage solution_ like [**ReductStore**](/). Time-series storage works really well for ROS data because it sorts and retrieves information by time, which fits naturally with how robots process and use data. This approach also lets you add helpful labels to the files, like AI labels, sensor types, or recording locations, making it easier to manage and access your data.
 
 **Advantages**:
 

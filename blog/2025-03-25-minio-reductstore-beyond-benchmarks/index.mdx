@@ -12,7 +12,7 @@ image: ./img/minio_vs_reductstore.webp
 
 As data-driven applications evolve, the need for efficient storage solutions continues to grow. ReductStore and MinIO are two powerful solutions designed to handle massive amounts of unstructured data, but they serve different purposes.
 
-While ReductStore is optimized for time-series object storage with a focus on unstructured data such as sensor logs, images, and machine-generated data for robotics and IIoT, MinIO is a high-performance object storage system built for scalable, cloud-native applications with a focus on S3 compatibility and enterprise-wide storage needs.
+While ReductStore is optimized for time-indexed object storage with a focus on unstructured data such as sensor logs, images, and machine-generated data for robotics and IIoT, MinIO is a high-performance object storage system built for scalable, cloud-native applications with a focus on S3 compatibility and enterprise-wide storage needs.
 
 In this article, we'll explore the differences between ReductStore and MinIO, examine where each excels, and discuss how they can be used together to build a more comprehensive data storage solution.
 
@@ -58,7 +58,7 @@ In distributed setups - such as those with high latency or remote nodes - the to
 
 |     **Feature**      |                                  **ReductStore**                                  |                                **MinIO**                                |
 | :------------------: | :-------------------------------------------------------------------------------: | :---------------------------------------------------------------------: |
-| **Primary Use Case** | Time-series object storage for high-frequency, unstructured data (robotics/IIoT). |   Cloud-native object storage for scalable, S3-compatible workloads.    |
+| **Primary Use Case** | Time-indexed object storage for high-frequency, unstructured data (robotics/IIoT). |   Cloud-native object storage for scalable, S3-compatible workloads.    |
 |    **Data Type**     |    Sequential, time-indexed blobs (sensor streams, logs, images, event data).     | General-purpose unstructured data (files, backups, training datasets).  |
 |   **Performance**    |   Optimized for low-latency writes/reads of time-series data; batch ingestion.    |           High-throughput for large-scale parallel workloads.           |
 | **Deployment Focus** |   Edge devices, lightweight data acquisition, and central time-series storage.    | Enterprise data centers, multi-cloud clusters, and hybrid environments. |

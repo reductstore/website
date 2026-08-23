@@ -9,14 +9,14 @@ export default function RemoteDatasetsPage(): JSX.Element {
   return (
     <Layout
       title="Playground Datasets"
-      description="Explore various image datasets hosted in ReductStore's Time Series Object Store. Access IMDB reviews, cat images, and MNIST digits in this interactive demo."
+      description="Explore various image datasets hosted in ReductStore's Time-Indexed Object Store. Access IMDB reviews, cat images, and MNIST digits in this interactive demo."
     >
       <main>
         <SimpleHeader pageTitle="Playground Datasets" />
         <div className="container">
           <p>
             Welcome to the Playground Datasets, where you can explore and use
-            annotated images stored in ReductStore's Time Series Object Store.
+            annotated images stored in ReductStore's Time-Indexed Object Store.
             These datasets are hosted on a remote server accessible via{" "}
             <b>
               <Link href="https://play.reduct.store">
