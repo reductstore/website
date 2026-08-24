@@ -10,8 +10,6 @@ image: ./img/intro-image.png
 
 import BridgeDiagram from "./img/reduct-bridge-architecture.drawio.svg";
 
-![Img example](./img/intro-image.png)
-
 Robotics teams today wrestle with data that grows faster than their infrastructure. Every robot generates streams of images, sensor readings, logs, and events in different formats. These data piles are fragmented, expensive to move, and slow to analyze. Teams often rely on generic cloud tools that are not built for robotics. They charge way too much per gigabyte (when it should cost little per terabyte), hide the raw data behind proprietary APIs, and make it hard for robots (and developers) to access or use their own data.
 
 ReductStore introduces a new category: a database purpose built for robotics data pipelines. It is open, efficient, and developer friendly. It lets teams store, query, and manage any time series of unstructured data directly from robots to the cloud.
@@ -30,7 +28,7 @@ Developers can run ReductStore on an edge device for local data capture and repl
 
 ## Recording ROS 2 Data with Reduct Bridge
 
-Most robotics data starts as ROS 2 topics. [Reduct Bridge](/docs/reduct-bridge) records those topics straight into ReductStore on the robot, one entry per topic and one timestamped record per message. From there the same data replicates to the cloud on the labels and time windows you choose.
+Most robotics data starts as ROS 2 topics. [**Reduct Bridge**](/docs/reduct-bridge) records those topics straight into ReductStore on the robot, one entry per topic and one timestamped record per message. From there the same data replicates to the cloud on the labels and time windows you choose.
 
 <BridgeDiagram
   role="img"
@@ -178,9 +176,21 @@ ReductStore works with the tools robotics engineers already trust.
 
 ### INSAION
 
-[INSAION](https://www.insaion.com) is a robotics observability platform built on top of ReductStore. Its agent embeds ReductStore on the robot to record every topic locally, then syncs only the time windows an alarm asks for to the cloud. On that data it layers fleet dashboards, per device inventory, synchronized replay of camera, LiDAR, and logs, and AI diagnostics.
+[**INSAION**](https://www.insaion.com) is a robotics observability platform built on top of ReductStore. Instead of running as a separate service, the INSAION Agent embeds ReductStore directly on the robot as a supervised process and records every configured topic locally, at full rate.
 
-Read more in our [ReductStore and INSAION partnership](/blog/news/reductstore-insaion-partnership) announcement.
+Each recording pipeline (a named group of topics such as `perception` or `telemetry`) writes MCAP slices into a single rolling-buffer bucket, one entry per pipeline, keyed by timestamp and labeled with the recording session. Retention is handled by ReductStore's own FIFO, HARD, and NONE policies, so an operator picks a disk budget in the UI and the edge store enforces it. That is the Rolling Buffer: always the newest data that fits.
+
+:::note[TODO: screenshot]
+Add a screenshot of the INSAION Rolling Buffer editor (pipeline and quota configuration).
+:::
+
+When an alarm fires or an operator selects a time window, INSAION runs a Surgical Cloud Sync: it queries the local ReductStore for the matching slices by time range and label, then streams those exact slices straight to S3 without routing the heavy data through its servers. Recording keeps running through a dropped link, and uploads resume when connectivity returns.
+
+:::note[TODO: screenshot]
+Add a screenshot of an incident window uploading from the device to the cloud.
+:::
+
+On top of that stored data, INSAION adds fleet dashboards, per device inventory and access control, synchronized replay of camera, LiDAR, TF, and logs, and AI diagnostics. Read more in our [**ReductStore and INSAION partnership**](/blog/news/reductstore-insaion-partnership) announcement.
 
 ### Foxglove Studio
 

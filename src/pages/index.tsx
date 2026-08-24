@@ -23,7 +23,6 @@ import HomepageStats from "../components/homepage/HomepageStats";
 import HomepagePartners from "../components/homepage/HomepagePartners";
 import HomepageCompanies from "../components/homepage/HomepageCompanies";
 import HomepageReductBridge from "@site/src/components/homepage/HomepageReductBridge";
-import HomepagePartnership from "../components/homepage/HomepagePartnership";
 
 function HomepageHeader() {
   return (
@@ -69,8 +68,6 @@ export default function Home(): JSX.Element {
       <HomepageHeader />
       <main>
         <div className="container">
-          <HomepagePartnership />
-          <hr className={styles.industrialHr} />
           <HomepageArchitecture />
           <hr className={styles.industrialHr} />
           <HomepageBenefits />

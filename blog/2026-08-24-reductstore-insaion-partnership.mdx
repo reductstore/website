@@ -17,7 +17,7 @@ ReductStore and INSAION have formalized their partnership for robotics edge reco
 
 A robot's most valuable data is also its heaviest: camera frames, LiDAR point clouds, high frequency control signals. Streaming all of it to the cloud is expensive and often impossible on real connectivity. Recording nothing leaves you blind when an incident happens.
 
-So you keep it on the robot and pull only what matters. That is the same edge constraint we cover in [AMR fleet data infrastructure](/blog/amr-fleet-data-infrastructure).
+So you keep it on the robot and pull only what matters. That is the same edge constraint we cover in [**AMR fleet data infrastructure**](/blog/amr-fleet-data-infrastructure).
 
 ## What ReductStore keeps on the robot
 
@@ -28,7 +28,7 @@ ReductStore runs embedded in the INSAION Agent, next to where the data is produc
 - **Queries.** Retrieve a window by time and label, or browse it in the web console.
 - **Replication.** Move selected records to any backend you run: an S3 bucket, your own cloud, or another ReductStore.
 
-You can point [Reduct Bridge](/docs/reduct-bridge) or the SDKs straight at it, with or without INSAION on top. For the storage architecture underneath, see [How to Store and Manage Robotics Data](/blog/store-robotic-data).
+You can point [**Reduct Bridge**](/docs/reduct-bridge) or the SDKs straight at it, with or without INSAION on top. For the storage architecture underneath, see [**How to Store and Manage Robotics Data**](/blog/store-robotic-data).
 
 ## What INSAION adds on top
 
@@ -47,9 +47,9 @@ Each recording pipeline writes MCAP slices into ReductStore as timestamped recor
 
 When an incident window is needed, INSAION queries ReductStore by time range and label, then streams those exact slices straight to S3, never routing the heavy data through its own servers.
 
-<!-- Screenshot placeholder: INSAION fleet dashboard -->
-
-<small>INSAION fleet dashboard showing live robot status.</small>
+:::note[TODO: screenshot]
+Add a screenshot of the INSAION fleet dashboard showing live robot status.
+:::
 
 <!-- link to ReductStore's technical companion post once its slug is finalized -->
 <!-- link to INSAION's partnership announcement at its final insaion.com URL -->

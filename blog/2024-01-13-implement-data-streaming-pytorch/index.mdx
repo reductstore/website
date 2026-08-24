@@ -8,10 +8,6 @@ date: 2024-01-13
 image: ./img/pytorch-iterabledataset.png
 ---
 
-![PyTorch Training Diagram](./img/pytorch-iterabledataset.png)
-
-<small>PyTorch training loop with data streaming from remote device</small>
-
 When training a model, we aim to process data in batches, shuffle data at each epoch to avoid over fitting, and leverage Python's `multiprocessing` for data fetching through multiple workers.
 
 The reason that we want to use multiple workers is that GPUs are capable of handling large amounts of data concurrently; however, the bottleneck often lies in the time-consuming task of loading this data into the system.
