@@ -2,23 +2,37 @@
   padding: 2rem 0;
 }
 
-.row {
+.description {
+  max-width: 720px;
+  margin: 0 auto 2.5rem;
+}
+
+.logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.logoBox {
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 180px;
+  height: 90px;
+  padding: 1rem 1.5rem;
+  background: white;
+  border-radius: 8px;
 }
 
-.roboticsImage {
-  max-width: 100%;
+.logoImage {
+  max-width: 130px;
+  max-height: 58px;
+  width: auto;
   height: auto;
-  border-radius: 12px;
-}
-
-:global(html[data-theme="light"]) .roboticsImage {
-  color-scheme: light !important;
-}
-
-:global(html[data-theme="dark"]) .roboticsImage {
-  color-scheme: dark !important;
+  object-fit: contain;
 }
 
 .btn {
@@ -26,7 +40,7 @@
 }
 
 @media (max-width: 996px) {
-  .row {
-    flex-direction: column-reverse;
+  .logos {
+    gap: 1rem;
   }
 }
