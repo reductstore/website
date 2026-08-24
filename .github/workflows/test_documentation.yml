@@ -180,6 +180,11 @@ jobs:
               continue
             fi
 
+            if [[ "$example" == *"/ros_export.sh" ]]; then
+              echo "Skip $example (depends on the external Orion dataset)"
+              continue
+            fi
+
             echo '${{secrets.LICENSE_KEY}}' > ./license.lic
 
             IS_ZENOH=0
