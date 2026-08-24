@@ -33,10 +33,18 @@ Most robotics data starts as ROS 2 topics. [**Reduct Bridge**](/docs/reduct-brid
 <BridgeDiagram
   role="img"
   aria-label="Reduct Bridge architecture"
-  style={{ width: "100%", height: "auto" }}
+  style={{
+    maxWidth: "440px",
+    width: "100%",
+    height: "auto",
+    display: "block",
+    margin: "0 auto",
+  }}
 />
 
 This is the whole path from a running robot to a queryable, cloud replicated dataset.
+
+Reduct Bridge is one way in, not the only one. [**INSAION**](#insaion) ships an agent that embeds ReductStore and records ROS 2 for you; reach for Reduct Bridge when you want to point ReductStore at your own topics directly.
 
 ## Data Handling and Querying
 
