@@ -73,6 +73,7 @@ You can provision replication tasks by setting environment variables. The follow
 | `RS_REPLICATION_<ID>_DST_BUCKET`  |         | Remote bucket name (required). It must be created before replication                                                                |
 | `RS_REPLICATION_<ID>_DST_HOST`    |         | URL of destination instance (required). For example, https://play.reduct.store or http://localhost:8383                             |
 | `RS_REPLICATION_<ID>_DST_TOKEN`   |         | Token for destination instance                                                                                                      |
+| `RS_REPLICATION_<ID>_DST_PREFIX`  |         | Prefix added to destination entry names. For example, `robot-1` writes `/camera/image` as `robot-1/camera/image`.                   |
 | `RS_REPLICATION_<ID>_ENTRIES`     |         | Comma-separated entry names or patterns to replicate. If empty, all entries are replicated. Supports `*`, `**`, and `!` exclusions. |
 | `RS_REPLICATION_<ID>_WHEN`        |         | Condition for replication. If not set, all entries will be replicated.                                                              |
 | `RS_REPLICATION_<ID>_MODE`        | enabled | Replication mode. Accepted values: `enabled`, `paused`, `disabled` (case-insensitive).                                              |
@@ -87,17 +88,16 @@ These settings apply to all replication tasks created through provisioning, the 
 
 You can provision lifecycle policies by setting environment variables. Lifecycle policies run in the background and currently support deleting or compressing old records in a bucket.
 
-| Name                                    | Default         | Description                                                                                                                                         |
-| --------------------------------------- | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `RS_LIFECYCLE_<ID>_NAME`                |                 | Provisioned lifecycle policy name (required)                                                                                                        |
-| `RS_LIFECYCLE_<ID>_TYPE`                |                 | Lifecycle action type (required). Supported values: `delete`, `compress`.                                                                           |
-| `RS_LIFECYCLE_<ID>_BUCKET`              |                 | Bucket to apply the lifecycle policy to (required)                                                                                                  |
-| `RS_LIFECYCLE_<ID>_OLDER_THAN`          |                 | Maximum record age before the action is applied, for example `30d`, `24h`, or `3600s` (required). Minimum value is `1h`.                            |
-| `RS_LIFECYCLE_<ID>_INTERVAL`            | 3600s           | Interval between lifecycle runs, for example `10m`, `1h`, or `3600s`. Minimum value is `10m`.                                                       |
-| `RS_LIFECYCLE_<ID>_PROCESSING_INTERVAL` | `24 * interval` | Maximum span of data time processed by one run, for example `6h`, `12h`, or `1d`. Must be a positive duration.                                      |
-| `RS_LIFECYCLE_<ID>_ENTRIES`             |                 | Comma-separated entry names or patterns to clean. If empty, all entries are matched. Supports `*`, `**`, and `!` exclusions.                        |
-| `RS_LIFECYCLE_<ID>_WHEN`                |                 | JSON condition for records to delete. Supported only for `delete` policies. Uses the same condition syntax as queries, but `#ext` is not supported. |
-| `RS_LIFECYCLE_<ID>_MODE`                | enabled         | Policy mode: `enabled`, `disabled`, or `dry_run`.                                                                                                   |
+| Name                           | Default | Description                                                                                                                                         |
+| ------------------------------ | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `RS_LIFECYCLE_<ID>_NAME`       |         | Provisioned lifecycle policy name (required)                                                                                                        |
+| `RS_LIFECYCLE_<ID>_TYPE`       |         | Lifecycle action type (required). Supported values: `delete`, `compress`.                                                                           |
+| `RS_LIFECYCLE_<ID>_BUCKET`     |         | Bucket to apply the lifecycle policy to (required)                                                                                                  |
+| `RS_LIFECYCLE_<ID>_OLDER_THAN` |         | Maximum record age before the action is applied, for example `30d`, `24h`, or `3600s` (required). Minimum value is `1h`.                            |
+| `RS_LIFECYCLE_<ID>_INTERVAL`   | 3600s   | Interval between lifecycle runs, for example `10m`, `1h`, or `3600s`. Minimum value is `10m`.                                                       |
+| `RS_LIFECYCLE_<ID>_ENTRIES`    |         | Comma-separated entry names or patterns to clean. If empty, all entries are matched. Supports `*`, `**`, and `!` exclusions.                        |
+| `RS_LIFECYCLE_<ID>_WHEN`       |         | JSON condition for records to delete. Supported only for `delete` policies. Uses the same condition syntax as queries, but `#ext` is not supported. |
+| `RS_LIFECYCLE_<ID>_MODE`       | enabled | Policy mode: `enabled`, `disabled`, or `dry_run`.                                                                                                   |
 
 Example:
 
@@ -108,7 +108,6 @@ RS_LIFECYCLE_A_BUCKET=telemetry
 RS_LIFECYCLE_A_ENTRIES=sensors/**,!sensors/private/**,env/temp,env/humidity
 RS_LIFECYCLE_A_OLDER_THAN=30d
 RS_LIFECYCLE_A_INTERVAL=10m
-RS_LIFECYCLE_A_PROCESSING_INTERVAL=6h
 RS_LIFECYCLE_A_WHEN={"$eq":["&label","true"]}
 RS_LIFECYCLE_A_MODE=dry_run
 ```

@@ -70,6 +70,22 @@
       ]
     },
     {
+      "type": "category",
+      "label": "\uD83E\uDD16 ROS",
+      "collapsed": true,
+      "link": {
+        "type": "doc",
+        "id": "ros/index"
+      },
+      "items": [
+        "ros/data-collection",
+        "ros/buffering-replication-monitoring",
+        "ros/using-sdks",
+        "ros/using-grafana",
+        "ros/using-foxglove"
+      ]
+    },
+    {
       "type": "doc",
       "label": "\uD83D\uDDD2\uFE0F Glossary",
       "id": "glossary"
