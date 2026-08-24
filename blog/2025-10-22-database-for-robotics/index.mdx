@@ -180,15 +180,11 @@ ReductStore works with the tools robotics engineers already trust.
 
 Each recording pipeline (a named group of topics such as `perception` or `telemetry`) writes MCAP slices into a single rolling-buffer bucket, one entry per pipeline, keyed by timestamp and labeled with the recording session. Retention is handled by ReductStore's own FIFO, HARD, and NONE policies, so an operator picks a disk budget in the UI and the edge store enforces it. That is the Rolling Buffer: always the newest data that fits.
 
-:::note[TODO: screenshot]
-Add a screenshot of the INSAION Rolling Buffer editor (pipeline and quota configuration).
-:::
+![INSAION Rolling Buffer editor](./img/insaion-pipeline-settings.png)
 
 When an alarm fires or an operator selects a time window, INSAION runs a Surgical Cloud Sync: it queries the local ReductStore for the matching slices by time range and label, then streams those exact slices straight to S3 without routing the heavy data through its servers. Recording keeps running through a dropped link, and uploads resume when connectivity returns.
 
-:::note[TODO: screenshot]
-Add a screenshot of an incident window uploading from the device to the cloud.
-:::
+![INSAION Incident Window editor](./img/insaion-incident-window.png)
 
 On top of that stored data, INSAION adds fleet dashboards, per device inventory and access control, synchronized replay of camera, LiDAR, TF, and logs, and AI diagnostics. Read more in our [**ReductStore and INSAION partnership**](/blog/news/reductstore-insaion-partnership) announcement.
 

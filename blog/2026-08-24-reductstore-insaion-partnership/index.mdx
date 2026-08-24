@@ -7,6 +7,8 @@ date: 2026-08-24
 authors: anthony
 ---
 
+![INSAION - ReductStore partnership](./img/insaion-reductstore.png)
+
 Your robot loses its uplink halfway through an eight hour shift. Cameras and sensors keep writing. Sending every frame to the cloud was never an option.
 
 ReductStore and INSAION have formalized their partnership for robotics edge recording. It makes official what already ships in production: ReductStore is the storage engine behind INSAION's edge recording. Every Rolling Buffer, every device recording, and every Surgical Cloud Sync runs on ReductStore embedded directly in the INSAION Agent.
@@ -46,11 +48,3 @@ Recording continues on the robot through a dropped link, and uploads resume when
 Each recording pipeline writes MCAP slices into ReductStore as timestamped records: one `rolling-buffer` bucket per device, one entry per pipeline, each slice keyed by its start time and labeled with the recording session. The store runs embedded in the agent, bound to localhost and authenticated with the device's own token, so raw sensor data never leaves the machine unless you ask.
 
 When an incident window is needed, INSAION queries ReductStore by time range and label, then streams those exact slices straight to S3, never routing the heavy data through its own servers.
-
-:::note[TODO: screenshot]
-Add a screenshot of the INSAION fleet dashboard showing live robot status.
-:::
-
-<!-- link to ReductStore's technical companion post once its slug is finalized -->
-<!-- link to INSAION's partnership announcement at its final insaion.com URL -->
-<!-- link to INSAION's edge recording deep dive at its final insaion.com URL -->
