@@ -36,7 +36,7 @@ Most robotics data starts as ROS 2 topics. [**Reduct Bridge**](/docs/reduct-brid
   style={{ maxWidth: "100%", height: "auto" }}
 />
 
-This is the whole path from a running robot to a queryable, cloud replicated dataset, with no bag files to shuffle and no reformatting in between.
+This is the whole path from a running robot to a queryable, cloud replicated dataset.
 
 ## Data Handling and Querying
 
@@ -176,9 +176,9 @@ ReductStore works with the tools robotics engineers already trust.
 
 ### INSAION
 
-[**INSAION**](https://www.insaion.com) is a robotics observability platform built on top of ReductStore. Instead of running as a separate service, the INSAION Agent embeds ReductStore directly on the robot as a supervised process and records every configured topic locally, at full rate.
+[**INSAION**](https://www.insaion.com) is a robotics observability platform built on top of ReductStore. Instead of running as a separate service, the INSAION Agent embeds ReductStore directly on the robot as a supervised process and records every configured topic locally.
 
-Each recording pipeline (a named group of topics such as `perception` or `telemetry`) writes MCAP slices into a single rolling-buffer bucket, one entry per pipeline, keyed by timestamp and labeled with the recording session. Retention is handled by ReductStore's own FIFO, HARD, and NONE policies, so an operator picks a disk budget in the UI and the edge store enforces it. That is the Rolling Buffer: always the newest data that fits.
+Each recording pipeline (a named group of topics such as `navigation`, `perception` or `telemetry`) writes MCAP slices into a single rolling-buffer bucket, one entry per pipeline, keyed by timestamp and labeled with the recording session. Retention is handled by ReductStore's own FIFO, HARD, and NONE policies, so an operator picks a disk quota in the UI and the edge store enforces it.
 
 ![INSAION Rolling Buffer editor](./img/insaion-pipeline-settings.png)
 

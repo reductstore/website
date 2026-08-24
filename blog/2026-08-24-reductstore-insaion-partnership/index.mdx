@@ -23,14 +23,14 @@ So you keep it on the robot and pull only what matters. That is the same edge co
 
 ## What ReductStore keeps on the robot
 
-ReductStore runs embedded in the INSAION Agent, next to where the data is produced. It stores each topic as its own entry and each message as a timestamped record. On the device it handles:
+ReductStore is the storage layer inside the INSAION Agent, sitting next to the sensors. It stores each topic as its own entry and each message as a timestamped record, so data lands in the shape robots actually produce. That gives the agent a local store built to:
 
-- **Ingestion.** ROS messages, raw binary, and time series in one model, so a query asks for one topic over one time range.
-- **Retention you set.** FIFO, HARD, or NONE eviction. FIFO makes the Rolling Buffer: the newest data that fits the disk you allotted, so the device never silently fills up.
-- **Queries.** Retrieve a window by time and label, or browse it in the web console.
-- **Replication.** Move selected records to any backend you run: an S3 bucket, your own cloud, or another ReductStore.
+- **Ingest fast.** Absorb bursts from multi camera and LiDAR rigs as recording pipelines write their MCAP slices, without dropping messages.
+- **Retain within a budget.** FIFO, HARD, or NONE quotas per device. FIFO is the Rolling Buffer: the newest data that fits the disk you set, so a robot never quietly fills up.
+- **Retrieve precisely.** Every record is keyed by time and labeled with its recording session, so the agent pulls the exact window around an incident by time range and label, with no full scans.
+- **Run anywhere, unattended.** A single Rust binary with no extra services to manage, embedded in the agent and identical on one prototype or a fleet of hundreds.
 
-You can point [**Reduct Bridge**](/docs/reduct-bridge) or the SDKs straight at it, with or without INSAION on top. For the storage architecture underneath, see [**How to Store and Manage Robotics Data**](/blog/store-robotic-data).
+That mapping onto how robots generate data is why INSAION built its edge recording on ReductStore.
 
 ## What INSAION adds on top
 
