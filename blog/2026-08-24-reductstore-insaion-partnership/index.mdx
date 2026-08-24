@@ -34,12 +34,13 @@ That mapping onto how robots generate data is why INSAION built its edge recordi
 
 ## What INSAION adds on top
 
-ReductStore keeps the data. INSAION turns it into observability for the whole fleet:
+ReductStore keeps the data on the robot. INSAION is the platform on top: it turns that local store into observability for an entire fleet, in one place. Operators watch every robot from a single view and drop into any one device when they need to. On top of the stored data it adds:
 
 - **Zero config discovery.** It finds ROS topics with no manual setup and keeps a per device inventory with access control.
+- **Fleet dashboards and alerts.** Live status and metrics across every robot, with alarms that fire when something drifts out of range.
 - **Incident capture.** When an alarm fires, Surgical Cloud Sync reads the exact window from the local ReductStore instance and uploads only that.
 - **Multimodal replay.** Camera, LiDAR, TF, and logs from that moment play back together, so an engineer sees the failure instead of a chart that hints at it.
-- **AI diagnostics.** It summarizes what happened in plain language.
+- **AI diagnostics.** It summarizes what happened in plain language and points at the likely cause.
 
 Recording continues on the robot through a dropped link, and uploads resume when the link is back. The robot decides what to keep. The platform decides what to pull.
 
