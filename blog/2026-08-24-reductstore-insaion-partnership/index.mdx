@@ -11,7 +11,7 @@ authors: anthony
 
 Your robot loses its uplink halfway through an eight hour shift. Cameras and sensors keep writing. Sending every frame to the cloud was never an option.
 
-ReductStore and INSAION have formalized their partnership for robotics edge recording. It makes official what already ships in production: ReductStore is the storage engine behind INSAION's edge recording. Every Rolling Buffer, every device recording, and every Surgical Cloud Sync runs on ReductStore embedded directly in the INSAION Agent.
+ReductStore and [**INSAION**](https://www.insaion.com) have formalized their partnership for robotics edge recording. It makes official what already ships in production: ReductStore is the storage engine behind INSAION's edge recording. Every Rolling Buffer, every device recording, and every Surgical Cloud Sync runs on ReductStore embedded directly in the INSAION Agent.
 
 <!-- truncate -->
 
@@ -19,7 +19,7 @@ ReductStore and INSAION have formalized their partnership for robotics edge reco
 
 A robot's most valuable data is also its heaviest: camera frames, LiDAR point clouds, high frequency control signals. Streaming all of it to the cloud is expensive and often impossible on real connectivity. Recording nothing leaves you blind when an incident happens.
 
-So you keep it on the robot and pull only what matters. INSAION makes that same case from the platform side in its [**partnership announcement**](https://www.insaion.com/blog/reductstore-partnership).
+The way out is to record everything at full rate on the robot and move only what you need. A device keeps a rolling window of its own data, and when something goes wrong you pull the exact minutes around the event instead of a day of footage. Storage stays cheap because it stays local, and the network only carries the parts a person actually looks at.
 
 ## What ReductStore keeps on the robot
 
