@@ -23,9 +23,9 @@ The way out is to record everything at full rate on the robot and move only what
 
 ## What ReductStore keeps on the robot
 
-ReductStore is the storage layer inside the INSAION Agent, sitting next to the sensors. It stores each topic as its own entry and each message as a timestamped record, so data lands in the shape robots actually produce. That gives the agent a local store built to:
+ReductStore is the storage layer inside the INSAION Agent, sitting next to the sensors. It stores multimodal data with timestamps and labels, so it lands in the shape robots actually produce. That gives the agent a local store built to:
 
-- **Ingest fast.** Absorb bursts from multi camera and LiDAR rigs as recording pipelines write their MCAP slices, without dropping messages.
+- **Ingest fast.** Absorb bursts of camera, LiDAR, and control data as recording pipelines write their MCAP slices, without dropping messages.
 - **Retain within a budget.** FIFO, HARD, or NONE quotas per device. FIFO is the Rolling Buffer: the newest data that fits the disk you set, so a robot never quietly fills up.
 - **Retrieve precisely.** Every record is keyed by time and labeled with its recording session, so the agent pulls the exact window around an incident by time range and label, with no full scans.
 - **Run anywhere, unattended.** A single Rust binary with no extra services to manage, embedded in the agent and identical on one prototype or a fleet of hundreds.
