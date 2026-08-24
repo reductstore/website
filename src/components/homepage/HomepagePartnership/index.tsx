@@ -12,8 +12,9 @@ function HomepagePartnership() {
           <h2>ReductStore and INSAION partner on edge recording</h2>
           <p className={styles.description}>
             ReductStore is the storage engine behind INSAION's edge recording.
-            Robots capture camera, LiDAR, and control data locally, then sync
-            only the time windows an incident needs to the cloud.
+            Robots capture camera, LiDAR, and control data locally with
+            ReductStore, and INSAION adds fleet observability on top:
+            dashboards, incident replay, and AI diagnostics.
           </p>
           <Link
             className={clsx("button button--primary button--lg", styles.btn)}
