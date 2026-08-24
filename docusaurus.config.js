@@ -7,6 +7,7 @@ import "dotenv/config";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import remarkSVGBob from "remark-svgbob";
+import remarkResponsiveSVGBob from "./src/plugins/remark-responsive-svgbob/index.js";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -115,7 +116,11 @@ const config = {
         docs: {
           sidebarPath: require.resolve("./sidebars.json"),
           editUrl: "https://github.com/reductstore/docs/tree/main",
-          remarkPlugins: [codeImport, [remarkSVGBob, { useMdx: true }]],
+          remarkPlugins: [
+            codeImport,
+            [remarkSVGBob, { useMdx: true }],
+            remarkResponsiveSVGBob,
+          ],
         },
         blog: {
           blogTitle: "Blog | Time Series Object Storage for AI Infrastructure",
@@ -126,7 +131,11 @@ const config = {
           postsPerPage: 3,
           showReadingTime: true,
           editUrl: "https://github.com/reductstore/docs/tree/main",
-          remarkPlugins: [remarkMath, [remarkSVGBob, { useMdx: true }]],
+          remarkPlugins: [
+            remarkMath,
+            [remarkSVGBob, { useMdx: true }],
+            remarkResponsiveSVGBob,
+          ],
           rehypePlugins: [rehypeKatex],
         },
         theme: {
