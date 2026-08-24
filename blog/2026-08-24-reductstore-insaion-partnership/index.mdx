@@ -42,7 +42,7 @@ ReductStore keeps the data on the robot. INSAION is the platform on top: it turn
 - **Multimodal replay.** Camera, LiDAR, TF, and logs from that moment play back together, so an engineer sees the failure instead of a chart that hints at it.
 - **AI diagnostics.** It summarizes what happened in plain language and points at the likely cause.
 
-Recording continues on the robot through a dropped link, and uploads resume when the link is back. The robot decides what to keep. The platform decides what to pull.
+Even when the link drops, the robot keeps recording, and uploads pick back up once it returns. The robot holds everything locally, and the platform pulls only what you need.
 
 ## How it works in practice
 

@@ -44,7 +44,7 @@ Most robotics data starts as ROS 2 topics. [**Reduct Bridge**](/docs/reduct-brid
 
 This is the whole path from a running robot to a queryable, cloud replicated dataset.
 
-Reduct Bridge is one way in. [**INSAION**](#insaion) is another: its agent embeds ReductStore and records ROS 2 for you. Wire it yourself, or let the agent do it.
+Reduct Bridge is one way to get ROS 2 topics into ReductStore. And if you want full observability on top of that data, platforms like [**INSAION**](#insaion) build on ReductStore directly: their agent embeds it on the robot and handles the recording for you.
 
 ## Data Handling and Querying
 
@@ -190,7 +190,7 @@ Each recording pipeline (a named group of topics such as `navigation`, `percepti
 
 ![INSAION Rolling Buffer editor](./img/insaion-pipeline-settings.png)
 
-When an alarm fires or an operator selects a time window, INSAION runs a Surgical Cloud Sync: it queries the local ReductStore for the matching slices by time range and label, then streams those exact slices straight to S3 without routing the heavy data through its servers. Recording keeps running through a dropped link, and uploads resume when connectivity returns.
+When an alarm fires or an operator selects a time window, INSAION runs a Surgical Cloud Sync: it queries the local ReductStore for the matching slices by time range and label, then streams those exact slices straight to S3 without routing the heavy data through its servers. And if the robot loses connectivity, it keeps recording locally and resumes uploading once the link is back.
 
 ![INSAION Incident Window editor](./img/insaion-incident-window.png)
 
