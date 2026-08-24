@@ -174,7 +174,17 @@ Replication tasks can be configured to replicate only specific data based on lab
 
 In the cloud, by batching multiple records into single data blocks, ReductStore minimizes both the number of blobs and the number of API calls to S3. This design reduces storage and retrieval costs by leveraging S3's pricing model.
 
-![Diagram Cloud Integration](./img/cloud-integration.tinified.png)
+<img
+  src={require("./img/cloud-integration.tinified.png").default}
+  alt="Diagram Cloud Integration"
+  style={{
+    maxWidth: "640px",
+    width: "100%",
+    height: "auto",
+    display: "block",
+    margin: "0 auto",
+  }}
+/>
 
 > This approach can deliver major savings when working with large volumes of robotics data.
 
@@ -226,7 +236,17 @@ Canonical's COS (Canonical Observability Stack) for robotics is an end to end ob
 
 The missing piece in this stack has always been a purpose built system for storing and managing robotics data efficiently from robot to cloud.
 
-![Diagram Observability Stack Integration](./img/observability-stack-integration.tinified.png)
+<img
+  src={require("./img/observability-stack-integration.tinified.png").default}
+  alt="Diagram Observability Stack Integration"
+  style={{
+    maxWidth: "520px",
+    width: "100%",
+    height: "auto",
+    display: "block",
+    margin: "0 auto",
+  }}
+/>
 
 ReductStore closes that gap. It provides a data storage and streaming solution optimized for both edge and cloud environments, along with an agent that captures data directly from ROS and streams it into the observability pipeline.
 
