@@ -175,6 +175,16 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      // News banner at the top of every page
+      announcementBar: {
+        id: "insaion_partnership_2026_08",
+        content:
+          'News: ReductStore and INSAION partner on edge recording. <a href="/blog/news/reductstore-insaion-partnership">Read the announcement</a>.',
+        backgroundColor: "#0d1117",
+        textColor: "#ffffff",
+        isCloseable: true,
+      },
+
       // Algolia search integration
       algolia: {
         appId: "PRYY64U3U1",
