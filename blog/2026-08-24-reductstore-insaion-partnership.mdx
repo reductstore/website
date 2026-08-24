@@ -1,6 +1,6 @@
 ---
 title: "ReductStore and INSAION: Edge Recording Partnership"
-description: "ReductStore is the storage engine behind INSAION's edge recording: local capture on the robot, selective cloud sync, and retention you set."
+description: "ReductStore is the storage engine behind INSAION's edge recording. It keeps data on the robot, and INSAION adds fleet observability on top."
 tags: [news]
 slug: news/reductstore-insaion-partnership
 date: 2026-08-24
@@ -15,13 +15,23 @@ ReductStore and INSAION have formalized their partnership for robotics edge reco
 
 ## Why it matters
 
-A robot's most valuable data is also its heaviest: camera frames, LiDAR point clouds, high frequency control signals. Streaming all of it to the cloud is expensive and often impossible on real connectivity. Recording nothing leaves you blind when an incident happens. The robot needs a storage layer that absorbs bursts without dropping messages, keeps the most recent data inside a fixed disk budget, and retrieves a precise window without scanning terabytes. That is what ReductStore does.
+A robot's most valuable data is also its heaviest: camera frames, LiDAR point clouds, high frequency control signals. Streaming all of it to the cloud is expensive and often impossible on real connectivity. Recording nothing leaves you blind when an incident happens. The robot needs a storage layer that absorbs bursts without dropping messages, keeps the most recent data inside a fixed disk budget, and answers a precise query without scanning terabytes. That is what ReductStore does.
 
-## How the integration works
+## What ReductStore keeps on the robot
 
-ReductStore runs embedded in the INSAION Agent. It records the configured pipelines into a local buffer that stays inside its disk budget. When an alarm fires or an operator asks for a window, only that window leaves the robot. INSAION reads it straight from the local ReductStore instance and syncs it to the cloud. A dropped link does not stop recording. The edge buffer keeps capturing, and uploads resume when the link is back.
+ReductStore runs embedded in the INSAION Agent, next to where the data is produced. It stores each topic as its own entry and each message as a timestamped record. ROS messages, raw binary, and time series all land in the same model, so a later query asks for one topic over one time range instead of unpacking a whole bag file.
 
-Retention on the device is a policy you set, not a background cleanup. Each deployment picks ReductStore's FIFO, HARD, or NONE eviction. FIFO keeps recording within a quota by evicting the oldest records first. HARD keeps existing records and stops recording once the quota is full. NONE leaves capacity to the operator. The device never silently fills up.
+Retention is a policy you set, not a background cleanup. Each deployment picks ReductStore's FIFO, HARD, or NONE eviction. FIFO keeps recording within a byte quota by dropping the oldest records first, which is what makes the Rolling Buffer: the newest data that fits the disk you allotted. HARD keeps what is already recorded and stops when the quota is full. NONE leaves capacity to the operator. Either way the device never silently fills up.
+
+The data stays queryable and movable while it sits there. You retrieve a window by time and label, browse it in the web console, and replicate selected records to any backend you run: an S3 bucket, your own cloud, or another ReductStore on a central server.
+
+## What INSAION adds on top
+
+ReductStore keeps the data. INSAION turns it into observability for the whole fleet. The platform sits on top of the same records and makes them usable across every robot, not one device at a time.
+
+INSAION discovers ROS topics without manual config and keeps a per device inventory with access control. When an alarm fires, it requests the incident window through Surgical Cloud Sync, reads it straight from the local ReductStore instance, and uploads only that window. Then it replays the camera, LiDAR, TF, and logs from that moment together, so an engineer sees the failure instead of a chart that hints at it. Its AI diagnostics summarize what happened in plain language.
+
+None of this needs a permanent uplink. Recording continues on the robot through a dropped link, and uploads resume when the link is back. The robot decides what to keep. The platform decides what to pull.
 
 Support follows the same split. INSAION handles Tier 1 and customer success. ReductStore handles Tier 2 and Tier 3 for its own components.
 
@@ -29,9 +39,9 @@ Support follows the same split. INSAION handles Tier 1 and customer success. Red
 
 <small>INSAION fleet dashboard showing live robot status.</small>
 
-## ReductStore on its own
+## ReductStore without INSAION
 
-The INSAION integration is one application of ReductStore, not its edge. ReductStore is a standalone store for time-indexed data, with native query APIs, a web console, and replication to any backend. Teams run it for robotics, industrial, and other edge workloads, with or without INSAION on top.
+You do not need INSAION to run ReductStore. It is a standalone store for time-indexed data, with native query APIs, a web console, and replication to any backend. Teams point Reduct Bridge, the native Zenoh API, plain HTTP, or an SDK straight at it and run it for robotics, industrial, and other edge workloads. INSAION is the layer you add when you want fleet dashboards and diagnostics on top of that storage, not a requirement for using it.
 
 For the broader architecture, read [How to Store and Manage Robotics Data](/blog/store-robotic-data), our guide to [AMR fleet data infrastructure](/blog/amr-fleet-data-infrastructure), and our tutorial on [persisting Zenoh data](/blog/how-to-persist-zenoh-data).
 
