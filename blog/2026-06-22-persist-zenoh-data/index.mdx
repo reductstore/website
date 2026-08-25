@@ -40,7 +40,7 @@ What was missing was a backend built for binary time-series data: one that store
 
 ## A storage backend that speaks Zenoh natively
 
-Starting with version 1.19, [**ReductStore**](/) (an open source time series object store built for robotics and edge data) ships a native Zenoh API. It keeps every sample, not just the latest, indexed by time, so the queries above just work. A ReductStore instance joins your Zenoh network as a regular peer: it registers a **subscriber** for writes and a **queryable** for reads, talking directly to the storage engine. No bridge process, no extra protocol, no custom backend to maintain.
+Starting with version 1.19, [**ReductStore**](/) (an open source time-indexed object store built for robotics and edge data) ships a native Zenoh API. It keeps every sample, not just the latest, indexed by time, so the queries above just work. A ReductStore instance joins your Zenoh network as a regular peer: it registers a **subscriber** for writes and a **queryable** for reads, talking directly to the storage engine. No bridge process, no extra protocol, no custom backend to maintain.
 
 ```svgbob
      +-------------------------+     +-------------------------+

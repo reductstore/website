@@ -10,7 +10,7 @@ image: ./img/intro-image.png
 
 ![Distributed Storage in Mobile Robotics](./img/intro-image.png)
 
-Mobile robots produce a **lot** of data (camera images, IMU readings, logs, etc). Storing this data reliably on each robot and syncing it to the cloud can be hard. **ReductStore** makes this easier: it's a lightweight, time-series object store built for robotics and industrial IoT. It stores binary blobs (images, logs, CSV sensor data, MCAP, JSON) with timestamps and labels so you can quickly find and query them later.
+Mobile robots produce a **lot** of data (camera images, IMU readings, logs, etc). Storing this data reliably on each robot and syncing it to the cloud can be hard. **ReductStore** makes this easier: it's a lightweight, time-indexed object store built for robotics and industrial IoT. It stores binary blobs (images, logs, CSV sensor data, MCAP, JSON) with timestamps and labels so you can quickly find and query them later.
 
 This introduction guide explains a simple setup where each robot stores data locally and automatically syncs it to a cloud ReductStore instance backed by Amazon S3.
 
