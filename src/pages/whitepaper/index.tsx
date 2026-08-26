@@ -9,11 +9,11 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 const subBulletIcon = faArrowRight;
 
-export default function WhitePaper(): JSX.Element {
+export default function ReductAI(): JSX.Element {
   return (
     <Layout
       title="White Paper"
-      description="ReductStore white paper: architecture, integration paths, benchmarks, and end to end use cases for robotics, industrial IoT, and drones."
+      description="ReductStore white paper: architecture, benchmarks, and use cases for robotics and industrial IoT."
     >
       <main>
         <SimpleHeader pageTitle="ReductStore White Paper" />
@@ -24,76 +24,45 @@ export default function WhitePaper(): JSX.Element {
               <p className={styles.bulletTitle}>What's inside:</p>
               <ul className={styles.bulletPoints}>
                 <BulletPointItem>
-                  Why raw sensor data outgrows the infrastructure that collects
-                  it, and what teams build to cope
+                  Why time-series databases and object storage fall short for
+                  robotics & industrial use cases
                 </BulletPointItem>
                 <BulletPointItem>
-                  Why time series databases and object stores each fall short
-                  for robotics and industrial workloads
+                  Three use cases end to end: robotics with ROS, industrial IoT
+                  over MQTT, and drones
                 </BulletPointItem>
                 <BulletPointItem>
-                  The mental model: buckets, entries, records, and one
-                  conditional query language for reads and replication
+                  Benchmarks and comparisons vs. MinIO, TimescaleDB, MongoDB,
+                  InfluxDB, and IoTDB
                 </BulletPointItem>
-                <BulletPointItem>
-                  The reduction strategy: keep everything raw at the edge, then
-                  filter on every transfer to the next tier
-                </BulletPointItem>
-                <BulletPointItem>
-                  Three use cases end to end: robotics, industrial IoT, and
-                  drones
-                </BulletPointItem>
-                <BulletPointItem>
-                  Benchmarks against MinIO, TimescaleDB, MongoDB, InfluxDB, and
-                  IoTDB
-                </BulletPointItem>
-                <BulletPointItem>
-                  Key features:
-                  <ul className={styles.subBulletPoints}>
-                    <BulletPointItem icon={subBulletIcon} size="xs">
-                      FIFO quota by volume, so the disk never overflows on edge
-                    </BulletPointItem>
-                    <BulletPointItem icon={subBulletIcon} size="xs">
-                      Labels and conditional queries for selective replication
-                    </BulletPointItem>
-                    <BulletPointItem icon={subBulletIcon} size="xs">
-                      SQL over stored records with ReductSelect and DataFusion
-                    </BulletPointItem>
-                    <BulletPointItem icon={subBulletIcon} size="xs">
-                      ROS support: store ROS messages, export mcap or rosbag on
-                      demand
-                    </BulletPointItem>
-                    <BulletPointItem icon={subBulletIcon} size="xs">
-                      Ingest without code: MQTT, ROS, HTTP, and Zenoh
-                    </BulletPointItem>
-                    <BulletPointItem icon={subBulletIcon} size="xs">
-                      S3 and Azure Blob backends for the cloud tier
-                    </BulletPointItem>
-                    <BulletPointItem icon={subBulletIcon} size="xs">
-                      Replication that resumes after an outage, without
-                      duplicates
-                    </BulletPointItem>
-                  </ul>
-                </BulletPointItem>
+                <BulletPointItem>Key features:</BulletPointItem>
+                <ul className={styles.subBulletPoints}>
+                  <BulletPointItem icon={subBulletIcon} size="xs">
+                    FIFO quota to prevent disk overflow on edge
+                  </BulletPointItem>
+                  <BulletPointItem icon={subBulletIcon} size="xs">
+                    Metadata labels for selective replication
+                  </BulletPointItem>
+                  <BulletPointItem icon={subBulletIcon} size="xs">
+                    SQL over stored records with ReductSelect and DataFusion
+                  </BulletPointItem>
+                  <BulletPointItem icon={subBulletIcon} size="xs">
+                    S3 and Azure Blob backends for cloud deployments
+                  </BulletPointItem>
+                </ul>
               </ul>
-
               <p className={styles.bulletTitle}>Performance highlights:</p>
               <ul className={styles.bulletPoints}>
                 <BulletPointItem>
-                  Reads 1552% faster than MinIO, writes 1288% faster
+                  16x faster reads vs. MinIO (100 KB records)
                 </BulletPointItem>
                 <BulletPointItem>
-                  Writes 924% faster than TimescaleDB, reads 603% faster
+                  10x faster writes vs. TimescaleDB (100 KB records)
                 </BulletPointItem>
                 <BulletPointItem>
                   Around $4,200 a month saved on a 50 TB S3 workload
                 </BulletPointItem>
               </ul>
-              <p className={styles.benchmarkNote}>
-                Measured at 100 KB records, Python SDK, single client, NVMe
-                drive. Full results per database and per record size are in the
-                paper.
-              </p>
             </div>
 
             {/* Form Column */}
