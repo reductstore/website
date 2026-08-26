@@ -23,12 +23,35 @@
   width: 100%;
   height: auto;
   object-fit: contain;
-}
-
-:global(html[data-theme="light"]) .architectureDiagram {
-  color-scheme: light !important;
+  --architecture-color-0: #ffffff;
+  --architecture-color-1: rgb(255, 255, 255);
+  --architecture-color-2: #606770;
+  --architecture-color-3: #1c1e21;
+  --architecture-color-4: rgb(96, 103, 112);
+  --architecture-color-5: rgb(0, 0, 0);
+  --architecture-color-6: rgb(255, 255, 255);
+  --architecture-color-7: rgb(153, 153, 153);
+  --architecture-color-8: #ffffff;
+  --architecture-color-9: rgb(43, 6, 72);
+  --architecture-color-10: #999999;
+  --architecture-color-11: rgb(219, 129, 123);
+  --architecture-color-12: rgb(96, 103, 112);
+  --architecture-color-13: #999999;
 }
 
 :global(html[data-theme="dark"]) .architectureDiagram {
-  color-scheme: dark !important;
+  --architecture-color-0: #1a1c1d;
+  --architecture-color-1: rgb(26, 28, 29);
+  --architecture-color-2: #e3e3e3;
+  --architecture-color-3: #e3e3e3;
+  --architecture-color-4: rgb(227, 227, 227);
+  --architecture-color-5: rgb(96, 103, 112);
+  --architecture-color-6: rgb(18, 18, 18);
+  --architecture-color-7: rgb(106, 106, 106);
+  --architecture-color-8: var(--ge-dark-color, #121212);
+  --architecture-color-9: rgb(218, 190, 237);
+  --architecture-color-10: #1a1c1d;
+  --architecture-color-11: rgb(248, 138, 128);
+  --architecture-color-12: rgb(144, 150, 158);
+  --architecture-color-13: #ffffff;
 }

@@ -39,14 +39,43 @@
   height: auto;
   object-fit: contain;
   display: block;
-}
-
-:global(html[data-theme="light"]) .BannerImage {
-  color-scheme: light !important;
+  --cm-0: #ffffff;
+  --cm-1: #606770;
+  --cm-2: #999999;
+  --cm-3: #606770;
+  --cm-4: rgb(96, 103, 112);
+  --cm-5: #2b0648;
+  --cm-6: #999999;
+  --cm-7: #db817b;
+  --cm-8: #1c1e21;
+  --cm-9: #999999;
+  --cm-10: #000000;
+  --cm-11: #999999;
+  --cm-12: rgb(255, 255, 255);
+  --cm-13: rgb(96, 103, 112);
+  --cm-14: rgb(255, 255, 255);
+  --cm-15: rgb(43, 6, 72);
+  --cm-16: rgb(219, 129, 123);
 }
 
 :global(html[data-theme="dark"]) .BannerImage {
-  color-scheme: dark !important;
+  --cm-0: #1a1c1d;
+  --cm-1: #90969e;
+  --cm-2: #e4e6eb;
+  --cm-3: #e3e3e3;
+  --cm-4: rgb(227, 227, 227);
+  --cm-5: #dabeed;
+  --cm-6: #1a1c1d;
+  --cm-7: #f88a80;
+  --cm-8: #e3e3e3;
+  --cm-9: #e3e3e3;
+  --cm-10: #606770;
+  --cm-11: #ffffff;
+  --cm-12: rgb(26, 28, 29);
+  --cm-13: rgb(144, 150, 158);
+  --cm-14: rgb(18, 18, 18);
+  --cm-15: rgb(218, 190, 237);
+  --cm-16: rgb(248, 138, 128);
 }
 
 .BannerTitle {
