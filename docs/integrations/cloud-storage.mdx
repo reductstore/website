@@ -31,7 +31,7 @@ For all cloud-storage topologies, you need:
 - An existing bucket in Amazon S3 or any S3-compatible service (MinIO, Ceph, Cloudflare R2, etc.)
 - Either access and secret keys that allow bucket-level read/write, list, and delete, or an AWS environment where the default credential provider chain can resolve credentials
 - Network connectivity from the host to the S3 endpoint and region you plan to use
-- A valid license file for commercial usage, mounted into the container and configured via `RS_LICENSE_PATH` (see **[Configuration](../configuration/index.mdx#general-settings)** for details)
+- A valid license for commercial usage, configured either with `RS_LICENSE` or `RS_LICENSE_PATH` (see **[Configuration](../configuration/index.mdx#license-configuration)** for details)
 - A persistent cache path on the host (for example, a Docker volume) sized for your expected hot data
 - ReductStore v1.18+ container image and a TCP listener for port `8383`
 
@@ -53,6 +53,8 @@ RS_REMOTE_SYNC_INTERVAL=60        # Adjust based on ingestion rate
 ```
 
 If you run on AWS and want to use the default credential provider chain, omit `RS_REMOTE_ACCESS_KEY` and `RS_REMOTE_SECRET_KEY` entirely. If you provide one of them, you must provide the other one too. Use `RS_REMOTE_SESSION_TOKEN` only with temporary credentials.
+
+For commercial deployments, provide your enterprise license either as a mounted file with `RS_LICENSE_PATH` or as inline secret content with `RS_LICENSE`. Do not set both variables at the same time.
 
 ## Azure differences
 

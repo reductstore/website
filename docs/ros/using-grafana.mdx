@@ -1,0 +1,154 @@
+---
+title: Querying ROS data with Grafana
+description: Query and visualize ROS GPS data from ReductStore with Grafana.
+---
+
+<head>
+  <link
+    rel="canonical"
+    href="https://www.reduct.store/docs/ros/using-grafana"
+  />
+</head>
+
+import GrafanaRosGpsQuery from "./img/grafana-ros-gps-query.png";
+
+# Querying ROS data with Grafana
+
+This guide explains how to query ROS data directly from ReductStore and
+visualize it in Grafana. It expands on the visualization workflow introduced in
+the **[ROS applications guide](./index.mdx#using-grafana)**.
+
+The example queries individual GPS messages from the
+**[public ROS dataset](https://play.reduct.store/)** and plots
+interval-averaged latitude and longitude.
+
+To run the preconfigured example, you need Docker with Docker Compose.
+
+The Compose service uses the `reduct/grafana:latest` image, which includes
+Grafana and the ReductStore data source plugin. The public Play server provides
+the required ReductROS and ReductSelect extensions.
+
+For a custom deployment, you need:
+
+- Grafana 10 or newer;
+- version 1.3.0 or newer of the ReductStore data source plugin; and
+- a ReductStore server with the
+  **[ReductROS](../extensions/official/ros-ext/index.mdx)** and
+  **[ReductSelect](../extensions/official/select-ext.mdx)** extensions.
+
+Both extensions are available with ReductStore Pro.
+
+See the **[Grafana integration guide](../integrations/grafana/index.mdx)**
+for plugin installation and compatibility requirements.
+
+## Start Grafana
+
+The ROS example includes the following Grafana service:
+
+```yaml file=./example/docker-compose.yml start=grafana-start end=grafana-end
+
+```
+
+It mounts this read-only provisioning file, which configures the `ReductStore`
+data source to query the public Play server:
+
+```yaml file=./example/grafana/datasources.yml
+
+```
+
+Clone the documentation repository, enter the example directory, and start
+Grafana:
+
+```bash
+git clone https://github.com/reductstore/website.git
+cd website/docs/ros/example
+docker compose up -d grafana
+```
+
+Open `http://localhost:3000` and sign in with the default username `admin` and
+password `admin`.
+
+:::warning Demo credentials and data
+Change the default Grafana credentials for any non-local deployment. The Play
+server and its `reductstore` token are shared demo resources; do not send private
+data to this server or use the demo token in production.
+:::
+
+To query your own ReductStore instance, replace `serverURL` and `serverToken` in
+`grafana/datasources.yml`. That server must provide ReductROS and ReductSelect,
+and each raw ROS entry must have the `$schema` attachment needed for decoding.
+
+## Plot GPS coordinates
+
+Create or edit a time-series panel, then configure its query:
+
+1. Select the `ReductStore` data source.
+2. Set the dashboard time range to **Last 1 hour**.
+3. Select the `orion` bucket and the `Pablo05/sensor/gps/fix` entry.
+4. Set **Scope** to **Content Only**.
+5. Enable **Combine frames**.
+6. Paste the following condition into the JSON editor and run the query:
+
+```json
+{
+  "#ext": [
+    {
+      "ros": {
+        "extract": {}
+      }
+    },
+    {
+      "select": {
+        "export": {
+          "duration": "$__interval"
+        },
+        "sql": "SELECT latitude, longitude FROM ENTRY()"
+      }
+    },
+    {
+      "select": {
+        "sql": "SELECT AVG(latitude) AS lat, AVG(longitude) as long FROM ENTRY()"
+      }
+    }
+  ]
+}
+```
+
+The `#ext` array runs an ordered server-side pipeline:
+
+- `ros.extract` uses the entry's `$schema` attachment to decode each
+  **[CDR](../glossary.mdx#cdr)** message into JSON.
+- The first `select` stage projects the `latitude` and `longitude` fields. Its
+  `export.duration` setting batches rows according to their source timestamp span,
+  using Grafana's resolved `$__interval` value.
+- The second `select` stage averages each batch and emits the numeric `lat` and
+  `long` series.
+
+Grafana adjusts `$__interval` to the selected time range and panel width. This
+keeps the point density suitable for the panel while preserving more detail over
+narrower ranges. **Combine frames** keeps both output fields in one Grafana result
+frame.
+
+<img
+  src={GrafanaRosGpsQuery}
+  alt="Grafana panel querying a public ROS GPS entry and plotting averaged latitude and longitude"
+  style={{
+    width: "100%",
+    maxWidth: "1222px",
+    height: "auto",
+    borderRadius: "10px",
+  }}
+/>
+
+The plugin flattens the combined JSON result, so the legend names may appear as
+`$[0].lat` and `$[0].long` rather than the bare SQL aliases.
+
+## Troubleshooting
+
+If the panel is empty or one of the series is missing, verify that:
+
+- the selected entry contains `latitude` and `longitude` fields;
+- the entry has the `$schema` attachment required by ReductROS;
+- ReductROS and ReductSelect are available on the queried server;
+- the selected time range contains records for the entry; and
+- **Combine frames** is enabled.

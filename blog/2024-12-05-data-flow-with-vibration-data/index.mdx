@@ -18,7 +18,7 @@ Vibration data is typically collected from sensors attached to machinery or equi
 
 However, effectively managing vibration data can be challenging due to its high frequency, large volume, and complex nature. To address these challenges, we must implement efficient storage strategies that balance data retention with storage constraints.
 
-After covering the basics of vibration data, we'll explore the best practices for managing this data, including storing both raw and pre-processed metrics to take advantage of their benefits. We'll also look at the differences between traditional time series databases and a time series object store such as [**ReductStore**](/), which is designed to efficiently handle time series unstructured data, making it an excellent choice for storing high-frequency vibration sensor measurements.
+After covering the basics of vibration data, we'll explore the best practices for managing this data, including storing both raw and pre-processed metrics to take advantage of their benefits. We'll also look at the differences between traditional time series databases and a time-indexed object store such as [**ReductStore**](/), which is designed to efficiently handle time series unstructured data, making it an excellent choice for storing high-frequency vibration sensor measurements.
 
 We'll then cover a real-world example of storing vibration sensor data using Python and ReductStore. This example will show you step-by-step how to store raw sensor data, calculate key metrics, and query and retrieve this data for analysis.
 
@@ -94,19 +94,19 @@ For example, temperature data can reveal problems such as overheating or lubrica
 
 This sounds great in theory, but in practice it can be challenging to manage and analyze data from multiple sensors that may have different sampling rates, data formats and storage requirements.
 
-This is where a time series object store can be particularly useful, as it can handle multiple data sources with different formats and requirements, providing a unified storage solution for all sensor data.
+This is where a time-indexed object store can be particularly useful, as it can handle multiple data sources with different formats and requirements, providing a unified storage solution for all sensor data.
 
 ## The Need for Time Series Databases
 
 Time Series Databases (TSDBs) are specialised data storage systems optimised for handling time-indexed data. They excel at managing large volumes of sequentially generated data points, such as vibration measurements, by providing efficient write and read operations.
 
-### Time Series Object Store vs. Traditional Time Series Database
+### Time-Indexed Object Store vs. Traditional Time Series Database
 
-A time series object store and a traditional time series database can serve similar purposes, but have distinct architectural differences. While a traditional TSDB is optimised for high-speed ingestion and retrieval of scalar data points, an object store is designed to handle complex, high-dimensional data objects and their metadata. This makes the object store more versatile for applications that require rich contextual information, such as vibration analysis that includes waveform data and diagnostic logs.
+A time-indexed object store and a traditional time series database can serve similar purposes, but have distinct architectural differences. While a traditional TSDB is optimised for high-speed ingestion and retrieval of scalar data points, an object store is designed to handle complex, high-dimensional data objects and their metadata. This makes the object store more versatile for applications that require rich contextual information, such as vibration analysis that includes waveform data and diagnostic logs.
 
-### Vibration Data in Time Series Object Store
+### Vibration Data in Time-Indexed Object Store
 
-With a time series object store, each chunk of vibration data is stored as a binary object with a timestamp along with metadata such as preprocess metrics that can be useful for filtering and replication (more on that later).
+With a time-indexed object store, each chunk of vibration data is stored as a binary object with a timestamp along with metadata such as preprocess metrics that can be useful for filtering and replication (more on that later).
 
 ![Data Flow Schema](./img/vibration_data_flow.webp)
 
@@ -139,7 +139,7 @@ By preprocessing vibration data to extract key metrics such as peak amplitude, f
 
 ![Data Replication Schema](./img/data_replication.webp)
 
-In this example, the system stores raw data locally and pre-processed metrics in a time series object store.
+In this example, the system stores raw data locally and pre-processed metrics in a time-indexed object store.
 Both the pre-processed metrics and the raw data are then automatically replicated to a central database.
 The replication strategy in this scenario focuses on reducing data transfer by replicating raw data only when necessary, based on the insights derived from the pre-processed metrics.
 
@@ -468,7 +468,7 @@ This setup can serve as a starting point for building your own vibration data ma
 
 Here are some key takeaways:
 
-- Time series object storage can offer significant advantages over traditional TSDBs by efficiently managing vibration data in chunks.
+- Time-indexed object storage can offer significant advantages over traditional TSDBs by efficiently managing vibration data in chunks.
 - Volume-based retention policies and automated data replication ensure critical information is retained while minimizing storage constraints at the edge.
 - By pre-processing and prioritizing metadata for replication, critical diagnostic data remains accessible even if raw data is overwritten.
 

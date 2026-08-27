@@ -99,7 +99,7 @@ import GrafanaDataSourceConfig from "./img/grafana-datasource-config.png";
 
 ### Query Builder
 
-The plugin includes a query builder where you select the bucket, entry, and mode (labels, content, or both). There is also a JSON editor available for writing [**Conditional Queries**](/docs/next/conditional-query) that allow you to filter records based on labels and extract specific fields from record contents.
+The plugin includes a query builder where you select the bucket, entry, and mode (labels, content, or both). You can also combine the results into one frame. There is a JSON editor available for writing [**Conditional Queries**](/docs/next/conditional-query) that allow you to filter records based on labels and extract specific fields from record contents.
 
 import GrafanaQueryBuilder from "./img/grafana-query-builder.png";
 
@@ -156,6 +156,46 @@ For example, to extract only the `temperature` field from JSON records, you can 
 
 Query the full records including both labels and content. You can combine label filters and content extraction as needed.
 
+### Combine frames
+
+The **Combine frames** option is available in plugin version 1.3.0 and later. It
+controls how the plugin structures query results and is disabled by default to
+preserve the behavior of existing dashboards.
+
+When **Combine frames** is disabled, the plugin returns each label or flattened
+JSON value in a separate time-series frame. Enable it when a panel or Grafana
+transformation needs the complete record context in one table. The combined
+result contains one row per record and always includes:
+
+- `time`: the record timestamp;
+- `entry`: the entry that contains the record; and
+- value columns selected by the query scope.
+
+The query scope determines the value columns:
+
+- **Label Only** adds record labels.
+- **Content Only** adds fields from JSON record content.
+- **Label & Content** adds both labels and JSON fields.
+
+The plugin flattens nested JSON objects and arrays into column names such as
+`$.temperature` and `$[0].value`. It builds one stable schema for the complete
+result, so a field that is absent from a record has a null value in that row.
+Labels are converted to numeric or Boolean columns when possible and otherwise
+remain strings.
+
+If a label name conflicts with a content column or with `time` or `entry`, the
+plugin prefixes the label column with `label.`. It adds a numeric suffix when
+needed to keep every column name unique.
+
+:::note
+Only JSON object or array content is expanded into combined value columns.
+Binary, text, scalar JSON, or empty content still contributes its `time`,
+`entry`, and any selected labels, but it does not add content columns. Use an
+extension such as
+[**ReductSelect**](/docs/extensions/official/select-ext) to return JSON before
+combining content fields.
+:::
+
 ## Grafana `$__interval` Macro
 
 The plugin supports Grafana's built-in `$__interval` macro. It automatically adjusts the query interval to match the dashboard time range.
@@ -167,6 +207,12 @@ The plugin supports Grafana's built-in `$__interval` macro. It automatically adj
 ```
 
 This makes it easy to create dynamic dashboards that adapt to different time ranges without manual adjustments.
+
+## Visualize ROS GPS data
+
+For a complete example that starts a preconfigured Grafana container, queries the
+public ROS dataset, and plots interval-averaged GPS coordinates, see the
+**[Using Grafana with ROS guide](../../ros/using-grafana.mdx)**.
 
 ## Automated Provisioning
 

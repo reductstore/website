@@ -78,8 +78,28 @@ jobs:
       - name: Prepare ReductStore instance with data
         run: |
           docker pull ${{ matrix.image }}
-          docker run -d --name reductstore-init -p 8384:8383  ${{ matrix.image }}
-          sleep 3
+          docker run -d --name reductstore-init -p 8384:8383 \
+            --env RS_API_TOKEN="my-token" \
+            ${{ matrix.image }}
+
+          for attempt in {1..60}; do
+            if curl -fsS http://127.0.0.1:8384/api/v1/alive >/dev/null; then
+              break
+            fi
+
+            if [ "$(docker inspect -f '{{.State.Running}}' reductstore-init)" != "true" ]; then
+              docker logs reductstore-init
+              exit 1
+            fi
+
+            if [ "$attempt" -eq 60 ]; then
+              docker logs reductstore-init
+              exit 1
+            fi
+
+            sleep 1
+          done
+
           reduct-cli cp https://reductstore@play.reduct.store/datasets  http://my-token@127.0.0.1:8384/example-bucket --limit 100
 
       - name: Install Python
@@ -160,6 +180,11 @@ jobs:
               continue
             fi
 
+            if [[ "$example" == *"/ros_export.sh" ]]; then
+              echo "Skip $example (depends on the external Orion dataset)"
+              continue
+            fi
+
             echo '${{secrets.LICENSE_KEY}}' > ./license.lic
 
             IS_ZENOH=0
@@ -224,7 +249,8 @@ jobs:
         if: failure()
         continue-on-error: true
         run: |
-          docker logs reductstore
+          docker logs reductstore-init || true
+          docker logs reductstore || true
 
   test_provisioning:
     runs-on: ubuntu-latest
@@ -241,3 +267,66 @@ jobs:
             docker compose -f $example up -d
             docker compose -f $example down
           done
+
+  test_ros_compose_example:
+    runs-on: ubuntu-latest
+    name: Test ROS compose example
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          lfs: false
+
+      - name: Pull images
+        working-directory: docs/ros/example
+        run: docker compose pull
+
+      - name: Start ROS compose example
+        working-directory: docs/ros/example
+        run: |
+          set -euo pipefail
+
+          docker compose up -d reductstore
+
+          for attempt in {1..60}; do
+            if curl -fsS http://127.0.0.1:8383/api/v1/alive >/dev/null; then
+              break
+            fi
+
+            if [ "$attempt" -eq 60 ]; then
+              docker compose logs --no-color
+              exit 1
+            fi
+
+            sleep 1
+          done
+
+          docker compose up -d reduct-bridge
+          sleep 15
+
+          docker compose ps
+
+          for container in $(docker compose ps -q); do
+            status=$(docker inspect -f '{{.State.Status}}' "$container")
+            if [ "$status" != "running" ]; then
+              docker compose logs --no-color
+              exit 1
+            fi
+          done
+
+          logs=$(docker compose logs --no-color)
+          if printf '%s\n' "$logs" | grep -Eiq '(error|panic|fatal|failed|failure|backtrace)'; then
+            printf '%s\n' "$logs"
+            exit 1
+          fi
+
+      - name: Print Docker logs
+        if: failure()
+        continue-on-error: true
+        working-directory: docs/ros/example
+        run: docker compose logs --no-color
+
+      - name: Stop ROS compose example
+        if: always()
+        working-directory: docs/ros/example
+        run: docker compose down -v --remove-orphans

@@ -30,7 +30,7 @@ Robots operate in dynamic environments and continuously produce large volumes of
 
 A few approaches that work well in practice:
 
-- **Use a time series object store**: Systems like ReductStore are designed specifically for high frequency, timestamped binary data. They offer fast writes, efficient querying, and manageable costs at scale.
+- **Use a time-indexed object store**: Systems like ReductStore are designed specifically for high frequency, timestamped binary data. They offer fast writes, efficient querying, and manageable costs at scale.
 - **Balance edge and cloud storage**: Keep recent, critical data on the robot for fast access. Move older or lower priority data to the cloud for long term storage and analysis. Splitting storage this way cuts costs without adding much latency to what matters.
 - **Use volume based retention policies**: Rather than deleting data based on age, use a FIFO (first in, first out) quota. Data is only removed when the storage limit is reached, which avoids unnecessary deletion during downtime or low activity periods.
 - **Compress where it makes sense**: H.265 for video, JPEG for images. The right format can cut storage by an order of magnitude without losing anything you actually need.
@@ -59,7 +59,7 @@ ReductStore supports native cloud storage backends for both [**Amazon S3 and Azu
 | Tiered access      | Recent data stays in the local cache for fast reads. Older data lives in the cloud bucket. |
 | Read replicas      | Add read only replicas pointing at the same S3 bucket, close to your consumers.            |
 
-For records around 100KB (e.g. JPEG images), ReductStore can be >10x faster than traditional time series object stores at a fraction of the cost.
+For records around 100KB (e.g. JPEG images), ReductStore can be >10x faster than traditional time-indexed object stores at a fraction of the cost.
 
 ### Visualize ROS Data in Grafana
 

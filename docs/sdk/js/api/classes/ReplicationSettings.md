@@ -9,7 +9,7 @@ description: "API reference for ReplicationSettings in the ReductStore Client SD
 
 # ReplicationSettings
 
-Defined in: [messages/ReplicationSettings.ts:24](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L24)
+Defined in: [messages/ReplicationSettings.ts:31](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L31)
 
 Replication settings
 
@@ -25,11 +25,21 @@ Replication settings
 
 ## Properties
 
+### compression?
+
+&gt; `readonly` `optional` **compression**: [`ReplicationCompression`](../type-aliases/ReplicationCompression.md)
+
+Defined in: [messages/ReplicationSettings.ts:75](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L75)
+
+Wire compression for replication batch payload transfer.
+
+***
+
 ### dstBucket
 
 &gt; `readonly` **dstBucket**: `string` = `""`
 
-Defined in: [messages/ReplicationSettings.ts:33](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L33)
+Defined in: [messages/ReplicationSettings.ts:40](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L40)
 
 Destination bucket. Must exist.
 
@@ -39,9 +49,19 @@ Destination bucket. Must exist.
 
 &gt; `readonly` **dstHost**: `string` = `""`
 
-Defined in: [messages/ReplicationSettings.ts:38](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L38)
+Defined in: [messages/ReplicationSettings.ts:45](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L45)
 
 Destination host. Must exist.
+
+***
+
+### dstPrefix?
+
+&gt; `readonly` `optional` **dstPrefix**: `string`
+
+Defined in: [messages/ReplicationSettings.ts:60](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L60)
+
+Prefix to add to destination entry names.
 
 ***
 
@@ -49,7 +69,7 @@ Destination host. Must exist.
 
 &gt; `readonly` `optional` **dstToken**: `string`
 
-Defined in: [messages/ReplicationSettings.ts:43](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L43)
+Defined in: [messages/ReplicationSettings.ts:50](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L50)
 
 Destination token. Must have write access to the destination bucket.
 
@@ -59,7 +79,7 @@ Destination token. Must have write access to the destination bucket.
 
 &gt; `readonly` **entries**: `string`[] = `[]`
 
-Defined in: [messages/ReplicationSettings.ts:48](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L48)
+Defined in: [messages/ReplicationSettings.ts:55](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L55)
 
 List of entries to replicate. If empty, all entries are replicated. Wildcards are supported.
 
@@ -69,7 +89,7 @@ List of entries to replicate. If empty, all entries are replicated. Wildcards ar
 
 &gt; `readonly` `optional` **mode**: [`ReplicationMode`](../type-aliases/ReplicationMode.md)
 
-Defined in: [messages/ReplicationSettings.ts:58](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L58)
+Defined in: [messages/ReplicationSettings.ts:70](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L70)
 
 Replication mode
 
@@ -79,7 +99,7 @@ Replication mode
 
 &gt; `readonly` **srcBucket**: `string` = `""`
 
-Defined in: [messages/ReplicationSettings.ts:28](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L28)
+Defined in: [messages/ReplicationSettings.ts:35](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L35)
 
 Source bucket. Must exist.
 
@@ -89,7 +109,7 @@ Source bucket. Must exist.
 
 &gt; `readonly` `optional` **when**: `any`
 
-Defined in: [messages/ReplicationSettings.ts:53](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L53)
+Defined in: [messages/ReplicationSettings.ts:65](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L65)
 
 Conditional query
 
@@ -99,7 +119,7 @@ Conditional query
 
 &gt; `static` **parse**(`data`): `ReplicationSettings`
 
-Defined in: [messages/ReplicationSettings.ts:60](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L60)
+Defined in: [messages/ReplicationSettings.ts:77](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L77)
 
 #### Parameters
 
@@ -117,7 +137,7 @@ Defined in: [messages/ReplicationSettings.ts:60](https://github.com/reductstore/
 
 &gt; `static` **serialize**(`data`): `OriginalReplicationSettings`
 
-Defined in: [messages/ReplicationSettings.ts:72](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L72)
+Defined in: [messages/ReplicationSettings.ts:91](https://github.com/reductstore/reduct-js/blob/main/src/messages/ReplicationSettings.ts#L91)
 
 #### Parameters
 

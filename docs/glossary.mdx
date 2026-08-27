@@ -27,6 +27,12 @@ A metadata record stored in an entry's system `$meta` entry and identified by a 
 
 _Related entries:_ [**entry**](#entry), [**record**](#record), [**label**](#label)
 
+## CDR
+
+Common Data Representation (CDR) is a binary serialization format standardized by the Object Management Group and used by DDS-based systems such as ROS 2. ReductStore can preserve the original CDR payload while an accompanying schema attachment enables tools and extensions to decode it later.
+
+_Related entries:_ [**attachment**](#attachment), [**record**](#record), [**extension**](#extension)
+
 ## record
 
 A piece of data stored in an entry, consisting of metadata (timestamp, content type, labels) and content (actual data). Records are the fundamental data units in ReductStore and are stored within blocks.

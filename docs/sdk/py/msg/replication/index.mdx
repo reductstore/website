@@ -24,6 +24,16 @@ class ReplicationMode(str, Enum)
 
 Replication mode
 
+<a id="reduct.msg.replication.ReplicationCompression"></a>
+
+## ReplicationCompression
+
+```python
+class ReplicationCompression(str, Enum)
+```
+
+Replication batch payload compression
+
 <a id="reduct.msg.replication.ReplicationInfo"></a>
 
 ## ReplicationInfo
@@ -187,6 +197,12 @@ access token for the destination instance
 list of entries to replicate. If empty, all entries are replicated.
 Wildcards are supported
 
+<a id="reduct.msg.replication.ReplicationSettings.dst_prefix"></a>
+
+#### dst\_prefix
+
+prefix to add to destination entry names
+
 <a id="reduct.msg.replication.ReplicationSettings.when"></a>
 
 #### when
@@ -198,6 +214,12 @@ replication schedule in cron format
 #### mode
 
 replication mode
+
+<a id="reduct.msg.replication.ReplicationSettings.compression"></a>
+
+#### compression
+
+replication batch payload compression
 
 <a id="reduct.msg.replication.ReplicationDetailInfo"></a>
 
@@ -226,5 +248,3 @@ replication information
 #### settings
 
 replication settings
-
-
