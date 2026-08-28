@@ -24,15 +24,16 @@ export default function ReductAI(): JSX.Element {
               <p className={styles.bulletTitle}>What's inside:</p>
               <ul className={styles.bulletPoints}>
                 <BulletPointItem>
-                  Challenges in managing time-stamped blob data and why a new
-                  solution was needed
-                </BulletPointItem>
-                <BulletPointItem>
                   Why time-series databases and object storage fall short for
                   robotics & industrial use cases
                 </BulletPointItem>
                 <BulletPointItem>
-                  Benchmarks and comparisons vs. TimescaleDB, MongoDB, and MinIO
+                  Three use cases end to end: robotics with ROS, industrial IoT
+                  over MQTT, and drones
+                </BulletPointItem>
+                <BulletPointItem>
+                  Benchmarks and comparisons vs. MinIO, TimescaleDB, MongoDB,
+                  InfluxDB, and IoTDB
                 </BulletPointItem>
                 <BulletPointItem>Key features:</BulletPointItem>
                 <ul className={styles.subBulletPoints}>
@@ -43,23 +44,23 @@ export default function ReductAI(): JSX.Element {
                     Metadata labels for selective replication
                   </BulletPointItem>
                   <BulletPointItem icon={subBulletIcon} size="xs">
-                    S3 backend for cloud deployments
+                    SQL over stored records with ReductSelect and DataFusion
                   </BulletPointItem>
                   <BulletPointItem icon={subBulletIcon} size="xs">
-                    Unreliable network handling for edge-to-cloud replication
+                    S3 and Azure Blob backends for cloud deployments
                   </BulletPointItem>
                 </ul>
               </ul>
               <p className={styles.bulletTitle}>Performance highlights:</p>
               <ul className={styles.bulletPoints}>
                 <BulletPointItem>
-                  16x faster writes vs. TimescaleDB (1MB records)
+                  16x faster reads vs. MinIO (100 KB records)
                 </BulletPointItem>
                 <BulletPointItem>
-                  3x faster reads vs. MinIO (1MB blobs)
+                  10x faster writes vs. TimescaleDB (100 KB records)
                 </BulletPointItem>
                 <BulletPointItem>
-                  Significant infrastructure cost savings
+                  Around $4,200 a month saved on a 50 TB S3 workload
                 </BulletPointItem>
               </ul>
             </div>

@@ -1,3 +1,14 @@
 .useCaseCard {
+  display: flex;
+  flex-direction: column;
   width: 300px;
+}
+
+.useCaseCard :global(.card__header) {
+  padding-bottom: 0;
+}
+
+.useCaseCard :global(.card__body) {
+  flex: 1;
+  padding-top: 0;
 }

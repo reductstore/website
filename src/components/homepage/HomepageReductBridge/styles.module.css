@@ -11,14 +11,43 @@
   max-width: 100%;
   height: auto;
   border-radius: 12px;
-}
-
-:global(html[data-theme="light"]) .roboticsImage {
-  color-scheme: light !important;
+  --bridge-0: #ffffff;
+  --bridge-1: #000000;
+  --bridge-2: #999999;
+  --bridge-3: #606770;
+  --bridge-4: #db817b;
+  --bridge-5: #999999;
+  --bridge-6: #2b0648;
+  --bridge-7: #999999;
+  --bridge-8: rgb(255, 255, 255);
+  --bridge-9: rgb(0, 0, 0);
+  --bridge-10: rgb(255, 255, 255);
+  --bridge-11: rgb(153, 153, 153);
+  --bridge-12: rgb(96, 103, 112);
+  --bridge-13: #000000;
+  --bridge-14: #ffffff;
+  --bridge-15: rgb(219, 129, 123);
+  --bridge-16: rgb(43, 6, 72);
 }
 
 :global(html[data-theme="dark"]) .roboticsImage {
-  color-scheme: dark !important;
+  --bridge-0: #1a1c1d;
+  --bridge-1: #606770;
+  --bridge-2: #e4e6eb;
+  --bridge-3: #e3e3e3;
+  --bridge-4: #f88a80;
+  --bridge-5: #1a1c1d;
+  --bridge-6: #dabeed;
+  --bridge-7: #ffffff;
+  --bridge-8: rgb(26, 28, 29);
+  --bridge-9: rgb(96, 103, 112);
+  --bridge-10: rgb(18, 18, 18);
+  --bridge-11: rgb(106, 106, 106);
+  --bridge-12: rgb(227, 227, 227);
+  --bridge-13: #ffffff;
+  --bridge-14: var(--ge-dark-color, #121212);
+  --bridge-15: rgb(248, 138, 128);
+  --bridge-16: rgb(218, 190, 237);
 }
 
 .btn {
