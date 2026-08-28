@@ -69,7 +69,7 @@ At the fleet server tier: aggregated data from all robots, with the same query i
 
 In the cloud: a cost-efficient long-term store using batched writes to object storage, with lifecycle-aware tiering that moves infrequently accessed data to cold storage automatically. The same query interface applies.
 
-Tools like ReductStore are built specifically for this architecture: binary payloads stored with microsecond-precision timestamps and labels, replicated conditionally across tiers, queryable by time window and label combination from any tier. The same model from edge to cloud, with no translation layer between them.
+ReductStore is a time-indexed storage engine for this architecture: it stores binary payloads with microsecond-precision timestamps and labels, replicates them conditionally across tiers, and queries them by time window and label combination from any tier. The same model from edge to cloud, with no translation layer between them.
 
 ## The Board Framing
 

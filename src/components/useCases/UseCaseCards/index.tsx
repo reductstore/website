@@ -7,7 +7,6 @@ interface UseCase {
   title: string;
   description: string;
   link: string;
-  image?: string;
 }
 
 export default function UseCaseCards({
@@ -19,15 +18,6 @@ export default function UseCaseCards({
     <>
       {useCases.map((useCase, index) => (
         <div key={index} className={clsx("card", styles.useCaseCard)}>
-          {useCase.image && (
-            <div className="card__image">
-              <img
-                src={useCase.image}
-                alt={useCase.title}
-                title={useCase.title}
-              />
-            </div>
-          )}
           <div className="card__header">
             <h3>{useCase.title}</h3>
           </div>
