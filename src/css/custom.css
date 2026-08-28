@@ -107,46 +107,6 @@ img {
   height: auto;
 }
 
-.bridgeArchitectureDiagram {
-  --robotics-color-0: #ffffff;
-  --robotics-color-1: #606770;
-  --robotics-color-2: rgb(96, 103, 112);
-  --robotics-color-3: #999999;
-  --robotics-color-4: #999999;
-  --robotics-color-5: #000000;
-  --robotics-color-6: #999999;
-  --robotics-color-7: #2b0648;
-  --robotics-color-8: #999999;
-  --robotics-color-9: #db817b;
-  --robotics-color-10: rgb(255, 255, 255);
-  --robotics-color-11: rgb(0, 0, 0);
-  --robotics-color-12: rgb(255, 255, 255);
-  --robotics-color-13: rgb(153, 153, 153);
-  --robotics-color-14: #ffffff;
-  --robotics-color-15: rgb(43, 6, 72);
-  --robotics-color-16: rgb(219, 129, 123);
-}
-
-html[data-theme="dark"] .bridgeArchitectureDiagram {
-  --robotics-color-0: #1a1c1d;
-  --robotics-color-1: #e3e3e3;
-  --robotics-color-2: rgb(227, 227, 227);
-  --robotics-color-3: #e4e6eb;
-  --robotics-color-4: #e3e3e3;
-  --robotics-color-5: #606770;
-  --robotics-color-6: #ffffff;
-  --robotics-color-7: #dabeed;
-  --robotics-color-8: #1a1c1d;
-  --robotics-color-9: #f88a80;
-  --robotics-color-10: rgb(26, 28, 29);
-  --robotics-color-11: rgb(96, 103, 112);
-  --robotics-color-12: rgb(18, 18, 18);
-  --robotics-color-13: rgb(106, 106, 106);
-  --robotics-color-14: var(--ge-dark-color, #121212);
-  --robotics-color-15: rgb(218, 190, 237);
-  --robotics-color-16: rgb(248, 138, 128);
-}
-
 /* Navbar CSS */
 .navbar__brand,
 .navbar__brand:hover,
