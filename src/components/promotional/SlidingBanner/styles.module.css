@@ -75,3 +75,14 @@
   font-size: 16px;
   margin-bottom: 10px;
 }
+
+.downloadButton {
+  background-color: var(--reduct-accent);
+  border-color: transparent;
+  color: #fff;
+}
+
+.downloadButton:hover {
+  background-color: var(--reduct-accent-hover);
+  color: #fff;
+}

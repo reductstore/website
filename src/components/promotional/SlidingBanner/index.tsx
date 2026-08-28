@@ -95,7 +95,7 @@ const SlidingBanner: React.FC<SlidingBannerProps> = ({
           <Link
             id="whitepaper-banner-button"
             to={linkTo || "/whitepaper"}
-            className="button button--primary button--lg"
+            className={`button button--primary button--lg ${styles.downloadButton}`}
             onClick={handleDownloadClick}
           >
             {linkText || "Read Now →"}
