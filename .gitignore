@@ -45,3 +45,6 @@ package-lock.json
 
 
 .kilo
+
+# Local secrets
+.local-secrets/
