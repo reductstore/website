@@ -25,7 +25,6 @@ import HomepageCompanies from "../components/homepage/HomepageCompanies";
 import HomepageReductBridge from "@site/src/components/homepage/HomepageReductBridge";
 
 function HomepageHeader() {
-  const { siteConfig } = useDocusaurusContext();
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">

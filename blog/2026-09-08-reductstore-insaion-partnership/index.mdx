@@ -1,0 +1,53 @@
+---
+title: "ReductStore and INSAION: Edge Recording Partnership"
+description: "ReductStore is the storage engine behind INSAION's edge recording. It keeps data on the robot, and INSAION adds fleet observability on top."
+tags: [news]
+slug: news/reductstore-insaion-partnership
+date: 2026-09-08
+authors: anthony
+---
+
+![INSAION - ReductStore partnership](./img/insaion-reductstore.png)
+
+Your robot loses its uplink halfway through an eight hour shift. Cameras and sensors keep writing. Sending every frame to the cloud was never an option.
+
+ReductStore and [**INSAION**](https://www.insaion.com) have formalized their partnership for robotics edge recording. It makes official what already ships in production: ReductStore is the storage engine behind INSAION's edge recording. Every Rolling Buffer, every device recording, and every Surgical Cloud Sync runs on ReductStore embedded directly in the INSAION Agent.
+
+<!-- truncate -->
+
+## Why it matters
+
+A robot's most valuable data is also its heaviest: camera frames, LiDAR point clouds, high frequency control signals. Streaming all of it to the cloud is expensive and often impossible on real connectivity. Recording nothing leaves you blind when an incident happens.
+
+The way out is to record everything at full rate on the robot and move only what you need. A device keeps a rolling window of its own data, and when something goes wrong you pull the exact minutes around the event instead of a day of footage. Storage stays cheap because it stays local, and the network only carries the parts a person actually looks at.
+
+## What ReductStore keeps on the robot
+
+ReductStore is the storage layer inside the INSAION Agent, sitting next to the sensors. It stores multimodal data with timestamps and labels, so it lands in the shape robots actually produce. That gives the agent a local store built to:
+
+- **Ingest fast.** Absorb bursts of camera, LiDAR, and control data as recording pipelines write their MCAP slices, without dropping messages.
+- **Retain within a budget.** FIFO, HARD, or NONE quotas per device. FIFO is the Rolling Buffer: the newest data that fits the disk you set, so a robot never quietly fills up.
+- **Retrieve precisely.** Every record is keyed by time and labeled with its recording session, so the agent pulls the exact window around an incident by time range and label, with no full scans.
+- **Run anywhere, unattended.** A single Rust binary with no extra services to manage, embedded in the agent and identical on one prototype or a fleet of hundreds.
+
+That mapping onto how robots generate data is why INSAION built its edge recording on ReductStore.
+
+## What INSAION adds on top
+
+ReductStore keeps the data on the robot. INSAION is the platform on top: it turns that local store into observability for an entire fleet, in one place. Operators watch every robot from a single view and drop into any one device when they need to. On top of the stored data it adds:
+
+- **Zero config discovery.** It finds ROS topics with no manual setup and keeps a per device inventory with access control.
+- **Fleet dashboards and alerts.** Live status and metrics across every robot, with alarms that fire when something drifts out of range.
+- **Incident capture.** When an alarm fires, Surgical Cloud Sync reads the exact window from the local ReductStore instance and uploads only that.
+- **Multimodal replay.** Camera, LiDAR, TF, and logs from that moment play back together, so an engineer sees the failure instead of a chart that hints at it.
+- **AI diagnostics.** It summarizes what happened in plain language and points at the likely cause.
+
+Even when the link drops, the robot keeps recording, and uploads pick back up once it returns. The robot holds everything locally, and the platform pulls only what you need.
+
+## How it works in practice
+
+Each recording pipeline writes MCAP slices into ReductStore as timestamped records: one `rolling-buffer` bucket per device, one entry per pipeline, each slice keyed by its start time and labeled with the recording session. The store runs embedded in the agent, bound to localhost and authenticated with the device's own token, so raw sensor data never leaves the machine unless you ask.
+
+When an incident window is needed, INSAION queries ReductStore by time range and label, then streams those exact slices straight to S3, never routing the heavy data through its own servers.
+
+INSAION's engineers wrote up the whole mechanism, from MCAP slicing to the S3 upload pipeline, in their [**edge recording deep dive**](https://www.insaion.com/blog/reductstore-edge-recording).
