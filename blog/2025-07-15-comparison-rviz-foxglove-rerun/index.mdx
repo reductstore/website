@@ -94,6 +94,8 @@ Although there are only few formal benchmarks comparing Rerun with RViz or Foxgl
 
 > **Note**: Best practices for handling large datasets include splitting data files by time or size (e.g., every 1–5 minutes), using separate files for different topic groups, and automatically deleting old files when disk space is low. Chunk compression can also save disk space more efficiently than whole-file compression, but this approach consumes more CPU and memory resources, representing a trade-off between storage and performance.
 
+None of these tools decide where the data lives. RViz, Foxglove and Rerun all read from a bag file or a live topic, so a long recording still needs somewhere to sit that can be queried by time range. That is the job [**ReductStore**](/use-cases) does alongside them: time-indexed buckets, replication by label, and retention by size quota instead of by hand.
+
 ## **Analysis & Visualization**
 
 ### **RViz & RViz 2**
