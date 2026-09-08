@@ -2,33 +2,55 @@ import React from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 import Link from "@docusaurus/Link";
-import RoboticsDiagram from "@site/static/img/landing/robotics-support.drawio.svg";
+
+const logos = [
+  {
+    image: require("@site/static/img/companies/insaion.webp").default,
+    alt: "INSAION",
+  },
+  {
+    image: require("@site/static/img/integrations/ubuntu.png").default,
+    alt: "Ubuntu",
+  },
+  {
+    image: require("@site/static/img/integrations/mcap.webp").default,
+    alt: "MCAP",
+  },
+  {
+    image: require("@site/static/img/integrations/zenoh.png").default,
+    alt: "Zenoh",
+  },
+];
 
 function HomepageRobotics() {
   return (
     <div className={styles.roboticsSection}>
-      <div className={clsx("row", styles.row)}>
-        <div className="col col--7 text--center">
-          <RoboticsDiagram
-            className={styles.roboticsImage}
-            role="img"
-            aria-label="Robotics Support"
-          />
+      <div className="text--center">
+        <h2>Robotics Support</h2>
+        <p className={styles.description}>
+          ReductStore is built for the robotics stack. Reduct Bridge records ROS
+          2 topics straight to storage, and it ingests MCAP files, Zenoh
+          streams, and raw sensor data with timestamps and labels. It plugs into
+          Canonical's Observability Stack (COS) for robotics on Ubuntu, and it
+          powers INSAION's edge recording across whole fleets.
+        </p>
+        <div className={styles.logos}>
+          {logos.map((logo, index) => (
+            <div key={index} className={styles.logoBox}>
+              <img
+                src={logo.image}
+                alt={logo.alt}
+                className={styles.logoImage}
+              />
+            </div>
+          ))}
         </div>
-        <div className={"col col--5 text--center"}>
-          <h2 className="hideOnMobile">Robotics Support</h2>
-          <p>
-            ReductBridge records ROS2 topics directly to storage. Store camera
-            feeds, LiDAR scans, and sensor data with timestamps. Foxglove for
-            visualization and debugging.
-          </p>
-          <Link
-            className={clsx("button button--primary button--lg", styles.btn)}
-            to="/blog/database-for-robotics"
-          >
-            Learn More →
-          </Link>
-        </div>
+        <Link
+          className={clsx("button button--primary button--lg", styles.btn)}
+          to="/blog/database-for-robotics"
+        >
+          Learn More →
+        </Link>
       </div>
     </div>
   );

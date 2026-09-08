@@ -317,3 +317,15 @@ article .markdown svg.svgbob text {
   fill: var(--ifm-font-color-base);
   font-family: var(--ifm-font-family-monospace);
 }
+
+/* News announcement bar: a bit larger than the default */
+div[class*="announcementBar_"] {
+  --docusaurus-announcement-bar-height: 3rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+div[class*="announcementBarContent_"] a {
+  color: inherit;
+  text-decoration: underline;
+}
