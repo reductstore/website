@@ -1,10 +1,10 @@
 ---
-title: "Alternative to TimescaleDB for Blob Data"
-description: "A comparison of ReductStore and TimescaleDB for storing time series blob data."
-authors: alexey
+title: "TimescaleDB Alternatives for Multimodal Data"
+description: "Benchmarks for TimescaleDB against ReductStore from 1 KB to 1 MB records, why large values get slow, and how time-indexed storage handles multimodal data."
+authors: [alexey, anthony]
 tags: [comparison, iot]
 slug: comparisons/iot/reductstore-vs-timescaledb
-date: 2024-03-27
+date: 2026-09-07
 image: ./img/snippet.webp
 ---
 
@@ -241,6 +241,69 @@ When we choose a database for storing blob data, we should consider not only per
 ## Conclusions
 
 TimescaleDB excels as a time series database and can be used to store small blobs. It's a good choice if you need to store structured data and want to avoid additional storage for blob data. However, if you have blobs larger than 10KB, ReductStore might be a better option. It offers better performance and provides a retention policy based on disk usage and conditional append-only replication for your data reduction strategy.
+
+## When TimescaleDB Is Still the Right Choice
+
+The numbers above are for large opaque payloads. They say nothing about the workload TimescaleDB was built for, and that workload is the common one.
+
+Keep TimescaleDB when your records are structured rows and you ask for them by aggregate. Continuous aggregates, hypertable partitioning and columnar compression are real advantages, and an object store has no equivalent for any of them. If you join sensor readings against an asset table, a work order or a shift schedule, you need SQL and you need it in the same database as the readings. That is not a job to hand to a blob store.
+
+Keep it when your payloads are small. Under about 2 KB a `BYTEA` value sits inline in the row and the overhead measured above never appears. One `INSERT` writes it, one `SELECT` reads it back, and there is no second system to keep consistent.
+
+The problem starts above that threshold, and the mechanism is worth naming.
+
+### Why Large Values Get Slow
+
+PostgreSQL moves any field larger than roughly 2 KB out of the main table and into a TOAST table, split into chunks and compressed on the way. That is a good design for text. For a JPEG or a packed sensor frame the compression attempt returns almost nothing, so what is left is the chunking: every write splits the value across rows in a side table, and every read reassembles it.
+
+The client pays a second time. `execute_values` builds the entire `INSERT` statement in memory before any of it goes on the wire, so a 1 MB record is a 1 MB string in the client process before it is a 1 MB value in the server. The SQL path has no chunked upload. That is most of the gap in the 1 MB row of the table above.
+
+TimescaleDB's columnar compression does not recover it either. Columnar compression works on columns of similar values, and random binary data has no similarity to exploit.
+
+## Three Kinds of TimescaleDB Alternative
+
+"Alternatives to TimescaleDB" covers three different problems. Picking the wrong category costs more than staying where you are.
+
+**Your problem is analytical scale on structured data.** You have billions of numeric rows and the aggregate queries have stopped finishing in time. You want a different SQL engine, not an object store. ClickHouse, QuestDB and InfluxDB sit in this group. A migration keeps the shape of your data and swaps the engine underneath it.
+
+**Your problem is size.** The rows are fine, but each one carries an image, a waveform or a serialized message, and the database is now mostly payload. You want the payload out of the database. The standard answer is an object store with a metadata table pointing into it. It works, and you own the consistency between the two systems and the retention on both of them. We measured the same workload against S3 style storage in **[the MinIO comparison](/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio)**.
+
+**Your problem is time and modality together.** The payloads have to leave the database and you still have to ask for them by time range, by device, by label. This is the physical AI case: several streams of different types and sizes recorded against one clock, each too large for a row and not much use without the others. That is what this post benchmarks.
+
+Most teams arrive at the second problem and reach for a bucket and a table. The third framing is worth checking first, because the metadata table you were about to write is usually the part that breaks. The same split shows up against **[MongoDB](/blog/comparisons/iot/reductstore-vs-mongodb)** and against **[InfluxDB and MinIO together](/blog/comparison/iot/reductstore-benchmark)**.
+
+### Time-Indexed Storage Is Not a Time Series Database
+
+A physical AI workload records several modalities against one clock. A camera frame, a lidar sweep, an audio window, an IMU burst and a row of structured telemetry all belong to the same moment, and they run from a hundred byte row to a multi megabyte frame. The question is not where to put the biggest one. It is what indexes all of them.
+
+Three storage shapes get called on here, and they differ in what the primary index is.
+
+A time series database indexes by timestamp. That is what makes a range query cheap, and it is why TimescaleDB is a reasonable first thing to try. The cost is that the payload has to stay small, because the row is the unit of storage and a large value gets pushed out of it. The table above is what that push out costs.
+
+An object store indexes by key. The payload can be any size and any type, which solves the problem the time series database has, and it gives up the index to do it. Time is not a dimension S3 knows about, so you encode it in the key and list a prefix, or you keep a metadata table beside the bucket and join on it. With one modality that is tolerable. With five it is a schema you now own and have to keep correct.
+
+Time-indexed storage keeps the timestamp as the primary index and leaves the payload opaque and unbounded. A record is a timestamp, a blob of any size, and a set of labels. Each modality is its own entry in the same bucket, written against the same clock. Pulling a moment back is a time range across entries rather than a join you wrote yourself.
+
+|                      | Primary index | Payload            | Several modalities           |
+| -------------------- | ------------- | ------------------ | ---------------------------- |
+| Time series database | timestamp     | small, structured  | one table, one schema        |
+| Object store         | key string    | any size, any type | your naming scheme           |
+| Time-indexed storage | timestamp     | any size, any type | one entry each, shared clock |
+
+ReductStore is the third row. It is not a time series database that accepts binary payloads, and calling it one sets the wrong expectation. There is no continuous aggregate, no hypertable partitioning, no join against an asset table. What it does is keep the timestamp as the index across every modality, at payload sizes a row based database cannot hold.
+
+## Retention, SQL and Schema
+
+Moving the payload out is the first decision. What you can do with it once it is out is the second, and it is where a time-indexed store and a plain bucket diverge again.
+
+- **Lifecycle policies** run as background tasks on a bucket. They delete old records or compress persisted blocks with zstd, and they have a `dry_run` mode, so a retention rule can be checked against real data before it removes any of it.
+- **SQL over records**, through the ReductSelect extension. Each queried record is exposed through an `ENTRY()` table function, which supports filtering, aggregation and computed output columns over structured payloads, and results can be exported as Parquet. Keeping the payload out of a relational database does not mean giving up SQL over it.
+- **Hierarchical entry names and entry attachments** give an entry a place to carry a schema next to the data it describes, so a consumer reading the bucket does not need an out of band definition to interpret what is in it.
+- **ReductStore Core is Apache 2.0**, which matters if licensing was the reason TimescaleDB was on the shortlist.
+
+Lifecycle policies and ReductSelect need 1.20, entry attachments 1.19.
+
+If the payloads are arriving over MQTT rather than out of an existing database, **[how to choose the right MQTT database](/blog/advice/database/mqtt-data-storage)** covers the same decision at ingest time instead of after the fact. **[How to store vibration sensor data](/blog/how-to-store-vibration-sensor-data)** runs the same split on high frequency waveforms, including the FIFO quota that holds on a fixed disk. The **[benchmark repository](https://github.com/reductstore/reduct-vs-timescaledb)** holds the runner and the compose file if you want these numbers on your own hardware. **[Download ReductStore](/download)** to get started, or see **[what teams use it for](/use-cases)**.
 
 ## References
 
