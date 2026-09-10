@@ -121,8 +121,8 @@ The `#ext` array runs an ordered server-side pipeline:
   their source timestamp span, using Grafana's resolved `$__interval` value.
   Because this step has no SQL query or format conversion, it only batches the
   decoded JSON and avoids unnecessary SQL parsing and execution.
-- The second `select` stage averages each batch and emits the numeric `lat` and
-  `long` series.
+- The second `select` stage runs the SQL query to average each batch and emits
+  the numeric `lat` and `long` series.
 
 Grafana adjusts `$__interval` to the selected time range and panel width. This
 keeps the point density suitable for the panel while preserving more detail over
