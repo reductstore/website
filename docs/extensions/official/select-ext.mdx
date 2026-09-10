@@ -98,9 +98,9 @@ Nested JSON and Parquet fields can be referenced with dotted paths, for example 
 
 #### Export Parameters
 
-| Parameter  | Type             | Mandatory | Default         | Description                                                                                                                               |
-| ---------- | ---------------- | --------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`   | string           | No        | Input-dependent | Output format. Supported values are `csv`, `json`, and `parquet`.                                                                         |
+| Parameter  | Type             | Mandatory | Default         | Description                                                                                                                                        |
+| ---------- | ---------------- | --------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`   | string           | No        | Input-dependent | Output format. Supported values are `csv`, `json`, and `parquet`.                                                                                  |
 | `rows`     | number           | No        | All rows        | Batches input or SQL result rows into output records with at most this many rows per output record. Must be greater than 0.                        |
 | `duration` | number or string | No        | Not set         | Batches input or SQL result rows into output records by source timestamp span, as microseconds or a duration string such as `1s`, `1.5s`, or `1m`. |
 
