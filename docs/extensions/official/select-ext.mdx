@@ -21,7 +21,9 @@ import DemoLicenseNote from "@site/src/components/promotional/DemoLicenseNote";
 
 ## Query Format
 
-ReductSelect uses SQL to select, filter, aggregate, and reorder rows.
+ReductSelect can use SQL to select, filter, aggregate, and reorder rows. When
+`sql` is omitted, it skips SQL processing and can pass through, batch, or
+convert the input depending on the other options.
 
 A user can specify the SQL query and other parameters in the `#ext.select` object of the conditional query in the JSON format:
 
@@ -45,15 +47,15 @@ A user can specify the SQL query and other parameters in the `#ext.select` objec
             "column_name": { "id": "number", "type": "string" }
         }
     },
-    # SQL query to run against the current record. Default is "SELECT * FROM ENTRY()"
+    # Optional SQL query to run against the current record
     "sql": "string",
     # Optional output controls
     "export": {
         # Output format: "csv", "json", or "parquet"
         "format": "string",
-        # Batching: group SQL result rows into output records with at most this many rows each. Must be greater than 0.
+        # Batching: group input or SQL result rows into output records with at most this many rows each. Must be greater than 0.
         "rows": "number",
-        # Batching: group SQL result rows into output records by source timestamp span, as microseconds or a duration string such as "1s", "1.5s", or "1m".
+        # Batching: group input or SQL result rows into output records by source timestamp span, as microseconds or a duration string such as "1s", "1.5s", or "1m".
         "duration": "number|string"
     },
     # Map SQL result columns to computed labels: label name -> SQL column name
@@ -68,11 +70,15 @@ A user can specify the SQL query and other parameters in the `#ext.select` objec
 The `sql` field contains the query to run against the current record.
 The current input record is available through the case-sensitive `ENTRY()` table function.
 
-If it is not specified, ReductSelect uses:
+If `sql` is not specified, ReductSelect skips SQL parsing and execution. When
+the query also omits batching, computed labels, Protobuf field extraction, and
+output format conversion, the original payload and metadata are returned
+unchanged without parsing the data.
 
-```sql
-SELECT * FROM ENTRY()
-```
+When `sql` is omitted but batching, computed labels, Protobuf field extraction,
+or a different `export.format` is requested, ReductSelect parses only the data
+needed for that operation and bypasses the SQL engine. For example, a JSON-to-
+Parquet conversion does not create or execute a DataFusion SQL session.
 
 For CSV data without headers, columns are exposed as `column_0`, `column_1`, and so on.
 For CSV data with headers, JSON objects, and Parquet data, SQL columns use the original field names.
@@ -86,7 +92,7 @@ Nested JSON and Parquet fields can be referenced with dotted paths, for example 
 | `json`     | object | No        | Inferred from content type | Selects JSON input parsing. Cannot be used together with `csv`, `parquet`, or `protobuf`.                             |
 | `parquet`  | object | No        | Inferred from content type | Selects Parquet input parsing. Cannot be used together with `csv`, `json`, or `protobuf`.                             |
 | `protobuf` | object | No        | Inferred from content type | Selects Protobuf input parsing. Cannot be used together with `csv`, `json`, or `parquet`.                             |
-| `sql`      | string | No        | `SELECT * FROM ENTRY()`    | SQL query executed against the current input record.                                                                  |
+| `sql`      | string | No        | Not set                    | SQL query executed against the current input record. When omitted, SQL parsing and execution are skipped.             |
 | `export`   | object | No        | Format-specific            | Controls output format and batching.                                                                                  |
 | `as_label` | object | No        | `{}`                       | Maps SQL result columns to computed labels using `{"label_name": "column_name"}`. Only primitive values are accepted. |
 
@@ -95,8 +101,37 @@ Nested JSON and Parquet fields can be referenced with dotted paths, for example 
 | Parameter  | Type             | Mandatory | Default         | Description                                                                                                                               |
 | ---------- | ---------------- | --------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `format`   | string           | No        | Input-dependent | Output format. Supported values are `csv`, `json`, and `parquet`.                                                                         |
-| `rows`     | number           | No        | All rows        | Batches SQL result rows into output records with at most this many rows per output record. Must be greater than 0.                        |
-| `duration` | number or string | No        | Not set         | Batches SQL result rows into output records by source timestamp span, as microseconds or a duration string such as `1s`, `1.5s`, or `1m`. |
+| `rows`     | number           | No        | All rows        | Batches input or SQL result rows into output records with at most this many rows per output record. Must be greater than 0.                        |
+| `duration` | number or string | No        | Not set         | Batches input or SQL result rows into output records by source timestamp span, as microseconds or a duration string such as `1s`, `1.5s`, or `1m`. |
+
+:::tip Batch before SQL in a pipeline
+If one pipeline stage only needs to batch rows for a later SQL stage, put the
+batching-only `select` step first and omit both `sql` and `export.format` from
+that step:
+
+```json
+{
+  "#ext": [
+    {
+      "select": {
+        "export": {
+          "duration": "1s"
+        }
+      }
+    },
+    {
+      "select": {
+        "sql": "SELECT AVG(value) AS value FROM ENTRY()"
+      }
+    }
+  ]
+}
+```
+
+This is considerably faster than running a projection query while batching.
+The first step avoids SQL parsing and processing as well as format conversion,
+so it performs only the batching needed by the next step.
+:::
 
 ### Computed Labels
 
