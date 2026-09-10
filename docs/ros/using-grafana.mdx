@@ -101,8 +101,7 @@ Create or edit a time-series panel, then configure its query:
       "select": {
         "export": {
           "duration": "$__interval"
-        },
-        "sql": "SELECT latitude, longitude FROM ENTRY()"
+        }
       }
     },
     {
@@ -118,11 +117,12 @@ The `#ext` array runs an ordered server-side pipeline:
 
 - `ros.extract` uses the entry's `$schema` attachment to decode each
   **[CDR](../glossary.mdx#cdr)** message into JSON.
-- The first `select` stage projects the `latitude` and `longitude` fields. Its
-  `export.duration` setting batches rows according to their source timestamp span,
-  using Grafana's resolved `$__interval` value.
-- The second `select` stage averages each batch and emits the numeric `lat` and
-  `long` series.
+- The first `select` stage uses `export.duration` to batch rows according to
+  their source timestamp span, using Grafana's resolved `$__interval` value.
+  Because this step has no SQL query or format conversion, it only batches the
+  decoded JSON and avoids unnecessary SQL parsing and execution.
+- The second `select` stage runs the SQL query to average each batch and emits
+  the numeric `lat` and `long` series.
 
 Grafana adjusts `$__interval` to the selected time range and panel width. This
 keeps the point density suitable for the panel while preserving more detail over
