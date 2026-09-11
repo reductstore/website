@@ -4,11 +4,21 @@ description: Store time-indexed camera frames and LiDAR scans alongside an exist
 authors: alexey
 tags: [comparison, robotics, influxdb]
 slug: influxdb-robotics-sensor-data
-date: 2026-09-11
-image: ./img/influxdb-reductstore-robotics-architecture.svg
+date: 2026-09-15
+image: ./img/influxdb-reductstore-robotics-architecture.png
 ---
 
-![Robotics sensor data architecture showing metrics flowing to InfluxDB and raw camera, LiDAR, and waveform data flowing to ReductStore](./img/influxdb-reductstore-robotics-architecture.svg)
+<img
+  src={require("./img/influxdb-reductstore-robotics-architecture.png").default}
+  alt="Robotics sensor data architecture showing metrics flowing to InfluxDB and raw camera, LiDAR, and waveform data flowing to ReductStore"
+  style={{
+    width: "100%",
+    height: "auto",
+    display: "block",
+    padding: "5% 10%",
+    boxSizing: "border-box",
+  }}
+/>
 
 InfluxDB works well for robotics metrics such as battery level, temperature, CPU usage, detection counts, and anomaly scores. These numeric values are a good fit for dashboards, alerts, and time-series analytics.
 
