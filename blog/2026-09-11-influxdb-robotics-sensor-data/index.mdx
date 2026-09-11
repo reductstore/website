@@ -1,0 +1,113 @@
+---
+title: "InfluxDB for Robotics Sensor Data: Where It Works and Where It Breaks"
+description: Store time-indexed camera frames and LiDAR scans alongside an existing InfluxDB metrics deployment by placing each data shape in the right store.
+authors: alexey
+tags: [comparison, robotics, influxdb]
+slug: influxdb-robotics-sensor-data
+date: 2026-09-11
+image: ./img/influxdb-reductstore-robotics-architecture.svg
+---
+
+![Robotics sensor data architecture showing metrics flowing to InfluxDB and raw camera, LiDAR, and waveform data flowing to ReductStore](./img/influxdb-reductstore-robotics-architecture.svg)
+
+InfluxDB works well for robotics metrics such as battery level, temperature, CPU usage, detection counts, and anomaly scores. These numeric values are a good fit for dashboards, alerts, and time-series analytics.
+
+Robots also generate much heavier data: camera frames, LiDAR scans, audio, and high-frequency waveform chunks. This raw data must often be preserved in its original format for incident replay, debugging, and model training.
+
+You do not need to replace InfluxDB. Keep it for the metrics you need to visualize and analyze, and add ReductStore for the raw sensor data. Use the same event time and stable robot and sensor identifiers in both systems so a metric can be traced back to the original records.
+
+{/* truncate */}
+
+## Where InfluxDB works well in robotics
+
+InfluxDB remains a useful metrics layer in a robotics system. Temperatures, battery state, CPU and memory usage, counters, rates, derived detections, anomaly scores, and aggregates are all small typed values. They fit naturally into measurements or tables, where InfluxDB can support dashboards, alerts, and time-series analysis.
+
+These metrics describe the robot's condition and behavior over time. Operators can organize them with stable tags such as `robot_id` and `sensor_id`, aggregate them over time windows, visualize trends, and trigger alerts when values cross a threshold.
+
+For example, a perception service can publish detection counts and confidence statistics, while an onboard computer reports CPU load and battery voltage. InfluxDB can then answer operational questions such as whether battery voltage drifted during a mission or when a detection rate crossed an alert threshold. This is the role InfluxDB already performs well, and it does not need to change.
+
+## Can InfluxDB store images or LiDAR scans?
+
+InfluxDB works well when each observation can be represented as a small set of typed values. A detection count, anomaly score, or battery level fits this model. The original JPEG behind a detection, a LiDAR point cloud, or a waveform buffer does not: it is an opaque binary payload that must remain intact for replay, inspection, or model training.
+
+This is where the InfluxDB data model becomes a limitation. Neither InfluxDB 2 nor InfluxDB 3 Core exposes a native binary field through line protocol. The **[InfluxDB 2 line protocol reference](https://docs.influxdata.com/influxdb/v2/reference/syntax/line-protocol/)** lists float, integer, unsigned integer, string, and boolean field values. The **[InfluxDB 3 Core line protocol reference](https://docs.influxdata.com/influxdb3/core/reference/line-protocol/)** similarly lists typed scalar fields, not a binary or blob field.
+
+| Version         | String-field limit | Native binary field |
+| --------------- | -----------------: | ------------------- |
+| InfluxDB 2      |              64 KB | No                  |
+| InfluxDB 3 Core |               1 MB | No                  |
+
+The `64 KB` limit for InfluxDB 2 and the `1 MB` limit for InfluxDB 3 Core are documented on their respective line-protocol references. Base64 can technically put some bytes into a string field within those limits, but it expands the payload by roughly one third, adds encode/decode work, and sends opaque bytes through a text-oriented ingestion and query path. It also provides no native content type or streaming semantics.
+
+## Why files and object storage create a two-system problem
+
+A filesystem or remote object storage is a better place for large binary objects than an InfluxDB string field. A common design writes each payload there, then stores its file path or object key with the related metrics in InfluxDB.
+
+This makes InfluxDB the index for a second storage system. Every event requires two related writes, and a partial failure can leave either a stale InfluxDB reference or an orphaned object. Reading an incident requires querying InfluxDB first and then resolving the returned paths or keys. Retention and cleanup must also remain synchronized so that metrics do not point to deleted payloads.
+
+The issue is not simply that two systems are involved. It is that every raw record depends on a manually maintained pointer because filesystems and general-purpose object storage do not provide the event-time and sensor query model required by the application. With a time-indexed raw-data store, the two streams can instead be queried independently using the same time range and stable source identifiers.
+
+The **[object-storage and InfluxDB benchmark](/blog/comparison/iot/reductstore-benchmark#benchmarking-setup)** presents ReductStore as one possible way to replace this blob-and-pointer layer with storage that indexes raw records by time.
+
+## Recommended architecture: split storage by purpose
+
+Use one processing or acquisition stage to fan out each event by purpose. Send all raw sensor data to ReductStore in its original format, at the event timestamp, with stable robot and sensor dimensions plus a content type. Send only the metrics needed for visualization, alerting, or analytics to InfluxDB.
+
+```svgbob
+ .-------------------.       .-----------------------------.
+ | "Camera / LiDAR"  |------>| "Processing and fan-out"    |
+ | "Waveform / PLC"  |       | "event time + stable IDs"   |
+ '-------------------'       '-----------------------------'
+                                      |         |
+                         "numeric metrics"    "raw binary payloads"
+                                      |         |
+                                      v         v
+                         .-----------------.  .------------------------.
+                         |    InfluxDB     |  |     ReductStore        |
+                         | metrics, alerts |  | frames, scans, chunks  |
+                         '-----------------'  '------------------------'
+                                      ^         ^
+                                      |         |
+                         "same event-time"    "investigation window"
+                                      |         |
+                            .----------------------------------.
+                           | "Incident investigation and ML"   |
+                            '----------------------------------'
+```
+
+For InfluxDB, use the event time and low-cardinality stable tags for the selected metrics. For ReductStore, write each JPEG, point-cloud message, protobuf record, waveform chunk, or other raw record unchanged at its event timestamp. Store matching labels such as `robot_id` and `sensor_id`, and set the content type so consumers know what they receive without inspecting the payload.
+
+| Stream                                                                                             | Store       | Purpose                                                                  |
+| -------------------------------------------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------ |
+| Original camera frames, LiDAR scans, waveform chunks, protobuf messages, and other raw sensor data | ReductStore | Preserve the unchanged records for replay, debugging, and model training |
+| Selected battery, CPU, detection-count, anomaly-score, and aggregate metrics                       | InfluxDB    | Power visualizations, alerts, and time-series analytics                  |
+
+## Connect metrics to the original sensor data
+
+The purpose of this architecture is to move directly from a metric in InfluxDB to the raw records that explain it. If an alert identifies a problem with one robot at 14:32, the operator should be able to query the corresponding camera frames, LiDAR scans, and waveform chunks in ReductStore for the same time window.
+
+Use the producer or capture time for both streams. Normalize it to the precision required by each API when writing the records. This gives the metric and its source data the same event-time reference even though the database APIs use different timestamp representations.
+
+Keep the source identifiers consistent as well. Use stable `robot_id` and `sensor_id` values as tags in InfluxDB and as a ReductStore entry path such as `<robot_id>/<sensor_id>`. Optional labels such as site or mission can narrow the ReductStore query without introducing a separate file-path or object-key lookup.
+
+The investigation then has two straightforward steps: identify the robot and time interval from the InfluxDB metric, and query ReductStore using that entry path and interval. The **[data-querying guide](/docs/guides/data-querying)** explains how to retrieve ReductStore records by time range and labels.
+
+## Conclusion
+
+InfluxDB remains the right home for small numeric robotics metrics. ReductStore supplies the complementary raw-data path for time-indexed frames, scans, and waveform chunks. With producer event time and stable metadata shared across both streams, teams can correlate an alert with the evidence that explains it without migrating a working metrics system.
+
+Review the reproducible **[object-storage and InfluxDB benchmark](/blog/comparison/iot/reductstore-benchmark)** for the batch-retrieval case, then read the **[architecture comparison](/whitepaper)** for the broader storage design.
+
+## FAQ
+
+### Can InfluxDB store binary data?
+
+InfluxDB 2 and InfluxDB 3 Core line protocols do not expose a native binary or blob field. Both support strings with documented, version-specific size limits, so base64 is possible for limited cases but is not native binary storage.
+
+### Do I need to replace InfluxDB with ReductStore?
+
+No. Keep InfluxDB for metrics, dashboards, and alerts when it already serves those needs. Add ReductStore for raw sensor payloads that do not fit a small typed-field model.
+
+### How do I query metrics and raw sensor data for the same time range?
+
+Use the source event timestamp and stable identifiers such as `robot_id` and `sensor_id` in both streams. Query the InfluxDB metrics interval, then query ReductStore for the identical time window and labels.
