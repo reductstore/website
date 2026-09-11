@@ -64,25 +64,25 @@ The **[object-storage and InfluxDB benchmark](/blog/comparison/iot/reductstore-b
 Use one processing or acquisition stage to fan out each event by purpose. Send all raw sensor data to ReductStore in its original format, at the event timestamp, with stable robot and sensor dimensions plus a content type. Send only the metrics needed for visualization, alerting, or analytics to InfluxDB.
 
 ```svgbob
- .-------------------.       .-----------------------------.
- | "Camera / LiDAR"  |------>| "Processing and fan-out"    |
- | "Waveform / PLC"  |       | "event time + stable IDs"   |
- '-------------------'       '-----------------------------'
-                                      |         |
-                         "numeric metrics"    "raw binary payloads"
-                                      |         |
-                                      v         v
-                         .-----------------.  .------------------------.
-                         |    InfluxDB     |  |     ReductStore        |
-                         | metrics, alerts |  | frames, scans, chunks  |
-                         '-----------------'  '------------------------'
-                                      ^         ^
-                                      |         |
-                         "same event-time"    "investigation window"
-                                      |         |
-                            .----------------------------------.
-                           | "Incident investigation and ML"   |
-                            '----------------------------------'
+ .-------------------.       .-------------------------------------.
+ | "Camera / LiDAR"  |------>|     "Processing and fan-out"        |
+ | "Waveform / PLC"  |       |     "event time + stable IDs"       |
+ '-------------------'       '-------------------------------------'
+                                    |                   |
+                       "numeric metrics"           "raw binary payloads"
+                                    |                   |
+                                    v                   v
+                       .-------------------.  .----------------------------.
+                       |    InfluxDB       |  |       ReductStore          |
+                       |"metrics, alerts"  |  |  "frames, scans, chunks"   |
+                       '-------------------'  '----------------------------'
+                                    ^                    ^
+                                    |                    |
+                        "same event-time"          "investigation window"
+                                    |                    |
+                       .---------------------------------------------------.
+                       |        "Incident investigation and ML"            |
+                       '---------------------------------------------------'
 ```
 
 For InfluxDB, use the event time and low-cardinality stable tags for the selected metrics. For ReductStore, write each JPEG, point-cloud message, protobuf record, waveform chunk, or other raw record unchanged at its event timestamp. Store matching labels such as `robot_id` and `sensor_id`, and set the content type so consumers know what they receive without inspecting the payload.
