@@ -252,9 +252,9 @@ The problem starts above that threshold, and the mechanism is worth naming.
 
 PostgreSQL triggers TOAST once a row's total size passes roughly 2 KB, not at a hard per-field threshold, and a large `BYTEA` value is usually most of what pushes a row over it. Once TOAST triggers, PostgreSQL may compress the value and, if it is still too large, move it out of the main table into a side table in chunks. Compression buys little on a JPEG or a packed sensor frame, so what is left is the chunking and the indirection: writing splits the value across rows in a side table, and reading reassembles it.
 
-The benchmark's own client path pays a second cost on top of that. It writes through `execute_values`, which builds the entire `INSERT` statement in memory before any of it goes on the wire, so a 1 MB record is a 1 MB string in the client process before it is a 1 MB value in the server. That is a property of the batching helper this benchmark uses, not a limit of PostgreSQL itself: `COPY` can stream a value to the server without building it in memory first.
+The benchmark's own client path pays a second cost on top of that. It writes through `execute_values`, which builds the entire `INSERT` statement in memory before any of it goes on the wire, so the SQL encoded payload is materialized in client memory as part of the complete batch statement before that statement is sent to the server. That is a property of the batching helper this benchmark uses, not a limit of PostgreSQL itself: `COPY` can stream a value to the server without building it in memory first.
 
-TimescaleDB's columnar compression does not recover it either. Compression works by finding similarity across values, and an already compressed, high entropy binary payload such as a JPEG has little of that left to exploit.
+TimescaleDB's columnar compression addresses a different problem. Its compression algorithms benefit from repeated or similar values across rows. Already compressed, high cardinality binary payloads such as distinct JPEG frames generally provide much less structure for those algorithms to exploit. The benchmark above does not enable TimescaleDB compression, so its results should not be interpreted as measuring that feature.
 
 ## Three Kinds of TimescaleDB Alternative
 
