@@ -4,7 +4,7 @@ description: "Benchmarks for TimescaleDB against ReductStore from 1 KB to 1 MB r
 authors: [alexey, anthony]
 tags: [comparison, iot]
 slug: comparisons/iot/reductstore-vs-timescaledb
-date: 2026-09-15
+date: 2026-09-17
 image: ./img/snippet.webp
 ---
 
@@ -238,27 +238,23 @@ When we choose a database for storing blob data, we should consider not only per
 - **Querying**: TimescaleDB is better for structured data and complex queries, while ReductStore is more suitable for storing and retrieving blobs with minimal overhead and latency.
 - **Replication**: TimescaleDB replicates data across multiple nodes as exact copies, while ReductStore provides append-only replication, with the ability to filter data based on labels. This could be a part of your data reduction strategy.
 
-## Conclusions
-
-TimescaleDB excels as a time series database and can be used to store small blobs. It's a good choice if you need to store structured data and want to avoid additional storage for blob data. However, if you have blobs larger than 10KB, ReductStore might be a better option. It offers better performance and provides a retention policy based on disk usage and conditional append-only replication for your data reduction strategy.
-
 ## When TimescaleDB Is Still the Right Choice
 
 The numbers above are for large opaque payloads. They say nothing about the workload TimescaleDB was built for, and that workload is the common one.
 
-Keep TimescaleDB when your records are structured rows and you ask for them by aggregate. Continuous aggregates, hypertable partitioning and columnar compression are real advantages, and an object store has no equivalent for any of them. If you join sensor readings against an asset table, a work order or a shift schedule, you need SQL and you need it in the same database as the readings. That is not a job to hand to a blob store.
+Keep TimescaleDB when your records are structured rows and you ask for them by aggregate. Continuous aggregates, hypertable partitioning and columnar compression are real advantages, and an object store has no equivalent for any of them. TimescaleDB is particularly strong when you want SQL joins and relational data directly alongside the readings, for example against an asset table, a work order or a shift schedule. That is not a job to hand to a blob store.
 
-Keep it when your payloads are small. Under about 2 KB a `BYTEA` value sits inline in the row and the overhead measured above never appears. One `INSERT` writes it, one `SELECT` reads it back, and there is no second system to keep consistent.
+Keep it when your payloads are small. Under roughly 2 KB of total row size, TOAST never triggers, the value sits inline, and the overhead measured above never appears. One `INSERT` writes it, one `SELECT` reads it back, and there is no second system to keep consistent.
 
 The problem starts above that threshold, and the mechanism is worth naming.
 
 ### Why Large Values Get Slow
 
-PostgreSQL moves any field larger than roughly 2 KB out of the main table and into a TOAST table, split into chunks and compressed on the way. That is a good design for text. For a JPEG or a packed sensor frame the compression attempt returns almost nothing, so what is left is the chunking: every write splits the value across rows in a side table, and every read reassembles it.
+PostgreSQL triggers TOAST once a row's total size passes roughly 2 KB, not at a hard per-field threshold, and a large `BYTEA` value is usually most of what pushes a row over it. Once TOAST triggers, PostgreSQL may compress the value and, if it is still too large, move it out of the main table into a side table in chunks. Compression buys little on a JPEG or a packed sensor frame, so what is left is the chunking and the indirection: writing splits the value across rows in a side table, and reading reassembles it.
 
-The client pays a second time. `execute_values` builds the entire `INSERT` statement in memory before any of it goes on the wire, so a 1 MB record is a 1 MB string in the client process before it is a 1 MB value in the server. The SQL path has no chunked upload. That is most of the gap in the 1 MB row of the table above.
+The benchmark's own client path pays a second cost on top of that. It writes through `execute_values`, which builds the entire `INSERT` statement in memory before any of it goes on the wire, so a 1 MB record is a 1 MB string in the client process before it is a 1 MB value in the server. That is a property of the batching helper this benchmark uses, not a limit of PostgreSQL itself: `COPY` can stream a value to the server without building it in memory first.
 
-TimescaleDB's columnar compression does not recover it either. Columnar compression works on columns of similar values, and random binary data has no similarity to exploit.
+TimescaleDB's columnar compression does not recover it either. Compression works by finding similarity across values, and an already-compressed, high-entropy binary payload such as a JPEG has little of that left to exploit.
 
 ## Three Kinds of TimescaleDB Alternative
 
@@ -268,9 +264,9 @@ TimescaleDB's columnar compression does not recover it either. Columnar compress
 
 **Your problem is size.** The rows are fine, but each one carries an image, a waveform or a serialized message, and the database is now mostly payload. You want the payload out of the database. The standard answer is an object store with a metadata table pointing into it. It works, and you own the consistency between the two systems and the retention on both of them. We measured the same workload against S3 style storage in **[the MinIO comparison](/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio)**.
 
-**Your problem is time and modality together.** The payloads have to leave the database and you still have to ask for them by time range, by device, by label. This is the physical AI case: several streams of different types and sizes recorded against one clock, each too large for a row and not much use without the others. That is what this post benchmarks.
+**Your problem is time and modality together.** The payloads have to leave the database and you still have to ask for them by time range, by device, by label. This is the physical AI case: several streams of different types and sizes recorded against one clock, large enough that storing the payload directly as database rows becomes inefficient, and not much use without the others. That is what this post benchmarks.
 
-Most teams arrive at the second problem and reach for a bucket and a table. The third framing is worth checking first, because the metadata table you were about to write is usually the part that breaks. The same split shows up against **[MongoDB](/blog/comparisons/iot/reductstore-vs-mongodb)** and against **[InfluxDB and MinIO together](/blog/comparison/iot/reductstore-benchmark)**.
+Most teams arrive at the second problem and reach for a bucket and a table. The third framing is worth checking first, because the metadata table is often where synchronization, retention and consistency complexity accumulates. The same split shows up against **[MongoDB](/blog/comparisons/iot/reductstore-vs-mongodb)** and against **[InfluxDB and MinIO together](/blog/comparison/iot/reductstore-benchmark)**.
 
 ### Time-Indexed Storage Is Not a Time Series Database
 
@@ -302,6 +298,10 @@ Moving the payload out is the first decision. What you can do with it once it is
 - **ReductStore Core is Apache 2.0**, which matters if licensing was the reason TimescaleDB was on the shortlist.
 
 Lifecycle policies and ReductSelect need 1.20, entry attachments 1.19.
+
+## Conclusions
+
+TimescaleDB excels as a time series database and can be used to store small blobs. It's a good choice if you need to store structured data and want to avoid additional storage for blob data. However, if you have blobs larger than 10KB, ReductStore might be a better option. It offers better performance and provides a retention policy based on disk usage and conditional append-only replication for your data reduction strategy.
 
 If the payloads are arriving over MQTT rather than out of an existing database, **[how to choose the right MQTT database](/blog/advice/database/mqtt-data-storage)** covers the same decision at ingest time instead of after the fact. **[How to store vibration sensor data](/blog/how-to-store-vibration-sensor-data)** runs the same split on high frequency waveforms, including the FIFO quota that holds on a fixed disk. The **[benchmark repository](https://github.com/reductstore/reduct-vs-timescaledb)** holds the runner and the compose file if you want these numbers on your own hardware. **[Download ReductStore](/download)** to get started, or see **[what teams use it for](/use-cases)**.
 
