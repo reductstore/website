@@ -270,7 +270,7 @@ Most teams arrive at the second problem and reach for a bucket and a table. The 
 
 ### Time-Indexed Storage Is Not a Time Series Database
 
-A physical AI workload records several modalities against one clock. A camera frame, a lidar sweep, an audio window, an IMU burst and a row of structured telemetry all belong to the same moment, and they run from a hundred byte row to a multi megabyte frame. The question is not where to put the biggest one. It is what indexes all of them.
+A physical AI workload records several modalities against one clock. A camera frame, a lidar scan, an audio window, an IMU burst and a row of structured telemetry all belong to the same moment, and they run from a hundred byte row to a multi megabyte frame. The question is not where to put the biggest one. It is what indexes all of them.
 
 Three storage shapes get called on here, and they differ in what the primary index is.
 
@@ -303,7 +303,7 @@ Lifecycle policies and ReductSelect need 1.20, entry attachments 1.19.
 
 TimescaleDB is the right choice when your records are structured rows you aggregate and join in SQL, and the payloads stay small enough to sit inline, under roughly 2 KB. Push past that threshold with opaque, high entropy blobs and the cost we measured above shows up: TOAST chunking, an extra assembly step on every read, and, in this benchmark, a client path that builds the whole insert in memory before it goes on the wire.
 
-This is not TimescaleDB failing at its job. It is a row based database asked to hold a payload shape it was not built for. A physical AI workload has both problems at once: structured telemetry TimescaleDB handles well, and camera frames, lidar sweeps and audio windows it does not. Time-indexed storage keeps the timestamp as the shared index across every modality and leaves the payload opaque and unbounded, so the two stop competing for the same table.
+This is not TimescaleDB failing at its job. It is a row based database asked to hold a payload shape it was not built for. A physical AI workload has both problems at once: structured telemetry TimescaleDB handles well, and camera frames, lidar scans and audio windows it does not. Time-indexed storage keeps the timestamp as the shared index across every modality and leaves the payload opaque and unbounded, so the two stop competing for the same table.
 
 If the payloads are arriving over MQTT rather than out of an existing database, **[how to choose the right MQTT database](/blog/advice/database/mqtt-data-storage)** covers the same decision at ingest time instead of after the fact. **[How to store vibration sensor data](/blog/how-to-store-vibration-sensor-data)** runs the same split on high frequency waveforms, including the FIFO quota that holds on a fixed disk. The **[benchmark repository](https://github.com/reductstore/reduct-vs-timescaledb)** holds the runner and the compose file if you want these numbers on your own hardware. **[Download ReductStore](/download)** to get started, or see **[what teams use it for](/use-cases)**.
 
