@@ -26,7 +26,9 @@ ReductStore uses environment variables for configuration. Here is a list of the 
 | `RS_PUBLIC_URL`        | http(s)://[RS_HOST]:[RS_PORT][RS_API_BASE_PATH] | Public URL of the instance. Used for **[query links](/docs/glossary#query-link)**.                                                             |
 | `RS_PRIMARY_URL`       |                                                 | Public URL of the primary ReductStore instance used when forwarding system information (for example, audit events).                            |
 | `RS_SECONDARY_URL`     |                                                 | Optional fallback URL for the primary instance.                                                                                                |
-| `RS_API_TOKEN`         |                                                 | If set, the storage uses token authorization                                                                                                   |
+| `RS_API_TOKEN`         |                                                 | Enables authentication and provisions the `init-token` with this value. The token cannot be rotated or removed through the API.                |
+| `RS_INIT_API_TOKEN`    |                                                 | Enables authentication and initializes a manageable `init-token` with this value. The token can later be rotated or removed through the API.   |
+| `RS_DISABLE_AUTH`      | false                                           | Set to `true` to explicitly run without authentication.                                                                                        |
 | `RS_CERT_PATH`         |                                                 | Path to an SSL certificate. If unset, the storage uses HTTP instead of HTTPS                                                                   |
 | `RS_CERT_KEY_PATH`     |                                                 | Path to the private key of the desired SSL certificate. Should be set with RS_CERT_PATH                                                        |
 | `RS_LICENSE`           |                                                 | Inline license document content. Required for commercial usage unless `RS_LICENSE_PATH` is set. See **[Pricing](/pricing)** for more details.  |
@@ -34,6 +36,8 @@ ReductStore uses environment variables for configuration. Here is a list of the 
 | `RS_CORS_ALLOW_ORIGIN` |                                                 | Sets the `Access-Control-Allow-Origin header`. Use `*` to allow all origins or list specific origins separated by commas.                      |
 | `RS_EXT_PATH`          |                                                 | If set, it activates the experimental extension API. The path should be a folder with extension binaries.                                      |
 | `RS_INSTANCE_NAME`     |                                                 | Optional instance name used in audit record labels (`instance`). If unset, ReductStore uses OS hostname (or `unknown` if unavailable).         |
+
+Standalone, primary, and secondary instances must explicitly choose an authentication mode: set exactly one of `RS_API_TOKEN` or `RS_INIT_API_TOKEN`, or set `RS_DISABLE_AUTH=true`. Do not set both token variables. If `RS_DISABLE_AUTH=true`, the token variables are ignored.
 
 You can tune other settings such as performance, storage engine, and more. See **[the advanced settings](./settings.mdx)**.
 

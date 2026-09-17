@@ -195,6 +195,6 @@ For deployment patterns and architecture examples, see the [**Disaster Recovery 
 ## Security
 
 In order to manage access to the storage, ReductStore uses access tokens for authentication and authorization. You can generate tokens with the [**Token API**](./http-api/token-authentication.mdx) and use them to access the data.
-A user can disable the token authorization and use the storage without authentication. In this case, the storage engine doesn't check the token and allows access to all data.
+A user can explicitly disable token authorization with `RS_DISABLE_AUTH=true` and use the storage without authentication. In this case, the storage engine doesn't check the token and allows access to all data.
 
 For more details, read the [**Access Control Guide**](./guides/access-control.mdx).
