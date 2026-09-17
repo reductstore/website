@@ -39,8 +39,6 @@ ReductStore uses environment variables for configuration. Here is a list of the 
 
 Standalone, primary, and secondary instances must explicitly choose an authentication mode: set exactly one of `RS_API_TOKEN` or `RS_INIT_API_TOKEN`, or set `RS_DISABLE_AUTH=true`. Do not set both token variables. If `RS_DISABLE_AUTH=true`, the token variables are ignored.
 
-Read-only replicas keep the existing behavior: `RS_API_TOKEN` is optional, while `RS_INIT_API_TOKEN` and `RS_DISABLE_AUTH` do not apply. See the **[Access Control guide](../guides/access-control)** for details.
-
 You can tune other settings such as performance, storage engine, and more. See **[the advanced settings](./settings.mdx)**.
 
 ### License Configuration
