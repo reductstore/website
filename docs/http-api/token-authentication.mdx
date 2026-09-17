@@ -17,7 +17,7 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
 The Token API provides HTTP methods for managing access tokens and permissions for the database.
 
 :::info
-The API is available only when the `RS_API_TOKEN` environment variable is set.
+The API is available when authentication is enabled with `RS_API_TOKEN` or `RS_INIT_API_TOKEN`. It is unavailable when `RS_DISABLE_AUTH=true`.
 :::
 
 ## Get a List of Tokens

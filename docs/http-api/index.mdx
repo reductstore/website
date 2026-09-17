@@ -12,7 +12,7 @@ The API follows the RESTful principles and uses JSON as the primary data format 
 
 ## Token Authentication
 
-ReductStore provides an HTTP API for interacting with the database. In order to use the API, you must first authenticate using a token, which you can be provisioned one with the `RS_API_TOKEN` **[environment variable](./configuration)** or created with [**the Token API**](./http-api/token-authentication).
+When authentication is enabled, you must use an access token. The initial full-access token is configured with either `RS_API_TOKEN` or `RS_INIT_API_TOKEN`; additional tokens can be created with the **[Token API](./token-authentication)**. See **[Server Configuration](../configuration)** for the authentication settings.
 
 Once you have obtained a token, you can use it to authenticate your requests by including it in the `authorization` header of your HTTP request, like this:
 
@@ -27,7 +27,7 @@ An example of a request with CURL:
 ```
 
 :::info
-The database uses the token authentication when the `RS_API_TOKEN` environment is set. You should use it as a full **[access token](./glossary#access-token)** to create other tokens with different permission by using the Token API
+Standalone, primary, and secondary instances require an explicit authentication mode: set exactly one of `RS_API_TOKEN` or `RS_INIT_API_TOKEN`, or set `RS_DISABLE_AUTH=true`. Use the configured full-access token to create other tokens with narrower permissions through the Token API.
 :::
 
 ## Handling Errors
