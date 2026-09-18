@@ -1,0 +1,45 @@
+---
+title: Basic Concepts
+description: HTTP API documentation for interacting with the database.
+---
+
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/http-api" />
+</head>
+
+ReductStore provides an **[HTTP API](./glossary#http-api)** for interacting with the database. The API allows you to read, write, and query data, as well as manage the database itself.
+The API follows the RESTful principles and uses JSON as the primary data format for administrative operations.
+
+## Token Authentication
+
+When authentication is enabled, you must use an access token. The initial full-access token is configured with either `RS_API_TOKEN` or `RS_INIT_API_TOKEN`; additional tokens can be created with the **[Token API](./http-api/token-authentication)**. See **[Server Configuration](../configuration)** for the authentication settings.
+
+Once you have obtained a token, you can use it to authenticate your requests by including it in the `authorization` header of your HTTP request, like this:
+
+```
+authorization: Bearer <your-token-here>
+```
+
+An example of a request with CURL:
+
+```shell
+ curl   --header "authorization: Bearer ${ACCESS_TOKEN}" -a http://127.0.0.1:8383/api/v1/info
+```
+
+:::info
+Standalone, primary, and secondary instances require an explicit authentication mode: set exactly one of `RS_API_TOKEN` or `RS_INIT_API_TOKEN`, or set `RS_DISABLE_AUTH=true`. Use the configured full-access token to create other tokens with narrower permissions through the Token API.
+:::
+
+## Handling Errors
+
+If a request to ReductStore fails, the API returns an HTTP status code indicating the type of error that occurred. For example, a `404 Not Found` status code indicates that the requested resource could not be found.
+
+As of version 1.2.0, the HTTP API also includes an error message in the `x-reduct-error` header of the response. This error message provides more detailed information about the error, which can be useful for debugging and troubleshooting.
+
+## HTTP/1.1 and HTTP/2 Support
+
+The HTTP API supports both HTTP/1.1 and HTTP/2 protocols. If a client sends an HTTP/2 request, the server will respond with an HTTP/2 response. If a client sends an HTTP/1.1 request, the server will respond with an HTTP/1.1 response.
+
+import DocCardList from "@theme/DocCardList";
+
+<DocCardList />
