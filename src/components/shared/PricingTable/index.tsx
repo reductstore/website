@@ -3,9 +3,34 @@ import clsx from "clsx";
 import styles from "./styles.module.css";
 import PricingPlan from "./PricingPlan";
 import Link from "@docusaurus/Link";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+
+type ReductProCustomFields = {
+  checkoutUrl?: string;
+  portalUrl?: string;
+};
 
 export default function PricingTable() {
-  const createFeatures = (plan: "community" | "onpremise" | "cloud") => {
+  const { siteConfig } = useDocusaurusContext();
+  const { checkoutUrl, portalUrl } =
+    siteConfig.customFields as ReductProCustomFields;
+  const handleSubscribe: React.MouseEventHandler<HTMLAnchorElement> = async (
+    event,
+  ) => {
+    event.preventDefault();
+
+    if (!checkoutUrl) {
+      return;
+    }
+
+    const response = await fetch(checkoutUrl);
+    if (!response.ok) {
+      return;
+    }
+
+    window.location.assign(await response.text());
+  };
+  const createFeatures = (plan: "community" | "onpremise") => {
     return [
       // Core Capabilities
       { title: "Core Capabilities", available: true, isCategoryHeader: true },
@@ -94,16 +119,6 @@ export default function PricingTable() {
         available: true,
         titleDetail: "Data source plugin for visualization",
       },
-      {
-        title: "Fully Managed Service",
-        available: plan === "cloud",
-        titleDetail: "Zero-maintenance cloud hosting",
-      },
-      {
-        title: "No-Code Provisioning",
-        available: plan === "cloud",
-        titleDetail: "Deploy instances without infrastructure knowledge",
-      },
 
       // Support & Maintenance
       {
@@ -124,9 +139,7 @@ export default function PricingTable() {
         title: "Long Term Support (LTS)",
         available: plan !== "community",
         titleDetail:
-          plan === "onpremise"
-            ? "Up to 3 years. No vendor lock-in, legacy versions remain open source"
-            : "Always up-to-date with latest features",
+          "Up to 3 years. No vendor lock-in, legacy versions remain open source",
       },
       {
         title: "Architecture Review",
@@ -145,7 +158,7 @@ export default function PricingTable() {
     <section>
       <div className={clsx("row", styles.pricingTable)}>
         <PricingPlan
-          title="ReductStore Core"
+          title="Core"
           subtitle="Apache-2.0"
           description="Open-source ReductStore for self-managed edge and server deployments."
           categories={createFeatures("community")}
@@ -155,23 +168,23 @@ export default function PricingTable() {
         />
 
         <PricingPlan
-          title="ReductStore Pro"
+          title="Pro"
           subtitle="Commercial Self-Hosted"
           description="Commercial components, support, proof-of-concept assistance, and long-term release support for self-hosted deployments. Any ReductStore instance linked through replication to Pro must also be covered by a Pro commercial license."
           categories={createFeatures("onpremise")}
-          buttonUrl="/demo-license"
-          buttonLabel="Get Demo License"
-          termsUrl="/terms"
+          buttonLabel="Subscribe"
+          onClick={handleSubscribe}
+          isHighlight
+          manageSubscriptionUrl={portalUrl}
         />
 
         <PricingPlan
-          title="Cloud"
-          subtitle="Managed Pro"
-          description="Zero-maintenance managed service built on ReductStore Pro."
-          categories={createFeatures("cloud")}
-          buttonUrl="/solutions/cloud"
-          buttonLabel="Get Demo Server"
-          isHighlight
+          title="Enterprise"
+          subtitle="For larger companies"
+          description="Custom licensing, support, and commercial terms for larger companies with complex deployments."
+          categories={createFeatures("onpremise")}
+          buttonUrl="/enterprise"
+          buttonLabel="Learn More"
           termsUrl="/terms"
         />
       </div>

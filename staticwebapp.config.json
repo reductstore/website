@@ -41,6 +41,11 @@
       "statusCode": 301
     },
     {
+      "route": "/demo-license",
+      "redirect": "/enterprise",
+      "statusCode": 301
+    },
+    {
       "route": "/docs/integrations/s3",
       "redirect": "/docs/integrations/cloud-storage",
       "statusCode": 301

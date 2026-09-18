@@ -19,9 +19,10 @@ interface PricingPlanProps {
   categories: Category[];
   buttonLabel: string;
   buttonUrl?: string;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
   isHighlight?: boolean;
   termsUrl?: string;
+  manageSubscriptionUrl?: string;
 }
 
 const PricingPlan: React.FC<PricingPlanProps> = ({
@@ -34,6 +35,7 @@ const PricingPlan: React.FC<PricingPlanProps> = ({
   onClick,
   isHighlight = false,
   termsUrl = "/terms",
+  manageSubscriptionUrl,
 }) => {
   const planId = title.replace(/\s+/g, "").replace(/[^a-zA-Z0-9]/g, "");
   return (
@@ -127,6 +129,14 @@ const PricingPlan: React.FC<PricingPlanProps> = ({
         <a href={termsUrl} className={styles.termsLink}>
           Terms & Conditions
         </a>
+        {manageSubscriptionUrl && (
+          <>
+            <span aria-hidden="true">·</span>
+            <a href={manageSubscriptionUrl} className={styles.termsLink}>
+              Manage subscription
+            </a>
+          </>
+        )}
       </div>
     </div>
   );

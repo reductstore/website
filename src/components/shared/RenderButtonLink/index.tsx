@@ -6,7 +6,7 @@ interface RenderButtonLinkProps {
   buttonLabel: string;
   isHighlight: boolean;
   buttonUrl?: string;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 }
 
 const RenderButtonLink = ({

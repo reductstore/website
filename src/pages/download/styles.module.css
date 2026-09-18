@@ -13,13 +13,3 @@
   max-width: 650px;
   flex: 1 1 20rem;
 }
-
-.offer {
-  flex: 0 0 auto;
-}
-
-@media (max-width: 760px) {
-  .offer {
-    display: none;
-  }
-}

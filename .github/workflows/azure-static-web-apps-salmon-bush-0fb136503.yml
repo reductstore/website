@@ -51,6 +51,8 @@ jobs:
           ###### End of Repository/Build Configurations ######
         env:
           APP_ENV: ${{ env.APP_ENV }}
+          REDUCTPRO_CHECKOUT_URL: ${{ github.event_name == 'pull_request' && vars.REDUCTPRO_CHECKOUT_URL_STAGING || vars.REDUCTPRO_CHECKOUT_URL_PROD }}
+          REDUCTPRO_PORTAL_URL: ${{ github.event_name == 'pull_request' && vars.REDUCTPRO_PORTAL_URL_STAGING || vars.REDUCTPRO_PORTAL_URL_PROD }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'

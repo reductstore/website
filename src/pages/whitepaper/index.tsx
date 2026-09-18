@@ -60,7 +60,7 @@ export default function ReductAI(): JSX.Element {
                   10x faster writes vs. TimescaleDB (100 KB records)
                 </BulletPointItem>
                 <BulletPointItem>
-                  Around $4,200 a month saved on a 50 TB S3 workload
+                  Around €4,200 a month saved on a 50 TB S3 workload
                 </BulletPointItem>
               </ul>
             </div>

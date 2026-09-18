@@ -107,6 +107,10 @@
   padding-top: 1em;
   border-top: 1px solid #e0e0e0;
   text-align: center;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
 }
 
 .termsLink {
@@ -203,8 +207,13 @@
 
 .buttonContainer {
   display: flex;
+  gap: 0.5rem;
   justify-content: center;
   margin-bottom: 1em;
+}
+
+.buttonContainer :global(.button) {
+  flex: 1 1 0;
 }
 
 .buttonContainer button {
