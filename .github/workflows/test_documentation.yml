@@ -288,7 +288,8 @@ jobs:
 
           # The example normally replicates to the public demo instance. Pause that
           # optional external side effect so CI remains self-contained.
-          RS_REPLICATION_1_MODE=paused docker compose up -d reductstore
+          export RS_REPLICATION_1_MODE=paused
+          docker compose up -d reductstore
 
           for attempt in {1..60}; do
             if curl -fsS http://127.0.0.1:8383/api/v1/alive >/dev/null; then
