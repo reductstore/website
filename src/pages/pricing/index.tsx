@@ -2,7 +2,6 @@ import Layout from "@theme/Layout";
 import PricingTable from "@site/src/components/shared/PricingTable";
 import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import Faq from "@site/src/components/shared/Faq";
-import PlaygroundOffer from "@site/src/components/promotional/PlaygroundOffer";
 import { JSX } from "react";
 import styles from "./styles.module.css";
 
@@ -10,7 +9,7 @@ export default function Pricing(): JSX.Element {
   return (
     <Layout
       title="Pricing"
-      description="Choose the right ReductStore plan for your scale, from ReductStore Core under Apache-2.0 to ReductStore Pro and fully managed cloud offerings."
+      description="Choose the right ReductStore plan for your scale, from ReductStore Core under Apache-2.0 to self-serve Pro and custom Enterprise offerings."
     >
       <main>
         <SimpleHeader pageTitle="ReductStore Pricing" />
@@ -18,13 +17,9 @@ export default function Pricing(): JSX.Element {
         <section className="container">
           <div className={styles.introSection}>
             <p className={styles.introText}>
-              ReductStore Core is open source under Apache-2.0. ReductStore Pro
-              adds commercial components, production support, and licensed
-              self-hosted deployments.
+              Start free with open source Core. Upgrade to Pro when you need the
+              extensions.
             </p>
-            <div className={styles.offer}>
-              <PlaygroundOffer />
-            </div>
           </div>
           <PricingTable />
         </section>
@@ -46,22 +41,55 @@ const pricingFaqs = [
     question:
       "What is the difference between ReductStore Core and ReductStore Pro?",
     answer:
-      "ReductStore Core is the open-source base distributed under Apache-2.0. ReductStore Pro adds commercial components, support, and subscription-based deployment rights.",
+      "ReductStore Core is the open-source base distributed under Apache-2.0. ReductStore Pro adds commercial extensions, private Docker images and binaries, and a self-serve monthly subscription for business customers.",
   },
   {
     question: "How does ReductStore Pro licensing work?",
     answer:
-      "You receive a license key specifying the licensed scope, such as disk usage and deployment coverage. The database continues working if limits are exceeded, but CLI, WebConsole, and SDKs will show warnings.",
+      "ReductStore Pro is a self-serve monthly subscription for business customers, in EUR.",
   },
   {
-    question: "What happens when the license expires?",
+    question: "How is Pro billed?",
     answer:
-      "The database keeps running. CLI, WebConsole, and SDKs show license warnings.",
+      "Monthly, on the peak storage during the billing period. 1 TB minimum, then per GB. 1.2 TB costs €18.",
   },
   {
-    question: "Do linked replicated instances need ReductStore Pro coverage?",
-    answer:
-      "Yes. If an instance replicates data to a ReductStore Pro deployment or receives replicated data from it, that linked instance must also be covered by a ReductStore Pro commercial license unless ReductSoftware approves otherwise in writing.",
+    question: "When am I charged?",
+    answer: (
+      <p>
+        Automatically at the end of each month, to the saved payment method.
+      </p>
+    ),
+  },
+  {
+    question: "What about VAT?",
+    answer: (
+      <p>
+        VAT at 19% in Germany. EU businesses with a valid VAT ID use the reverse
+        charge mechanism. No German VAT for customers outside the EU.
+      </p>
+    ),
+  },
+  {
+    question: "How do I cancel?",
+    answer: (
+      <p>
+        Through the customer portal. The license stays active until the end of
+        the billing period.
+      </p>
+    ),
+  },
+  {
+    question: "Which payment methods?",
+    answer: <p>Card, Apple Pay, Google Pay and Link.</p>,
+  },
+  {
+    question: "Cloud or Pro?",
+    answer: (
+      <p>
+        Pro runs on your infrastructure. Cloud is hosted and operated by us.
+      </p>
+    ),
   },
   {
     question: "Does ReductStore Core remain open source?",
@@ -70,7 +98,11 @@ const pricingFaqs = [
   },
   {
     question: "What are Extensions?",
-    answer:
-      "Server-side data processing during queries—e.g., SQL over CSV, JSON, and Parquet; image scaling; rosbag topic filtering.",
+    answer: (
+      <p>
+        Server-side data processing during queries—e.g., SQL over CSV, JSON, and
+        Parquet (ReductSelect); MCAP/ROS topic filtering (ReductROS).
+      </p>
+    ),
   },
 ];

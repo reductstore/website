@@ -1,12 +1,183 @@
 .pricingTable {
-  margin-top: 4em;
-  margin-bottom: 4em;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 2em;
+  margin: 4em auto 1.5em;
+}
+
+.plan {
+  display: grid;
+  grid-template-rows: 2rem 1.5rem 5rem auto minmax(10rem, 1fr);
+  width: 100%;
+  padding: 1em;
+  border: 3px solid #ccc;
+  border-radius: 20px;
+}
+
+.highlight {
+  border-color: var(--ifm-color-primary);
+}
+
+.planTitle {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.tagline {
+  margin: 0;
+  overflow: hidden;
+  color: var(--reduct-dimmed);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.priceRow {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
+}
+
+.price {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.proPrice {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.proPrice span {
+  margin-right: 0.2rem;
+  font-size: 2rem;
+}
+
+.billingNote {
+  margin: 0.25rem 0 0;
+  color: var(--reduct-dimmed);
+  font-size: 0.85rem;
+}
+
+.actionsRow {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.buttonContainer :global(.button) {
+  flex: 1 1 0;
+  white-space: normal;
+}
+
+.footNote {
+  margin: 0.5rem 0 0;
+  color: var(--reduct-dimmed);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.summaryBullets {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.summaryBullets li::marker {
+  color: var(--ifm-color-primary);
+}
+
+.manageLine {
+  margin: 0 0 4em;
+  text-align: center;
+}
+
+.comparisonSection {
+  margin: 0 0 4em;
+}
+
+.comparisonSection h2 {
+  margin-bottom: 1.5rem;
+}
+
+.comparisonScroll {
+  overflow-x: auto;
+}
+
+.comparisonTable {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+.comparisonTable th,
+.comparisonTable td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.comparisonTable thead th {
+  color: var(--ifm-color-primary);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.comparisonTable th:first-child {
+  width: 36%;
+  text-align: left;
+}
+
+.comparisonTable tbody th {
+  font-weight: 500;
+}
+
+.categoryHeader th {
+  padding-top: 1.5rem;
+  color: var(--ifm-color-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.featureIcon,
+.unavailableIcon {
+  width: 1.2em;
+  height: 1.2em;
+}
+
+.featureIcon {
+  color: green;
+}
+
+.unavailableIcon {
+  color: #ccc;
+}
+
+.termsContainer {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.termsLink {
+  color: var(--reduct-dimmed);
+  font-size: 0.75em;
+  text-decoration: none;
+}
+
+.termsLink:hover {
+  color: var(--ifm-color-primary);
+  text-decoration: underline;
 }
 
 @media (max-width: 1100px) {
@@ -19,194 +190,13 @@
   .pricingTable {
     grid-template-columns: minmax(0, 1fr);
   }
-}
 
-.plan {
-  border: 3px solid #ccc;
-  border-color: #ccc;
-  padding: 1em;
-  border-radius: 20px;
-  width: 100%;
-  display: grid;
-  grid-template-rows: auto auto auto 1fr auto;
-  gap: 1em;
-}
+  .plan {
+    grid-template-rows: 2rem 1.5rem 5rem auto minmax(8rem, 1fr);
+  }
 
-.highlight {
-  border-color: var(--ifm-color-primary);
-}
-
-.planCard {
-  display: grid;
-  grid-template-rows: subgrid;
-  grid-row: 1 / -1;
-  gap: inherit;
-}
-
-.planHeader {
-  display: flex;
-  flex-direction: column;
-}
-
-.featuresContainer {
-  display: grid;
-  grid-template-rows: auto;
-  gap: 8px;
-  align-content: start;
-}
-
-.categorySeparator {
-  margin-top: 1em;
-  margin-bottom: 0;
-  border-top: 1px solid #ccc;
-}
-
-.card__body {
-  display: grid;
-  grid-template-rows: repeat(11, auto);
-  gap: 8px;
-  align-content: start;
-}
-
-.planTitle {
-  margin-bottom: 0.5rem;
-}
-
-.subtitle {
-  color: var(--reduct-dimmed);
-}
-
-.underlinedText {
-  text-decoration: underline;
-  cursor: help;
-}
-
-.categoryHeader {
-  margin: 1em 0 0.5em 0;
-  padding-top: 0.5em;
-  border-top: 1px solid #e0e0e0;
-}
-
-.categoryHeader:first-child {
-  margin-top: 0;
-  padding-top: 0;
-  border-top: none;
-}
-
-.categoryHeaderTitle {
-  font-size: 0.9em;
-  font-weight: 600;
-  color: var(--ifm-color-primary);
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.termsContainer {
-  margin-top: auto;
-  padding-top: 1em;
-  border-top: 1px solid #e0e0e0;
-  text-align: center;
-}
-
-.termsLink {
-  font-size: 0.75em;
-  color: var(--reduct-dimmed);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.termsLink:hover {
-  color: var(--ifm-color-primary);
-  text-decoration: underline;
-}
-
-.category {
-  margin-bottom: 8px;
-}
-
-.categoryTitle {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 5px;
-  color: var(--ifm-color-content);
-  line-height: 1.4;
-}
-
-.infoIcon {
-  margin-top: 0.3em;
-  margin-left: 5px;
-  vertical-align: top;
-  cursor: help;
-  color: var(--reduct-dimmed);
-}
-
-.featureIcon {
-  margin-right: 8px;
-  flex-shrink: 0;
-  width: 1.2em;
-  height: 1.2em;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.categoryTitleContent {
-  display: flex;
-  align-items: center;
-  line-height: 1.4;
-}
-
-.tooltipTrigger {
-  border-bottom: 1px dotted var(--reduct-dimmed);
-  cursor: help;
-  transition: border-color 0.2s ease;
-}
-
-.tooltipTrigger:hover {
-  border-bottom-color: var(--ifm-color-primary);
-}
-
-.tooltipContent {
-  max-width: 200px;
-  word-wrap: break-word;
-}
-
-.termsGroup {
-  margin-top: 16px;
-}
-
-.boldLink {
-  font-weight: bold;
-}
-
-.errorMessage {
-  display: none;
-  color: #cc0033;
-  font-size: 12px;
-}
-
-.error .errorMessage {
-  display: block;
-  margin-bottom: -2em;
-}
-
-.freePlanDisclaimer {
-  margin-top: 1em;
-  font-size: 0.8em;
-  color: var(--reduct-dimmed);
-}
-
-/* Modal */
-.form {
-  margin: 2em 1em;
-}
-
-.buttonContainer {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1em;
-}
-
-.buttonContainer button {
-  white-space: normal;
+  .comparisonTable th,
+  .comparisonTable td {
+    padding: 0.65rem 0.75rem;
+  }
 }

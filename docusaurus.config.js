@@ -34,6 +34,12 @@ const config = {
   // This behavior can have SEO impacts and create relative link issues.
   trailingSlash: false,
 
+  customFields: {
+    checkoutUrl: process.env.REDUCTPRO_CHECKOUT_URL,
+    portalUrl: process.env.REDUCTPRO_PORTAL_URL,
+    checkoutEnabled: process.env.REDUCTPRO_CHECKOUT_ENABLED === "true",
+  },
+
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
   // to replace "en" with "zh-Hans".
