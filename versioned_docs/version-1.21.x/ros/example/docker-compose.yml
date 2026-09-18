@@ -1,0 +1,100 @@
+services:
+  # reductstore-start
+  reductstore:
+    image: reduct/store:latest
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8383:8383"
+    environment:
+      RS_API_TOKEN: my-token
+      # Keep diagnostic entry paths stable across container recreation.
+      RS_INSTANCE_NAME: ${ROBOT_NAME:-robot-1}
+
+      # bucket-buffering-start
+      # Keep the newest 20 GB of robot data on local disk.
+      RS_BUCKET_1_NAME: robot-data
+      RS_BUCKET_1_QUOTA_TYPE: FIFO
+      RS_BUCKET_1_QUOTA_SIZE: 20GB
+      # bucket-buffering-end
+
+      # replication-start
+      # Send selected topics to the public demo instance.
+      RS_REPLICATION_1_NAME: robot-to-central
+      RS_REPLICATION_1_SRC_BUCKET: robot-data
+      RS_REPLICATION_1_DST_BUCKET: demo
+      RS_REPLICATION_1_DST_HOST: https://play.reduct.store
+      RS_REPLICATION_1_DST_TOKEN: reductstore
+      RS_REPLICATION_1_DST_PREFIX: ${ROBOT_NAME:-robot-1}
+      RS_REPLICATION_1_ENTRIES: "/camera/image_raw,/imu/data"
+      # replication-end
+
+      # compression-start
+      # Compress local data after one day.
+      RS_LIFECYCLE_1_NAME: compress-robot-data
+      RS_LIFECYCLE_1_TYPE: compress
+      RS_LIFECYCLE_1_BUCKET: robot-data
+      RS_LIFECYCLE_1_OLDER_THAN: 1d
+      RS_LIFECYCLE_1_INTERVAL: 1h
+      # compression-end
+    volumes:
+      - reduct-data:/data
+  # reductstore-end
+
+  # grafana-start
+  grafana:
+    image: reduct/grafana:latest
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - ./grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
+  # grafana-end
+
+  ros2publisher:
+    image: ros:jazzy-ros-base
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      ROS_DOMAIN_ID: "0"
+      ROS_HOME: /tmp/ros
+      FASTDDS_BUILTIN_TRANSPORTS: UDPv4
+    volumes:
+      - ./publisher.py:/app/publisher.py:ro
+    command: ["python3", "/app/publisher.py"]
+
+  # reduct-bridge-start
+  reduct-bridge:
+    image: reduct/bridge:latest-ros2-jazzy
+    restart: unless-stopped
+    depends_on:
+      - reductstore
+      - ros2publisher
+    network_mode: host
+    environment:
+      ROS_DOMAIN_ID: "0"
+      ROS_HOME: /tmp/ros
+      FASTDDS_BUILTIN_TRANSPORTS: UDPv4
+    volumes:
+      - ./bridge.toml:/etc/reduct-bridge/config.toml:ro
+    command: ["reduct-bridge", "/etc/reduct-bridge/config.toml"]
+  # reduct-bridge-end
+
+  query-orion:
+    image: python:3.12-slim
+    working_dir: /workspace
+    environment:
+      PYTHONDONTWRITEBYTECODE: "1"
+      OUTPUT_DIR: /tmp/orion-images
+    volumes:
+      - ..:/workspace:ro
+      - ./orion-images:/tmp/orion-images
+    command:
+      - /bin/sh
+      - -c
+      - |
+        set -eu
+        pip install --no-cache-dir reduct-py
+        python example/query_orion.py
+
+volumes:
+  reduct-data:

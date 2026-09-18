@@ -1,0 +1,4 @@
+black==23.12.1
+docspec-python==2.2.1
+pydoc-markdown==4.8.2
+databind-json==4.5.2

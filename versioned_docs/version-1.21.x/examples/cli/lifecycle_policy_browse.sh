@@ -1,0 +1,3 @@
+reduct-cli alias add local -L http://localhost:8383 -t "my-token"
+reduct-cli lifecycle ls local --full
+reduct-cli lifecycle show local/my-lifecycle
