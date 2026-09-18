@@ -12,7 +12,7 @@ The API follows the RESTful principles and uses JSON as the primary data format 
 
 ## Token Authentication
 
-When authentication is enabled, you must use an access token. The initial full-access token is configured with either `RS_API_TOKEN` or `RS_INIT_API_TOKEN`; additional tokens can be created with the **[Token API](./http-api/token-authentication)**. See **[Server Configuration](/docs/1.21.x/configuration)** for the authentication settings.
+When authentication is enabled, you must use an access token. The initial full-access token is configured with either `RS_API_TOKEN` or `RS_INIT_API_TOKEN`; additional tokens can be created with the **[Token API](./http-api/token-authentication)**. See **[Server Configuration](../configuration/index.mdx)** for the authentication settings.
 
 Once you have obtained a token, you can use it to authenticate your requests by including it in the `authorization` header of your HTTP request, like this:
 
