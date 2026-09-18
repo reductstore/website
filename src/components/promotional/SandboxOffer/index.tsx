@@ -4,27 +4,19 @@ import Admonition from "@theme/Admonition";
 const SandboxOffer = () => {
   return (
     <>
-      <Admonition type="info" title="Get Started for Free">
+      <Admonition type="info" title="Get Started with ReductStore Pro">
         <p>
-          Get your own ReductStore environment with{" "}
-          <strong>10GB free cloud storage</strong> or a{" "}
-          <strong>demo license for on-premise</strong> deployment — no credit
-          card required.
+          Run ReductStore Pro in production with simple{" "}
+          <strong>pay-as-you-go pricing</strong> — billed on peak storage, with
+          no upfront commitment.
         </p>
         <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
           <Link
             className="button button--primary"
-            to="/solutions/cloud"
+            to="/pricing"
             style={{ textDecoration: "none" }}
           >
-            Get Demo Server
-          </Link>
-          <Link
-            className="button button--secondary"
-            to="/demo-license"
-            style={{ textDecoration: "none" }}
-          >
-            Request Demo License
+            Get Started
           </Link>
         </div>
       </Admonition>

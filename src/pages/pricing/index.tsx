@@ -2,7 +2,6 @@ import Layout from "@theme/Layout";
 import PricingTable from "@site/src/components/shared/PricingTable";
 import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import Faq from "@site/src/components/shared/Faq";
-import PlaygroundOffer from "@site/src/components/promotional/PlaygroundOffer";
 import { JSX } from "react";
 import styles from "./styles.module.css";
 
@@ -10,7 +9,7 @@ export default function Pricing(): JSX.Element {
   return (
     <Layout
       title="Pricing"
-      description="Choose the right ReductStore plan for your scale, from ReductStore Core under Apache-2.0 to ReductStore Pro and fully managed cloud offerings."
+      description="Choose the right ReductStore plan for your scale, from ReductStore Core under Apache-2.0 to self-serve Pro and custom Enterprise offerings."
     >
       <main>
         <SimpleHeader pageTitle="ReductStore Pricing" />
@@ -20,11 +19,9 @@ export default function Pricing(): JSX.Element {
             <p className={styles.introText}>
               ReductStore Core is open source under Apache-2.0. ReductStore Pro
               adds commercial components, production support, and licensed
-              self-hosted deployments.
+              self-hosted deployments. ReductStore Enterprise adds custom terms
+              and support for larger companies.
             </p>
-            <div className={styles.offer}>
-              <PlaygroundOffer />
-            </div>
           </div>
           <PricingTable />
         </section>
@@ -51,12 +48,26 @@ const pricingFaqs = [
   {
     question: "How does ReductStore Pro licensing work?",
     answer:
-      "You receive a license key specifying the licensed scope, such as disk usage and deployment coverage. The database continues working if limits are exceeded, but CLI, WebConsole, and SDKs will show warnings.",
+      "ReductStore Pro is a self-serve subscription for business customers. Billing is based on peak storage during each monthly billing period: 1 TB minimum, then per GB. €15 per TB per month, excl. VAT. 1.2 TB costs €18 per month.",
   },
   {
-    question: "What happens when the license expires?",
+    question: "When will I be charged?",
     answer:
-      "The database keeps running. CLI, WebConsole, and SDKs show license warnings.",
+      "We charge automatically at the end of each month to your saved payment method.",
+  },
+  {
+    question: "How does VAT apply?",
+    answer:
+      "VAT is charged at 19% in Germany. EU businesses with a valid VAT ID use the reverse charge mechanism. Customers outside the EU do not pay German VAT.",
+  },
+  {
+    question: "How do I cancel my subscription?",
+    answer:
+      "Cancel through the customer portal. Your license remains active until the end of the current billing period.",
+  },
+  {
+    question: "Which payment methods are supported?",
+    answer: "Card, Apple Pay, Google Pay, and Link are supported.",
   },
   {
     question: "Do linked replicated instances need ReductStore Pro coverage?",

@@ -90,21 +90,24 @@ const demoLicenseFaqs = [
   },
 ];
 
-export default function DemoLicensePage(): JSX.Element {
+export default function EnterprisePage(): JSX.Element {
   return (
     <Layout
-      title="Demo License"
-      description="Get a free ReductStore Pro demo license and explore co-development services for robotics and industrial IoT data pipelines."
+      title="Enterprise"
+      description="Explore ReductStore Enterprise: commercial extensions, cloud object storage, long-term support, and co-development for robotics and industrial IoT data pipelines. Request a demo license to evaluate everything."
     >
       <main>
-        <SimpleHeader pageTitle="Demo License" />
+        <SimpleHeader pageTitle="ReductStore Enterprise" />
         <div className={clsx("container", styles.pageContainer)}>
           {/* Intro */}
           <h2 className={styles.sectionTitle}>Co-Development and Licensing</h2>
           <p className={styles.introText}>
-            Get a free 30 day ReductStore Pro license with full access to all
-            commercial features. We also offer co-development projects at a
-            preferred rate to help you build production-ready data pipelines.
+            ReductStore Pro adds commercial extensions, a cloud object storage
+            backend, long-term release support, and SLA-backed support with
+            architecture reviews on top of the open-source core. Evaluate all of
+            it with a free 30-day Pro license, no credit card required, and add
+            a co-development project at a preferred rate to build your pipeline
+            from edge to cloud.
           </p>
 
           {/* Service cards */}

@@ -1,0 +1,39 @@
+---
+title: ReductPro subscription
+sidebar_label: ReductPro subscription
+---
+
+# ReductPro subscription
+
+## Get your license key
+
+After checkout, ReductPro provisions the license through the license server.
+
+License key delivery: TODO: confirm with Alexey
+
+## Configure the license key
+
+Configure the license key on the ReductStore instance with one of the following settings:
+
+- Set `RS_LICENSE` to the complete license document content.
+- Set `RS_LICENSE_PATH` to the path of a mounted license file.
+
+Configure only one license source. If both are set, ReductStore rejects the ambiguous configuration and starts without a valid license. See **[License Configuration](/docs/configuration#license-configuration)** for details.
+
+## Subscription usage data
+
+ReductStore sends the peak storage in GB and the Stripe customer ID to the license server for the subscription.
+
+Usage reporting frequency: TODO: confirm with Alexey
+
+## License server availability
+
+What happens when the license server cannot be reached: TODO: confirm with Alexey
+
+## Failed payments and subscription end
+
+What happens when a payment fails or the subscription ends: TODO: confirm with Alexey
+
+## Manage your subscription
+
+Manage or cancel the subscription through the customer portal. Open the portal from the **[Pricing page](/pricing)**. Cancellation takes effect at the end of the current billing period.

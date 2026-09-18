@@ -6,7 +6,6 @@ import ClientSDKs from "@site/src/components/homepage/ClientSDKs";
 import InstallClientCLI from "@site/src/components/docs/InstallClientCLI";
 import Link from "@docusaurus/Link";
 import styles from "./styles.module.css";
-import PlaygroundOffer from "@site/src/components/promotional/PlaygroundOffer";
 import InstallReductBridge from "@site/src/components/docs/InstallReductBridge";
 
 export default function DownloadPage(): JSX.Element {
@@ -29,9 +28,6 @@ export default function DownloadPage(): JSX.Element {
               </Link>{" "}
               guide to set up your first ReductStore instance.
             </p>
-            <div className={styles.offer}>
-              <PlaygroundOffer />
-            </div>
           </div>
           <InstallReductStore />
           <hr />
