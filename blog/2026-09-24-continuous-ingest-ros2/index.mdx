@@ -13,8 +13,8 @@ point, so rosbag2 makes you pick where: `ros2 bag record -a -b 100000` closes on
 kilobytes, `-d 9000` closes one every 9000 seconds. Either way, a recording that runs for hours
 comes out as a directory of many small files instead of one file nobody could open.
 
-That is a sound tradeoff going in. The bill arrives later, when the pieces have to be put back
-together for anything that wants to read the recording end to end. `ros2 bag convert`, which is
+That's a fair compromise. The problem comes later, when the recording has to be pieced back
+together for anyone who wants to listen to it from start to finish. `ros2 bag convert`, which is
 `rosbag2_transport::bag_rewrite` underneath, writes the merged output while the inputs it is
 reading from are still on disk, so peak usage during a merge is the sum of both. One user on the
 rosbag2 tracker put a number on it: **[merging 300 GB of five-minute splits needed about 600 GB
