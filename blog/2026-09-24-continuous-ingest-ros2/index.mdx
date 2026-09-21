@@ -8,32 +8,35 @@ date: 2026-09-24
 image: ./continuous-ingest-ros2-cover.png
 ---
 
-Recording ROS 2 topics into rosbag splits usually starts as a safety measure and ends as a merge
-job. `ros2 bag convert`, which is `rosbag2_transport::bag_rewrite` underneath, writes the merged
-output while the inputs it is reading from are still on disk, so peak usage during a merge is the
-sum of both. One user on the rosbag2 tracker put a number on it: **[merging 300 GB of five-minute
-splits needed about 600 GB free](https://github.com/ros2/rosbag2/issues/2335)**. Merge sequentially
-instead, bag 0 into bag 1, then that result into bag 2, and peak disk drops, but the work now
-approaches O(n²) in the number of splits, because every step rewrites everything merged so far.
+A rosbag recording is a file, and a file cannot grow forever. Something has to close it at some
+point, so rosbag2 makes you pick where: `ros2 bag record -a -b 100000` closes one every 100
+kilobytes, `-d 9000` closes one every 9000 seconds. Either way, a recording that runs for hours
+comes out as a directory of many small files instead of one file nobody could open.
 
-The recording was split in the first place to make it safer. Putting it back together is the part
-nobody budgets for.
+That is a sound tradeoff going in. The bill arrives later, when the pieces have to be put back
+together for anything that wants to read the recording end to end. `ros2 bag convert`, which is
+`rosbag2_transport::bag_rewrite` underneath, writes the merged output while the inputs it is
+reading from are still on disk, so peak usage during a merge is the sum of both. One user on the
+rosbag2 tracker put a number on it: **[merging 300 GB of five-minute splits needed about 600 GB
+free](https://github.com/ros2/rosbag2/issues/2335)**. Merge sequentially instead, bag 0 into bag
+1, then that result into bag 2, and peak disk drops, but the work now approaches O(n²) in the
+number of splits, because every step rewrites everything merged so far.
+
+The recording was split because the file had to close somewhere. Putting it back together is the
+part nobody budgets for.
 
 {/* truncate */}
 
-## Why the split is there
+## Why the interval is usually small
 
-Splitting is the right answer to three real problems, and rosbag2 gives you two flags for it. `ros2
-bag record -a -b 100000` starts a new file every 100 kilobytes. `ros2 bag record -a -d 9000` starts
-one every 9000 seconds.
+Nothing forces the interval down to five minutes specifically. A few practical constraints just
+tend to push it there. A robot that loses power mid recording loses less if the open file is
+small. A single file that grows for eight hours is awkward to copy off a machine. And some
+downstream tool has a size it stops being happy at past a certain point.
 
-Teams reach for those flags because a robot loses power mid recording and a smaller file loses less.
-Because a single file that grows for eight hours is awkward to copy off a machine. Because some
-downstream tool has a size it stops being happy at.
-
-None of that is wrong. The split does what it was asked to do. It just moves the cost to the other
-end of the workflow, where it is measured in disk, CPU and the hours between a recording existing
-and being usable.
+None of that is wrong. Splitting does what it was asked to do. It just moves the cost to the
+other end of the workflow, where it is measured in disk, CPU and the hours between a recording
+existing and being usable.
 
 ## The cost lands in more than one place
 
