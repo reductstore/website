@@ -103,7 +103,7 @@ jobs:
 
           for attempt in {1..5}; do
             if reduct-cli cp https://reductstore@play.reduct.store/datasets http://my-token@127.0.0.1:8384/example-bucket \
-              --limit 100 --parallel 1 --from-last; then
+              --limit 10 --parallel 1 --from-last; then
               break
             fi
 
