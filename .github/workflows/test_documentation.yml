@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Test examples
     strategy:
-      max-parallel: 4
       matrix:
         example: [python, rust, golang, curl, cpp, node, cli]
         doc_version: [next, 1.21.x]
@@ -101,18 +100,33 @@ jobs:
             sleep 1
           done
 
-          for attempt in {1..5}; do
-            if reduct-cli cp https://reductstore@play.reduct.store/datasets http://my-token@127.0.0.1:8384/example-bucket \
-              --limit 10 --parallel 1 --from-last; then
-              break
-            fi
+          reduct-cli bucket create http://my-token@127.0.0.1:8384/example-bucket
 
-            if [ "$attempt" -eq 5 ]; then
-              exit 1
-            fi
-
-            sleep $((attempt * 5))
+          for timestamp in {1..30}; do
+            curl -fsS -o /dev/null \
+              -H "Authorization: Bearer my-token" \
+              --data-binary "entry-$timestamp" \
+              -X POST "http://127.0.0.1:8384/api/v1/b/example-bucket/entry_1?ts=$timestamp"
+            curl -fsS -o /dev/null \
+              -H "Authorization: Bearer my-token" \
+              --data-binary "cat-$timestamp" \
+              -X POST "http://127.0.0.1:8384/api/v1/b/example-bucket/cats?ts=$timestamp"
           done
+
+          curl -fsS -o /dev/null \
+            -H "Authorization: Bearer my-token" \
+            -H "x-reduct-label-name: Sample One" \
+            -H "x-reduct-label-photo_taken: 2007" \
+            -H "x-reduct-label-face_score: 3" \
+            --data-binary "sample-image-one" \
+            -X POST "http://127.0.0.1:8384/api/v1/b/example-bucket/imdb?ts=1"
+          curl -fsS -o /dev/null \
+            -H "Authorization: Bearer my-token" \
+            -H "x-reduct-label-name: Sample Two" \
+            -H "x-reduct-label-photo_taken: 2008" \
+            -H "x-reduct-label-face_score: 2" \
+            --data-binary "sample-image-two" \
+            -X POST "http://127.0.0.1:8384/api/v1/b/example-bucket/imdb?ts=2"
 
       - name: Install Python
         uses: actions/setup-python@v5
