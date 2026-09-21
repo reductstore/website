@@ -6,6 +6,7 @@ export default function WindowsInstall(props) {
 Invoke-WebRequest -Uri  https://github.com/reductstore/reductstore/releases/latest/download/reductstore.x86_64-pc-windows-gnu.zip -OutFile reductstore.zip
 Expand-Archive -LiteralPath reductstore.zip -DestinationPath .
 $env:RS_DATA_PATH = 'C:\\DataFolder'
+$env:RS_API_TOKEN = 'my-token'
 .\\reductstore.exe
 `.trim();
   return (
