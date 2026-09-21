@@ -4,19 +4,17 @@ description: "Splitting rosbag files protects a recording. Merging them back cos
 authors: anthony
 tags: [robotics, ros]
 slug: continuous-ingest-ros2
-date: 2026-09-22
+date: 2026-09-24
 image: ./continuous-ingest-ros2-cover.png
 ---
 
-Merging 300 GB of rosbag recordings into one bag needs about 600 GB of free disk. That number comes
-from a rosbag2 user in **[rosbag2 issue #2335](https://github.com/ros2/rosbag2/issues/2335)**, and it
-describes how the tool works rather than a fault in it. `ros2 bag convert`, which is
-`rosbag2_transport::bag_rewrite` underneath, writes the output while the inputs are still on disk.
-Peak usage is the sum of both.
-
-You can merge the bags one at a time instead, bag 0 into bag 1, then that result into bag 2. Peak
-disk drops. The same reporter points out what it costs: the work approaches O(n²) in the number of
-splits, because every step rewrites everything merged so far.
+Recording ROS 2 topics into rosbag splits usually starts as a safety measure and ends as a merge
+job. `ros2 bag convert`, which is `rosbag2_transport::bag_rewrite` underneath, writes the merged
+output while the inputs it is reading from are still on disk, so peak usage during a merge is the
+sum of both. One user on the rosbag2 tracker put a number on it: **[merging 300 GB of five-minute
+splits needed about 600 GB free](https://github.com/ros2/rosbag2/issues/2335)**. Merge sequentially
+instead, bag 0 into bag 1, then that result into bag 2, and peak disk drops, but the work now
+approaches O(n²) in the number of splits, because every step rewrites everything merged so far.
 
 The recording was split in the first place to make it safer. Putting it back together is the part
 nobody budgets for.
@@ -31,41 +29,34 @@ one every 9000 seconds.
 
 Teams reach for those flags because a robot loses power mid recording and a smaller file loses less.
 Because a single file that grows for eight hours is awkward to copy off a machine. Because some
-downstream tool has a size it stops being happy at. The reporter in #2335 splits every five minutes
-for exactly the first reason.
+downstream tool has a size it stops being happy at.
 
 None of that is wrong. The split does what it was asked to do. It just moves the cost to the other
 end of the workflow, where it is measured in disk, CPU and the hours between a recording existing
 and being usable.
 
-## The cost lands in three different places
+## The cost lands in more than one place
 
-Three issues are open on the rosbag2 repository right now. Different authors, different symptoms,
-and no two of them look related on the tracker. What they have in common is that each one is a
-cost of closing one file and opening the next.
+Merging is the most visible cost, but the file boundary itself creates a few more, all with the
+same root cause: something has to decide when to close a file, write into it what it knows about
+the others, and handle whatever goes wrong at that instant.
 
-**Disk, twice over.** That is issue #2335 above. `bag_rewrite` does not delete inputs as it goes, so
-a merge needs room for the question and the answer at the same time.
+**Disk, twice over.** `bag_rewrite` does not delete inputs as it goes, so a merge needs room for
+the question and the answer at the same time.
 
-**No floor under the disk.** **[rosbag2 issue #2477](https://github.com/ros2/rosbag2/issues/2477)** asks for
-a minimum free space option on `ros2 bag record`. The existing size and duration limits bound the
-bag, not the disk, so recording continues until the disk is full. On an embedded robot that takes
-the system logs and the DDS shared memory files with it, and services start failing for reasons that
-have nothing to do with recording. ROS 1 had `--min-space`, defaulting to 1 GB. rosbag2 dropped it.
+**No floor under the disk.** The size and duration limits on `ros2 bag record` bound the bag, not
+the disk, so recording continues until the disk is full. On an embedded robot that takes the
+system logs and the DDS shared memory files with it, and services start failing for reasons that
+have nothing to do with recording. ROS 1 had a `--min-space` flag for exactly this, defaulting to
+1 GB. rosbag2 dropped it.
 
-**CPU that grows with the recording.** **[rosbag2 issue #2481](https://github.com/ros2/rosbag2/issues/2481)** reports CPU climbing 14% in one hour with a
-one second split interval. That interval is deliberately extreme, but the shape is the point: it
-grows, and it should not.
+**CPU that climbs over the session.** Splitting frequently means writing a new file's metadata
+header more often, and the metadata each bag carries tends to grow with the number of files
+already recorded, so the per-split cost is not flat.
 
-Two of the three already have pull requests in flight. **[rosbag2 PR #2479](https://github.com/ros2/rosbag2/pull/2479)** adds the free space option. **[rosbag2 PR #2490](https://github.com/ros2/rosbag2/pull/2490)** trims what gets written on each split so the
-metadata each bag file carries stays proportional to the number of topics rather than to every file
-recorded so far. Both will land, and rosbag2 will be better for it.
-
-The case here is about where the work goes, not about rosbag2 being badly built. Every one of those
-three symptoms is a consequence of having a file boundary at all. Something has to decide when to
-close a file, write into it what it knows about the other files, and handle the disk running out mid
-write. A merge step exists because the boundary exists. Fix all three and the boundary is still
-there, and so is the merge.
+None of this makes rosbag2 badly built. Closing one file and opening the next is where all three
+costs originate, and fixing any one of them individually still leaves the file boundary, and the
+merge it eventually demands, in place.
 
 ## One entry per topic, one record per message
 
@@ -86,9 +77,9 @@ taken from the message's own `ros_stamp` rather than from when the bridge happen
 Writes to the store are batched, by default at 80 records, 8 MB or 1000 ms, whichever comes first.
 That is a flush, not a split. It has no name, nothing downstream refers to it, and once a record
 lands it is addressable by its timestamp on its entry. The bucket itself can be created with a FIFO
-quota by volume, which is the #2477 problem answered as a property of the storage rather than as a
-flag on the recorder: you set the ceiling, the oldest records go first, and the robot keeps
-recording.
+quota by volume, which answers the disk-floor problem above as a property of the storage rather
+than as a flag on the recorder: you set the ceiling, the oldest records go first, and the robot
+keeps recording.
 
 Pull an interval back out and it is a query across entries, not a hunt through a directory for which
 files overlap 10:31 to 10:34. The wider picture of what that changes on a fleet is in **[a database
@@ -134,8 +125,8 @@ All of that runs on records as they land. None of it waits for a merge.
 ## What you give up
 
 You no longer have a bag, and a lot of tooling wants one. `ros2 bag play` wants a directory with
-metadata in it. Older Foxglove builds want a file, and the reporter in #2335 was merging in the
-first place because their version could not play several mcap files at once. Anything you have
+metadata in it. Older Foxglove builds want a single file, since some versions cannot open several
+mcap files at once, which is exactly why merging is tempting in the first place. Anything you have
 scripted around **[loading bag files for analysis](/blog/boston-dynamic-example)** expects a path,
 not a bucket.
 
@@ -173,8 +164,9 @@ is still the recording unit but not the storage.
 
 ## Conclusion
 
-The three rosbag2 issues above will be fixed. The merge will still need somewhere to put its output,
-because a merge is what you do when the recording arrived as pieces.
+Splitting will keep getting incrementally cheaper as rosbag2 improves. That does not remove the
+merge, because a merge is what you do when the recording arrived as pieces, and pieces are what
+splitting produces by design.
 
 If you are already writing a script to work out which bags overlap the window you care about, you
 have the split then merge problem, and making the split cheaper does not remove that script.
