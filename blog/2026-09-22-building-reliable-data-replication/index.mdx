@@ -35,13 +35,13 @@ The data path looks like this:
                                 |
                                 v
 +--------+    HTTP    +---------+-----------+  notification  +------------------+
-| Client +----------> | Source bucket/entry +--------------->|   Task filter    |
+| Client +----------> | "Source bucket/entry" +------------>|   Task filter    |
 +--------+            +---------+-----------+                +--------+---------+
                                 |                                      |
                                 |               accepted notifications |
                                 |                                      v
                                 |                             +--------+---------+
-                                |                             | Transaction log  |
+                                |                             | "Transaction log" |
                                 |                             +--------+---------+
                            read from bucket                            |
                                 |                                      v
@@ -68,10 +68,10 @@ Every replication task has a sender worker that periodically reads pending notif
 
 The transaction log is a ring buffer stored in a preallocated file of fixed size. The first 16 bytes contain the current write and read positions. The rest of the file is divided into 9-byte slots containing an operation type and a record timestamp:
 
-| Region | Size     | Content                                                     |
-| ------ | -------- | ----------------------------------------------------------- |
-| Header | 16 bytes | Write position (`u64`) and read position (`u64`)            |
-| Slot   | 9 bytes  | Operation (`u8`) and timestamp (`u64`, big-endian)          |
+| Region | Size     | Content                                            |
+| ------ | -------- | -------------------------------------------------- |
+| Header | 16 bytes | Write position (`u64`) and read position (`u64`)   |
+| Slot   | 9 bytes  | Operation (`u8`) and timestamp (`u64`, big-endian) |
 
 When a notification arrives, ReductStore seeks to the write position, writes the next slot, and advances the position. The sender does the same from the read position and advances it after successful delivery. Both positions wrap around when they reach the end of the file.
 
