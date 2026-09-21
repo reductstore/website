@@ -23,17 +23,17 @@ The easiest way to start using ReductStore is to run Docker image:
 ```bash
 mkdir -p ./data
 sudo chown -R 10001:10001 ./data
-docker run -p 8383:8383 -v ${PWD}/data:/data reduct/store:latest
+docker run -p 8383:8383 -v ${PWD}/data:/data -e RS_API_TOKEN="my-token" reduct/store:latest
 ```
 
 :::note
 Since v1.19, the Docker container runs as a non-root user. Create the host folder in advance and make sure it is writable by UID/GID `10001:10001` before mounting it.
 :::
 
-The database will be available on port `http://127.0.01:8383` and stores data in the `./data` directory. You may check if it's working with a simple HTTP request:
+The database will be available at `http://127.0.0.1:8383` and stores data in the `./data` directory. The `RS_API_TOKEN` environment variable configures the initial full-access API token. You may check if the database is working with an authenticated HTTP request:
 
 ```bash
-curl http://127.0.0.1:8383/api/v1/info
+curl --header "Authorization: Bearer my-token" http://127.0.0.1:8383/api/v1/info
 ```
 
 ## Pre-built Binaries
@@ -44,13 +44,14 @@ On Windows with PowerShell:
 
 ```powershell
 $env:RS_DATA_PATH = 'C:\<PATH_TO_DATA>'
+$env:RS_API_TOKEN = 'my-token'
 .\reductstore
 ```
 
 On Linux or macOS
 
 ```bash
-RS_DATA_PATH=./data ./reductstore
+RS_DATA_PATH=./data RS_API_TOKEN=my-token ./reductstore
 ```
 
 ## Demo Server
@@ -74,7 +75,7 @@ Install and run the database:
 
 ```bash
 cargo install reductstore
-RS_DATA_PATH=./data reductstore
+RS_DATA_PATH=./data RS_API_TOKEN=my-token reductstore
 ```
 
 You may need to install a newer Rust version. Read the **[official Rust installation guide](https://www.rust-lang.org/tools/install)** for more information.
@@ -85,9 +86,10 @@ You can install the database with snap:
 
 ```
 sudo snap install reductstore
+sudo snap set reductstore api-token=my-token
 ```
 
-ReductStore will be available on port http://127.0.01:8383 and store data in the `/var/snap/reductstore/common/data` directory.
+ReductStore will be available at http://127.0.0.1:8383 and store data in the `/var/snap/reductstore/common/data` directory.
 
 ## What Is Next?
 

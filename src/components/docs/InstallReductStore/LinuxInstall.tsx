@@ -10,14 +10,14 @@ export default function LinuxInstall(props) {
 wget https://github.com/reductstore/reductstore/releases/latest/download/reductstore.x86_64-unknown-linux-gnu.tar.gz
 tar xfv reductstore.x86_64-unknown-linux-gnu.tar.gz
 chmod +x reductstore
-RS_DATA_PATH=./data ./reductstore
+RS_DATA_PATH=./data RS_API_TOKEN=my-token ./reductstore
 `.trim();
 
   const binaryInstallArm64 = `
 wget https://github.com/reductstore/reductstore/releases/latest/download/reductstore.aarch64-unknown-linux-gnu.tar.gz
 tar xfv reductstore.aarch64-unknown-linux-gnu.tar.gz
 chmod +x reductstore
-RS_DATA_PATH=./data ./reductstore
+RS_DATA_PATH=./data RS_API_TOKEN=my-token ./reductstore
 `.trim();
 
   return (
@@ -48,7 +48,8 @@ RS_DATA_PATH=./data ./reductstore
         )}
         {activeTab === "snap" && (
           <CodeBlock className="language-bash">
-            sudo snap install reductstore
+            {`sudo snap install reductstore
+sudo snap set reductstore api-token=my-token`}
           </CodeBlock>
         )}
       </div>

@@ -129,12 +129,12 @@ To test a backup:
 1. Copy the backup to a new directory.
 2. Start a new ReductStore instance with the copied data:
    ```bash
-   RS_DATA_PATH=/path/to/backup reductstore
+   RS_DATA_PATH=/path/to/backup RS_API_TOKEN=my-token reductstore
    ```
 3. Check the logs for any startup errors.
 4. Verify data accessibility, for example:
    ```bash
-   curl http://127.0.0.1:8383/api/v1/list
+   curl --header "Authorization: Bearer my-token" http://127.0.0.1:8383/api/v1/list
    ```
 
 ### Restore Process
@@ -262,6 +262,7 @@ services:
   reduct-primary:
     image: reduct/store:latest
     environment:
+      RS_API_TOKEN: my-token
       RS_INSTANCE_ROLE: PRIMARY
       RS_DATA_PATH: /data
       RS_LOCK_FILE_TTL: 45s
@@ -274,6 +275,7 @@ services:
   reduct-secondary:
     image: reduct/store:latest
     environment:
+      RS_API_TOKEN: my-token
       RS_INSTANCE_ROLE: SECONDARY
       RS_DATA_PATH: /data
       RS_LOCK_FILE_TTL: 45s
@@ -342,6 +344,7 @@ services:
   reduct-writer:
     image: reduct/store:latest
     environment:
+      RS_API_TOKEN: my-token
       RS_INSTANCE_ROLE: PRIMARY
       RS_DATA_PATH: /data
     volumes:
@@ -352,6 +355,7 @@ services:
   reduct-replica-1:
     image: reduct/store:latest
     environment:
+      RS_API_TOKEN: my-token
       RS_INSTANCE_ROLE: REPLICA
       RS_DATA_PATH: /data
       RS_ENGINE_REPLICA_UPDATE_INTERVAL: 30s
@@ -363,6 +367,7 @@ services:
   reduct-replica-2:
     image: reduct/store:latest
     environment:
+      RS_API_TOKEN: my-token
       RS_INSTANCE_ROLE: REPLICA
       RS_DATA_PATH: /data
       RS_ENGINE_REPLICA_UPDATE_INTERVAL: 30s
