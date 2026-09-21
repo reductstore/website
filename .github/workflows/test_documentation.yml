@@ -211,6 +211,11 @@ jobs:
               continue
             fi
 
+            if [[ "$example" == *"/data_replication_manual.sh" ]]; then
+              echo "Skip $example (depends on the external demo instance)"
+              continue
+            fi
+
             echo '${{secrets.LICENSE_KEY}}' > ./license.lic
 
             IS_ZENOH=0
