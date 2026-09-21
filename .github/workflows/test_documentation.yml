@@ -100,33 +100,7 @@ jobs:
             sleep 1
           done
 
-          reduct-cli bucket create http://my-token@127.0.0.1:8384/example-bucket
-
-          for timestamp in {1..30}; do
-            curl -fsS -o /dev/null \
-              -H "Authorization: Bearer my-token" \
-              --data-binary "entry-$timestamp" \
-              -X POST "http://127.0.0.1:8384/api/v1/b/example-bucket/entry_1?ts=$timestamp"
-            curl -fsS -o /dev/null \
-              -H "Authorization: Bearer my-token" \
-              --data-binary "cat-$timestamp" \
-              -X POST "http://127.0.0.1:8384/api/v1/b/example-bucket/cats?ts=$timestamp"
-          done
-
-          curl -fsS -o /dev/null \
-            -H "Authorization: Bearer my-token" \
-            -H "x-reduct-label-name: Sample One" \
-            -H "x-reduct-label-photo_taken: 2007" \
-            -H "x-reduct-label-face_score: 3" \
-            --data-binary "sample-image-one" \
-            -X POST "http://127.0.0.1:8384/api/v1/b/example-bucket/imdb?ts=1"
-          curl -fsS -o /dev/null \
-            -H "Authorization: Bearer my-token" \
-            -H "x-reduct-label-name: Sample Two" \
-            -H "x-reduct-label-photo_taken: 2008" \
-            -H "x-reduct-label-face_score: 2" \
-            --data-binary "sample-image-two" \
-            -X POST "http://127.0.0.1:8384/api/v1/b/example-bucket/imdb?ts=2"
+          reduct-cli cp https://reductstore@play.reduct.store/datasets  http://my-token@127.0.0.1:8384/example-bucket --limit 100
 
       - name: Install Python
         uses: actions/setup-python@v5
@@ -208,11 +182,6 @@ jobs:
 
             if [[ "$example" == *"/ros_export.sh" ]]; then
               echo "Skip $example (depends on the external Orion dataset)"
-              continue
-            fi
-
-            if [[ "$example" == *"/data_replication_manual.sh" ]]; then
-              echo "Skip $example (depends on the external demo instance)"
               continue
             fi
 
@@ -349,12 +318,8 @@ jobs:
           done
 
           logs=$(docker compose logs --no-color)
-          unexpected_logs=$(printf '%s\n' "$logs" \
-            | grep -Ei '(error|panic|fatal|failed|failure|backtrace)' \
-            | grep -Eiv 'GET /api/v1/alive .*503 Service Unavailable.*server is starting up' \
-            || true)
-          if [ -n "$unexpected_logs" ]; then
-            printf '%s\n' "$unexpected_logs"
+          if printf '%s\n' "$logs" | grep -Eiq '(error|panic|fatal|failed|failure|backtrace)'; then
+            printf '%s\n' "$logs"
             exit 1
           fi
 
