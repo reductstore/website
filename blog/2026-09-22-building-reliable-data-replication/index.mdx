@@ -31,30 +31,30 @@ We also had to keep in mind that the source is usually on the edge. Very often i
 The data path looks like this:
 
 ```svgbob
-                      local write completed
+                    "local write completed"
                                 |
                                 v
-+--------+    HTTP    +---------+-----------+  notification  +------------------+
-| Client +----------> | "Source bucket/entry" +------------>|   Task filter    |
-+--------+            +---------+-----------+                +--------+---------+
++---------+  HTTP    +-----------+-------------+notification   +------------------+
+| Client  +--------->| "Source bucket/entry"   +-------------->|  "Task filter"   |
++---------+          +-----------+-------------+               +--------+---------+
                                 |                                      |
-                                |               accepted notifications |
+                                |           "accepted notifications"   |
                                 |                                      v
                                 |                             +--------+---------+
-                                |                             | "Transaction log" |
+                                |                             |"Transaction log" |
                                 |                             +--------+---------+
-                           read from bucket                            |
+                         "read from bucket"                            |
                                 |                                      v
-                                |                             +--------+---------+
-                                |                             | Sender worker    |
-                                +---------------------------->+ * reread source  |
-                                                              | * batch records  |
-                                                              +--------+---------+
+                                |                             +--------+----------+
+                                |                             | "Sender worker"   |
+                                +---------------------------->+ * "reread source" |
+                                                              | * "batch records" |
+                                                              +--------+----------+
                                                                        |
                                                                  HTTP  |
                                                                        v
                                                               +--------+---------+
-                                                              | Target bucket    |
+                                                              | "Target bucket"  |
                                                               +------------------+
 ```
 
