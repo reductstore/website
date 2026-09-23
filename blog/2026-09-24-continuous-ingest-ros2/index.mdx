@@ -73,9 +73,9 @@ Writes are batched for efficiency, but a batch flush is not a split. Nothing dow
 that boundary. Once a record is written, it is addressed by timestamp rather than by which file
 contains it.
 
-The bucket itself can be created with a FIFO quota by volume, which is what stops the disk filling
-up: you set a size limit on the bucket, the oldest records are deleted first, and the robot keeps
-recording.
+The bucket itself can be created with a FIFO quota by volume, which keeps recording within a fixed
+amount of disk space: you set a size limit on the bucket, the oldest records are deleted first, and
+the robot keeps recording.
 
 There is no split, so there is no merge. The wider picture of what that changes on a fleet is in
 **[a database for robotics](/blog/database-for-robotics)**, and the retention and edge to cloud
