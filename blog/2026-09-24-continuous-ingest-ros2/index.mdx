@@ -17,8 +17,8 @@ comes out as a directory of many small files instead of one file nobody could op
 
 That's a fair compromise. The problem comes later, when the recording has to be pieced back
 together for anyone who wants to listen to it from start to finish. `ros2 bag convert`, which is
-`rosbag2_transport::bag_rewrite` underneath, writes the merged output while the inputs it is
-reading from are still on disk, so peak usage during a merge is the sum of both. One user on the
+`rosbag2_transport::bag_rewrite` underneath, writes the merged output while the inputs are still
+on disk, so peak usage during a merge is the sum of both. One user on the
 rosbag2 tracker put a number on it: **[merging 300 GB of five minute splits needed about 600 GB
 free](https://github.com/ros2/rosbag2/issues/2335)**. Merge sequentially instead, bag 0 into bag
 1, then that result into bag 2, and peak disk drops, but the work now approaches O(n²) in the
