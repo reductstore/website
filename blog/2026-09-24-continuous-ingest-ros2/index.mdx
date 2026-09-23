@@ -34,21 +34,18 @@ there. A robot that loses power mid recording loses only the file that was open,
 file loses less. A single file that grows for eight hours is awkward to copy off a machine. And
 many tools that read bags slow down or run out of memory on files above a few gigabytes.
 
-None of that is wrong. Splitting does what it was asked to do. It just moves the cost to the
-other end of the workflow, where it is measured in disk, CPU and the hours between a recording
-existing and being usable.
+None of that is wrong. Splitting does what it was asked to do. It just moves the work to the other
+end of the workflow: more files to manage, more disk needed to merge them, and more time before
+the recording is ready to use.
 
-## Two more costs, beyond the merge
-
-Merging is the most visible cost. Two more problems show up once a recording is meant to run
-continuously.
+## Two more problems with continuous recording
 
 **Splitting does not limit total disk usage.** The size and duration limits on `ros2 bag record`
 cap each bag, not the recording as a whole. It keeps creating new bags until the disk is full. On
 an embedded robot, that can cause seemingly unrelated services to fail because they can no longer
 write logs, temporary files, databases, caches, and anything else they expect to be able to save.
 
-**Long recordings are where the bugs turn up.** An **[open report on
+**Frequent splitting can also get more expensive over time.** An **[open report on
 rosbag2](https://github.com/ros2/rosbag2/issues/2481)** shows CPU use increasing over time when
 bags are split frequently. The **[proposed fix](https://github.com/ros2/rosbag2/pull/2490)** points
 to metadata written on every split: it currently includes the growing list of all bag files
@@ -103,17 +100,16 @@ was cut where the recorder decided, not where the incident was.
 ReductStore writes to local disk, so recording carries on whether or not there is a network.
 What you replicate lands in a second instance in the cloud, which can use **[S3 or Azure Blob as
 its backend](/docs/integrations/cloud-storage)**. The cloud instance keeps a local cache while
-older data is pushed to object storage. The archive is priced as object storage rather than as
-disks you keep attached, and neither end needs the recording cut into files first.
+older data is pushed to object storage. Neither end needs the recording cut into files first.
 
 **You ask the store a question instead of writing a script.** Records are indexed by time, and
 labels filter within a range, so narrowing to one camera or one frame type happens in the query
 rather than in a pass over payloads.
 
-SQL takes one more step. ROS messages are stored as CDR, which ReductSelect does not read, so the
-**[ReductROS extension](/docs/extensions/official/ros-ext)** decodes them to JSON on the way out
-and the **[ReductSelect extension](/docs/extensions/official/select-ext)** runs the query over
-that, returning JSON, CSV or Parquet:
+For SQL queries, the CDR payload first has to be decoded. The **[ReductROS
+extension](/docs/extensions/official/ros-ext)** converts it to JSON on the way out, and
+**[ReductSelect](/docs/extensions/official/select-ext)** runs the query over that, returning JSON,
+CSV or Parquet:
 
 ```sql
 SELECT device_id, temperature FROM ENTRY() WHERE temperature > 20
