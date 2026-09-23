@@ -18,8 +18,8 @@ comes out as a directory of many small files instead of one file nobody could op
 Splitting a recording into five minute bags seems like a simple solution. The problem starts when
 you need to turn them back into one file.
 
-A user on the **[rosbag2 tracker](https://github.com/ros2/rosbag2/issues/2335)** reported that
-merging 300 GB of split recordings required roughly 600 GB of disk capacity. The original 300 GB
+**[A rosbag2 user reported](https://github.com/ros2/rosbag2/issues/2335)** that merging 300 GB of
+split recordings required roughly 600 GB of disk capacity. The original 300 GB
 stays on disk while another 300 GB is written out as the merged bag.
 
 Splitting solves one problem. Merging creates another, and it is easy to underestimate.
