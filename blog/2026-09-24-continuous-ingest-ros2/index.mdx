@@ -39,12 +39,13 @@ existing and being usable.
 
 ## Two more costs, beyond the merge
 
-Merging is the most visible cost. Closing one file and opening the next creates two others.
+Merging is the most visible cost. Two more problems show up once a recording is meant to run
+continuously.
 
-**Recording does not stop when the disk fills.** The size and duration limits on `ros2 bag
-record` cap each bag, not the total. Recording continues until the disk is full. On an embedded
-robot, that can cause seemingly unrelated services to fail because they can no longer write
-logs, temporary files, databases, caches, and anything else they expect to be able to save.
+**Splitting does not limit total disk usage.** The size and duration limits on `ros2 bag record`
+cap each bag, not the recording as a whole. It keeps creating new bags until the disk is full. On
+an embedded robot, that can cause seemingly unrelated services to fail because they can no longer
+write logs, temporary files, databases, caches, and anything else they expect to be able to save.
 
 **Long recordings are where the bugs turn up.** An **[open report on
 rosbag2](https://github.com/ros2/rosbag2/issues/2481)** shows CPU use increasing over time when
@@ -52,19 +53,19 @@ bags are split frequently. The **[proposed fix](https://github.com/ros2/rosbag2/
 to metadata written on every split: it currently includes the growing list of all bag files
 recorded so far, making each split progressively more expensive.
 
-None of this is a criticism of rosbag2. Both problems come from the same place, the moment one
-file is closed and another is opened. Fix them both and you still end up with a directory of
-files, and something still has to put them back together.
+None of this is a criticism of rosbag2. Splitting solves the practical problem of keeping
+individual recordings manageable, but it does not solve retention, and every split adds another
+file that has to be tracked and handled later. Fix the CPU issue and you still end up with a
+directory of files that represents one continuous recording.
 
 ## One entry per topic, one record per message
 
 The alternative is to stop making files the unit of recording. One topic becomes one entry, and
 one message becomes one record inside it, written as it arrives.
 
-**[Reduct Bridge](/docs/reduct-bridge)** subscribes to ROS 2 topics and does exactly that. Payloads
-go in as serialized CDR with content type `application/cdr`, so nothing is re-encoded on the way
-in. Each entry is named after its topic unless you set `entry_name`, and topic patterns like
-`/camera/*` are matched with a wildcard rather than listed one by one.
+**[Reduct Bridge](/docs/reduct-bridge)** subscribes to ROS 2 topics and does exactly that. Each
+topic becomes an entry and each message becomes a timestamped record. The payload stays as
+serialized CDR, so nothing is re-encoded on the way in.
 
 Three things are stored alongside the message and matter later. The schema for the message type
 goes into a `$ros` attachment, so the recording carries the definition needed to read it back.
@@ -72,11 +73,13 @@ Named fields from the message are copied into labels, decoded against that schem
 later filter on camera id or frame type without opening any payloads. And the timestamp can come
 from the message's own `ros_stamp` rather than from when the bridge received it.
 
-Writes to the store are batched, by default at 80 records, 8 MB or 1000 ms, whichever comes first.
-That's a flush, not a split. It creates no file, nothing downstream refers to it, and once a
-record lands you address it by its timestamp on its entry. The bucket itself can be created with
-a FIFO quota by volume, which is what stops the disk filling up: you set a size limit on the
-bucket, the oldest records are deleted first, and the robot keeps recording.
+Writes are batched for efficiency, but a batch flush is not a split. Nothing downstream depends on
+that boundary. Once a record is written, it is addressed by timestamp rather than by which file
+happens to contain it.
+
+The bucket itself can be created with a FIFO quota by volume, which is what stops the disk filling
+up: you set a size limit on the bucket, the oldest records are deleted first, and the robot keeps
+recording.
 
 There is no split, so there is no merge. The wider picture of what that changes on a fleet is in
 **[a database for robotics](/blog/database-for-robotics)**, and the retention and edge to cloud
@@ -136,12 +139,10 @@ at once, which is exactly why merging is tempting in the first place. Anything y
 around **[loading bag files for analysis](/blog/boston-dynamic-example)** expects a path, not a
 bucket.
 
-You still get one, you just ask for it. The **[ReductROS
-extension](/docs/extensions/official/ros-ext)** reads stored records back as JSON or exports them
-as mcap, filters existing mcap files, and reads ROS 2 rosbag2 archives in either sqlite3 or mcap
-form. It can also re-pack them into new episodes, keeping only the topics you name and splitting
-by `duration` or `size`. The bag is built for the slice you asked for rather than for every topic
-the robot published that afternoon.
+You still get a bag when you need one. The **[ReductROS
+extension](/docs/extensions/official/ros-ext)** can export the topics and time range you ask for
+as mcap. Instead of recording an entire afternoon into bags just in case, the bag is created for
+the slice a tool actually needs.
 
 What this does cost is worth being plain about. ReductROS is part of ReductStore Pro under a
 commercial licence, with a free demo server and evaluation licences for testing, so the export
@@ -158,18 +159,15 @@ and the tooling around bags is good.
 **[Three ways to store ROS topics](/blog/store-ros-topics)** covers the middle ground, where the
 bag is still the recording unit but not the storage.
 
-That is the boundary: bags work well for finite captures. The problems described here start when
-recording is supposed to run continuously.
-
 ## Conclusion
 
 Splitting rosbag files makes sense for short recordings. But once recording becomes continuous,
 those file boundaries start getting in the way: you have to manage disk space, find which files
 contain the interval you want, and sometimes merge them again before you can use the data.
 
-For long running robots, it is simpler to keep recording as a time-indexed stream. Recent data
-stays on the robot under a fixed storage limit, while selected data, such as an incident or the
-minutes around an anomaly, can be replicated to the cloud and stored on S3 or Azure Blob.
+For long running robots, a time-indexed stream removes those file boundaries. Recent data stays
+on the robot under a fixed storage limit, while selected data, such as an incident or the minutes
+around an anomaly, can be replicated to the cloud and stored on S3 or Azure Blob.
 
 If a tool still needs a bag, export the topics and time range you need.
 
