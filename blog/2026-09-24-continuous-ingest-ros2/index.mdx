@@ -15,17 +15,14 @@ point, so rosbag2 makes you pick where: `ros2 bag record -a -b 100000` closes on
 kilobytes, `-d 9000` closes one every 9000 seconds. Either way, a recording that runs for hours
 comes out as a directory of many small files instead of one file nobody could open.
 
-That's a fair compromise. The problem comes later, when the recording has to be pieced back
-together for anyone who wants to listen to it from start to finish. `ros2 bag convert`, which is
-`rosbag2_transport::bag_rewrite` underneath, writes the merged output while the inputs are still
-on disk, so peak usage during a merge is the sum of both. One user on the
-rosbag2 tracker put a number on it: **[merging 300 GB of five minute splits needed about 600 GB
-free](https://github.com/ros2/rosbag2/issues/2335)**. Merge sequentially instead, bag 0 into bag
-1, then that result into bag 2, and peak disk drops, but the work now approaches O(n²) in the
-number of splits, because every step rewrites everything merged so far.
+Splitting a recording into five minute bags seems like a simple solution. The problem starts when
+you need to turn them back into one file.
 
-The recording was split because the file had to close somewhere. Putting it back together is the
-part nobody budgets for.
+A user on the **[rosbag2 tracker](https://github.com/ros2/rosbag2/issues/2335)** reported that
+merging 300 GB of split recordings required roughly 600 GB of disk capacity. The original 300 GB
+stays on disk while another 300 GB is written out as the merged bag.
+
+Splitting solves one problem. Merging creates another, and it is easy to underestimate.
 
 {/* truncate */}
 
@@ -42,12 +39,9 @@ existing and being usable.
 
 ## The cost lands in more than one place
 
-Merging is the most visible cost, but the file boundary itself creates a few more, all with the
+Merging is the most visible cost, but the file boundary itself creates two more, both with the
 same root cause: something has to decide when to close a file, write into it what it knows about
 the others, and handle whatever goes wrong at that instant.
-
-**Disk, twice over.** `bag_rewrite` doesn't delete inputs as it goes, so a merge needs room for
-the inputs and the output at the same time.
 
 **No floor under the disk.** The size and duration limits on `ros2 bag record` bound the bag, not
 the disk, so recording continues until the disk is full. On an embedded robot that takes the
@@ -59,9 +53,9 @@ have nothing to do with recording. ROS 1 had a `--min-space` flag for exactly th
 header more often, and the metadata each bag carries tends to grow with the number of files
 already recorded, so the cost per split doesn't stay flat.
 
-None of this makes rosbag2 badly built. All three costs come from the same moment, closing one
-file and opening the next. Fix any one of them and the boundary is still there, and so is the
-merge it eventually asks for.
+None of this makes rosbag2 badly built. Both costs come from the same moment, closing one file
+and opening the next. Fix either one and the boundary is still there, and so is the merge it
+eventually asks for.
 
 ## One entry per topic, one record per message
 
