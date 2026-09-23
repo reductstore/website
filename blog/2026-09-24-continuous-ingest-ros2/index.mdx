@@ -125,26 +125,25 @@ Against a directory of bags, both of those are a script that opens every file in
 source](/docs/integrations/grafana)** pulls from buckets, so entries become panels and alerts with
 no export step in between.
 
-## What you give up
+## The bag becomes something you export, not something you record
 
-You no longer have a bag, and a lot of tooling wants one. `ros2 bag play` wants a directory with
-metadata in it. Older Foxglove builds want a single file, since some versions cannot open several
-mcap files at once, which is exactly why merging is tempting in the first place. Anything you have
-scripted around **[loading bag files for analysis](/blog/boston-dynamic-example)** expects a path,
-not a bucket.
+Plenty of tooling still wants one. `ros2 bag play` wants a directory with metadata in it. Older
+Foxglove builds want a single file, since some versions cannot open several mcap files at once,
+which is exactly why merging is tempting in the first place. Anything you have scripted around
+**[loading bag files for analysis](/blog/boston-dynamic-example)** expects a path, not a bucket.
 
-The answer is to generate the bag on the way out instead of recording into one. The **[ReductROS
-extension](/docs/extensions/official/ros-ext)** reads stored records back as JSON or exports them as
-mcap, filters existing mcap files, and reads ROS 2 rosbag2 archives in either sqlite3 or mcap form.
-It can also re-pack them into new episodes, keeping only the topics you name and splitting by
-`duration` or `size`. So a bag still exists when you need one, built for the slice you asked for
-rather than for every topic the robot published that afternoon.
+You still get one, you just ask for it. The **[ReductROS
+extension](/docs/extensions/official/ros-ext)** reads stored records back as JSON or exports them
+as mcap, filters existing mcap files, and reads ROS 2 rosbag2 archives in either sqlite3 or mcap
+form. It can also re-pack them into new episodes, keeping only the topics you name and splitting
+by `duration` or `size`. The bag is built for the slice you asked for rather than for every topic
+the robot published that afternoon.
 
-Two things to be plain about. ReductROS is part of ReductStore Pro under a commercial licence, with
-a free demo server and evaluation licences for testing, so the export path isn't the same kind of
-free as `ros2 bag record`. And the bridge is another process to deploy on the robot, built against a
-sourced ROS 2 environment, where `ros2 bag record` is already installed and needs no configuration
-to start.
+What this does cost is worth being plain about. ReductROS is part of ReductStore Pro under a
+commercial licence, with a free demo server and evaluation licences for testing, so the export
+path isn't the same kind of free as `ros2 bag record`. And the bridge is another process to
+deploy on the robot, built against a sourced ROS 2 environment, where `ros2 bag record` is
+already installed and needs no configuration to start.
 
 ## When recording bags is still the right call
 
