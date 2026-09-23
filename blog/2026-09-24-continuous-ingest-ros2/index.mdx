@@ -145,39 +145,31 @@ path isn't the same kind of free as `ros2 bag record`. And the bridge is another
 deploy on the robot, built against a sourced ROS 2 environment, where `ros2 bag record` is
 already installed and needs no configuration to start.
 
-## When recording bags is still the right call
+## Bags are still right for short, one off recordings
 
-Record a bag when the recording is short and you are going to open it once. Dragging a file into a
-visualiser is fewer moving parts than anything described above.
+Record a bag for a prototype on the bench, a lab run, or a debug capture you will open once and
+throw away. Standing up a store and a bridge for that is more work than the recording is worth,
+and the tooling around bags is good.
 
-Record a bag when you are handing data to someone outside your infrastructure. A bag is a file and
-you can send it. A bucket is an account, a token and a conversation.
-
-Record a bag when the robot has no network path off it and the data has no life past the debug
-session it was captured for.
-
-And record a bag when the tool you actually need reads bags and nothing else. That's a real
-constraint and no architecture argument beats it.
-
-The split and merge cost only becomes a problem once recordings run for hours and reach hundreds
-of gigabytes. Below that, bags are fine, and the tooling around them is better than anything you
-would assemble yourself.
-**[Three ways to store ROS topics](/blog/store-ros-topics)** covers the middle ground, where the bag
-is still the recording unit but not the storage.
+The argument here starts when recording becomes continuous: a robot running for hours, every day,
+producing data somebody will want to look at weeks later.
+**[Three ways to store ROS topics](/blog/store-ros-topics)** covers the middle ground, where the
+bag is still the recording unit but not the storage.
 
 ## Conclusion
 
-Splitting will keep getting cheaper as rosbag2 improves. That doesn't remove the merge, because a
-merge is what you do when the recording arrived as pieces, and pieces are what splitting produces
-by design.
+The split exists because a file has to close. The merge exists because the split did. Making the
+split cheaper, which the rosbag2 maintainers are doing, does not make the merge unnecessary.
 
-If you're already writing a script to work out which bags overlap the window you care about, you
-have the split then merge problem, and making the split cheaper doesn't remove that script.
-Recording each topic continuously does, because there's nothing to reassemble.
+Recording each topic as its own entry removes the step instead. Nothing is being closed during
+recording, so there is nothing to reassemble afterwards, and the bag goes back to being something
+you export when a tool asks for one.
 
-For the setup itself, the **[Reduct Bridge docs](/docs/reduct-bridge)** cover the ROS 2 input and
-what it writes. The **[data querying guide](/docs/guides/data-querying)** covers reading an
-interval back out once it's in there.
+If you are writing a script to work out which bags overlap the window you care about, that script
+is the problem this removes.
+
+The **[Reduct Bridge docs](/docs/reduct-bridge)** cover the ROS 2 input and what it writes, and
+the **[data querying guide](/docs/guides/data-querying)** covers reading an interval back out.
 
 ---
 
