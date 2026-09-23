@@ -59,13 +59,13 @@ files, and something still has to put them back together.
 
 ## One entry per topic, one record per message
 
-The other model is to stop producing files during recording.
+The alternative is to stop making files the unit of recording. One topic becomes one entry, and
+one message becomes one record inside it, written as it arrives.
 
-**[Reduct Bridge](/docs/reduct-bridge)** subscribes to ROS 2 topics and writes each message straight
-into ReductStore as a record. Payloads go in as serialized CDR with content type `application/cdr`,
-so nothing is re-encoded on the way in. Each topic becomes its own entry, named after the topic
-unless you set `entry_name`, and topic patterns like `/camera/*` are matched with a wildcard rather
-than listed one by one.
+**[Reduct Bridge](/docs/reduct-bridge)** subscribes to ROS 2 topics and does exactly that. Payloads
+go in as serialized CDR with content type `application/cdr`, so nothing is re-encoded on the way
+in. Each entry is named after its topic unless you set `entry_name`, and topic patterns like
+`/camera/*` are matched with a wildcard rather than listed one by one.
 
 Three things are stored alongside the message and matter later. The schema for the message type
 goes into a `$ros` attachment, so the recording carries the definition needed to read it back.
@@ -79,16 +79,15 @@ record lands you address it by its timestamp on its entry. The bucket itself can
 a FIFO quota by volume, which is what stops the disk filling up: you set a size limit on the
 bucket, the oldest records are deleted first, and the robot keeps recording.
 
-Pull an interval back out and it is a query across entries, not a hunt through a directory for which
-files overlap 10:31 to 10:34. The wider picture of what that changes on a fleet is in **[a database
-for robotics](/blog/database-for-robotics)**, and the retention and edge to cloud side is in **[how
-to store and manage robotics data](/blog/store-robotic-data)**.
+There is no split, so there is no merge. The wider picture of what that changes on a fleet is in
+**[a database for robotics](/blog/database-for-robotics)**, and the retention and edge to cloud
+side is in **[how to store and manage robotics data](/blog/store-robotic-data)**.
 
-There is no split, so there is no merge.
+## What changes once recording is continuous
 
-## What the bag could not do
-
-Removing the merge is the immediate win. The four things below have no bag equivalent at all.
+The robot now holds a rolling window of everything it recorded, bounded by the quota and indexed
+by time. The rest of the workflow follows from that: decide what leaves the machine, decide where
+it lands, then read it back.
 
 **You choose which data leaves the robot.** A replication task copies records from the
 bucket on the robot to a bucket in the cloud, and it takes a `when` condition on labels, so what
@@ -132,10 +131,11 @@ dashboard is a separate pipeline you build and keep running.
 
 ## The bag becomes something you export, not something you record
 
-Plenty of tooling still wants one. `ros2 bag play` wants a directory with metadata in it. Older
-Foxglove builds want a single file, since some versions cannot open several mcap files at once,
-which is exactly why merging is tempting in the first place. Anything you have scripted around
-**[loading bag files for analysis](/blog/boston-dynamic-example)** expects a path, not a bucket.
+Some tools still need a bag, and that is fine. `ros2 bag play` wants a directory with metadata in
+it. Older Foxglove builds want a single file, since some versions cannot open several mcap files
+at once, which is exactly why merging is tempting in the first place. Anything you have scripted
+around **[loading bag files for analysis](/blog/boston-dynamic-example)** expects a path, not a
+bucket.
 
 You still get one, you just ask for it. The **[ReductROS
 extension](/docs/extensions/official/ros-ext)** reads stored records back as JSON or exports them
@@ -156,22 +156,26 @@ Record a bag for a prototype on the bench, a lab run, or a debug capture you wil
 throw away. Standing up a store and a bridge for that is more work than the recording is worth,
 and the tooling around bags is good.
 
-The argument here starts when recording becomes continuous: a robot running for hours, every day,
-producing data somebody will want to look at weeks later.
 **[Three ways to store ROS topics](/blog/store-ros-topics)** covers the middle ground, where the
 bag is still the recording unit but not the storage.
 
+That is the boundary: bags work well for finite captures. The problems described here start when
+recording is supposed to run continuously.
+
 ## Conclusion
 
-The split exists because a file has to close. The merge exists because the split did. Making the
-split cheaper, which the rosbag2 maintainers are doing, does not make the merge unnecessary.
+Splitting rosbag files makes sense for short recordings. But once recording becomes continuous,
+those file boundaries start getting in the way: you have to manage disk space, find which files
+contain the interval you want, and sometimes merge them again before you can use the data.
 
-Recording each topic as its own entry removes the step instead. Nothing is being closed during
-recording, so there is nothing to reassemble afterwards, and the bag goes back to being something
-you export when a tool asks for one.
+For long running robots, it is simpler to keep recording as a time-indexed stream. Recent data
+stays on the robot under a fixed storage limit, while selected data, such as an incident or the
+minutes around an anomaly, can be replicated to the cloud and stored on S3 or Azure Blob.
 
-If you are writing a script to work out which bags overlap the window you care about, that script
-is the problem this removes.
+If a tool still needs a bag, export the topics and time range you need.
+
+The bag remains useful for playback, exchange and analysis. It just no longer has to define how
+continuous data is recorded and stored.
 
 The **[Reduct Bridge docs](/docs/reduct-bridge)** cover the ROS 2 input and what it writes, and
 the **[data querying guide](/docs/guides/data-querying)** covers reading an interval back out.
