@@ -28,34 +28,31 @@ Splitting solves one problem. Merging creates another, and it is easy to underes
 
 ## Why the interval is usually small
 
-Nothing forces the interval down to five minutes specifically. A few practical constraints just
-tend to push it there. A robot that loses power mid recording loses less if the open file is
-small. A single file that grows for eight hours is awkward to copy off a machine. And some
-downstream tool has a size it stops being happy at past a certain point.
+Nothing forces the interval down to five minutes specifically. Three practical limits push it
+there. A robot that loses power mid recording loses only the file that was open, so a smaller
+file loses less. A single file that grows for eight hours is awkward to copy off a machine. And
+many tools that read bags slow down or run out of memory on files above a few gigabytes.
 
 None of that is wrong. Splitting does what it was asked to do. It just moves the cost to the
 other end of the workflow, where it is measured in disk, CPU and the hours between a recording
 existing and being usable.
 
-## The cost lands in more than one place
+## Two more costs, beyond the merge
 
-Merging is the most visible cost, but the file boundary itself creates two more, both with the
-same root cause: something has to decide when to close a file, write into it what it knows about
-the others, and handle whatever goes wrong at that instant.
+Merging is the most visible cost. Closing one file and opening the next creates two others.
 
-**No floor under the disk.** The size and duration limits on `ros2 bag record` bound the bag, not
-the disk, so recording continues until the disk is full. On an embedded robot that takes the
-system logs and the DDS shared memory files with it, and services start failing for reasons that
-have nothing to do with recording. ROS 1 had a `--min-space` flag for exactly this, defaulting to
-1 GB. rosbag2 dropped it.
+**Recording does not stop when the disk fills.** The size and duration limits on `ros2 bag
+record` cap each bag, not the total. Recording continues until the disk is full, and on an
+embedded robot a full disk takes the system logs and the DDS shared memory files with it, so
+services start failing for reasons that have nothing to do with recording.
 
-**CPU that climbs over the session.** Splitting frequently means writing a new file's metadata
-header more often, and the metadata each bag carries tends to grow with the number of files
-already recorded, so the cost per split doesn't stay flat.
+**CPU use grows as the recording gets longer.** Every split writes a new metadata header, and
+that metadata describes all the files recorded so far. The more files already on disk, the more
+each new split costs, so a long session gets steadily more expensive rather than staying flat.
 
 None of this makes rosbag2 badly built. Both costs come from the same moment, closing one file
-and opening the next. Fix either one and the boundary is still there, and so is the merge it
-eventually asks for.
+and opening the next. Fix either one and files are still being closed, so the merge is still
+waiting at the end.
 
 ## One entry per topic, one record per message
 
@@ -67,18 +64,17 @@ so nothing is re-encoded on the way in. Each topic becomes its own entry, named 
 unless you set `entry_name`, and topic patterns like `/camera/*` are matched with a wildcard rather
 than listed one by one.
 
-Three things ride along with the message and matter later. The schema metadata for the message type
-is stored in a `$ros` attachment, so the recording carries the definition needed to read it back.
-Fields can be lifted out into labels, decoded against the resolved `.msg` schema, which is what lets
-you filter on camera id or frame type later without unpacking any payloads. And the timestamp can be
-taken from the message's own `ros_stamp` rather than from when the bridge happened to see it.
+Three things are stored alongside the message and matter later. The schema for the message type
+goes into a `$ros` attachment, so the recording carries the definition needed to read it back.
+Named fields from the message are copied into labels, decoded against that schema, so you can
+later filter on camera id or frame type without opening any payloads. And the timestamp can come
+from the message's own `ros_stamp` rather than from when the bridge received it.
 
 Writes to the store are batched, by default at 80 records, 8 MB or 1000 ms, whichever comes first.
-That's a flush, not a split. It has no name, nothing downstream refers to it, and once a record
-lands it is addressable by its timestamp on its entry. The bucket itself can be created with a FIFO
-quota by volume, which answers the disk floor problem above as a property of the storage rather
-than as a flag on the recorder: you set the ceiling, the oldest records go first, and the robot
-keeps recording.
+That's a flush, not a split. It creates no file, nothing downstream refers to it, and once a
+record lands you address it by its timestamp on its entry. The bucket itself can be created with
+a FIFO quota by volume, which is what stops the disk filling up: you set a size limit on the
+bucket, the oldest records are deleted first, and the robot keeps recording.
 
 Pull an interval back out and it is a query across entries, not a hunt through a directory for which
 files overlap 10:31 to 10:34. The wider picture of what that changes on a fleet is in **[a database
@@ -89,9 +85,9 @@ There is no split, so there is no merge.
 
 ## What the bag could not do
 
-Removing the merge is the immediate win. The rest of it has no bag equivalent at all.
+Removing the merge is the immediate win. The four things below have no bag equivalent at all.
 
-**Only the part worth keeping leaves the robot.** A replication task copies records from the
+**You choose which data leaves the robot.** A replication task copies records from the
 bucket on the robot to a bucket in the cloud, and it takes a `when` condition on labels, so what
 crosses the link is chosen rather than scheduled. It also carries context. **[Conditional
 replication](/docs/guides/data-replication)** accepts `#ctx_before` and `#ctx_after`, each taking
@@ -100,12 +96,12 @@ on that label with `#ctx_before` set to ten minutes, and what lands in the cloud
 plus the ten minutes that led to it. With bags, the unit you can move is the file, and the file
 was cut where the recorder decided, not where the incident was.
 
-**The long tail sits in S3 or Azure Blob, and the robot still writes locally.** ReductStore runs
+**Older data moves to S3 or Azure Blob while the robot keeps writing locally.** ReductStore runs
 on **[cloud object storage](/docs/integrations/cloud-storage)** with a local cache in front of it,
-sized by `RS_REMOTE_CACHE_SIZE` at a path you choose and pushed up on `RS_REMOTE_SYNC_INTERVAL`.
-Recent data stays on the node's own disk, which is where ingest happens and where a robot with no
-link keeps recording regardless. Older data lives in a bucket you already pay for. Neither half
-needs the recording to have been cut into files first.
+sized by `RS_REMOTE_CACHE_SIZE` at a path you choose and uploaded on `RS_REMOTE_SYNC_INTERVAL`.
+Recent data stays on the node's own disk, which is where recording happens and where a robot with
+no network link keeps working. Anything older sits in a cloud bucket you already pay for. Neither
+half needs the recording to have been cut into files first.
 
 **You ask the store a question instead of writing a script.** Labels are indexed, so narrowing to
 one camera or one frame type is a query, not a pass over payloads. And the **[ReductSelect
@@ -156,8 +152,9 @@ session it was captured for.
 And record a bag when the tool you actually need reads bags and nothing else. That's a real
 constraint and no architecture argument beats it.
 
-The split and merge cost only shows up past a certain volume and a certain uptime. Below that line,
-bags are fine, and the ecosystem around them is better than anything you would assemble yourself.
+The split and merge cost only becomes a problem once recordings run for hours and reach hundreds
+of gigabytes. Below that, bags are fine, and the tooling around them is better than anything you
+would assemble yourself.
 **[Three ways to store ROS topics](/blog/store-ros-topics)** covers the middle ground, where the bag
 is still the recording unit but not the storage.
 
