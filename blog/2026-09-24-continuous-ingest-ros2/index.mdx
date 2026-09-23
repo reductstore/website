@@ -11,8 +11,8 @@ image: ./continuous-ingest-ros2-cover.png
 ![A robot recording ROS 2 topics into a shrinking stack of split bag files, and into ReductStore](./continuous-ingest-ros2-cover.png)
 
 A rosbag recording is a file, and a file cannot grow forever. Something has to close it at some
-point, so rosbag2 makes you pick where: `ros2 bag record -a -b 100000` closes one every 100
-kilobytes, `-d 9000` closes one every 9000 seconds. Either way, a recording that runs for hours
+point, so rosbag2 makes you pick: `ros2 bag record -a -b 100000` closes one every 100 kilobytes,
+or `-d 9000` closes one every 9000 seconds. Either way, a recording that runs for hours
 comes out as a directory of many small files instead of one file nobody could open.
 
 Splitting a recording into five minute bags seems like a simple solution. The problem starts when
