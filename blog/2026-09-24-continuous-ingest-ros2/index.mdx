@@ -42,8 +42,8 @@ the recording is ready to use.
 
 **Splitting does not limit total disk usage.** The size and duration limits on `ros2 bag record`
 cap each bag, not the recording as a whole. It keeps creating new bags until the disk is full. On
-an embedded robot, that can cause seemingly unrelated services to fail because they can no longer
-write logs, temporary files, databases, caches, and anything else they expect to be able to save.
+an embedded robot, a full disk can cause seemingly unrelated services to fail because they can no
+longer write logs, temporary files, databases or caches.
 
 **Frequent splitting can also get more expensive over time.** An **[open report on
 rosbag2](https://github.com/ros2/rosbag2/issues/2481)** shows CPU use increasing over time when
