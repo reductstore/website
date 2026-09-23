@@ -10,10 +10,11 @@ image: ./continuous-ingest-ros2-cover.png
 
 ![A robot recording ROS 2 topics](./continuous-ingest-ros2-cover.png)
 
-A rosbag recording is a file, and a file cannot grow forever. Something has to close it at some
-point, so rosbag2 makes you pick: `ros2 bag record -a -b 100000` closes one every 100 kilobytes,
-or `-d 9000` closes one every 9000 seconds. Either way, a recording that runs for hours
-comes out as a directory of many small files instead of one file nobody could open.
+A rosbag recording is ultimately written to files, and a single file cannot grow forever.
+Something has to close it at some point, so rosbag2 makes you pick: `ros2 bag record -a -b 100000`
+closes one every 100 kilobytes, or `-d 9000` closes one every 9000 seconds. Either way, a
+recording that runs for hours comes out as a directory of many small files instead of one huge
+file that becomes awkward to work with.
 
 Splitting a recording into five minute bags seems like a simple solution. The problem starts when
 you need to turn them back into one file.
@@ -26,9 +27,9 @@ Splitting solves one problem. Merging creates another, and it is easy to underes
 
 {/* truncate */}
 
-## Why the interval is usually small
+## Why the splits are usually small
 
-Nothing forces the interval down to five minutes specifically. Three practical limits push it
+Nothing forces the split down to five minutes specifically. Three practical limits push it
 there. A robot that loses power mid recording loses only the file that was open, so a smaller
 file loses less. A single file that grows for eight hours is awkward to copy off a machine. And
 many tools that read bags slow down or run out of memory on files above a few gigabytes.
@@ -67,15 +68,13 @@ one message becomes one record inside it, written as it arrives.
 topic becomes an entry and each message becomes a timestamped record. The payload stays as
 serialized CDR, so nothing is re-encoded on the way in.
 
-Three things are stored alongside the message and matter later. The schema for the message type
-goes into a `$ros` attachment, so the recording carries the definition needed to read it back.
-Named fields from the message are copied into labels, decoded against that schema, so you can
-later filter on camera id or frame type without opening any payloads. And the timestamp can come
-from the message's own `ros_stamp` rather than from when the bridge received it.
+The schema is stored alongside the data, selected message fields can become labels, and the
+timestamp can come from the message's own `ros_stamp`. That means the data keeps enough context to
+decode, filter and query it later without changing the original CDR payload.
 
 Writes are batched for efficiency, but a batch flush is not a split. Nothing downstream depends on
 that boundary. Once a record is written, it is addressed by timestamp rather than by which file
-happens to contain it.
+contains it.
 
 The bucket itself can be created with a FIFO quota by volume, which is what stops the disk filling
 up: you set a size limit on the bucket, the oldest records are deleted first, and the robot keeps
@@ -102,11 +101,10 @@ was cut where the recorder decided, not where the incident was.
 
 **The robot keeps a plain filesystem, the cloud instance sits on object storage.** On the robot,
 ReductStore writes to local disk, so recording carries on whether or not there is a network.
-What you replicate lands in a second instance in the cloud, and that one can use **[S3 or Azure
-Blob as its backend](/docs/integrations/cloud-storage)**, keeping a local cache sized by
-`RS_REMOTE_CACHE_SIZE` for recent data and pushing the rest out on `RS_REMOTE_SYNC_INTERVAL`. The
-archive is priced as object storage rather than as disks you keep attached, and neither end needs
-the recording cut into files first.
+What you replicate lands in a second instance in the cloud, which can use **[S3 or Azure Blob as
+its backend](/docs/integrations/cloud-storage)**. The cloud instance keeps a local cache while
+older data is pushed to object storage. The archive is priced as object storage rather than as
+disks you keep attached, and neither end needs the recording cut into files first.
 
 **You ask the store a question instead of writing a script.** Records are indexed by time, and
 labels filter within a range, so narrowing to one camera or one frame type happens in the query
@@ -121,15 +119,17 @@ that, returning JSON, CSV or Parquet:
 SELECT device_id, temperature FROM ENTRY() WHERE temperature > 20
 ```
 
-Against a directory of bags, both of those are a script that opens every file in turn.
+Against a directory of bags, filtering by time or message fields means opening and processing the
+relevant files yourself.
 
 **Dashboards read the store directly.** The **[Grafana data
 source](/docs/integrations/grafana)** pulls time series straight out of ReductStore buckets, so an
 entry becomes a panel without an export step in between. That matters most for the numeric topics
 riding alongside the heavy ones: battery voltage, motor temperature, CPU load, all recorded
 against the same clock as the camera frames. You can chart them, alert on them, and when something
-looks wrong, go to the images from the same moment because they share a timestamp. With bags, the
-dashboard is a separate pipeline you build and keep running.
+looks wrong, go to the images from the same moment because they share a timestamp. With bags,
+getting that data into a live dashboard requires another pipeline between the recordings and
+Grafana.
 
 ## The bag becomes something you export, not something you record
 
@@ -165,9 +165,9 @@ Splitting rosbag files makes sense for short recordings. But once recording beco
 those file boundaries start getting in the way: you have to manage disk space, find which files
 contain the interval you want, and sometimes merge them again before you can use the data.
 
-For long running robots, a time-indexed stream removes those file boundaries. Recent data stays
-on the robot under a fixed storage limit, while selected data, such as an incident or the minutes
-around an anomaly, can be replicated to the cloud and stored on S3 or Azure Blob.
+For long running robots, a time-indexed stream removes those file boundaries. The robot keeps a
+rolling window locally under a fixed storage limit, while selected data, such as an incident or
+the minutes around an anomaly, can be replicated to the cloud and stored on S3 or Azure Blob.
 
 If a tool still needs a bag, export the topics and time range you need.
 
