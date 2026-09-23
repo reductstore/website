@@ -108,9 +108,12 @@ half needs the recording to have been cut into files first.
 
 **You ask the store a question instead of writing a script.** Records are indexed by time, and
 labels filter within a range, so narrowing to one camera or one frame type happens in the query
-rather than in a pass over payloads. And the **[ReductSelect
-extension](/docs/extensions/official/select-ext)** answers SQL against stored records, over JSON,
-CSV, Protobuf and Parquet, and writes the result out as Parquet:
+rather than in a pass over payloads.
+
+SQL takes one more step. ROS messages are stored as CDR, which ReductSelect does not read, so the
+**[ReductROS extension](/docs/extensions/official/ros-ext)** decodes them to JSON on the way out
+and the **[ReductSelect extension](/docs/extensions/official/select-ext)** runs the query over
+that, returning JSON, CSV or Parquet:
 
 ```sql
 SELECT device_id, temperature FROM ENTRY() WHERE temperature > 20
@@ -120,10 +123,7 @@ Against a directory of bags, both of those are a script that opens every file in
 
 **Dashboards read the store directly.** The **[Grafana data
 source](/docs/integrations/grafana)** pulls from buckets, so entries become panels and alerts with
-no export step in between. It's a community plugin and isn't on the Grafana marketplace yet, so
-installing it means permitting an unsigned plugin on Grafana 10 or later.
-
-All of that runs on records as they land. None of it waits for a merge.
+no export step in between.
 
 ## What you give up
 
