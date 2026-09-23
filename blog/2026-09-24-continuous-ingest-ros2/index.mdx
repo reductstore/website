@@ -46,13 +46,16 @@ record` cap each bag, not the total. Recording continues until the disk is full.
 robot, that can cause seemingly unrelated services to fail because they can no longer write
 logs, temporary files, databases, caches, and anything else they expect to be able to save.
 
-**CPU use grows as the recording gets longer.** Every split writes a new metadata header, and
-that metadata describes all the files recorded so far. The more files already on disk, the more
-each new split costs, so a long session gets steadily more expensive rather than staying flat.
+**Long recordings are where the bugs turn up.** An **[open report on
+rosbag2](https://github.com/ros2/rosbag2/issues/2481)** describes CPU use growing without bound
+when bags split often, traced to the list of files being rewritten into the manifest on every
+split. A fix is already in review, so that particular problem should not last. It is worth
+mentioning for its shape rather than its size: every split closes a file, updates a manifest and
+carries state forward, and that is the part of a long running recording where things go wrong.
 
-None of this makes rosbag2 badly built. Both costs come from the same moment, closing one file
-and opening the next. Fix either one and files are still being closed, so the merge is still
-waiting at the end.
+None of this is a criticism of rosbag2. Both problems come from the same place, the moment one
+file is closed and another is opened. Fix them both and you still end up with a directory of
+files, and something still has to put them back together.
 
 ## One entry per topic, one record per message
 
