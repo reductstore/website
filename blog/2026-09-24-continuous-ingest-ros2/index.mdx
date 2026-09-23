@@ -106,8 +106,9 @@ Recent data stays on the node's own disk, which is where recording happens and w
 no network link keeps working. Anything older sits in a cloud bucket you already pay for. Neither
 half needs the recording to have been cut into files first.
 
-**You ask the store a question instead of writing a script.** Labels are indexed, so narrowing to
-one camera or one frame type is a query, not a pass over payloads. And the **[ReductSelect
+**You ask the store a question instead of writing a script.** Records are indexed by time, and
+labels filter within a range, so narrowing to one camera or one frame type happens in the query
+rather than in a pass over payloads. And the **[ReductSelect
 extension](/docs/extensions/official/select-ext)** answers SQL against stored records, over JSON,
 CSV, Protobuf and Parquet, and writes the result out as Parquet:
 
