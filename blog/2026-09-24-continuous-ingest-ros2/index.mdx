@@ -42,9 +42,9 @@ existing and being usable.
 Merging is the most visible cost. Closing one file and opening the next creates two others.
 
 **Recording does not stop when the disk fills.** The size and duration limits on `ros2 bag
-record` cap each bag, not the total. Recording continues until the disk is full, and on an
-embedded robot a full disk takes the system logs and the DDS shared memory files with it, so
-services start failing for reasons that have nothing to do with recording.
+record` cap each bag, not the total. Recording continues until the disk is full. On an embedded
+robot, that can cause seemingly unrelated services to fail because they can no longer write
+logs, temporary files, databases, caches, and anything else they expect to be able to save.
 
 **CPU use grows as the recording gets longer.** Every split writes a new metadata header, and
 that metadata describes all the files recorded so far. The more files already on disk, the more
