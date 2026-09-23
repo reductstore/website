@@ -47,11 +47,10 @@ robot, that can cause seemingly unrelated services to fail because they can no l
 logs, temporary files, databases, caches, and anything else they expect to be able to save.
 
 **Long recordings are where the bugs turn up.** An **[open report on
-rosbag2](https://github.com/ros2/rosbag2/issues/2481)** describes CPU use growing without bound
-when bags split often, traced to the list of files being rewritten into the manifest on every
-split. A fix is already in review, so that particular problem should not last. It is worth
-mentioning for its shape rather than its size: every split closes a file, updates a manifest and
-carries state forward, and that is the part of a long running recording where things go wrong.
+rosbag2](https://github.com/ros2/rosbag2/issues/2481)** shows CPU use increasing over time when
+bags are split frequently. The **[proposed fix](https://github.com/ros2/rosbag2/pull/2490)** points
+to metadata written on every split: it currently includes the growing list of all bag files
+recorded so far, making each split progressively more expensive.
 
 None of this is a criticism of rosbag2. Both problems come from the same place, the moment one
 file is closed and another is opened. Fix them both and you still end up with a directory of
