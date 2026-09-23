@@ -51,10 +51,10 @@ bags are split frequently. The **[proposed fix](https://github.com/ros2/rosbag2/
 to metadata written on every split: it currently includes the growing list of all bag files
 recorded so far, making each split progressively more expensive.
 
-None of this is a criticism of rosbag2. Splitting solves the practical problem of keeping
-individual recordings manageable, but it does not solve retention, and every split adds another
-file that has to be tracked and handled later. Fix the CPU issue and you still end up with a
-directory of files that represents one continuous recording.
+Splitting solves the practical problem of keeping individual recordings manageable, but it does
+not solve retention. Every split also adds another file that has to be tracked and handled later.
+Fix the CPU issue and you still end up with a directory of files that represents one continuous
+recording.
 
 ## One entry per topic, one record per message
 
