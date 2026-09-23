@@ -99,12 +99,13 @@ on that label with `#ctx_before` set to ten minutes, and what lands in the cloud
 plus the ten minutes that led to it. With bags, the unit you can move is the file, and the file
 was cut where the recorder decided, not where the incident was.
 
-**Older data moves to S3 or Azure Blob while the robot keeps writing locally.** ReductStore runs
-on **[cloud object storage](/docs/integrations/cloud-storage)** with a local cache in front of it,
-sized by `RS_REMOTE_CACHE_SIZE` at a path you choose and uploaded on `RS_REMOTE_SYNC_INTERVAL`.
-Recent data stays on the node's own disk, which is where recording happens and where a robot with
-no network link keeps working. Anything older sits in a cloud bucket you already pay for. Neither
-half needs the recording to have been cut into files first.
+**The robot keeps a plain filesystem, the cloud instance sits on object storage.** On the robot,
+ReductStore writes to local disk, so recording carries on whether or not there is a network.
+What you replicate lands in a second instance in the cloud, and that one can use **[S3 or Azure
+Blob as its backend](/docs/integrations/cloud-storage)**, keeping a local cache sized by
+`RS_REMOTE_CACHE_SIZE` for recent data and pushing the rest out on `RS_REMOTE_SYNC_INTERVAL`. The
+archive is priced as object storage rather than as disks you keep attached, and neither end needs
+the recording cut into files first.
 
 **You ask the store a question instead of writing a script.** Records are indexed by time, and
 labels filter within a range, so narrowing to one camera or one frame type happens in the query
@@ -122,8 +123,12 @@ SELECT device_id, temperature FROM ENTRY() WHERE temperature > 20
 Against a directory of bags, both of those are a script that opens every file in turn.
 
 **Dashboards read the store directly.** The **[Grafana data
-source](/docs/integrations/grafana)** pulls from buckets, so entries become panels and alerts with
-no export step in between.
+source](/docs/integrations/grafana)** pulls time series straight out of ReductStore buckets, so an
+entry becomes a panel without an export step in between. That matters most for the numeric topics
+riding alongside the heavy ones: battery voltage, motor temperature, CPU load, all recorded
+against the same clock as the camera frames. You can chart them, alert on them, and when something
+looks wrong, go to the images from the same moment because they share a timestamp. With bags, the
+dashboard is a separate pipeline you build and keep running.
 
 ## The bag becomes something you export, not something you record
 
