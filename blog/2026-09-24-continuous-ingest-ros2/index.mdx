@@ -105,10 +105,14 @@ half needs the recording to have been cut into files first.
 
 **You ask the store a question instead of writing a script.** Labels are indexed, so narrowing to
 one camera or one frame type is a query, not a pass over payloads. And the **[ReductSelect
-extension](/docs/extensions/official/select-ext)** answers SQL against stored records,
-`SELECT device_id, temperature FROM ENTRY() WHERE temperature > 20`, over JSON, CSV, Protobuf and
-Parquet, and writes the result out as Parquet. Against a directory of bags, both of those are a
-script that opens every file in turn.
+extension](/docs/extensions/official/select-ext)** answers SQL against stored records, over JSON,
+CSV, Protobuf and Parquet, and writes the result out as Parquet:
+
+```sql
+SELECT device_id, temperature FROM ENTRY() WHERE temperature > 20
+```
+
+Against a directory of bags, both of those are a script that opens every file in turn.
 
 **Dashboards read the store directly.** The **[Grafana data
 source](/docs/integrations/grafana)** pulls from buckets, so entries become panels and alerts with
