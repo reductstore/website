@@ -56,14 +56,13 @@ not solve retention. Every split also adds another file that has to be tracked a
 Fix the CPU issue and you still end up with a directory of files that represents one continuous
 recording.
 
-## One entry per topic, one record per message
+## Store each topic separately, as the messages arrive
 
-The alternative is to stop making files the unit of recording. One topic becomes one entry, and
-one message becomes one record inside it, written as it arrives.
+The alternative is to store the data as it is. Messages can be stored separately per topic in the
+original format, rather than recording everything into one file.
 
-**[Reduct Bridge](/docs/reduct-bridge)** subscribes to ROS 2 topics and does exactly that. Each
-topic becomes an entry and each message becomes a timestamped record. The payload stays as
-serialized CDR, so nothing is re-encoded on the way in.
+**[Reduct Bridge](/docs/reduct-bridge)** subscribes to ROS 2 topics and writes each message as it
+arrives, keeping the payload as serialized CDR so nothing is re-encoded on the way in.
 
 The schema is stored alongside the data, selected message fields can become labels, and the
 timestamp can come from the message's own `ros_stamp`. That means the data keeps enough context to
@@ -119,8 +118,8 @@ Against a directory of bags, filtering by time or message fields means opening a
 relevant files yourself.
 
 **Dashboards read the store directly.** The **[Grafana data
-source](/docs/integrations/grafana)** pulls time series straight out of ReductStore buckets, so an
-entry becomes a panel without an export step in between. That matters most for the numeric topics
+source](/docs/integrations/grafana)** pulls time series straight out of ReductStore buckets, so a
+stored topic becomes a panel without an export step in between. That matters most for the numeric topics
 riding alongside the heavy ones: battery voltage, motor temperature, CPU load, all recorded
 against the same clock as the camera frames. You can chart them, alert on them, and when something
 looks wrong, go to the images from the same moment because they share a timestamp. With bags,
