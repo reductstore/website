@@ -4,7 +4,7 @@ description: "Learn how to capture and store images from ROS2 using ReductStore,
 authors: anthony
 tags: [tutorials, ros, computer vision, robotics]
 slug: tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision
-date: 2025-05-20
+date: 2026-10-06
 image: ./img/ros-reductstore-example.png
 ---
 
@@ -28,12 +28,13 @@ For the full code example, we will be using the [**reduct-ros-example repository
 
 ## ROS2 distributions
 
-To install ROS2, you'll need to select a distribution that aligns with your project requirements and system compatibility. As of May 2025, two distributions are currently supported:
+To install ROS2, you'll need to select a distribution that aligns with your project requirements and system compatibility. As of late 2026, three distributions are supported:
 
-- **Jazzy Jalisco** (`jazzy`) (Release date: May 23rd, 2024; End of life: May 2029)
-- **Humble Hawksbill** (`humble`) (Release date: May 23rd, 2022; End of life: May 2027)
+- **Jazzy Jalisco** (`jazzy`) (Release date: May 2024; End of life: May 2029)
+- **Kilted Kaiju** (`kilted`) (Release date: May 2025; End of life: November 2026)
+- **Humble Hawksbill** (`humble`) (Release date: May 2022; End of life: May 2027)
 
-If you are starting today, the `jazzy` distribution is recommended for its long-term support until May 2029. This is the thenth release of ROS2 and supports the following platforms:
+If you are starting today, the `jazzy` distribution is recommended for its long-term support until May 2029. Kilted Kaiju reaches end of life in November 2026, so it is not a good place to start a new project. Jazzy is the tenth release of ROS2 and supports the following platforms:
 
 - Tier 1: Ubuntu 24.04, Windows 10
 - Tier 2: RHEL 9 (Red Hat Enterprise Linux)
@@ -205,6 +206,42 @@ When the `store_data` method is called, it first checks if the bucket has been i
 The `store_data` method is designed to be non-blocking, which allows the main thread to continue processing other tasks while the data is stored.
 :::
 
+## The header stamp is acquisition time, not arrival time
+
+`get_timestamp` above keys every record on `msg.header.stamp`. The ROS message definition says what that field is for, in a comment on the line itself.
+
+From `sensor_msgs/msg/Image.msg`:
+
+```
+std_msgs/Header header # Header timestamp should be acquisition time of image
+                       # Header frame_id should be optical frame of camera
+```
+
+`CompressedImage`, the message this tutorial subscribes to, carries the same line.
+
+So the stamp is meant to be the moment the camera captured the frame, not the moment the message reached you. Note the wording. It says **should be**, not _is_. The message definition states an intent, and the driver is what actually fills the field. A driver written carelessly will hand you a clock reading taken long after the shutter closed, and nothing in ROS stops it.
+
+### Check what your own driver does
+
+You do not have to take the driver's word for it. Measure the gap in the callback:
+
+```python
+def image_callback(self, msg: CompressedImage) -> None:
+    stamp_us = self.get_timestamp(msg)
+    now_us = self.get_clock().now().nanoseconds // 1000
+    self.get_logger().info(f"delay {(now_us - stamp_us) / 1000:.1f} ms")
+```
+
+Three readings tell you what you have.
+
+A small delay that stays roughly steady means the driver is stamping at acquisition and the machine is keeping up. A delay that swings with load means the driver is stamping at acquisition and you are watching the transport, which is exactly what you want kept out of your timestamps.
+
+### One clock for every sensor
+
+ReductStore timestamps each record with the timestamp you provide, and each modality is its own entry. The camera, the lidar and the IMU are separate entries, and a query for a moment returns whatever each of them recorded at that moment.
+
+That only works if every entry agrees on what the time means.
+
 ## Testing the image storage system
 
 To test the image storage system, you can run the ROS2 node and publish image messages to the `/image_raw/compressed` topic.
@@ -271,6 +308,7 @@ This command copies all images from the `ros-bucket` bucket to the `./exported-d
 There are several best practices to consider when integrating ReductStore. Here are a few to keep in mind:
 
 - Use non-blocking operations to prevent the main thread of the ROS2 node from being blocked. This allows the node to continue processing other tasks while waiting for data to be stored.
+- Key records on `msg.header.stamp`, which the message definition defines as acquisition time, rather than on the time the callback happened to run.
 - Serialize data before storing it in ReductStore in a cross-platform binary format to ensure compatibility with different systems and programming languages.
 - Create a ReductStore bucket with a FIFO quota policy to prevent disk space issues.
 - Use token authentication to the bucket to ensure secure access to the data.
