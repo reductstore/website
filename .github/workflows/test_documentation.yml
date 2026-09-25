@@ -16,15 +16,15 @@ jobs:
     strategy:
       matrix:
         example: [python, rust, golang, curl, cpp, node, cli]
-        doc_version: [next, 1.20.x]
+        doc_version: [next, 1.21.x]
         include:
           - doc_version: next
             image: reduct/pro:main
             example_root: docs/examples
 
-          - doc_version: 1.20.x
+          - doc_version: 1.21.x
             image: reduct/pro:latest
-            example_root: versioned_docs/version-1.20.x/examples
+            example_root: versioned_docs/version-1.21.x/examples
 
           #          - doc_version: 1.18.x
           #            image: reduct/store:v1.18.10
@@ -286,6 +286,9 @@ jobs:
         run: |
           set -euo pipefail
 
+          # The example normally replicates to the public demo instance. Pause that
+          # optional external side effect so CI remains self-contained.
+          export RS_REPLICATION_1_MODE=paused
           docker compose up -d reductstore
 
           for attempt in {1..60}; do

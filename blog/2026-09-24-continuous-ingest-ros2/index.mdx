@@ -1,0 +1,177 @@
+---
+title: "Continuous Ingest for ROS 2: No Splits, No Merge"
+description: "Splitting rosbag files protects a recording. Merging them back costs disk and CPU. Recording each ROS 2 topic continuously removes the split step."
+authors: anthony
+tags: [robotics, ros]
+slug: continuous-ingest-ros2
+date: 2026-09-24
+image: ./continuous-ingest-ros2-cover.png
+---
+
+![A robot recording ROS 2 topics](./continuous-ingest-ros2-cover.png)
+
+A rosbag recording is ultimately written to files, and a single file cannot grow forever.
+Something has to close it at some point, so rosbag2 makes you pick: `ros2 bag record -a -b 100000`
+closes one every 100 kilobytes, or `-d 9000` closes one every 9000 seconds. Either way, a
+recording that runs for hours comes out as a directory of many small files instead of one huge
+file that becomes awkward to work with.
+
+Splitting a recording into five minute bags seems like a simple solution. The problem starts when
+you need to turn them back into one file.
+
+**[A rosbag2 user reported](https://github.com/ros2/rosbag2/issues/2335)** that merging 300 GB of
+split recordings required roughly 600 GB of disk capacity. The original 300 GB
+stays on disk while another 300 GB is written out as the merged bag.
+
+Splitting solves one problem. Merging creates another, and it is easy to underestimate.
+
+{/* truncate */}
+
+## Why the splits are usually small
+
+Nothing forces the split down to five minutes specifically. Three practical limits push it
+there. A robot that loses power mid recording loses only the file that was open, so a smaller
+file loses less. A single file that grows for eight hours is awkward to copy off a machine. And
+many tools that read bags slow down or run out of memory on files above a few gigabytes.
+
+None of that is wrong. Splitting does what it was asked to do. It just moves the work to the other
+end of the workflow: more files to manage, more disk needed to merge them, and more time before
+the recording is ready to use.
+
+## Two more problems with continuous recording
+
+**Splitting does not limit total disk usage.** The size and duration limits on `ros2 bag record`
+cap each bag, not the recording as a whole. It keeps creating new bags until the disk is full. On
+an embedded robot, a full disk can cause seemingly unrelated services to fail because they can no
+longer write logs, temporary files, databases or caches.
+
+**Frequent splitting can also get more expensive over time.** An **[open report on
+rosbag2](https://github.com/ros2/rosbag2/issues/2481)** shows CPU use increasing over time when
+bags are split frequently. The **[proposed fix](https://github.com/ros2/rosbag2/pull/2490)** points
+to metadata written on every split: it currently includes the growing list of all bag files
+recorded so far, making each split progressively more expensive.
+
+Splitting solves the practical problem of keeping individual recordings manageable, but it does
+not solve retention. Every split also adds another file that has to be tracked and handled later.
+Fix the CPU issue and you still end up with a directory of files that represents one continuous
+recording.
+
+## Store each topic separately, as the messages arrive
+
+The alternative is to store the data as it is. Messages can be stored separately per topic in the
+original format, rather than recording everything into one file.
+
+**[Reduct Bridge](/docs/reduct-bridge)** subscribes to ROS 2 topics and writes each message as it
+arrives, keeping the payload as serialized CDR so nothing is re-encoded on the way in.
+
+The schema is stored alongside the data, selected message fields can become labels, and the
+timestamp can come from the message's own `ros_stamp`. That means the data keeps enough context to
+decode, filter and query it later without changing the original CDR payload.
+
+Writes are batched for efficiency, but a batch flush is not a split. Nothing downstream depends on
+that boundary. Once a record is written, it is addressed by timestamp rather than by which file
+contains it.
+
+The bucket itself can be created with a FIFO quota by volume, which keeps recording within a fixed
+amount of disk space: you set a size limit on the bucket, the oldest records are deleted first, and
+the robot keeps recording.
+
+There is no split, so there is no merge. The wider picture of what that changes on a fleet is in
+**[a database for robotics](/blog/database-for-robotics)**, and the retention and edge to cloud
+side is in **[how to store and manage robotics data](/blog/store-robotic-data)**.
+
+## What changes once recording is continuous
+
+The robot now holds a rolling window of everything it recorded, bounded by the quota and indexed
+by time. The rest of the workflow follows from that: decide what leaves the machine, decide where
+it lands, then read it back.
+
+**You choose which data leaves the robot.** A replication task copies records from the
+bucket on the robot to a bucket in the cloud, and it takes a `when` condition on labels, so what
+crosses the link is chosen rather than scheduled. It also carries context. **[Conditional
+replication](/docs/guides/data-replication)** accepts `#ctx_before` and `#ctx_after`, each taking
+a duration, and pulls in the records around every match. Label an anomaly on the way in, replicate
+on that label with `#ctx_before` set to ten minutes, and what lands in the cloud is the incident
+plus the ten minutes that led to it. With bags, the unit you can move is the file, and the file
+was cut where the recorder decided, not where the incident was.
+
+**The robot keeps a plain filesystem, the cloud instance sits on object storage.** On the robot,
+ReductStore writes to local disk, so recording carries on whether or not there is a network.
+What you replicate lands in a second instance in the cloud, which can use **[S3 or Azure Blob as
+its backend](/docs/integrations/cloud-storage)**. The cloud instance keeps a local cache while
+older data is pushed to object storage. Neither end needs the recording cut into files first.
+
+**You ask the store a question instead of writing a script.** Records are indexed by time, and
+labels filter within a range, so narrowing to one camera or one frame type happens in the query
+rather than in a pass over payloads.
+
+For SQL queries, the CDR payload first has to be decoded. The **[ReductROS
+extension](/docs/extensions/official/ros-ext)** converts it to JSON on the way out, and
+**[ReductSelect](/docs/extensions/official/select-ext)** runs the query over that, returning JSON,
+CSV or Parquet:
+
+```sql
+SELECT device_id, temperature FROM ENTRY() WHERE temperature > 20
+```
+
+Against a directory of bags, filtering by time or message fields means opening and processing the
+relevant files yourself.
+
+**Dashboards read the store directly.** The **[Grafana data
+source](/docs/integrations/grafana)** pulls time series straight out of ReductStore buckets, so a
+stored topic becomes a panel without an export step in between. That matters most for the numeric topics
+riding alongside the heavy ones: battery voltage, motor temperature, CPU load, all recorded
+against the same clock as the camera frames. You can chart them, alert on them, and when something
+looks wrong, go to the images from the same moment because they share a timestamp. With bags,
+getting that data into a live dashboard requires another pipeline between the recordings and
+Grafana.
+
+## The bag becomes something you export, not something you record
+
+Some tools still need a bag, and that is fine. `ros2 bag play` wants a directory with metadata in
+it. Older Foxglove builds want a single file, since some versions cannot open several mcap files
+at once, which is exactly why merging is tempting in the first place. Anything you have scripted
+around **[loading bag files for analysis](/blog/boston-dynamic-example)** expects a path, not a
+bucket.
+
+You still get a bag when you need one. The **[ReductROS
+extension](/docs/extensions/official/ros-ext)** can export the topics and time range you ask for
+as mcap. Instead of recording an entire afternoon into bags just in case, the bag is created for
+the slice a tool actually needs.
+
+What this does cost is worth being plain about. ReductROS is part of ReductStore Pro under a
+commercial licence, so the export
+path isn't the same kind of free as `ros2 bag record`. And the bridge is another process to
+deploy on the robot, built against a sourced ROS 2 environment, where `ros2 bag record` is
+already installed and needs no configuration to start.
+
+## Bags are still right for short, one off recordings
+
+Record a bag for a prototype on the bench, a lab run, or a debug capture you will open once and
+throw away. Standing up a store and a bridge for that is more work than the recording is worth,
+and the tooling around bags is good.
+
+**[Three ways to store ROS topics](/blog/store-ros-topics)** covers the middle ground, where the
+bag is still the recording unit but not the storage.
+
+## Conclusion
+
+Splitting rosbag files makes sense for short recordings. But once recording becomes continuous,
+those file boundaries start getting in the way: you have to manage disk space, find which files
+contain the interval you want, and sometimes merge them again before you can use the data.
+
+For long running robots, a time-indexed stream removes those file boundaries. The robot keeps a
+rolling window locally under a fixed storage limit, while selected data, such as an incident or
+the minutes around an anomaly, can be replicated to the cloud and stored on S3 or Azure Blob.
+
+If a tool still needs a bag, export the topics and time range you need.
+
+The bag remains useful for playback, exchange and analysis. It just no longer has to define how
+continuous data is recorded and stored.
+
+The **[Reduct Bridge docs](/docs/reduct-bridge)** cover the ROS 2 input and what it writes, and
+the **[data querying guide](/docs/guides/data-querying)** covers reading an interval back out.
+
+---
+
+If you have any questions or comments, feel free to use the [**ReductStore Community Forum**](https://community.reduct.store).

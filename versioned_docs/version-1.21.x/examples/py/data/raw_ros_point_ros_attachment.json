@@ -1,0 +1,6 @@
+{
+  "encoding": "ros1",
+  "schema": "# This contains the position of a point in free space\nfloat64 x\nfloat64 y\nfloat64 z\n",
+  "topic": "/sensor/pos",
+  "schema_name": "geometry_msgs/Point"
+}

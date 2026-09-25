@@ -26,6 +26,8 @@ services:
       RS_REPLICATION_1_DST_TOKEN: reductstore
       RS_REPLICATION_1_DST_PREFIX: ${ROBOT_NAME:-robot-1}
       RS_REPLICATION_1_ENTRIES: "/camera/image_raw,/imu/data"
+      # Set RS_REPLICATION_1_MODE=paused to run the example without sending data.
+      RS_REPLICATION_1_MODE: ${RS_REPLICATION_1_MODE:-enabled}
       # replication-end
 
       # compression-start

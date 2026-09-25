@@ -1,0 +1,9 @@
+apiVersion: 1
+datasources:
+  - name: ReductStore
+    uid: reductstore
+    type: reductstore-datasource
+    jsonData:
+      serverURL: https://play.reduct.store
+    secureJsonData:
+      serverToken: reductstore

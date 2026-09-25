@@ -10,14 +10,14 @@ export default function MacOSInstall(props) {
 wget https://github.com/reductstore/reductstore/releases/latest/download/reductstore.x86_64-apple-darwin.tar.gz
 tar xfv reductstore.x86_64-apple-darwin.tar.gz
 chmod +x reductstore
-RS_DATA_PATH=./data ./reductstore
+RS_DATA_PATH=./data RS_API_TOKEN=my-token ./reductstore
 `.trim();
 
   const binaryInstallArm64 = `
 wget https://github.com/reductstore/reductstore/releases/latest/download/reductstore.aarch64-apple-darwin.tar.gz
 tar xfv reductstore.aarch64-apple-darwin.tar.gz
 chmod +x reductstore
-RS_DATA_PATH=./data ./reductstore
+RS_DATA_PATH=./data RS_API_TOKEN=my-token ./reductstore
 `.trim();
 
   return (

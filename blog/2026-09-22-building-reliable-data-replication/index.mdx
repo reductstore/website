@@ -1,0 +1,119 @@
+---
+title: "Building Reliable Data Replication at the Edge"
+description: "How ReductStore uses a persistent store-and-forward queue to deliver edge data over unreliable networks."
+authors: alexey
+tags: [system-design, database, edge-computing]
+slug: building-reliable-data-replication
+date: 2026-09-22
+---
+
+import Head from "@docusaurus/Head";
+
+<Head>
+  <link
+    rel="canonical"
+    href="https://blog.atimin.dev/building-reliable-data-replication/"
+  />
+</Head>
+
+We originally built [**ReductStore**](https://www.reduct.store) to store data on edge devices and read it back by time interval. But a device only has so much disk space. With cameras and sensors writing all the time, we used a FIFO quota to remove the oldest records and make room for new ones. That left us with another problem: how to get the data off the device before it was deleted.
+
+At first, transferring data from an edge device to central storage was a manual job. We used the CLI client or scripts and copied data when somebody remembered to do it. It was always problematic because data collection never stopped. Sometimes we had only two or three days to copy it before it was gone, and a temporary network problem or a missed run could make that window disappear completely.
+
+Automatic replication was the next logical step. The edge is producing a stream of new data, while the central store has more capacity and can have different criteria for what it keeps. We needed to forward new records and configure source-side filters for each destination. Keeping two identical replicas was not the goal.
+
+We also had to keep in mind that the source is usually on the edge. Very often it has no public IP address, and its network connection can be unstable, slow, or absent for long periods. Replication therefore could not make local ingestion wait for the central store. The device still needed to accept data first and deliver it later when a connection became available.
+
+{/* truncate */}
+
+## Replicated data path
+
+The data path looks like this:
+
+```svgbob
+                    "local write completed"
+                                |
+                                v
++---------+  HTTP    +-----------+-------------+notification   +------------------+
+| Client  +--------->| "Source bucket/entry"   +-------------->|  "Task filter"   |
++---------+          +-----------+-------------+               +--------+---------+
+                                |                                      |
+                                |           "accepted notifications"   |
+                                |                                      v
+                                |                             +--------+---------+
+                                |                             |"Transaction log" |
+                                |                             +--------+---------+
+                         "read from bucket"                            |
+                                |                                      v
+                                |                             +--------+----------+
+                                |                             | "Sender worker"   |
+                                +---------------------------->+ * "reread source" |
+                                                              | * "batch records" |
+                                                              +--------+----------+
+                                                                       |
+                                                                 HTTP  |
+                                                                       v
+                                                              +--------+---------+
+                                                              | "Target bucket"  |
+                                                              +------------------+
+```
+
+When a record is successfully written to an entry, ReductStore generates a notification and passes it through the replication task's filter. The filter checks whether the entry and its labels meet the replication conditions. If they do, the notification is stored in the transaction log.
+
+Each log belongs to a specific replication task and source entry, so a notification only needs to store the operation type and the record's timestamp. Together, the log and timestamp provide enough information to find the record in the source bucket when it is time to send its content and metadata to the target bucket.
+
+Every replication task has a sender worker that periodically reads pending notifications from the transaction logs and then reads the corresponding records from the source bucket. It batches writes and updates into HTTP requests to the target bucket. When delivery succeeds, the sender removes the corresponding notifications from the logs. If the target bucket is unavailable or returns an error classified as retryable, the sender keeps the notifications and tries again after a delay. Some failures also cause notifications to be removed, as described below.
+
+## Transaction log
+
+The transaction log is a ring buffer stored in a preallocated file of fixed size. The first 16 bytes contain the current write and read positions. The rest of the file is divided into 9-byte slots containing an operation type and a record timestamp:
+
+| Region | Size     | Content                                            |
+| ------ | -------- | -------------------------------------------------- |
+| Header | 16 bytes | Write position (`u64`) and read position (`u64`)   |
+| Slot   | 9 bytes  | Operation (`u8`) and timestamp (`u64`, big-endian) |
+
+When a notification arrives, ReductStore seeks to the write position, writes the next slot, and advances the position. The sender does the same from the read position and advances it after successful delivery. Both positions wrap around when they reach the end of the file.
+
+This approach reuses the same allocated space. It avoids creating a file for every notification or continuously appending records and later removing them from the beginning of a file. Reads and writes require only a seek to a known position, and disk usage stays predictable.
+
+Each source entry has a separate transaction log for each replication task. For example, a task named `copy-to-cloud` creates the following layout:
+
+```text
+data/
+`-- source-bucket/
+    |-- camera-1/
+    |   |-- ... record data ...
+    |   `-- copy-to-cloud.log
+    `-- camera-2/
+        |-- ... record data ...
+        `-- copy-to-cloud.log
+```
+
+The directory identifies the source entry, the file name identifies the replication task, and each slot identifies a record by its timestamp. This makes finding the source record straightforward: the sender already knows which entry to open and which timestamp to read. The log stays small because the record content and metadata remain in the source bucket until the sender needs them.
+
+The fixed size also defines the overflow behavior. If the write position catches up with the read position, the oldest pending reference is discarded to make room. This bounds the disk space used by each log, but local retention and transaction log capacity must be large enough to cover the expected outage.
+
+For example, an entry producing 100 accepted notifications per second accumulates 360,000 notifications during a one-hour outage. At 9 bytes per slot, that takes about 3.24 MB of log space, plus the header and an extra slot to distinguish a full queue from an empty one. In practice, allow headroom for longer outages and bursts, and retain the source records until they can be delivered. Each entry and replication task needs its own capacity budget.
+
+Recovery also needs spare throughput. If the sender can deliver 200 records per second while 100 new records per second keep arriving, it drains that backlog at 100 records per second and needs another hour to catch up. These rates are illustrative; payload sizes and network bandwidth determine the achievable throughput.
+
+The implementation details here refer to commit `965c9edb`: [**`transaction_log.rs`**](https://github.com/reductstore/reductstore/blob/965c9edbb218d0e880b5fd3fb8c5aba9d65e1036/reductstore/src/replication/transaction_log.rs), [**`replication_task.rs`**](https://github.com/reductstore/reductstore/blob/965c9edbb218d0e880b5fd3fb8c5aba9d65e1036/reductstore/src/replication/replication_task.rs), and [**`replication_sender.rs`**](https://github.com/reductstore/reductstore/blob/965c9edbb218d0e880b5fd3fb8c5aba9d65e1036/reductstore/src/replication/replication_sender.rs).
+
+## Guarantees and limits
+
+The guarantees and limits are:
+
+- An enabled replication task starts observing writes and updates when it is created. It does not automatically copy existing records or propagate deletions. Existing records can be copied through [**manual replication**](https://www.reduct.store/docs/guides/data-replication#manual-data-replication).
+- Pending references can be reloaded after an orderly shutdown and restart if the log remains intact. This is not a guarantee against process crashes or power loss: storing a source record and enqueueing its notification are separate steps, not one atomic transaction, and the log append path does not explicitly sync each notification to durable storage. A failure between those steps can leave a stored record without a queued reference.
+- The sender reads each entry's notification queue in FIFO order, but this does not guarantee that all operations reach the destination in that order. Within a batch, [**updates are sent before writes**](https://github.com/reductstore/reductstore/blob/965c9edbb218d0e880b5fd3fb8c5aba9d65e1036/reductstore/src/replication/remote_bucket/states/bucket_available.rs). There is no global ordering across entries.
+- The sender retries recoverable failures. A timeout can leave it unable to tell whether the target committed a write, so it may send the same record again. Record content is immutable: if a record already exists at that timestamp in the target entry, the repeated write returns `409 Conflict` without creating a duplicate or overwriting the stored content. Eventual delivery still depends on retaining both the queued reference and the source record, and on the destination accepting the record; the bounded queue does not provide an unconditional at-least-once guarantee.
+- The queue is deliberately bounded. A reference can be lost when the log overflows, local retention removes the source record before delivery, a corrupt log is recreated, a task with pending work is deleted, or the sender receives an error it cannot recover from.
+
+These limits make the capacity, retention, and failure-handling requirements explicit while keeping the transaction log small enough for edge devices.
+
+## Conclusions
+
+The reusable pattern is straightforward: push outward from constrained nodes, persist references rather than duplicate payloads, and isolate network work from ingestion. Reliability depends on sizing the queue and local retention for outages, leaving enough throughput to drain the backlog, and exposing pending work and errors. The durability, ordering, and loss limits are part of the design and need to be explicit.
+
+For the user-facing model, read the [**Data Replication guide**](https://www.reduct.store/docs/guides/data-replication). The [**replication source at the reviewed commit**](https://github.com/reductstore/reductstore/tree/965c9edbb218d0e880b5fd3fb8c5aba9d65e1036/reductstore/src/replication) provides the implementation behind this explanation. For one practical use of this mechanism, see the [**persistent storage for MQTT and IoT**](https://blog.atimin.dev/persistent-storage-mqtt-iot/) article.

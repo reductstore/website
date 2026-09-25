@@ -1,0 +1,56 @@
+---
+title: "write"
+description: "Write single record to a bucket"
+---
+
+<head>
+  <link rel="canonical" href="https://www.reduct.store/docs/cli/write" />
+</head>
+
+# reduct-cli write
+
+Write single record to a bucket
+
+## Arguments
+
+- `<ENTRY_PATH>`: Full path the entry to write to
+
+## Options
+
+- `-i, --ignore-ssl`: Ignore SSL certificate verification
+- `-s, --string <PAYLOAD>`: inline payload string.
+- `--ca-cert <PATH>`: Path to a custom CA certificate bundle/file
+- `-f, --file <PATH>`: payload file path.
+- `-C, --content-type <MIME>`: record content type.
+- `-T, --timeout <SECONDS>`: Timeout for requests
+- `-p, --parallel <COUNT>`: Number of parallel requests
+- `-t, --timestamp <TIME>`: RFC 3339 / ISO timestamp or Unix timestamp in microseconds.
+- `-q, --quiet`: suppress successful output.
+- `-j, --json`: output result in JSON format with timing information.
+- `-l, --labels <LABELS>`: labels as key=value,key=value or a JSON object.
+- `-h, --help`: Print help
+
+## Help Output
+
+```text
+Write single record to a bucket
+
+Usage: reduct-cli write [OPTIONS] --string <PAYLOAD> --file <PATH> <ENTRY_PATH>
+
+Arguments:
+  <ENTRY_PATH>  Full path the entry to write to
+
+Options:
+  -i, --ignore-ssl           Ignore SSL certificate verification
+  -s, --string <PAYLOAD>     inline payload string.
+      --ca-cert <PATH>       Path to a custom CA certificate bundle/file
+  -f, --file <PATH>          payload file path.
+  -C, --content-type <MIME>  record content type.
+  -T, --timeout <SECONDS>    Timeout for requests
+  -p, --parallel <COUNT>     Number of parallel requests
+  -t, --timestamp <TIME>     RFC 3339 / ISO timestamp or Unix timestamp in microseconds.
+  -q, --quiet                suppress successful output.
+  -j, --json                 output result in JSON format with timing information.
+  -l, --labels <LABELS>      labels as key=value,key=value or a JSON object.
+  -h, --help                 Print help
+```
