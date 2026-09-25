@@ -15,12 +15,9 @@ The license server creates your checkout and, once payment is confirmed, provisi
 
 ## Configure the license key
 
-Configure the license key on the ReductStore instance with one of the following settings:
+Set `RS_LICENSE_KEY` on the ReductStore instance to the license key from your subscription. The instance validates the key with the ReductStore license server.
 
-- Set `RS_LICENSE` to the complete license document content.
-- Set `RS_LICENSE_PATH` to the path of a mounted license file.
-
-Configure only one license source. If both are set, ReductStore rejects the ambiguous configuration and starts without a valid license. See **[License Configuration](/docs/configuration#license-configuration)** for details.
+Self-hosted deployments with a license document instead of a subscription key can use `RS_LICENSE` or `RS_LICENSE_PATH`. See **[License Configuration](/docs/configuration#license-configuration)** for details.
 
 ## Usage reporting
 
