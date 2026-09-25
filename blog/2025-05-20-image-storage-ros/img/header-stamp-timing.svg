@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="10 26 700 220" width="100%" height="100%">
+  <defs>
+    <style>
+      :root {
+        --card-bg: #FFFFFF; --card-brand: #2B0548; --card-stroke: #333333;
+        --text-main: #333333; --text-muted: #666666; --line: #333333; --rule: #CCCCCC;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --card-bg: #1E1E1E; --card-stroke: #555555;
+          --text-main: #EFEFEF; --text-muted: #A0A0A0; --line: #EFEFEF; --rule: #444444;
+        }
+      }
+      text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+      .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
+      .tick-brand    { fill: var(--card-brand); }
+      .text-label    { font-size: 13px; fill: var(--text-muted); letter-spacing: 0.09em; }
+      .text-emph     { font-size: 15px; font-weight: 600; fill: var(--text-main); }
+      .mono          { font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+                       font-size: 13px; fill: var(--text-muted); }
+      .connector { stroke: var(--line); stroke-width: 2; fill: none; }
+      .rule-dash { stroke: var(--rule); stroke-width: 1.5; fill: none; stroke-dasharray: 3 5; }
+      .arrow-head { fill: var(--line); }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head"/>
+    </marker>
+  </defs>
+
+  <text x="20" y="46" class="text-label">SHUTTER OPENS</text>
+  <rect x="54.0" y="56" width="52" height="44" rx="6" class="card-standard"/>
+  <rect x="57.0" y="59" width="5" height="38" class="tick-brand"/>
+  <text x="84.0" y="83" class="mono" text-anchor="middle">1</text>
+  <rect x="454.0" y="56" width="52" height="44" rx="6" class="card-standard"/>
+  <rect x="457.0" y="59" width="5" height="38" class="tick-brand"/>
+  <text x="484.0" y="83" class="mono" text-anchor="middle">2</text>
+  <text x="20" y="182" class="text-label">CALLBACK RUNS</text>
+  <rect x="134.0" y="192" width="52" height="44" rx="6" class="card-standard"/>
+  <rect x="137.0" y="195" width="5" height="38" class="tick-brand"/>
+  <text x="164.0" y="219" class="mono" text-anchor="middle">1</text>
+  <rect x="634.0" y="192" width="52" height="44" rx="6" class="card-standard"/>
+  <rect x="637.0" y="195" width="5" height="38" class="tick-brand"/>
+  <text x="664.0" y="219" class="mono" text-anchor="middle">2</text>
+  <line x1="80.0" y1="146" x2="152.0" y2="146" class="connector" marker-end="url(#arrow)"/>
+  <text x="120.0" y="138" class="text-emph" text-anchor="middle">+0.4 s</text>
+  <line x1="480.0" y1="146" x2="652.0" y2="146" class="connector" marker-end="url(#arrow)"/>
+  <text x="570.0" y="138" class="text-emph" text-anchor="middle">+0.9 s</text>
+</svg>
