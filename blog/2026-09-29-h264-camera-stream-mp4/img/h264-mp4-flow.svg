@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="100 204 1020 254" width="100%" height="100%">
   <defs>
     <style>
       :root {
@@ -57,7 +57,6 @@
     </marker>
   </defs>
 
-  <rect x="0" y="0" width="1200" height="630" class="bg"/>
   <text x="110" y="226.0" class="text-label" font-size="15">CAMERA</text>
   <rect x="110" y="256.0" width="64" height="112" rx="8" class="card-standard"/>
   <rect x="113" y="259.0" width="6" height="106" class="keyframe"/>
