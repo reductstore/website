@@ -1,10 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="10 24 786 490" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="10 26 700 220" width="100%" height="100%">
   <defs>
     <style>
       :root {
         --card-bg: #FFFFFF; --card-brand: #2B0548; --card-stroke: #333333;
-        --text-main: #333333; --text-muted: #666666; --text-inverse: #FFFFFF;
-        --line: #333333; --rule: #CCCCCC;
+        --text-main: #333333; --text-muted: #666666; --line: #333333; --rule: #CCCCCC;
       }
       @media (prefers-color-scheme: dark) {
         :root {
@@ -14,21 +13,14 @@
       }
       text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
       .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
-      .card-brand    { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
       .tick-brand    { fill: var(--card-brand); }
       .text-label    { font-size: 13px; fill: var(--text-muted); letter-spacing: 0.09em; }
-      .text-subtitle { font-size: 14px; fill: var(--text-muted); }
-      .text-emph     { font-size: 14px; font-weight: 600; fill: var(--text-main); }
-      .text-note     { font-size: 13px; font-style: italic; fill: var(--text-muted); }
+      .text-emph     { font-size: 15px; font-weight: 600; fill: var(--text-main); }
       .mono          { font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
                        font-size: 13px; fill: var(--text-muted); }
-      .mono-inverse  { font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-                       font-size: 12px; fill: var(--text-inverse); }
       .connector { stroke: var(--line); stroke-width: 2; fill: none; }
-      .rule      { stroke: var(--rule); stroke-width: 1.5; fill: none; }
       .rule-dash { stroke: var(--rule); stroke-width: 1.5; fill: none; stroke-dasharray: 3 5; }
       .arrow-head { fill: var(--line); }
-      .bg { fill: var(--card-bg); }
     </style>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5"
             markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -36,46 +28,22 @@
     </marker>
   </defs>
 
-  <text x="20" y="40" class="text-label">CAMERA, WHEN THE SHUTTER OPENS</text>
-  <rect x="34.0" y="58" width="52" height="42" rx="6" class="card-standard"/>
-  <rect x="36.0" y="60" width="5" height="38" class="tick-brand"/>
-  <text x="64.0" y="84" class="mono" text-anchor="middle">1</text>
-  <rect x="490.0" y="58" width="52" height="42" rx="6" class="card-standard"/>
-  <rect x="492.0" y="60" width="5" height="38" class="tick-brand"/>
-  <text x="520.0" y="84" class="mono" text-anchor="middle">2</text>
-  <line x1="30" y1="114" x2="766.8000000000001" y2="114" class="rule" marker-end="url(#arrow)"/>
-  <text x="778.8000000000001" y="119" class="text-note">t</text>
-  <path d="M 60 128 L 60 140 L 516 140 L 516 128" class="rule"/>
-  <text x="288" y="158" class="text-emph" text-anchor="middle">2.0 s apart, every time</text>
-  <text x="20" y="198" class="text-label">YOUR CALLBACK, WHEN THE MESSAGE ARRIVES</text>
-  <rect x="125.19999999999999" y="254" width="52" height="42" rx="6" class="card-standard"/>
-  <rect x="127.19999999999999" y="256" width="5" height="38" class="tick-brand"/>
-  <text x="155.2" y="280" class="mono" text-anchor="middle">1</text>
-  <rect x="695.1999999999999" y="254" width="52" height="42" rx="6" class="card-standard"/>
-  <rect x="697.1999999999999" y="256" width="5" height="38" class="tick-brand"/>
-  <text x="725.1999999999999" y="280" class="mono" text-anchor="middle">2</text>
-  <line x1="30" y1="310" x2="766.8000000000001" y2="310" class="rule" marker-end="url(#arrow)"/>
-  <text x="778.8000000000001" y="315" class="text-note">t</text>
-  <line x1="60.0" y1="104" x2="60.0" y2="180" class="rule-dash"/>
-  <line x1="60.0" y1="206" x2="60.0" y2="246" class="rule-dash"/>
-  <line x1="60.0" y1="240" x2="143.2" y2="240" class="connector" marker-end="url(#arrow)"/>
-  <text x="105.6" y="232" class="text-emph" text-anchor="middle">+0.4 s</text>
-  <line x1="516.0" y1="104" x2="516.0" y2="246" class="rule-dash"/>
-  <line x1="516.0" y1="240" x2="713.1999999999999" y2="240" class="connector" marker-end="url(#arrow)"/>
-  <text x="618.5999999999999" y="232" class="text-emph" text-anchor="middle">+0.9 s</text>
-  <text x="413.40000000000003" y="332" class="text-subtitle" text-anchor="middle">transfer, decode and queue. Not constant.</text>
-  <text x="20" y="372" class="text-label">STORED, KEYED ON header.stamp</text>
-  <rect x="34.0" y="388" width="52" height="34" rx="6" class="card-brand"/>
-  <text x="60.0" y="410" class="mono-inverse" text-anchor="middle">1</text>
-  <rect x="490.0" y="388" width="52" height="34" rx="6" class="card-brand"/>
-  <text x="516.0" y="410" class="mono-inverse" text-anchor="middle">2</text>
-  <line x1="90.0" y1="405" x2="486.0" y2="405" class="rule-dash"/>
-  <text x="288.0" y="398" class="text-emph" text-anchor="middle">2.0 s, matches the camera</text>
-  <text x="20" y="452" class="text-label">STORED, KEYED ON ARRIVAL TIME</text>
-  <rect x="125.19999999999999" y="468" width="52" height="34" rx="6" class="card-standard"/>
-  <text x="151.2" y="490" class="mono" text-anchor="middle">1</text>
-  <rect x="695.1999999999999" y="468" width="52" height="34" rx="6" class="card-standard"/>
-  <text x="721.1999999999999" y="490" class="mono" text-anchor="middle">2</text>
-  <line x1="181.2" y1="485" x2="691.1999999999999" y2="485" class="rule-dash"/>
-  <text x="436.19999999999993" y="478" class="text-subtitle" text-anchor="middle">2.5 s, and the error changes frame to frame</text>
+  <text x="20" y="46" class="text-label">SHUTTER OPENS</text>
+  <rect x="54.0" y="56" width="52" height="44" rx="6" class="card-standard"/>
+  <rect x="57.0" y="59" width="5" height="38" class="tick-brand"/>
+  <text x="84.0" y="83" class="mono" text-anchor="middle">1</text>
+  <rect x="454.0" y="56" width="52" height="44" rx="6" class="card-standard"/>
+  <rect x="457.0" y="59" width="5" height="38" class="tick-brand"/>
+  <text x="484.0" y="83" class="mono" text-anchor="middle">2</text>
+  <text x="20" y="182" class="text-label">CALLBACK RUNS</text>
+  <rect x="134.0" y="192" width="52" height="44" rx="6" class="card-standard"/>
+  <rect x="137.0" y="195" width="5" height="38" class="tick-brand"/>
+  <text x="164.0" y="219" class="mono" text-anchor="middle">1</text>
+  <rect x="634.0" y="192" width="52" height="44" rx="6" class="card-standard"/>
+  <rect x="637.0" y="195" width="5" height="38" class="tick-brand"/>
+  <text x="664.0" y="219" class="mono" text-anchor="middle">2</text>
+  <line x1="80.0" y1="146" x2="152.0" y2="146" class="connector" marker-end="url(#arrow)"/>
+  <text x="120.0" y="138" class="text-emph" text-anchor="middle">+0.4 s</text>
+  <line x1="480.0" y1="146" x2="652.0" y2="146" class="connector" marker-end="url(#arrow)"/>
+  <text x="570.0" y="138" class="text-emph" text-anchor="middle">+0.9 s</text>
 </svg>
