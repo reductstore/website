@@ -1,15 +1,20 @@
 .pricingTable {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 2em;
+  grid-template-rows: repeat(5, auto);
+  column-gap: 2em;
+  row-gap: 0.85rem;
   margin: 4em auto 1.5em;
 }
 
+/* Each card spans the five shared tracks, so name, tagline, price, buttons and
+   bullets line up across cards without fixed per-card heights. */
 .plan {
   display: grid;
-  grid-template-rows: 2rem 1.5rem 5rem auto minmax(10rem, 1fr);
-  width: 100%;
-  padding: 1em;
+  grid-row: span 5;
+  grid-template-rows: subgrid;
+  min-width: 0;
+  padding: 1.25em;
   border: 3px solid #ccc;
   border-radius: 20px;
 }
@@ -25,10 +30,7 @@
 
 .tagline {
   margin: 0;
-  overflow: hidden;
   color: var(--reduct-dimmed);
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .priceRow {
@@ -38,7 +40,7 @@
 }
 
 .price {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 600;
 }
 
@@ -46,11 +48,13 @@
   margin: 0;
   font-size: 0.85rem;
   font-weight: 600;
+  line-height: 1.3;
 }
 
 .proPrice span {
-  margin-right: 0.2rem;
-  font-size: 2rem;
+  margin-right: 0.25rem;
+  font-size: 1.75rem;
+  line-height: 1.1;
 }
 
 .billingNote {
@@ -63,15 +67,18 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  min-width: 0;
 }
 
 .buttonContainer {
   display: flex;
+  flex-direction: column;
   gap: 0.5rem;
+  min-width: 0;
 }
 
 .buttonContainer :global(.button) {
-  flex: 1 1 0;
+  width: 100%;
   white-space: normal;
 }
 
@@ -86,8 +93,14 @@
   display: grid;
   gap: 0.5rem;
   align-content: start;
+  min-width: 0;
   margin: 0;
   padding-left: 1.2rem;
+}
+
+.summaryBullets li {
+  min-width: 0;
+  overflow-wrap: break-word;
 }
 
 .summaryBullets li::marker {
@@ -184,15 +197,15 @@
   .pricingTable {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .plan {
+    margin-bottom: 1.5rem;
+  }
 }
 
 @media (max-width: 760px) {
   .pricingTable {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .plan {
-    grid-template-rows: 2rem 1.5rem 5rem auto minmax(8rem, 1fr);
   }
 
   .comparisonTable th,
