@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="90 26 736 368" width="100%" height="100%">
+  <defs>
+    <style>
+      :root {
+        --card-bg: #FFFFFF;
+        --card-brand: #2B0548;
+        --card-stroke: #333333;
+        --text-main: #333333;
+        --text-muted: #666666;
+        --text-inverse: #FFFFFF;
+        --line: #333333;
+        --rule: #CCCCCC;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --card-bg: #1E1E1E;
+          --card-stroke: #555555;
+          --text-main: #EFEFEF;
+          --text-muted: #A0A0A0;
+          --line: #EFEFEF;
+          --rule: #444444;
+        }
+      }
+
+      text {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand    { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .keyframe      { fill: var(--card-brand); }
+
+      .text-title         { font-weight: 600; font-size: 18px; fill: var(--text-main); }
+      .text-title-inverse { font-weight: 600; font-size: 14px; fill: var(--text-inverse); }
+      .text-label         { font-size: 13px; fill: var(--text-muted); letter-spacing: 0.09em; }
+      .text-subtitle      { font-size: 14px; fill: var(--text-muted); }
+      .text-note          { font-size: 13px; font-style: italic; fill: var(--text-muted); }
+      .text-emph          { font-size: 14px; font-weight: 600; fill: var(--text-main); }
+      .mono, .mono-inverse {
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        font-size: 14px;
+      }
+      .mono         { fill: var(--text-muted); }
+      .mono-inverse { fill: var(--text-inverse); font-size: 12px; }
+
+      .connector { stroke: var(--line); stroke-width: 2; fill: none; }
+      .rule      { stroke: var(--rule); stroke-width: 1.5; fill: none; }
+      .rule-dash { stroke: var(--rule); stroke-width: 1.5; fill: none; stroke-dasharray: 3 5; }
+      .arrow-head { fill: var(--line); }
+      .bg { fill: var(--card-bg); }
+    </style>
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
+    </marker>
+  </defs>
+
+  <text x="100" y="62" class="text-label">RECORDS</text>
+  <text x="800" y="62" class="mono" text-anchor="end">video/h264</text>
+  <rect x="100" y="76" width="94" height="52" rx="6" class="card-standard"/>
+  <rect x="102" y="78" width="5" height="48" class="keyframe"/>
+  <text x="147.0" y="107" class="mono" text-anchor="middle">1s</text>
+  <rect x="200" y="76" width="94" height="52" rx="6" class="card-standard"/>
+  <rect x="202" y="78" width="5" height="48" class="keyframe"/>
+  <text x="247.0" y="107" class="mono" text-anchor="middle">1s</text>
+  <rect x="300" y="76" width="94" height="52" rx="6" class="card-standard"/>
+  <rect x="302" y="78" width="5" height="48" class="keyframe"/>
+  <text x="347.0" y="107" class="mono" text-anchor="middle">1s</text>
+  <rect x="600" y="76" width="94" height="52" rx="6" class="card-standard"/>
+  <rect x="602" y="78" width="5" height="48" class="keyframe"/>
+  <text x="647.0" y="107" class="mono" text-anchor="middle">1s</text>
+  <rect x="700" y="76" width="94" height="52" rx="6" class="card-standard"/>
+  <rect x="702" y="78" width="5" height="48" class="keyframe"/>
+  <text x="747.0" y="107" class="mono" text-anchor="middle">1s</text>
+  <rect x="400" y="76" width="194" height="52" rx="6" class="rule-dash"/>
+  <text x="497.0" y="107" class="text-note" text-anchor="middle">no records</text>
+  <line x1="100" y1="146" x2="814" y2="146" class="rule" marker-end="url(#arrow)"/>
+  <line x1="100" y1="146" x2="100" y2="152" class="rule"/>
+  <text x="100" y="169" class="mono" text-anchor="middle" font-size="12">0s</text>
+  <line x1="200" y1="146" x2="200" y2="152" class="rule"/>
+  <text x="200" y="169" class="mono" text-anchor="middle" font-size="12">1s</text>
+  <line x1="300" y1="146" x2="300" y2="152" class="rule"/>
+  <text x="300" y="169" class="mono" text-anchor="middle" font-size="12">2s</text>
+  <line x1="400" y1="146" x2="400" y2="152" class="rule"/>
+  <text x="400" y="169" class="mono" text-anchor="middle" font-size="12">3s</text>
+  <line x1="500" y1="146" x2="500" y2="152" class="rule"/>
+  <text x="500" y="169" class="mono" text-anchor="middle" font-size="12">4s</text>
+  <line x1="600" y1="146" x2="600" y2="152" class="rule"/>
+  <text x="600" y="169" class="mono" text-anchor="middle" font-size="12">5s</text>
+  <line x1="700" y1="146" x2="700" y2="152" class="rule"/>
+  <text x="700" y="169" class="mono" text-anchor="middle" font-size="12">6s</text>
+  <line x1="800" y1="146" x2="800" y2="152" class="rule"/>
+  <text x="800" y="169" class="mono" text-anchor="middle" font-size="12">7s</text>
+  <rect x="100" y="186" width="5" height="13" class="keyframe"/>
+  <text x="113" y="197" class="text-subtitle">keyframe</text>
+  <line x1="297" y1="128" x2="297" y2="246" class="rule-dash"/>
+  <line x1="397" y1="128" x2="397" y2="246" class="rule-dash"/>
+  <line x1="597" y1="128" x2="597" y2="246" class="rule-dash"/>
+  <line x1="797" y1="128" x2="797" y2="214" class="rule-dash"/>
+  <line x1="797" y1="240" x2="797" y2="246" class="rule-dash"/>
+  <text x="100" y="230" class="text-label">EPISODES</text>
+  <text x="800" y="230" class="mono" text-anchor="end">video/mp4</text>
+  <rect x="100" y="246" width="194" height="54" rx="6" class="card-brand"/>
+  <text x="197.0" y="269" class="text-title-inverse" text-anchor="middle">episode 1</text>
+  <text x="197.0" y="286" class="mono-inverse" text-anchor="middle">2s</text>
+  <text x="197.0" y="322" class="text-subtitle" text-anchor="middle">closed by duration</text>
+  <rect x="300" y="246" width="94" height="54" rx="6" class="card-brand"/>
+  <text x="347.0" y="269" class="text-title-inverse" text-anchor="middle">episode 2</text>
+  <text x="347.0" y="286" class="mono-inverse" text-anchor="middle">1s</text>
+  <text x="347.0" y="322" class="text-emph" text-anchor="middle">closed by gap</text>
+  <rect x="600" y="246" width="194" height="54" rx="6" class="card-brand"/>
+  <text x="697.0" y="269" class="text-title-inverse" text-anchor="middle">episode 3</text>
+  <text x="697.0" y="286" class="mono-inverse" text-anchor="middle">2s</text>
+  <text x="697.0" y="322" class="text-subtitle" text-anchor="middle">closed by duration</text>
+  <text x="100" y="378" class="mono">when={"#ext": {"video": {"export": {"duration": "2s"}}}}</text>
+</svg>

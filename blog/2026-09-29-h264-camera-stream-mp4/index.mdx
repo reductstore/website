@@ -1,0 +1,145 @@
+---
+title: "Store an H.264 Camera Stream and Export It as Playable MP4"
+description: "ReductStore stores H.264 chunks as time-indexed records, and the ReductVideo extension returns a playable MP4 from a normal query, split into episodes by duration, size or timestamp gap."
+authors: anthony
+tags: [tutorials, computer vision]
+slug: store-h264-camera-stream-export-mp4
+date: 2026-09-29
+image: ./img/h264-mp4-social.png
+---
+
+![Storing an H.264 stream in ReductStore and exporting it as MP4](./img/h264-mp4-flow.svg)
+
+Your robot has a camera. You are storing what it sees as one image per frame, and that works until someone asks to watch it. Then you write a script that extracts ten thousand JPEGs from storage, sorts them by timestamp, and calls ffmpeg. You write that script again the next time anyone wants thirty seconds of footage.
+
+Storing the encoded stream removes that step. ReductStore stores H.264 chunks as time-indexed records, and the ReductVideo extension returns an MP4 you can open in a player.
+
+{/* truncate */}
+
+## What you need
+
+You need the video in the right shape. The extension reads H.264 in Annex B byte stream format, the one with `00 00 01` or `00 00 00 01` start codes between units. That is what most cameras and most encoders emit already. It is a raw elementary stream, not an MP4 and not a Matroska file. An MP4 file on disk includes a container around the stream; ReductVideo creates that container from the other end.
+
+The extension does not re-encode anything. It joins your records back together in timestamp order and puts a container around the result. So the bytes have to be a valid stream once joined: write the chunks in the order the camera produced them, and cut them on keyframes.
+
+## Store the stream
+
+Each record is one encoded chunk, and the natural chunk is one keyframe interval. The timestamp is the chunk's capture time in microseconds, not the time you happened to write it. That distinction is the whole point of time-indexed storage, and getting it wrong here shows up later as video that drifts against every other signal you recorded.
+
+```python
+from time import time_ns
+from pathlib import Path
+
+from reduct import Client
+
+HERE = Path(__file__).parent
+CHUNKS_DIR = HERE / "../data/h264_chunks"
+
+
+async def main():
+    async with Client("http://localhost:8383", api_token="my-token") as client:
+        bucket = await client.create_bucket("my-bucket", exist_ok=True)
+
+        now = time_ns() // 1000
+        for idx, chunk_path in enumerate(sorted(CHUNKS_DIR.glob("*.h264"))):
+            await bucket.write(
+                "h264",
+                chunk_path.read_bytes(),
+                timestamp=now + idx * 1_000_000,
+                content_type="video/h264",
+                labels={"fps": "10"},
+            )
+```
+
+Three things there matter. The content type is `video/h264`, which is how the extension knows what it is looking at. The `fps` label carries the recording frame rate. And the timestamps advance by one million microseconds per chunk because the chunks are one second apart.
+
+## Export one MP4
+
+Querying is a normal query with an `#ext` block on it. You ask for the export and you get records back with `content_type` set to `video/mp4`.
+
+```python
+async for record in bucket.query(
+    "h264",
+    start=now,
+    when={"#ext": {"video": {"export": {}}}},
+):
+    print(f"Record timestamp: {record.timestamp}")
+    print(f"Content type: {record.content_type}")
+    mp4 = await record.read_all()
+    print(f"MP4 size: {len(mp4)} bytes")
+```
+
+```
+Record timestamp: 1749797653273752
+Content type: video/mp4
+MP4 size: 198545 bytes
+```
+
+One record in, one record out. The bytes are a complete MP4. Write them to a file and double click it.
+
+## Split it into episodes
+
+A continuous recording is rarely what you want to download. Give the export a limit and it returns episodes instead of one file, splitting at keyframe boundaries so every episode opens on its own.
+
+```python
+episode = 0
+async for record in bucket.query(
+    "h264",
+    start=now,
+    when={"#ext": {"video": {"export": {"duration": "2s"}}}},
+):
+    episode += 1
+    mp4 = await record.read_all()
+    print(f"Episode {episode}: timestamp={record.timestamp}, size={len(mp4)} bytes")
+
+print(f"Total episodes: {episode}")
+```
+
+```
+Episode 1: timestamp=1749797653273752, size=73106 bytes
+Episode 2: timestamp=1749797655273752, size=75771 bytes
+Episode 3: timestamp=1749797657273752, size=50994 bytes
+Total episodes: 3
+```
+
+`duration` takes strings like `"30s"`, `"1m"` or `"1h 30m"`. `size` takes `"100MB"` or `"1GB"`. Set both and the episode closes as soon as either limit is reached. That is worth doing because bitrate varies: thirty seconds of a busy scene can be several times the size of thirty seconds of an empty corridor. A duration limit on its own leaves the file size unbounded, and a size limit on its own leaves the time span unbounded.
+
+Gap detection is also on by default. When the space between two chunk timestamps is larger than one frame, ReductVideo treats that as a discontinuity and starts a new episode. A camera that stopped for four seconds gives you two episodes rather than one file with four seconds of nothing in it. Pass `"gap_detection": false` to turn that off and get everything muxed into one episode regardless.
+
+The threshold is one frame, which is tight. Gap detection cannot tell a camera that stopped on purpose from a camera that dropped a frame, because the two look identical in the timestamps. When your recording genuinely starts and stops, that is exactly right and each run comes back as its own episode.
+
+![Records on a timeline split into MP4 episodes by duration and by gap](./img/episode-splitting.svg)
+
+## Where the frame rate comes from
+
+Muxing needs the recording frame rate, and so does gap detection, because a gap is only defined relative to one frame duration. ReductVideo resolves it in this order:
+
+1. The `fps` label on the records
+2. The `fps` field of the `$video` attachment on the entry
+3. The `fps` query parameter, as a fallback
+
+The label is the one used above and it is the most direct: the value travels with the chunk that it describes.
+
+The `$video` attachment sets it once for the whole entry, which is the right place when the camera is fixed at a known rate and you do not want to repeat yourself on every write. Attachments are key value metadata on the entry:
+
+```python
+await bucket.write_attachments("h264", {"$video": {"fps": 10}})
+```
+
+The query parameter is there for the case where the data is already stored and carries no rate at all.
+
+## Frames or video
+
+Storing JPEG frames and storing an H.264 stream answer different questions, and the **ReductStore entry model lets you keep both against one clock** rather than choosing globally.
+
+Frames win when you need to reach a specific instant. Individual records, individually addressable, and you can hang labels on each one and query by them. That is the shape described in [**three ways to store data for computer vision applications**](/blog/computer-vision-applications), and for a ROS pipeline specifically, [**optimal image storage for ROS based computer vision**](/blog/tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision) covers the message level detail.
+
+Video wins on everything a human looks at. Interframe compression means you store a fraction of the bytes for the same footage, and the output is a file people can already open. What you give up is the per frame handle.
+
+The usual answer on a robot is both, in separate entries against the same clock: the encoded stream for review, and frames or inference output at the moments that matter. The rest of the recording model is in [**how to store and manage robotics data**](/blog/store-robotic-data).
+
+## Conclusion
+
+The export is a query parameter, not a pipeline. Store H.264 chunks with the right content type and an `fps` label, put the capture time on each record, and the MP4 comes back out of a normal query with an `#ext` block on it. Episode splitting by duration, by size and on timestamp gaps means the thing you hand a reviewer is already the clip they asked for.
+
+If you are recording a camera today and exporting it by hand, that is the script you get to delete.
