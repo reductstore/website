@@ -5,7 +5,7 @@ authors: anthony
 tags: [tutorials, ros, computer vision, robotics]
 slug: tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision
 date: 2026-10-06
-image: ./img/ros-reductstore-example.png
+image: ./img/ros-reductstore-social.png
 ---
 
 import YouTube from "@site/src/components/shared/VideoPlayer/YouTube";
@@ -53,7 +53,7 @@ Integrating ReductStore with ROS provides many benefits for robotic applications
 
 ## Example to capture and store raw camera images
 
-![ROS with ReductStore](./img/ros-reductstore-example.png)
+![Camera frames flowing into a ReductStore bucket as records keyed on header.stamp](./img/ros-reductstore-flow.svg)
 
 To capture and store raw camera images with ROS2, you need to create a node that subscribes to an image topic, serialize the image, and stores it in ReductStore.
 
@@ -220,6 +220,8 @@ std_msgs/Header header # Header timestamp should be acquisition time of image
 `CompressedImage`, the message this tutorial subscribes to, carries the same line.
 
 So the stamp is meant to be the moment the camera captured the frame, not the moment the message reached you. Note the wording. It says **should be**, not _is_. The message definition states an intent, and the driver is what actually fills the field. A driver written carelessly will hand you a clock reading taken long after the shutter closed, and nothing in ROS stops it.
+
+![Frame arrival time varies with transfer, decode and queue, but keyed on header.stamp each record is stored 2.0 s apart, matching the camera](./img/header-stamp-timing.svg)
 
 ### Check what your own driver does
 
