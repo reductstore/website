@@ -1,119 +1,191 @@
 .pricingTable {
-  margin-top: 4em;
-  margin-bottom: 4em;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 2em;
-  justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(5, auto);
+  column-gap: 2em;
+  row-gap: 0.85rem;
+  margin: 4em auto 1.5em;
 }
 
-@media (max-width: 1100px) {
-  .pricingTable {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 760px) {
-  .pricingTable {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
+/* Each card spans the five shared tracks, so name, tagline, price, buttons and
+   bullets line up across cards without fixed per-card heights. */
 .plan {
-  border: 3px solid #ccc;
-  border-color: #ccc;
-  padding: 1em;
-  border-radius: 20px;
-  width: 100%;
   display: grid;
-  grid-template-rows: auto auto auto 1fr auto;
-  gap: 1em;
+  grid-row: span 5;
+  grid-template-rows: subgrid;
+  min-width: 0;
+  padding: 1.25em;
+  border: 3px solid #ccc;
+  border-radius: 20px;
 }
 
 .highlight {
   border-color: var(--ifm-color-primary);
 }
 
-.planCard {
-  display: grid;
-  grid-template-rows: subgrid;
-  grid-row: 1 / -1;
-  gap: inherit;
-}
-
-.planHeader {
-  display: flex;
-  flex-direction: column;
-}
-
-.featuresContainer {
-  display: grid;
-  grid-template-rows: auto;
-  gap: 8px;
-  align-content: start;
-}
-
-.categorySeparator {
-  margin-top: 1em;
-  margin-bottom: 0;
-  border-top: 1px solid #ccc;
-}
-
-.card__body {
-  display: grid;
-  grid-template-rows: repeat(11, auto);
-  gap: 8px;
-  align-content: start;
-}
-
 .planTitle {
-  margin-bottom: 0.5rem;
+  margin: 0;
+  font-size: 1.5rem;
 }
 
-.subtitle {
+.tagline {
+  margin: 0;
   color: var(--reduct-dimmed);
 }
 
-.underlinedText {
-  text-decoration: underline;
-  cursor: help;
+.priceRow {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.categoryHeader {
-  margin: 1em 0 0.5em 0;
-  padding-top: 0.5em;
-  border-top: 1px solid #e0e0e0;
-}
-
-.categoryHeader:first-child {
-  margin-top: 0;
-  padding-top: 0;
-  border-top: none;
-}
-
-.categoryHeaderTitle {
-  font-size: 0.9em;
+.price {
+  font-size: 1.75rem;
   font-weight: 600;
-  color: var(--ifm-color-primary);
+}
+
+.proPrice {
   margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.proPrice span {
+  margin-right: 0.25rem;
+  font-size: 1.75rem;
+  line-height: 1.1;
+}
+
+.billingNote {
+  margin: 0.25rem 0 0;
+  color: var(--reduct-dimmed);
+  font-size: 0.85rem;
+}
+
+.actionsRow {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.buttonContainer :global(.button) {
+  width: 100%;
+  white-space: normal;
+}
+
+.footNote {
+  margin: 0.5rem 0 0;
+  color: var(--reduct-dimmed);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.summaryBullets {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+  min-width: 0;
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.summaryBullets li {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.summaryBullets li::marker {
+  color: var(--ifm-color-primary);
+}
+
+.manageLine {
+  margin: 0 0 4em;
+  text-align: center;
+}
+
+.comparisonSection {
+  margin: 0 0 4em;
+}
+
+.comparisonSection h2 {
+  margin-bottom: 1.5rem;
+}
+
+.comparisonScroll {
+  overflow-x: auto;
+}
+
+.comparisonTable {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+.comparisonTable th,
+.comparisonTable td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.comparisonTable thead th {
+  color: var(--ifm-color-primary);
+  font-size: 0.9rem;
   text-transform: uppercase;
+}
+
+.comparisonTable th:first-child {
+  width: 36%;
+  text-align: left;
+}
+
+.comparisonTable tbody th {
+  font-weight: 500;
+}
+
+.categoryHeader th {
+  padding-top: 1.5rem;
+  color: var(--ifm-color-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
   letter-spacing: 0.5px;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.featureIcon,
+.unavailableIcon {
+  width: 1.2em;
+  height: 1.2em;
+}
+
+.featureIcon {
+  color: green;
+}
+
+.unavailableIcon {
+  color: #ccc;
 }
 
 .termsContainer {
-  margin-top: auto;
-  padding-top: 1em;
-  border-top: 1px solid #e0e0e0;
+  margin-top: 1rem;
   text-align: center;
 }
 
 .termsLink {
-  font-size: 0.75em;
   color: var(--reduct-dimmed);
+  font-size: 0.75em;
   text-decoration: none;
-  transition: color 0.2s ease;
 }
 
 .termsLink:hover {
@@ -121,92 +193,23 @@
   text-decoration: underline;
 }
 
-.category {
-  margin-bottom: 8px;
+@media (max-width: 1100px) {
+  .pricingTable {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .plan {
+    margin-bottom: 1.5rem;
+  }
 }
 
-.categoryTitle {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 5px;
-  color: var(--ifm-color-content);
-  line-height: 1.4;
-}
+@media (max-width: 760px) {
+  .pricingTable {
+    grid-template-columns: minmax(0, 1fr);
+  }
 
-.infoIcon {
-  margin-top: 0.3em;
-  margin-left: 5px;
-  vertical-align: top;
-  cursor: help;
-  color: var(--reduct-dimmed);
-}
-
-.featureIcon {
-  margin-right: 8px;
-  flex-shrink: 0;
-  width: 1.2em;
-  height: 1.2em;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.categoryTitleContent {
-  display: flex;
-  align-items: center;
-  line-height: 1.4;
-}
-
-.tooltipTrigger {
-  border-bottom: 1px dotted var(--reduct-dimmed);
-  cursor: help;
-  transition: border-color 0.2s ease;
-}
-
-.tooltipTrigger:hover {
-  border-bottom-color: var(--ifm-color-primary);
-}
-
-.tooltipContent {
-  max-width: 200px;
-  word-wrap: break-word;
-}
-
-.termsGroup {
-  margin-top: 16px;
-}
-
-.boldLink {
-  font-weight: bold;
-}
-
-.errorMessage {
-  display: none;
-  color: #cc0033;
-  font-size: 12px;
-}
-
-.error .errorMessage {
-  display: block;
-  margin-bottom: -2em;
-}
-
-.freePlanDisclaimer {
-  margin-top: 1em;
-  font-size: 0.8em;
-  color: var(--reduct-dimmed);
-}
-
-/* Modal */
-.form {
-  margin: 2em 1em;
-}
-
-.buttonContainer {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1em;
-}
-
-.buttonContainer button {
-  white-space: normal;
+  .comparisonTable th,
+  .comparisonTable td {
+    padding: 0.65rem 0.75rem;
+  }
 }

@@ -1,180 +1,312 @@
 import React from "react";
-import clsx from "clsx";
-import styles from "./styles.module.css";
-import PricingPlan from "./PricingPlan";
 import Link from "@docusaurus/Link";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import { FaCheckCircle, FaTimes } from "react-icons/fa";
+import PricingPlan from "./PricingPlan";
+import styles from "./styles.module.css";
 
-export default function PricingTable() {
-  const createFeatures = (plan: "community" | "onpremise" | "cloud") => {
-    return [
-      // Core Capabilities
-      { title: "Core Capabilities", available: true, isCategoryHeader: true },
-      {
-        title: "High-Performance Time Series DB",
-        available: true,
-        titleDetail: "Built for robotics and IIoT workloads",
-      },
-      {
-        title: "SDKs: Python, JavaScript, Go, Rust, C++",
-        available: true,
-        titleDetail:
-          "Official client libraries with batching and streaming support over HTTP(s)",
-      },
-      {
-        title: "Multi-Format Data Support",
-        available: true,
-        titleDetail: "Store any data format: blobs, images, 3D, sensor data",
-      },
-      {
-        title: "CLI Tool",
-        available: true,
-        titleDetail: "Command-line interface for database management",
-      },
-      {
-        title: "Web Console",
-        available: true,
-        titleDetail: "Browser-based administration interface",
-      },
+type ReductProCustomFields = {
+  checkoutEnabled?: boolean;
+  checkoutUrl?: string;
+  portalUrl?: string;
+};
 
-      // Data & Storage Support
-      {
-        title: "Data & Storage Support",
-        available: true,
-        isCategoryHeader: true,
-      },
-      {
-        title: "Extensible Query Engine",
-        available: true,
-        titleDetail: "Advanced querying capabilities for unstructured data",
-      },
-      {
-        title:
-          plan === "community" ? (
-            "SQL over CSV, JSON & Parquet"
-          ) : (
-            <Link href="/docs/extensions/official/select-ext">
-              <b>SQL over CSV, JSON & Parquet</b>
-            </Link>
-          ),
-        available: plan !== "community",
-        titleDetail: "Official extension for querying structured data formats",
-      },
-      {
-        title:
-          plan === "community" ? (
-            "Robotics Data Support"
-          ) : (
-            <Link href="/docs/extensions/official/ros-ext">
-              <b>Robotics Data Support</b>
-            </Link>
-          ),
-        available: plan !== "community",
-        titleDetail: "Official extension for MCAP (ROS2) data",
-      },
-      {
-        title: "Cloud Object Storage Backend",
-        available: plan !== "community",
-        titleDetail:
-          "Store data in AWS S3, Azure Blob Storage, MinIO, or any S3-compatible storage",
-      },
+type Plan = "core" | "pro" | "cloud" | "enterprise";
 
-      // Deployment & Operations
-      {
-        title: "Deployment & Operations",
-        available: true,
-        isCategoryHeader: true,
-      },
-      {
-        title: "Docker & Kubernetes Ready",
-        available: true,
-        titleDetail: "Easy containerized deployment options",
-      },
-      {
-        title: "Grafana Integration",
-        available: true,
-        titleDetail: "Data source plugin for visualization",
-      },
-      {
-        title: "Fully Managed Service",
-        available: plan === "cloud",
-        titleDetail: "Zero-maintenance cloud hosting",
-      },
-      {
-        title: "No-Code Provisioning",
-        available: plan === "cloud",
-        titleDetail: "Deploy instances without infrastructure knowledge",
-      },
+type Feature = {
+  title: React.ReactNode;
+  available: boolean;
+  isCategoryHeader?: boolean;
+};
 
-      // Support & Maintenance
-      {
-        title: "Support & Maintenance",
-        available: true,
-        isCategoryHeader: true,
-      },
-      {
-        title:
-          plan === "community" ? "Community Support" : "Commercial Support",
-        available: true,
-        titleDetail:
-          plan === "community"
-            ? "Community forums and GitHub issues"
-            : "Professional technical support with SLA",
-      },
-      {
-        title: "Long Term Support (LTS)",
-        available: plan !== "community",
-        titleDetail:
-          plan === "onpremise"
-            ? "Up to 3 years. No vendor lock-in, legacy versions remain open source"
-            : "Always up-to-date with latest features",
-      },
-      {
-        title: "Architecture Review",
-        available: plan !== "community",
-        titleDetail: "Expert consultation on system design and optimization",
-      },
-      {
-        title: "Deployment Assistance",
-        available: plan !== "community",
-        titleDetail: "Professional help with initial setup and configuration",
-      },
-    ];
-  };
+const plans: { id: Plan; label: string }[] = [
+  { id: "core", label: "Core" },
+  { id: "pro", label: "Pro" },
+  { id: "cloud", label: "Cloud" },
+  { id: "enterprise", label: "Enterprise" },
+];
+
+const createFeatures = (plan: Plan): Feature[] => {
+  const isPaid = plan !== "core";
+
+  return [
+    { title: "Core Capabilities", available: true, isCategoryHeader: true },
+    { title: "High-Performance Time Series DB", available: true },
+    { title: "SDKs: Python, JavaScript, Go, Rust, C++", available: true },
+    { title: "Multi-Format Data Support", available: true },
+    { title: "CLI Tool", available: true },
+    { title: "Web Console", available: true },
+
+    {
+      title: "Data & Storage Support",
+      available: true,
+      isCategoryHeader: true,
+    },
+    { title: "Extensible Query Engine", available: true },
+    {
+      title: isPaid ? (
+        <Link href="/docs/extensions/official/select-ext">
+          <b>ReductSelect: SQL over CSV, JSON &amp; Parquet</b>
+        </Link>
+      ) : (
+        "ReductSelect: SQL over CSV, JSON & Parquet"
+      ),
+      available: isPaid,
+    },
+    {
+      title: isPaid ? (
+        <Link href="/docs/extensions/official/ros-ext">
+          <b>ReductROS: Robotics data support</b>
+        </Link>
+      ) : (
+        "ReductROS: Robotics data support"
+      ),
+      available: isPaid,
+    },
+    { title: "Cloud Object Storage Backend", available: isPaid },
+    { title: "Private Docker images and binaries", available: isPaid },
+
+    {
+      title: "Deployment & Operations",
+      available: true,
+      isCategoryHeader: true,
+    },
+    { title: "Docker & Kubernetes Ready", available: true },
+    { title: "Grafana Integration", available: true },
+    { title: "Fully Managed Service", available: plan === "cloud" },
+    { title: "No-Code Provisioning", available: plan === "cloud" },
+    { title: "Reports subscription usage", available: plan === "pro" },
+
+    {
+      title: "Support & Maintenance",
+      available: true,
+      isCategoryHeader: true,
+    },
+    { title: "Support", available: true },
+    { title: "Long Term Support (LTS)", available: isPaid },
+    { title: "Architecture Review", available: isPaid },
+    { title: "Deployment Assistance", available: isPaid },
+    { title: "Works fully offline", available: plan === "enterprise" },
+    {
+      title: "Annual contract with invoicing",
+      available: plan === "enterprise",
+    },
+    { title: "Volume pricing", available: plan === "enterprise" },
+    { title: "SLA", available: plan === "enterprise" },
+  ];
+};
+
+const summaryBullets = (plan: Plan): React.ReactNode[] => {
+  const features = createFeatures(plan);
+  const baseline = createFeatures(plan === "pro" ? "core" : "pro");
+  const available = features.filter(
+    (feature, index) =>
+      !feature.isCategoryHeader &&
+      feature.available &&
+      (plan === "core" || !baseline[index].available),
+  );
+
+  if (plan === "core") {
+    return available.slice(0, 5).map((feature) => feature.title);
+  }
+
+  return [
+    <strong key="plus">
+      Everything in {plan === "pro" ? "Core" : "Pro"}, plus
+    </strong>,
+    ...available.slice(0, 4).map((feature) => feature.title),
+  ];
+};
+
+const availabilityIcon = (available: boolean) =>
+  available ? (
+    <FaCheckCircle aria-label="Included" className={styles.featureIcon} />
+  ) : (
+    <FaTimes aria-label="Not included" className={styles.unavailableIcon} />
+  );
+
+function PricingComparison() {
+  const features = createFeatures("core");
 
   return (
-    <section>
-      <div className={clsx("row", styles.pricingTable)}>
-        <PricingPlan
-          title="ReductStore Core"
-          subtitle="Apache-2.0"
-          description="Open-source ReductStore for self-managed edge and server deployments."
-          categories={createFeatures("community")}
-          buttonUrl="/docs/getting-started"
-          buttonLabel="Start for Free"
-          termsUrl="/terms"
-        />
+    <section
+      className={styles.comparisonSection}
+      aria-labelledby="comparison-title"
+    >
+      <h2 id="comparison-title">Compare plans</h2>
+      <div className={styles.comparisonScroll}>
+        <table className={styles.comparisonTable}>
+          <thead>
+            <tr>
+              <th scope="col">Feature</th>
+              {plans.map((plan) => (
+                <th key={plan.id} scope="col">
+                  {plan.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Price</th>
+              <td>Free</td>
+              <td>€15 per TB per month, excl. VAT</td>
+              <td>{/* TODO: confirm with Anthony */}</td>
+              <td>Custom</td>
+            </tr>
+            <tr>
+              <th scope="row">Hosted by</th>
+              <td>You</td>
+              <td>You</td>
+              <td>Us</td>
+              <td>You</td>
+            </tr>
+            <tr>
+              <th scope="row">Internet connection</th>
+              <td>Not needed</td>
+              <td>Once a day for the license check</td>
+              <td>Managed by us</td>
+              <td>Not needed, works offline</td>
+            </tr>
+            <tr>
+              <th scope="row">Billing</th>
+              <td>Free</td>
+              <td>Monthly by card</td>
+              <td>{/* TODO: confirm with Anthony */}</td>
+              <td>Annual invoice</td>
+            </tr>
+            <tr>
+              <th scope="row">Support</th>
+              {/* TODO: confirm with Anthony, per plan */}
+              {plans.map((plan) => (
+                <td key={plan.id}>{availabilityIcon(true)}</td>
+              ))}
+            </tr>
+            {features.map((feature, index) => {
+              if (feature.isCategoryHeader) {
+                return (
+                  <tr key={index} className={styles.categoryHeader}>
+                    <th colSpan={5} scope="colgroup">
+                      {feature.title}
+                    </th>
+                  </tr>
+                );
+              }
 
-        <PricingPlan
-          title="ReductStore Pro"
-          subtitle="Commercial Self-Hosted"
-          description="Commercial components, support, proof-of-concept assistance, and long-term release support for self-hosted deployments. Any ReductStore instance linked through replication to Pro must also be covered by a Pro commercial license."
-          categories={createFeatures("onpremise")}
-          buttonUrl="/demo-license"
-          buttonLabel="Get Demo License"
-          termsUrl="/terms"
-        />
+              return (
+                <tr key={index}>
+                  <th scope="row">{feature.title}</th>
+                  {plans.map((plan) => (
+                    <td key={plan.id}>
+                      {availabilityIcon(
+                        createFeatures(plan.id)[index].available,
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p className={styles.termsContainer}>
+        <a href="/terms" className={styles.termsLink}>
+          Terms &amp; Conditions
+        </a>
+      </p>
+    </section>
+  );
+}
 
+export default function PricingTable() {
+  const { siteConfig } = useDocusaurusContext();
+  const { checkoutEnabled, checkoutUrl, portalUrl } =
+    siteConfig.customFields as ReductProCustomFields;
+
+  return (
+    <>
+      <div className={styles.pricingTable}>
+        <PricingPlan
+          title="Core"
+          tagline="Open source, self hosted"
+          price={<span className={styles.price}>Free</span>}
+          actions={
+            <Link
+              className="button button--secondary button--lg"
+              to="/docs/getting-started"
+            >
+              Get started
+            </Link>
+          }
+          bullets={summaryBullets("core")}
+        />
+        <PricingPlan
+          title="Pro"
+          tagline="Self hosted, commercial"
+          price={
+            <>
+              <p className={styles.proPrice}>
+                <span>€15</span> per TB per month, excl. VAT
+              </p>
+              <p className={styles.billingNote}>
+                1 TB minimum. 1.2 TB costs €18.
+              </p>
+            </>
+          }
+          actions={
+            <>
+              {checkoutEnabled && checkoutUrl && (
+                <a
+                  className="button button--primary button--lg"
+                  href={checkoutUrl}
+                >
+                  Subscribe
+                </a>
+              )}
+              <Link
+                className="button button--secondary button--lg"
+                to="/demo-license"
+              >
+                Get demo license
+              </Link>
+            </>
+          }
+          footNote="For business customers only."
+          bullets={summaryBullets("pro")}
+          isHighlight
+        />
         <PricingPlan
           title="Cloud"
-          subtitle="Managed Pro"
-          description="Zero-maintenance managed service built on ReductStore Pro."
-          categories={createFeatures("cloud")}
-          buttonUrl="/solutions/cloud"
-          buttonLabel="Get Demo Server"
-          isHighlight
-          termsUrl="/terms"
+          tagline="We run it for you"
+          price={<>{/* TODO: confirm with Anthony */}</>}
+          actions={
+            <Link
+              className="button button--secondary button--lg"
+              to="/solutions/cloud"
+            >
+              Get demo server
+            </Link>
+          }
+          bullets={summaryBullets("cloud")}
+        />
+        <PricingPlan
+          title="Enterprise"
+          tagline="For larger companies"
+          price={<span className={styles.price}>Custom</span>}
+          actions={
+            <Link className="button button--secondary button--lg" to="/contact">
+              Talk to us
+            </Link>
+          }
+          bullets={summaryBullets("enterprise")}
         />
       </div>
-    </section>
+      {portalUrl && (
+        <p className={styles.manageLine}>
+          <a href={portalUrl}>Manage your subscription</a>
+        </p>
+      )}
+      <PricingComparison />
+    </>
   );
 }
