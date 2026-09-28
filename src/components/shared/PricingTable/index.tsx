@@ -216,7 +216,7 @@ export default function PricingTable() {
   const { checkoutEnabled, checkoutUrl } =
     siteConfig.customFields as ReductProCustomFields;
   const [storageTb, setStorageTb] = useState(1);
-  const monthlyPrice = storageTb * 15;
+  const monthlyPrice = Math.floor(storageTb * 15);
 
   return (
     <>
@@ -251,7 +251,7 @@ export default function PricingTable() {
                 <input
                   type="range"
                   min="1"
-                  max="66.6"
+                  max="66.7"
                   step="0.1"
                   value={storageTb}
                   onChange={(event) => setStorageTb(Number(event.target.value))}
@@ -261,17 +261,23 @@ export default function PricingTable() {
                   <span>Scales to any storage volume</span>
                 </span>
               </label>
-              <output className={styles.gaugePrice}>
-                €{monthlyPrice.toFixed(0)} per month
-              </output>
-              {monthlyPrice >= 999 && (
-                <p className={styles.volumeBanner}>
-                  <strong>Need more?</strong> The Pro plan scales to as much
-                  storage as you need.{" "}
-                  <Link to="/enterprise">
-                    <strong>Get a quote for higher volumes today.</strong>
+              {monthlyPrice < 1000 ? (
+                <output className={styles.gaugePrice}>
+                  €{monthlyPrice} per month
+                </output>
+              ) : (
+                <div className={styles.volumeBanner}>
+                  <p>
+                    <strong>Need more?</strong> The Pro plan scales to as much
+                    storage as you need.
+                  </p>
+                  <Link
+                    className="button button--primary button--sm"
+                    to="/enterprise"
+                  >
+                    Get a quote for higher volumes today.
                   </Link>
-                </p>
+                </div>
               )}
             </div>
           }
