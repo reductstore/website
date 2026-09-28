@@ -274,7 +274,7 @@ export default function PricingTable() {
               )}
               <Link
                 className="button button--secondary button--lg"
-                to="/demo-license"
+                to="/enterprise"
               >
                 Get demo license
               </Link>
@@ -291,7 +291,7 @@ export default function PricingTable() {
           actions={
             <Link
               className="button button--secondary button--lg"
-              to="/demo-license"
+              to="/enterprise"
             >
               Talk to us
             </Link>

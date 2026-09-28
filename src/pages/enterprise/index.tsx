@@ -90,14 +90,14 @@ const demoLicenseFaqs = [
   },
 ];
 
-export default function DemoLicensePage(): JSX.Element {
+export default function EnterprisePage(): JSX.Element {
   return (
     <Layout
-      title="Demo License"
-      description="Get a free ReductStore Pro demo license and explore co-development services for robotics and industrial IoT data pipelines."
+      title="Enterprise"
+      description="Explore ReductStore Enterprise plans, commercial licensing, and co-development services for robotics and industrial IoT data pipelines."
     >
       <main>
-        <SimpleHeader pageTitle="Demo License" />
+        <SimpleHeader pageTitle="ReductStore Enterprise" />
         <div className={clsx("container", styles.pageContainer)}>
           {/* Intro */}
           <h2 className={styles.sectionTitle}>Co-Development and Licensing</h2>
