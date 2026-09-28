@@ -147,17 +147,15 @@
   color: var(--ifm-color-primary);
 }
 
-.detailsLink,
-.manageLine {
+.detailsLink {
+  margin: 0 0 4em;
   text-align: center;
 }
 
-.detailsLink {
-  margin: 0 0 1rem;
-}
-
-.manageLine {
-  margin: 0 0 4em;
+.detailsLink a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .comparisonSection {

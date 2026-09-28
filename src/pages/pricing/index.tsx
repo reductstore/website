@@ -2,10 +2,15 @@ import Layout from "@theme/Layout";
 import PricingTable from "@site/src/components/shared/PricingTable";
 import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import Faq from "@site/src/components/shared/Faq";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import { JSX } from "react";
 import styles from "./styles.module.css";
 
+type ReductProCustomFields = { portalUrl?: string };
+
 export default function Pricing(): JSX.Element {
+  const { siteConfig } = useDocusaurusContext();
+  const { portalUrl } = siteConfig.customFields as ReductProCustomFields;
   return (
     <Layout
       title="Pricing"
@@ -29,14 +34,14 @@ export default function Pricing(): JSX.Element {
             pageTitle="Frequently Asked Questions"
             pageTitleAs="h2"
           />
-          <Faq faqs={pricingFaqs} defaultOpenCount={3} />
+          <Faq faqs={pricingFaqs(portalUrl)} defaultOpenCount={3} />
         </section>
       </main>
     </Layout>
   );
 }
 
-const pricingFaqs = [
+const pricingFaqs = (portalUrl?: string) => [
   {
     question:
       "What is the difference between ReductStore Core and ReductStore Pro?",
@@ -74,7 +79,12 @@ const pricingFaqs = [
     question: "How do I cancel?",
     answer: (
       <p>
-        Through the customer portal. The license stays active until the end of
+        {portalUrl ? (
+          <a href={portalUrl}>Manage your subscription</a>
+        ) : (
+          "Manage your subscription"
+        )}{" "}
+        through the customer portal. The license stays active until the end of
         the billing period.
       </p>
     ),

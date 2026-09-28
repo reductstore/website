@@ -213,7 +213,7 @@ export function PricingComparison() {
 
 export default function PricingTable() {
   const { siteConfig } = useDocusaurusContext();
-  const { checkoutEnabled, checkoutUrl, portalUrl } =
+  const { checkoutEnabled, checkoutUrl } =
     siteConfig.customFields as ReductProCustomFields;
   const [storageGb, setStorageGb] = useState(1);
   const monthlyPrice = storageGb * 15;
@@ -306,13 +306,10 @@ export default function PricingTable() {
         />
       </div>
       <p className={styles.detailsLink}>
-        <Link to="/pricing/details">Compare all plan details</Link>
+        <Link to="/pricing/details">
+          Compare all plan details <span aria-hidden="true">→</span>
+        </Link>
       </p>
-      {portalUrl && (
-        <p className={styles.manageLine}>
-          <a href={portalUrl}>Manage your subscription</a>
-        </p>
-      )}
     </>
   );
 }
