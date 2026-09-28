@@ -20,6 +20,16 @@
 .highlight {
   border-color: var(--ifm-color-primary);
 }
+/* Free and Enterprise sit slightly lower than the highlighted Pro card */
+.plan:not(.highlight) {
+  margin-top: 1.75rem;
+}
+
+/* Extra breathing room around the price on non-Pro cards */
+.plan:not(.highlight) .priceRow {
+  padding-top: 0.85rem;
+  padding-bottom: 0.85rem;
+}
 
 .planTitle {
   margin: 0;
