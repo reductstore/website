@@ -144,7 +144,7 @@ export function PricingComparison() {
             <tr>
               <th scope="row">Price</th>
               <td>€0</td>
-              <td>€15 per TB per month, excl. VAT</td>
+              <td>€15 per GB per month, excl. VAT</td>
               <td>Custom pricing</td>
               <td>Custom pricing</td>
             </tr>
@@ -215,8 +215,8 @@ export default function PricingTable() {
   const { siteConfig } = useDocusaurusContext();
   const { checkoutEnabled, checkoutUrl, portalUrl } =
     siteConfig.customFields as ReductProCustomFields;
-  const [storageTb, setStorageTb] = useState(1);
-  const monthlyPrice = storageTb * 15;
+  const [storageGb, setStorageGb] = useState(1);
+  const monthlyPrice = storageGb * 15;
 
   return (
     <>
@@ -241,46 +241,47 @@ export default function PricingTable() {
           price={
             <div className={styles.proPrice}>
               <p>
-                <span>€15</span> per TB per month, excl. VAT
+                <span>€15</span> per GB per month, excl. VAT
               </p>
               <p className={styles.billingNote}>
-                Billed monthly on peak storage. 1 TB minimum.
+                Billed monthly on peak storage. 1 GB minimum.
               </p>
               <label className={styles.storageGauge}>
-                <span>Peak storage: {storageTb.toFixed(1)} TB</span>
+                <span>Peak storage: {storageGb.toFixed(2)} GB</span>
                 <input
                   type="range"
                   min="1"
-                  max="10"
-                  step="0.1"
-                  value={storageTb}
-                  onChange={(event) => setStorageTb(Number(event.target.value))}
+                  max="66.67"
+                  step="0.01"
+                  value={storageGb}
+                  onChange={(event) => setStorageGb(Number(event.target.value))}
                 />
               </label>
               <output className={styles.gaugePrice}>
                 €{monthlyPrice.toFixed(0)} per month
               </output>
+              {monthlyPrice >= 1000 && (
+                <p className={styles.volumeBanner}>
+                  <strong>Need more?</strong> The Pro plan scales to as much
+                  storage as you need.{" "}
+                  <Link to="/enterprise">
+                    Get a quote for higher volumes today.
+                  </Link>
+                </p>
+              )}
             </div>
           }
           actions={
-            <>
-              {checkoutEnabled && checkoutUrl && (
-                <a
-                  className="button button--primary button--lg"
-                  href={checkoutUrl}
-                >
-                  Subscribe
-                </a>
-              )}
-              <Link
-                className="button button--secondary button--lg"
-                to="/enterprise"
+            checkoutEnabled &&
+            checkoutUrl && (
+              <a
+                className="button button--primary button--lg"
+                href={checkoutUrl}
               >
-                Get demo license
-              </Link>
-            </>
+                Subscribe
+              </a>
+            )
           }
-          footNote="For business customers only."
           bullets={summaryBullets("pro")}
           isHighlight
         />
@@ -297,6 +298,7 @@ export default function PricingTable() {
             </Link>
           }
           bullets={[
+            <strong key="plus">Everything in Pro, plus</strong>,
             "Cloud Enterprise or Cloud Self-hosted",
             "Custom support and SLA",
             "Architecture and deployment assistance",

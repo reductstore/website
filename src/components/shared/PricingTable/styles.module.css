@@ -88,6 +88,21 @@
   font-weight: 700;
 }
 
+.volumeBanner {
+  margin: 0.75rem 0 0;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background: var(--ifm-color-emphasis-100);
+  color: var(--ifm-font-color-base);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.volumeBanner strong {
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
 .actionsRow {
   display: flex;
   flex-direction: column;
