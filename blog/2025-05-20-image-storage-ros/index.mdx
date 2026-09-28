@@ -208,18 +208,16 @@ The `store_data` method is designed to be non-blocking, which allows the main th
 
 ## The header stamp is acquisition time, not arrival time
 
-`get_timestamp` above keys every record on `msg.header.stamp`. The ROS message definition says what that field is for, in a comment on the line itself.
+`get_timestamp` above indexes every record on `msg.header.stamp`. 
 
-From `sensor_msgs/msg/Image.msg`:
+The `sensor_msgs/msg/Image.msg` is defined as follows: 
 
 ```
 std_msgs/Header header # Header timestamp should be acquisition time of image
                        # Header frame_id should be optical frame of camera
 ```
 
-`CompressedImage`, the message this tutorial subscribes to, carries the same line.
-
-So the stamp is meant to be the moment the camera captured the frame, not the moment the message reached you. Note the wording. It says **should be**, not _is_. The message definition states an intent, and the driver is what actually fills the field. A driver written carelessly will hand you a clock reading taken long after the shutter closed, and nothing in ROS stops it.
+So the time stamp is meant to be the moment the camera captured the frame, but not the moment the message reached the callback function. A driver written carelessly will hand you a clock reading taken long after the shutter closed, and nothing in ROS stops it.
 
 ![Frame arrival time varies with transfer, decode and queue, but keyed on header.stamp each record is stored 2.0 s apart, matching the camera](./img/header-stamp-timing.svg)
 
@@ -236,7 +234,7 @@ def image_callback(self, msg: CompressedImage) -> None:
 
 Three readings tell you what you have.
 
-A small delay that stays roughly steady means the driver is stamping at acquisition and the machine is keeping up. A delay that swings with load means the driver is stamping at acquisition and you are watching the transport, which is exactly what you want kept out of your timestamps.
+A small delay that stays roughly steady means the driver is stamping at acquisition and the machine is keeping up. A delay that varies with the load indicates that the driver is stamping during acquisition and you are measuring the transport.
 
 ### One clock for every sensor
 
