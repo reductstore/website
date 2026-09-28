@@ -217,7 +217,7 @@ std_msgs/Header header # Header timestamp should be acquisition time of image
                        # Header frame_id should be optical frame of camera
 ```
 
-So the time stamp is meant to be the moment the camera captured the frame, but not the moment the message reached the callback function. A driver written carelessly will hand you a clock reading taken long after the shutter closed, and nothing in ROS stops it.
+So the timestamp is meant to be the moment the camera captured the frame, but not the moment the message reached the callback function. A driver written carelessly will hand you a clock reading taken long after the shutter closed, and nothing in ROS stops it.
 
 ![Frame arrival time varies with transfer, decode and queue, but keyed on header.stamp each record is stored 2.0 s apart, matching the camera](./img/header-stamp-timing.svg)
 
