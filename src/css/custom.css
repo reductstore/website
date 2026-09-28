@@ -219,8 +219,17 @@ body {
 .navbar__items--right .DocSearch-Button {
   color: var(--ifm-font-color-base) !important;
   background-color: var(--ifm-background-surface-color) !important;
-  border: 0 !important;
-  transition: none !important;
+  border: 1.5px solid var(--ifm-color-emphasis-300) !important;
+  border-radius: 8px !important;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease !important;
+}
+
+.navbar__items--right .DocSearch-Button:hover {
+  border-color: var(--ifm-color-primary) !important;
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--ifm-color-primary) 20%, transparent) !important;
 }
 
 .navbar__items--right .DocSearch-Button-Key {
