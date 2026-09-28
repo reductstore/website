@@ -338,3 +338,20 @@ div[class*="announcementBarContent_"] a {
   color: inherit;
   text-decoration: underline;
 }
+/* Navbar right-side item order: search → color mode → version → GitHub */
+.navbar__items--right [class*="searchBar"],
+.navbar__items--right [class*="navbarSearchContainer"] {
+  order: 1;
+}
+
+.navbar__items--right [class*="colorModeToggle"] {
+  order: 2;
+}
+
+.navbar__items--right .dropdown {
+  order: 3;
+}
+
+.navbar__items--right .header-github-link {
+  order: 4;
+}

@@ -354,7 +354,6 @@ const config = {
             position: "left",
           },
           { type: "search", position: "right" },
-          { type: "colorMode", position: "right" },
           {
             type: "docsVersionDropdown",
             position: "right",
