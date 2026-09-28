@@ -56,7 +56,7 @@ const pricingFaqs = (portalUrl?: string) => [
   {
     question: "How is Pro billed?",
     answer:
-      "Monthly, on the peak storage during the billing period. 1 GB minimum.",
+      "Monthly, on the peak storage during the billing period. 1 TB minimum, then per GB. 1.2 TB costs €18.",
   },
   {
     question: "When am I charged?",

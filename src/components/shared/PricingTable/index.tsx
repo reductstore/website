@@ -144,7 +144,7 @@ export function PricingComparison() {
             <tr>
               <th scope="row">Price</th>
               <td>€0</td>
-              <td>€15 per GB per month, excl. VAT</td>
+              <td>€0.015 per GB per month, excl. VAT</td>
               <td>Custom pricing</td>
               <td>Custom pricing</td>
             </tr>
@@ -215,8 +215,8 @@ export default function PricingTable() {
   const { siteConfig } = useDocusaurusContext();
   const { checkoutEnabled, checkoutUrl } =
     siteConfig.customFields as ReductProCustomFields;
-  const [storageGb, setStorageGb] = useState(1);
-  const monthlyPrice = storageGb * 15;
+  const [storageTb, setStorageTb] = useState(1);
+  const monthlyPrice = storageTb * 15;
 
   return (
     <>
@@ -241,31 +241,35 @@ export default function PricingTable() {
           price={
             <div className={styles.proPrice}>
               <p>
-                <span>€15</span> per GB per month, excl. VAT
+                <span>€0.015</span> per GB per month, excl. VAT
               </p>
               <p className={styles.billingNote}>
-                Billed monthly on peak storage. 1 GB minimum.
+                Billed monthly on peak storage. 1 TB minimum.
               </p>
               <label className={styles.storageGauge}>
-                <span>Peak storage: {storageGb.toFixed(2)} GB</span>
+                <span>Peak storage: {storageTb.toFixed(1)} TB</span>
                 <input
                   type="range"
                   min="1"
-                  max="66.67"
-                  step="0.01"
-                  value={storageGb}
-                  onChange={(event) => setStorageGb(Number(event.target.value))}
+                  max="66.6"
+                  step="0.1"
+                  value={storageTb}
+                  onChange={(event) => setStorageTb(Number(event.target.value))}
                 />
+                <span className={styles.gaugeLimits}>
+                  <span>€15 / month</span>
+                  <span>Scales to any storage volume</span>
+                </span>
               </label>
               <output className={styles.gaugePrice}>
                 €{monthlyPrice.toFixed(0)} per month
               </output>
-              {monthlyPrice >= 1000 && (
+              {monthlyPrice >= 999 && (
                 <p className={styles.volumeBanner}>
                   <strong>Need more?</strong> The Pro plan scales to as much
                   storage as you need.{" "}
                   <Link to="/enterprise">
-                    Get a quote for higher volumes today.
+                    <strong>Get a quote for higher volumes today.</strong>
                   </Link>
                 </p>
               )}
