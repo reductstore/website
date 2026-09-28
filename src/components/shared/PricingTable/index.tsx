@@ -94,7 +94,7 @@ const createFeatures = (plan: Plan): Feature[] => {
 
 const summaryBullets = (plan: Plan): React.ReactNode[] => {
   const features = createFeatures(plan);
-  const baseline = createFeatures(plan === "free" ? "free" : "pro");
+  const baseline = createFeatures("free");
   const available = features.filter(
     (feature, index) =>
       !feature.isCategoryHeader &&
@@ -107,7 +107,7 @@ const summaryBullets = (plan: Plan): React.ReactNode[] => {
   }
 
   return [
-    <strong key="plus">Everything in Pro, plus</strong>,
+    <strong key="plus">Everything in Free, plus</strong>,
     ...available.slice(0, 3).map((feature) => feature.title),
   ];
 };
