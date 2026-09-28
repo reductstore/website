@@ -240,8 +240,6 @@ A small delay that stays roughly steady means the driver is stamping at acquisit
 
 ReductStore timestamps each record with the timestamp you provide, and each modality is its own entry. The camera, the lidar and the IMU are separate entries, and a query for a moment returns whatever each of them recorded at that moment.
 
-That only works if every entry agrees on what the time means.
-
 ## Testing the image storage system
 
 To test the image storage system, you can run the ROS2 node and publish image messages to the `/image_raw/compressed` topic.
