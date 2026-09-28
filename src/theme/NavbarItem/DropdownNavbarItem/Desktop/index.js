@@ -66,6 +66,7 @@ export default function DropdownNavbarItemDesktop({
       className={clsx("navbar__item", "dropdown", {
         "dropdown--right": position === "right",
       })}
+      style={{ alignSelf: "stretch", display: "flex", alignItems: "center" }}
       onMouseEnter={() => setShowDropdown(true)}
       onMouseLeave={() => setShowDropdown(false)}
     >
