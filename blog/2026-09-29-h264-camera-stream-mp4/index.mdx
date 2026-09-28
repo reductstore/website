@@ -18,7 +18,7 @@ Storing the encoded stream removes that step. ReductStore stores H.264 chunks as
 
 ## What you need
 
-You need the video in the right shape. The extension reads H.264 in Annex B byte stream format, the one with `00 00 01` or `00 00 00 01` start codes between units. That is what most cameras and most encoders emit already. It is a raw elementary stream, not an MP4 and not a Matroska file. An MP4 file on disk includes a container around the stream; ReductVideo creates that container from the other end.
+You need the video in the right shape. The extension reads H.264 in Annex B byte stream format, the one with `00 00 01` or `00 00 00 01` start codes between units. That is what most cameras and most encoders emit already. It is a raw elementary stream, not an MP4 and not a Matroska file. An MP4 file on disk includes a container around the stream; the ReductVideo extension creates that container from the other end.
 
 The extension does not re-encode anything. It joins your records back together in timestamp order and puts a container around the result. So the bytes have to be a valid stream once joined: write the chunks in the order the camera produced them, and cut them on keyframes.
 
@@ -104,7 +104,7 @@ Total episodes: 3
 
 `duration` takes strings like `"30s"`, `"1m"` or `"1h 30m"`. `size` takes `"100MB"` or `"1GB"`. Set both and the episode closes as soon as either limit is reached. That is worth doing because bitrate varies: thirty seconds of a busy scene can be several times the size of thirty seconds of an empty corridor. A duration limit on its own leaves the file size unbounded, and a size limit on its own leaves the time span unbounded.
 
-Gap detection is also on by default. When the space between two chunk timestamps is larger than one frame, ReductVideo treats that as a discontinuity and starts a new episode. A camera that stopped for four seconds gives you two episodes rather than one file with four seconds of nothing in it. Pass `"gap_detection": false` to turn that off and get everything muxed into one episode regardless.
+Gap detection is also on by default. When the space between two chunk timestamps is larger than one frame, the ReductVideo extension treats that as a discontinuity and starts a new episode. A camera that stopped for four seconds gives you two episodes rather than one file with four seconds of nothing in it. Pass `"gap_detection": false` to turn that off and get everything muxed into one episode regardless.
 
 The threshold is one frame, which is tight. Gap detection cannot tell a camera that stopped on purpose from a camera that dropped a frame, because the two look identical in the timestamps. When your recording genuinely starts and stops, that is exactly right and each run comes back as its own episode.
 
@@ -112,7 +112,7 @@ The threshold is one frame, which is tight. Gap detection cannot tell a camera t
 
 ## Where the frame rate comes from
 
-Muxing needs the recording frame rate, and so does gap detection, because a gap is only defined relative to one frame duration. ReductVideo resolves it in this order:
+Muxing needs the recording frame rate, and so does gap detection, because a gap is only defined relative to one frame duration. The ReductVideo extension resolves it in this order:
 
 1. The `fps` label on the records
 2. The `fps` field of the `$video` attachment on the entry
