@@ -1,0 +1,62 @@
+.megaPanel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 200;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+  min-width: 300px;
+  padding: 0.5rem;
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.07),
+    0 10px 24px -4px rgba(0, 0, 0, 0.1);
+}
+
+.twoCol {
+  grid-template-columns: 1fr 1fr;
+  min-width: 580px;
+}
+
+/* Anchor panels that would overflow right edge to the right-hand side instead */
+.alignRight {
+  left: auto;
+  right: 0;
+}
+
+.megaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 8px;
+  color: var(--ifm-font-color-base) !important;
+  text-decoration: none !important;
+  transition: background 0.12s ease;
+}
+
+.megaItem:hover {
+  background: var(--ifm-color-emphasis-100);
+  text-decoration: none !important;
+}
+
+.megaItem:hover .megaLabel {
+  color: var(--ifm-color-primary);
+}
+
+.megaLabel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ifm-font-color-base);
+  transition: color 0.12s ease;
+}
+
+.megaDesc {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--reduct-dimmed);
+  line-height: 1.4;
+}
