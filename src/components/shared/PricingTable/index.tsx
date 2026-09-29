@@ -319,9 +319,7 @@ export default function PricingTable() {
           }
           actions={
             checkoutEnabled &&
-            checkoutUrl && (
-              <SubscribeButton href={checkoutUrl} />
-            )
+            checkoutUrl && <SubscribeButton href={checkoutUrl} />
           }
           bullets={summaryBullets("pro")}
           isHighlight
