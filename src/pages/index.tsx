@@ -23,6 +23,7 @@ import HomepagePartners from "../components/homepage/HomepagePartners";
 import HomepageCompanies from "../components/homepage/HomepageCompanies";
 import HomepageReductBridge from "@site/src/components/homepage/HomepageReductBridge";
 import HomepageReductSelect from "@site/src/components/homepage/HomepageReductSelect";
+import HomepageZenoh from "@site/src/components/homepage/HomepageZenoh";
 
 function HomepageHeader() {
   return (
@@ -96,6 +97,8 @@ export default function Home(): JSX.Element {
           <HomepageObservability />
           <hr className={styles.industrialHr} />
           <HomepageReductSelect />
+          <hr className={styles.industrialHr} />
+          <HomepageZenoh />
           <hr className={styles.industrialHr} />
           <HomepageRobotics />
           <hr className={styles.industrialHr} />
