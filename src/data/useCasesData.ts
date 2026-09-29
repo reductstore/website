@@ -2,6 +2,7 @@ import type { ComponentType, SVGProps } from "react";
 import RoboticsDiagram from "@site/static/img/use-cases/robotics.svg";
 import DaqDiagram from "@site/static/img/use-cases/daq.svg";
 import ComputerVisionDiagram from "@site/static/img/use-cases/computer-vision.svg";
+import H264VideoDiagram from "@site/static/img/use-cases/h264-video.svg";
 import VibrationDiagram from "@site/static/img/use-cases/vibration.svg";
 import MqttDiagram from "@site/static/img/use-cases/mqtt.svg";
 import KafkaDiagram from "@site/static/img/use-cases/kafka.svg";
@@ -36,6 +37,13 @@ const useCases: UseCase[] = [
       "Explore how to implement computer vision applications in industrial settings with practical examples.",
     link: "/blog/computer-vision-applications",
     diagram: ComputerVisionDiagram,
+  },
+  {
+    title: "H.264 Video Storage",
+    description:
+      "Store an H.264 camera stream as time-indexed records and export playable MP4 episodes with ReductVideo.",
+    link: "/blog/store-h264-camera-stream-export-mp4",
+    diagram: H264VideoDiagram,
   },
   {
     title: "Vibration Data",

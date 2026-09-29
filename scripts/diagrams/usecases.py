@@ -18,6 +18,7 @@ USE_CASES = {
     "robotics": [("Robot", "ROS 2, LiDAR", "card"), ("ReductStore", "edge", "brand"), ("Cloud", "fleet data", "card")],
     "daq": [("Sensors, PLC", "shop floor", "card"), ("ReductStore", "FIFO quota", "brand"), ("Cloud", "S3 backend", "coral")],
     "computer-vision": [("Camera", "frames", "card"), ("Model", "detections", "card"), ("ReductStore", "labeled data", "brand")],
+    "h264-video": [("Camera", "H.264 chunks", "card"), ("ReductStore", "video/h264", "brand"), ("ReductVideo", "MP4 episodes", "coral")],
     "vibration": [("Sensor", "waveforms", "card"), ("ReductStore", "FIFO buffer", "brand"), ("Analysis", "anomalies", "card")],
     "mqtt": [("MQTT broker", "topics", "card"), ("ReductBridge", "pipelines", "coral"), ("ReductStore", "labeled data", "brand")],
     "kafka": [("Kafka", "partitions", "card"), ("Data sink", "consumer", "card"), ("ReductStore", "entries", "brand")],
