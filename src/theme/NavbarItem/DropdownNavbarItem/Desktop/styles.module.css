@@ -6,8 +6,6 @@
   }
 
   .navbarDropdown :global(.navbar__link) {
-    display: inline-flex;
-    align-items: center;
     white-space: nowrap;
   }
 }
