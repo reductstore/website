@@ -2,6 +2,7 @@ import type {
   BackendPricing,
   CostBreakdown,
   LicenseTier,
+  ErasureCoding,
   StorageInput,
   StorageTier,
   StreamInput,
@@ -130,6 +131,18 @@ export function licenseEurYear(retainedTb: number, tiers: LicenseTier[]) {
   return cost;
 }
 
+// Raw disk used per logical byte when every object is split into erasure
+// shards and each shard occupies whole disk blocks.
+export function erasureFactor(objectSizeKb: number, erasure: ErasureCoding) {
+  if (!(objectSizeKb > 0)) return 1;
+  const shardKb = objectSizeKb / erasure.dataShards;
+  const onDiskKb =
+    Math.max(1, Math.ceil(shardKb / erasure.diskBlockKb)) * erasure.diskBlockKb;
+  return (
+    ((erasure.dataShards + erasure.parityShards) * onDiskKb) / objectSizeKb
+  );
+}
+
 const TIER_ORDER: TierName[] = ["hot", "cold", "archive"];
 
 // The cold age band may stay hot or move to cold; the archive band may use
@@ -191,8 +204,9 @@ export function streamCost(
       const tier = pricing[name] as StorageTier;
       const bandTb = (workload.dataMonthTb * days) / DAYS_PER_MONTH;
       const bandRecords = (workload.recordsMonth * days) / DAYS_PER_MONTH;
-      const billable =
-        tier.minBillableObjectKb > 0
+      const billable = tier.erasure
+        ? erasureFactor(objectSizeKb, tier.erasure)
+        : tier.minBillableObjectKb > 0
           ? Math.max(1, tier.minBillableObjectKb / objectSizeKb)
           : 1;
       storage += bandTb * tier.storageEurPerTbMonth * billable;

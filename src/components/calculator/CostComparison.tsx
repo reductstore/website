@@ -65,19 +65,21 @@ function Bar({
 }
 
 export default function CostComparison({
-  backendName,
+  directLabel,
+  reductLabel,
   direct,
   reduct,
 }: {
-  backendName: string;
+  directLabel: string;
+  reductLabel: string;
   direct: CostBreakdown;
   reduct: CostBreakdown;
 }): JSX.Element {
   const max = Math.max(direct.totalEurYear, reduct.totalEurYear, 1);
   return (
     <div className={styles.comparison}>
-      <Bar label={`Direct ${backendName}`} cost={direct} max={max} />
-      <Bar label={`ReductStore + ${backendName}`} cost={reduct} max={max} />
+      <Bar label={directLabel} cost={direct} max={max} />
+      <Bar label={reductLabel} cost={reduct} max={max} />
       <table className={styles.legend}>
         <thead>
           <tr>

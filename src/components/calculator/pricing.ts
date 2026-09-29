@@ -66,12 +66,19 @@ export const AZURE_BLOB: BackendPricing = {
 
 export const DEFAULT_MINIO_EUR_PER_TB_MONTH = 10;
 
+// On premises, both sides pay for raw disk. MinIO splits every object into
+// erasure shards on separate drives, and each shard takes at least one disk
+// block; ReductStore writes large blocks to a file system with the same
+// protection overhead.
+export const MINIO_ERASURE = { dataShards: 8, parityShards: 4, diskBlockKb: 4 };
+
 export function minioPricing(storageEurPerTbMonth: number): BackendPricing {
   return {
     name: "MinIO",
     putEurPer1000: 0,
     hot: {
       storageEurPerTbMonth,
+      erasure: MINIO_ERASURE,
       getEurPer1000: 0,
       retrievalEurPerTb: 0,
       minBillableObjectKb: 0,

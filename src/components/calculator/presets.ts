@@ -55,7 +55,7 @@ export const PRESETS: WorkloadPreset[] = [
     id: "mobile-robot",
     name: "Mobile robot",
     unitLabel: "Mobile robots",
-    units: 5,
+    units: 10,
     recordingHoursPerDay: 8,
     streams: [
       {
@@ -104,7 +104,7 @@ export const PRESETS: WorkloadPreset[] = [
     id: "autonomous-vehicle",
     name: "Autonomous vehicle",
     unitLabel: "Vehicles",
-    units: 2,
+    units: 10,
     recordingHoursPerDay: 8,
     streams: [
       {
@@ -202,7 +202,7 @@ export const PRESETS: WorkloadPreset[] = [
     id: "computer-vision",
     name: "Computer vision",
     unitLabel: "Cameras",
-    units: 20,
+    units: 100,
     recordingHoursPerDay: 24,
     streams: [
       {
@@ -243,7 +243,7 @@ export const PRESETS: WorkloadPreset[] = [
     id: "vibration",
     name: "Vibration data",
     unitLabel: "Machines",
-    units: 100,
+    units: 10,
     recordingHoursPerDay: 24,
     streams: [
       {
@@ -318,47 +318,6 @@ export const PRESETS: WorkloadPreset[] = [
         count: 1,
         frequencyHz: 1,
         recordSizeKb: 4,
-      },
-    ],
-  },
-  {
-    id: "machine-vision-qa",
-    name: "Machine vision QA",
-    unitLabel: "Stations",
-    units: 25,
-    recordingHoursPerDay: 16,
-    streams: [
-      {
-        id: "machine-vision-qa-0",
-        name: "Inspection images",
-        enabled: true,
-        count: 2,
-        frequencyHz: 1,
-        recordSizeKb: 2000,
-      },
-      {
-        id: "machine-vision-qa-1",
-        name: "Detection results",
-        enabled: true,
-        count: 1,
-        frequencyHz: 1,
-        recordSizeKb: 10,
-      },
-      {
-        id: "machine-vision-qa-2",
-        name: "PLC context",
-        enabled: true,
-        count: 1,
-        frequencyHz: 10,
-        recordSizeKb: 2,
-      },
-      {
-        id: "machine-vision-qa-3",
-        name: "Rejected sample",
-        enabled: false,
-        count: 1,
-        frequencyHz: 0.05,
-        recordSizeKb: 5000,
       },
     ],
   },

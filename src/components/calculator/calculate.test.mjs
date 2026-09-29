@@ -176,15 +176,37 @@ test("no NaN or Infinity when every stream is disabled", () => {
   }
 });
 
-test("MinIO has no request cost, so the license can make ReductStore more expensive", () => {
-  const result = estimate(
-    PRESETS.find((preset) => preset.id === "mobile-robot"),
+test("MinIO pays erasure shard overhead on small objects", () => {
+  const minio = config(backendPricing("minio", 10));
+  const small = estimate(
+    { units: 1, recordingHoursPerDay: 24, streams: [stream("s", 1, 100, 2)] },
     storage({ backend: "minio" }),
-    config(backendPricing("minio", 10)),
+    minio,
   );
-  assert.equal(result.direct.operationsEurYear, 0);
-  close(result.direct.storageEurYear, result.reduct.storageEurYear);
-  assert.ok(result.savingEurYear < 0);
+  assert.equal(small.direct.operationsEurYear, 0);
+  // 2 KB objects on 8 + 4 shards of 4 KB blocks use 24x raw disk; ReductStore
+  // blocks use the 1.5x protection overhead only.
+  close(small.direct.storageEurYear / small.reduct.storageEurYear, 16, 1e-6);
+
+  const large = estimate(
+    {
+      units: 1,
+      recordingHoursPerDay: 24,
+      streams: [stream("l", 1, 10, 2000)],
+    },
+    storage({ backend: "minio" }),
+    minio,
+  );
+  const ratio = large.direct.storageEurYear / large.reduct.storageEurYear;
+  assert.ok(ratio >= 1 && ratio < 1.01, `ratio ${ratio}`);
+  assert.ok(large.savingEurYear < 0);
+});
+
+test("every preset saves on AWS by default", () => {
+  for (const preset of PRESETS) {
+    const result = estimate(preset, storage(), config());
+    assert.ok(result.savingEurYear > 0, preset.id);
+  }
 });
 
 test("every preset produces finite results on every backend", () => {

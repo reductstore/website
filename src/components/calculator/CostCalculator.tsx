@@ -10,7 +10,6 @@ import {
   LuActivity,
   LuPlane,
   LuRoute,
-  LuScanSearch,
   LuSlidersHorizontal,
 } from "react-icons/lu";
 import type { IconType } from "react-icons";
@@ -45,7 +44,6 @@ const PRESET_ICONS: Record<string, IconType> = {
   "computer-vision": LuCamera,
   vibration: LuActivity,
   plc: LuCpu,
-  "machine-vision-qa": LuScanSearch,
   ros: LuBot,
   custom: LuSlidersHorizontal,
 };
@@ -331,7 +329,7 @@ export default function CostCalculator(): JSX.Element {
           <div className={styles.fields}>
             {backend === "minio" && (
               <NumberField
-                label="On premises storage cost"
+                label="Raw disk cost"
                 value={minioCost}
                 onChange={setMinioCost}
                 min={0}
@@ -381,6 +379,44 @@ export default function CostCalculator(): JSX.Element {
             />
           </div>
         </section>
+
+        <details className={clsx(styles.disclosure, styles.assumptions)}>
+          <summary>Calculation assumptions</summary>
+          <div className={styles.assumptionsBody}>
+            <p>
+              An estimate, not a quote. Both sides use the same workload,
+              retention, and reads.
+            </p>
+            <ul>
+              <li>
+                Each stream is costed with its own record size. Months have 30
+                days; 1 TB is 10<sup>9</sup> KB.
+              </li>
+              <li>
+                Data moves from hot to cold (up to 90 days) to archive only when
+                that is cheaper, respecting minimum storage durations and
+                billable object sizes.
+              </li>
+              <li>
+                ReductStore packs up to 1,024 records into 64 MB blocks, with
+                two backend operations per block.
+              </li>
+              <li>
+                License on retained data: €150 per TB per year up to 100 TB,
+                €100 up to 1,000 TB, €50 above.
+              </li>
+              <li>
+                Cloud prices are list price estimates in EUR. MinIO stores each
+                object as 8 + 4 erasure shards on 4 KB disk blocks; ReductStore
+                uses a file system with the same protection.
+              </li>
+            </ul>
+            <p>
+              Excludes compute, egress, networking, support, VAT, extra backups,
+              labor, and migration.
+            </p>
+          </div>
+        </details>
       </div>
 
       <aside className={styles.result} aria-live="polite">
@@ -406,12 +442,20 @@ export default function CostCalculator(): JSX.Element {
                 : "for this configuration"}
             </p>
             <p className={styles.compare}>
-              Direct {backendName} vs ReductStore + {backendName}, including the
-              ReductStore license.
+              {backend === "minio"
+                ? "MinIO vs ReductStore on a file system, on the same disks, including the ReductStore license."
+                : `Direct ${backendName} vs ReductStore + ${backendName}, including the ReductStore license.`}
             </p>
 
             <CostComparison
-              backendName={backendName}
+              directLabel={
+                backend === "minio" ? "Direct MinIO" : `Direct ${backendName}`
+              }
+              reductLabel={
+                backend === "minio"
+                  ? "ReductStore on a file system"
+                  : `ReductStore + ${backendName}`
+              }
               direct={result.direct}
               reduct={result.reduct}
             />
@@ -452,7 +496,7 @@ export default function CostCalculator(): JSX.Element {
                   })
                 }
               >
-                Test your workload with ReductStore
+                Book an architecture review
               </Link>
               <Link to="/docs/how-does-it-work">
                 See how ReductStore stores data →
@@ -461,61 +505,6 @@ export default function CostCalculator(): JSX.Element {
           </>
         )}
       </aside>
-
-      <details className={clsx(styles.disclosure, styles.assumptions)}>
-        <summary>Calculation assumptions</summary>
-        <div className={styles.assumptionsBody}>
-          <p>
-            This is an estimate for comparison, not a quote. Both columns use
-            the same workload, retention, backend, and read pattern.
-          </p>
-          <ul>
-            <li>
-              Every stream is calculated separately with its own record size.
-              Months have 30 days, and 1 TB is 10<sup>9</sup> KB.
-            </li>
-            <li>
-              Data ages through a hot band (your hot storage duration), a cold
-              band of up to 90 days, and an archive band. For each stream the
-              cheapest valid lifecycle is chosen separately for direct storage
-              and for ReductStore, respecting minimum storage durations
-              (Standard IA 30 days, Glacier IR 90 days) and minimum billable
-              object sizes (128 KB).
-            </li>
-            <li>
-              ReductStore packs records into blocks of up to 64 MB and 1,024
-              records, and is assumed to need two backend operations per block
-              for writes and for reads.
-            </li>
-            <li>
-              The read percentage applies to each age band of retained data.
-              Both architectures retrieve the same logical bytes; no cache
-              savings are assumed.
-            </li>
-            <li>
-              The ReductStore license is estimated on retained data at €150 per
-              TB per year for the first 100 TB, €100 up to 1,000 TB, and €50
-              above that.
-            </li>
-            <li>
-              Cloud prices are list price assumptions shown in EUR. MinIO uses
-              only the storage cost you enter, with no request or retrieval
-              fees.
-            </li>
-            <li>
-              Local history divides the edge disk by the data recorded per unit
-              per day and ignores filesystem overhead, compression, and reserved
-              space.
-            </li>
-          </ul>
-          <p>
-            This estimate excludes compute, database host cost, public internet
-            egress, NAT gateways, VPC endpoints, support, VAT, backup redundancy
-            beyond the selected storage tier, engineering labor, and migration
-            cost.
-          </p>
-        </div>
-      </details>
     </div>
   );
 }
