@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="rs-diagram" viewBox="0 0 800 416" width="100%" height="100%" role="img" aria-label="ReductBridge writes ROS records to the robot-data bucket with a 20 GB FIFO buffer. A replication task sends camera and IMU records over HTTPS to the demo bucket on the Play server under the robot name. A compression policy applies zstd after one day, and replication and lifecycle diagnostics, usage, warnings and errors go to the $system bucket."><defs><style>
+:root{--rs-card-bg:#FFFFFF;--rs-card-stroke:#DAD4E0;--rs-brand:#2B0548;--rs-accent:#2B0548;
+--rs-halo:rgba(43,5,72,.05);--rs-inner:#FBF9FC;--rs-text-main:#333333;--rs-text-muted:#707070;--rs-wire:#B8AEC3;--rs-boxline:#C4B2D4}
+[data-theme='dark']{--rs-card-bg:#1E1E1E;--rs-card-stroke:#3A3440;--rs-accent:#BFA6DC;
+--rs-halo:rgba(205,184,230,.07);--rs-inner:#232026;--rs-text-main:#EFEFEF;--rs-text-muted:#A0A0A0;--rs-wire:#6E6478;--rs-boxline:#5C4F69}
+:where(.rs-diagram) text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.rs-mono{font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace}
+.rs-card{fill:var(--rs-card-bg);stroke:var(--rs-card-stroke);stroke-width:1.5}
+.rs-halo{fill:var(--rs-halo)}
+.rs-box{fill:var(--rs-inner);stroke:var(--rs-boxline);stroke-width:1.5;stroke-dasharray:6 5}
+.rs-pill{fill:var(--rs-brand)}
+.rs-chip{fill:var(--rs-card-bg);stroke:var(--rs-card-stroke);stroke-width:1.2}
+.rs-t{font-weight:600;font-size:15px;fill:var(--rs-text-main)}
+.rs-bt{font-weight:600;font-size:14px;fill:var(--rs-accent)}
+.rs-pt{font-weight:600;font-size:15px;fill:#FFFFFF}
+.rs-s{font-size:12.5px;fill:var(--rs-text-muted)}
+.rs-wire{fill:none;stroke:var(--rs-wire);stroke-width:1.5;stroke-dasharray:4 6;stroke-linecap:round}
+.rs-flow-in{animation:rs-flow 1.6s linear infinite}
+.rs-flow-rep{stroke:var(--rs-accent);stroke-width:2;animation:rs-flow 1.6s linear infinite}
+.rs-bl{font-weight:600;font-size:14px;fill:var(--rs-accent)}
+.rs-small{font-size:12px;font-weight:600}
+.rs-big{font-size:26px}
+.rs-static{animation:none}
+.rs-logo{fill:var(--rs-accent)}
+.rs-head{font-size:15px;fill:var(--rs-text-muted)}
+.rs-coral{fill:#DB817B}
+.rs-cchip{fill:none;stroke:#FFFFFF;stroke-opacity:.7;stroke-width:1.2}
+.rs-ct{font-weight:600;font-size:14px;fill:#FFFFFF}
+.rs-cs{font-size:12.5px;fill:#FFFFFF}
+.rs-cap{font-size:13px;font-style:italic;fill:var(--rs-text-muted)}
+.rs-si{font-size:12.5px;fill:#D9CCE6}
+.rs-flow-out{animation:rs-flow 1.6s linear infinite}
+[data-theme='dark'] .rs-pill{fill:#CDB8E6}
+[data-theme='dark'] .rs-pill+.rs-pt{fill:#2B0548}
+@keyframes rs-flow{to{stroke-dashoffset:-20}}
+.rs-port{fill:var(--rs-card-bg);stroke:var(--rs-wire);stroke-width:1.5}
+@media (prefers-reduced-motion: reduce){.rs-flow-in,.rs-flow-out,.rs-flow-rep{animation:none}}
+</style><style>
+.rs-line{stroke:var(--rs-card-stroke);stroke-width:1}
+.rs-hl{fill:#DB817B;fill-opacity:.18}
+.rs-sel{fill:var(--rs-card-bg);stroke:var(--rs-accent);stroke-width:2}
+.rs-code{font-size:13px;fill:var(--rs-text-main)}
+</style></defs><path d="M190,58 L280,58" class="rs-wire rs-flow-in"/>
+<path d="M500,58 L590,58" class="rs-wire rs-flow-in"/>
+<path d="M390,96 L390,170" class="rs-wire rs-flow-out"/>
+<path d="M690,96 L690,160" class="rs-wire rs-flow-rep"/>
+<path d="M390,246 L390,330" class="rs-wire rs-flow-out"/>
+<rect x="10.0" y="20.0" width="180.0" height="76.0" rx="16" class="rs-coral"/>
+<text x="100.0" y="53.0" class="rs-ct" text-anchor="middle">ReductBridge</text>
+<text x="100.0" y="73.0" class="rs-cs" text-anchor="middle">ROS records</text>
+<rect x="280.0" y="20.0" width="220.0" height="76.0" rx="16" class="rs-card"/>
+<text x="390.0" y="53.0" class="rs-bt" text-anchor="middle">robot-data</text>
+<text x="390.0" y="73.0" class="rs-s rs-mono" text-anchor="middle">20 GB FIFO buffer</text>
+<rect x="590.0" y="20.0" width="200.0" height="76.0" rx="16" class="rs-card"/>
+<text x="690.0" y="53.0" class="rs-bt" text-anchor="middle">replication task</text>
+<text x="690.0" y="73.0" class="rs-s rs-mono" text-anchor="middle">camera + IMU only</text>
+<circle cx="190.0" cy="58.0" r="5" class="rs-port"/>
+<circle cx="280.0" cy="58.0" r="5" class="rs-port"/>
+<circle cx="500.0" cy="58.0" r="5" class="rs-port"/>
+<circle cx="590.0" cy="58.0" r="5" class="rs-port"/>
+<rect x="280.0" y="170.0" width="220.0" height="76.0" rx="16" class="rs-card"/>
+<text x="390.0" y="203.0" class="rs-bt" text-anchor="middle">compression policy</text>
+<text x="390.0" y="223.0" class="rs-s rs-mono" text-anchor="middle">zstd after one day</text>
+<rect x="590.0" y="160.0" width="200.0" height="96.0" rx="16" class="rs-card"/>
+<text x="690.0" y="193.0" class="rs-bt" text-anchor="middle">Play server</text>
+<text x="690.0" y="213.0" class="rs-s rs-mono" text-anchor="middle">bucket: demo</text>
+<text x="690.0" y="233.0" class="rs-s rs-mono" text-anchor="middle">&lt;robot-name&gt;/*</text>
+<circle cx="390.0" cy="96.0" r="5" class="rs-port"/>
+<circle cx="390.0" cy="170.0" r="5" class="rs-port"/>
+<circle cx="690.0" cy="96.0" r="5" class="rs-port"/>
+<circle cx="690.0" cy="160.0" r="5" class="rs-port"/>
+<text x="702.0" y="134.0" class="rs-bl" text-anchor="start">HTTPS</text>
+<rect x="10.0" y="330.0" width="780.0" height="76.0" rx="16" class="rs-card"/>
+<text x="400.0" y="363.0" class="rs-bt" text-anchor="middle">$system bucket</text>
+<text x="400.0" y="383.0" class="rs-s rs-mono" text-anchor="middle">replication + lifecycle diagnostics · usage · warnings and errors</text>
+<circle cx="390.0" cy="246.0" r="5" class="rs-port"/>
+<circle cx="390.0" cy="330.0" r="5" class="rs-port"/></svg>

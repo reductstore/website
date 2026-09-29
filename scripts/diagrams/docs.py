@@ -219,7 +219,83 @@ def ros():
     return c.svg(800, cy + 200, "ROS topics on the robot flow into ReductBridge, which writes records, labels and the ROS schema to the local ReductStore. A replication task sends selected camera and IMU entries over HTTP(S) to ReductStore in the cloud or a central on-premises server, where ReductROS extracts messages as JSON and ReductSelect runs SQL over them.")
 
 
+def card(c, x, y, w, h, title, lines, cls="rs-card"):
+    title_cls, line_cls = ("rs-ct", "rs-cs") if cls == "rs-coral" else ("rs-bt", "rs-s rs-mono")
+    c.rect(x, y, w, h, cls, 16)
+    ty = y + h / 2 - 10 * len(lines) + 5
+    c.text(x + w / 2, ty, title, title_cls)
+    for i, line in enumerate(lines):
+        c.text(x + w / 2, ty + 20 * (i + 1), line, line_cls)
+
+
+def ros_data_collection():
+    c = C()
+    topics = ["/camera/image_raw", "/gps/fix", "/imu/data"]
+    c.text(400, 18, "ROS 2 topics", "rs-s")
+    tops = []
+    for i, t in enumerate(topics):
+        x = 130 + i * 190
+        c.rect(x, 30, 170, 38, "rs-chip", 19)
+        c.text(x + 85, 54, t, "rs-code rs-mono")
+        tops.append(x + 85)
+    area(c, 10, 130, 780, 210, "ReductBridge")
+    for x in tops:
+        c.wire(f"M{x},68 C{x},96 400,106 400,142", "rs-flow-in")
+    c.port(400, 142)
+    c.text(60, 112, "serialized messages", "rs-s rs-mono", "start")
+    stages = [
+        ("ROS 2 input", ["subscriptions", "timestamps", "schema + labels"]),
+        ("pipeline", ["label routing", "GPS propagation", "robot label"]),
+        ("remote: local", ["batching", "HTTP write"]),
+    ]
+    bw, gap, by = 216, 32, 192
+    for i, (title, lines) in enumerate(stages):
+        x = 44 + i * (bw + gap)
+        box(c, x, by, bw, 118, title, [(line, "rs-s rs-mono") for line in lines])
+        if i:
+            c.wire(f"M{x - gap},{by + 59} L{x},{by + 59}", "rs-flow-in")
+            c.port(x - gap, by + 59)
+            c.port(x, by + 59)
+    rx = 44 + 2 * (bw + gap) + bw / 2
+    c.wire(f"M{rx},{by + 118} L{rx},418", "rs-flow-rep")
+    c.port(rx, by + 118)
+    c.port(rx, 418)
+    c.text(rx - 12, 378, "HTTP", "rs-bl", "end")
+    c.rect(rx - 140, 418, 280, 128, "rs-card", 20)
+    c.pill(rx, 432, "ReductStore")
+    for i, line in enumerate(["bucket: robot-data", "one entry per topic", "CDR records + $schema"]):
+        c.text(rx, 492 + i * 20, line, "rs-s rs-mono")
+    return c.svg(800, 556, "ROS 2 topics send serialized messages to ReductBridge, which subscribes and timestamps them, routes labels in a pipeline, and batches HTTP writes to the robot-data bucket in ReductStore, one entry per topic with CDR records and the $schema attachment.")
+
+
+def ros_buffering():
+    c = C()
+    card(c, 10, 20, 180, 76, "ReductBridge", ["ROS records"], "rs-coral")
+    card(c, 280, 20, 220, 76, "robot-data", ["20 GB FIFO buffer"])
+    card(c, 590, 20, 200, 76, "replication task", ["camera + IMU only"])
+    for x0, x1 in [(190, 280), (500, 590)]:
+        c.wire(f"M{x0},58 L{x1},58", "rs-flow-in")
+        c.port(x0, 58)
+        c.port(x1, 58)
+    card(c, 280, 170, 220, 76, "compression policy", ["zstd after one day"])
+    card(c, 590, 160, 200, 96, "Play server", ["bucket: demo", "&lt;robot-name&gt;/*"])
+    c.wire("M390,96 L390,170", "rs-flow-out")
+    c.port(390, 96)
+    c.port(390, 170)
+    c.wire("M690,96 L690,160", "rs-flow-rep")
+    c.port(690, 96)
+    c.port(690, 160)
+    c.text(702, 134, "HTTPS", "rs-bl", "start")
+    card(c, 10, 330, 780, 76, "$system bucket", ["replication + lifecycle diagnostics · usage · warnings and errors"])
+    c.wire("M390,246 L390,330", "rs-flow-out")
+    c.port(390, 246)
+    c.port(390, 330)
+    return c.svg(800, 416, "ReductBridge writes ROS records to the robot-data bucket with a 20 GB FIFO buffer. A replication task sends camera and IMU records over HTTPS to the demo bucket on the Play server under the robot name. A compression policy applies zstd after one day, and replication and lifecycle diagnostics, usage, warnings and errors go to the $system bucket.")
+
+
 for name, fn in [("buckets", buckets), ("entries", entries), ("blocks", blocks)]:
     open(OUT + name + ".svg", "w").write(fn())
 open("docs/ros/img/ros-workflow.svg", "w").write(ros())
+open("docs/ros/img/ros-data-collection.svg", "w").write(ros_data_collection())
+open("docs/ros/img/ros-buffering.svg", "w").write(ros_buffering())
 print("ok")
