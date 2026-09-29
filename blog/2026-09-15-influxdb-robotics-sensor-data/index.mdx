@@ -5,19 +5,10 @@ authors: alexey
 tags: [comparison, robotics, influxdb]
 slug: influxdb-robotics-sensor-data
 date: 2026-09-15
-image: ./img/influxdb-reductstore-robotics-architecture.png
+image: ./img/influxdb-reductstore-social.png
 ---
 
-<img
-  src={require("./img/influxdb-reductstore-robotics-architecture.png").default}
-  alt="Robotics sensor data architecture showing metrics flowing to InfluxDB and raw camera, LiDAR, and waveform data flowing to ReductStore"
-  style={{
-    margin: "0 auto",
-    display: "block",
-    padding: "5% 10%",
-    boxSizing: "border-box",
-  }}
-/>
+![Robot sensor data fans out after processing: numeric metrics to InfluxDB, raw binary payloads to ReductStore, linked by the same event time and IDs](./img/influxdb-reductstore-flow.svg)
 
 InfluxDB works well for robotics metrics such as battery level, temperature, CPU usage, detection counts, and anomaly scores. These numeric values are a good fit for dashboards, alerts, and time-series analytics.
 
