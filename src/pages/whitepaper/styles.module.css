@@ -1,18 +1,41 @@
 .whitePaperContainer {
-  padding-top: 1rem;
+  padding-top: 0.5rem;
   margin-bottom: var(--reduct-bottom-page-margin);
 }
 
+.lead {
+  max-width: 44rem;
+  margin-bottom: 2.5rem;
+  font-size: var(--reduct-font-size-subtitle);
+  line-height: 1.6;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.jumpToForm {
+  display: none;
+}
+
+.sectionTitle {
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.overview {
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 1fr);
+  gap: 3rem;
+  align-items: start;
+  margin-bottom: 2.5rem;
+}
+
 .preview {
-  margin: 0 0 2rem;
+  margin: 0;
 }
 
 .stack {
   position: relative;
-  width: min(300px, 60%);
+  width: 72%;
   aspect-ratio: 932 / 1320;
-  margin: 1rem auto 0;
-  translate: -18% 0;
 }
 
 .page {
@@ -47,33 +70,80 @@
 .meta {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 1.75rem;
+  gap: 0.4rem;
+  margin-top: 1.5rem;
 }
 
 .meta span {
-  padding: 0.2rem 0.65rem;
+  padding: 0.15rem 0.6rem;
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 999px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--reduct-dimmed);
 }
 
-.insideTitle {
-  margin: 0 0 0.75rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--reduct-dimmed);
+.bulletPoints {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.subBulletPoints {
+  list-style: none;
+  margin: 0 0 0 2rem;
+  padding: 0;
+}
+
+.highlights {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0 0 2.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.highlights li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 0.75rem;
+  text-align: center;
+  border-radius: 12px;
+  background-color: #f7f4fa;
+  border: 1px solid rgba(43, 5, 72, 0.06);
+}
+
+.highlightValue {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  color: var(--ifm-color-primary);
+}
+
+.highlightValue::after {
+  content: "";
+  display: block;
+  width: 1.5rem;
+  height: 3px;
+  margin: 0.7rem auto 0.6rem;
+  border-radius: 2px;
+  background-color: var(--reduct-accent);
+}
+
+.highlightLabel {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--ifm-color-emphasis-700);
 }
 
 .inside {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
-  margin: 0 0 2.5rem;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
@@ -98,54 +168,56 @@
   color: var(--reduct-dimmed);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .page {
-    transition: none;
-  }
-}
-
-/* Bullet Points */
-.bulletTitle {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-
-.bulletPoints {
-  list-style: none;
-  margin-left: 2rem;
-  margin-bottom: 1rem;
-  padding: 0;
-}
-
-.subBulletPoints {
-  list-style: none;
-  margin-left: 2rem;
-  margin-bottom: 1rem;
-  padding: 0;
-}
-
-.subBulletPoints .bulletPointItem {
-  display: flex;
-  align-items: center;
-}
-
-.subBulletPoints .bulletIcon {
-  margin-right: 0.5rem;
-}
-
-/* Form column */
 .formColumn {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  height: 100%;
-  padding-left: 2rem;
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + 1.5rem);
+  padding-left: 1rem;
+}
+
+html[data-theme="dark"] .highlights li {
+  background-color: var(--reduct-surface-1);
+  border-color: var(--reduct-border);
+}
+
+html[data-theme="dark"] .lead,
+html[data-theme="dark"] .highlightLabel {
+  color: var(--ifm-color-emphasis-600);
 }
 
 @media (max-width: 996px) {
+  .jumpToForm {
+    display: inline-block;
+    margin: -1rem 0 2.5rem;
+  }
+
   .formColumn {
+    position: static;
     padding-left: 0;
-    margin-top: 2rem;
+    margin-top: 2.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .overview {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  .stack {
+    width: min(12rem, 55%);
+  }
+
+  .highlights {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .highlightValue {
+    font-size: 1.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page {
+    transition: none;
   }
 }

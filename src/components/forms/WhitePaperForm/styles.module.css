@@ -1,12 +1,20 @@
 .whitePaperForm {
   max-width: 700px;
   margin: 0 auto;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(43, 5, 72, 0.1);
+  box-shadow:
+    0 1px 2px rgba(43, 5, 72, 0.04),
+    0 12px 32px rgba(43, 5, 72, 0.08);
   padding: 20px;
 
   /* Ensures the container doesn't collapse while the form loads */
   min-height: 500px;
   min-width: min(400px, 100%);
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 1rem);
+}
+
+html[data-theme="dark"] .whitePaperForm {
+  border-color: var(--reduct-border);
+  box-shadow: none;
 }
