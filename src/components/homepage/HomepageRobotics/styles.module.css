@@ -1,5 +1,10 @@
 .roboticsSection {
-  padding: 2rem 0;
+  padding: 3rem 0 0;
+}
+
+.heading {
+  font-size: 1.35rem;
+  margin-bottom: 0.75rem;
 }
 
 .description {

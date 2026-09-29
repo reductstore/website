@@ -34,13 +34,10 @@ function HomepageRobotics() {
   return (
     <div className={styles.roboticsSection}>
       <div className="text--center">
-        <h2>Robotics Support</h2>
+        <h3 className={styles.heading}>Works with your robotics stack</h3>
         <p className={styles.description}>
-          ReductStore is built for the robotics stack. ReductBridge records ROS
-          2 topics straight to storage, and it ingests MCAP files, Zenoh
-          streams, and raw sensor data with timestamps and labels. It plugs into
-          Canonical's Observability Stack (COS) for robotics on Ubuntu, and it
-          powers INSAION's edge recording across whole fleets.
+          ReductBridge records ROS 2 topics, ReductStore ingests MCAP and Zenoh,
+          plugs into Canonical's COS, and powers INSAION fleets.
         </p>
         <div className={styles.logos}>
           {logos.map((logo) => (

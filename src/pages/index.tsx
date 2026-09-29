@@ -5,15 +5,10 @@ import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
 import HomepageFeatures from "../components/homepage/HomepageFeatures";
+import HomepageChapters from "../components/homepage/HomepageChapters";
 import HomepageTestimonials from "../components/homepage/HomepageTestimonials";
 import HomepageCTA from "../components/homepage/HomepageCTA";
 import HomepageFaqs from "../components/homepage/HomepageFaqs";
-import HomepageSDKs from "../components/homepage/HomepageSDKs";
-import HomepageWebConsole from "../components/homepage/HomepageWebConsole";
-import HomepageCLI from "../components/homepage/HomepageCLI";
-import HomepagePerformance from "../components/homepage/HomepagePerformance";
-import HomepageObservability from "../components/homepage/HomepageObservability";
-import HomepageRobotics from "../components/homepage/HomepageRobotics";
 import HomepageBenefits from "../components/homepage/HomepageBenefits";
 import HomepageArchitecture from "../components/homepage/HomepageArchitecture";
 import HomepageUseCase from "../components/homepage/HomepageUseCase";
@@ -21,9 +16,6 @@ import styles from "./index.module.css";
 import HomepageStats from "../components/homepage/HomepageStats";
 import HomepagePartners from "../components/homepage/HomepagePartners";
 import HomepageCompanies from "../components/homepage/HomepageCompanies";
-import HomepageReductBridge from "@site/src/components/homepage/HomepageReductBridge";
-import HomepageReductSelect from "@site/src/components/homepage/HomepageReductSelect";
-import HomepageZenoh from "@site/src/components/homepage/HomepageZenoh";
 
 function HomepageHeader() {
   return (
@@ -83,24 +75,7 @@ export default function Home(): JSX.Element {
           <hr className={styles.industrialHr} />
           <HomepageFeatures />
           <hr className={styles.industrialHr} />
-          <HomepageSDKs />
-          <hr className={styles.industrialHr} />
-          <HomepageWebConsole />
-          <hr className={styles.industrialHr} />
-          <HomepageCLI />
-          <hr className={styles.industrialHr} />
-          <HomepageReductBridge />
-          <hr className={styles.industrialHr} />
-
-          <HomepagePerformance />
-          <hr className={styles.industrialHr} />
-          <HomepageObservability />
-          <hr className={styles.industrialHr} />
-          <HomepageReductSelect />
-          <hr className={styles.industrialHr} />
-          <HomepageZenoh />
-          <hr className={styles.industrialHr} />
-          <HomepageRobotics />
+          <HomepageChapters />
           <hr className={styles.industrialHr} />
           <HomepageUseCase />
           <hr className={styles.industrialHr} />
