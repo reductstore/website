@@ -120,7 +120,7 @@
   line-height: 1;
   letter-spacing: -0.02em;
   white-space: nowrap;
-  color: var(--ifm-color-primary);
+  color: var(--ifm-heading-color);
 }
 
 .highlightValue::after {
@@ -177,10 +177,6 @@
 html[data-theme="dark"] .highlights li {
   background-color: var(--reduct-surface-1);
   border-color: var(--reduct-border);
-}
-
-html[data-theme="dark"] .highlightValue {
-  color: #bfa6dc;
 }
 
 html[data-theme="dark"] .lead,
