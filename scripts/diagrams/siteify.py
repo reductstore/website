@@ -11,7 +11,8 @@ def siteify(svg):
     assert "prefers-color-scheme" not in new_style
     new_style = new_style.replace(":root{", ":root{", 1)
     new_style = re.sub(r"(?<![\w-])text\{", ":where(.rs-diagram) text{", new_style)
-    new_style = new_style.replace("@keyframes rs-flow{", "[data-theme='dark'] .rs-pill{fill:#DCCDEF}\n[data-theme='dark'] .rs-pill+.rs-pt{fill:#2B0548}\n@keyframes rs-flow{", 1)
+    new_style = new_style.replace("--rs-accent:#CDB8E6", "--rs-accent:#BFA6DC", 1)
+    new_style = new_style.replace("@keyframes rs-flow{", "[data-theme='dark'] .rs-pill{fill:#CDB8E6}\n[data-theme='dark'] .rs-pill+.rs-pt{fill:#2B0548}\n@keyframes rs-flow{", 1)
     assert style in svg
     svg = svg.replace(style, new_style)
     svg = re.sub(r"--([a-z][\w-]*)", r"--rs-\1", svg)

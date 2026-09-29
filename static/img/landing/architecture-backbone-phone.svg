@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" class="rs-diagram" viewBox="0 0 360 972" width="100%" height="100%" role="img" aria-label="ROS, MQTT, Zenoh, PLC and vibration data flows into ReductStore at the edge, which replicates filtered data to ReductStore in the cloud. Python, JavaScript, Go, Rust, C++ and Grafana read from the cloud. Each instance has its own storage."><defs><style>
 :root{--rs-card-bg:#FFFFFF;--rs-card-stroke:#DAD4E0;--rs-brand:#2B0548;--rs-accent:#2B0548;
 --rs-halo:rgba(43,5,72,.05);--rs-inner:#FBF9FC;--rs-text-main:#333333;--rs-text-muted:#707070;--rs-wire:#B8AEC3;--rs-boxline:#C4B2D4}
-[data-theme='dark']{--rs-card-bg:#1E1E1E;--rs-card-stroke:#3A3440;--rs-accent:#CDB8E6;
+[data-theme='dark']{--rs-card-bg:#1E1E1E;--rs-card-stroke:#3A3440;--rs-accent:#BFA6DC;
 --rs-halo:rgba(205,184,230,.07);--rs-inner:#232026;--rs-text-main:#EFEFEF;--rs-text-muted:#A0A0A0;--rs-wire:#6E6478;--rs-boxline:#5C4F69}
 :where(.rs-diagram) text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
 .rs-mono{font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace}
@@ -30,7 +30,7 @@
 .rs-cap{font-size:13px;font-style:italic;fill:var(--rs-text-muted)}
 .rs-si{font-size:12.5px;fill:#D9CCE6}
 .rs-flow-out{animation:rs-flow 1.6s linear infinite}
-[data-theme='dark'] .rs-pill{fill:#DCCDEF}
+[data-theme='dark'] .rs-pill{fill:#CDB8E6}
 [data-theme='dark'] .rs-pill+.rs-pt{fill:#2B0548}
 @keyframes rs-flow{to{stroke-dashoffset:-20}}
 .rs-port{fill:var(--rs-card-bg);stroke:var(--rs-wire);stroke-width:1.5}
