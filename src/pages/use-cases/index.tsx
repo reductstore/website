@@ -14,8 +14,15 @@ export default function UseCases(): JSX.Element {
     >
       <main>
         <SimpleHeader pageTitle="Explore Typical Use Cases" />
+        <div className="container">
+          <p className={styles.lead}>
+            See how teams use ReductStore to capture, store, and replicate
+            time-indexed data, from robot fleets and factory floors to vision
+            and machine learning pipelines.
+          </p>
+        </div>
         <div className={clsx("container", styles.useCasesContainer)}>
-          <UseCaseCards useCases={useCases} />
+          <UseCaseCards useCases={useCases} showDiagram />
         </div>
       </main>
     </Layout>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="rs-diagram" viewBox="-2 0 384 76" width="100%" height="100%" role="img" aria-label="Camera (frames) to Model (detections) to ReductStore (labeled data)"><defs><style>
+:root{--rs-card-bg:#FFFFFF;--rs-card-stroke:#DAD4E0;--rs-brand:#2B0548;--rs-accent:#2B0548;
+--rs-halo:rgba(43,5,72,.05);--rs-inner:#FBF9FC;--rs-text-main:#333333;--rs-text-muted:#707070;--rs-wire:#B8AEC3;--rs-boxline:#C4B2D4}
+[data-theme='dark']{--rs-card-bg:#1E1E1E;--rs-card-stroke:#3A3440;--rs-accent:#BFA6DC;
+--rs-halo:rgba(205,184,230,.07);--rs-inner:#232026;--rs-text-main:#EFEFEF;--rs-text-muted:#A0A0A0;--rs-wire:#6E6478;--rs-boxline:#5C4F69}
+:where(.rs-diagram) text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.rs-mono{font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace}
+.rs-card{fill:var(--rs-card-bg);stroke:var(--rs-card-stroke);stroke-width:1.5}
+.rs-halo{fill:var(--rs-halo)}
+.rs-box{fill:var(--rs-inner);stroke:var(--rs-boxline);stroke-width:1.5;stroke-dasharray:6 5}
+.rs-pill{fill:var(--rs-brand)}
+.rs-chip{fill:var(--rs-card-bg);stroke:var(--rs-card-stroke);stroke-width:1.2}
+.rs-t{font-weight:600;font-size:15px;fill:var(--rs-text-main)}
+.rs-bt{font-weight:600;font-size:14px;fill:var(--rs-accent)}
+.rs-pt{font-weight:600;font-size:15px;fill:#FFFFFF}
+.rs-s{font-size:12.5px;fill:var(--rs-text-muted)}
+.rs-wire{fill:none;stroke:var(--rs-wire);stroke-width:1.5;stroke-dasharray:4 6;stroke-linecap:round}
+.rs-flow-in{animation:rs-flow 1.6s linear infinite}
+.rs-flow-rep{stroke:var(--rs-accent);stroke-width:2;animation:rs-flow 1.6s linear infinite}
+.rs-bl{font-weight:600;font-size:14px;fill:var(--rs-accent)}
+.rs-small{font-size:12px;font-weight:600}
+.rs-big{font-size:26px}
+.rs-static{animation:none}
+.rs-logo{fill:var(--rs-accent)}
+.rs-head{font-size:15px;fill:var(--rs-text-muted)}
+.rs-coral{fill:#DB817B}
+.rs-cchip{fill:none;stroke:#FFFFFF;stroke-opacity:.7;stroke-width:1.2}
+.rs-ct{font-weight:600;font-size:14px;fill:#FFFFFF}
+.rs-cs{font-size:12.5px;fill:#FFFFFF}
+.rs-cap{font-size:13px;font-style:italic;fill:var(--rs-text-muted)}
+.rs-si{font-size:12.5px;fill:#D9CCE6}
+.rs-flow-out{animation:rs-flow 1.6s linear infinite}
+[data-theme='dark'] .rs-pill{fill:#CDB8E6}
+[data-theme='dark'] .rs-pill+.rs-pt{fill:#2B0548}
+@keyframes rs-flow{to{stroke-dashoffset:-20}}
+.rs-port{fill:var(--rs-card-bg);stroke:var(--rs-wire);stroke-width:1.5}
+@media (prefers-reduced-motion: reduce){.rs-flow-in,.rs-flow-out,.rs-flow-rep{animation:none}}
+</style><style>
+[data-theme='dark'] .rs-pill~.rs-si{fill:#4A3560}
+</style></defs><path d="M112,38.0 L134,38.0" class="rs-wire rs-flow-in"/>
+<path d="M246,38.0 L268,38.0" class="rs-wire rs-flow-in"/>
+<g><rect x="0" y="6.0" width="112" height="64" rx="16" class="rs-chip"/><text x="56.0" y="34.0" class="rs-t" text-anchor="middle">Camera</text><text x="56.0" y="54.0" class="rs-s rs-mono" text-anchor="middle">frames</text></g>
+<g><rect x="134" y="6.0" width="112" height="64" rx="16" class="rs-chip"/><text x="190.0" y="34.0" class="rs-t" text-anchor="middle">Model</text><text x="190.0" y="54.0" class="rs-s rs-mono" text-anchor="middle">detections</text></g>
+<circle cx="112" cy="38.0" r="3.5" class="rs-port"/><circle cx="134" cy="38.0" r="3.5" class="rs-port"/>
+<g><rect x="268" y="6.0" width="112" height="64" rx="16" class="rs-pill"/><text x="324.0" y="34.0" class="rs-pt" text-anchor="middle">ReductStore</text><text x="324.0" y="54.0" class="rs-si rs-mono" text-anchor="middle">labeled data</text></g>
+<circle cx="246" cy="38.0" r="3.5" class="rs-port"/><circle cx="268" cy="38.0" r="3.5" class="rs-port"/></svg>

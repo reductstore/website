@@ -24,6 +24,25 @@
     0 12px 32px rgba(43, 5, 72, 0.1);
 }
 
+.withDiagram {
+  width: 360px;
+  padding-top: 0;
+  overflow: hidden;
+}
+
+.diagram {
+  margin: 0 -1.5rem 1.25rem;
+  padding: 1rem 0.5rem;
+  background-color: #f7f4fa;
+  border-bottom: 1px solid rgba(43, 5, 72, 0.06);
+}
+
+.diagram svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .title {
   margin-bottom: 0.5rem;
   font-size: 1.15rem;
@@ -49,6 +68,11 @@
   background-color: var(--reduct-surface-1);
   border-color: var(--reduct-border);
   box-shadow: none;
+}
+
+[data-theme="dark"] .diagram {
+  background-color: var(--reduct-surface-0);
+  border-color: var(--reduct-border);
 }
 
 [data-theme="dark"] .description {

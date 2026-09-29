@@ -1,28 +1,33 @@
 import React, { JSX } from "react";
-import styles from "./styles.module.css";
+import clsx from "clsx";
 import Link from "@docusaurus/Link";
-
-interface UseCase {
-  title: string;
-  description: string;
-  link: string;
-}
+import type { UseCase } from "@site/src/data/useCasesData";
+import styles from "./styles.module.css";
 
 export default function UseCaseCards({
   useCases,
+  showDiagram = false,
 }: {
   useCases: UseCase[];
+  showDiagram?: boolean;
 }): JSX.Element {
   return (
     <>
-      {useCases.map((useCase) => (
+      {useCases.map(({ title, description, link, diagram: Diagram }) => (
         <Link
-          key={useCase.link}
-          to={useCase.link}
-          className={styles.useCaseCard}
+          key={link}
+          to={link}
+          className={clsx(styles.useCaseCard, {
+            [styles.withDiagram]: showDiagram && Diagram,
+          })}
         >
-          <h3 className={styles.title}>{useCase.title}</h3>
-          <p className={styles.description}>{useCase.description}</p>
+          {showDiagram && Diagram && (
+            <div className={styles.diagram}>
+              <Diagram className="rs-diagram" aria-hidden="true" />
+            </div>
+          )}
+          <h3 className={styles.title}>{title}</h3>
+          <p className={styles.description}>{description}</p>
           <span className={styles.more}>
             Learn more <span aria-hidden="true">→</span>
           </span>
