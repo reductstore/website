@@ -37,7 +37,7 @@ export default function ReductAI(): JSX.Element {
   return (
     <Layout
       title="White Paper"
-      description="ReductStore white paper: architecture, benchmarks, and use cases for robotics and industrial IoT."
+      description="Read the ReductStore white paper: a data backbone for robotics and industrial IoT, with the architecture, benchmarks, and robotics, IIoT, and drone use cases."
     >
       <main>
         <SimpleHeader pageTitle="White Paper" />

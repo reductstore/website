@@ -14,8 +14,7 @@ import useCases from "./src/data/useCases.js";
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "ReductStore",
-  tagline:
-    "High Performance Data Storage and Streaming for Robotics and Industrial IoT",
+  tagline: "The Data Backbone for Robots and Machines",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here

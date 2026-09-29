@@ -57,8 +57,7 @@ export default function Home(): JSX.Element {
   return (
     <Layout
       title={siteConfig.tagline}
-      description="ReductStore is a high-performance, ELT-based storage solution for robotics and industrial IoT data acquisition systems. 
-      It captures raw data—images, sensor readings, logs, files, ROS bags—and stores it with time indexing and labels for fast ingestion, streaming, and retrieval."
+      description="Time-indexed storage for robots and machines: record images, LiDAR, telemetry, and logs at the edge, replicate what matters to the cloud, and query it with SQL."
     >
       <HomepageHeader />
       <main>

@@ -15,7 +15,7 @@ export default function Pricing(): JSX.Element {
   return (
     <Layout
       title="Pricing"
-      description="Choose the right ReductStore plan for your scale, from ReductStore Core under Apache-2.0 to self-serve Pro and custom Enterprise offerings."
+      description="ReductStore pricing: free open source Core, self-serve Pro at €0.015 per GB per month, and Enterprise. Estimate your storage cost on AWS S3, Azure Blob, or MinIO."
     >
       <main>
         <SimpleHeader pageTitle="Pricing" />
