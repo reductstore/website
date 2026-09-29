@@ -5,13 +5,13 @@ import { WebLinksAddon } from "@xterm/addon-web-links";
 import "@xterm/xterm/css/xterm.css";
 import styles from "./styles.module.css";
 
-const TerminalAnimation = () => {
+const TerminalAnimation = ({ fontSize = 13 }: { fontSize?: number }) => {
   const terminalRef = useRef(null);
 
   useEffect(() => {
     const terminal = new Terminal({
       cursorBlink: true,
-      fontSize: 13,
+      fontSize,
       fontFamily: 'Menlo, Monaco, "Courier New", monospace',
       scrollback: 0,
       scrollOnUserInput: false,

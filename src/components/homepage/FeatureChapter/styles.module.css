@@ -62,7 +62,10 @@
 .tabActive,
 .tabActive:hover {
   border-left-color: var(--reduct-accent);
-  background-color: #f7f4fa;
+  background-color: var(--reduct-surface-0);
+  box-shadow:
+    0 1px 2px rgba(43, 5, 72, 0.06),
+    0 6px 18px rgba(43, 5, 72, 0.08);
 }
 
 .tabTitle {
@@ -81,19 +84,18 @@
   padding-left: 1.2rem;
 }
 
-.text p {
-  margin-bottom: 1.25rem;
-}
-
 .panel {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
   min-height: 26rem;
   padding: 1.5rem;
   border-radius: 16px;
-  background-color: #f7f4fa;
-  border: 1px solid rgba(43, 5, 72, 0.06);
+  background-color: var(--reduct-surface-0);
+  border: 1px solid rgba(43, 5, 72, 0.1);
+  box-shadow:
+    0 1px 2px rgba(43, 5, 72, 0.04),
+    0 12px 32px rgba(43, 5, 72, 0.08);
 }
 
 .panel[hidden] {
@@ -104,21 +106,11 @@
   width: 100%;
 }
 
-.panel img {
-  display: block;
-  max-width: 100%;
-  height: auto;
-  margin: 0 auto;
-  border-radius: 8px;
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.08),
-    0 12px 32px rgba(43, 5, 72, 0.12);
-}
-
 html[data-theme="dark"] .tabActive,
 html[data-theme="dark"] .tabActive:hover,
 html[data-theme="dark"] .panel {
   background-color: var(--reduct-surface-1);
+  box-shadow: none;
 }
 
 html[data-theme="dark"] .panel {

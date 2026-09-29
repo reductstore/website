@@ -62,12 +62,6 @@ const collect: ChapterItem[] = [
   {
     title: "ReductBridge",
     summary: "ROS, MQTT, HTTP, metrics, shell",
-    text: (
-      <p>
-        Record ROS, MQTT, HTTP, and system data with labels, straight into
-        ReductStore.
-      </p>
-    ),
     cta: { label: "Learn More", to: "/docs/reduct-bridge" },
     visual: (
       <Responsive
@@ -91,12 +85,6 @@ const collect: ChapterItem[] = [
   {
     title: "Native Zenoh API",
     summary: "a peer on your Zenoh network",
-    text: (
-      <p>
-        ReductStore joins your Zenoh network as a peer: it stores every sample
-        and answers get() queries. No glue code.
-      </p>
-    ),
     cta: { label: "Learn More", to: "/docs/integrations/zenoh" },
     visual: (
       <ZenohDiagram
@@ -109,7 +97,6 @@ const collect: ChapterItem[] = [
   {
     title: "Client SDKs",
     summary: "Python, JavaScript, Go, Rust, C++",
-    text: <p>Write, label, and query data from your own code.</p>,
     cta: { label: "Try SDKs", to: "/docs/getting-started" },
     visual: <CodeSnippetExample />,
   },
@@ -119,12 +106,6 @@ const query: ChapterItem[] = [
   {
     title: "SQL with DataFusion",
     summary: "JSON, CSV, Parquet, Protobuf",
-    text: (
-      <p>
-        Run SQL on stored JSON, CSV, Parquet, and Protobuf records and export
-        them in bigger batches.
-      </p>
-    ),
     cta: {
       label: "Learn More",
       to: "/docs/extensions/official/select-ext#sql-source",
@@ -149,21 +130,8 @@ const query: ChapterItem[] = [
     ),
   },
   {
-    title: "Grafana",
-    summary: "dashboards and alerts",
-    text: <p>Dashboards and alerts on labels and record content.</p>,
-    cta: { label: "Setup Grafana", to: "/docs/integrations/grafana" },
-    visual: <img src={grafanaImage} alt="Grafana dashboard" loading="lazy" />,
-  },
-  {
     title: "Performance",
     summary: "10x faster writes, 16x faster reads",
-    text: (
-      <p>
-        10x faster writes than TimescaleDB and 16x faster reads than MinIO for
-        100 KB images.
-      </p>
-    ),
     cta: { label: "See Benchmarks", to: "/blog/tags/comparison" },
     visual: (
       <div>
@@ -171,22 +139,44 @@ const query: ChapterItem[] = [
       </div>
     ),
   },
+  {
+    title: "Robotics stack",
+    summary: "INSAION, Ubuntu, MCAP, Zenoh",
+    cta: { label: "Learn More", to: "/blog/database-for-robotics" },
+    visual: <HomepageRobotics />,
+  },
 ];
 
 const operate: ChapterItem[] = [
   {
+    title: "Grafana",
+    summary: "dashboards and alerts",
+    cta: { label: "Setup Grafana", to: "/docs/integrations/grafana" },
+    visual: (
+      <img
+        className={styles.screenshot}
+        src={grafanaImage}
+        alt="Grafana dashboard"
+        loading="lazy"
+      />
+    ),
+  },
+  {
     title: "Web Console",
     summary: "browse data, manage access",
-    text: <p>Browse data and manage access and settings.</p>,
     cta: { label: "Try Web Console", to: "/docs/getting-started" },
     visual: (
-      <img src={webConsoleImage} alt="ReductStore Web Console" loading="lazy" />
+      <img
+        className={styles.screenshot}
+        src={webConsoleImage}
+        alt="ReductStore Web Console"
+        loading="lazy"
+      />
     ),
   },
   {
     title: "CLI",
     summary: "scripts and automation",
-    text: <p>Manage data and configuration from scripts.</p>,
     cta: { label: "Try CLI", to: "/docs/cli" },
     visual: (
       <Responsive
@@ -194,11 +184,18 @@ const operate: ChapterItem[] = [
           <BrowserOnly>
             {() => {
               const TerminalAnimation = require("../TerminalAnimation").default;
-              return <TerminalAnimation />;
+              return <TerminalAnimation fontSize={11} />;
             }}
           </BrowserOnly>
         }
-        phone={<img src={cliImage} alt="ReductStore CLI" loading="lazy" />}
+        phone={
+          <img
+            className={styles.screenshot}
+            src={cliImage}
+            alt="ReductStore CLI"
+            loading="lazy"
+          />
+        }
       />
     ),
   },
@@ -211,7 +208,6 @@ export default function HomepageChapters(): JSX.Element {
         eyebrow="Collect"
         title="Get data in from any machine"
         items={collect}
-        footer={<HomepageRobotics />}
       />
       <hr className={styles.divider} />
       <FeatureChapter

@@ -6,7 +6,7 @@ import styles from "./styles.module.css";
 export interface ChapterItem {
   title: string;
   summary: string;
-  text: ReactNode;
+  text?: ReactNode;
   cta: { label: string; to: string };
   extra?: ReactNode;
   visual: ReactNode;
@@ -74,7 +74,6 @@ export default function FeatureChapter({
               className={styles.details}
               hidden={active !== index}
             >
-              <div className={styles.text}>{item.text}</div>
               {item.extra}
               <Link
                 className="button button--primary button--lg"
