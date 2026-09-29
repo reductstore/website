@@ -1,10 +1,15 @@
 .grid {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 1rem;
+  --columns: 6;
+  --gap: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap);
 }
 
 .tile {
+  flex: 0 0 calc((100% - (var(--columns) - 1) * var(--gap)) / var(--columns));
+  min-width: 0;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -74,14 +79,14 @@
 
 @media (max-width: 1200px) {
   .grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    --columns: 3;
   }
 }
 
 @media (max-width: 600px) {
   .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.625rem;
+    --columns: 2;
+    --gap: 0.625rem;
   }
 }
 

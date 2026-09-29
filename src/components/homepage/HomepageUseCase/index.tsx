@@ -11,7 +11,7 @@ export default function HomepageUseCase() {
       <Heading as="h2" className={styles.sectionTitle}>
         Typical Use Cases
       </Heading>
-      <UseCaseTiles useCases={useCases.filter((useCase) => useCase.featured)} />
+      <UseCaseTiles useCases={useCases.slice(0, 12)} />
       <div className={styles.buttonContainer}>
         <Link
           to="/use-cases"
