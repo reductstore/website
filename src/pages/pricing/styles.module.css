@@ -14,6 +14,10 @@
   font-size: var(--reduct-font-size-subtitle);
 }
 
+.detailsIntro {
+  margin-bottom: 2rem;
+}
+
 .offer {
   flex: 0 0 auto;
 }

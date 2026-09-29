@@ -1,4 +1,5 @@
 import type { JSX } from "react";
+import clsx from "clsx";
 import Layout from "@theme/Layout";
 import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import { PricingComparison } from "@site/src/components/shared/PricingTable";
@@ -13,7 +14,7 @@ export default function PricingDetails(): JSX.Element {
       <main>
         <SimpleHeader pageTitle="Pricing details" />
         <section className="container">
-          <p className={styles.introText}>
+          <p className={clsx(styles.introText, styles.detailsIntro)}>
             Compare plans and choose the best fit for your deployment.
           </p>
           <PricingComparison />
