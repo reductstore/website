@@ -16,6 +16,7 @@ import HomepageObservability from "../components/homepage/HomepageObservability"
 import HomepageRobotics from "../components/homepage/HomepageRobotics";
 import HomepageBenefits from "../components/homepage/HomepageBenefits";
 import HomepageArchitecture from "../components/homepage/HomepageArchitecture";
+import HomepageSegments from "../components/homepage/HomepageSegments";
 import HomepageUseCase from "../components/homepage/HomepageUseCase";
 import styles from "./index.module.css";
 import HomepageStats from "../components/homepage/HomepageStats";
@@ -71,6 +72,7 @@ export default function Home(): JSX.Element {
       <HomepageHeader />
       <main>
         <div className="container">
+          <HomepageSegments />
           <HomepageArchitecture />
           <hr className={styles.industrialHr} />
           <HomepageBenefits />
