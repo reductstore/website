@@ -8,6 +8,20 @@ import BulletPointItem from "@site/src/components/shared/BulletPointItem";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 const subBulletIcon = faArrowRight;
+const cover = require("@site/static/img/whitepaper/whitepaper.png").default;
+const pageThree = require("@site/static/img/whitepaper/page-3.webp").default;
+const pageEleven = require("@site/static/img/whitepaper/page-11.webp").default;
+const insidePages = [
+  {
+    src: pageThree,
+    caption: "Benchmarks vs. MinIO and TimescaleDB",
+  },
+  {
+    src: require("@site/static/img/whitepaper/page-7.webp").default,
+    caption: "The reduction strategy",
+  },
+  { src: pageEleven, caption: "Industrial IoT dashboards" },
+];
 
 export default function ReductAI(): JSX.Element {
   return (
@@ -21,6 +35,46 @@ export default function ReductAI(): JSX.Element {
           <div className="row">
             {/* Description Column */}
             <div className="col col--5">
+              <figure className={styles.preview}>
+                <div className={styles.stack}>
+                  <img
+                    className={clsx(styles.page, styles.pageBack)}
+                    src={pageEleven}
+                    alt=""
+                    loading="lazy"
+                  />
+                  <img
+                    className={clsx(styles.page, styles.pageMiddle)}
+                    src={pageThree}
+                    alt=""
+                    loading="lazy"
+                  />
+                  <img
+                    className={clsx(styles.page, styles.pageFront)}
+                    src={cover}
+                    alt="Cover of the ReductStore white paper: A data backbone for robotics and industrial IoT"
+                  />
+                </div>
+                <figcaption className={styles.meta}>
+                  <span>PDF</span>
+                  <span>13 pages</span>
+                  <span>A4</span>
+                  <span>2026 edition</span>
+                </figcaption>
+              </figure>
+              <p className={styles.insideTitle}>Look inside</p>
+              <ul className={styles.inside}>
+                {insidePages.map((page) => (
+                  <li key={page.caption}>
+                    <img
+                      src={page.src}
+                      alt={`White paper page: ${page.caption}`}
+                      loading="lazy"
+                    />
+                    <span>{page.caption}</span>
+                  </li>
+                ))}
+              </ul>
               <p className={styles.bulletTitle}>What's inside:</p>
               <ul className={styles.bulletPoints}>
                 <BulletPointItem>
