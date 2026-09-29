@@ -4,7 +4,6 @@ import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
-import { LuServer, LuCloud } from "react-icons/lu";
 import HomepageFeatures from "../components/homepage/HomepageFeatures";
 import HomepageTestimonials from "../components/homepage/HomepageTestimonials";
 import HomepageCTA from "../components/homepage/HomepageCTA";
@@ -41,15 +40,15 @@ function HomepageHeader() {
         <div className={styles.buttonContainer}>
           <Link
             className={clsx("button button--lg", styles.buttonPrimary)}
-            to="/solutions/cloud"
+            to="/docs/getting-started"
           >
-            <LuCloud /> Cloud
+            Get started for free
           </Link>
           <Link
             className={clsx("button button--lg", styles.buttonSecondary)}
-            to="/docs/getting-started"
+            to="/pricing"
           >
-            <LuServer /> On-Premises
+            View pricing
           </Link>
         </div>
       </div>

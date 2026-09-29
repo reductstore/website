@@ -83,7 +83,7 @@
   transform: translateY(-1px);
 }
 
-/* Secondary (White Paper) - tuned for purple hero */
+/* Secondary */
 .buttonSecondary {
   background-color: transparent;
   border: 2px solid rgba(255, 255, 255, 0.75);
