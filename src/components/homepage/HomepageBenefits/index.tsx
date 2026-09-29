@@ -20,7 +20,7 @@ const benefits: BenefitsValue[] = [
     icon: <LuPuzzle />,
     title: "Any Data Format",
     description:
-      "Store multimodal time series of any size: images, video, LiDAR, IMU, logs, files, ROS bags and more.",
+      "Store multimodal time-indexed data of any size: images, video, LiDAR, IMU, logs, files, ROS bags and more.",
   },
   {
     icon: <LuGlobe />,
