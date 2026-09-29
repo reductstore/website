@@ -2,7 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 import Link from "@docusaurus/Link";
-import BridgeDiagram from "@site/static/img/landing/reduct-bridge.drawio.svg";
+import BridgeDiagram from "@site/static/img/landing/reduct-bridge.svg";
 
 function HomepageReductBridge() {
   return (
@@ -23,9 +23,9 @@ function HomepageReductBridge() {
         </div>
         <div className="col col--7 text--center">
           <BridgeDiagram
-            className={styles.roboticsImage}
+            className={clsx("rs-diagram", styles.roboticsImage)}
             role="img"
-            aria-label="Robotics Support"
+            aria-label="ROS 1, ROS 2, MQTT, HTTP, system metrics and shell inputs flow into ReductBridge, which sends labeled data to ReductStore"
           />
         </div>
       </div>

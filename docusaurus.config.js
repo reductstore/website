@@ -8,6 +8,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import remarkSVGBob from "remark-svgbob";
 import remarkResponsiveSVGBob from "./src/plugins/remark-responsive-svgbob/index.js";
+import { svgoConfig } from "./src/plugins/svgo-config.js";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -146,6 +147,9 @@ const config = {
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
+        },
+        svgr: {
+          svgrConfig: { svgoConfig },
         },
         sitemap: {
           lastmod: "date",

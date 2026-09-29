@@ -28,27 +28,30 @@ function HomepageHeader() {
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
         <h1 className={clsx("hero__title", styles.heroTitle)}>
-          High Performance Data Storage and Streaming for{" "}
-          <span className={styles.heroAccent}>Robotics</span> and{" "}
-          <span className={styles.heroAccent}>Industrial IoT</span>
+          The data backbone for{" "}
+          <span className={styles.heroAccent}>robots</span> and{" "}
+          <span className={styles.heroAccent}>machines</span>
         </h1>
         <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
-          Store and stream multimodal time series from many robots or devices.
-          Built to handle large data volumes, poor connectivity, and fast event
-          retrieval at scale.
+          Make your data queryable. Store images, telemetry and logs on the
+          machine, replicate what matters to the cloud, and query it from any
+          app.
         </p>
         <div className={styles.buttonContainer}>
           <Link
             className={clsx("button button--lg", styles.buttonPrimary)}
             to="/docs/getting-started"
           >
-            Get started for free
+            Start for free
           </Link>
           <Link
             className={clsx("button button--lg", styles.buttonSecondary)}
-            to="/pricing"
+            to="/contact"
           >
-            View pricing
+            Talk to us
+          </Link>
+          <Link className={styles.textLink} to="/pricing">
+            See pricing →
           </Link>
         </div>
       </div>
