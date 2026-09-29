@@ -232,6 +232,15 @@ body {
     color-mix(in srgb, var(--ifm-color-primary) 20%, transparent) !important;
 }
 
+html[data-theme="dark"] .navbar__items--right .DocSearch-Button:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--ifm-color-primary) 40%,
+    var(--ifm-color-emphasis-300)
+  ) !important;
+  box-shadow: none !important;
+}
+
 .navbar__items--right .DocSearch-Button-Key {
   color: var(--ifm-font-color-base) !important;
   background-color: var(--ifm-color-emphasis-200) !important;
