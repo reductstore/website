@@ -1,3 +1,17 @@
+@media (min-width: 997px) {
+  .navbarDropdown {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+  }
+
+  .navbarDropdown :global(.navbar__link) {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+}
+
 .megaPanel {
   position: absolute;
   top: 100%;

@@ -63,10 +63,15 @@ export default function DropdownNavbarItemDesktop({
   return (
     <div
       ref={dropdownRef}
-      className={clsx("navbar__item", "dropdown", className, {
-        "dropdown--right": position === "right",
-      })}
-      style={{ alignSelf: "stretch" }}
+      className={clsx(
+        styles.navbarDropdown,
+        "navbar__item",
+        "dropdown",
+        className,
+        {
+          "dropdown--right": position === "right",
+        },
+      )}
       onMouseEnter={() => setShowDropdown(true)}
       onMouseLeave={() => setShowDropdown(false)}
     >
