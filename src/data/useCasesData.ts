@@ -5,7 +5,6 @@ import {
   LuBrain,
   LuBrainCircuit,
   LuCamera,
-  LuCloud,
   LuFactory,
   LuLayers,
   LuPlane,
@@ -52,12 +51,6 @@ const useCases: UseCase[] = [
     link: "/blog/air-gapped-drone-data",
     icon: LuPlane,
     data: "air-gapped, sync later",
-  },
-  {
-    title: "Cloud Backbone",
-    link: "/solutions/cloud",
-    icon: LuCloud,
-    data: "replication, S3, SQL",
   },
   {
     title: "Computer Vision",

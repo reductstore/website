@@ -21,7 +21,7 @@ const DESCRIPTIONS = {
   "/blog/computer-vision-applications": "Image and video dataset management",
   "/blog/how-to-store-vibration-sensor-data": "Waveform storage at the edge",
   "/blog/advice/database/mqtt-data-storage": "Ingest and store MQTT telemetry",
-  "/use-cases": "Browse all industries and scenarios",
+  "/#use-cases": "Browse all industries and scenarios",
   // Developers
   "/download": "Binaries, Docker images, and packages",
   "/docs/getting-started": "Guides, API reference, and SDK docs",

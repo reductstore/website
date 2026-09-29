@@ -1,4 +1,5 @@
 .section {
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 1rem);
   margin-top: var(--reduct-section-space);
   margin-bottom: var(--reduct-section-space);
 }
@@ -6,13 +7,4 @@
 .sectionTitle {
   margin-bottom: 2rem;
   text-align: center;
-}
-.buttonContainer {
-  display: flex;
-  justify-content: center;
-  margin-top: 2.5rem;
-}
-
-.buttonContainer a {
-  width: 300px;
 }

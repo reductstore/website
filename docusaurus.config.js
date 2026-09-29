@@ -315,8 +315,8 @@ const config = {
                 to: "/blog/advice/database/mqtt-data-storage",
               },
               {
-                label: "Explore More",
-                to: "/use-cases",
+                label: "All Use Cases",
+                to: "/#use-cases",
               },
             ],
           },

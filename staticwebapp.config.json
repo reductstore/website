@@ -274,6 +274,11 @@
       "route": "/demo-license",
       "redirect": "/enterprise",
       "statusCode": 301
+    },
+    {
+      "route": "/use-cases",
+      "redirect": "/#use-cases",
+      "statusCode": 301
     }
   ]
 }
