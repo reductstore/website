@@ -18,4 +18,8 @@
   .observabilitySection .row {
     flex-direction: column;
   }
+
+  .grafanaImage {
+    margin-top: 2rem;
+  }
 }
