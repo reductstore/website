@@ -21,6 +21,21 @@
   min-width: 580px;
 }
 
+.compactPanel {
+  max-height: 13rem;
+  min-width: 9rem;
+  padding: 0.25rem;
+  overflow-y: auto;
+}
+
+.compactPanel .megaItem {
+  padding: 0.45rem 0.7rem;
+}
+
+.compactPanel .megaDesc {
+  display: none;
+}
+
 /* Anchor panels that would overflow right edge to the right-hand side instead */
 .alignRight {
   left: auto;

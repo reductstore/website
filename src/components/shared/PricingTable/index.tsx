@@ -209,8 +209,8 @@ export default function PricingTable() {
   const { siteConfig } = useDocusaurusContext();
   const { checkoutEnabled, checkoutUrl } =
     siteConfig.customFields as ReductProCustomFields;
-  const [storageTb, setStorageTb] = useState(1);
-  const monthlyPrice = Math.floor(storageTb * 15);
+  const [storageGb, setStorageGb] = useState(1000);
+  const monthlyPrice = Math.floor(storageGb * 0.015);
 
   return (
     <>
@@ -242,19 +242,19 @@ export default function PricingTable() {
               </p>
               <label className={styles.storageGauge}>
                 <span className={styles.storageGaugeHeader}>
-                  <span>Peak storage: {storageTb.toFixed(0)} TB</span>
+                  <span>Peak storage: {storageGb.toLocaleString()} GB</span>
                   <span>Scales to any storage volume</span>
                 </span>
                 <input
                   type="range"
-                  min="1"
-                  max="100"
+                  min="1000"
+                  max="100000"
                   step="1"
-                  value={storageTb}
-                  onChange={(event) => setStorageTb(Number(event.target.value))}
+                  value={storageGb}
+                  onChange={(event) => setStorageGb(Number(event.target.value))}
                 />
               </label>
-              {storageTb < 100 ? (
+              {storageGb < 100000 ? (
                 <output className={styles.gaugePrice}>
                   €{monthlyPrice} per month
                 </output>

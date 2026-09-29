@@ -358,6 +358,7 @@ const config = {
             type: "docsVersionDropdown",
             position: "right",
             dropdownActiveClassDisabled: true,
+            className: "navbar-version-dropdown",
           },
           {
             href: "https://github.com/reductstore/reductstore",

@@ -57,13 +57,13 @@ export default function DropdownNavbarItemDesktop({
     };
   }, [dropdownRef]);
 
-  // > 5 items get a two-column layout; ≤ 5 stay single-column.
-  const twoCol = items.length > 5;
+  const isVersionDropdown = className?.includes("navbar-version-dropdown");
+  const twoCol = !isVersionDropdown && items.length > 5;
 
   return (
     <div
       ref={dropdownRef}
-      className={clsx("navbar__item", "dropdown", {
+      className={clsx("navbar__item", "dropdown", className, {
         "dropdown--right": position === "right",
       })}
       style={{ alignSelf: "stretch", display: "flex", alignItems: "center" }}
@@ -94,6 +94,7 @@ export default function DropdownNavbarItemDesktop({
       {showDropdown && (
         <div
           className={clsx(styles.megaPanel, {
+            [styles.compactPanel]: isVersionDropdown,
             [styles.twoCol]: twoCol,
             [styles.alignRight]: position === "right",
           })}
