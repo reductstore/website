@@ -2,8 +2,24 @@
   margin: 3rem 0;
 }
 
-.architectureDiagram {
+.diagram {
   display: block;
   width: 100%;
   height: auto;
+}
+
+.phone {
+  display: none;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+@media (max-width: 996px) {
+  .desktop {
+    display: none;
+  }
+
+  .phone {
+    display: block;
+  }
 }

@@ -30,6 +30,8 @@
 .rs-cap{font-size:13px;font-style:italic;fill:var(--rs-text-muted)}
 .rs-si{font-size:12.5px;fill:#D9CCE6}
 .rs-flow-out{animation:rs-flow 1.6s linear infinite}
+[data-theme='dark'] .rs-pill{fill:#DCCDEF}
+[data-theme='dark'] .rs-pill+.rs-pt{fill:#2B0548}
 @keyframes rs-flow{to{stroke-dashoffset:-20}}
 .rs-port{fill:var(--rs-card-bg);stroke:var(--rs-wire);stroke-width:1.5}
 @media (prefers-reduced-motion: reduce){.rs-flow-in,.rs-flow-out,.rs-flow-rep{animation:none}}

@@ -3,6 +3,7 @@ import clsx from "clsx";
 import styles from "./styles.module.css";
 import Link from "@docusaurus/Link";
 import BridgeDiagram from "@site/static/img/landing/reduct-bridge.svg";
+import BridgeDiagramPhone from "@site/static/img/landing/reduct-bridge-phone.svg";
 
 function HomepageReductBridge() {
   return (
@@ -23,7 +24,12 @@ function HomepageReductBridge() {
         </div>
         <div className="col col--7 text--center">
           <BridgeDiagram
-            className={clsx("rs-diagram", styles.roboticsImage)}
+            className={clsx("rs-diagram", styles.roboticsImage, styles.desktop)}
+            role="img"
+            aria-label="ROS 1, ROS 2, MQTT, HTTP, system metrics and shell inputs flow into ReductBridge, which sends labeled data to ReductStore"
+          />
+          <BridgeDiagramPhone
+            className={clsx("rs-diagram", styles.roboticsImage, styles.phone)}
             role="img"
             aria-label="ROS 1, ROS 2, MQTT, HTTP, system metrics and shell inputs flow into ReductBridge, which sends labeled data to ReductStore"
           />
