@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./styles.module.css";
 import UseCaseTiles from "../../useCases/UseCaseTiles";
 import Heading from "@theme/Heading";
-import useCases from "@site/src/data/useCasesData";
+import useCases from "@site/src/data/useCases";
 
 export default function HomepageUseCase() {
   return (

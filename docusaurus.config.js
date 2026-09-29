@@ -9,6 +9,7 @@ import rehypeKatex from "rehype-katex";
 import remarkSVGBob from "remark-svgbob";
 import remarkResponsiveSVGBob from "./src/plugins/remark-responsive-svgbob/index.js";
 import { svgoConfig } from "./src/plugins/svgo-config.js";
+import useCases from "./src/data/useCases.js";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -293,32 +294,10 @@ const config = {
             type: "dropdown",
             label: "Use Cases",
             position: "left",
-            items: [
-              {
-                label: "Robotics Data",
-                to: "/blog/database-for-robotics",
-              },
-              {
-                label: "DAQ for Manufacturing",
-                to: "/blog/daq-manufacture-system",
-              },
-              {
-                label: "Computer Vision",
-                to: "/blog/computer-vision-applications",
-              },
-              {
-                label: "Vibration Data",
-                to: "/blog/how-to-store-vibration-sensor-data",
-              },
-              {
-                label: "IIoT (MQTT)",
-                to: "/blog/advice/database/mqtt-data-storage",
-              },
-              {
-                label: "All Use Cases",
-                to: "/#use-cases",
-              },
-            ],
+            items: useCases.map(({ title, link }) => ({
+              label: title,
+              to: link,
+            })),
           },
           {
             type: "dropdown",

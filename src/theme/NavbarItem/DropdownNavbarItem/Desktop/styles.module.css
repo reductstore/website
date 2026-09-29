@@ -49,6 +49,7 @@
   max-height: 13rem;
   min-width: 9rem;
   padding: 0.25rem;
+  overflow-x: hidden;
   overflow-y: auto;
 }
 
@@ -75,6 +76,36 @@
   color: var(--ifm-font-color-base) !important;
   text-decoration: none !important;
   transition: background 0.12s ease;
+}
+
+.withIcon {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  column-gap: 0.75rem;
+  row-gap: 0.2rem;
+  align-items: center;
+}
+
+.withIcon .megaLabel,
+.withIcon .megaDesc {
+  grid-column: 2;
+}
+
+.megaIcon {
+  grid-row: 1 / span 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  font-size: 1.05rem;
+  color: var(--ifm-color-primary);
+  background-color: rgba(43, 5, 72, 0.07);
+}
+
+html[data-theme="dark"] .megaIcon {
+  background-color: rgba(218, 190, 237, 0.1);
 }
 
 .megaItem:hover {

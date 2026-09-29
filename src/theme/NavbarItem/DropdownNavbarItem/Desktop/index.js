@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect, useId } from "react";
 import clsx from "clsx";
 import NavbarNavLink from "@theme/NavbarItem/NavbarNavLink";
 import Link from "@docusaurus/Link";
+import useCases from "@site/src/data/useCases";
+import { ICONS } from "@site/src/data/icons";
 import styles from "./styles.module.css";
 
 /** One-line descriptions keyed by the item's `to` or `href`. */
@@ -15,19 +17,30 @@ const DESCRIPTIONS = {
   "/blog/comparisons/iot/reductstore-vs-timescaledb": "Compared to TimescaleDB",
   "/blog/comparisons/iot/reductstore-vs-mongodb": "Compared to MongoDB",
   "/solutions/cloud": "Managed cloud deployments",
-  // Use Cases
-  "/blog/database-for-robotics": "Sensor and camera data pipelines",
-  "/blog/daq-manufacture-system": "High-frequency acquisition pipelines",
-  "/blog/computer-vision-applications": "Image and video dataset management",
-  "/blog/how-to-store-vibration-sensor-data": "Waveform storage at the edge",
-  "/blog/advice/database/mqtt-data-storage": "Ingest and store MQTT telemetry",
-  "/#use-cases": "Browse all industries and scenarios",
   // Developers
   "/download": "Binaries, Docker images, and packages",
   "/docs/getting-started": "Guides, API reference, and SDK docs",
   "/datasets": "Sample datasets for local testing",
   "https://github.com/reductstore/reductstore": "Open source, Apache-2.0",
   "https://community.reduct.store": "Forums, Discord, and GitHub issues",
+  ...Object.fromEntries(useCases.map(({ link, data }) => [link, data])),
+};
+
+const ICON_NAMES = {
+  "/docs/how-does-it-work": "LuBookOpen",
+  "/whitepaper": "LuFileText",
+  "/blog/comparisons/computer-vision/iot/performance-comparison-reductstore-vs-minio":
+    "LuScale",
+  "/blog/comparison/iot/reductstore-benchmark": "LuScale",
+  "/blog/comparisons/iot/reductstore-vs-timescaledb": "LuScale",
+  "/blog/comparisons/iot/reductstore-vs-mongodb": "LuScale",
+  "/solutions/cloud": "LuCloud",
+  "/download": "LuDownload",
+  "/docs/getting-started": "LuBook",
+  "/datasets": "LuDatabase",
+  "https://github.com/reductstore/reductstore": "LuCode",
+  "https://community.reduct.store": "LuUsers",
+  ...Object.fromEntries(useCases.map(({ link, icon }) => [link, icon])),
 };
 
 export default function DropdownNavbarItemDesktop({
@@ -154,13 +167,19 @@ export default function DropdownNavbarItemDesktop({
           {items.map((item, i) => {
             const target = item.to ?? item.href;
             const desc = DESCRIPTIONS[target] ?? item.description;
+            const Icon = ICONS[ICON_NAMES[target]];
             return (
               <Link
                 key={i}
                 to={target}
-                className={styles.megaItem}
+                className={clsx(styles.megaItem, { [styles.withIcon]: Icon })}
                 onClick={() => setShowDropdown(false)}
               >
+                {Icon && (
+                  <span className={styles.megaIcon} aria-hidden="true">
+                    <Icon />
+                  </span>
+                )}
                 <span className={styles.megaLabel}>{item.label}</span>
                 {desc && <span className={styles.megaDesc}>{desc}</span>}
               </Link>
