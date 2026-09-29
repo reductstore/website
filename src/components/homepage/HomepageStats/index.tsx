@@ -19,10 +19,7 @@ function HomepageStats() {
   return (
     <section className={styles.statsSection}>
       <div className="container">
-        <h2 className={styles.statsTitle}>
-          Developers choose{" "}
-          <span className={styles.statsAccent}>ReductStore</span>
-        </h2>
+        <h2 className={styles.statsTitle}>Developers choose ReductStore</h2>
         <p className={styles.statsSubheader}>
           Trusted by robotics and IIoT engineers to process billions of
           time-indexed records

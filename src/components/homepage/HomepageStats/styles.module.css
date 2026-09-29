@@ -2,8 +2,11 @@
   text-align: center;
   padding: 4rem 2rem;
   border-radius: 16px;
-  background-color: #f7f4fa;
-  border: 1px solid rgba(43, 5, 72, 0.06);
+  background-color: var(--reduct-surface-0);
+  border: 1px solid rgba(43, 5, 72, 0.08);
+  box-shadow:
+    0 2px 4px rgba(43, 5, 72, 0.04),
+    0 20px 48px rgba(43, 5, 72, 0.1);
 }
 
 .statsTitle {
@@ -12,29 +15,6 @@
   line-height: 1.2;
   margin-bottom: 0.75rem;
   color: var(--ifm-heading-color);
-}
-
-.statsAccent {
-  position: relative;
-  display: inline-block;
-  white-space: nowrap;
-  color: var(--ifm-color-primary);
-}
-
-.statsAccent::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 3px;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--reduct-accent) 0px,
-    var(--reduct-accent) 8px,
-    transparent 8px,
-    transparent 12px
-  );
 }
 
 .statsSubheader {
@@ -55,12 +35,9 @@
 .statCard {
   text-align: center;
   padding: 1.75rem 1rem;
-  background-color: var(--reduct-surface-0);
-  border: 1px solid rgba(43, 5, 72, 0.1);
+  background-color: #f7f4fa;
+  border: 1px solid rgba(43, 5, 72, 0.06);
   border-radius: 12px;
-  box-shadow:
-    0 1px 2px rgba(43, 5, 72, 0.04),
-    0 8px 24px rgba(43, 5, 72, 0.06);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -95,12 +72,12 @@
 html[data-theme="dark"] .statsSection {
   background-color: var(--reduct-surface-1);
   border-color: var(--reduct-border);
+  box-shadow: none;
 }
 
 html[data-theme="dark"] .statCard {
   background-color: var(--reduct-surface-0);
   border-color: var(--reduct-border);
-  box-shadow: none;
 }
 
 html[data-theme="dark"] .statsSubheader,
