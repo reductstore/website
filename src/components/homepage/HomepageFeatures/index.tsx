@@ -7,7 +7,7 @@ import {
   LuLayers,
   LuRefreshCw,
   LuSearch,
-  LuKey,
+  LuDatabase,
   LuPuzzle,
 } from "react-icons/lu";
 import styles from "./styles.module.css";
@@ -32,6 +32,11 @@ export default function HomepageFeatures() {
           IconComponent={LuTimer}
           title="Multimodal Time-Indexed Storage"
           description="Store records of any type and size, indexed by time: log files, images, video, LiDAR, ROS bags and more."
+        />
+        <Feature
+          IconComponent={LuDatabase}
+          title="SQL with DataFusion"
+          description="Run SQL on JSON, CSV, Parquet, and Protobuf records on the server and export the results as bigger batches."
         />
         <Feature
           IconComponent={LuTags}
@@ -67,11 +72,6 @@ export default function HomepageFeatures() {
           IconComponent={LuPuzzle}
           title="Extensible Query Engine"
           description="Use extensions to transform data during queries, like resizing images, filtering CSV, or extracting ROS topics."
-        />
-        <Feature
-          IconComponent={LuKey}
-          title="Token Authorization"
-          description="Secure access for devices and services with token based authorization."
         />
       </div>
     </section>
