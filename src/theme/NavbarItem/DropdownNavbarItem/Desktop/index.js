@@ -39,6 +39,19 @@ export default function DropdownNavbarItemDesktop({
 }) {
   const dropdownRef = useRef(null);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [panelGap, setPanelGap] = useState(null);
+
+  const openDropdown = () => {
+    const item = dropdownRef.current;
+    const navbar = item?.closest(".navbar");
+    if (item && navbar) {
+      setPanelGap(
+        navbar.getBoundingClientRect().bottom -
+          item.getBoundingClientRect().bottom,
+      );
+    }
+    setShowDropdown(true);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -72,7 +85,7 @@ export default function DropdownNavbarItemDesktop({
           "dropdown--right": position === "right",
         },
       )}
-      onMouseEnter={() => setShowDropdown(true)}
+      onMouseEnter={openDropdown}
       onMouseLeave={() => setShowDropdown(false)}
     >
       <NavbarNavLink
@@ -86,7 +99,11 @@ export default function DropdownNavbarItemDesktop({
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             e.preventDefault();
-            setShowDropdown(!showDropdown);
+            if (showDropdown) {
+              setShowDropdown(false);
+            } else {
+              openDropdown();
+            }
           }
           if (e.key === "Escape") {
             setShowDropdown(false);
@@ -103,6 +120,9 @@ export default function DropdownNavbarItemDesktop({
             [styles.twoCol]: twoCol,
             [styles.alignRight]: position === "right",
           })}
+          style={
+            panelGap === null ? undefined : { "--panel-gap": `${panelGap}px` }
+          }
         >
           {items.map((item, i) => {
             const target = item.to ?? item.href;
