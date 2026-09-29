@@ -247,21 +247,20 @@ export default function PricingTable() {
                 Billed monthly on peak storage. 1 TB minimum.
               </p>
               <label className={styles.storageGauge}>
-                <span>Peak storage: {storageTb.toFixed(1)} TB</span>
+                <span className={styles.storageGaugeHeader}>
+                  <span>Peak storage: {storageTb.toFixed(0)} TB</span>
+                  <span>Scales to any storage volume</span>
+                </span>
                 <input
                   type="range"
                   min="1"
-                  max="66.7"
-                  step="0.1"
+                  max="100"
+                  step="1"
                   value={storageTb}
                   onChange={(event) => setStorageTb(Number(event.target.value))}
                 />
-                <span className={styles.gaugeLimits}>
-                  <span>€15 / month</span>
-                  <span>Scales to any storage volume</span>
-                </span>
               </label>
-              {monthlyPrice < 1000 ? (
+              {storageTb < 100 ? (
                 <output className={styles.gaugePrice}>
                   €{monthlyPrice} per month
                 </output>
@@ -275,7 +274,7 @@ export default function PricingTable() {
                     className="button button--primary button--sm"
                     to="/enterprise"
                   >
-                    Get a quote for higher volumes today.
+                    Talk to us
                   </Link>
                 </div>
               )}

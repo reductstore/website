@@ -90,13 +90,17 @@
   accent-color: var(--ifm-color-primary);
 }
 
-.gaugeLimits {
+.storageGaugeHeader {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 0.5rem;
+}
+
+.storageGaugeHeader span:last-child {
   color: var(--reduct-dimmed);
-  font-size: 0.75rem;
   font-weight: 400;
+  text-align: right;
 }
 
 .gaugePrice {
@@ -117,9 +121,14 @@
   font-weight: 400;
 }
 
-.volumeBanner > strong {
-  display: block;
-  margin-bottom: 0.2rem;
+.volumeBanner p {
+  margin: 0 0 1rem;
+}
+
+.volumeBanner :global(.button) {
+  background-color: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary-contrast-background);
 }
 
 .actionsRow {
