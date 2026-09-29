@@ -114,23 +114,23 @@
   border: 1px solid rgba(43, 5, 72, 0.06);
 }
 
-.highlightValue {
-  font-size: 2rem;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  white-space: nowrap;
-  color: var(--ifm-heading-color);
+.useCaseIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-bottom: 0.75rem;
+  border-radius: 12px;
+  font-size: 1.35rem;
+  color: var(--ifm-color-primary);
+  background-color: rgba(43, 5, 72, 0.07);
 }
 
-.highlightValue::after {
-  content: "";
-  display: block;
-  width: 1.5rem;
-  height: 3px;
-  margin: 0.7rem auto 0.6rem;
-  border-radius: 2px;
-  background-color: var(--reduct-accent);
+.useCaseTitle {
+  margin-bottom: 0.3rem;
+  font-weight: 700;
+  color: var(--ifm-heading-color);
 }
 
 .highlightLabel {
@@ -179,6 +179,10 @@ html[data-theme="dark"] .highlights li {
   border-color: var(--reduct-border);
 }
 
+html[data-theme="dark"] .useCaseIcon {
+  background-color: rgba(218, 190, 237, 0.1);
+}
+
 html[data-theme="dark"] .lead,
 html[data-theme="dark"] .highlightLabel {
   color: var(--ifm-color-emphasis-600);
@@ -209,10 +213,6 @@ html[data-theme="dark"] .highlightLabel {
 
   .highlights {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .highlightValue {
-    font-size: 1.75rem;
   }
 }
 

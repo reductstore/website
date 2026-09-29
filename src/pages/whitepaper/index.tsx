@@ -6,6 +6,7 @@ import styles from "./styles.module.css";
 import clsx from "clsx";
 import BulletPointItem from "@site/src/components/shared/BulletPointItem";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { LuBot, LuFactory, LuPlane } from "react-icons/lu";
 
 const subBulletIcon = faArrowRight;
 const cover = require("@site/static/img/whitepaper/whitepaper.png").default;
@@ -22,10 +23,14 @@ const insidePages = [
   },
   { src: pageEleven, caption: "Industrial IoT dashboards" },
 ];
-const highlights = [
-  { value: "16x", label: "faster reads vs. MinIO (100 KB records)" },
-  { value: "10x", label: "faster writes vs. TimescaleDB (100 KB records)" },
-  { value: "5x", label: "faster writes vs. MongoDB (100 KB records)" },
+const coveredUseCases = [
+  { icon: LuBot, title: "Robotics", data: "cameras, LiDAR, ROS topics" },
+  {
+    icon: LuFactory,
+    title: "Industrial IoT",
+    data: "PLCs over MQTT, vibration",
+  },
+  { icon: LuPlane, title: "Drones", data: "offline missions, sync later" },
 ];
 
 export default function ReductAI(): JSX.Element {
@@ -114,12 +119,15 @@ export default function ReductAI(): JSX.Element {
                 </div>
               </div>
 
-              <h2 className={styles.sectionTitle}>Performance highlights</h2>
+              <h2 className={styles.sectionTitle}>Use cases covered</h2>
               <ul className={styles.highlights}>
-                {highlights.map((item) => (
-                  <li key={item.value}>
-                    <span className={styles.highlightValue}>{item.value}</span>
-                    <span className={styles.highlightLabel}>{item.label}</span>
+                {coveredUseCases.map(({ icon: Icon, title, data }) => (
+                  <li key={title}>
+                    <span className={styles.useCaseIcon}>
+                      <Icon />
+                    </span>
+                    <span className={styles.useCaseTitle}>{title}</span>
+                    <span className={styles.highlightLabel}>{data}</span>
                   </li>
                 ))}
               </ul>
