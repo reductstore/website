@@ -179,6 +179,10 @@ html[data-theme="dark"] .highlights li {
   border-color: var(--reduct-border);
 }
 
+html[data-theme="dark"] .highlightValue {
+  color: #bfa6dc;
+}
+
 html[data-theme="dark"] .lead,
 html[data-theme="dark"] .highlightLabel {
   color: var(--ifm-color-emphasis-600);
