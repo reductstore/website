@@ -50,7 +50,7 @@ function HomepageCLI() {
             "text--center",
           )}
         >
-          <h2 className="hideOnMobile">CLI Client</h2>
+          <h2>CLI Client</h2>
           <p>Command line interface to manage data and system configuration.</p>
           <Link
             className={clsx("button button--primary button--lg", styles.btn)}

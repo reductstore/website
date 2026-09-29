@@ -12,7 +12,7 @@ function HomepagePerformance() {
           <PerformanceComparison />
         </div>
         <div className={"col col--6 text--center"}>
-          <h2 className="hideOnMobile">High Performance</h2>
+          <h2>High Performance</h2>
           <p>
             Optimized for robotics and industrial workloads. 100KB images: 10x
             faster writes than TimescaleDB, 16x faster reads than MinIO.

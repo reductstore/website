@@ -10,7 +10,7 @@ function HomepageReductBridge() {
     <div className={styles.roboticsSection}>
       <div className={clsx("row", styles.row)}>
         <div className={"col col--5 text--center"}>
-          <h2 className="hideOnMobile">ReductBridge</h2>
+          <h2>ReductBridge</h2>
           <p>
             Collect data from multiple sources, label it automatically, and
             store it efficiently in ReductStore with ReductBridge.{" "}

@@ -11,7 +11,7 @@ function HomepageObservability() {
     <div className={styles.observabilitySection}>
       <div className="row" style={{ display: "flex", alignItems: "center" }}>
         <div className={"col col--5 text--center"}>
-          <h2 className="hideOnMobile">Observability</h2>
+          <h2>Observability</h2>
           <p>
             Visualize your data in Grafana dashboards. Query labels and content
             of records (e.g. CSV columns, JSON fields, ROS message fields). Set

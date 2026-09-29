@@ -20,7 +20,7 @@ export default function HomepageSDKs() {
         </div>
         <div className="col col--5">
           <div className="text--center">
-            <h2 className="hideOnMobile">Client SDKs</h2>
+            <h2>Client SDKs</h2>
             <p>
               Read and write data, attach labels, and query time ranges from
               your applications.

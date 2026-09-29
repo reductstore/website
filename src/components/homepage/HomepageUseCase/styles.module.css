@@ -7,18 +7,10 @@
   margin-bottom: 2rem;
   text-align: center;
 }
-.useCasesContainer {
-  max-width: 1200px;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 1.25rem;
-  margin-bottom: 50px;
-}
-
 .buttonContainer {
   display: flex;
   justify-content: center;
+  margin-top: 2.5rem;
 }
 
 .buttonContainer a {
