@@ -284,6 +284,32 @@ article .markdown header h1 {
   margin-bottom: 1rem;
 }
 
+nav.theme-doc-breadcrumbs:has(.markdown-copy-container) {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+nav.theme-doc-breadcrumbs .markdown-copy-container {
+  flex: 0 0 auto;
+  margin: 0 0 0 auto;
+}
+
+@media (max-width: 996px) {
+  nav.theme-doc-breadcrumbs:has(.markdown-copy-container) {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  nav.theme-doc-breadcrumbs .breadcrumbs {
+    flex: 1 1 100%;
+  }
+
+  nav.theme-doc-breadcrumbs .markdown-copy-container {
+    margin: 0;
+  }
+}
+
 .markdown-copy-button {
   display: inline-flex;
   align-items: center;
