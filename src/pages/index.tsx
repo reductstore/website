@@ -8,7 +8,6 @@ import HomepageFeatures from "../components/homepage/HomepageFeatures";
 import HomepageChapters from "../components/homepage/HomepageChapters";
 import HomepageTestimonials from "../components/homepage/HomepageTestimonials";
 import HomepageCTA from "../components/homepage/HomepageCTA";
-import HomepageFaqs from "../components/homepage/HomepageFaqs";
 import HomepageBenefits from "../components/homepage/HomepageBenefits";
 import HomepageArchitecture from "../components/homepage/HomepageArchitecture";
 import HomepageUseCase from "../components/homepage/HomepageUseCase";
@@ -78,8 +77,6 @@ export default function Home(): JSX.Element {
           <HomepageChapters />
           <hr className={styles.industrialHr} />
           <HomepageUseCase />
-          <hr className={styles.industrialHr} />
-          <HomepageFaqs />
         </div>
         <HomepageCTA />
       </main>
