@@ -3,15 +3,31 @@ import assert from "node:assert/strict";
 import { ageBands, estimate, licenseEurYear, packFactor } from "./calculate.ts";
 import {
   AWS_S3,
+  LICENSE_MIN_TB,
   LICENSE_TIERS,
   REDUCT_BLOCK,
   backendPricing,
 } from "./pricing.ts";
 import { PRESETS } from "./presets.ts";
 
+// The reference tests from the calculator specification use this tiered
+// license; the published Pro price is tested separately.
+const SPEC_LICENSE_TIERS = [
+  { upToTb: 100, eurPerTbYear: 150 },
+  { upToTb: 1000, eurPerTbYear: 100 },
+  { upToTb: Infinity, eurPerTbYear: 50 },
+];
+
 const config = (pricing = AWS_S3) => ({
   pricing,
+  licenseTiers: SPEC_LICENSE_TIERS,
+  block: REDUCT_BLOCK,
+});
+
+const published = (pricing = AWS_S3) => ({
+  pricing,
   licenseTiers: LICENSE_TIERS,
+  licenseMinTb: LICENSE_MIN_TB,
   block: REDUCT_BLOCK,
 });
 
@@ -56,10 +72,20 @@ test("pack factor follows the block size and record limits", () => {
 });
 
 test("license tiers", () => {
-  close(licenseEurYear(50, LICENSE_TIERS), 7_500);
-  close(licenseEurYear(500, LICENSE_TIERS), 55_000);
-  close(licenseEurYear(1_500, LICENSE_TIERS), 130_000);
-  assert.equal(licenseEurYear(0, LICENSE_TIERS), 0);
+  close(licenseEurYear(50, SPEC_LICENSE_TIERS), 7_500);
+  close(licenseEurYear(500, SPEC_LICENSE_TIERS), 55_000);
+  close(licenseEurYear(1_500, SPEC_LICENSE_TIERS), 130_000);
+  assert.equal(licenseEurYear(0, SPEC_LICENSE_TIERS), 0);
+});
+
+test("published Pro price: €0.015 per GB per month, 1 TB minimum", () => {
+  close(licenseEurYear(100, LICENSE_TIERS), 18_000);
+  const tiny = estimate(
+    { units: 1, recordingHoursPerDay: 1, streams: [stream("s", 1, 1, 1)] },
+    storage(),
+    published(),
+  );
+  close(tiny.reduct.licenseEurYear, 180);
 });
 
 test("age bands", () => {
@@ -202,10 +228,20 @@ test("MinIO pays erasure shard overhead on small objects", () => {
   assert.ok(large.savingEurYear < 0);
 });
 
-test("every preset saves on AWS by default", () => {
+test("every preset saves on AWS and Azure with its defaults", () => {
   for (const preset of PRESETS) {
-    const result = estimate(preset, storage(), config());
-    assert.ok(result.savingEurYear > 0, preset.id);
+    for (const backend of ["aws", "azure"]) {
+      const result = estimate(
+        preset,
+        storage({
+          backend,
+          hotDays: preset.hotDays,
+          retentionDays: preset.retentionDays,
+        }),
+        published(backendPricing(backend)),
+      );
+      assert.ok(result.savingEurYear > 0, `${preset.id} ${backend}`);
+    }
   }
 });
 

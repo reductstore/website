@@ -97,13 +97,12 @@ export function backendPricing(
   return minioPricing(minioEurPerTbMonth);
 }
 
-// Internal commercial assumption; the public pricing page does not publish
-// these tiers yet.
+// ReductStore Pro as published on the pricing page: €0.015 per GB per month
+// on peak storage, 1 TB minimum.
 export const LICENSE_TIERS: LicenseTier[] = [
-  { upToTb: 100, eurPerTbYear: 150 },
-  { upToTb: 1000, eurPerTbYear: 100 },
-  { upToTb: Infinity, eurPerTbYear: 50 },
+  { upToTb: Infinity, eurPerTbYear: 0.015 * 1000 * 12 },
 ];
+export const LICENSE_MIN_TB = 1;
 
 export const REDUCT_BLOCK = {
   sizeKb: 64_000,

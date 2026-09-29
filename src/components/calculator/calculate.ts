@@ -23,6 +23,7 @@ export type BlockConfig = {
 export type CalculatorConfig = {
   pricing: BackendPricing;
   licenseTiers: LicenseTier[];
+  licenseMinTb?: number;
   block: BlockConfig;
 };
 
@@ -293,7 +294,12 @@ export function estimate(
   const direct = breakdown(directCosts, 0);
   const reduct = breakdown(
     reductCosts,
-    licenseEurYear(workload.totalRetainedTb, config.licenseTiers),
+    licenseEurYear(
+      workload.totalRetainedTb > 0
+        ? Math.max(workload.totalRetainedTb, config.licenseMinTb ?? 0)
+        : 0,
+      config.licenseTiers,
+    ),
   );
   const savingEurYear = direct.totalEurYear - reduct.totalEurYear;
 

@@ -16,6 +16,7 @@ import type { IconType } from "react-icons";
 import { estimate } from "./calculate";
 import {
   LICENSE_TIERS,
+  LICENSE_MIN_TB,
   REDUCT_BLOCK,
   DEFAULT_MINIO_EUR_PER_TB_MONTH,
   backendPricing,
@@ -92,8 +93,10 @@ export default function CostCalculator(): JSX.Element {
   );
   const [backend, setBackend] = useState<BackendId>("aws");
   const [edgeDisk, setEdgeDisk] = useState("2");
-  const [hotDays, setHotDays] = useState("30");
-  const [retentionDays, setRetentionDays] = useState("365");
+  const [hotDays, setHotDays] = useState(String(preset.hotDays));
+  const [retentionDays, setRetentionDays] = useState(
+    String(preset.retentionDays),
+  );
   const [readPercent, setReadPercent] = useState("5");
   const [minioCost, setMinioCost] = useState(
     String(DEFAULT_MINIO_EUR_PER_TB_MONTH),
@@ -106,6 +109,8 @@ export default function CostCalculator(): JSX.Element {
     setUnits(String(next.units));
     setHours(String(next.recordingHoursPerDay));
     setStreams(toDraft(next.streams));
+    setHotDays(String(next.hotDays));
+    setRetentionDays(String(next.retentionDays));
     track("calculator_preset_selected", { preset: id });
   };
 
@@ -170,6 +175,7 @@ export default function CostCalculator(): JSX.Element {
     return estimate(workload, storage, {
       pricing: backendPricing(backend, storage.minioEurPerTbMonth),
       licenseTiers: LICENSE_TIERS,
+      licenseMinTb: LICENSE_MIN_TB,
       block: REDUCT_BLOCK,
     });
   }, [
@@ -402,8 +408,8 @@ export default function CostCalculator(): JSX.Element {
                 two backend operations per block.
               </li>
               <li>
-                License on retained data: €150 per TB per year up to 100 TB,
-                €100 up to 1,000 TB, €50 above.
+                License: ReductStore Pro at €0.015 per GB per month on retained
+                data, 1 TB minimum.
               </li>
               <li>
                 Cloud prices are list price estimates in EUR. MinIO stores each

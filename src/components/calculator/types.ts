@@ -67,5 +67,7 @@ export type WorkloadPreset = {
   unitLabel: string;
   units: number;
   recordingHoursPerDay: number;
+  hotDays: number;
+  retentionDays: number;
   streams: StreamInput[];
 };

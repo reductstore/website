@@ -8,6 +8,8 @@ export const PRESETS: WorkloadPreset[] = [
     unitLabel: "Drones",
     units: 10,
     recordingHoursPerDay: 2,
+    hotDays: 30,
+    retentionDays: 90,
     streams: [
       {
         id: "drone-0",
@@ -57,6 +59,8 @@ export const PRESETS: WorkloadPreset[] = [
     unitLabel: "Mobile robots",
     units: 10,
     recordingHoursPerDay: 8,
+    hotDays: 30,
+    retentionDays: 90,
     streams: [
       {
         id: "mobile-robot-0",
@@ -106,6 +110,8 @@ export const PRESETS: WorkloadPreset[] = [
     unitLabel: "Vehicles",
     units: 10,
     recordingHoursPerDay: 8,
+    hotDays: 30,
+    retentionDays: 30,
     streams: [
       {
         id: "autonomous-vehicle-0",
@@ -155,6 +161,8 @@ export const PRESETS: WorkloadPreset[] = [
     unitLabel: "Industrial robots",
     units: 25,
     recordingHoursPerDay: 16,
+    hotDays: 30,
+    retentionDays: 90,
     streams: [
       {
         id: "industrial-robot-0",
@@ -204,6 +212,8 @@ export const PRESETS: WorkloadPreset[] = [
     unitLabel: "Cameras",
     units: 100,
     recordingHoursPerDay: 24,
+    hotDays: 30,
+    retentionDays: 30,
     streams: [
       {
         id: "computer-vision-0",
@@ -245,6 +255,8 @@ export const PRESETS: WorkloadPreset[] = [
     unitLabel: "Machines",
     units: 10,
     recordingHoursPerDay: 24,
+    hotDays: 30,
+    retentionDays: 90,
     streams: [
       {
         id: "vibration-0",
@@ -286,6 +298,8 @@ export const PRESETS: WorkloadPreset[] = [
     unitLabel: "PLCs",
     units: 100,
     recordingHoursPerDay: 24,
+    hotDays: 30,
+    retentionDays: 90,
     streams: [
       {
         id: "plc-0",
@@ -327,6 +341,8 @@ export const PRESETS: WorkloadPreset[] = [
     unitLabel: "Robots",
     units: 10,
     recordingHoursPerDay: 4,
+    hotDays: 30,
+    retentionDays: 90,
     streams: [
       {
         id: "ros-0",
@@ -376,6 +392,8 @@ export const PRESETS: WorkloadPreset[] = [
     unitLabel: "Data sources",
     units: 10,
     recordingHoursPerDay: 8,
+    hotDays: 30,
+    retentionDays: 90,
     streams: [
       {
         id: "custom-0",
