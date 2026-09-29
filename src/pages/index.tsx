@@ -46,9 +46,9 @@ function HomepageHeader() {
           </Link>
           <Link
             className={clsx("button button--lg", styles.buttonSecondary)}
-            to="/contact"
+            to="/whitepaper"
           >
-            Talk to us
+            White paper
           </Link>
           <Link className={styles.textLink} to="/pricing">
             See pricing →
