@@ -25,7 +25,7 @@ const insidePages = [
 const highlights = [
   { value: "16x", label: "faster reads vs. MinIO (100 KB records)" },
   { value: "10x", label: "faster writes vs. TimescaleDB (100 KB records)" },
-  { value: "$4,200", label: "saved per month on a 50 TB S3 workload" },
+  { value: "5x", label: "faster writes vs. MongoDB (100 KB records)" },
 ];
 
 export default function ReductAI(): JSX.Element {
