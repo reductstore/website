@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="100 204 1020 254" width="100%" height="100%">
+  <defs>
+    <style>
+      :root {
+        --card-bg: #FFFFFF;
+        --card-brand: #2B0548;
+        --card-stroke: #333333;
+        --text-main: #333333;
+        --text-muted: #666666;
+        --text-inverse: #FFFFFF;
+        --line: #333333;
+        --rule: #CCCCCC;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --card-bg: #1E1E1E;
+          --card-stroke: #555555;
+          --text-main: #EFEFEF;
+          --text-muted: #A0A0A0;
+          --line: #EFEFEF;
+          --rule: #444444;
+        }
+      }
+
+      text {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand    { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .keyframe      { fill: var(--card-brand); }
+
+      .text-title         { font-weight: 600; font-size: 18px; fill: var(--text-main); }
+      .text-title-inverse { font-weight: 600; font-size: 14px; fill: var(--text-inverse); }
+      .text-label         { font-size: 13px; fill: var(--text-muted); letter-spacing: 0.09em; }
+      .text-subtitle      { font-size: 14px; fill: var(--text-muted); }
+      .text-note          { font-size: 13px; font-style: italic; fill: var(--text-muted); }
+      .text-emph          { font-size: 14px; font-weight: 600; fill: var(--text-main); }
+      .mono, .mono-inverse {
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        font-size: 14px;
+      }
+      .mono         { fill: var(--text-muted); }
+      .mono-inverse { fill: var(--text-inverse); font-size: 12px; }
+
+      .connector { stroke: var(--line); stroke-width: 2; fill: none; }
+      .rule      { stroke: var(--rule); stroke-width: 1.5; fill: none; }
+      .rule-dash { stroke: var(--rule); stroke-width: 1.5; fill: none; stroke-dasharray: 3 5; }
+      .arrow-head { fill: var(--line); }
+      .bg { fill: var(--card-bg); }
+    </style>
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
+    </marker>
+  </defs>
+
+  <text x="110" y="226.0" class="text-label" font-size="15">CAMERA</text>
+  <rect x="110" y="256.0" width="64" height="112" rx="8" class="card-standard"/>
+  <rect x="113" y="259.0" width="6" height="106" class="keyframe"/>
+  <rect x="182" y="256.0" width="64" height="112" rx="8" class="card-standard"/>
+  <rect x="185" y="259.0" width="6" height="106" class="keyframe"/>
+  <rect x="254" y="256.0" width="64" height="112" rx="8" class="card-standard"/>
+  <rect x="257" y="259.0" width="6" height="106" class="keyframe"/>
+  <text x="110" y="412.0" class="mono" font-size="18">video/h264</text>
+  <text x="110" y="442.0" class="text-subtitle" font-size="16">Annex B, one keyframe interval each</text>
+  <line x1="346" y1="312" x2="386" y2="312" class="connector" marker-end="url(#arrow)"/>
+  <text x="400" y="226.0" class="text-label" font-size="15">REDUCTSTORE</text>
+  <rect x="400" y="256.0" width="70" height="112" rx="8" class="card-standard"/>
+  <rect x="403" y="259.0" width="6" height="106" class="keyframe"/>
+  <rect x="478" y="256.0" width="70" height="112" rx="8" class="card-standard"/>
+  <rect x="481" y="259.0" width="6" height="106" class="keyframe"/>
+  <rect x="556" y="256.0" width="70" height="112" rx="8" class="card-standard"/>
+  <rect x="559" y="259.0" width="6" height="106" class="keyframe"/>
+  <rect x="634" y="256.0" width="70" height="112" rx="8" class="card-standard"/>
+  <rect x="637" y="259.0" width="6" height="106" class="keyframe"/>
+  <rect x="712" y="256.0" width="70" height="112" rx="8" class="card-standard"/>
+  <rect x="715" y="259.0" width="6" height="106" class="keyframe"/>
+  <line x1="394" y1="386.0" x2="792" y2="386.0" class="rule" marker-end="url(#arrow)"/>
+  <text x="800" y="391.0" class="text-note" font-size="15">t</text>
+  <text x="400" y="442.0" class="text-subtitle" font-size="16">time-indexed records, capture time on each</text>
+  <line x1="804" y1="312" x2="844" y2="312" class="connector" marker-end="url(#arrow)"/>
+  <text x="880" y="226.0" class="text-label" font-size="15">ONE QUERY</text>
+  <rect x="880" y="256.0" width="210" height="112" rx="8" class="card-brand"/>
+  <path d="M 968 290 L 968 334 L 1006 312 Z" fill="#FFFFFF"/>
+  <text x="880" y="412.0" class="mono" font-size="18">video/mp4</text>
+  <text x="880" y="442.0" class="text-subtitle" font-size="16">or one episode per limit or gap</text>
+</svg>
