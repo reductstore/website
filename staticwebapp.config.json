@@ -279,6 +279,11 @@
       "route": "/use-cases",
       "redirect": "/#use-cases",
       "statusCode": 301
+    },
+    {
+      "route": "/calculator",
+      "redirect": "/pricing#calculator",
+      "statusCode": 301
     }
   ]
 }

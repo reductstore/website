@@ -2,6 +2,7 @@ import Layout from "@theme/Layout";
 import PricingTable from "@site/src/components/shared/PricingTable";
 import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import Faq from "@site/src/components/shared/Faq";
+import CostCalculator from "@site/src/components/calculator/CostCalculator";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import { JSX } from "react";
 import styles from "./styles.module.css";
@@ -29,11 +30,21 @@ export default function Pricing(): JSX.Element {
           <PricingTable />
         </section>
 
+        <SimpleHeader
+          pageTitle="Calculate your data storage cost"
+          pageTitleAs="h2"
+          id="calculator"
+        />
         <section className="container">
-          <SimpleHeader
-            pageTitle="Frequently Asked Questions"
-            pageTitleAs="h2"
-          />
+          <p className={styles.calculatorIntro}>
+            Tell us what your system records. We estimate the data volume and
+            compare direct object storage with ReductStore on the same backend.
+          </p>
+          <CostCalculator />
+        </section>
+
+        <SimpleHeader pageTitle="Frequently Asked Questions" pageTitleAs="h2" />
+        <section className="container">
           <Faq faqs={pricingFaqs(portalUrl)} defaultOpenCount={3} />
         </section>
       </main>

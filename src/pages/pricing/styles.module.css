@@ -14,6 +14,18 @@
   font-size: var(--reduct-font-size-subtitle);
 }
 
+.calculatorIntro {
+  max-width: 44rem;
+  margin-bottom: 2rem;
+  font-size: var(--reduct-font-size-subtitle);
+  line-height: 1.6;
+  color: var(--ifm-color-emphasis-700);
+}
+
+html[data-theme="dark"] .calculatorIntro {
+  color: var(--ifm-color-emphasis-600);
+}
+
 .detailsIntro {
   margin-bottom: 2rem;
 }
