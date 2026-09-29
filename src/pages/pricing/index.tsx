@@ -17,7 +17,7 @@ export default function Pricing(): JSX.Element {
       description="Choose the right ReductStore plan for your scale, from ReductStore Core under Apache-2.0 to self-serve Pro and custom Enterprise offerings."
     >
       <main>
-        <SimpleHeader pageTitle="ReductStore Pricing" />
+        <SimpleHeader pageTitle="Pricing" />
 
         <section className="container">
           <div className={styles.introSection}>
@@ -92,14 +92,6 @@ const pricingFaqs = (portalUrl?: string) => [
   {
     question: "Which payment methods?",
     answer: <p>Card, Apple Pay, Google Pay and Link.</p>,
-  },
-  {
-    question: "Cloud or Pro?",
-    answer: (
-      <p>
-        Pro runs on your infrastructure. Cloud is hosted and operated by us.
-      </p>
-    ),
   },
   {
     question: "Does ReductStore Core remain open source?",
