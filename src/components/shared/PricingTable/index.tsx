@@ -121,11 +121,7 @@ export function PricingComparison() {
   const features = createFeatures("free");
 
   return (
-    <section
-      className={styles.comparisonSection}
-      aria-labelledby="comparison-title"
-    >
-      <h1 id="comparison-title">Compare ReductStore plans</h1>
+    <section className={styles.comparisonSection} aria-label="Plan comparison">
       <div className={styles.comparisonScroll}>
         <table className={styles.comparisonTable}>
           <thead>
