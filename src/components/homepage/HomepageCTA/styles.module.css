@@ -1,6 +1,8 @@
 .section {
   padding-top: var(--reduct-section-space);
   padding-bottom: var(--reduct-section-space);
+  margin: 0 1rem 1rem;
+  border-radius: 24px;
   text-align: center;
   background-color: var(--ifm-color-primary);
 }
@@ -44,6 +46,11 @@ html[data-theme="dark"] .title {
 }
 
 @media (max-width: 600px) {
+  .section {
+    margin: 0 0.5rem 0.5rem;
+    border-radius: 16px;
+  }
+
   .title {
     font-size: 1.75rem;
     padding: 0 1rem;
