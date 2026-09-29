@@ -4,7 +4,7 @@ import styles from "./styles.module.css";
 const stats = [
   { value: "60k+", description: "downloads" },
   { value: "100+", description: "production deployments" },
-  { value: "1+ PB", description: "time series data managed" },
+  { value: "1+ PB", description: "time-indexed data managed" },
   { value: "99.99%", description: "uptime across production deployments" },
   {
     value: "10x",
@@ -19,7 +19,10 @@ function HomepageStats() {
   return (
     <section className={styles.statsSection}>
       <div className="container">
-        <h2 className={styles.statsTitle}>Developers choose ReductStore</h2>
+        <h2 className={styles.statsTitle}>
+          Developers choose{" "}
+          <span className={styles.statsAccent}>ReductStore</span>
+        </h2>
         <p className={styles.statsSubheader}>
           Trusted by robotics and IIoT engineers to process billions of
           time-indexed records
