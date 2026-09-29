@@ -16,7 +16,8 @@
     "fmt": "prettier --write .",
     "fmt:check": "prettier --check .",
     "build:azure": "npm run clear && npm run build",
-    "depcheck": "depcheck . --config=.depcheckrc"
+    "depcheck": "depcheck . --config=.depcheckrc",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"src/components/calculator/*.test.mjs\""
   },
   "dependencies": {
     "@algolia/client-search": "^5.47.0",
