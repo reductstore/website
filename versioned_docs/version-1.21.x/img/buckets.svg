@@ -40,10 +40,10 @@
 .rs-hl{fill:#DB817B;fill-opacity:.18}
 .rs-sel{fill:var(--rs-card-bg);stroke:var(--rs-accent);stroke-width:2}
 .rs-code{font-size:13px;fill:var(--rs-text-main)}
-</style></defs><path d="M10,144 L200,144" class="rs-wire rs-flow-in"/>
+</style></defs><rect x="130" y="10" width="620" height="220" rx="36" class="rs-halo"/>
+<rect x="144" y="24" width="592" height="192" rx="28" class="rs-card"/>
+<path d="M10,144 L200,144" class="rs-wire rs-flow-in"/>
 <path d="M400,144 L500,144" class="rs-wire rs-flow-rep"/>
-<rect x="130.0" y="10.0" width="620.0" height="220.0" rx="36" class="rs-halo"/>
-<rect x="144.0" y="24.0" width="592.0" height="192.0" rx="28" class="rs-card"/>
 <rect x="329.0" y="40.0" width="222.0" height="34.0" rx="17" class="rs-pill"/>
 <text x="440.0" y="62.0" class="rs-pt" text-anchor="middle">ReductStore instance</text>
 <rect x="200.0" y="96.0" width="200.0" height="96.0" rx="16" class="rs-box"/>

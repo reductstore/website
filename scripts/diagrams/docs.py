@@ -43,8 +43,8 @@ class C:
         s.text(cx, y + 22, t, "rs-pt")
 
     def panel(s, x, y, w, h, title):
-        s.rect(x, y, w, h, "rs-halo", 36)
-        s.rect(x + 14, y + 14, w - 28, h - 28, "rs-card", 28)
+        s.bg.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="36" class="rs-halo"/>')
+        s.bg.append(f'<rect x="{x + 14}" y="{y + 14}" width="{w - 28}" height="{h - 28}" rx="28" class="rs-card"/>')
         s.pill(x + w / 2, y + 30, title)
 
     def table(s, x, y, cols, header, row, hl=True):

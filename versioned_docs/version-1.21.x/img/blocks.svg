@@ -40,12 +40,12 @@
 .rs-hl{fill:#DB817B;fill-opacity:.18}
 .rs-sel{fill:var(--rs-card-bg);stroke:var(--rs-accent);stroke-width:2}
 .rs-code{font-size:13px;fill:var(--rs-text-main)}
-</style></defs><path d="M420,153 C400,153 394,162 374,162" class="rs-wire rs-static"/>
+</style></defs><rect x="150" y="10" width="640" height="236" rx="36" class="rs-halo"/>
+<rect x="164" y="24" width="612" height="208" rx="28" class="rs-card"/>
+<path d="M420,153 C400,153 394,162 374,162" class="rs-wire rs-static"/>
 <path d="M184,337 L120,337 L120,128 L150,128" class="rs-wire rs-flow-in"/>
 <path d="M635.0,196 L635.0,314" class="rs-wire rs-flow-out"/>
 <path d="M560,336 L444,336" class="rs-wire rs-flow-out"/>
-<rect x="150.0" y="10.0" width="640.0" height="236.0" rx="36" class="rs-halo"/>
-<rect x="164.0" y="24.0" width="612.0" height="208.0" rx="28" class="rs-card"/>
 <rect x="401.3" y="40.0" width="137.4" height="34.0" rx="17" class="rs-pill"/>
 <text x="470.0" y="62.0" class="rs-pt" text-anchor="middle">Block xxxxx</text>
 <rect x="184.0" y="108.0" width="190.0" height="108.0" rx="10" class="rs-card"/>

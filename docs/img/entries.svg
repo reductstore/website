@@ -40,9 +40,11 @@
 .rs-hl{fill:#DB817B;fill-opacity:.18}
 .rs-sel{fill:var(--rs-card-bg);stroke:var(--rs-accent);stroke-width:2}
 .rs-code{font-size:13px;fill:var(--rs-text-main)}
-</style></defs><path d="M196,216 C244,216 236,135 280,135" class="rs-wire rs-static"/>
-<rect x="10.0" y="10.0" width="220.0" height="250.0" rx="36" class="rs-halo"/>
-<rect x="24.0" y="24.0" width="192.0" height="222.0" rx="28" class="rs-card"/>
+</style></defs><rect x="10" y="10" width="220" height="250" rx="36" class="rs-halo"/>
+<rect x="24" y="24" width="192" height="222" rx="28" class="rs-card"/>
+<rect x="280" y="10" width="510" height="250" rx="36" class="rs-halo"/>
+<rect x="294" y="24" width="482" height="222" rx="28" class="rs-card"/>
+<path d="M196,216 C244,216 236,135 280,135" class="rs-wire rs-static"/>
 <rect x="74.8" y="40.0" width="90.4" height="34.0" rx="17" class="rs-pill"/>
 <text x="120.0" y="62.0" class="rs-pt" text-anchor="middle">Bucket</text>
 <rect x="44.0" y="92.0" width="152.0" height="40.0" rx="20" class="rs-chip"/>
@@ -51,8 +53,6 @@
 <text x="120.0" y="169.0" class="rs-t" text-anchor="middle">Entry B</text>
 <rect x="44.0" y="196.0" width="152.0" height="40.0" rx="20" class="rs-sel"/>
 <text x="120.0" y="221.0" class="rs-t" text-anchor="middle">Entry C</text>
-<rect x="280.0" y="10.0" width="510.0" height="250.0" rx="36" class="rs-halo"/>
-<rect x="294.0" y="24.0" width="482.0" height="222.0" rx="28" class="rs-card"/>
 <rect x="485.1" y="40.0" width="99.8" height="34.0" rx="17" class="rs-pill"/>
 <text x="535.0" y="62.0" class="rs-pt" text-anchor="middle">Entry C</text>
 <circle cx="196.0" cy="216.0" r="5" class="rs-port"/>
