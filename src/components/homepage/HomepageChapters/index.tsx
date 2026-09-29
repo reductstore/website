@@ -184,7 +184,7 @@ const operate: ChapterItem[] = [
           <BrowserOnly>
             {() => {
               const TerminalAnimation = require("../TerminalAnimation").default;
-              return <TerminalAnimation fontSize={11} />;
+              return <TerminalAnimation fontSize={11} minColumns={90} />;
             }}
           </BrowserOnly>
         }
