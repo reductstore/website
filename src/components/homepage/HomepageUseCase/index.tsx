@@ -6,8 +6,8 @@ import useCases from "@site/src/data/useCasesData";
 
 export default function HomepageUseCase() {
   return (
-    <section id="use-cases" className={styles.section}>
-      <Heading as="h2" className={styles.sectionTitle}>
+    <section className={styles.section}>
+      <Heading as="h2" id="use-cases" className={styles.sectionTitle}>
         Typical Use Cases
       </Heading>
       <UseCaseTiles useCases={useCases} />

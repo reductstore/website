@@ -1,5 +1,4 @@
 .section {
-  scroll-margin-top: calc(var(--ifm-navbar-height) + 1rem);
   margin-top: var(--reduct-section-space);
   margin-bottom: var(--reduct-section-space);
 }
