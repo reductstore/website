@@ -20,15 +20,65 @@ const landingFaqs = [
     question: "What is ReductStore?",
     answer: (
       <p>
-        ReductStore is a time-series database for blob data—images, sensor
-        readings, rosbags, logs—designed for robotics and industrial
-        applications. Store data on edge devices or robots, then replicate to
-        on-prem servers or cloud with cloud object storage backend. Learn more
-        in the{" "}
+        ReductStore is time-indexed storage for robotics and industrial IoT
+        data: camera frames, LiDAR scans, sensor readings, ROS messages, and
+        logs. Each record is stored unchanged with its timestamp and labels. Run
+        it on the robot or edge device, then replicate the data that matters to
+        an on-prem server or the cloud. Learn more in{" "}
         <strong>
           <Link to="/docs/how-does-it-work">How Does It Work</Link>
+        </strong>
+        .
+      </p>
+    ),
+  },
+  {
+    question: "How is it different from a time-series database?",
+    answer: (
+      <p>
+        Time-series databases such as InfluxDB and TimescaleDB are built for
+        small numeric values. ReductStore stores each record as a binary payload
+        of any size, with a content type, indexed by time and labels. Many teams
+        use both: metrics and dashboards in the time-series database, raw sensor
+        data in ReductStore. See{" "}
+        <strong>
+          <Link to="/blog/influxdb-robotics-sensor-data">
+            InfluxDB for Robotics Sensor Data
+          </Link>
+        </strong>
+        .
+      </p>
+    ),
+  },
+  {
+    question: "How do I query data?",
+    answer: (
+      <p>
+        Query records by time range and filter them with{" "}
+        <strong>
+          <Link to="/docs/conditional-query">conditional queries</Link>
         </strong>{" "}
-        section.
+        on their labels. Extensions process data on the storage side: ReductROS
+        exports ROS 1 and ROS 2 records as JSON or MCAP, and ReductSelect runs
+        SQL over CSV, JSON, and Parquet. See the{" "}
+        <strong>
+          <Link to="/docs/guides/data-querying">Data Querying</Link>
+        </strong>{" "}
+        guide.
+      </p>
+    ),
+  },
+  {
+    question: "What happens when the disk is full?",
+    answer: (
+      <p>
+        Set a quota on each bucket. A FIFO quota removes the oldest records to
+        make room for new ones, so a robot keeps recording without manual
+        cleanup. A HARD quota rejects new records instead. See{" "}
+        <strong>
+          <Link to="/docs/guides/buckets">Buckets</Link>
+        </strong>
+        .
       </p>
     ),
   },
@@ -36,29 +86,46 @@ const landingFaqs = [
     question: "How does replication work?",
     answer: (
       <p>
-        Set up replication tasks to stream data from edge devices to another
-        instance—on-prem or cloud. Supports high availability setups and S3
-        backends for cloud deployments. See the{" "}
+        A replication task sends new records from a bucket to another
+        ReductStore instance, on-prem or in the cloud. Filter by labels to
+        replicate only what matters. Records wait in a transaction log, so when
+        the connection drops, replication resumes once it is back. See the{" "}
         <strong>
-          <Link to="/docs/next/integrations/cloud-storage">
-            Cloud Storage Integration
-          </Link>
+          <Link to="/docs/guides/data-replication">Data Replication</Link>
         </strong>{" "}
         guide.
       </p>
     ),
   },
   {
-    question: "What deployment options are available?",
+    question: "Can I store data in cloud object storage?",
     answer: (
       <p>
-        Self-managed with ReductStore Core, self-hosted with ReductStore Pro, or
-        managed cloud on our infrastructure. Core and Pro share the same storage
-        engine, while Pro adds commercial components and support. Check our{" "}
+        Yes, with ReductStore Pro. Use Amazon S3 or any S3-compatible storage
+        such as MinIO, Ceph, or Cloudflare R2, or Azure Blob Storage, with a
+        local cache that keeps recent data close to the node. See{" "}
         <strong>
-          <Link to="/pricing">Pricing</Link>
+          <Link to="/docs/integrations/cloud-storage">Cloud Storage</Link>
+        </strong>
+        .
+      </p>
+    ),
+  },
+  {
+    question: "Does it work with ROS?",
+    answer: (
+      <p>
+        Yes.{" "}
+        <strong>
+          <Link to="/docs/reduct-bridge">ReductBridge</Link>
         </strong>{" "}
-        page for details.
+        collects data from ROS 1, ROS 2, MQTT, HTTP, system metrics, and shell
+        commands and writes it to ReductStore with labels. The ReductROS
+        extension exports recordings as MCAP or JSON. See{" "}
+        <strong>
+          <Link to="/docs/ros">ReductStore for ROS</Link>
+        </strong>
+        .
       </p>
     ),
   },
@@ -68,6 +135,22 @@ const landingFaqs = [
       <p>
         SDKs for Python, JavaScript, C++, Rust, and Go. Plus an HTTP API for any
         language and a CLI for scripting and automation.
+      </p>
+    ),
+  },
+  {
+    question: "What deployment options are available?",
+    answer: (
+      <p>
+        Free runs the open source ReductStore on your own hardware. Pro is
+        self-hosted too, at €0.015 per GB per month on peak storage with a 1 TB
+        minimum, and adds commercial components and support. Enterprise is
+        either Cloud Enterprise, hosted by us, or Cloud Self-hosted, which works
+        fully offline. See{" "}
+        <strong>
+          <Link to="/pricing">Pricing</Link>
+        </strong>{" "}
+        for details.
       </p>
     ),
   },
@@ -90,12 +173,12 @@ const landingFaqs = [
     question: "What support is available?",
     answer: (
       <p>
-        Community support via{" "}
+        Community support is available on{" "}
         <strong>
           <Link to="https://community.reduct.store/">Discourse</Link>
-        </strong>{" "}
-        . ReductStore Pro plans include direct support with guaranteed response
-        times. See{" "}
+        </strong>
+        . Pro adds long-term support releases, architecture review, and
+        deployment assistance. Enterprise adds custom support and an SLA. See{" "}
         <strong>
           <Link to="/pricing">Pricing</Link>
         </strong>{" "}

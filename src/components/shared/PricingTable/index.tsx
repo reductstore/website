@@ -34,7 +34,7 @@ const createFeatures = (plan: Plan): Feature[] => {
 
   return [
     { title: "Core Capabilities", available: true, isCategoryHeader: true },
-    { title: "High-Performance Time Series DB", available: true },
+    { title: "High-Performance Time-Indexed Storage", available: true },
     { title: "SDKs: Python, JavaScript, Go, Rust, C++", available: true },
     { title: "Multi-Format Data Support", available: true },
     { title: "CLI Tool", available: true },
