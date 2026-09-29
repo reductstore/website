@@ -65,7 +65,6 @@ const createFeatures = (plan: Plan): Feature[] => {
       available: isPaid,
     },
     { title: "Cloud Object Storage Backend", available: isPaid },
-    { title: "Private Docker images and binaries", available: isPaid },
     {
       title: "Deployment & Operations",
       available: true,
@@ -74,7 +73,6 @@ const createFeatures = (plan: Plan): Feature[] => {
     { title: "Docker & Kubernetes Ready", available: true },
     { title: "Grafana Integration", available: true },
     { title: "Fully Managed Service", available: isCloud },
-    { title: "No-Code Provisioning", available: isCloud },
     { title: "Reports subscription usage", available: plan === "pro" },
     {
       title: "Support & Maintenance",
@@ -180,7 +178,7 @@ export function PricingComparison() {
                 return (
                   <tr key={index} className={styles.categoryHeader}>
                     <th colSpan={5} scope="colgroup">
-                      {feature.title}
+                      <strong>{feature.title}</strong>
                     </th>
                   </tr>
                 );
