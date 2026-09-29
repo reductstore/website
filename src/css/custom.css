@@ -355,3 +355,14 @@ div[class*="announcementBarContent_"] a {
 .navbar__items--right .header-github-link {
   order: 4;
 }
+
+/* Collapse desktop navigation before its labels or brand need to compress. */
+@media (max-width: 1100px) {
+  .navbar__toggle {
+    display: inherit;
+  }
+
+  .navbar__item {
+    display: none;
+  }
+}
