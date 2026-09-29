@@ -39,6 +39,7 @@
 .rs-line{stroke:var(--rs-card-stroke);stroke-width:1}
 .rs-hl{fill:#DB817B;fill-opacity:.18}
 .rs-sel{fill:var(--rs-card-bg);stroke:var(--rs-accent);stroke-width:2}
+.rs-code{font-size:13px;fill:var(--rs-text-main)}
 </style></defs><path d="M420,153 C400,153 394,162 374,162" class="rs-wire rs-static"/>
 <path d="M184,337 L120,337 L120,128 L150,128" class="rs-wire rs-flow-in"/>
 <path d="M635.0,196 L635.0,314" class="rs-wire rs-flow-out"/>

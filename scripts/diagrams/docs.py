@@ -9,6 +9,7 @@ EXTRA = """<style>
 .rs-line{stroke:var(--rs-card-stroke);stroke-width:1}
 .rs-hl{fill:#DB817B;fill-opacity:.18}
 .rs-sel{fill:var(--rs-card-bg);stroke:var(--rs-accent);stroke-width:2}
+.rs-code{font-size:13px;fill:var(--rs-text-main)}
 </style>"""
 
 
@@ -19,7 +20,7 @@ def base_style():
 
 class C:
     def __init__(s):
-        s.wires, s.p = [], []
+        s.bg, s.wires, s.p = [], [], []
 
     def rect(s, x, y, w, h, cls, rx=16):
         s.p.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{w:.1f}" height="{h:.1f}" rx="{rx}" class="{cls}"/>')
@@ -66,7 +67,7 @@ class C:
         return (
             f'<svg xmlns="http://www.w3.org/2000/svg" class="rs-diagram" viewBox="0 0 {w} {h}" '
             f'width="100%" height="100%" role="img" aria-label="{label}"><defs>{base_style()}{EXTRA}</defs>'
-            + "\n".join(s.wires + s.p)
+            + "\n".join(s.bg + s.wires + s.p)
             + "</svg>\n"
         )
 
@@ -164,6 +165,61 @@ def blocks():
     return c.svg(800, 392, "A block stores record contents in a data block and their metadata in a block descriptor. Uncommitted descriptor changes go to a write-ahead log, which updates and recovers the block index used for fast search.")
 
 
+def area(c, x, y, w, h, title):
+    c.bg.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="32" class="rs-halo"/>')
+    c.bg.append(f'<rect x="{x + 12}" y="{y + 12}" width="{w - 24}" height="{h - 24}" rx="24" class="rs-card"/>')
+    c.text(x + 32, y + 42, title, "rs-bt", "start")
+
+
+def ros():
+    c = C()
+    area(c, 10, 10, 780, 270, "Awesome Robot")
+    c.text(44, 86, "ROS topics", "rs-s", "start")
+    topics = ["/camera/image_raw", "/gps/fix", "/imu/data"]
+    bx, by, bw, bh = 290, 110, 190, 130
+    for i, t in enumerate(topics):
+        y = 100 + i * 52
+        c.rect(44, y, 180, 38, "rs-chip", 19)
+        c.text(134, y + 24, t, "rs-code rs-mono")
+        c.wire(f"M224,{y + 19} C256,{y + 19} {bx - 32},{by + bh / 2} {bx},{by + bh / 2}", "rs-flow-in")
+    c.port(bx, by + bh / 2)
+    c.rect(bx, by, bw, bh, "rs-coral", 20)
+    c.text(bx + bw / 2, by + 30, "ReductBridge", "rs-ct")
+    for i, t in enumerate(["subscribes to topics", "stores payloads", "applies labels", "attaches ROS schema"]):
+        c.text(bx + bw / 2, by + 56 + i * 19, t, "rs-cs")
+    sx, sy, sw, sh = 560, 62, 206, 200
+    c.wire(f"M{bx + bw},{by + bh / 2} L{sx},{by + bh / 2}", "rs-flow-in")
+    c.port(bx + bw, by + bh / 2)
+    c.port(sx, by + bh / 2)
+    for i, t in enumerate(["records", "labels", "$schema"]):
+        c.text((bx + bw + sx) / 2, by + bh / 2 - 44 + i * 16, t, "rs-s rs-mono")
+    c.rect(sx, sy, sw, sh, "rs-card", 20)
+    c.pill(sx + sw / 2, sy + 14, "ReductStore")
+    box(c, sx + 14, sy + 60, sw - 28, 58, "bucket: robot-data", [("entries + labels", "rs-s rs-mono")])
+    box(c, sx + 14, sy + 128, sw - 28, 58, "replication task", [("camera + IMU entries", "rs-s rs-mono")])
+
+    cy = 360
+    lx = sx + sw / 2
+    c.wire(f"M{lx},{sy + sh} L{lx},{cy + 12}", "rs-flow-rep")
+    c.port(lx, sy + sh)
+    c.port(lx, cy + 12)
+    c.text(lx - 14, 322, "selected records over HTTP(S)", "rs-bl", "end")
+
+    area(c, 10, cy, 780, 190, "Cloud or central on-premises")
+    c.pill(400, cy + 24, "ReductStore")
+    by2 = cy + 80
+    box(c, 44, by2, 220, 70, "bucket: demo", [("replicated robot data", "rs-s rs-mono")])
+    box(c, 310, by2, 210, 70, "ReductROS", [("messages to JSON", "rs-s rs-mono")])
+    box(c, 566, by2, 200, 70, "ReductSelect", [("SQL over JSON", "rs-s rs-mono")])
+    for x0, x1 in [(264, 310), (520, 566)]:
+        c.wire(f"M{x0},{by2 + 35} L{x1},{by2 + 35}", "rs-flow-out")
+        c.port(x0, by2 + 35)
+        c.port(x1, by2 + 35)
+    c.text(543, by2 + 90, "query pipeline", "rs-s")
+    return c.svg(800, cy + 200, "ROS topics on the robot flow into ReductBridge, which writes records, labels and the ROS schema to the local ReductStore. A replication task sends selected camera and IMU entries over HTTP(S) to ReductStore in the cloud or a central on-premises server, where ReductROS extracts messages as JSON and ReductSelect runs SQL over them.")
+
+
 for name, fn in [("buckets", buckets), ("entries", entries), ("blocks", blocks)]:
     open(OUT + name + ".svg", "w").write(fn())
+open("docs/ros/img/ros-workflow.svg", "w").write(ros())
 print("ok")

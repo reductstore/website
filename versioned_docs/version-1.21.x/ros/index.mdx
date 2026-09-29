@@ -7,6 +7,8 @@ description: Complete guide to building data flow pipelines with ReductStore in 
   <link rel="canonical" href="https://www.reduct.store/docs/ros" />
 </head>
 
+import RosWorkflowDiagram from "./img/ros-workflow.svg";
+
 # Using ReductStore in ROS applications
 
 :::info
@@ -72,63 +74,18 @@ selected entries or label-matched records to the cloud or central on-premises
 ReductStore instance. When users query that data, ReductROS extracts the messages
 as JSON before ReductSelect runs SQL over the decoded fields.
 
-<div style={{ textAlign: "center" }}>
-
-```svgbob
-                        +--------------------------------------+
-                        | "Cloud or central on-premises"       |
-                        |                                      |
-                        |   .-------------------------------.  |
-                        |   | "ReductStore"                 |  |
-                        |   | "bucket: demo"                |  |
-                        |   | "replicated robot data"       |  |
-                        |   |                               |  |
-                        |   | "query pipeline"              |  |
-                        |   | "ReductROS: messages -> JSON" |  |
-                        |   | "ReductSelect: SQL over JSON" |  |
-                        |   `-------------------------------'  |
-                        |                   ^                  |
-                        +-------------------|------------------+
-                                            |
-                                            | "selected records over HTTP(S)"
-          +---------------------------------+------------------------------------+
-          |  "Awesome Robot"                |                                    |
-          |                                 |                                    |
-          |                 .-------------------------------.                    |
-          |                 | "Local ReductStore"           |                    |
-          |                 |               |               |                    |
-          |                 |   .-----------+-----------.   |                    |
-          |                 |   | "replication task"    |   |                    |
-          |                 |   | "camera + IMU entries"|   |                    |
-          |                 |   `-----------+-----------'   |                    |
-          |                 |               |               |                    |
-          |                 |   .-----------+-----------.   |                    |
-          |                 |   | "bucket: robot-data"  |   |                    |
-          |                 |   | "entries + labels"    |   |                    |
-          |                 |   `-----------+-----------'   |                    |
-          |                 |               ^               |                    |
-          |                 `---------------|---------------'                    |
-          |                                 |                                    |
-          |                                 | "records + labels + $schema"       |
-          |                                 +---------------+                    |
-          |   "ROS topics"                                  |                    |
-          |                                                 |                    |
-          |   .---------------------.                       |                    |
-          |   | "/camera/image_raw" |---+   .---------------+-----------------.  |
-          |   `---------------------'   |   | "ReductBridge"                  |  |
-          |                             |   |                                 |  |
-          |   .---------------------.   |   | * "subscribes to topics"        |  |
-          |   | "/gps/fix"          |---+-->| * "stores message payloads"     |  |
-          |   `---------------------'   |   | * "applies labels"              |  |
-          |                             |   | * "attaches ROS schema"         |  |
-          |   .---------------------.   |   |                                 |  |
-          |   | "/imu/data"         |---+   |                                 |  |
-          |   `---------------------'       `---------------------------------'  |
-          |                                                                      |
-          |                                                                      |
-          +----------------------------------------------------------------------+
-```
-
+<div style={{ overflowX: "auto" }}>
+  <RosWorkflowDiagram
+    className="rs-diagram"
+    role="img"
+    aria-label="ROS topics on the robot flow into ReductBridge, which writes records, labels and the ROS schema to the local ReductStore. A replication task sends selected camera and IMU entries over HTTP(S) to ReductStore in the cloud or a central on-premises server, where ReductROS extracts messages as JSON and ReductSelect runs SQL over them."
+    style={{
+      display: "block",
+      width: "100%",
+      minWidth: "640px",
+      height: "auto",
+    }}
+  />
 </div>
 
 <small style={{ textAlign: "right" }}>
