@@ -14,14 +14,12 @@ import styles from "./styles.module.css";
 
 function Feature({ IconComponent, title, description }) {
   return (
-    <div className="col col--4">
-      <div className={styles.feature}>
-        <div className={styles.featureIcon}>
-          <IconComponent />
-        </div>
-        <h3>{title}</h3>
-        <p>{description}</p>
+    <div className={styles.feature}>
+      <div className={styles.featureIcon}>
+        <IconComponent />
       </div>
+      <h3 className={styles.featureTitle}>{title}</h3>
+      <p className={styles.featureDescription}>{description}</p>
     </div>
   );
 }
@@ -29,7 +27,7 @@ function Feature({ IconComponent, title, description }) {
 export default function HomepageFeatures() {
   return (
     <section className={styles.features}>
-      <div className="row">
+      <div className={styles.grid}>
         <Feature
           IconComponent={LuTimer}
           title="Multimodal Time-Indexed Storage"
@@ -45,9 +43,6 @@ export default function HomepageFeatures() {
           title="Selective Edge to Cloud Replication"
           description="Replicate using rules based on labels or events, even with limited bandwidth and intermittent connectivity."
         />
-      </div>
-
-      <div className="row">
         <Feature
           IconComponent={LuLayers}
           title="Batching for Lower Cloud Cost"
@@ -63,9 +58,6 @@ export default function HomepageFeatures() {
           title="Retention and Quotas"
           description="FIFO quotas based on volume keep edge disks from filling up and maintain a rolling window of recent data."
         />
-      </div>
-
-      <div className="row">
         <Feature
           IconComponent={LuSearch}
           title="Fast Event Retrieval"
