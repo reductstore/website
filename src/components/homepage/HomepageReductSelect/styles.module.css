@@ -1,0 +1,45 @@
+.section {
+  padding: 2rem 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.phone {
+  display: none;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.btn {
+  margin-top: 1rem;
+}
+
+.note {
+  margin: 1rem 0 0;
+  font-size: 0.9rem;
+  color: var(--reduct-dimmed);
+}
+
+@media (max-width: 996px) {
+  .row {
+    flex-direction: column-reverse;
+  }
+
+  .desktop {
+    display: none;
+  }
+
+  .phone {
+    display: block;
+    margin-top: 2rem;
+  }
+}

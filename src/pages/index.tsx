@@ -22,6 +22,7 @@ import HomepageStats from "../components/homepage/HomepageStats";
 import HomepagePartners from "../components/homepage/HomepagePartners";
 import HomepageCompanies from "../components/homepage/HomepageCompanies";
 import HomepageReductBridge from "@site/src/components/homepage/HomepageReductBridge";
+import HomepageReductSelect from "@site/src/components/homepage/HomepageReductSelect";
 
 function HomepageHeader() {
   return (
@@ -93,6 +94,8 @@ export default function Home(): JSX.Element {
           <HomepagePerformance />
           <hr className={styles.industrialHr} />
           <HomepageObservability />
+          <hr className={styles.industrialHr} />
+          <HomepageReductSelect />
           <hr className={styles.industrialHr} />
           <HomepageRobotics />
           <hr className={styles.industrialHr} />
