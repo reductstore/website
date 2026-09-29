@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useId } from "react";
 import clsx from "clsx";
 import NavbarNavLink from "@theme/NavbarItem/NavbarNavLink";
 import Link from "@docusaurus/Link";
@@ -40,8 +40,35 @@ export default function DropdownNavbarItemDesktop({
   const dropdownRef = useRef(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const [panelGap, setPanelGap] = useState(null);
+  const closeTimer = useRef(null);
+
+  // A short grace period so moving the pointer diagonally onto a narrow
+  // panel does not close it.
+  const scheduleClose = () => {
+    clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setShowDropdown(false), 250);
+  };
+
+  useEffect(() => () => clearTimeout(closeTimer.current), []);
+
+  const dropdownId = useId();
+  useEffect(() => {
+    const closeOthers = (event) => {
+      if (event.detail !== dropdownId) {
+        clearTimeout(closeTimer.current);
+        setShowDropdown(false);
+      }
+    };
+    window.addEventListener("navbar-dropdown-open", closeOthers);
+    return () =>
+      window.removeEventListener("navbar-dropdown-open", closeOthers);
+  }, [dropdownId]);
 
   const openDropdown = () => {
+    clearTimeout(closeTimer.current);
+    window.dispatchEvent(
+      new CustomEvent("navbar-dropdown-open", { detail: dropdownId }),
+    );
     const item = dropdownRef.current;
     const navbar = item?.closest(".navbar");
     if (item && navbar) {
@@ -86,7 +113,7 @@ export default function DropdownNavbarItemDesktop({
         },
       )}
       onMouseEnter={openDropdown}
-      onMouseLeave={() => setShowDropdown(false)}
+      onMouseLeave={scheduleClose}
     >
       <NavbarNavLink
         aria-haspopup="true"

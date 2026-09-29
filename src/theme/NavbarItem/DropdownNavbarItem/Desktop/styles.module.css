@@ -34,8 +34,8 @@
 .megaPanel::before {
   content: "";
   position: absolute;
-  left: 0;
-  right: 0;
+  left: -1.5rem;
+  right: -1.5rem;
   bottom: 100%;
   height: calc(var(--panel-gap, var(--ifm-navbar-padding-vertical)) + 0.75rem);
 }
