@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import { FaCheckCircle, FaTimes } from "react-icons/fa";
@@ -205,6 +206,48 @@ export function PricingComparison() {
   );
 }
 
+function SubscribeButton({ href }: { href: string }) {
+  const [redirecting, setRedirecting] = useState(false);
+
+  useEffect(() => {
+    // Leaving for Stripe keeps this page in the back/forward cache with the
+    // loader still showing, so reset it when the visitor comes back.
+    const reset = () => setRedirecting(false);
+    window.addEventListener("pageshow", reset);
+    return () => window.removeEventListener("pageshow", reset);
+  }, []);
+
+  const onClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      return;
+    }
+    if (redirecting) {
+      event.preventDefault();
+      return;
+    }
+    setRedirecting(true);
+  };
+
+  return (
+    <a
+      className={clsx("button button--primary button--lg", styles.subscribe)}
+      href={href}
+      onClick={onClick}
+      aria-busy={redirecting}
+      aria-disabled={redirecting}
+    >
+      {redirecting && <span className={styles.spinner} aria-hidden="true" />}
+      {redirecting ? "Redirecting…" : "Subscribe"}
+    </a>
+  );
+}
+
 export default function PricingTable() {
   const { siteConfig } = useDocusaurusContext();
   const { checkoutEnabled, checkoutUrl } =
@@ -277,12 +320,7 @@ export default function PricingTable() {
           actions={
             checkoutEnabled &&
             checkoutUrl && (
-              <a
-                className="button button--primary button--lg"
-                href={checkoutUrl}
-              >
-                Subscribe
-              </a>
+              <SubscribeButton href={checkoutUrl} />
             )
           }
           bullets={summaryBullets("pro")}
