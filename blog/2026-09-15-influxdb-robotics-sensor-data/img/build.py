@@ -1,4 +1,7 @@
-# Regenerate with: python3 build.py (then rasterise the social card, see render.js)
+# Regenerate with: python3 build.py (set CHROMIUM if the binary is not on PATH as "chromium")
+import os
+import subprocess
+
 DEFS = '''<defs>
     <style>
       :root {
@@ -103,3 +106,20 @@ svg = "\n".join(
 )
 open("influxdb-reductstore-flow.svg", "w").write(svg)
 print("viewBox", VIEWBOX)
+
+here = os.path.dirname(os.path.abspath(__file__))
+page = os.path.join(here, "social.html")
+open(page, "w").write(
+    '<!doctype html><meta charset="utf-8"><style>html,body{margin:0;background:#fff}'
+    "body{width:1200px;height:630px;display:flex;align-items:center;justify-content:center}"
+    "svg{display:block;height:570px;width:auto}</style>" + svg
+)
+try:
+    subprocess.run(
+        [os.environ.get("CHROMIUM", "chromium"), "--headless", "--no-sandbox", "--hide-scrollbars",
+         "--force-prefers-color-scheme=light", "--window-size=1200,630",
+         "--screenshot=" + os.path.join(here, "influxdb-reductstore-social.png"), "file://" + page],
+        check=True, capture_output=True,
+    )
+finally:
+    os.remove(page)
