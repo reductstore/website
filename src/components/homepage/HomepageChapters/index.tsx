@@ -149,19 +149,6 @@ const query: ChapterItem[] = [
 
 const operate: ChapterItem[] = [
   {
-    title: "Grafana",
-    summary: "dashboards and alerts",
-    cta: { label: "Setup Grafana", to: "/docs/integrations/grafana" },
-    visual: (
-      <img
-        className={styles.screenshot}
-        src={grafanaImage}
-        alt="Grafana dashboard"
-        loading="lazy"
-      />
-    ),
-  },
-  {
     title: "Web Console",
     summary: "browse data, manage access",
     cta: { label: "Try Web Console", to: "/docs/getting-started" },
@@ -170,6 +157,19 @@ const operate: ChapterItem[] = [
         className={styles.screenshot}
         src={webConsoleImage}
         alt="ReductStore Web Console"
+        loading="lazy"
+      />
+    ),
+  },
+  {
+    title: "Grafana",
+    summary: "dashboards and alerts",
+    cta: { label: "Setup Grafana", to: "/docs/integrations/grafana" },
+    visual: (
+      <img
+        className={styles.screenshot}
+        src={grafanaImage}
+        alt="Grafana dashboard"
         loading="lazy"
       />
     ),
