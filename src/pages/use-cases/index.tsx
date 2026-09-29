@@ -22,7 +22,7 @@ export default function UseCases(): JSX.Element {
           </p>
         </div>
         <div className={clsx("container", styles.useCasesContainer)}>
-          <UseCaseCards useCases={useCases} showDiagram />
+          <UseCaseCards useCases={useCases} />
         </div>
       </main>
     </Layout>

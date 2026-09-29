@@ -6,10 +6,8 @@ import styles from "./styles.module.css";
 
 export default function UseCaseCards({
   useCases,
-  showDiagram = false,
 }: {
   useCases: UseCase[];
-  showDiagram?: boolean;
 }): JSX.Element {
   return (
     <>
@@ -18,10 +16,10 @@ export default function UseCaseCards({
           key={link}
           to={link}
           className={clsx(styles.useCaseCard, {
-            [styles.withDiagram]: showDiagram && Diagram,
+            [styles.withDiagram]: Diagram,
           })}
         >
-          {showDiagram && Diagram && (
+          {Diagram && (
             <div className={styles.diagram}>
               <Diagram className="rs-diagram" aria-hidden="true" />
             </div>

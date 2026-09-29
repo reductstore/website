@@ -1,22 +1,3 @@
-.section {
-  margin: 3.5rem 0 1rem;
-  text-align: center;
-}
-
-.title {
-  font-size: 2rem;
-  font-weight: 800;
-  line-height: 1.25;
-  margin-bottom: 0.75rem;
-}
-
-.subtitle {
-  max-width: 44rem;
-  margin: 0 auto 2rem;
-  font-size: var(--reduct-font-size-subtitle);
-  color: var(--ifm-color-emphasis-700);
-}
-
 .grid {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -24,6 +5,7 @@
 }
 
 .tile {
+  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -76,7 +58,6 @@
   color: var(--ifm-color-emphasis-700);
 }
 
-[data-theme="dark"] .subtitle,
 [data-theme="dark"] .data {
   color: var(--ifm-color-emphasis-600);
 }
@@ -98,10 +79,6 @@
 }
 
 @media (max-width: 600px) {
-  .title {
-    font-size: 1.6rem;
-  }
-
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.625rem;

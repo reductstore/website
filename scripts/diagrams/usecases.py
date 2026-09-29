@@ -15,8 +15,12 @@ W, H = 3 * NW + 2 * GAP, 76
 Y = (H - NH) / 2
 
 USE_CASES = {
-    "robotics": [("Robot", "ROS 2, LiDAR", "card"), ("ReductStore", "edge", "brand"), ("Cloud", "fleet data", "card")],
-    "daq": [("Sensors, PLC", "shop floor", "card"), ("ReductStore", "FIFO quota", "brand"), ("Cloud", "S3 backend", "coral")],
+    "industrial-edge": [("Sensors, PLC", "shop floor", "card"), ("ReductStore", "FIFO quota", "brand"), ("Cloud", "S3 backend", "coral")],
+    "mobile-robots": [("Robot", "LiDAR, cameras", "card"), ("ReductStore", "edge", "brand"), ("Cloud", "fleet data", "card")],
+    "ros": [("ROS 2", "topics", "card"), ("ReductBridge", "pipelines", "coral"), ("ReductStore", "MCAP export", "brand")],
+    "physical-ai": [("Robot", "episodes", "card"), ("ReductStore", "labels", "brand"), ("Training", "datasets", "card")],
+    "drones": [("Drone", "sensors", "card"), ("ReductStore", "air-gapped", "brand"), ("Ground", "sync later", "card")],
+    "cloud": [("Edge", "ReductStore", "card"), ("ReductStore", "cloud", "brand"), ("Object store", "S3, Azure", "coral")],
     "computer-vision": [("Camera", "frames", "card"), ("Model", "detections", "card"), ("ReductStore", "labeled data", "brand")],
     "h264-video": [("Camera", "H.264 chunks", "card"), ("ReductStore", "video/h264", "brand"), ("ReductVideo", "MP4 episodes", "coral")],
     "vibration": [("Sensor", "waveforms", "card"), ("ReductStore", "FIFO buffer", "brand"), ("Analysis", "anomalies", "card")],
