@@ -11,7 +11,18 @@
 }
 
 .featureIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
   margin-bottom: 1rem;
+  border-radius: 12px;
+  font-size: 1.5rem;
   color: var(--ifm-color-primary);
-  font-size: 2rem;
+  background-color: rgba(43, 5, 72, 0.07);
+}
+
+[data-theme="dark"] .featureIcon {
+  background-color: rgba(218, 190, 237, 0.1);
 }

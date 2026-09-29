@@ -32,8 +32,8 @@ export default function HomepageFeatures() {
       <div className="row">
         <Feature
           IconComponent={LuTimer}
-          title="Multimodal Time Series Storage"
-          description="Store time ordered records of any type and size: log files, images, video, LiDAR, ROS bags and more."
+          title="Multimodal Time-Indexed Storage"
+          description="Store records of any type and size, indexed by time: log files, images, video, LiDAR, ROS bags and more."
         />
         <Feature
           IconComponent={LuTags}

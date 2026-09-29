@@ -2,12 +2,13 @@ import React from "react";
 import Link from "@docusaurus/Link";
 import styles from "./styles.module.css";
 import Heading from "@theme/Heading";
+import clsx from "clsx";
 
 function HomepageCTA() {
   return (
     <section className={styles.section}>
-      <Heading as="h2">
-        Time-Series Blob Storage for Robotics & Industrial IoT
+      <Heading as="h2" className={styles.title}>
+        A data backbone for robotics and industrial IoT
       </Heading>
       <p>
         Learn how ReductStore helps robotics and industrial teams store images,
@@ -15,7 +16,10 @@ function HomepageCTA() {
         cloud. With benchmarks and comparisons vs. TimescaleDB, MongoDB, and
         MinIO.
       </p>
-      <Link className="button button--primary button--lg" to="/whitepaper">
+      <Link
+        className={clsx("button button--lg", styles.button)}
+        to="/whitepaper"
+      >
         Download White Paper (PDF)
       </Link>
     </section>

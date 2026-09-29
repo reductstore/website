@@ -13,9 +13,9 @@ function HomepageObservability() {
         <div className={"col col--5 text--center"}>
           <h2 className="hideOnMobile">Observability</h2>
           <p>
-            Visualize time-series data in Grafana dashboards. Query labels and
-            content of records (e.g. CSV columns, JSON fields, ROS message
-            fields). Set up alerts for anomalies.
+            Visualize your data in Grafana dashboards. Query labels and content
+            of records (e.g. CSV columns, JSON fields, ROS message fields). Set
+            up alerts for anomalies.
           </p>
           <Link
             className={clsx("button button--primary button--lg", styles.btn)}

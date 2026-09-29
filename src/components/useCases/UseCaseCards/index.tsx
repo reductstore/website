@@ -1,7 +1,6 @@
-import React from "react";
+import React, { JSX } from "react";
 import styles from "./styles.module.css";
 import Link from "@docusaurus/Link";
-import clsx from "clsx";
 
 interface UseCase {
   title: string;
@@ -16,23 +15,18 @@ export default function UseCaseCards({
 }): JSX.Element {
   return (
     <>
-      {useCases.map((useCase, index) => (
-        <div key={index} className={clsx("card", styles.useCaseCard)}>
-          <div className="card__header">
-            <h3>{useCase.title}</h3>
-          </div>
-          <div className="card__body">
-            <p>{useCase.description}</p>
-          </div>
-          <div className="card__footer">
-            <Link
-              to={useCase.link}
-              className="button button--primary button--block"
-            >
-              Learn More &rarr;
-            </Link>
-          </div>
-        </div>
+      {useCases.map((useCase) => (
+        <Link
+          key={useCase.link}
+          to={useCase.link}
+          className={styles.useCaseCard}
+        >
+          <h3 className={styles.title}>{useCase.title}</h3>
+          <p className={styles.description}>{useCase.description}</p>
+          <span className={styles.more}>
+            Learn more <span aria-hidden="true">→</span>
+          </span>
+        </Link>
       ))}
     </>
   );

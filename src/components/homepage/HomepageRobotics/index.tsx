@@ -28,7 +28,7 @@ function HomepageRobotics() {
       <div className="text--center">
         <h2>Robotics Support</h2>
         <p className={styles.description}>
-          ReductStore is built for the robotics stack. Reduct Bridge records ROS
+          ReductStore is built for the robotics stack. ReductBridge records ROS
           2 topics straight to storage, and it ingests MCAP files, Zenoh
           streams, and raw sensor data with timestamps and labels. It plugs into
           Canonical's Observability Stack (COS) for robotics on Ubuntu, and it
