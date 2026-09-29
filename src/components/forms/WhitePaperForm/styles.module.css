@@ -8,5 +8,5 @@
 
   /* Ensures the container doesn't collapse while the form loads */
   min-height: 500px;
-  min-width: 400px;
+  min-width: min(400px, 100%);
 }
