@@ -19,7 +19,7 @@ function HomepageObservability() {
           </p>
           <Link
             className={clsx("button button--primary button--lg", styles.btn)}
-            to="/docs/next/integrations/grafana"
+            to="/docs/integrations/grafana"
           >
             Setup Grafana →
           </Link>
