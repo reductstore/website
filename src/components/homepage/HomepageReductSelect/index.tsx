@@ -39,9 +39,6 @@ export default function HomepageReductSelect(): JSX.Element {
           >
             Learn More →
           </Link>
-          <p className={styles.note}>
-            ReductSelect comes with <Link to="/pricing">ReductStore Pro</Link>.
-          </p>
         </div>
       </div>
     </section>

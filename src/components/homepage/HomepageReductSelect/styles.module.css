@@ -23,12 +23,6 @@
   margin-top: 1rem;
 }
 
-.note {
-  margin: 1rem 0 0;
-  font-size: 0.9rem;
-  color: var(--reduct-dimmed);
-}
-
 @media (max-width: 996px) {
   .row {
     flex-direction: column-reverse;
