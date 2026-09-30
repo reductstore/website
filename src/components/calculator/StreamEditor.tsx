@@ -1,5 +1,6 @@
 import React, { JSX } from "react";
 import type { DataClass, StreamInput } from "./types";
+import InfoTip from "./InfoTip";
 import styles from "./styles.module.css";
 
 export type StreamDraft = Omit<
@@ -14,13 +15,34 @@ export type StreamDraft = Omit<
 const NUMERIC: {
   key: "count" | "frequencyHz" | "recordSizeKb";
   label: string;
+  hint: string;
   unit?: string;
   step: number;
   min: number;
 }[] = [
-  { key: "count", label: "Count", step: 1, min: 0 },
-  { key: "frequencyHz", label: "Frequency", unit: "Hz", step: 1, min: 0 },
-  { key: "recordSizeKb", label: "Record size", unit: "KB", step: 1, min: 0 },
+  {
+    key: "count",
+    label: "Count",
+    hint: "How many of this stream each unit has, for example 2 cameras.",
+    step: 1,
+    min: 0,
+  },
+  {
+    key: "frequencyHz",
+    label: "Frequency",
+    hint: "Records written per second while recording. A 1 s video segment is 1 Hz.",
+    unit: "Hz",
+    step: 1,
+    min: 0,
+  },
+  {
+    key: "recordSizeKb",
+    label: "Record size",
+    hint: "Average size of one record, as stored.",
+    unit: "KB",
+    step: 1,
+    min: 0,
+  },
 ];
 
 const DATA_CLASSES: { id: DataClass; label: string }[] = [
@@ -55,10 +77,23 @@ export default function StreamEditor({
           <tr>
             <th scope="col" aria-label="Include" />
             <th scope="col">Stream</th>
-            {classEditable && <th scope="col">Data class</th>}
-            {NUMERIC.map((field) => (
+            {classEditable && (
+              <th scope="col">
+                Data class{" "}
+                <InfoTip
+                  below
+                  text="Where the other stack keeps it: InfluxDB stores metrics; binary data, metadata, and logs go to object storage. ReductStore stores every class."
+                />
+              </th>
+            )}
+            {NUMERIC.map((field, i) => (
               <th key={field.key} scope="col" className={styles.numeric}>
-                {field.label}
+                {field.label}{" "}
+                <InfoTip
+                  below
+                  text={field.hint}
+                  align={i === NUMERIC.length - 1 ? "end" : "center"}
+                />
               </th>
             ))}
           </tr>

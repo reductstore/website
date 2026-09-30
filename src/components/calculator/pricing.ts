@@ -47,20 +47,22 @@ export const pricingConfig = {
     },
   },
 
-  // Development placeholders for Azure Blob (LRS hot / cool / cold). Replace
-  // them with current prices for the chosen region before relying on them.
   azure: {
     vendor: "Microsoft",
     product: "Azure Blob Storage (LRS hot, cool, cold)",
     currency: "USD",
     units: "per GB-month stored, per 10,000 operations, per GB retrieved",
     source: "https://azure.microsoft.com/pricing/details/storage/blobs/",
-    region: "placeholder",
-    lastVerified: "placeholder",
+    // The same list prices as the page, from the public retail prices API
+    // (General Block Blob v2, East US). Hot storage uses the first 50 TB tier.
+    apiSource:
+      "https://prices.azure.com/api/retail/prices?$filter=serviceName eq 'Storage' and armRegionName eq 'eastus' and productName eq 'General Block Blob v2'",
+    region: "East US",
+    lastVerified: "2026-09-30",
     putUsdPer1000: 0.005,
-    hot: { storageUsdPerGbMonth: 0.018, getUsdPer1000: 0.0004 },
+    hot: { storageUsdPerGbMonth: 0.0208, getUsdPer1000: 0.0004 },
     cool: {
-      storageUsdPerGbMonth: 0.01,
+      storageUsdPerGbMonth: 0.0152,
       getUsdPer1000: 0.001,
       retrievalUsdPerGb: 0.01,
       transitionUsdPer1000: 0.01,

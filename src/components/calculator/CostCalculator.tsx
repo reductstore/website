@@ -3,6 +3,7 @@ import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import {
   LuActivity,
+  LuCamera,
   LuCar,
   LuCpu,
   LuFactory,
@@ -51,6 +52,7 @@ const PRESET_ICONS: Record<string, IconType> = {
   "industrial-robot": LuFactory,
   vibration: LuActivity,
   plc: LuCpu,
+  "computer-vision": LuCamera,
   custom: LuSlidersHorizontal,
 };
 
@@ -60,17 +62,14 @@ const BACKENDS: { id: BackendId; label: string; name: string }[] = [
   { id: "minio", label: "On-prem", name: "On-prem" },
 ];
 
-const COMPETITORS: { id: CompetitorId; label: string; about: string }[] = [
+const COMPETITORS: { id: CompetitorId; label: string }[] = [
   {
     id: "foxglove",
     label: "Foxglove",
-    about: "Managed robotics data platform. Every stream is uploaded to it.",
   },
   {
     id: "influx",
     label: "InfluxDB + object storage",
-    about:
-      "InfluxDB Cloud Serverless for metrics; images, scans, and logs go to object storage in 64 MB batches.",
   },
 ];
 
@@ -279,7 +278,7 @@ export default function CostCalculator(): JSX.Element {
       : `${formatCurrency(-saving, currency)} / year higher`;
   const subline =
     saving >= 0
-      ? `${formatPercent(result.savingPercent)} lower TCO`
+      ? `${formatPercent(result.savingPercent)} lower total cost of ownership (TCO)`
       : "for this configuration";
 
   return (
@@ -318,6 +317,7 @@ export default function CostCalculator(): JSX.Element {
             <div className={styles.fields}>
               <NumberField
                 label={preset.unitLabel}
+                hint={`How many ${preset.unitLabel.toLowerCase()} record data. Each one records the streams in the table.`}
                 value={units}
                 onChange={setUnits}
                 min={1}
@@ -326,6 +326,7 @@ export default function CostCalculator(): JSX.Element {
               />
               <NumberField
                 label="Recording per day"
+                hint="Hours a day each unit records. Use 24 for equipment that runs all day."
                 value={hours}
                 onChange={setHours}
                 min={0}
@@ -376,6 +377,7 @@ export default function CostCalculator(): JSX.Element {
             <div className={styles.fields}>
               <NumberField
                 label="Retention"
+                hint="How long data is kept before it is deleted. The estimate is for when a full retention window is stored."
                 value={retentionDays}
                 onChange={setRetentionDays}
                 min={1}
@@ -386,6 +388,7 @@ export default function CostCalculator(): JSX.Element {
               {backend === "minio" && (
                 <NumberField
                   label="On-prem storage cost"
+                  hint="What one TB of your own object storage (for example MinIO) costs per month, with disks, servers, and power."
                   value={minioCost}
                   onChange={setMinioCost}
                   min={0}
@@ -425,9 +428,6 @@ export default function CostCalculator(): JSX.Element {
                 </button>
               ))}
             </div>
-            <p className={styles.competitorAbout}>
-              {COMPETITORS.find((c) => c.id === competitor)?.about}
-            </p>
             <div className={styles.architectures}>
               <Routes
                 title={result.alternative.label}
@@ -520,65 +520,71 @@ export default function CostCalculator(): JSX.Element {
         <summary>Calculation assumptions</summary>
         <div className={styles.assumptionsBody}>
           <p>
-            An estimate, not a quote. Both architectures use the same workload,
-            retention, reads, and storage backend. Costs are annualized at
-            steady state, once retained data has reached its full size.
+            This is an estimate from public list prices, not a quote. Both sides
+            store the same data for the same time on the same storage, and costs
+            are per year once the retention window is full.
           </p>
-          <ul>
-            <li>
-              Data per month = units × count × frequency × record size ×
-              recording hours × 30 days. Retained data = data per month ×
-              retention / 30.
-            </li>
-            <li>
-              ReductStore writes records in blocks of up to 64 MB or 1,024
-              records to the storage backend, with two requests per block.
-              InfluxDB + object storage batches raw data into objects of about
-              64 MB as well, with one request per object.
-            </li>
-            <li>
-              Each month {READ_PERCENT_PER_MONTH}% of retained data is read
-              back. On AWS S3 and Azure Blob, data older than {preset.hotDays}{" "}
-              days moves to colder storage classes only when that is cheaper,
-              respecting minimum storage durations and billable object sizes.
-              On-prem object storage (for example MinIO) costs retained TB × the
-              storage price you enter × 12.
-            </li>
-            <li>
-              ReductStore license: ReductStore Pro list price of{" "}
-              {formatCurrency(
-                REDUCTSTORE_PRICING[currency].perTbMonth,
-                currency,
-              )}{" "}
-              per TB per month on retained data, {REDUCTSTORE_MIN_TB} TB
-              minimum. It is a fixed price in each currency and is never
-              converted.
-            </li>
-            <li>
-              Foxglove Pro: base plan with {ASSUMPTIONS.foxgloveDeveloperSeats}{" "}
-              developer seats, one device per unit, storage on retained data,
-              indexing on uploaded data, bandwidth on data read, and{" "}
-              {ASSUMPTIONS.foxgloveQueryHoursPerMonth} query hours per month,
-              each with its public marginal tiers.
-            </li>
-            <li>
-              InfluxDB Cloud Serverless: metrics only, with data in, storage,{" "}
-              {ASSUMPTIONS.influxQueriesPerMonth.toLocaleString("en")} queries
-              per month, and data out. At larger production scale InfluxData
-              positions Cloud Dedicated, whose pricing is not public.
-            </li>
-            <li>
-              Excludes compute outside the listed services, egress, networking,
-              support, VAT, extra backups, labor, and migration.
-            </li>
-          </ul>
+
+          <h3>Your data</h3>
           <p>
-            Competitor and cloud prices are public list prices in USD
+            Each stream produces count × frequency × record size of data for
+            every hour it records, over 30-day months. Retained data is one
+            retention window of it. Each month, {READ_PERCENT_PER_MONTH}% of the
+            retained data is read back.
+          </p>
+
+          <h3>ReductStore</h3>
+          <p>
+            ReductStore Pro costs{" "}
+            {formatCurrency(REDUCTSTORE_PRICING[currency].perTbMonth, currency)}{" "}
+            per TB per month of retained data, with a {REDUCTSTORE_MIN_TB} TB
+            minimum. It is a fixed price in each currency, never converted.
+            ReductStore groups records into blocks of up to 64 MB before writing
+            them to storage, so storage sees few, large objects.
+          </p>
+
+          <h3>Storage</h3>
+          <p>
+            On S3 and Azure, data older than {preset.hotDays} days moves to a
+            cheaper storage class when that saves money, following each
+            class&apos;s minimum storage time. On-prem storage costs the price
+            you enter per TB per month.
+          </p>
+
+          <h3>Foxglove</h3>
+          <p>
+            Foxglove Pro with {ASSUMPTIONS.foxgloveDeveloperSeats} developer
+            seats, one device per unit, and{" "}
+            {ASSUMPTIONS.foxgloveQueryHoursPerMonth} query hours a month. Every
+            stream is uploaded to Foxglove, which charges for storage, indexing,
+            and bandwidth.
+          </p>
+
+          <h3>InfluxDB + object storage</h3>
+          <p>
+            Metrics go to InfluxDB Cloud Serverless, which charges for data
+            written, storage,{" "}
+            {ASSUMPTIONS.influxQueriesPerMonth.toLocaleString("en")} queries a
+            month, and data read. Everything else goes to the same object
+            storage in 64 MB batches. Large production deployments usually run
+            InfluxDB Cloud Dedicated, whose price is not public.
+          </p>
+
+          <h3>Not included</h3>
+          <p>
+            Compute outside these services, network transfer, support, VAT,
+            extra backups, engineering time, and migration.
+          </p>
+
+          <h3>Prices</h3>
+          <p>
+            Cloud and vendor prices are in USD
             {currency === "EUR"
-              ? `, converted for comparison at $1 = €${pricingConfig.fx.usdToEur} (FX reference date ${formatDate(pricingConfig.fx.lastVerified)})`
+              ? `, converted to EUR at $1 = €${pricingConfig.fx.usdToEur} (rate of ${formatDate(pricingConfig.fx.lastVerified)})`
               : ""}
-            . They vary by region, workload, and commercial agreement. AWS uses{" "}
-            {pricingConfig.aws.region} rates; Azure prices are placeholders.
+            , for {pricingConfig.aws.region} on AWS and{" "}
+            {pricingConfig.azure.region} on Azure. They vary by region,
+            workload, and agreement.
           </p>
           <div className={styles.sourcesTable}>
             <table>

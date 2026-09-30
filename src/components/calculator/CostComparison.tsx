@@ -89,7 +89,7 @@ function Breakdown({ side, currency }: { side: CostSide; currency: Currency }) {
       <tfoot>
         <tr>
           <th scope="row">Total</th>
-          <td>{total(side, currency)}</td>
+          <td>{formatCurrency(side.totalYear, currency)}</td>
         </tr>
       </tfoot>
     </table>

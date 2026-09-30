@@ -1,5 +1,6 @@
 import React, { JSX, useId } from "react";
 import clsx from "clsx";
+import InfoTip from "./InfoTip";
 import styles from "./styles.module.css";
 
 export default function NumberField({
@@ -12,6 +13,7 @@ export default function NumberField({
   prefix,
   suffix,
   error,
+  hint,
   wide,
 }: {
   label: string;
@@ -23,12 +25,16 @@ export default function NumberField({
   prefix?: string;
   suffix?: string;
   error?: string | null;
+  hint?: string;
   wide?: boolean;
 }): JSX.Element {
   const id = useId();
   return (
     <div className={clsx(styles.field, { [styles.fieldWide]: wide })}>
-      <label htmlFor={id}>{label}</label>
+      <div className={styles.labelRow}>
+        <label htmlFor={id}>{label}</label>
+        {hint && <InfoTip text={hint} />}
+      </div>
       <div className={clsx(styles.inputWrap, { [styles.invalid]: error })}>
         {prefix && <span className={styles.affix}>{prefix}</span>}
         <input

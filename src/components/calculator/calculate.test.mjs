@@ -431,6 +431,8 @@ const regressions = [
   ["vibration", "influx", 80.3, 79.7],
   ["plc", "foxglove", 37.62, 35.94],
   ["plc", "influx", 98.01, 97.96],
+  ["computer-vision", "foxglove", 38.08, 36.29],
+  ["computer-vision", "influx", -104.18, -110.09],
   ["custom", "foxglove", 36.71, 34.78],
   ["custom", "influx", -115.94, -122.55],
 ];
@@ -460,6 +462,7 @@ test("every example is 30 to 40% cheaper than Foxglove in both currencies", () =
       "industrial-robot",
       "vibration",
       "plc",
+      "computer-vision",
       "custom",
     ],
   );
