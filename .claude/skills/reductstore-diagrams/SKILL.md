@@ -19,7 +19,9 @@ gradients, colors other than the palette, or background rectangle.
 
 - **Purple means ReductStore.** Use `brand=True` for ReductStore components, or
   for the one thing the figure is about (for example the records a replication
-  filter selects). If everything is purple, nothing is.
+  filter selects). If everything is purple, nothing is. The fill is the
+  lighter site purple `#8A6FA8`, not the logo's `#2B0548`, so arrows and
+  arrowheads that touch or cross a purple box stay visible.
 - Group what runs in one place with `zone()` (dashed frame, label top left).
 - Draw at the size it is shown. The blog column is about 630 px wide, so keep
   the viewBox at most about 760 units wide (900 for a dense figure). A wider
@@ -59,7 +61,9 @@ gradients, colors other than the palette, or background rectangle.
 
 2. Building blocks: `card` (shadowed box, title and mono sub or bullets),
    `panel` (card with the title on top, for nesting), `item` (small box inside a
-   zone or panel), `zone`, `records` (a strip of stored records), `hatch`
+   zone or panel), `zone`, `records` (a strip of stored records; pass
+   `labels="abac"` to color records by label value, so filtering between tiers
+   shows as colors disappearing), `hatch`
    (binary payload), `arrow` / `line` / `guide` (orthogonal points,
    `dashed=True`, `both=True`), `text`, `ellipsis`. Classes for `text` are in
    `STYLE` (`text-label`, `text-label-strong`, `text-note`, `-inverse` for text

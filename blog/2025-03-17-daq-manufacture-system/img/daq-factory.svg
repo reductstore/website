@@ -3,7 +3,7 @@
     <style>
       :root {
         --card-bg: #FFFFFF;
-        --card-brand: #2B0548;
+        --card-brand: #8A6FA8;
         --card-stroke: #333333;
         --shadow: #000000;
         --text-main: #333333;
@@ -11,6 +11,12 @@
         --text-inverse: #FFFFFF;
         --line: #333333;
         --zone: #F7F4FA;
+        --label-a: #D5E8D4;
+        --label-a-stroke: #82B366;
+        --label-b: #E1D5E7;
+        --label-b-stroke: #9673A6;
+        --label-c: #F8CECC;
+        --label-c-stroke: #B85450;
       }
 
       @media (prefers-color-scheme: dark) {
@@ -41,6 +47,9 @@
       .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
       .hatch-line { stroke: var(--line); stroke-width: 1.5; }
       .record { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1; }
+      .label-a { fill: var(--label-a); stroke: var(--label-a-stroke); }
+      .label-b { fill: var(--label-b); stroke: var(--label-b-stroke); }
+      .label-c { fill: var(--label-c); stroke: var(--label-c-stroke); }
       .dot { fill: var(--text-muted); }
 
       .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
@@ -79,59 +88,59 @@
   <rect x="22" y="150" width="420" height="50" rx="10" class="card-plain" />
   <text x="232" y="180" class="text-item" text-anchor="middle">Replication</text>
   <rect x="22" y="250" width="290" height="104" rx="10" class="card-brand" />
-  <rect x="34.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="48.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="62.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="76.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="90.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="104.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="118.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="132.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="146.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="160.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="174.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="188.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="34.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="48.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="62.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="76.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="90.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="104.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="118.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="132.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="146.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="160.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="174.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="188.8" y="305" width="9" height="41" rx="2" class="record" />
+  <rect x="34.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="48.8" y="258" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="62.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="76.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="90.8" y="258" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="104.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="118.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="132.8" y="258" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="146.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="160.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="174.8" y="258" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="188.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="34.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="48.8" y="305" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="62.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="76.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="90.8" y="305" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="104.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="118.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="132.8" y="305" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="146.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="160.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="174.8" y="305" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="188.8" y="305" width="9" height="41" rx="2" class="record label-a" />
   <text x="298" y="307" class="text-item-inverse" text-anchor="end">Bucket #1</text>
   <circle cx="336" cy="302" r="3" class="dot" />
   <circle cx="350" cy="302" r="3" class="dot" />
   <circle cx="364" cy="302" r="3" class="dot" />
   <rect x="388" y="250" width="290" height="104" rx="10" class="card-brand" />
-  <rect x="400.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="414.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="428.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="442.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="456.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="470.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="484.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="498.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="512.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="526.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="540.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="554.8" y="258" width="9" height="41" rx="2" class="record" />
-  <rect x="400.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="414.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="428.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="442.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="456.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="470.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="484.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="498.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="512.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="526.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="540.8" y="305" width="9" height="41" rx="2" class="record" />
-  <rect x="554.8" y="305" width="9" height="41" rx="2" class="record" />
+  <rect x="400.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="414.8" y="258" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="428.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="442.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="456.8" y="258" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="470.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="484.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="498.8" y="258" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="512.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="526.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="540.8" y="258" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="554.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="400.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="414.8" y="305" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="428.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="442.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="456.8" y="305" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="470.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="484.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="498.8" y="305" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="512.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="526.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="540.8" y="305" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="554.8" y="305" width="9" height="41" rx="2" class="record label-a" />
   <text x="664" y="307" class="text-item-inverse" text-anchor="end">Bucket #N</text>
   <text x="292" y="396" class="text-bullet" text-anchor="start">• Fast access</text>
   <text x="292" y="420" class="text-bullet" text-anchor="start">• Data management by labels</text>

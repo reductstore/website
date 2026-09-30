@@ -29,7 +29,7 @@ STYLE = """<defs>
     <style>
       :root {
         --card-bg: #FFFFFF;
-        --card-brand: #2B0548;
+        --card-brand: #8A6FA8;
         --card-stroke: #333333;
         --shadow: #000000;
         --text-main: #333333;
@@ -37,6 +37,12 @@ STYLE = """<defs>
         --text-inverse: #FFFFFF;
         --line: #333333;
         --zone: #F7F4FA;
+        --label-a: #D5E8D4;
+        --label-a-stroke: #82B366;
+        --label-b: #E1D5E7;
+        --label-b-stroke: #9673A6;
+        --label-c: #F8CECC;
+        --label-c-stroke: #B85450;
       }
 
       @media (prefers-color-scheme: dark) {
@@ -67,6 +73,9 @@ STYLE = """<defs>
       .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
       .hatch-line { stroke: var(--line); stroke-width: 1.5; }
       .record { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1; }
+      .label-a { fill: var(--label-a); stroke: var(--label-a-stroke); }
+      .label-b { fill: var(--label-b); stroke: var(--label-b-stroke); }
+      .label-c { fill: var(--label-c); stroke: var(--label-c-stroke); }
       .dot { fill: var(--text-muted); }
 
       .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
@@ -167,13 +176,18 @@ class Diagram:
         if sub:
             self.text(tx, y + 54, sub, f"text-subtitle{inv}", anchor, mono=True)
 
-    def records(self, x, y, w, h, count=None, gap=5, width=9):
-        """A row of stored records, drawn as thin cells."""
+    def records(self, x, y, w, h, count=None, gap=5, width=9, labels=None):
+        """A row of stored records, drawn as thin cells.
+
+        labels colors the cells by label, repeating a pattern such as "abac":
+        "a", "b" and "c" are three label values, so a filter that keeps only
+        some of them is visible from one tier to the next."""
         count = count or int((w + gap) // (width + gap))
         span = count * width + (count - 1) * gap
         left = x + (w - span) / 2
         for i in range(count):
-            self.rect(left + i * (width + gap), y, width, h, "record", 2)
+            cls = f"record label-{labels[i % len(labels)]}" if labels else "record"
+            self.rect(left + i * (width + gap), y, width, h, cls, 2)
 
     def ellipsis(self, cx, cy):
         for dx in (-14, 0, 14):

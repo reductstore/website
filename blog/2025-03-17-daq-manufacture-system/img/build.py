@@ -8,12 +8,20 @@ from blogkit import Diagram  # noqa: E402
 HERE = Path(__file__).parent
 
 
-def bucket(d, x, y, w, h, label, rows=2):
+# Records are colored by label. Edge devices keep every label, the factory
+# drops "c", and the cloud keeps only "a".
+EDGE = "abacaacab"
+FACTORY = "abaabaaba"
+CLOUD = "a"
+
+
+def bucket(d, x, y, w, h, label, rows=2, labels=None):
     d.rect(x, y, w, h, "card-brand", 10)
     label_w = len(label) * 8.6 + 24
     row_h = (h - 16 - (rows - 1) * 6) / rows
     for r in range(rows):
-        d.records(x + 12, y + 8 + r * (row_h + 6), w - label_w - 24, row_h)
+        pattern = labels[r * 3 % len(labels):] + labels[: r * 3 % len(labels)] if labels else None
+        d.records(x + 12, y + 8 + r * (row_h + 6), w - label_w - 24, row_h, labels=pattern)
     d.text(x + w - 14, y + h / 2 + 5, label, "text-item-inverse", "end")
 
 
@@ -26,18 +34,18 @@ def tiers():
         d.guide((0, y), (right, y))
 
     d.panel(left, 0, 610, 180, "Cloud Instance #1", anchor="start")
-    bucket(d, left + 22, 52, 370, 104, "Bucket")
+    bucket(d, left + 22, 52, 370, 104, "Bucket", labels=CLOUD)
     d.card(left + 440, 64, 150, 80, "Cloud Storage", "object storage", shadow=False)
     d.arrow((left + 392, 104), (left + 436, 104))
 
     d.panel(left, 232, 610, 180, "Central Storage", anchor="start")
-    bucket(d, left + 22, 284, 250, 104, "Bucket #1")
+    bucket(d, left + 22, 284, 250, 104, "Bucket #1", labels=FACTORY)
     d.ellipsis(left + 305, 336)
-    bucket(d, left + 338, 284, 250, 104, "Bucket #N")
+    bucket(d, left + 338, 284, 250, 104, "Bucket #N", labels=FACTORY)
 
     for x, name in ((left, "Edge Device #1"), (left + 350, "Edge Device #N")):
         d.panel(x, 462, 260, 130, name, anchor="start")
-        bucket(d, x + 22, 512, 216, 56, "FIFO", rows=1)
+        bucket(d, x + 22, 512, 216, 56, "FIFO", rows=1, labels=EDGE)
         d.card(x + 105, 650, 150, 70, "Machine", "sensors, PLC", shadow=False)
         d.arrow((x + 180, 650), (x + 180, 572))
         d.arrow((x + 180, 512), (x + 180, 392))
@@ -60,7 +68,7 @@ def edge_device():
         d.arrow((182, cy), (232, cy))
         ey = 206 + i * 62
         d.rect(432, ey, 264, 46, "card-plain", 8)
-        d.records(442, ey + 9, 164, 28)
+        d.records(442, ey + 9, 164, 28, labels=EDGE[i:] + EDGE[:i])
         d.text(684, ey + 28, entry, "text-label-strong", "end")
         d.line((396, cy), (410, cy), (410, ey + 23))
         d.arrow((410, ey + 23), (428, ey + 23))
@@ -87,9 +95,9 @@ def factory():
     d.card(40, 0, 220, 76, "Cloud Storage", "cloud tier", shadow=False)
     d.panel(0, 130, 700, 330, "Central Storage", anchor="end")
     d.item(22, 150, 420, 50, "Replication")
-    bucket(d, 22, 250, 290, 104, "Bucket #1")
+    bucket(d, 22, 250, 290, 104, "Bucket #1", labels=FACTORY)
     d.ellipsis(350, 302)
-    bucket(d, 388, 250, 290, 104, "Bucket #N")
+    bucket(d, 388, 250, 290, 104, "Bucket #N", labels=FACTORY)
     d.text(292, 396, "• Fast access", "text-bullet", "start")
     d.text(292, 420, "• Data management by labels", "text-bullet", "start")
     d.arrow((150, 150), (150, 80))
@@ -113,7 +121,7 @@ def cloud():
     d.text(380, 166, "• Cost-effective storage", "text-label", "end")
     d.text(380, 186, "• Fully managed instance", "text-label", "end")
     d.panel(20, 204, 236, 310, "ReductStore instance", brand=True, anchor="start")
-    bucket(d, 38, 254, 200, 238, "Bucket", rows=5)
+    bucket(d, 38, 254, 200, 238, "Bucket", rows=5, labels=CLOUD)
     d.item(276, 264, 108, 54, "ETL logic")
     d.item(276, 408, 108, 54, "FUSE driver")
 
