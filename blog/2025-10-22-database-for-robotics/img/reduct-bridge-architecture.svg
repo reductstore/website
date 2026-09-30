@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.1 -10 621.1 473.9" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.9 -10 751.8 420" width="100%" height="100%">
   <defs>
     <style>
       :root {
@@ -76,25 +76,38 @@
       <line x1="0" y1="0" x2="0" y2="8" class="hatch-line" />
     </pattern>
   </defs>
-  <rect x="160" y="0" width="280" height="80" rx="16" class="card-standard" />
-  <text x="300" y="34" class="text-title" text-anchor="middle">Robot sensors</text>
-  <text x="300" y="58" class="text-subtitle mono" text-anchor="middle">camera, LiDAR, waveform</text>
-  <path d="M300,80 L300,126" class="connector" marker-end="url(#arrow)" />
-  <rect x="160" y="130" width="280" height="80" rx="16" class="card-standard" />
-  <text x="300" y="164" class="text-title" text-anchor="middle">Processing and fan-out</text>
-  <text x="300" y="188" class="text-subtitle mono" text-anchor="middle">event time + stable IDs</text>
-  <path d="M300,210 L300,242" class="connector" />
-  <path d="M135,242 L465,242" class="connector" />
-  <path d="M135,242 L135,306" class="connector" marker-end="url(#arrow)" />
-  <path d="M465,242 L465,306" class="connector" marker-end="url(#arrow)" />
-  <text x="145" y="272" class="text-label mono" text-anchor="start">numeric metrics</text>
-  <text x="455" y="272" class="text-label-strong mono" text-anchor="end">raw binary payloads</text>
-  <rect x="0" y="310" width="270" height="80" rx="16" class="card-standard" />
-  <text x="135" y="344" class="text-title" text-anchor="middle">InfluxDB</text>
-  <text x="135" y="368" class="text-subtitle mono" text-anchor="middle">metrics, dashboards, alerts</text>
-  <rect x="330" y="310" width="270" height="80" rx="16" class="card-brand" />
-  <text x="465" y="344" class="text-title-inverse" text-anchor="middle">ReductStore</text>
-  <text x="465" y="368" class="text-subtitle-inverse mono" text-anchor="middle">frames, scans, chunks</text>
-  <path d="M135,402 L135,426 L465,426 L465,402" class="link" />
-  <text x="300" y="450" class="text-label mono" text-anchor="middle">same event time, robot_id, sensor_id</text>
+  <rect x="260" y="0" width="220" height="220" rx="18" class="zone" />
+  <rect x="0" y="270" width="590" height="130" rx="18" class="zone" />
+  <rect x="0" y="0" width="200" height="96" rx="16" class="card-standard" />
+  <text x="100" y="30" class="text-item" text-anchor="middle">Data processing</text>
+  <text x="100" y="52" class="text-label" text-anchor="middle">Downstream users, ELT</text>
+  <text x="100" y="70" class="text-label" text-anchor="middle">pipelines, Jupyter notebooks</text>
+  <rect x="0" y="124" width="200" height="96" rx="16" class="card-standard" />
+  <text x="100" y="154" class="text-item" text-anchor="middle">Visualization</text>
+  <text x="100" y="176" class="text-label" text-anchor="middle">Foxglove, Grafana,</text>
+  <text x="100" y="194" class="text-label" text-anchor="middle">custom dashboards</text>
+  <rect x="280" y="24" width="180" height="56" rx="10" class="card-brand" />
+  <text x="370" y="57" class="text-item-inverse" text-anchor="middle">ReductStore</text>
+  <path d="M370,80 L370,136" class="link" />
+  <rect x="280" y="136" width="180" height="60" rx="10" class="card-plain" />
+  <text x="370" y="163" class="text-item" text-anchor="middle">S3 storage</text>
+  <text x="370" y="182" class="text-label" text-anchor="middle">backend</text>
+  <path d="M204,48 L276,48" class="connector" marker-end="url(#arrow)" marker-start="url(#arrow)" />
+  <text x="240" y="38" class="text-note" text-anchor="middle">SDKs</text>
+  <path d="M260,172 L204,172" class="connector" marker-end="url(#arrow)" />
+  <text x="130" y="305" class="text-label mono" text-anchor="end">/camera/image</text>
+  <path d="M138,300 L160,300 L160,334" class="connector" />
+  <text x="130" y="339" class="text-label mono" text-anchor="end">/vectornav/IMU</text>
+  <path d="M138,334 L160,334 L160,334" class="connector" />
+  <text x="130" y="373" class="text-label mono" text-anchor="end">/rosout</text>
+  <path d="M138,368 L160,368 L160,334" class="connector" />
+  <path d="M160,334 L196,334" class="connector" marker-end="url(#arrow)" />
+  <rect x="200" y="306" width="150" height="56" rx="10" class="card-brand" />
+  <text x="275" y="339" class="text-item-inverse" text-anchor="middle">ReductBridge</text>
+  <path d="M350,334 L396,334" class="connector" marker-end="url(#arrow)" />
+  <rect x="400" y="306" width="160" height="56" rx="10" class="card-brand" />
+  <text x="480" y="339" class="text-item-inverse" text-anchor="middle">ReductStore</text>
+  <path d="M560,334 L620,334 L620,110 L484,110" class="connector" marker-end="url(#arrow)" />
+  <text x="628" y="214" class="text-note" text-anchor="start">replicate</text>
+  <text x="628" y="232" class="text-note" text-anchor="start">subset of data</text>
 </svg>

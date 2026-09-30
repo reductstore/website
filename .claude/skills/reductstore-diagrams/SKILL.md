@@ -11,8 +11,9 @@ export: the next change becomes a one line edit in the script instead of a redra
 
 ## Style
 
-The kit carries the style of `blog/2026-02-24-air-gapped-drone-data/img/drone-workflow.svg`:
-white cards with a hard offset shadow, 2px hairline connectors with one arrow
+The kit carries the style of the computer vision post
+(`blog/2025-07-08-3-ways-store-data-for-computer-vision-applications/img/`):
+flat boxes with no shadows, dashed zones for where things run, 2px connectors with one arrow
 marker, sans labels, mono for technical tokens (entry names, protocols, labels,
 timestamps), and a `prefers-color-scheme: dark` palette. No icons, glyphs,
 gradients, colors other than the palette, or background rectangle.
@@ -59,8 +60,8 @@ gradients, colors other than the palette, or background rectangle.
 
    Adjust `parents[3]` for docs pages so it reaches the repo root.
 
-2. Building blocks: `card` (shadowed box, title and mono sub or bullets),
-   `panel` (card with the title on top, for nesting), `item` (small box inside a
+2. Building blocks: `card` (standalone box, title and mono sub or bullets),
+   `panel` (titled container: a dashed zone, or a purple box with `brand=True`), `item` (small box inside a
    zone or panel), `zone`, `records` (a strip of stored records; pass
    `labels="abac"` to color records by label value, so filtering between tiers
    shows as colors disappearing), `hatch`

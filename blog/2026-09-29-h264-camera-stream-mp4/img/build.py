@@ -25,7 +25,7 @@ def flow():
     d.text(20, 174, "Annex B, one keyframe", "text-label", "start")
     d.text(20, 192, "interval each", "text-label", "start")
 
-    d.panel(244, 0, 300, 214, "ReductStore", brand=True, anchor="start", shadow=False)
+    d.panel(244, 0, 300, 214, "ReductStore", brand=True, anchor="start")
     for i in range(5):
         gop(d, 264 + i * 54, 50, 44, 70)
     d.arrow((264, 138), (512, 138))

@@ -9,7 +9,7 @@ HERE = Path(__file__).parent
 
 
 def node(d, x, y, name, w=140):
-    d.card(x, y, w, 70, name, shadow=True)
+    d.card(x, y, w, 70, name)
 
 
 def topic(d, x, y, name, w=130):

@@ -5,7 +5,6 @@
         --card-bg: #FFFFFF;
         --card-brand: #8A6FA8;
         --card-stroke: #333333;
-        --shadow: #000000;
         --text-main: #333333;
         --text-muted: #666666;
         --text-inverse: #FFFFFF;
@@ -23,8 +22,7 @@
         :root {
           --card-bg: #1E1E1E;
           --card-stroke: #555555;
-          --shadow: #000000;
-          --text-main: #EFEFEF;
+            --text-main: #EFEFEF;
           --text-muted: #A0A0A0;
           --line: #EFEFEF;
           --zone: #262129;
@@ -42,7 +40,6 @@
       .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
       .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
       .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
-      .shadow { fill: var(--shadow); }
       .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
       .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
       .hatch-line { stroke: var(--line); stroke-width: 1.5; }

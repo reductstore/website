@@ -1,7 +1,7 @@
 """Shared drawing kit for ReductStore blog and use case diagrams.
 
 The style is the one of blog/2026-02-24-air-gapped-drone-data/img/drone-workflow.svg:
-white cards with a hard offset shadow, the brand purple for ReductStore, hairline
+flat white boxes, dashed zones for where things run, purple for ReductStore, hairline
 connectors with one arrow marker, sans labels and mono for technical tokens.
 
 A post keeps its own img/build.py next to the images:
@@ -31,7 +31,6 @@ STYLE = """<defs>
         --card-bg: #FFFFFF;
         --card-brand: #8A6FA8;
         --card-stroke: #333333;
-        --shadow: #000000;
         --text-main: #333333;
         --text-muted: #666666;
         --text-inverse: #FFFFFF;
@@ -49,8 +48,7 @@ STYLE = """<defs>
         :root {
           --card-bg: #1E1E1E;
           --card-stroke: #555555;
-          --shadow: #000000;
-          --text-main: #EFEFEF;
+            --text-main: #EFEFEF;
           --text-muted: #A0A0A0;
           --line: #EFEFEF;
           --zone: #262129;
@@ -68,7 +66,6 @@ STYLE = """<defs>
       .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
       .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
       .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
-      .shadow { fill: var(--shadow); }
       .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
       .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
       .hatch-line { stroke: var(--line); stroke-width: 1.5; }
@@ -106,7 +103,6 @@ STYLE = """<defs>
     </pattern>
   </defs>"""
 
-SHADOW = 8
 PAD = 10
 
 
@@ -147,12 +143,10 @@ class Diagram:
             f'<rect x="{_fmt(x)}" y="{_fmt(y)}" width="{_fmt(w)}" height="{_fmt(h)}" rx="{rx}" class="{cls}" />'
         )
 
-    def card(self, x, y, w, h, title, sub=None, brand=False, bullets=(), shadow=True, mono_sub=True):
-        """A titled card. Brand cards are ReductStore, and only ReductStore."""
+    def card(self, x, y, w, h, title, sub=None, brand=False, bullets=(), mono_sub=True):
+        """A titled box standing on its own. Brand cards are ReductStore."""
         kind = "brand" if brand else "standard"
         inv = "-inverse" if brand else ""
-        if shadow:
-            self.rect(x + SHADOW, y + SHADOW, w, h, "shadow", 16)
         self.rect(x, y, w, h, f"card-{kind}", 16)
         cx = x + w / 2
         if bullets:
@@ -165,16 +159,20 @@ class Diagram:
         else:
             self.text(cx, y + h / 2 + 6, title, f"text-title{inv}")
 
-    def panel(self, x, y, w, h, title, sub=None, brand=False, anchor="middle", shadow=True):
-        """A card whose title sits at the top so parts can go inside it."""
-        inv = "-inverse" if brand else ""
-        if shadow:
-            self.rect(x + SHADOW, y + SHADOW, w, h, "shadow", 18)
-        self.rect(x, y, w, h, "card-brand" if brand else "card-standard", 18)
-        tx = {"start": x + 22, "middle": x + w / 2, "end": x + w - 22}[anchor]
-        self.text(tx, y + 32, title, f"text-title{inv}", anchor)
+    def panel(self, x, y, w, h, title, sub=None, brand=False, anchor="middle"):
+        """A titled container for parts. A ReductStore panel is a purple box;
+        any other panel is a dashed zone, like the place something runs."""
+        tx = {"start": x + 20, "middle": x + w / 2, "end": x + w - 20}[anchor]
+        if brand:
+            self.rect(x, y, w, h, "card-brand", 18)
+            self.text(tx, y + 32, title, "text-title-inverse", anchor)
+            if sub:
+                self.text(tx, y + 54, sub, "text-subtitle-inverse", anchor, mono=True)
+            return
+        self.rect(x, y, w, h, "zone", 18, back=True)
+        self.text(tx, y + 26, title, "text-zone", anchor)
         if sub:
-            self.text(tx, y + 54, sub, f"text-subtitle{inv}", anchor, mono=True)
+            self.text(tx, y + 46, sub, "text-label", anchor, mono=True)
 
     def records(self, x, y, w, h, count=None, gap=5, width=9, labels=None):
         """A row of stored records, drawn as thin cells.
@@ -195,7 +193,7 @@ class Diagram:
             self.parts.append(f'<circle cx="{_fmt(cx + dx)}" cy="{_fmt(cy)}" r="3" class="dot" />')
 
     def item(self, x, y, w, h, title, sub=None, brand=False, mono_sub=True):
-        """A smaller box inside a zone or a card: no shadow, 15px label."""
+        """A smaller box inside a zone or a card, with a 15px label."""
         inv = "-inverse" if brand else ""
         self.rect(x, y, w, h, "card-brand" if brand else "card-plain", 10)
         cx = x + w / 2

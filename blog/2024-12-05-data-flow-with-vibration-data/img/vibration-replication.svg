@@ -1,11 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 778 768" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 770 760" width="100%" height="100%">
   <defs>
     <style>
       :root {
         --card-bg: #FFFFFF;
         --card-brand: #8A6FA8;
         --card-stroke: #333333;
-        --shadow: #000000;
         --text-main: #333333;
         --text-muted: #666666;
         --text-inverse: #FFFFFF;
@@ -23,8 +22,7 @@
         :root {
           --card-bg: #1E1E1E;
           --card-stroke: #555555;
-          --shadow: #000000;
-          --text-main: #EFEFEF;
+            --text-main: #EFEFEF;
           --text-muted: #A0A0A0;
           --line: #EFEFEF;
           --zone: #262129;
@@ -42,7 +40,6 @@
       .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
       .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
       .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
-      .shadow { fill: var(--shadow); }
       .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
       .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
       .hatch-line { stroke: var(--line); stroke-width: 1.5; }
@@ -79,9 +76,9 @@
       <line x1="0" y1="0" x2="0" y2="8" class="hatch-line" />
     </pattern>
   </defs>
-  <rect x="8" y="8" width="750" height="300" rx="18" class="shadow" />
-  <rect x="0" y="0" width="750" height="300" rx="18" class="card-standard" />
-  <text x="22" y="32" class="text-title" text-anchor="start">ReductStore (Cloud Server)</text>
+  <rect x="0" y="0" width="750" height="300" rx="18" class="zone" />
+  <rect x="0" y="440" width="750" height="300" rx="18" class="zone" />
+  <text x="20" y="26" class="text-zone" text-anchor="start">ReductStore (Cloud Server)</text>
   <text x="24" y="150" class="text-item" text-anchor="start">Replication with</text>
   <text x="24" y="172" class="text-item" text-anchor="start">reduction strategy</text>
   <text x="374" y="62" class="text-label" text-anchor="start">Label</text>
@@ -108,9 +105,7 @@
   <text x="750" y="370" class="text-label mono" text-anchor="end">network</text>
   <path d="M459,490 L459,310" class="connector" marker-end="url(#arrow)" />
   <path d="M633,490 L633,310" class="connector" marker-end="url(#arrow)" />
-  <rect x="8" y="448" width="750" height="300" rx="18" class="shadow" />
-  <rect x="0" y="440" width="750" height="300" rx="18" class="card-standard" />
-  <text x="22" y="472" class="text-title" text-anchor="start">ReductStore (Edge Server)</text>
+  <text x="20" y="466" class="text-zone" text-anchor="start">ReductStore (Edge Server)</text>
   <text x="200" y="502" class="text-label" text-anchor="start">Label</text>
   <rect x="200" y="510" width="170" height="82" rx="10" class="card-plain" />
   <text x="216" y="534" class="text-bullet" text-anchor="start">+ RMS</text>

@@ -5,7 +5,6 @@
         --card-bg: #FFFFFF;
         --card-brand: #8A6FA8;
         --card-stroke: #333333;
-        --shadow: #000000;
         --text-main: #333333;
         --text-muted: #666666;
         --text-inverse: #FFFFFF;
@@ -23,8 +22,7 @@
         :root {
           --card-bg: #1E1E1E;
           --card-stroke: #555555;
-          --shadow: #000000;
-          --text-main: #EFEFEF;
+            --text-main: #EFEFEF;
           --text-muted: #A0A0A0;
           --line: #EFEFEF;
           --zone: #262129;
@@ -42,7 +40,6 @@
       .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
       .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
       .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
-      .shadow { fill: var(--shadow); }
       .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
       .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
       .hatch-line { stroke: var(--line); stroke-width: 1.5; }
@@ -79,20 +76,16 @@
       <line x1="0" y1="0" x2="0" y2="8" class="hatch-line" />
     </pattern>
   </defs>
-  <rect x="8" y="58" width="140" height="70" rx="16" class="shadow" />
   <rect x="0" y="50" width="140" height="70" rx="16" class="card-standard" />
   <text x="70" y="91" class="text-title" text-anchor="middle">Camera</text>
-  <rect x="8" y="238" width="140" height="70" rx="16" class="shadow" />
   <rect x="0" y="230" width="140" height="70" rx="16" class="card-standard" />
   <text x="70" y="271" class="text-title" text-anchor="middle">Sensor</text>
   <rect x="190" y="60" width="130" height="50" rx="25" class="card-plain" />
   <text x="255" y="90" class="text-label-strong mono" text-anchor="middle">image</text>
   <rect x="190" y="240" width="130" height="50" rx="25" class="card-plain" />
   <text x="255" y="270" class="text-label-strong mono" text-anchor="middle">temperature</text>
-  <rect x="388" y="8" width="190" height="70" rx="16" class="shadow" />
   <rect x="380" y="0" width="190" height="70" rx="16" class="card-standard" />
   <text x="475" y="41" class="text-title" text-anchor="middle">Anomaly detection</text>
-  <rect x="388" y="158" width="190" height="70" rx="16" class="shadow" />
   <rect x="380" y="150" width="190" height="70" rx="16" class="card-standard" />
   <text x="475" y="191" class="text-title" text-anchor="middle">Control</text>
   <rect x="610" y="160" width="130" height="50" rx="25" class="card-plain" />

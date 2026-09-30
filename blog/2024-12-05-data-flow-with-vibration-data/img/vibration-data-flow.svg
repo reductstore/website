@@ -1,11 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 788 290" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 780 282" width="100%" height="100%">
   <defs>
     <style>
       :root {
         --card-bg: #FFFFFF;
         --card-brand: #8A6FA8;
         --card-stroke: #333333;
-        --shadow: #000000;
         --text-main: #333333;
         --text-muted: #666666;
         --text-inverse: #FFFFFF;
@@ -23,8 +22,7 @@
         :root {
           --card-bg: #1E1E1E;
           --card-stroke: #555555;
-          --shadow: #000000;
-          --text-main: #EFEFEF;
+            --text-main: #EFEFEF;
           --text-muted: #A0A0A0;
           --line: #EFEFEF;
           --zone: #262129;
@@ -42,7 +40,6 @@
       .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
       .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
       .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
-      .shadow { fill: var(--shadow); }
       .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
       .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
       .hatch-line { stroke: var(--line); stroke-width: 1.5; }
@@ -86,7 +83,6 @@
   <rect x="280" y="100" width="170" height="60" rx="10" class="card-plain" />
   <text x="365" y="135" class="text-item" text-anchor="middle">Pre-processing</text>
   <path d="M450,130 L506,130" class="connector" marker-end="url(#arrow)" />
-  <rect x="518" y="8" width="250" height="262" rx="18" class="shadow" />
   <rect x="510" y="0" width="250" height="262" rx="18" class="card-brand" />
   <text x="635" y="32" class="text-title-inverse" text-anchor="middle">ReductStore record</text>
   <text x="535" y="64" class="text-label-inverse" text-anchor="start">Label</text>

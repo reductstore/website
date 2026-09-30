@@ -24,7 +24,7 @@ def record(d, x, y, name=None, flagged=False, inverse=False):
 
 def data_flow():
     d = Diagram()
-    d.card(0, 92, 180, 76, "Vibration sensor", shadow=False)
+    d.card(0, 92, 180, 76, "Vibration sensor")
     d.arrow((180, 130), (276, 130))
     d.text(228, 120, "raw data", "text-label", mono=True)
     d.item(280, 100, 170, 60, "Pre-processing")
@@ -61,7 +61,7 @@ def replication():
 
 def bucket_replication():
     d = Diagram()
-    d.card(0, 110, 130, 76, "Vibration", "sensor", shadow=False, mono_sub=False)
+    d.card(0, 110, 130, 76, "Vibration", "sensor", mono_sub=False)
     d.arrow((130, 148), (176, 148))
     d.panel(180, 0, 580, 270, "sensor_data", anchor="start")
     for i, flagged in enumerate((False, False, True)):

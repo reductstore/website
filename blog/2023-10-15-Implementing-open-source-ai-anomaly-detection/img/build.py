@@ -19,7 +19,7 @@ def entry(d, y, name):
 
 def ml_flow():
     d = Diagram()
-    d.card(60, 0, 140, 56, "Camera", shadow=False)
+    d.card(60, 0, 140, 56, "Camera")
     d.zone(0, 90, 500, 720, "Edge Device")
     d.item(60, 182, 140, 56, "Image capture")
     d.rect(20, 280, 170, 240, "card-plain", 12)
@@ -27,7 +27,7 @@ def ml_flow():
     d.item(35, 420, 140, 54, "Model loader")
     d.text(105, 506, "Inference", "text-item")
 
-    d.panel(270, 110, 210, 680, "ReductStore", brand=True, shadow=False)
+    d.panel(270, 110, 210, 680, "ReductStore", brand=True)
     d.rect(285, 150, 180, 370, "card-plain", 12)
     d.text(EX, 176, "Data bucket", "text-label-strong", "start")
     for y, name in ((200, "original images"), (320, "labeled images"), (440, "annotated images")):

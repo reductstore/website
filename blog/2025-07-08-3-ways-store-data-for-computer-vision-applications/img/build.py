@@ -20,7 +20,7 @@ TREE = [
 
 
 def pipeline(d, zone_h, labels=None):
-    d.card(0, 70, 120, 70, "CV Camera", shadow=False)
+    d.card(0, 70, 120, 70, "CV Camera")
     d.zone(150, 0, 580, zone_h, "Edge Device")
     for i, name in enumerate(["Camera Driver", "Model", "UI"]):
         d.item(175 + i * 185, 70, 155, 70, name)
@@ -68,7 +68,7 @@ def object_storage():
 def reductstore():
     d = Diagram()
     pipeline(d, 640, ["images", "images labeled with results"])
-    d.panel(175, 220, 530, 390, "ReductStore", brand=True, anchor="end", shadow=False)
+    d.panel(175, 220, 530, 390, "ReductStore", brand=True, anchor="end")
     d.item(195, 262, 490, 326, "")
     d.text(213, 292, '"camera" entry', "text-item", "start", mono=True)
     for i, name in enumerate(["Block 1", "Block 2"]):

@@ -35,7 +35,7 @@ def tiers():
 
     d.panel(left, 0, 610, 180, "Cloud Instance #1", anchor="start")
     bucket(d, left + 22, 52, 370, 104, "Bucket", labels=CLOUD)
-    d.card(left + 440, 64, 150, 80, "Cloud Storage", "object storage", shadow=False)
+    d.card(left + 440, 64, 150, 80, "Cloud Storage", "object storage")
     d.arrow((left + 392, 104), (left + 436, 104))
 
     d.panel(left, 232, 610, 180, "Central Storage", anchor="start")
@@ -46,7 +46,7 @@ def tiers():
     for x, name in ((left, "Edge Device #1"), (left + 350, "Edge Device #N")):
         d.panel(x, 462, 260, 130, name, anchor="start")
         bucket(d, x + 22, 512, 216, 56, "FIFO", rows=1, labels=EDGE)
-        d.card(x + 105, 650, 150, 70, "Machine", "sensors, PLC", shadow=False)
+        d.card(x + 105, 650, 150, 70, "Machine", "sensors, PLC")
         d.arrow((x + 180, 650), (x + 180, 572))
         d.arrow((x + 180, 512), (x + 180, 392))
     d.ellipsis(left + 305, 527)
@@ -85,14 +85,14 @@ def edge_device():
     for i, text in enumerate(bullets):
         d.text(434, 410 + i * 20, f"• {text}", "text-label-inverse", "start")
     d.item(736, 200, 100, 166, "Replication")
-    d.card(696, 0, 180, 70, "Central Storage", "factory tier", shadow=False)
+    d.card(696, 0, 180, 70, "Central Storage", "factory tier")
     d.arrow((786, 200), (786, 74))
     return d
 
 
 def factory():
     d = Diagram()
-    d.card(40, 0, 220, 76, "Cloud Storage", "cloud tier", shadow=False)
+    d.card(40, 0, 220, 76, "Cloud Storage", "cloud tier")
     d.panel(0, 130, 700, 330, "Central Storage", anchor="end")
     d.item(22, 150, 420, 50, "Replication")
     bucket(d, 22, 250, 290, 104, "Bucket #1", labels=FACTORY)
@@ -105,7 +105,7 @@ def factory():
     d.line((533, 250), (533, 226), (360, 226))
     d.arrow((360, 226), (360, 204))
     for x, name in ((50, "Edge Device #1"), (430, "Edge Device #N")):
-        d.card(x, 520, 220, 76, name, "ReductStore", shadow=False)
+        d.card(x, 520, 220, 76, name, "ReductStore")
         d.arrow((x + 110, 520), (x + 110, 358))
     d.ellipsis(350, 558)
     return d
@@ -138,7 +138,7 @@ def cloud():
     d.ellipsis(740, 352)
     d.item(660, 468, 160, 72, "Cloud Instance #N", "ReductStore")
 
-    d.card(30, 600, 200, 76, "Factory Storage", "ReductStore", shadow=False)
+    d.card(30, 600, 200, 76, "Factory Storage", "ReductStore")
     d.arrow((130, 600), (130, 544))
     return d
 

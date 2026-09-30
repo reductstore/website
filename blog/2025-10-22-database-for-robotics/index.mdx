@@ -7,8 +7,6 @@ slug: database-for-robotics
 tags: [ros, robotics]
 ---
 
-import BridgeArchitectureDiagram from "@site/src/components/diagrams/BridgeArchitectureDiagram";
-
 Robotics teams today wrestle with data that grows faster than their infrastructure. Every robot generates streams of images, sensor readings, logs, and events in different formats. These data piles are fragmented, expensive to move, and slow to analyze. Teams often rely on generic cloud tools that are not built for robotics. They charge way too much per gigabyte (when it should cost little per terabyte), hide the raw data behind proprietary APIs, and make it hard for robots (and developers) to access or use their own data.
 
 ReductStore introduces a new category: a database purpose built for robotics data pipelines. It is open, efficient, and developer friendly. It lets teams store, query, and manage any time series of unstructured data directly from robots to the cloud.
@@ -29,7 +27,7 @@ Developers can run ReductStore on an edge device for local data capture and repl
 
 Most robotics data starts as ROS 2 topics. [**Reduct Bridge**](/docs/reduct-bridge) records those topics straight into ReductStore on the robot, one entry per topic and one timestamped record per message. From there the same data replicates to the cloud on the labels and time windows you choose.
 
-<BridgeArchitectureDiagram />
+![Reduct Bridge architecture: ROS topics go through ReductBridge into an edge ReductStore, which replicates a subset to a cloud ReductStore on S3](./img/reduct-bridge-architecture.svg)
 
 This is the whole path from a running robot to a queryable, cloud replicated dataset.
 
@@ -215,17 +213,7 @@ Canonical's COS (Canonical Observability Stack) for robotics is an end to end ob
 
 The missing piece in this stack has always been a purpose built system for storing and managing robotics data efficiently from robot to cloud.
 
-<img
-  src={require("./img/observability-stack-integration.tinified.png").default}
-  alt="Diagram Observability Stack Integration"
-  style={{
-    maxWidth: "520px",
-    width: "100%",
-    height: "auto",
-    display: "block",
-    margin: "0 auto",
-  }}
-/>
+![Diagram Observability Stack Integration](./img/observability-stack.svg)
 
 ReductStore closes that gap. It provides a data storage and streaming solution optimized for both edge and cloud environments, along with an agent that captures data directly from ROS and streams it into the observability pipeline.
 
