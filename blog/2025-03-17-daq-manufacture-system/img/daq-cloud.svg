@@ -3,7 +3,9 @@
     <style>
       :root {
         --card-bg: #FFFFFF;
-        --card-brand: #8A6FA8;
+        --card-brand: #2B0548;
+        --brand-line: #2B0548;
+        --card-accent: #DB817B;
         --card-stroke: #333333;
         --text-main: #333333;
         --text-muted: #666666;
@@ -26,6 +28,7 @@
           --text-muted: #A0A0A0;
           --line: #EFEFEF;
           --zone: #262129;
+          --brand-line: #BFA6DC;
         }
       }
 
@@ -39,6 +42,8 @@
 
       .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
       .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand-frame { fill: var(--card-bg); stroke: var(--brand-line); stroke-width: 2; }
+      .card-accent { fill: var(--card-accent); stroke: var(--card-stroke); stroke-width: 1.5; }
       .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
       .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
       .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
@@ -52,6 +57,8 @@
       .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
       .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
       .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-title-brand { font-weight: 700; font-size: 18px; fill: var(--brand-line); }
+      .text-item-brand { font-weight: 700; font-size: 15px; fill: var(--brand-line); }
       .text-item { font-weight: 600; font-size: 15px; fill: var(--text-main); }
       .text-item-inverse { font-weight: 600; font-size: 15px; fill: var(--text-inverse); }
       .text-subtitle { font-size: 14px; fill: var(--text-muted); }
@@ -86,9 +93,9 @@
   <text x="18" y="166" class="text-zone" text-anchor="start">Cloud Instance #1</text>
   <text x="380" y="166" class="text-label" text-anchor="end">• Cost-effective storage</text>
   <text x="380" y="186" class="text-label" text-anchor="end">• Fully managed instance</text>
-  <rect x="20" y="204" width="236" height="310" rx="18" class="card-brand" />
-  <text x="40" y="236" class="text-title-inverse" text-anchor="start">ReductStore instance</text>
-  <rect x="38" y="254" width="200" height="238" rx="10" class="card-brand" />
+  <rect x="20" y="204" width="236" height="310" rx="18" class="card-brand-frame" />
+  <text x="40" y="236" class="text-title-brand" text-anchor="start">ReductStore instance</text>
+  <rect x="38" y="254" width="200" height="238" rx="10" class="card-brand-frame" />
   <rect x="53.7" y="262" width="9" height="39.6" rx="2" class="record label-a" />
   <rect x="67.7" y="262" width="9" height="39.6" rx="2" class="record label-a" />
   <rect x="81.7" y="262" width="9" height="39.6" rx="2" class="record label-a" />
@@ -124,7 +131,7 @@
   <rect x="109.7" y="444.4" width="9" height="39.6" rx="2" class="record label-a" />
   <rect x="123.7" y="444.4" width="9" height="39.6" rx="2" class="record label-a" />
   <rect x="137.7" y="444.4" width="9" height="39.6" rx="2" class="record label-a" />
-  <text x="224" y="378" class="text-item-inverse" text-anchor="end">Bucket</text>
+  <text x="224" y="378" class="text-item-brand" text-anchor="end">Bucket</text>
   <rect x="276" y="264" width="108" height="54" rx="10" class="card-plain" />
   <text x="330" y="296" class="text-item" text-anchor="middle">ETL logic</text>
   <rect x="276" y="408" width="108" height="54" rx="10" class="card-plain" />

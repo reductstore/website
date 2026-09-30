@@ -3,7 +3,9 @@
     <style>
       :root {
         --card-bg: #FFFFFF;
-        --card-brand: #8A6FA8;
+        --card-brand: #2B0548;
+        --brand-line: #2B0548;
+        --card-accent: #DB817B;
         --card-stroke: #333333;
         --text-main: #333333;
         --text-muted: #666666;
@@ -26,6 +28,7 @@
           --text-muted: #A0A0A0;
           --line: #EFEFEF;
           --zone: #262129;
+          --brand-line: #BFA6DC;
         }
       }
 
@@ -39,6 +42,8 @@
 
       .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
       .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand-frame { fill: var(--card-bg); stroke: var(--brand-line); stroke-width: 2; }
+      .card-accent { fill: var(--card-accent); stroke: var(--card-stroke); stroke-width: 1.5; }
       .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
       .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
       .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
@@ -52,6 +57,8 @@
       .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
       .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
       .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-title-brand { font-weight: 700; font-size: 18px; fill: var(--brand-line); }
+      .text-item-brand { font-weight: 700; font-size: 15px; fill: var(--brand-line); }
       .text-item { font-weight: 600; font-size: 15px; fill: var(--text-main); }
       .text-item-inverse { font-weight: 600; font-size: 15px; fill: var(--text-inverse); }
       .text-subtitle { font-size: 14px; fill: var(--text-muted); }
@@ -86,7 +93,7 @@
   <path d="M0,212 L730,212" class="guide" />
   <path d="M0,442 L730,442" class="guide" />
   <text x="140" y="26" class="text-zone" text-anchor="start">Cloud Instance #1</text>
-  <rect x="142" y="52" width="370" height="104" rx="10" class="card-brand" />
+  <rect x="142" y="52" width="370" height="104" rx="10" class="card-brand-frame" />
   <rect x="158.7" y="60" width="9" height="41" rx="2" class="record label-a" />
   <rect x="172.7" y="60" width="9" height="41" rx="2" class="record label-a" />
   <rect x="186.7" y="60" width="9" height="41" rx="2" class="record label-a" />
@@ -125,13 +132,13 @@
   <rect x="382.7" y="107" width="9" height="41" rx="2" class="record label-a" />
   <rect x="396.7" y="107" width="9" height="41" rx="2" class="record label-a" />
   <rect x="410.7" y="107" width="9" height="41" rx="2" class="record label-a" />
-  <text x="498" y="109" class="text-item-inverse" text-anchor="end">Bucket</text>
-  <rect x="560" y="64" width="150" height="80" rx="16" class="card-standard" />
-  <text x="635" y="98" class="text-title" text-anchor="middle">Cloud Storage</text>
-  <text x="635" y="122" class="text-subtitle mono" text-anchor="middle">object storage</text>
+  <text x="498" y="109" class="text-item-brand" text-anchor="end">Bucket</text>
+  <rect x="560" y="64" width="150" height="80" rx="16" class="card-accent" />
+  <text x="635" y="98" class="text-title-inverse" text-anchor="middle">Cloud Storage</text>
+  <text x="635" y="122" class="text-subtitle-inverse mono" text-anchor="middle">object storage</text>
   <path d="M512,104 L556,104" class="connector" marker-end="url(#arrow)" />
   <text x="140" y="258" class="text-zone" text-anchor="start">Central Storage</text>
-  <rect x="142" y="284" width="250" height="104" rx="10" class="card-brand" />
+  <rect x="142" y="284" width="250" height="104" rx="10" class="card-brand-frame" />
   <rect x="155.8" y="292" width="9" height="41" rx="2" class="record label-a" />
   <rect x="169.8" y="292" width="9" height="41" rx="2" class="record label-b" />
   <rect x="183.8" y="292" width="9" height="41" rx="2" class="record label-a" />
@@ -150,11 +157,11 @@
   <rect x="239.8" y="339" width="9" height="41" rx="2" class="record label-a" />
   <rect x="253.8" y="339" width="9" height="41" rx="2" class="record label-b" />
   <rect x="267.8" y="339" width="9" height="41" rx="2" class="record label-a" />
-  <text x="378" y="341" class="text-item-inverse" text-anchor="end">Bucket #1</text>
+  <text x="378" y="341" class="text-item-brand" text-anchor="end">Bucket #1</text>
   <circle cx="411" cy="336" r="3" class="dot" />
   <circle cx="425" cy="336" r="3" class="dot" />
   <circle cx="439" cy="336" r="3" class="dot" />
-  <rect x="458" y="284" width="250" height="104" rx="10" class="card-brand" />
+  <rect x="458" y="284" width="250" height="104" rx="10" class="card-brand-frame" />
   <rect x="471.8" y="292" width="9" height="41" rx="2" class="record label-a" />
   <rect x="485.8" y="292" width="9" height="41" rx="2" class="record label-b" />
   <rect x="499.8" y="292" width="9" height="41" rx="2" class="record label-a" />
@@ -173,9 +180,9 @@
   <rect x="555.8" y="339" width="9" height="41" rx="2" class="record label-a" />
   <rect x="569.8" y="339" width="9" height="41" rx="2" class="record label-b" />
   <rect x="583.8" y="339" width="9" height="41" rx="2" class="record label-a" />
-  <text x="694" y="341" class="text-item-inverse" text-anchor="end">Bucket #N</text>
+  <text x="694" y="341" class="text-item-brand" text-anchor="end">Bucket #N</text>
   <text x="140" y="488" class="text-zone" text-anchor="start">Edge Device #1</text>
-  <rect x="142" y="512" width="216" height="56" rx="10" class="card-brand" />
+  <rect x="142" y="512" width="216" height="56" rx="10" class="card-brand-frame" />
   <rect x="160.3" y="520" width="9" height="40" rx="2" class="record label-a" />
   <rect x="174.3" y="520" width="9" height="40" rx="2" class="record label-b" />
   <rect x="188.3" y="520" width="9" height="40" rx="2" class="record label-a" />
@@ -185,14 +192,14 @@
   <rect x="244.3" y="520" width="9" height="40" rx="2" class="record label-c" />
   <rect x="258.3" y="520" width="9" height="40" rx="2" class="record label-a" />
   <rect x="272.3" y="520" width="9" height="40" rx="2" class="record label-b" />
-  <text x="344" y="545" class="text-item-inverse" text-anchor="end">FIFO</text>
+  <text x="344" y="545" class="text-item-brand" text-anchor="end">FIFO</text>
   <rect x="225" y="650" width="150" height="70" rx="16" class="card-standard" />
   <text x="300" y="679" class="text-title" text-anchor="middle">Machine</text>
   <text x="300" y="703" class="text-subtitle mono" text-anchor="middle">sensors, PLC</text>
   <path d="M300,650 L300,572" class="connector" marker-end="url(#arrow)" />
   <path d="M300,512 L300,392" class="connector" marker-end="url(#arrow)" />
   <text x="490" y="488" class="text-zone" text-anchor="start">Edge Device #N</text>
-  <rect x="492" y="512" width="216" height="56" rx="10" class="card-brand" />
+  <rect x="492" y="512" width="216" height="56" rx="10" class="card-brand-frame" />
   <rect x="510.3" y="520" width="9" height="40" rx="2" class="record label-a" />
   <rect x="524.3" y="520" width="9" height="40" rx="2" class="record label-b" />
   <rect x="538.3" y="520" width="9" height="40" rx="2" class="record label-a" />
@@ -202,7 +209,7 @@
   <rect x="594.3" y="520" width="9" height="40" rx="2" class="record label-c" />
   <rect x="608.3" y="520" width="9" height="40" rx="2" class="record label-a" />
   <rect x="622.3" y="520" width="9" height="40" rx="2" class="record label-b" />
-  <text x="694" y="545" class="text-item-inverse" text-anchor="end">FIFO</text>
+  <text x="694" y="545" class="text-item-brand" text-anchor="end">FIFO</text>
   <rect x="575" y="650" width="150" height="70" rx="16" class="card-standard" />
   <text x="650" y="679" class="text-title" text-anchor="middle">Machine</text>
   <text x="650" y="703" class="text-subtitle mono" text-anchor="middle">sensors, PLC</text>

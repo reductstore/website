@@ -30,7 +30,7 @@ def data_flow():
     d.item(280, 100, 170, 60, "Pre-processing")
     d.arrow((450, 130), (506, 130))
     d.panel(510, 0, 250, 262, "ReductStore record", brand=True)
-    record(d, 535, 72, "binary chunk", inverse=True)
+    record(d, 535, 72, "binary chunk")
     return d
 
 

@@ -29,9 +29,9 @@ def flow():
     for i in range(5):
         gop(d, 264 + i * 54, 50, 44, 70)
     d.arrow((264, 138), (512, 138))
-    d.text(520, 142, "t", "text-label-inverse", "start", mono=True)
-    d.text(264, 174, "time-indexed records,", "text-label-inverse", "start")
-    d.text(264, 192, "capture time on each", "text-label-inverse", "start")
+    d.text(520, 142, "t", "text-label", "start", mono=True)
+    d.text(264, 174, "time-indexed records,", "text-label", "start")
+    d.text(264, 192, "capture time on each", "text-label", "start")
 
     d.zone(588, 0, 180, 214, "One query")
     d.item(606, 50, 144, 70, "MP4", "video/mp4")

@@ -24,7 +24,7 @@ def architecture():
     d.panel(690, 30, 180, 340, "Cloud", anchor="start")
     d.item(712, 110, 136, 60, "ReductStore", brand=True)
     d.line((780, 170), (780, 240), dashed=True)
-    d.item(712, 240, 136, 70, "S3 storage", "backend", mono_sub=False)
+    d.item(712, 240, 136, 70, "S3 storage", "backend", accent=True, mono_sub=False)
     d.text(780, 348, "N replicas", "text-note")
 
     for a, b in ((290, 396), (580, 686)):

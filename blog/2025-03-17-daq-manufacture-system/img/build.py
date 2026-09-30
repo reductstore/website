@@ -16,13 +16,13 @@ CLOUD = "a"
 
 
 def bucket(d, x, y, w, h, label, rows=2, labels=None):
-    d.rect(x, y, w, h, "card-brand", 10)
+    d.rect(x, y, w, h, "card-brand-frame", 10)
     label_w = len(label) * 8.6 + 24
     row_h = (h - 16 - (rows - 1) * 6) / rows
     for r in range(rows):
         pattern = labels[r * 3 % len(labels):] + labels[: r * 3 % len(labels)] if labels else None
         d.records(x + 12, y + 8 + r * (row_h + 6), w - label_w - 24, row_h, labels=pattern)
-    d.text(x + w - 14, y + h / 2 + 5, label, "text-item-inverse", "end")
+    d.text(x + w - 14, y + h / 2 + 5, label, "text-item-brand", "end")
 
 
 def tiers():
@@ -35,7 +35,7 @@ def tiers():
 
     d.panel(left, 0, 610, 180, "Cloud Instance #1", anchor="start")
     bucket(d, left + 22, 52, 370, 104, "Bucket", labels=CLOUD)
-    d.card(left + 440, 64, 150, 80, "Cloud Storage", "object storage")
+    d.card(left + 440, 64, 150, 80, "Cloud Storage", "object storage", accent=True)
     d.arrow((left + 392, 104), (left + 436, 104))
 
     d.panel(left, 232, 610, 180, "Central Storage", anchor="start")
@@ -83,7 +83,7 @@ def edge_device():
         "Survives network outages",
     ]
     for i, text in enumerate(bullets):
-        d.text(434, 410 + i * 20, f"• {text}", "text-label-inverse", "start")
+        d.text(434, 410 + i * 20, f"• {text}", "text-label", "start")
     d.item(736, 200, 100, 166, "Replication")
     d.card(696, 0, 180, 70, "Central Storage", "factory tier")
     d.arrow((786, 200), (786, 74))

@@ -29,7 +29,9 @@ STYLE = """<defs>
     <style>
       :root {
         --card-bg: #FFFFFF;
-        --card-brand: #8A6FA8;
+        --card-brand: #2B0548;
+        --brand-line: #2B0548;
+        --card-accent: #DB817B;
         --card-stroke: #333333;
         --text-main: #333333;
         --text-muted: #666666;
@@ -52,6 +54,7 @@ STYLE = """<defs>
           --text-muted: #A0A0A0;
           --line: #EFEFEF;
           --zone: #262129;
+          --brand-line: #BFA6DC;
         }
       }
 
@@ -65,6 +68,8 @@ STYLE = """<defs>
 
       .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
       .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand-frame { fill: var(--card-bg); stroke: var(--brand-line); stroke-width: 2; }
+      .card-accent { fill: var(--card-accent); stroke: var(--card-stroke); stroke-width: 1.5; }
       .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
       .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
       .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
@@ -78,6 +83,8 @@ STYLE = """<defs>
       .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
       .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
       .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-title-brand { font-weight: 700; font-size: 18px; fill: var(--brand-line); }
+      .text-item-brand { font-weight: 700; font-size: 15px; fill: var(--brand-line); }
       .text-item { font-weight: 600; font-size: 15px; fill: var(--text-main); }
       .text-item-inverse { font-weight: 600; font-size: 15px; fill: var(--text-inverse); }
       .text-subtitle { font-size: 14px; fill: var(--text-muted); }
@@ -143,10 +150,11 @@ class Diagram:
             f'<rect x="{_fmt(x)}" y="{_fmt(y)}" width="{_fmt(w)}" height="{_fmt(h)}" rx="{rx}" class="{cls}" />'
         )
 
-    def card(self, x, y, w, h, title, sub=None, brand=False, bullets=(), mono_sub=True):
-        """A titled box standing on its own. Brand cards are ReductStore."""
-        kind = "brand" if brand else "standard"
-        inv = "-inverse" if brand else ""
+    def card(self, x, y, w, h, title, sub=None, brand=False, accent=False, bullets=(), mono_sub=True):
+        """A titled box standing on its own. Brand cards are ReductStore;
+        accent cards are its storage backend or ReductBridge."""
+        kind = "brand" if brand else "accent" if accent else "standard"
+        inv = "-inverse" if brand or accent else ""
         self.rect(x, y, w, h, f"card-{kind}", 16)
         cx = x + w / 2
         if bullets:
@@ -160,14 +168,15 @@ class Diagram:
             self.text(cx, y + h / 2 + 6, title, f"text-title{inv}")
 
     def panel(self, x, y, w, h, title, sub=None, brand=False, anchor="middle"):
-        """A titled container for parts. A ReductStore panel is a purple box;
+        """A titled container for parts. A ReductStore panel is a white box
+        with a purple outline and title, so what is inside stays readable;
         any other panel is a dashed zone, like the place something runs."""
         tx = {"start": x + 20, "middle": x + w / 2, "end": x + w - 20}[anchor]
         if brand:
-            self.rect(x, y, w, h, "card-brand", 18)
-            self.text(tx, y + 32, title, "text-title-inverse", anchor)
+            self.rect(x, y, w, h, "card-brand-frame", 18)
+            self.text(tx, y + 32, title, "text-title-brand", anchor)
             if sub:
-                self.text(tx, y + 54, sub, "text-subtitle-inverse", anchor, mono=True)
+                self.text(tx, y + 54, sub, "text-subtitle", anchor, mono=True)
             return
         self.rect(x, y, w, h, "zone", 18, back=True)
         self.text(tx, y + 26, title, "text-zone", anchor)
@@ -192,10 +201,11 @@ class Diagram:
             self._grow(cx + dx - 3, cy - 3, cx + dx + 3, cy + 3)
             self.parts.append(f'<circle cx="{_fmt(cx + dx)}" cy="{_fmt(cy)}" r="3" class="dot" />')
 
-    def item(self, x, y, w, h, title, sub=None, brand=False, mono_sub=True):
+    def item(self, x, y, w, h, title, sub=None, brand=False, accent=False, mono_sub=True):
         """A smaller box inside a zone or a card, with a 15px label."""
-        inv = "-inverse" if brand else ""
-        self.rect(x, y, w, h, "card-brand" if brand else "card-plain", 10)
+        inv = "-inverse" if brand or accent else ""
+        kind = "card-brand" if brand else "card-accent" if accent else "card-plain"
+        self.rect(x, y, w, h, kind, 10)
         cx = x + w / 2
         if sub:
             self.text(cx, y + h / 2 - 3, title, f"text-item{inv}")

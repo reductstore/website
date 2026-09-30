@@ -3,7 +3,9 @@
     <style>
       :root {
         --card-bg: #FFFFFF;
-        --card-brand: #8A6FA8;
+        --card-brand: #2B0548;
+        --brand-line: #2B0548;
+        --card-accent: #DB817B;
         --card-stroke: #333333;
         --text-main: #333333;
         --text-muted: #666666;
@@ -26,6 +28,7 @@
           --text-muted: #A0A0A0;
           --line: #EFEFEF;
           --zone: #262129;
+          --brand-line: #BFA6DC;
         }
       }
 
@@ -39,6 +42,8 @@
 
       .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
       .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand-frame { fill: var(--card-bg); stroke: var(--brand-line); stroke-width: 2; }
+      .card-accent { fill: var(--card-accent); stroke: var(--card-stroke); stroke-width: 1.5; }
       .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
       .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
       .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
@@ -52,6 +57,8 @@
       .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
       .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
       .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-title-brand { font-weight: 700; font-size: 18px; fill: var(--brand-line); }
+      .text-item-brand { font-weight: 700; font-size: 15px; fill: var(--brand-line); }
       .text-item { font-weight: 600; font-size: 15px; fill: var(--text-main); }
       .text-item-inverse { font-weight: 600; font-size: 15px; fill: var(--text-inverse); }
       .text-subtitle { font-size: 14px; fill: var(--text-muted); }
@@ -105,8 +112,8 @@
   <rect x="192" y="218" width="34" height="34" rx="6" class="card-plain" />
   <path d="M32,290 L220,290" class="connector" marker-end="url(#arrow)" />
   <text x="126" y="312" class="text-label mono" text-anchor="middle">time</text>
-  <rect x="380" y="40" width="360" height="250" rx="18" class="card-brand" />
-  <text x="400" y="72" class="text-title-inverse" text-anchor="start">ReductStore</text>
+  <rect x="380" y="40" width="360" height="250" rx="18" class="card-brand-frame" />
+  <text x="400" y="72" class="text-title-brand" text-anchor="start">ReductStore</text>
   <rect x="400" y="110" width="320" height="130" rx="12" class="card-plain" />
   <text x="418" y="138" class="text-label-strong mono" text-anchor="start">bucket / entry</text>
   <rect x="418" y="156" width="34" height="34" rx="6" class="card-plain" />

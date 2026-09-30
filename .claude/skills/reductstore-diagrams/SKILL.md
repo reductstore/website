@@ -18,11 +18,17 @@ marker, sans labels, mono for technical tokens (entry names, protocols, labels,
 timestamps), and a `prefers-color-scheme: dark` palette. No icons, glyphs,
 gradients, colors other than the palette, or background rectangle.
 
-- **Purple means ReductStore.** Use `brand=True` for ReductStore components, or
-  for the one thing the figure is about (for example the records a replication
-  filter selects). If everything is purple, nothing is. The fill is the
-  lighter site purple `#8A6FA8`, not the logo's `#2B0548`, so arrows and
-  arrowheads that touch or cross a purple box stay visible.
+- **Purple means ReductStore.** A standalone ReductStore box (`brand=True` on
+  `card` or `item`) is the strong base purple `#2B0548` with white text. A
+  ReductStore container with parts inside (`panel(..., brand=True)`) is white
+  with a purple outline and title, so its contents and the arrows into them
+  stay visible. Purple can also mark the one thing the figure is about, such
+  as the records a replication filter selects. If everything is purple,
+  nothing is.
+- **Coral means what ReductStore stands on:** its storage backend (S3,
+  object storage) and ReductBridge, with `accent=True`.
+- Surroundings are dashed zones with one light fill (`zone()` or a non-brand
+  `panel()`), never solid boxes.
 - Group what runs in one place with `zone()` (dashed frame, label top left).
 - Draw at the size it is shown. The blog column is about 630 px wide, so keep
   the viewBox at most about 760 units wide (900 for a dense figure). A wider

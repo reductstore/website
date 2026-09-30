@@ -3,7 +3,9 @@
     <style>
       :root {
         --card-bg: #FFFFFF;
-        --card-brand: #8A6FA8;
+        --card-brand: #2B0548;
+        --brand-line: #2B0548;
+        --card-accent: #DB817B;
         --card-stroke: #333333;
         --text-main: #333333;
         --text-muted: #666666;
@@ -26,6 +28,7 @@
           --text-muted: #A0A0A0;
           --line: #EFEFEF;
           --zone: #262129;
+          --brand-line: #BFA6DC;
         }
       }
 
@@ -39,6 +42,8 @@
 
       .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
       .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand-frame { fill: var(--card-bg); stroke: var(--brand-line); stroke-width: 2; }
+      .card-accent { fill: var(--card-accent); stroke: var(--card-stroke); stroke-width: 1.5; }
       .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
       .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
       .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
@@ -52,6 +57,8 @@
       .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
       .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
       .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-title-brand { font-weight: 700; font-size: 18px; fill: var(--brand-line); }
+      .text-item-brand { font-weight: 700; font-size: 15px; fill: var(--brand-line); }
       .text-item { font-weight: 600; font-size: 15px; fill: var(--text-main); }
       .text-item-inverse { font-weight: 600; font-size: 15px; fill: var(--text-inverse); }
       .text-subtitle { font-size: 14px; fill: var(--text-muted); }
@@ -89,9 +96,9 @@
   <rect x="280" y="24" width="180" height="56" rx="10" class="card-brand" />
   <text x="370" y="57" class="text-item-inverse" text-anchor="middle">ReductStore</text>
   <path d="M370,80 L370,136" class="link" />
-  <rect x="280" y="136" width="180" height="60" rx="10" class="card-plain" />
-  <text x="370" y="163" class="text-item" text-anchor="middle">S3 storage</text>
-  <text x="370" y="182" class="text-label" text-anchor="middle">backend</text>
+  <rect x="280" y="136" width="180" height="60" rx="10" class="card-accent" />
+  <text x="370" y="163" class="text-item-inverse" text-anchor="middle">S3 storage</text>
+  <text x="370" y="182" class="text-label-inverse" text-anchor="middle">backend</text>
   <path d="M204,48 L276,48" class="connector" marker-end="url(#arrow)" marker-start="url(#arrow)" />
   <text x="240" y="38" class="text-note" text-anchor="middle">SDKs</text>
   <path d="M260,172 L204,172" class="connector" marker-end="url(#arrow)" />
@@ -102,7 +109,7 @@
   <text x="130" y="373" class="text-label mono" text-anchor="end">/rosout</text>
   <path d="M138,368 L160,368 L160,334" class="connector" />
   <path d="M160,334 L196,334" class="connector" marker-end="url(#arrow)" />
-  <rect x="200" y="306" width="150" height="56" rx="10" class="card-brand" />
+  <rect x="200" y="306" width="150" height="56" rx="10" class="card-accent" />
   <text x="275" y="339" class="text-item-inverse" text-anchor="middle">ReductBridge</text>
   <path d="M350,334 L396,334" class="connector" marker-end="url(#arrow)" />
   <rect x="400" y="306" width="160" height="56" rx="10" class="card-brand" />

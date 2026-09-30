@@ -3,7 +3,9 @@
     <style>
       :root {
         --card-bg: #FFFFFF;
-        --card-brand: #8A6FA8;
+        --card-brand: #2B0548;
+        --brand-line: #2B0548;
+        --card-accent: #DB817B;
         --card-stroke: #333333;
         --text-main: #333333;
         --text-muted: #666666;
@@ -26,6 +28,7 @@
           --text-muted: #A0A0A0;
           --line: #EFEFEF;
           --zone: #262129;
+          --brand-line: #BFA6DC;
         }
       }
 
@@ -39,6 +42,8 @@
 
       .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
       .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand-frame { fill: var(--card-bg); stroke: var(--brand-line); stroke-width: 2; }
+      .card-accent { fill: var(--card-accent); stroke: var(--card-stroke); stroke-width: 1.5; }
       .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
       .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
       .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
@@ -52,6 +57,8 @@
       .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
       .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
       .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-title-brand { font-weight: 700; font-size: 18px; fill: var(--brand-line); }
+      .text-item-brand { font-weight: 700; font-size: 15px; fill: var(--brand-line); }
       .text-item { font-weight: 600; font-size: 15px; fill: var(--text-main); }
       .text-item-inverse { font-weight: 600; font-size: 15px; fill: var(--text-inverse); }
       .text-subtitle { font-size: 14px; fill: var(--text-muted); }
@@ -83,7 +90,7 @@
   <text x="680" y="156" class="text-zone" text-anchor="end">Central Storage</text>
   <rect x="22" y="150" width="420" height="50" rx="10" class="card-plain" />
   <text x="232" y="180" class="text-item" text-anchor="middle">Replication</text>
-  <rect x="22" y="250" width="290" height="104" rx="10" class="card-brand" />
+  <rect x="22" y="250" width="290" height="104" rx="10" class="card-brand-frame" />
   <rect x="34.8" y="258" width="9" height="41" rx="2" class="record label-a" />
   <rect x="48.8" y="258" width="9" height="41" rx="2" class="record label-b" />
   <rect x="62.8" y="258" width="9" height="41" rx="2" class="record label-a" />
@@ -108,11 +115,11 @@
   <rect x="160.8" y="305" width="9" height="41" rx="2" class="record label-a" />
   <rect x="174.8" y="305" width="9" height="41" rx="2" class="record label-b" />
   <rect x="188.8" y="305" width="9" height="41" rx="2" class="record label-a" />
-  <text x="298" y="307" class="text-item-inverse" text-anchor="end">Bucket #1</text>
+  <text x="298" y="307" class="text-item-brand" text-anchor="end">Bucket #1</text>
   <circle cx="336" cy="302" r="3" class="dot" />
   <circle cx="350" cy="302" r="3" class="dot" />
   <circle cx="364" cy="302" r="3" class="dot" />
-  <rect x="388" y="250" width="290" height="104" rx="10" class="card-brand" />
+  <rect x="388" y="250" width="290" height="104" rx="10" class="card-brand-frame" />
   <rect x="400.8" y="258" width="9" height="41" rx="2" class="record label-a" />
   <rect x="414.8" y="258" width="9" height="41" rx="2" class="record label-b" />
   <rect x="428.8" y="258" width="9" height="41" rx="2" class="record label-a" />
@@ -137,7 +144,7 @@
   <rect x="526.8" y="305" width="9" height="41" rx="2" class="record label-a" />
   <rect x="540.8" y="305" width="9" height="41" rx="2" class="record label-b" />
   <rect x="554.8" y="305" width="9" height="41" rx="2" class="record label-a" />
-  <text x="664" y="307" class="text-item-inverse" text-anchor="end">Bucket #N</text>
+  <text x="664" y="307" class="text-item-brand" text-anchor="end">Bucket #N</text>
   <text x="292" y="396" class="text-bullet" text-anchor="start">• Fast access</text>
   <text x="292" y="420" class="text-bullet" text-anchor="start">• Data management by labels</text>
   <path d="M150,150 L150,80" class="connector" marker-end="url(#arrow)" />

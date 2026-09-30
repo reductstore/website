@@ -3,7 +3,9 @@
     <style>
       :root {
         --card-bg: #FFFFFF;
-        --card-brand: #8A6FA8;
+        --card-brand: #2B0548;
+        --brand-line: #2B0548;
+        --card-accent: #DB817B;
         --card-stroke: #333333;
         --text-main: #333333;
         --text-muted: #666666;
@@ -26,6 +28,7 @@
           --text-muted: #A0A0A0;
           --line: #EFEFEF;
           --zone: #262129;
+          --brand-line: #BFA6DC;
         }
       }
 
@@ -39,6 +42,8 @@
 
       .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
       .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand-frame { fill: var(--card-bg); stroke: var(--brand-line); stroke-width: 2; }
+      .card-accent { fill: var(--card-accent); stroke: var(--card-stroke); stroke-width: 1.5; }
       .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
       .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
       .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
@@ -52,6 +57,8 @@
       .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
       .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
       .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-title-brand { font-weight: 700; font-size: 18px; fill: var(--brand-line); }
+      .text-item-brand { font-weight: 700; font-size: 15px; fill: var(--brand-line); }
       .text-item { font-weight: 600; font-size: 15px; fill: var(--text-main); }
       .text-item-inverse { font-weight: 600; font-size: 15px; fill: var(--text-inverse); }
       .text-subtitle { font-size: 14px; fill: var(--text-muted); }
@@ -88,8 +95,8 @@
   <text x="20" y="150" class="text-label-strong mono" text-anchor="start">video/h264</text>
   <text x="20" y="174" class="text-label" text-anchor="start">Annex B, one keyframe</text>
   <text x="20" y="192" class="text-label" text-anchor="start">interval each</text>
-  <rect x="244" y="0" width="300" height="214" rx="18" class="card-brand" />
-  <text x="264" y="32" class="text-title-inverse" text-anchor="start">ReductStore</text>
+  <rect x="244" y="0" width="300" height="214" rx="18" class="card-brand-frame" />
+  <text x="264" y="32" class="text-title-brand" text-anchor="start">ReductStore</text>
   <rect x="264" y="50" width="44" height="70" rx="6" class="card-plain" />
   <rect x="264" y="50" width="7" height="70" rx="3" class="card-brand" />
   <rect x="318" y="50" width="44" height="70" rx="6" class="card-plain" />
@@ -101,9 +108,9 @@
   <rect x="480" y="50" width="44" height="70" rx="6" class="card-plain" />
   <rect x="480" y="50" width="7" height="70" rx="3" class="card-brand" />
   <path d="M264,138 L512,138" class="connector" marker-end="url(#arrow)" />
-  <text x="520" y="142" class="text-label-inverse mono" text-anchor="start">t</text>
-  <text x="264" y="174" class="text-label-inverse" text-anchor="start">time-indexed records,</text>
-  <text x="264" y="192" class="text-label-inverse" text-anchor="start">capture time on each</text>
+  <text x="520" y="142" class="text-label mono" text-anchor="start">t</text>
+  <text x="264" y="174" class="text-label" text-anchor="start">time-indexed records,</text>
+  <text x="264" y="192" class="text-label" text-anchor="start">capture time on each</text>
   <text x="606" y="26" class="text-zone" text-anchor="start">One query</text>
   <rect x="606" y="50" width="144" height="70" rx="10" class="card-plain" />
   <text x="678" y="82" class="text-item" text-anchor="middle">MP4</text>

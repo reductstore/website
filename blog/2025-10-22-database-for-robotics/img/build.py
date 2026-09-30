@@ -15,7 +15,7 @@ def cloud_integration():
     d.panel(390, 0, 170, 160, "Blocks")
     for i in range(3):
         d.records(408, 48 + i * 34, 134, 24, count=5, gap=4, width=22)
-    d.card(610, 40, 120, 80, "S3")
+    d.card(610, 40, 120, 80, "S3", accent=True)
     for a, b in ((130, 176), (340, 386), (560, 606)):
         d.arrow((a, 80), (b, 80))
     return d
@@ -35,7 +35,7 @@ def bridge():
     d.zone(260, 0, 220, 220)
     d.item(280, 24, 180, 56, "ReductStore", brand=True)
     d.line((370, 80), (370, 136), dashed=True)
-    d.item(280, 136, 180, 60, "S3 storage", "backend", mono_sub=False)
+    d.item(280, 136, 180, 60, "S3 storage", "backend", accent=True, mono_sub=False)
     d.arrow((204, 48), (276, 48), both=True)
     d.text(240, 38, "SDKs", "text-note")
     d.arrow((260, 172), (204, 172))
@@ -46,7 +46,7 @@ def bridge():
         d.text(130, y + 5, topic, "text-label", "end", mono=True)
         d.line((138, y), (160, y), (160, 334))
     d.arrow((160, 334), (196, 334))
-    d.item(200, 306, 150, 56, "ReductBridge", brand=True)
+    d.item(200, 306, 150, 56, "ReductBridge", accent=True)
     d.arrow((350, 334), (396, 334))
     d.item(400, 306, 160, 56, "ReductStore", brand=True)
     d.arrow((560, 334), (620, 334), (620, 110), (484, 110))
