@@ -33,7 +33,7 @@
 
 .presets {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.5rem;
   margin-bottom: 1.5rem;
 }
@@ -193,19 +193,18 @@
 
 .streamTable input[type="number"] {
   text-align: right;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.streamTable input[type="number"]::-webkit-inner-spin-button,
+.streamTable input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .streamTable input[type="text"] {
   min-width: 7.5rem;
-}
-
-.streamTable select {
-  padding: 0.35rem 0.5rem;
-  border: 1px solid var(--ifm-color-emphasis-300);
-  border-radius: 6px;
-  background-color: var(--reduct-surface-0);
-  font: inherit;
-  color: inherit;
 }
 
 .streamTable input[aria-invalid="true"] {
@@ -395,7 +394,7 @@
 
 .summary {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.75rem 1rem;
   margin: 0 0 1.5rem;
   padding: 1rem 0 0;
@@ -459,7 +458,6 @@ html[data-theme="dark"] .presetActive:hover {
 html[data-theme="dark"] .inputWrap,
 html[data-theme="dark"] .streamTable input[type="text"],
 html[data-theme="dark"] .streamTable input[type="number"],
-html[data-theme="dark"] .streamTable select,
 html[data-theme="dark"] .segmentActive {
   background-color: var(--reduct-surface-0) !important;
 }
@@ -484,10 +482,6 @@ html[data-theme="dark"] .seg4 {
   background-color: #7a6391;
 }
 
-html[data-theme="dark"] .select {
-  background-color: var(--reduct-surface-0);
-}
-
 html[data-theme="dark"] .routes li {
   background-color: rgba(255, 255, 255, 0.05);
 }
@@ -500,8 +494,7 @@ html[data-theme="dark"] .summary {
   border-color: var(--reduct-border);
 }
 
-html[data-theme="dark"] .generated,
-html[data-theme="dark"] .fieldHint {
+html[data-theme="dark"] .generated {
   color: var(--ifm-color-emphasis-600);
 }
 
@@ -546,35 +539,10 @@ html[data-theme="dark"] .fieldHint {
   }
 }
 
-.select {
-  width: 100%;
-  padding: 0.55rem 0.75rem;
-  border: 1px solid var(--ifm-color-emphasis-300);
-  border-radius: 8px;
-  background-color: var(--reduct-surface-0);
-  font: inherit;
-  color: inherit;
-}
-
-.select:focus-visible {
-  outline: none;
-  border-color: var(--ifm-color-primary);
-  box-shadow: 0 0 0 1px var(--ifm-color-primary);
-}
-
 .competitorAbout {
   margin: 0.75rem 0;
   font-size: 0.9rem;
   color: var(--ifm-color-emphasis-700);
-}
-
-.competitorFields {
-  margin-top: 1rem;
-}
-
-.competitorFields .competitorAbout {
-  grid-column: 1 / -1;
-  margin: 0;
 }
 
 .routes {
@@ -623,19 +591,6 @@ html[data-theme="dark"] .fieldHint {
   color: var(--ifm-color-emphasis-700);
 }
 
-.fieldLabel {
-  margin: 0 0 0.5rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.fieldHint {
-  grid-column: 1 / -1;
-  margin: 0;
-  font-size: 0.8rem;
-  color: var(--ifm-color-emphasis-700);
-}
-
 .numeric {
   text-align: right !important;
 }
@@ -656,7 +611,6 @@ html[data-theme="dark"] .fieldHint {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
-  margin-bottom: 1rem;
 }
 
 .routeTitle {

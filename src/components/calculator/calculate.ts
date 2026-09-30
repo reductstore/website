@@ -385,7 +385,6 @@ export type CostSide = {
   label: string;
   components: CostComponent[];
   totalYear: number;
-  lowerBound: boolean;
   notes: string[];
   routes: Route[];
 };
@@ -557,156 +556,54 @@ export function alternativeCost(
       label: "Foxglove",
       components,
       totalYear: sumAmount(components),
-      lowerBound: false,
       notes: ["Foxglove Pro public list prices. Enterprise pricing is custom."],
       routes: [{ target: "Foxglove", streams: names(workload.streams) }],
     };
   }
 
-  if (config.competitor === "tiger") {
-    const t = prices.tiger;
-    const inDb = byClass("metric", "metadata");
-    const rest = storedByClass("blob", "log");
-    const ratio = Math.max(1, assumptions.tigerCompressionRatio);
-    const monthly = monthlyTb(inDb);
-    const hotGb = ((monthly * bands.hot) / DAYS_PER_MONTH / ratio) * 1000;
-    const tieredGb =
-      ((monthly * Math.max(0, retention - bands.hot)) /
-        DAYS_PER_MONTH /
-        ratio) *
-      1000;
-    const components: CostComponent[] = [
-      {
-        label: "Minimum published compute",
-        amountYear: usd(12 * t.scaleMinComputeUsdPerMonth),
-      },
-      {
-        label: "Hot database storage",
-        amountYear: usd(12 * hotGb * t.scaleStorageUsdPerGbMonth),
-      },
-      {
-        label: "Tiered database storage",
-        amountYear: usd(12 * tieredGb * t.tieredStorageUsdPerGbMonth),
-      },
-    ];
-    const routes: Route[] = [{ target: "Tiger Cloud", streams: names(inDb) }];
-    withObjectStorage(components, routes, rest, ctx);
-    return {
-      label: withBackend("Tiger Cloud", rest, config.backendName),
-      components,
-      totalYear: sumAmount(components),
-      lowerBound: true,
-      notes: [
-        "Uses Tiger Cloud's minimum published compute price. Actual compute depends on workload.",
-        `Tiger Cloud storage assumes ${ratio}× time-series compression, applied only to data in the database.`,
-      ],
-      routes,
-    };
-  }
-
-  if (config.competitor === "influx") {
-    const i = prices.influx;
-    const inDb = byClass("metric");
-    const rest = storedByClass("metadata", "blob", "log");
-    const monthly = monthlyTb(inDb);
-    const retainedGb =
-      retainedTb(inDb, retention) *
-      1000 *
-      Math.max(0, assumptions.influxStorageToRawRatio);
-    const components: CostComponent[] = [
-      {
-        label: "Data in",
-        amountYear: usd(12 * monthly * 1_000_000 * i.dataInUsdPerMb),
-      },
-      {
-        label: "Storage",
-        amountYear: usd(
-          12 *
-            retainedGb *
-            prices.mongodb.hoursPerMonth *
-            i.storageUsdPerGbHour,
-        ),
-      },
-      {
-        label: "Queries",
-        amountYear: usd(
-          12 *
-            (Math.max(0, assumptions.influxQueriesPerMonth) / 100) *
-            i.queryUsdPer100,
-        ),
-      },
-      {
-        label: "Data out",
-        amountYear: usd(
-          12 *
-            retainedTb(inDb, retention) *
-            1000 *
-            readShare *
-            i.dataOutUsdPerGb,
-        ),
-      },
-    ];
-    const routes: Route[] = [
-      { target: "InfluxDB Cloud", streams: names(inDb) },
-    ];
-    withObjectStorage(components, routes, rest, ctx);
-    return {
-      label: withBackend("InfluxDB Cloud", rest, config.backendName),
-      components,
-      totalYear: sumAmount(components),
-      lowerBound: false,
-      notes: [
-        "InfluxDB Cloud Serverless public list-price estimate.",
-        "At larger production scale, InfluxData positions Cloud Dedicated; its pricing is not public.",
-      ],
-      routes,
-    };
-  }
-
-  if (config.competitor === "mongodb") {
-    const m = prices.mongodb;
-    const tierName = m.tiers[assumptions.atlasTier]
-      ? assumptions.atlasTier
-      : m.defaultTier;
-    const tier = m.tiers[tierName];
-    const inDb = byClass("metadata", "metric");
-    const rest = storedByClass("blob", "log");
-    const components: CostComponent[] = [
-      {
-        label: `Atlas ${tierName} base cluster`,
-        amountYear: usd(12 * tier.usdPerHour * m.hoursPerMonth),
-      },
-    ];
-    const routes: Route[] = [{ target: "MongoDB Atlas", streams: names(inDb) }];
-    withObjectStorage(components, routes, rest, ctx);
-    const overflow = retainedTb(inDb, retention) * 1000 > tier.defaultStorageGb;
-    return {
-      label: withBackend("MongoDB Atlas", rest, config.backendName),
-      components,
-      totalYear: sumAmount(components),
-      lowerBound: overflow,
-      notes: [
-        "MongoDB Atlas public base price; region, storage, IOPS, and backups change the cluster price.",
-        ...(overflow
-          ? [
-              `The ${tierName} tier includes ${tier.defaultStorageGb} GB. Additional Atlas storage is not included in this public base-price estimate.`,
-            ]
-          : []),
-      ],
-      routes,
-    };
-  }
-
-  const components: CostComponent[] = [];
-  const routes: Route[] = [];
-  withObjectStorage(components, routes, stored, ctx);
+  const i = prices.influx;
+  const inDb = byClass("metric");
+  const rest = storedByClass("metadata", "blob", "log");
+  const monthly = monthlyTb(inDb);
+  const retainedGb =
+    retainedTb(inDb, retention) *
+    1000 *
+    Math.max(0, assumptions.influxStorageToRawRatio);
+  const components: CostComponent[] = [
+    {
+      label: "Data in",
+      amountYear: usd(12 * monthly * 1_000_000 * i.dataInUsdPerMb),
+    },
+    {
+      label: "Storage",
+      amountYear: usd(
+        12 * retainedGb * i.hoursPerMonth * i.storageUsdPerGbHour,
+      ),
+    },
+    {
+      label: "Queries",
+      amountYear: usd(
+        12 *
+          (Math.max(0, assumptions.influxQueriesPerMonth) / 100) *
+          i.queryUsdPer100,
+      ),
+    },
+    {
+      label: "Data out",
+      amountYear: usd(
+        12 * retainedTb(inDb, retention) * 1000 * readShare * i.dataOutUsdPerGb,
+      ),
+    },
+  ];
+  const routes: Route[] = [{ target: "InfluxDB Cloud", streams: names(inDb) }];
+  withObjectStorage(components, routes, rest, ctx);
   return {
-    label: `${config.backendName} only`,
+    label: withBackend("InfluxDB Cloud", rest, config.backendName),
     components,
     totalYear: sumAmount(components),
-    lowerBound: false,
     notes: [
-      "A custom pipeline that batches records into objects of about 64 MB.",
+      "InfluxDB Cloud Serverless public list-price estimate.",
+      "At larger production scale, InfluxData positions Cloud Dedicated; its pricing is not public.",
     ],
     routes,
   };
@@ -735,7 +632,6 @@ export function compare(
     label: `ReductStore + ${config.backendName}`,
     components: reductComponents,
     totalYear: result.reduct.totalYear,
-    lowerBound: false,
     notes: [],
     routes: [
       {

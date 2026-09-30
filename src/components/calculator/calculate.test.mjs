@@ -268,12 +268,12 @@ test("MinIO costs retained TB times the infrastructure price", () => {
   assert.equal(result.reduct.operationsYear, 0);
 });
 
-test("compression shrinks stored data on both sides but not Tiger's database", () => {
-  const plain = compare(mixed, storage(), comparison("tiger"));
+test("compression shrinks stored data on both sides but not InfluxDB's metrics", () => {
+  const plain = compare(mixed, storage(), comparison("influx"));
   const packed = compare(
     mixed,
     storage({ compressionRatio: 2 }),
-    comparison("tiger"),
+    comparison("influx"),
   );
   const part = (result, side, label) =>
     result[side].components.find((c) => c.label === label).amountYear;
@@ -292,8 +292,8 @@ test("compression shrinks stored data on both sides but not Tiger's database", (
     part(plain, "alternative", "AWS S3 storage"),
   );
   assert.equal(
-    part(packed, "alternative", "Hot database storage"),
-    part(plain, "alternative", "Hot database storage"),
+    part(packed, "alternative", "Storage"),
+    part(plain, "alternative", "Storage"),
   );
 });
 
@@ -315,10 +315,8 @@ test("every preset produces finite results on every backend", () => {
 const assumptions = {
   foxgloveDeveloperSeats: 3,
   foxgloveQueryHoursPerMonth: 20,
-  tigerCompressionRatio: 5,
   influxQueriesPerMonth: 10_000,
   influxStorageToRawRatio: 1,
-  atlasTier: "M30",
 };
 
 const comparison = (competitor, overrides = {}, currency = "EUR") => ({
@@ -384,7 +382,6 @@ test("Foxglove receives every stream and charges extra devices", () => {
       streams: ["Cameras", "Telemetry", "Events", "Logs"],
     },
   ]);
-  assert.equal(result.alternative.lowerBound, false);
   const platform = (r) =>
     r.alternative.components.find((c) => c.label === "Platform").amountYear;
   close(platform(result), 20 * 12 * pricingConfig.fx.usdToEur);
@@ -396,15 +393,6 @@ test("Foxglove receives every stream and charges extra devices", () => {
   close(platform(more), (20 + 3 * 20) * 12 * pricingConfig.fx.usdToEur);
 });
 
-test("Tiger Cloud stores metrics and metadata, blobs and logs go to object storage", () => {
-  const result = compare(mixed, storage(), comparison("tiger"));
-  assert.deepEqual(result.alternative.routes, [
-    { target: "Tiger Cloud", streams: ["Telemetry", "Events"] },
-    { target: "AWS S3", streams: ["Cameras", "Logs"] },
-  ]);
-  assert.equal(result.alternative.lowerBound, true);
-});
-
 test("InfluxDB stores only metric streams", () => {
   const result = compare(mixed, storage(), comparison("influx"));
   assert.deepEqual(result.alternative.routes, [
@@ -413,65 +401,9 @@ test("InfluxDB stores only metric streams", () => {
   ]);
 });
 
-test("MongoDB Atlas is a lower bound once data outgrows the tier's storage", () => {
-  const small = compare(
-    { ...mixed, units: 1, recordingHoursPerDay: 1 },
-    storage({ retentionDays: 30 }),
-    comparison("mongodb"),
-  );
-  assert.equal(small.alternative.lowerBound, false);
-  const large = compare(mixed, storage(), comparison("mongodb"));
-  assert.equal(large.alternative.lowerBound, true);
-  assert.deepEqual(large.alternative.routes[1], {
-    target: "AWS S3",
-    streams: ["Cameras", "Logs"],
-  });
-});
-
-test("direct object storage batches records like a well built pipeline", () => {
-  const result = compare(mixed, storage(), comparison("direct"));
-  const reductInfra =
-    result.reduct.totalYear -
-    result.reduct.components.find((c) => c.label === "ReductStore license")
-      .amountYear;
-  assert.ok(result.alternative.totalYear <= reductInfra);
-  assert.ok(result.alternative.totalYear > 0.9 * reductInfra);
-});
-
-test("presets recommend an application-aware comparison", () => {
-  const byId = Object.fromEntries(PRESETS.map((p) => [p.id, p.recommended]));
-  assert.equal(byId["mobile-robot"], "foxglove");
-  assert.equal(byId["autonomous-vehicle"], "foxglove");
-  assert.equal(byId["industrial-robot"], "tiger");
-  assert.equal(byId.vibration, "tiger");
-  assert.equal(byId.plc, "tiger");
-  assert.equal(byId["computer-vision"], "mongodb");
-  assert.equal(byId["machine-vision-qa"], "mongodb");
-  assert.equal(byId.custom, "direct");
-  for (const preset of PRESETS) {
-    assert.equal(preset.competitors[0], preset.recommended, preset.id);
-  }
-});
-
-test("the default mobile robot example lands near 30% below Foxglove", () => {
-  const preset = PRESETS.find((p) => p.id === "mobile-robot");
-  const result = compare(
-    preset,
-    storage({
-      hotDays: preset.hotDays,
-      retentionDays: preset.retentionDays,
-    }),
-    comparison("foxglove"),
-  );
-  assert.ok(
-    result.savingPercent > 25 && result.savingPercent < 35,
-    `${result.savingPercent}`,
-  );
-});
-
 test("cloud and competitor prices stay in USD for a USD display", () => {
-  const eur = compare(mixed, storage(), comparison("tiger", {}, "EUR"));
-  const usd = compare(mixed, storage(), comparison("tiger", {}, "USD"));
+  const eur = compare(mixed, storage(), comparison("influx", {}, "EUR"));
+  const usd = compare(mixed, storage(), comparison("influx", {}, "USD"));
   for (const component of usd.alternative.components) {
     const inEur = eur.alternative.components.find(
       (c) => c.label === component.label,
@@ -484,26 +416,80 @@ test("cloud and competitor prices stay in USD for a USD display", () => {
   }
 });
 
+// Results of the four examples on AWS S3 with their defaults. A change here
+// is a change of the published numbers, so review it rather than update it.
 const regressions = [
-  ["mobile-robot", "foxglove", 29.78, 27.69],
-  ["vibration", "tiger", -87.09, -92.46],
-  ["plc", "tiger", -143.34, -148.95],
-  ["computer-vision", "mongodb", -65.31, -69.31],
+  ["mobile-robot", "foxglove", 32.6, 30.65],
+  ["mobile-robot", "influx", 50.26, 48.82],
+  ["autonomous-vehicle", "foxglove", 37.4, 35.89],
+  ["autonomous-vehicle", "influx", 18.87, 16.91],
+  ["drone", "foxglove", 34.88, 32.95],
+  ["drone", "influx", 33.73, 31.77],
+  ["industrial-robot", "foxglove", 33.46, 31.64],
+  ["industrial-robot", "influx", 96.3, 96.2],
 ];
 
+const runPreset = (preset, competitor, currency) =>
+  compare(
+    preset,
+    storage({ hotDays: preset.hotDays, retentionDays: preset.retentionDays }),
+    comparison(competitor, {}, currency),
+  );
+
 for (const [presetId, competitor, eurPercent, usdPercent] of regressions) {
-  test(`${presetId} + AWS S3 + ${competitor} in EUR and USD`, () => {
+  test(`${presetId} + AWS S3 vs ${competitor} in EUR and USD`, () => {
     const preset = PRESETS.find((p) => p.id === presetId);
-    const run = (currency) =>
-      compare(
-        preset,
-        storage({
-          hotDays: preset.hotDays,
-          retentionDays: preset.retentionDays,
-        }),
-        comparison(competitor, {}, currency),
-      );
-    close(run("EUR").savingPercent, eurPercent);
-    close(run("USD").savingPercent, usdPercent);
+    close(runPreset(preset, competitor, "EUR").savingPercent, eurPercent);
+    close(runPreset(preset, competitor, "USD").savingPercent, usdPercent);
   });
 }
+
+test("every example is 30 to 40% cheaper than Foxglove in both currencies", () => {
+  assert.deepEqual(
+    PRESETS.map((p) => p.id),
+    ["mobile-robot", "autonomous-vehicle", "drone", "industrial-robot"],
+  );
+  for (const preset of PRESETS) {
+    for (const currency of ["EUR", "USD"]) {
+      const percent = runPreset(preset, "foxglove", currency).savingPercent;
+      assert.ok(
+        percent >= 30 && percent <= 40,
+        `${preset.id} ${currency} ${percent}`,
+      );
+    }
+  }
+});
+
+// The default example worked by hand from the published price lists, without
+// the calculator's code: 10 robots, 8 h a day, 90 days on AWS S3.
+test("cross-check: mobile robot vs Foxglove by hand", () => {
+  const kbPerSecond = 2 * 10 * 150 + 10 * 1000 + 100 * 2 + 100 * 1 + 10 * 5;
+  const monthTb = (kbPerSecond * 10 * 8 * 3600 * 30) / 1e9;
+  const retainedTb = monthTb * 3;
+  close(monthTb, 115.344, 1e-9);
+
+  // Foxglove Pro, USD per month: first TB of storage and indexing and
+  // 0.1 TB of bandwidth included, then marginal tiers.
+  const storage = 9 * 50 + 90 * 40 + (retainedTb - 100) * 30;
+  const indexing = 9 * 35 + 90 * 28 + (monthTb - 100) * 24;
+  const readTb = retainedTb * 0.05;
+  const bandwidth = 9.9 * 150 + (readTb - 10) * 135;
+  const query = 9 * 3.65 + 10 * 2.75;
+  const devices = (10 - 5) * 20;
+  const foxgloveUsd =
+    12 * (20 + devices + storage + indexing + bandwidth + query);
+
+  // ReductStore + S3, USD per month: 30 days in S3 Standard, then 60 days
+  // in Standard-IA, plus the license at $18 per TB.
+  const s3StorageUsd = 12 * (monthTb * 23 + monthTb * 2 * 12.5);
+  const licenseUsd = 12 * retainedTb * 18;
+
+  const result = runPreset(PRESETS[0], "foxglove", "USD");
+  close(result.alternative.totalYear, foxgloveUsd, 1);
+  const part = (label) =>
+    result.reduct.components.find((c) => c.label === label).amountYear;
+  close(part("AWS S3 storage"), s3StorageUsd, 1);
+  close(part("ReductStore license"), licenseUsd, 1e-6);
+  // Requests, transitions, and IA retrieval are the rest, about 1% of the bill.
+  assert.ok(part("Requests and retrieval") < 0.02 * result.reduct.totalYear);
+});

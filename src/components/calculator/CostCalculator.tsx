@@ -1,20 +1,10 @@
 import React, { JSX, useEffect, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 import Link from "@docusaurus/Link";
-import {
-  LuBot,
-  LuCamera,
-  LuCar,
-  LuCpu,
-  LuFactory,
-  LuActivity,
-  LuPlane,
-  LuRoute,
-  LuScanSearch,
-  LuSlidersHorizontal,
-} from "react-icons/lu";
+import { LuCar, LuFactory, LuPlane, LuRoute } from "react-icons/lu";
 import type { IconType } from "react-icons";
 import { compare } from "./calculate";
+import type { Route } from "./calculate";
 import {
   OBJECT_STORAGE_BATCH,
   REDUCT_BLOCK,
@@ -33,26 +23,24 @@ import {
 import useCurrency from "../../lib/useCurrency";
 import CurrencySwitch from "../shared/CurrencySwitch";
 import { PRESETS } from "./presets";
-import type { BackendId, CompetitorId, StreamInput } from "./types";
-import type { Route } from "./calculate";
+import type {
+  BackendId,
+  CompetitorAssumptions,
+  CompetitorId,
+  StreamInput,
+} from "./types";
 import { CostBars, CostBreakdowns } from "./CostComparison";
 import StreamEditor, { StreamDraft } from "./StreamEditor";
 import NumberField from "./NumberField";
-import { formatCount, formatDays, formatPercent, formatTb } from "./format";
+import { formatCount, formatPercent, formatTb } from "./format";
 import { bucket, track } from "./analytics";
 import styles from "./styles.module.css";
 
 const PRESET_ICONS: Record<string, IconType> = {
-  drone: LuPlane,
   "mobile-robot": LuRoute,
   "autonomous-vehicle": LuCar,
+  drone: LuPlane,
   "industrial-robot": LuFactory,
-  "computer-vision": LuCamera,
-  vibration: LuActivity,
-  plc: LuCpu,
-  "machine-vision-qa": LuScanSearch,
-  ros: LuBot,
-  custom: LuSlidersHorizontal,
 };
 
 const BACKENDS: { id: BackendId; label: string }[] = [
@@ -61,40 +49,33 @@ const BACKENDS: { id: BackendId; label: string }[] = [
   { id: "minio", label: "MinIO" },
 ];
 
-const COMPETITORS: Record<CompetitorId, { label: string; about: string }> = {
-  foxglove: {
+const COMPETITORS: { id: CompetitorId; label: string; about: string }[] = [
+  {
+    id: "foxglove",
     label: "Foxglove",
     about: "Managed robotics data platform. Every stream is uploaded to it.",
   },
-  tiger: {
-    label: "Tiger Cloud",
+  {
+    id: "influx",
+    label: "InfluxDB + object storage",
     about:
-      "Time-series database for metrics and metadata; binary data and logs go to object storage.",
+      "InfluxDB Cloud Serverless for metrics; images, scans, and logs go to object storage in 64 MB batches.",
   },
-  influx: {
-    label: "InfluxDB",
-    about:
-      "InfluxDB Cloud Serverless for metrics; everything else goes to object storage.",
-  },
-  mongodb: {
-    label: "MongoDB Atlas",
-    about:
-      "Document database for results and metadata; images and logs go to object storage.",
-  },
-  direct: {
-    label: "Object storage only",
-    about:
-      "A custom pipeline that batches records into objects of about 64 MB.",
-  },
+];
+
+const ASSUMPTIONS: CompetitorAssumptions = {
+  foxgloveDeveloperSeats: pricingConfig.foxglove.includedDeveloperSeats,
+  foxgloveQueryHoursPerMonth: 20,
+  influxQueriesPerMonth: pricingConfig.influx.defaultQueriesPerMonth,
+  influxStorageToRawRatio: 1,
 };
+const READ_PERCENT_PER_MONTH = 5;
 
 const PRICE_SOURCES = [
   pricingConfig.aws,
   pricingConfig.azure,
   pricingConfig.foxglove,
-  pricingConfig.tiger,
   pricingConfig.influx,
-  pricingConfig.mongodb,
 ];
 
 const formatDate = (iso: string) => {
@@ -117,12 +98,6 @@ const toDraft = (streams: StreamInput[]): StreamDraft[] =>
   }));
 
 const num = (value: string) => (value.trim() === "" ? NaN : Number(value));
-
-type Check = (value: number) => string | null;
-const atLeast =
-  (min: number, message: string): Check =>
-  (value) =>
-    Number.isFinite(value) && value >= min ? null : message;
 
 function useDebouncedEffect(effect: () => void, deps: unknown[], ms: number) {
   const first = useRef(true);
@@ -160,7 +135,7 @@ function Routes({ title, routes }: { title: string; routes: Route[] }) {
 
 export default function CostCalculator(): JSX.Element {
   const currency = useCurrency();
-  const [presetId, setPresetId] = useState("mobile-robot");
+  const [presetId, setPresetId] = useState(PRESETS[0].id);
   const preset = PRESETS.find((p) => p.id === presetId) ?? PRESETS[0];
   const [units, setUnits] = useState(String(preset.units));
   const [hours, setHours] = useState(String(preset.recordingHoursPerDay));
@@ -168,31 +143,13 @@ export default function CostCalculator(): JSX.Element {
     toDraft(preset.streams),
   );
   const [backend, setBackend] = useState<BackendId>("aws");
-  const [edgeDisk, setEdgeDisk] = useState("2");
-  const [hotDays, setHotDays] = useState(String(preset.hotDays));
   const [retentionDays, setRetentionDays] = useState(
     String(preset.retentionDays),
   );
-  const [readPercent, setReadPercent] = useState("5");
   const [minioCost, setMinioCost] = useState(
     String(DEFAULT_MINIO_PER_TB_MONTH),
   );
-  const [competitor, setCompetitor] = useState<CompetitorId>(
-    preset.recommended,
-  );
-  const [compressionRatio, setCompressionRatio] = useState("1");
-  const [seats, setSeats] = useState(
-    String(pricingConfig.foxglove.includedDeveloperSeats),
-  );
-  const [queryHours, setQueryHours] = useState("20");
-  const [tigerRatio, setTigerRatio] = useState(
-    String(pricingConfig.tiger.defaultCompressionRatio),
-  );
-  const [influxQueries, setInfluxQueries] = useState(
-    String(pricingConfig.influx.defaultQueriesPerMonth),
-  );
-  const [influxRatio, setInfluxRatio] = useState("1");
-  const [atlasTier, setAtlasTier] = useState(pricingConfig.mongodb.defaultTier);
+  const [competitor, setCompetitor] = useState<CompetitorId>("foxglove");
 
   const selectPreset = (id: string) => {
     const next = PRESETS.find((p) => p.id === id);
@@ -201,44 +158,19 @@ export default function CostCalculator(): JSX.Element {
     setUnits(String(next.units));
     setHours(String(next.recordingHoursPerDay));
     setStreams(toDraft(next.streams));
-    setHotDays(String(next.hotDays));
     setRetentionDays(String(next.retentionDays));
-    setCompetitor(next.recommended);
     track("calculator_preset_selected", { preset: id });
   };
 
-  const changeHotDays = (value: string) => {
-    setHotDays(value);
-    const hot = num(value);
-    if (Number.isFinite(hot) && hot > num(retentionDays)) {
-      setRetentionDays(value);
-    }
+  const valid = (value: string, min: number, max = Infinity) => {
+    const n = num(value);
+    return Number.isFinite(n) && n >= min && n <= max;
   };
-
   const errors = {
-    units: atLeast(1, "At least 1")(num(units)),
-    hours:
-      Number.isFinite(num(hours)) && num(hours) > 0 && num(hours) <= 24
-        ? null
-        : "Between 0 and 24",
-    edgeDisk:
-      Number.isFinite(num(edgeDisk)) && num(edgeDisk) > 0
-        ? null
-        : "Greater than 0",
-    hotDays: atLeast(1, "At least 1 day")(num(hotDays)),
-    retentionDays:
-      Number.isFinite(num(retentionDays)) &&
-      num(retentionDays) >= Math.max(1, num(hotDays) || 1)
-        ? null
-        : "Not less than hot storage days",
-    readPercent:
-      Number.isFinite(num(readPercent)) &&
-      num(readPercent) >= 0 &&
-      num(readPercent) <= 100
-        ? null
-        : "Between 0 and 100",
-    minioCost: atLeast(0, "Cannot be negative")(num(minioCost)),
-    compressionRatio: atLeast(1, "At least 1")(num(compressionRatio)),
+    units: valid(units, 1) ? null : "At least 1",
+    hours: valid(hours, 0.1, 24) ? null : "Between 0 and 24",
+    retentionDays: valid(retentionDays, 1) ? null : "At least 1 day",
+    minioCost: valid(minioCost, 0) ? null : "Cannot be negative",
   };
 
   const safe = (value: string, fallback: number, min = 0, max = Infinity) => {
@@ -257,14 +189,13 @@ export default function CostCalculator(): JSX.Element {
         recordSizeKb: safe(s.recordSizeKb, 0),
       })),
     };
-    const hot = safe(hotDays, 30, 1);
+    const hot = preset.hotDays;
     const storage = {
       backend,
-      edgeDiskTbPerUnit: safe(edgeDisk, 0),
+      edgeDiskTbPerUnit: 0,
       hotDays: hot,
-      retentionDays: Math.max(hot, safe(retentionDays, hot)),
-      readPercentPerMonth: safe(readPercent, 0, 0, 100),
-      compressionRatio: safe(compressionRatio, 1, 1),
+      retentionDays: Math.max(1, safe(retentionDays, hot)),
+      readPercentPerMonth: READ_PERCENT_PER_MONTH,
       minioPerTbMonth: safe(minioCost, 0),
     };
     return compare(workload, storage, {
@@ -277,41 +208,24 @@ export default function CostCalculator(): JSX.Element {
       prices: pricingConfig,
       usdRate: usdRate(currency),
       competitor,
-      assumptions: {
-        foxgloveDeveloperSeats: safe(seats, 3),
-        foxgloveQueryHoursPerMonth: safe(queryHours, 0),
-        tigerCompressionRatio: safe(tigerRatio, 5, 1),
-        influxQueriesPerMonth: safe(influxQueries, 0),
-        influxStorageToRawRatio: safe(influxRatio, 1),
-        atlasTier,
-      },
+      assumptions: ASSUMPTIONS,
     });
   }, [
     currency,
+    preset,
     units,
     hours,
     streams,
     backend,
-    edgeDisk,
-    hotDays,
     retentionDays,
-    readPercent,
-    compressionRatio,
     minioCost,
     competitor,
-    seats,
-    queryHours,
-    tigerRatio,
-    influxQueries,
-    influxRatio,
-    atlasTier,
   ]);
 
   const workload = result.estimate.workload;
   const hasData = workload.totalRecordsMonth > 0;
   const saving = result.savingYear;
   const retained = workload.totalRetainedTb;
-  const lowerBound = result.alternative.lowerBound;
 
   useEffect(() => {
     track("calculator_viewed");
@@ -348,19 +262,14 @@ export default function CostCalculator(): JSX.Element {
     2000,
   );
 
-  let headline: string;
-  let subline: string;
-  if (saving >= 0) {
-    headline = `Save ${lowerBound ? "at least " : ""}${formatCurrency(saving, currency)} / year`;
-    subline = lowerBound
-      ? "Estimated from public pricing"
-      : `${formatPercent(result.savingPercent)} lower TCO`;
-  } else {
-    headline = `${lowerBound ? "Up to " : ""}${formatCurrency(-saving, currency)} / year higher`;
-    subline = lowerBound
-      ? "Estimated from public pricing"
+  const headline =
+    saving >= 0
+      ? `Save ${formatCurrency(saving, currency)} / year`
+      : `${formatCurrency(-saving, currency)} / year higher`;
+  const subline =
+    saving >= 0
+      ? `${formatPercent(result.savingPercent)} lower TCO`
       : "for this configuration";
-  }
 
   return (
     <div className={styles.root}>
@@ -416,11 +325,7 @@ export default function CostCalculator(): JSX.Element {
               />
             </div>
 
-            <StreamEditor
-              streams={streams}
-              classEditable={presetId === "custom"}
-              onChange={setStreams}
-            />
+            <StreamEditor streams={streams} onChange={setStreams} />
             <p className={styles.generated}>
               {hasData
                 ? `≈ ${formatTb(workload.totalDataMonthTb)} generated per month`
@@ -430,13 +335,10 @@ export default function CostCalculator(): JSX.Element {
 
           <section className={styles.step}>
             <h2 className={styles.stepTitle}>2. Where should the data live?</h2>
-            <p className={styles.fieldLabel} id="calculator-backend">
-              Storage backend
-            </p>
             <div
               className={styles.segmented}
               role="radiogroup"
-              aria-labelledby="calculator-backend"
+              aria-label="Storage backend"
             >
               {BACKENDS.map((b) => (
                 <button
@@ -456,21 +358,7 @@ export default function CostCalculator(): JSX.Element {
                 </button>
               ))}
             </div>
-
             <div className={styles.fields}>
-              {backend === "minio" && (
-                <NumberField
-                  label="Infrastructure storage cost"
-                  value={minioCost}
-                  onChange={setMinioCost}
-                  min={0}
-                  step={1}
-                  prefix={currencySymbol(currency)}
-                  suffix="/ TB / month"
-                  error={errors.minioCost}
-                  wide
-                />
-              )}
               <NumberField
                 label="Retention"
                 value={retentionDays}
@@ -480,59 +368,51 @@ export default function CostCalculator(): JSX.Element {
                 suffix="days"
                 error={errors.retentionDays}
               />
-              <NumberField
-                label="Data read per month"
-                value={readPercent}
-                onChange={setReadPercent}
-                min={0}
-                max={100}
-                step={1}
-                suffix="% of retained"
-                error={errors.readPercent}
-              />
-              <NumberField
-                label="Edge disk per unit"
-                value={edgeDisk}
-                onChange={setEdgeDisk}
-                min={0}
-                step={0.5}
-                suffix="TB"
-                error={errors.edgeDisk}
-              />
-              <NumberField
-                label="Hot storage duration"
-                value={hotDays}
-                onChange={changeHotDays}
-                min={1}
-                step={1}
-                suffix="days"
-                error={errors.hotDays}
-              />
+              {backend === "minio" && (
+                <NumberField
+                  label="MinIO storage cost"
+                  value={minioCost}
+                  onChange={setMinioCost}
+                  min={0}
+                  step={1}
+                  prefix={currencySymbol(currency)}
+                  suffix="/ TB / month"
+                  error={errors.minioCost}
+                />
+              )}
             </div>
           </section>
 
           <section className={styles.step}>
             <h2 className={styles.stepTitle}>3. Compare ReductStore with</h2>
-            <select
+            <div
+              className={styles.segmented}
+              role="radiogroup"
               aria-label="Compare ReductStore with"
-              className={styles.select}
-              value={competitor}
-              onChange={(event) => {
-                const value = event.target.value as CompetitorId;
-                setCompetitor(value);
-                track("calculator_competitor_selected", { competitor: value });
-              }}
             >
-              {preset.competitors.map((id) => (
-                <option key={id} value={id}>
-                  {COMPETITORS[id].label}
-                </option>
+              {COMPETITORS.map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={c.id === competitor}
+                  className={clsx({
+                    [styles.segmentActive]: c.id === competitor,
+                  })}
+                  onClick={() => {
+                    setCompetitor(c.id);
+                    track("calculator_competitor_selected", {
+                      competitor: c.id,
+                    });
+                  }}
+                >
+                  {c.label}
+                </button>
               ))}
-            </select>
+            </div>
             <p className={styles.competitorAbout}>
-              {COMPETITORS[competitor].about}
+              {COMPETITORS.find((c) => c.id === competitor)?.about}
             </p>
-
             <div className={styles.architectures}>
               <Routes
                 title={result.alternative.label}
@@ -543,100 +423,6 @@ export default function CostCalculator(): JSX.Element {
                 routes={result.reduct.routes}
               />
             </div>
-
-            <details
-              className={styles.disclosure}
-              onToggle={(event) => {
-                if ((event.target as HTMLDetailsElement).open) {
-                  track("calculator_advanced_opened", { preset: presetId });
-                }
-              }}
-            >
-              <summary>Advanced assumptions</summary>
-              <div className={clsx(styles.fields, styles.competitorFields)}>
-                <NumberField
-                  label="Compression ratio, both sides"
-                  value={compressionRatio}
-                  onChange={setCompressionRatio}
-                  min={1}
-                  step={0.5}
-                  suffix="×"
-                  error={errors.compressionRatio}
-                />
-                {competitor === "foxglove" && (
-                  <>
-                    <NumberField
-                      label="Foxglove developer seats"
-                      value={seats}
-                      onChange={setSeats}
-                      min={0}
-                      step={1}
-                    />
-                    <NumberField
-                      label="Foxglove query time"
-                      value={queryHours}
-                      onChange={setQueryHours}
-                      min={0}
-                      step={1}
-                      suffix="h / month"
-                    />
-                  </>
-                )}
-                {competitor === "tiger" && (
-                  <NumberField
-                    label="Tiger Cloud compression"
-                    value={tigerRatio}
-                    onChange={setTigerRatio}
-                    min={1}
-                    step={0.5}
-                    suffix="×"
-                  />
-                )}
-                {competitor === "influx" && (
-                  <>
-                    <NumberField
-                      label="InfluxDB queries"
-                      value={influxQueries}
-                      onChange={setInfluxQueries}
-                      min={0}
-                      step={1000}
-                      suffix="/ month"
-                    />
-                    <NumberField
-                      label="InfluxDB storage to raw data"
-                      value={influxRatio}
-                      onChange={setInfluxRatio}
-                      min={0}
-                      step={0.1}
-                      suffix="×"
-                    />
-                  </>
-                )}
-                {competitor === "mongodb" && (
-                  <div className={styles.field}>
-                    <label htmlFor="calculator-atlas">Atlas cluster</label>
-                    <select
-                      id="calculator-atlas"
-                      className={styles.select}
-                      value={atlasTier}
-                      onChange={(event) => setAtlasTier(event.target.value)}
-                    >
-                      {Object.entries(pricingConfig.mongodb.tiers).map(
-                        ([name, tier]) => (
-                          <option key={name} value={name}>
-                            {name} ({tier.defaultStorageGb} GB)
-                          </option>
-                        ),
-                      )}
-                    </select>
-                  </div>
-                )}
-                <p className={styles.fieldHint}>
-                  A compression ratio of 2× means 100 TB of recorded data takes
-                  about 50 TB of storage.
-                </p>
-              </div>
-            </details>
           </section>
         </div>
 
@@ -691,10 +477,6 @@ export default function CostCalculator(): JSX.Element {
                   <dt>Records</dt>
                   <dd>{formatCount(workload.totalRecordsMonth)} / month</dd>
                 </div>
-                <div>
-                  <dt>Local history</dt>
-                  <dd>{formatDays(result.estimate.localHistoryDays)}</dd>
-                </div>
               </dl>
 
               <div className={styles.cta}>
@@ -734,26 +516,17 @@ export default function CostCalculator(): JSX.Element {
               retention / 30.
             </li>
             <li>
-              ReductStore keeps recent data on the edge disk and writes records
-              in blocks of up to 64 MB or 1,024 records to the storage backend,
-              with two requests per block. Local history = edge disk / data
-              recorded per unit per day.
+              ReductStore writes records in blocks of up to 64 MB or 1,024
+              records to the storage backend, with two requests per block.
+              InfluxDB + object storage batches raw data into objects of about
+              64 MB as well, with one request per object.
             </li>
             <li>
-              Alternatives that keep raw data in object storage are assumed to
-              batch it into objects of about 64 MB as well, with one request per
-              object. Only metrics, metadata, or results go into their database.
-            </li>
-            <li>
-              Compression (default none) applies equally to raw data on both
-              sides. Tiger Cloud's own compression applies only to data in its
-              database.
-            </li>
-            <li>
-              On AWS S3 and Azure Blob, data moves to colder storage classes
-              only when that is cheaper, respecting minimum storage durations
-              and billable object sizes. MinIO costs retained TB × the
-              infrastructure price × 12.
+              Each month {READ_PERCENT_PER_MONTH}% of retained data is read
+              back. On AWS S3 and Azure Blob, data older than {preset.hotDays}{" "}
+              days moves to colder storage classes only when that is cheaper,
+              respecting minimum storage durations and billable object sizes.
+              MinIO costs retained TB × the infrastructure price × 12.
             </li>
             <li>
               ReductStore license: ReductStore Pro list price of{" "}
@@ -766,12 +539,17 @@ export default function CostCalculator(): JSX.Element {
               converted.
             </li>
             <li>
-              Foxglove: base plan, extra seats and devices, storage on retained
-              data, indexing on uploaded data, bandwidth on data read, and query
-              hours, each with its public marginal tiers. Tiger Cloud: minimum
-              published compute plus hot and tiered storage. InfluxDB Cloud
-              Serverless: data in, storage, queries, and data out. MongoDB
-              Atlas: cluster price including the tier's default storage.
+              Foxglove Pro: base plan with {ASSUMPTIONS.foxgloveDeveloperSeats}{" "}
+              developer seats, one device per unit, storage on retained data,
+              indexing on uploaded data, bandwidth on data read, and{" "}
+              {ASSUMPTIONS.foxgloveQueryHoursPerMonth} query hours per month,
+              each with its public marginal tiers.
+            </li>
+            <li>
+              InfluxDB Cloud Serverless: metrics only, with data in, storage,{" "}
+              {ASSUMPTIONS.influxQueriesPerMonth.toLocaleString("en")} queries
+              per month, and data out. At larger production scale InfluxData
+              positions Cloud Dedicated, whose pricing is not public.
             </li>
             <li>
               Excludes compute outside the listed services, egress, networking,

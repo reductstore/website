@@ -11,7 +11,7 @@ const segmentClass = (label: string, index: number) =>
 type Sides = { alternative: CostSide; reduct: CostSide; currency: Currency };
 
 const total = (side: CostSide, currency: Currency) =>
-  `${side.lowerBound ? "From " : ""}${formatCurrency(side.totalYear, currency)} / year`;
+  `${formatCurrency(side.totalYear, currency)} / year`;
 
 function Bar({
   side,

@@ -120,19 +120,6 @@ export const pricingConfig = {
     ] as MarginalTier[],
   },
 
-  tiger: {
-    vendor: "Tiger Data",
-    product: "Tiger Cloud Scale",
-    currency: "USD",
-    units: "per month minimum compute, per GB-month hot and tiered storage",
-    source: "https://www.tigerdata.com/pricing",
-    lastVerified: "2026-09-30",
-    scaleMinComputeUsdPerMonth: 36,
-    scaleStorageUsdPerGbMonth: 0.212,
-    tieredStorageUsdPerGbMonth: 0.021,
-    defaultCompressionRatio: 5,
-  },
-
   influx: {
     vendor: "InfluxData",
     product: "InfluxDB Cloud Serverless (usage-based)",
@@ -147,33 +134,7 @@ export const pricingConfig = {
     storageUsdPerGbHour: 0.002,
     dataOutUsdPerGb: 0.09,
     defaultQueriesPerMonth: 10_000,
-  },
-
-  mongodb: {
-    vendor: "MongoDB",
-    product: "Atlas dedicated clusters (AWS)",
-    currency: "USD",
-    units: "per cluster hour, including the tier's default storage",
-    source: "https://www.mongodb.com/pricing",
-    billingSource:
-      "https://www.mongodb.com/docs/atlas/billing/invoice-breakdown/",
-    lastVerified: "2026-09-30",
     hoursPerMonth: 730,
-    defaultTier: "M30",
-    tiers: {
-      M10: { usdPerHour: 0.08, defaultStorageGb: 10 },
-      M20: { usdPerHour: 0.2, defaultStorageGb: 20 },
-      M30: { usdPerHour: 0.54, defaultStorageGb: 40 },
-      M40: { usdPerHour: 1.04, defaultStorageGb: 80 },
-      M50: { usdPerHour: 2.0, defaultStorageGb: 160 },
-      M60: { usdPerHour: 3.95, defaultStorageGb: 320 },
-      M80: { usdPerHour: 7.3, defaultStorageGb: 750 },
-      M140: { usdPerHour: 10.99, defaultStorageGb: 1000 },
-      M200: { usdPerHour: 14.59, defaultStorageGb: 1500 },
-      M300: { usdPerHour: 21.85, defaultStorageGb: 2000 },
-      M400: { usdPerHour: 22.4, defaultStorageGb: 3000 },
-      M700: { usdPerHour: 33.26, defaultStorageGb: 4000 },
-    } as Record<string, { usdPerHour: number; defaultStorageGb: number }>,
   },
 };
 

@@ -66,23 +66,14 @@ export type WorkloadPreset = {
   recordingHoursPerDay: number;
   hotDays: number;
   retentionDays: number;
-  recommended: CompetitorId;
-  competitors: CompetitorId[];
   streams: StreamInput[];
 };
 
-export type CompetitorId =
-  | "foxglove"
-  | "tiger"
-  | "influx"
-  | "mongodb"
-  | "direct";
+export type CompetitorId = "foxglove" | "influx";
 
 export type CompetitorAssumptions = {
   foxgloveDeveloperSeats: number;
   foxgloveQueryHoursPerMonth: number;
-  tigerCompressionRatio: number;
   influxQueriesPerMonth: number;
   influxStorageToRawRatio: number;
-  atlasTier: string;
 };

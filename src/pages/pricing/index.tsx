@@ -44,11 +44,6 @@ export default function Pricing(): JSX.Element {
           id="calculator"
         />
         <section className="container">
-          <p className={styles.calculatorIntro}>
-            Tell us what your system records. We estimate the data volume and
-            compare ReductStore with the stack teams usually build for that
-            workload, using public list prices.
-          </p>
           <CostCalculator />
         </section>
 
