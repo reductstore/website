@@ -12,6 +12,7 @@ export type StreamInput = {
 
 export type WorkloadInput = {
   units: number;
+  keepPercent?: number;
   recordingHoursPerDay: number;
   streams: StreamInput[];
 };
@@ -64,6 +65,7 @@ export type WorkloadPreset = {
   unitLabel: string;
   units: number;
   recordingHoursPerDay: number;
+  keepPercent: number;
   hotDays: number;
   retentionDays: number;
   streams: StreamInput[];

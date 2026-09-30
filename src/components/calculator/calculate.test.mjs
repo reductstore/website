@@ -419,22 +419,22 @@ test("cloud and competitor prices stay in USD for a USD display", () => {
 // Results of the four examples on AWS S3 with their defaults. A change here
 // is a change of the published numbers, so review it rather than update it.
 const regressions = [
-  ["mobile-robot", "foxglove", 32.6, 30.65],
-  ["mobile-robot", "influx", 50.26, 48.82],
-  ["autonomous-vehicle", "foxglove", 37.4, 35.89],
-  ["autonomous-vehicle", "influx", 18.87, 16.91],
-  ["drone", "foxglove", 34.88, 32.95],
-  ["drone", "influx", 33.73, 31.77],
-  ["industrial-robot", "foxglove", 33.46, 31.64],
+  ["mobile-robot", "foxglove", 43.63, 42.0],
+  ["mobile-robot", "influx", 50.26, 48.83],
+  ["autonomous-vehicle", "foxglove", 38.92, 37.15],
+  ["autonomous-vehicle", "influx", -5.66, -8.72],
+  ["drone", "foxglove", 42.35, 40.59],
+  ["drone", "influx", 29.54, 27.39],
+  ["industrial-robot", "foxglove", 38.7, 37.02],
   ["industrial-robot", "influx", 96.3, 96.2],
-  ["vibration", "foxglove", 38.04, 36.15],
+  ["vibration", "foxglove", 41.75, 39.98],
   ["vibration", "influx", 80.3, 79.7],
-  ["plc", "foxglove", 37.62, 35.94],
+  ["plc", "foxglove", 42.66, 41.12],
   ["plc", "influx", 98.01, 97.96],
-  ["computer-vision", "foxglove", 38.08, 36.29],
-  ["computer-vision", "influx", -104.18, -110.09],
-  ["custom", "foxglove", 36.71, 34.78],
-  ["custom", "influx", -115.94, -122.55],
+  ["computer-vision", "foxglove", 40.05, 38.27],
+  ["computer-vision", "influx", -109.71, -115.95],
+  ["custom", "foxglove", 43.44, 41.76],
+  ["custom", "influx", -109.61, -115.85],
 ];
 
 const runPreset = (preset, competitor, currency) =>
@@ -452,7 +452,7 @@ for (const [presetId, competitor, eurPercent, usdPercent] of regressions) {
   });
 }
 
-test("every example is 30 to 40% cheaper than Foxglove in both currencies", () => {
+test("every example keeps 70 to 160 TB and is 35 to 45% cheaper than Foxglove", () => {
   assert.deepEqual(
     PRESETS.map((p) => p.id),
     [
@@ -468,13 +468,31 @@ test("every example is 30 to 40% cheaper than Foxglove in both currencies", () =
   );
   for (const preset of PRESETS) {
     for (const currency of ["EUR", "USD"]) {
-      const percent = runPreset(preset, "foxglove", currency).savingPercent;
-      assert.ok(
-        percent >= 30 && percent <= 40,
-        `${preset.id} ${currency} ${percent}`,
-      );
+      const result = runPreset(preset, "foxglove", currency);
+      const tag = `${preset.id} ${currency}`;
+      const retained = result.estimate.workload.totalRetainedTb;
+      assert.ok(retained >= 70 && retained <= 160, `${tag} ${retained} TB`);
+      const percent = result.savingPercent;
+      assert.ok(percent >= 35 && percent <= 45, `${tag} ${percent}%`);
     }
   }
+});
+
+test("data kept scales what is stored, not what is generated", () => {
+  const all = estimate({ ...mixed, keepPercent: 100 }, storage(), config());
+  const kept = estimate({ ...mixed, keepPercent: 25 }, storage(), config());
+  close(kept.workload.generatedMonthTb, all.workload.generatedMonthTb, 1e-9);
+  close(
+    kept.workload.totalDataMonthTb,
+    all.workload.totalDataMonthTb / 4,
+    1e-9,
+  );
+  close(kept.workload.totalRecordsMonth, all.workload.totalRecordsMonth / 4, 1);
+  close(kept.workload.totalRetainedTb, all.workload.totalRetainedTb / 4, 1e-9);
+  assert.equal(
+    estimate(mixed, storage(), config()).workload.totalDataMonthTb,
+    all.workload.totalDataMonthTb,
+  );
 });
 
 // The default example worked by hand from the published price lists, without
@@ -501,7 +519,11 @@ test("cross-check: mobile robot vs Foxglove by hand", () => {
   const s3StorageUsd = 12 * (monthTb * 23 + monthTb * 2 * 12.5);
   const licenseUsd = 12 * retainedTb * 18;
 
-  const result = runPreset(PRESETS[0], "foxglove", "USD");
+  const result = runPreset(
+    { ...PRESETS[0], keepPercent: 100 },
+    "foxglove",
+    "USD",
+  );
   close(result.alternative.totalYear, foxgloveUsd, 1);
   const part = (label) =>
     result.reduct.components.find((c) => c.label === label).amountYear;

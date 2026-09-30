@@ -153,6 +153,7 @@ export default function CostCalculator(): JSX.Element {
     toDraft(preset.streams),
   );
   const [backend, setBackend] = useState<BackendId>("aws");
+  const [keepPercent, setKeepPercent] = useState(String(preset.keepPercent));
   const [retentionDays, setRetentionDays] = useState(
     String(preset.retentionDays),
   );
@@ -168,6 +169,7 @@ export default function CostCalculator(): JSX.Element {
     setUnits(String(next.units));
     setHours(String(next.recordingHoursPerDay));
     setStreams(toDraft(next.streams));
+    setKeepPercent(String(next.keepPercent));
     setRetentionDays(String(next.retentionDays));
     track("calculator_preset_selected", { preset: id });
   };
@@ -179,6 +181,7 @@ export default function CostCalculator(): JSX.Element {
   const errors = {
     units: valid(units, 1) ? null : "At least 1",
     hours: valid(hours, 0.1, 24) ? null : "Between 0 and 24",
+    keepPercent: valid(keepPercent, 1, 100) ? null : "Between 1 and 100",
     retentionDays: valid(retentionDays, 1) ? null : "At least 1 day",
     minioCost: valid(minioCost, 0) ? null : "Cannot be negative",
   };
@@ -192,6 +195,7 @@ export default function CostCalculator(): JSX.Element {
     const workload = {
       units: safe(units, 1, 1),
       recordingHoursPerDay: safe(hours, 0, 0, 24),
+      keepPercent: safe(keepPercent, 100, 1, 100),
       streams: streams.map((s) => ({
         ...s,
         count: safe(s.count, 0),
@@ -227,6 +231,7 @@ export default function CostCalculator(): JSX.Element {
     hours,
     streams,
     backend,
+    keepPercent,
     retentionDays,
     minioCost,
     competitor,
@@ -277,9 +282,21 @@ export default function CostCalculator(): JSX.Element {
       ? `Save ${formatCurrency(saving, currency)} / year`
       : `${formatCurrency(-saving, currency)} / year higher`;
   const subline =
-    saving >= 0
-      ? `${formatPercent(result.savingPercent)} lower total cost of ownership (TCO)`
-      : "for this configuration";
+    saving >= 0 ? (
+      <>
+        <strong className={styles.percent}>
+          {formatPercent(result.savingPercent)}
+        </strong>{" "}
+        cheaper
+      </>
+    ) : (
+      <>
+        <strong className={styles.percent}>
+          {formatPercent(-result.savingPercent)}
+        </strong>{" "}
+        more expensive
+      </>
+    );
 
   return (
     <div className={styles.root}>
@@ -344,7 +361,7 @@ export default function CostCalculator(): JSX.Element {
             />
             <p className={styles.generated}>
               {hasData
-                ? `≈ ${formatTb(workload.totalDataMonthTb)} generated per month`
+                ? `≈ ${formatTb(workload.generatedMonthTb)} generated per month`
                 : "Enable at least one stream with a frequency and record size."}
             </p>
           </section>
@@ -376,8 +393,19 @@ export default function CostCalculator(): JSX.Element {
             </div>
             <div className={styles.fields}>
               <NumberField
+                label="Data kept"
+                hint="Share of the recorded data you keep, for example only events plus a sample of normal operation. 100% keeps everything. Both sides store the same share."
+                value={keepPercent}
+                onChange={setKeepPercent}
+                min={1}
+                max={100}
+                step={5}
+                suffix="%"
+                error={errors.keepPercent}
+              />
+              <NumberField
                 label="Retention"
-                hint="How long data is kept before it is deleted. The estimate is for when a full retention window is stored."
+                hint="How many days each kept record is stored before it is deleted."
                 value={retentionDays}
                 onChange={setRetentionDays}
                 min={1}
@@ -476,14 +504,14 @@ export default function CostCalculator(): JSX.Element {
               <dl className={styles.summary}>
                 <div>
                   <dt>Generated</dt>
-                  <dd>{formatTb(workload.totalDataMonthTb)} / month</dd>
+                  <dd>{formatTb(workload.generatedMonthTb)} / month</dd>
                 </div>
                 <div>
                   <dt>Retained</dt>
                   <dd>{formatTb(retained)}</dd>
                 </div>
                 <div>
-                  <dt>Records</dt>
+                  <dt>Records kept</dt>
                   <dd>{formatCount(workload.totalRecordsMonth)} / month</dd>
                 </div>
               </dl>
@@ -522,9 +550,10 @@ export default function CostCalculator(): JSX.Element {
           <h3>Your data</h3>
           <p>
             Each stream produces count × frequency × record size of data for
-            every hour it records, over 30-day months. Retained data is one
-            retention window of it. Each month, {READ_PERCENT_PER_MONTH}% of the
-            retained data is read back.
+            every hour it records, over 30-day months. You keep the share set in
+            Data kept, and Retained is that share for one retention window. Both
+            sides store the same data. Each month, {READ_PERCENT_PER_MONTH}% of
+            the retained data is read back.
           </p>
 
           <h3>ReductStore</h3>

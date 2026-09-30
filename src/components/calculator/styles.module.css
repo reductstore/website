@@ -802,3 +802,13 @@ html[data-theme="dark"] .legend .totalRow td {
     transition: none;
   }
 }
+
+.percent {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--ifm-color-primary);
+}
+
+html[data-theme="dark"] .percent {
+  color: var(--reduct-accent);
+}

@@ -8,6 +8,7 @@ export const PRESETS: WorkloadPreset[] = [
     unitLabel: "Mobile robots",
     units: 10,
     recordingHoursPerDay: 8,
+    keepPercent: 25,
     hotDays: 30,
     retentionDays: 90,
     streams: [
@@ -64,8 +65,9 @@ export const PRESETS: WorkloadPreset[] = [
     unitLabel: "Vehicles",
     units: 10,
     recordingHoursPerDay: 8,
+    keepPercent: 10,
     hotDays: 30,
-    retentionDays: 30,
+    retentionDays: 90,
     streams: [
       {
         id: "autonomous-vehicle-0",
@@ -120,8 +122,9 @@ export const PRESETS: WorkloadPreset[] = [
     unitLabel: "Drones",
     units: 10,
     recordingHoursPerDay: 4,
+    keepPercent: 25,
     hotDays: 30,
-    retentionDays: 120,
+    retentionDays: 180,
     streams: [
       {
         id: "drone-0",
@@ -176,6 +179,7 @@ export const PRESETS: WorkloadPreset[] = [
     unitLabel: "Industrial robots",
     units: 25,
     recordingHoursPerDay: 16,
+    keepPercent: 60,
     hotDays: 30,
     retentionDays: 90,
     streams: [
@@ -230,8 +234,9 @@ export const PRESETS: WorkloadPreset[] = [
     id: "vibration",
     name: "Vibration data",
     unitLabel: "Machines",
-    units: 50,
+    units: 30,
     recordingHoursPerDay: 24,
+    keepPercent: 100,
     hotDays: 30,
     retentionDays: 180,
     streams: [
@@ -277,8 +282,9 @@ export const PRESETS: WorkloadPreset[] = [
     id: "plc",
     name: "PLC & telemetry",
     unitLabel: "PLCs",
-    units: 100,
+    units: 50,
     recordingHoursPerDay: 24,
+    keepPercent: 100,
     hotDays: 30,
     retentionDays: 180,
     streams: [
@@ -324,10 +330,11 @@ export const PRESETS: WorkloadPreset[] = [
     id: "computer-vision",
     name: "Computer vision",
     unitLabel: "Cameras",
-    units: 50,
+    units: 20,
     recordingHoursPerDay: 24,
+    keepPercent: 100,
     hotDays: 30,
-    retentionDays: 90,
+    retentionDays: 120,
     streams: [
       {
         id: "computer-vision-0",
@@ -364,8 +371,9 @@ export const PRESETS: WorkloadPreset[] = [
     unitLabel: "Data sources",
     units: 10,
     recordingHoursPerDay: 24,
+    keepPercent: 75,
     hotDays: 30,
-    retentionDays: 180,
+    retentionDays: 120,
     streams: [
       {
         id: "custom-0",

@@ -38,6 +38,7 @@ export type StreamWorkload = {
 export type Workload = {
   streams: StreamWorkload[];
   totalRecordsMonth: number;
+  generatedMonthTb: number;
   totalDataMonthTb: number;
   totalRetainedTb: number;
 };
@@ -87,21 +88,24 @@ export function calculateWorkload(
   block: BlockConfig,
 ): Workload {
   const units = nonNegative(input.units);
+  const keep = Math.min(100, nonNegative(input.keepPercent ?? 100)) / 100;
   const activeSecondsMonth =
     nonNegative(input.recordingHoursPerDay) * SECONDS_PER_HOUR * DAYS_PER_MONTH;
 
   const streams = input.streams
     .filter((stream) => stream.enabled && stream.recordSizeKb > 0)
     .map((stream) => {
-      const recordsMonth =
+      const generatedRecords =
         units *
         nonNegative(stream.count) *
         nonNegative(stream.frequencyHz) *
         activeSecondsMonth;
       return {
         stream,
-        recordsMonth,
-        dataMonthTb: (recordsMonth * stream.recordSizeKb) / KB_PER_TB,
+        recordsMonth: generatedRecords * keep,
+        dataMonthTb:
+          (generatedRecords * keep * stream.recordSizeKb) / KB_PER_TB,
+        generatedMonthTb: (generatedRecords * stream.recordSizeKb) / KB_PER_TB,
         packFactor: packFactor(stream.recordSizeKb, block),
       };
     })
@@ -109,9 +113,14 @@ export function calculateWorkload(
 
   const totalRecordsMonth = streams.reduce((sum, s) => sum + s.recordsMonth, 0);
   const totalDataMonthTb = streams.reduce((sum, s) => sum + s.dataMonthTb, 0);
+  const generatedMonthTb = streams.reduce(
+    (sum, s) => sum + s.generatedMonthTb,
+    0,
+  );
   return {
-    streams,
+    streams: streams.map(({ generatedMonthTb: _generated, ...s }) => s),
     totalRecordsMonth,
+    generatedMonthTb,
     totalDataMonthTb,
     totalRetainedTb:
       (totalDataMonthTb * nonNegative(retentionDays)) / DAYS_PER_MONTH,
