@@ -11,6 +11,7 @@ export const PRESETS: WorkloadPreset[] = [
     hotDays: 30,
     retentionDays: 90,
     recommended: "foxglove",
+    competitors: ["foxglove", "tiger", "mongodb", "direct"],
     streams: [
       {
         id: "drone-0",
@@ -66,8 +67,9 @@ export const PRESETS: WorkloadPreset[] = [
     units: 10,
     recordingHoursPerDay: 8,
     hotDays: 30,
-    retentionDays: 90,
+    retentionDays: 120,
     recommended: "foxglove",
+    competitors: ["foxglove", "tiger", "mongodb", "direct"],
     streams: [
       {
         id: "mobile-robot-0",
@@ -125,6 +127,7 @@ export const PRESETS: WorkloadPreset[] = [
     hotDays: 30,
     retentionDays: 30,
     recommended: "foxglove",
+    competitors: ["foxglove", "tiger", "mongodb", "direct"],
     streams: [
       {
         id: "autonomous-vehicle-0",
@@ -182,6 +185,7 @@ export const PRESETS: WorkloadPreset[] = [
     hotDays: 30,
     retentionDays: 90,
     recommended: "tiger",
+    competitors: ["tiger", "influx", "foxglove", "direct"],
     streams: [
       {
         id: "industrial-robot-0",
@@ -239,6 +243,7 @@ export const PRESETS: WorkloadPreset[] = [
     hotDays: 30,
     retentionDays: 30,
     recommended: "mongodb",
+    competitors: ["mongodb", "tiger", "direct"],
     streams: [
       {
         id: "computer-vision-0",
@@ -287,11 +292,12 @@ export const PRESETS: WorkloadPreset[] = [
     hotDays: 30,
     retentionDays: 90,
     recommended: "tiger",
+    competitors: ["tiger", "influx", "direct"],
     streams: [
       {
         id: "vibration-0",
         dataClass: "blob",
-        name: "Vibration windows",
+        name: "Vibration chunks",
         enabled: true,
         count: 4,
         frequencyHz: 1,
@@ -334,7 +340,8 @@ export const PRESETS: WorkloadPreset[] = [
     recordingHoursPerDay: 24,
     hotDays: 30,
     retentionDays: 90,
-    recommended: "influx",
+    recommended: "tiger",
+    competitors: ["tiger", "influx", "direct"],
     streams: [
       {
         id: "plc-0",
@@ -375,6 +382,55 @@ export const PRESETS: WorkloadPreset[] = [
     ],
   },
   {
+    id: "machine-vision-qa",
+    name: "Machine vision QA",
+    unitLabel: "Stations",
+    units: 25,
+    recordingHoursPerDay: 16,
+    hotDays: 30,
+    retentionDays: 90,
+    recommended: "mongodb",
+    competitors: ["mongodb", "tiger", "direct"],
+    streams: [
+      {
+        id: "machine-vision-qa-0",
+        dataClass: "blob",
+        name: "Inspection images",
+        enabled: true,
+        count: 2,
+        frequencyHz: 1,
+        recordSizeKb: 2000,
+      },
+      {
+        id: "machine-vision-qa-1",
+        dataClass: "metadata",
+        name: "Detection results",
+        enabled: true,
+        count: 1,
+        frequencyHz: 1,
+        recordSizeKb: 10,
+      },
+      {
+        id: "machine-vision-qa-2",
+        dataClass: "metric",
+        name: "PLC context",
+        enabled: true,
+        count: 1,
+        frequencyHz: 10,
+        recordSizeKb: 2,
+      },
+      {
+        id: "machine-vision-qa-3",
+        dataClass: "blob",
+        name: "Rejected samples",
+        enabled: false,
+        count: 1,
+        frequencyHz: 0.05,
+        recordSizeKb: 5000,
+      },
+    ],
+  },
+  {
     id: "ros",
     name: "ROS / research",
     unitLabel: "Robots",
@@ -383,6 +439,7 @@ export const PRESETS: WorkloadPreset[] = [
     hotDays: 30,
     retentionDays: 90,
     recommended: "foxglove",
+    competitors: ["foxglove", "tiger", "mongodb", "direct"],
     streams: [
       {
         id: "ros-0",
@@ -440,6 +497,7 @@ export const PRESETS: WorkloadPreset[] = [
     hotDays: 30,
     retentionDays: 90,
     recommended: "direct",
+    competitors: ["direct", "foxglove", "tiger", "influx", "mongodb"],
     streams: [
       {
         id: "custom-0",

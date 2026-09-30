@@ -24,18 +24,12 @@ export type StorageInput = {
   hotDays: number;
   retentionDays: number;
   readPercentPerMonth: number;
+  compressionRatio?: number;
   minioEurPerTbMonth?: number;
-};
-
-export type ErasureCoding = {
-  dataShards: number;
-  parityShards: number;
-  diskBlockKb: number;
 };
 
 export type StorageTier = {
   storageEurPerTbMonth: number;
-  erasure?: ErasureCoding;
   getEurPer1000: number;
   retrievalEurPerTb: number;
   minBillableObjectKb: number;
@@ -73,6 +67,7 @@ export type WorkloadPreset = {
   hotDays: number;
   retentionDays: number;
   recommended: CompetitorId;
+  competitors: CompetitorId[];
   streams: StreamInput[];
 };
 

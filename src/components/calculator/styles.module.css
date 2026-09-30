@@ -3,6 +3,12 @@
   grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   gap: 2rem;
   align-items: start;
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
   margin-bottom: var(--reduct-bottom-page-margin);
 }
 
@@ -137,14 +143,6 @@
   color: var(--ifm-color-danger);
 }
 
-.streamSummary {
-  margin: 1.25rem 0 0.75rem;
-  font-family: var(--ifm-font-family-monospace);
-  font-size: 0.8rem;
-  line-height: 1.6;
-  color: var(--ifm-color-emphasis-700);
-}
-
 .disclosure summary {
   cursor: pointer;
   font-weight: 600;
@@ -193,6 +191,10 @@
   color: inherit;
 }
 
+.streamTable input[type="number"] {
+  text-align: right;
+}
+
 .streamTable input[type="text"] {
   min-width: 7.5rem;
 }
@@ -218,11 +220,6 @@
 
 .off td:not(:first-child) {
   opacity: 0.5;
-}
-
-.volume {
-  font-family: var(--ifm-font-family-monospace);
-  color: var(--ifm-color-emphasis-700);
 }
 
 .segmented {
@@ -289,12 +286,6 @@
   font-size: 1.15rem;
   font-weight: 600;
   color: var(--ifm-heading-color);
-}
-
-.compare {
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
-  color: var(--ifm-color-emphasis-700);
 }
 
 .comparison {
@@ -509,9 +500,8 @@ html[data-theme="dark"] .summary {
   border-color: var(--reduct-border);
 }
 
-html[data-theme="dark"] .compare,
-html[data-theme="dark"] .streamSummary,
-html[data-theme="dark"] .volume {
+html[data-theme="dark"] .generated,
+html[data-theme="dark"] .fieldHint {
   color: var(--ifm-color-emphasis-600);
 }
 
@@ -615,17 +605,8 @@ html[data-theme="dark"] .volume {
   color: var(--reduct-dimmed);
 }
 
-.eyebrow {
-  margin: 0 0 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--reduct-dimmed);
-}
-
 .notes {
-  margin: 0 0 1.5rem;
+  margin: 0.75rem 0 1.5rem;
   padding-left: 1.1rem;
   font-size: 0.8rem;
   color: var(--ifm-color-emphasis-700);
@@ -635,10 +616,148 @@ html[data-theme="dark"] .volume {
   display: none;
 }
 
-.sources {
+.generated {
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.fieldLabel {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.fieldHint {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.numeric {
+  text-align: right !important;
+}
+
+.cellInput {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 1.25rem;
-  padding: 0;
-  list-style: none;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0;
+}
+
+.cellInput span {
+  font-size: 0.75rem;
+  color: var(--reduct-dimmed);
+}
+
+.architectures {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.routeTitle {
+  margin: 0 0 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ifm-heading-color);
+}
+
+.resultTitle {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.legend tfoot tr {
+  border-top: 1px solid rgba(43, 5, 72, 0.12);
+}
+
+.legend tfoot th,
+.legend tfoot td {
+  padding-top: 0.35rem;
+  font-weight: 700;
+  text-align: left;
+}
+
+.legend tfoot td {
+  text-align: right;
+}
+
+.sourcesTable {
+  overflow-x: auto;
+}
+
+.sourcesTable table {
+  display: table;
+  width: 100%;
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.sourcesTable tr {
+  border: 0;
+  background: none !important;
+}
+
+.sourcesTable th,
+.sourcesTable td {
+  padding: 0.3rem 0.5rem 0.3rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  text-align: left;
+  vertical-align: top;
+}
+
+.sourcesTable td:last-child {
+  white-space: nowrap;
+}
+
+.sourcesTable thead th {
+  color: var(--reduct-dimmed);
+}
+
+html[data-theme="dark"] .legend tfoot tr {
+  border-color: var(--reduct-border);
+}
+
+@media (max-width: 600px) {
+  .architectures {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .streamTable th,
+  .streamTable td {
+    padding: 0.3rem 0.15rem;
+  }
+
+  .step {
+    padding: 1.25rem 1rem;
+  }
+
+  .streamTable thead th {
+    white-space: normal;
+    vertical-align: bottom;
+  }
+
+  .streamTable input[type="text"] {
+    min-width: 5rem;
+  }
+
+  .streamTable input[type="number"] {
+    min-width: 3.6rem;
+    padding: 0.35rem 0.3rem;
+  }
+
+  .streamTable input[data-field="count"] {
+    min-width: 2.4rem;
+  }
+
+  .cellInput span {
+    display: none;
+  }
 }

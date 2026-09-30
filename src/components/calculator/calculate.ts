@@ -4,7 +4,6 @@ import type {
   CompetitorId,
   CostBreakdown,
   LicenseTier,
-  ErasureCoding,
   StorageInput,
   StorageTier,
   StreamInput,
@@ -64,6 +63,8 @@ export type Estimate = {
   reductIngestOperationsMonth: number;
   ingestReduction: number;
   localHistoryDays: number;
+  stored: StreamWorkload[];
+  storedRetainedTb: number;
 };
 
 const finite = (value: number) => (Number.isFinite(value) ? value : 0);
@@ -117,6 +118,25 @@ export function calculateWorkload(
   };
 }
 
+// Records as they land in storage when both sides store the same compressed
+// payloads.
+export function storedStreams(
+  streams: StreamWorkload[],
+  compressionRatio: number | undefined,
+  block: { sizeKb: number; maxRecords: number },
+): StreamWorkload[] {
+  const ratio = Math.max(1, finite(compressionRatio ?? 1));
+  return streams.map((s) => {
+    const recordSizeKb = s.stream.recordSizeKb / ratio;
+    return {
+      ...s,
+      stream: { ...s.stream, recordSizeKb },
+      dataMonthTb: s.dataMonthTb / ratio,
+      packFactor: packFactor(recordSizeKb, block),
+    };
+  });
+}
+
 export function ageBands(hotDays: number, retentionDays: number): Bands {
   const retention = nonNegative(retentionDays);
   const hot = Math.min(retention, Math.max(1, finite(hotDays)));
@@ -135,18 +155,6 @@ export function licenseEurYear(retainedTb: number, tiers: LicenseTier[]) {
     lower = tier.upToTb;
   }
   return cost;
-}
-
-// Raw disk used per logical byte when every object is split into erasure
-// shards and each shard occupies whole disk blocks.
-export function erasureFactor(objectSizeKb: number, erasure: ErasureCoding) {
-  if (!(objectSizeKb > 0)) return 1;
-  const shardKb = objectSizeKb / erasure.dataShards;
-  const onDiskKb =
-    Math.max(1, Math.ceil(shardKb / erasure.diskBlockKb)) * erasure.diskBlockKb;
-  return (
-    ((erasure.dataShards + erasure.parityShards) * onDiskKb) / objectSizeKb
-  );
 }
 
 const TIER_ORDER: TierName[] = ["hot", "cold", "archive"];
@@ -210,9 +218,8 @@ export function streamCost(
       const tier = pricing[name] as StorageTier;
       const bandTb = (workload.dataMonthTb * days) / DAYS_PER_MONTH;
       const bandRecords = (workload.recordsMonth * days) / DAYS_PER_MONTH;
-      const billable = tier.erasure
-        ? erasureFactor(objectSizeKb, tier.erasure)
-        : tier.minBillableObjectKb > 0
+      const billable =
+        tier.minBillableObjectKb > 0
           ? Math.max(1, tier.minBillableObjectKb / objectSizeKb)
           : 1;
       storage += bandTb * tier.storageEurPerTbMonth * billable;
@@ -274,8 +281,16 @@ export function estimate(
   );
   const bands = ageBands(storage.hotDays, retentionDays);
   const opsPerBlock = config.block.backendOpsPerBlock;
+  const stored = storedStreams(
+    workload.streams,
+    storage.compressionRatio,
+    config.block,
+  );
+  const storedRetainedTb =
+    (stored.reduce((sum, s) => sum + s.dataMonthTb, 0) * retentionDays) /
+    DAYS_PER_MONTH;
 
-  const directCosts = workload.streams.map((s) =>
+  const directCosts = stored.map((s) =>
     streamCost(
       s,
       bands,
@@ -285,7 +300,7 @@ export function estimate(
       1,
     ),
   );
-  const reductCosts = workload.streams.map((s) =>
+  const reductCosts = stored.map((s) =>
     streamCost(
       s,
       bands,
@@ -300,8 +315,8 @@ export function estimate(
   const reduct = breakdown(
     reductCosts,
     licenseEurYear(
-      workload.totalRetainedTb > 0
-        ? Math.max(workload.totalRetainedTb, config.licenseMinTb ?? 0)
+      storedRetainedTb > 0
+        ? Math.max(storedRetainedTb, config.licenseMinTb ?? 0)
         : 0,
       config.licenseTiers,
     ),
@@ -309,7 +324,7 @@ export function estimate(
   const savingEurYear = direct.totalEurYear - reduct.totalEurYear;
 
   const directIngestObjectsMonth = workload.totalRecordsMonth;
-  const reductIngestOperationsMonth = workload.streams.reduce(
+  const reductIngestOperationsMonth = stored.reduce(
     (sum, s) => sum + (opsPerBlock * s.recordsMonth) / s.packFactor,
     0,
   );
@@ -334,6 +349,8 @@ export function estimate(
       dailyPerUnitTb > 0
         ? nonNegative(storage.edgeDiskTbPerUnit) / dailyPerUnitTb
         : Infinity,
+    stored,
+    storedRetainedTb,
   };
 }
 
@@ -448,7 +465,7 @@ function withObjectStorage(
 ) {
   if (rest.length === 0) return;
   components.push({
-    label: `${ctx.config.backendName} object storage`,
+    label: `${ctx.config.backendName} storage`,
     eurYear: objectStorageEurYear(
       rest,
       ctx.bands,
@@ -460,8 +477,12 @@ function withObjectStorage(
   routes.push({ target: ctx.config.backendName, streams: names(rest) });
 }
 
+const withBackend = (name: string, rest: StreamWorkload[], backend: string) =>
+  rest.length > 0 ? `${name} + ${backend}` : name;
+
 export function alternativeCost(
   workload: Workload,
+  stored: StreamWorkload[],
   storage: StorageInput,
   units: number,
   config: ComparisonConfig,
@@ -475,13 +496,26 @@ export function alternativeCost(
   const ctx = { bands, readPercent: storage.readPercentPerMonth, config };
   const byClass = (...classes: string[]) =>
     workload.streams.filter((s) => classes.includes(s.stream.dataClass));
+  const storedByClass = (...classes: string[]) =>
+    stored.filter((s) => classes.includes(s.stream.dataClass));
 
   if (config.competitor === "foxglove") {
     const f = prices.foxglove;
-    const retained = workload.totalRetainedTb;
+    const uploadedMonthTb = monthlyTb(stored);
+    const retained = retainedTb(stored, retention);
     const seats = Math.max(0, assumptions.foxgloveDeveloperSeats);
     const components: CostComponent[] = [
-      { label: "Pro base", eurYear: usd(f.baseUsdPerMonth * 12) },
+      {
+        label: "Platform",
+        eurYear: usd(
+          12 *
+            (f.baseUsdPerMonth +
+              Math.max(0, seats - f.includedDeveloperSeats) *
+                f.extraDeveloperSeatUsdPerMonth +
+              Math.max(0, Math.ceil(units) - f.includedDevices) *
+                f.extraDeviceUsdPerMonth),
+        ),
+      },
       {
         label: "Storage",
         eurYear: usd(
@@ -494,7 +528,7 @@ export function alternativeCost(
         eurYear: usd(
           12 *
             marginalCost(
-              workload.totalDataMonthTb,
+              uploadedMonthTb,
               f.indexingIncludedTb,
               f.indexingUsdPerTb,
             ),
@@ -522,39 +556,21 @@ export function alternativeCost(
             ),
         ),
       },
-      {
-        label: "Developer seats",
-        eurYear: usd(
-          12 *
-            Math.max(0, seats - f.includedDeveloperSeats) *
-            f.extraDeveloperSeatUsdPerMonth,
-        ),
-      },
-      {
-        label: "Devices",
-        eurYear: usd(
-          12 *
-            Math.max(0, Math.ceil(units) - f.includedDevices) *
-            f.extraDeviceUsdPerMonth,
-        ),
-      },
     ];
     return {
-      label: "Foxglove Pro",
+      label: "Foxglove",
       components,
       totalEurYear: sumEur(components),
       lowerBound: false,
-      notes: [
-        "Foxglove Pro public list-price estimate. Enterprise pricing is custom.",
-      ],
-      routes: [{ target: "Foxglove Pro", streams: names(workload.streams) }],
+      notes: ["Foxglove Pro public list prices. Enterprise pricing is custom."],
+      routes: [{ target: "Foxglove", streams: names(workload.streams) }],
     };
   }
 
   if (config.competitor === "tiger") {
     const t = prices.tiger;
     const inDb = byClass("metric", "metadata");
-    const rest = byClass("blob", "log");
+    const rest = storedByClass("blob", "log");
     const ratio = Math.max(1, assumptions.tigerCompressionRatio);
     const monthly = monthlyTb(inDb);
     const hotGb = ((monthly * bands.hot) / DAYS_PER_MONTH / ratio) * 1000;
@@ -580,13 +596,13 @@ export function alternativeCost(
     const routes: Route[] = [{ target: "Tiger Cloud", streams: names(inDb) }];
     withObjectStorage(components, routes, rest, ctx);
     return {
-      label: `Tiger Cloud + ${config.backendName}`,
+      label: withBackend("Tiger Cloud", rest, config.backendName),
       components,
       totalEurYear: sumEur(components),
       lowerBound: true,
       notes: [
         "Uses Tiger Cloud's minimum published compute price. Actual compute depends on workload.",
-        `Database storage assumes ${ratio}× compression.`,
+        `Tiger Cloud storage assumes ${ratio}× time-series compression, applied only to data in the database.`,
       ],
       routes,
     };
@@ -595,7 +611,7 @@ export function alternativeCost(
   if (config.competitor === "influx") {
     const i = prices.influx;
     const inDb = byClass("metric");
-    const rest = byClass("metadata", "blob", "log");
+    const rest = storedByClass("metadata", "blob", "log");
     const monthly = monthlyTb(inDb);
     const retainedGb =
       retainedTb(inDb, retention) *
@@ -635,11 +651,11 @@ export function alternativeCost(
       },
     ];
     const routes: Route[] = [
-      { target: "InfluxDB Cloud Serverless", streams: names(inDb) },
+      { target: "InfluxDB Cloud", streams: names(inDb) },
     ];
     withObjectStorage(components, routes, rest, ctx);
     return {
-      label: `InfluxDB Cloud Serverless + ${config.backendName}`,
+      label: withBackend("InfluxDB Cloud", rest, config.backendName),
       components,
       totalEurYear: sumEur(components),
       lowerBound: false,
@@ -658,20 +674,18 @@ export function alternativeCost(
       : m.defaultTier;
     const tier = m.tiers[tierName];
     const inDb = byClass("metadata", "metric");
-    const rest = byClass("blob", "log");
+    const rest = storedByClass("blob", "log");
     const components: CostComponent[] = [
       {
         label: `Atlas ${tierName} base cluster`,
         eurYear: usd(12 * tier.usdPerHour * m.hoursPerMonth),
       },
     ];
-    const routes: Route[] = [
-      { target: `MongoDB Atlas ${tierName}`, streams: names(inDb) },
-    ];
+    const routes: Route[] = [{ target: "MongoDB Atlas", streams: names(inDb) }];
     withObjectStorage(components, routes, rest, ctx);
     const overflow = retainedTb(inDb, retention) * 1000 > tier.defaultStorageGb;
     return {
-      label: `MongoDB Atlas ${tierName} + ${config.backendName}`,
+      label: withBackend("MongoDB Atlas", rest, config.backendName),
       components,
       totalEurYear: sumEur(components),
       lowerBound: overflow,
@@ -689,9 +703,9 @@ export function alternativeCost(
 
   const components: CostComponent[] = [];
   const routes: Route[] = [];
-  withObjectStorage(components, routes, workload.streams, ctx);
+  withObjectStorage(components, routes, stored, ctx);
   return {
-    label: `Direct ${config.backendName}`,
+    label: `${config.backendName} only`,
     components,
     totalEurYear: sumEur(components),
     lowerBound: false,
@@ -709,40 +723,34 @@ export function compare(
 ): Comparison {
   const result = estimate(workloadInput, storage, config);
   const reductComponents: CostComponent[] = [
+    { label: "ReductStore license", eurYear: result.reduct.licenseEurYear },
     {
-      label:
-        storage.backend === "minio"
-          ? "File system storage"
-          : `${config.backendName} storage`,
+      label: `${config.backendName} storage`,
       eurYear: result.reduct.storageEurYear,
     },
-    {
+  ];
+  if (storage.backend !== "minio") {
+    reductComponents.push({
       label: "Requests and retrieval",
       eurYear: result.reduct.operationsEurYear + result.reduct.retrievalEurYear,
-    },
-    { label: "ReductStore license", eurYear: result.reduct.licenseEurYear },
-  ];
+    });
+  }
   const reduct: CostSide = {
-    label:
-      storage.backend === "minio"
-        ? "ReductStore on a file system"
-        : `ReductStore + ${config.backendName}`,
+    label: `ReductStore + ${config.backendName}`,
     components: reductComponents,
     totalEurYear: result.reduct.totalEurYear,
     lowerBound: false,
     notes: [],
     routes: [
       {
-        target:
-          storage.backend === "minio"
-            ? "ReductStore"
-            : `ReductStore + ${config.backendName}`,
+        target: `ReductStore → ${config.backendName}`,
         streams: names(result.workload.streams),
       },
     ],
   };
   const alternative = alternativeCost(
     result.workload,
+    result.stored,
     storage,
     nonNegative(workloadInput.units),
     config,

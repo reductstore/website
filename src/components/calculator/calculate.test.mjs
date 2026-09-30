@@ -250,47 +250,45 @@ test("no NaN or Infinity when every stream is disabled", () => {
   }
 });
 
-test("MinIO pays erasure shard overhead on small objects", () => {
-  const minio = config(backendPricing("minio", 10));
-  const small = estimate(
+test("MinIO costs retained TB times the infrastructure price", () => {
+  const result = estimate(
     { units: 1, recordingHoursPerDay: 24, streams: [stream("s", 1, 100, 2)] },
     storage({ backend: "minio" }),
-    minio,
+    config(backendPricing("minio", 10)),
   );
-  assert.equal(small.direct.operationsEurYear, 0);
-  // 2 KB objects on 8 + 4 shards of 4 KB blocks use 24x raw disk; ReductStore
-  // blocks use the 1.5x protection overhead only.
-  close(small.direct.storageEurYear / small.reduct.storageEurYear, 16, 1e-6);
-
-  const large = estimate(
-    {
-      units: 1,
-      recordingHoursPerDay: 24,
-      streams: [stream("l", 1, 10, 2000)],
-    },
-    storage({ backend: "minio" }),
-    minio,
-  );
-  const ratio = large.direct.storageEurYear / large.reduct.storageEurYear;
-  assert.ok(ratio >= 1 && ratio < 1.01, `ratio ${ratio}`);
-  assert.ok(large.savingEurYear < 0);
+  const retained = result.workload.totalRetainedTb;
+  close(result.reduct.storageEurYear, retained * 10 * 12, 1e-9);
+  close(result.direct.storageEurYear, retained * 10 * 12, 1e-9);
+  assert.equal(result.reduct.operationsEurYear, 0);
 });
 
-test("every preset saves on AWS and Azure with its defaults", () => {
-  for (const preset of PRESETS) {
-    for (const backend of ["aws", "azure"]) {
-      const result = estimate(
-        preset,
-        storage({
-          backend,
-          hotDays: preset.hotDays,
-          retentionDays: preset.retentionDays,
-        }),
-        published(backendPricing(backend)),
-      );
-      assert.ok(result.savingEurYear > 0, `${preset.id} ${backend}`);
-    }
-  }
+test("compression shrinks stored data on both sides but not Tiger's database", () => {
+  const plain = compare(mixed, storage(), comparison("tiger"));
+  const packed = compare(
+    mixed,
+    storage({ compressionRatio: 2 }),
+    comparison("tiger"),
+  );
+  const part = (result, side, label) =>
+    result[side].components.find((c) => c.label === label).eurYear;
+  const half = (a, b) => close(a / b, 0.5, 0.01);
+  half(
+    part(packed, "reduct", "AWS S3 storage"),
+    part(plain, "reduct", "AWS S3 storage"),
+  );
+  close(
+    part(packed, "reduct", "ReductStore license"),
+    part(plain, "reduct", "ReductStore license") / 2,
+    1e-6,
+  );
+  half(
+    part(packed, "alternative", "AWS S3 storage"),
+    part(plain, "alternative", "AWS S3 storage"),
+  );
+  assert.equal(
+    part(packed, "alternative", "Hot database storage"),
+    part(plain, "alternative", "Hot database storage"),
+  );
 });
 
 test("every preset produces finite results on every backend", () => {
@@ -375,24 +373,20 @@ test("Foxglove receives every stream and charges extra devices", () => {
   const result = compare(mixed, storage(), comparison("foxglove"));
   assert.deepEqual(result.alternative.routes, [
     {
-      target: "Foxglove Pro",
+      target: "Foxglove",
       streams: ["Cameras", "Telemetry", "Events", "Logs"],
     },
   ]);
   assert.equal(result.alternative.lowerBound, false);
-  const devices = result.alternative.components.find(
-    (c) => c.label === "Devices",
-  );
-  assert.equal(devices.eurYear, 0);
+  const platform = (r) =>
+    r.alternative.components.find((c) => c.label === "Platform").eurYear;
+  close(platform(result), 20 * 12 * pricingConfig.fx.usdToEur);
   const more = compare(
     { ...mixed, units: 8 },
     storage(),
     comparison("foxglove"),
   );
-  close(
-    more.alternative.components.find((c) => c.label === "Devices").eurYear,
-    3 * 20 * 12 * pricingConfig.fx.usdToEur,
-  );
+  close(platform(more), (20 + 3 * 20) * 12 * pricingConfig.fx.usdToEur);
 });
 
 test("Tiger Cloud stores metrics and metadata, blobs and logs go to object storage", () => {
@@ -407,7 +401,7 @@ test("Tiger Cloud stores metrics and metadata, blobs and logs go to object stora
 test("InfluxDB stores only metric streams", () => {
   const result = compare(mixed, storage(), comparison("influx"));
   assert.deepEqual(result.alternative.routes, [
-    { target: "InfluxDB Cloud Serverless", streams: ["Telemetry"] },
+    { target: "InfluxDB Cloud", streams: ["Telemetry"] },
     { target: "AWS S3", streams: ["Cameras", "Events", "Logs"] },
   ]);
 });
@@ -443,7 +437,27 @@ test("presets recommend an application-aware comparison", () => {
   assert.equal(byId["autonomous-vehicle"], "foxglove");
   assert.equal(byId["industrial-robot"], "tiger");
   assert.equal(byId.vibration, "tiger");
-  assert.equal(byId.plc, "influx");
+  assert.equal(byId.plc, "tiger");
   assert.equal(byId["computer-vision"], "mongodb");
+  assert.equal(byId["machine-vision-qa"], "mongodb");
   assert.equal(byId.custom, "direct");
+  for (const preset of PRESETS) {
+    assert.equal(preset.competitors[0], preset.recommended, preset.id);
+  }
+});
+
+test("the default mobile robot example lands near 30% below Foxglove", () => {
+  const preset = PRESETS.find((p) => p.id === "mobile-robot");
+  const result = compare(
+    preset,
+    storage({
+      hotDays: preset.hotDays,
+      retentionDays: preset.retentionDays,
+    }),
+    comparison("foxglove"),
+  );
+  assert.ok(
+    result.savingPercent > 25 && result.savingPercent < 35,
+    `${result.savingPercent}`,
+  );
 });

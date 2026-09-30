@@ -8,19 +8,23 @@ export type MarginalTier = {
 // Vendor prices are kept in their source currency (USD) and converted to EUR
 // only through usdToEur.
 export const pricingConfig = {
-  verifiedAt: "2026-09-30",
+  lastVerified: "2026-09-30",
 
   fx: {
     usdToEur: 0.880906,
-    verifiedAt: "2026-09-30",
+    lastVerified: "2026-09-30",
   },
 
   aws: {
+    vendor: "Amazon Web Services",
+    product: "S3 Standard, Standard-IA, Glacier Instant Retrieval",
+    currency: "USD",
+    units: "per GB-month stored, per 1,000 requests, per GB retrieved",
     source: "https://aws.amazon.com/s3/pricing/",
     classesSource:
       "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html",
     region: "US East (N. Virginia)",
-    verifiedAt: "2026-09-30",
+    lastVerified: "2026-09-30",
     putUsdPer1000: 0.005,
     standard: { storageUsdPerGbMonth: 0.023, getUsdPer1000: 0.0004 },
     standardIa: {
@@ -44,9 +48,13 @@ export const pricingConfig = {
   // Development placeholders for Azure Blob (LRS hot / cool / cold). Replace
   // them with current prices for the chosen region before relying on them.
   azure: {
+    vendor: "Microsoft",
+    product: "Azure Blob Storage (LRS hot, cool, cold)",
+    currency: "USD",
+    units: "per GB-month stored, per 10,000 operations, per GB retrieved",
     source: "https://azure.microsoft.com/pricing/details/storage/blobs/",
     region: "placeholder",
-    verifiedAt: "placeholder",
+    lastVerified: "placeholder",
     putUsdPer1000: 0.005,
     hot: { storageUsdPerGbMonth: 0.018, getUsdPer1000: 0.0004 },
     cool: {
@@ -66,9 +74,14 @@ export const pricingConfig = {
   },
 
   foxglove: {
+    vendor: "Foxglove",
+    product: "Pro",
+    currency: "USD",
+    units:
+      "per month base, per seat and device per month, per TB stored per month, per TB indexed, per TB of bandwidth, per query hour",
     source: "https://docs.foxglove.dev/docs/pricing",
     publicPlanUrl: "https://www.foxglove.dev/pricing",
-    verifiedAt: "2026-09-30",
+    lastVerified: "2026-09-30",
     baseUsdPerMonth: 20,
     includedDeveloperSeats: 3,
     extraDeveloperSeatUsdPerMonth: 42,
@@ -106,8 +119,12 @@ export const pricingConfig = {
   },
 
   tiger: {
+    vendor: "Tiger Data",
+    product: "Tiger Cloud Scale",
+    currency: "USD",
+    units: "per month minimum compute, per GB-month hot and tiered storage",
     source: "https://www.tigerdata.com/pricing",
-    verifiedAt: "2026-09-30",
+    lastVerified: "2026-09-30",
     scaleMinComputeUsdPerMonth: 36,
     scaleStorageUsdPerGbMonth: 0.212,
     tieredStorageUsdPerGbMonth: 0.021,
@@ -115,10 +132,14 @@ export const pricingConfig = {
   },
 
   influx: {
+    vendor: "InfluxData",
+    product: "InfluxDB Cloud Serverless (usage-based)",
+    currency: "USD",
+    units: "per MB written, per 100 queries, per GB-hour stored, per GB out",
     source: "https://www.influxdata.com/influxdb-pricing/",
     plansSource:
       "https://docs.influxdata.com/influxdb3/cloud-serverless/admin/billing/pricing-plans/",
-    verifiedAt: "2026-09-30",
+    lastVerified: "2026-09-30",
     dataInUsdPerMb: 0.0025,
     queryUsdPer100: 0.012,
     storageUsdPerGbHour: 0.002,
@@ -127,10 +148,14 @@ export const pricingConfig = {
   },
 
   mongodb: {
+    vendor: "MongoDB",
+    product: "Atlas dedicated clusters (AWS)",
+    currency: "USD",
+    units: "per cluster hour, including the tier's default storage",
     source: "https://www.mongodb.com/pricing",
     billingSource:
       "https://www.mongodb.com/docs/atlas/billing/invoice-breakdown/",
-    verifiedAt: "2026-09-30",
+    lastVerified: "2026-09-30",
     hoursPerMonth: 730,
     defaultTier: "M30",
     tiers: {
@@ -152,6 +177,10 @@ export const pricingConfig = {
   // ReductStore Pro as published on the pricing page: €0.015 per GB per month
   // on peak storage, 1 TB minimum.
   reductstore: {
+    vendor: "ReductStore",
+    product: "ReductStore Pro",
+    currency: "EUR",
+    units: "per GB-month of retained data",
     source: "/pricing",
     eurPerGbMonth: 0.015,
     minTb: 1,
@@ -225,19 +254,12 @@ export const AZURE_BLOB: BackendPricing = {
 
 export const DEFAULT_MINIO_EUR_PER_TB_MONTH = 10;
 
-// On premises, both sides pay for raw disk. MinIO splits every object into
-// erasure shards on separate drives, and each shard takes at least one disk
-// block; ReductStore writes large blocks to a file system with the same
-// protection overhead.
-export const MINIO_ERASURE = { dataShards: 8, parityShards: 4, diskBlockKb: 4 };
-
 export function minioPricing(storageEurPerTbMonth: number): BackendPricing {
   return {
     name: "MinIO",
     putEurPer1000: 0,
     hot: {
       storageEurPerTbMonth,
-      erasure: MINIO_ERASURE,
       getEurPer1000: 0,
       retrievalEurPerTb: 0,
       minBillableObjectKb: 0,

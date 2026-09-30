@@ -1,7 +1,5 @@
 import React, { JSX } from "react";
 import type { DataClass, StreamInput } from "./types";
-import type { Workload } from "./calculate";
-import { formatTb } from "./format";
 import styles from "./styles.module.css";
 
 export type StreamDraft = Omit<
@@ -16,12 +14,13 @@ export type StreamDraft = Omit<
 const NUMERIC: {
   key: "count" | "frequencyHz" | "recordSizeKb";
   label: string;
+  unit?: string;
   step: number;
   min: number;
 }[] = [
-  { key: "count", label: "Count per unit", step: 1, min: 0 },
-  { key: "frequencyHz", label: "Frequency, Hz", step: 1, min: 0 },
-  { key: "recordSizeKb", label: "Record size, KB", step: 1, min: 0 },
+  { key: "count", label: "Count", step: 1, min: 0 },
+  { key: "frequencyHz", label: "Frequency", unit: "Hz", step: 1, min: 0 },
+  { key: "recordSizeKb", label: "Record size", unit: "KB", step: 1, min: 0 },
 ];
 
 const DATA_CLASSES: { id: DataClass; label: string }[] = [
@@ -39,35 +38,29 @@ const invalid = (key: string, value: string) => {
 
 export default function StreamEditor({
   streams,
-  workload,
   classEditable,
   onChange,
 }: {
   streams: StreamDraft[];
-  workload: Workload;
   classEditable: boolean;
   onChange: (streams: StreamDraft[]) => void;
 }): JSX.Element {
   const update = (id: string, patch: Partial<StreamDraft>) =>
     onChange(streams.map((s) => (s.id === id ? { ...s, ...patch } : s)));
 
-  const volume = (id: string) =>
-    workload.streams.find((s) => s.stream.id === id)?.dataMonthTb ?? 0;
-
   return (
     <div className={styles.streamTable}>
       <table>
         <thead>
           <tr>
-            <th scope="col">On</th>
+            <th scope="col" aria-label="Include" />
             <th scope="col">Stream</th>
-            <th scope="col">Data class</th>
+            {classEditable && <th scope="col">Data class</th>}
             {NUMERIC.map((field) => (
-              <th key={field.key} scope="col">
+              <th key={field.key} scope="col" className={styles.numeric}>
                 {field.label}
               </th>
             ))}
-            <th scope="col">Data / month</th>
           </tr>
         </thead>
         <tbody>
@@ -93,8 +86,8 @@ export default function StreamEditor({
                   }
                 />
               </td>
-              <td>
-                {classEditable ? (
+              {classEditable && (
+                <td>
                   <select
                     value={stream.dataClass}
                     aria-label={`${stream.name}: Data class`}
@@ -110,29 +103,28 @@ export default function StreamEditor({
                       </option>
                     ))}
                   </select>
-                ) : (
-                  DATA_CLASSES.find((c) => c.id === stream.dataClass)?.label
-                )}
-              </td>
+                </td>
+              )}
               {NUMERIC.map((field) => (
                 <td key={field.key}>
-                  <input
-                    type="number"
-                    inputMode="decimal"
-                    min={field.min}
-                    step={field.step}
-                    value={stream[field.key]}
-                    aria-label={`${stream.name}: ${field.label}`}
-                    aria-invalid={invalid(field.key, stream[field.key])}
-                    onChange={(event) =>
-                      update(stream.id, { [field.key]: event.target.value })
-                    }
-                  />
+                  <label className={styles.cellInput}>
+                    <input
+                      type="number"
+                      inputMode="decimal"
+                      data-field={field.key}
+                      min={field.min}
+                      step={field.step}
+                      value={stream[field.key]}
+                      aria-label={`${stream.name}: ${field.label}${field.unit ? `, ${field.unit}` : ""}`}
+                      aria-invalid={invalid(field.key, stream[field.key])}
+                      onChange={(event) =>
+                        update(stream.id, { [field.key]: event.target.value })
+                      }
+                    />
+                    {field.unit && <span aria-hidden="true">{field.unit}</span>}
+                  </label>
                 </td>
               ))}
-              <td className={styles.volume}>
-                {stream.enabled ? formatTb(volume(stream.id)) : "off"}
-              </td>
             </tr>
           ))}
         </tbody>

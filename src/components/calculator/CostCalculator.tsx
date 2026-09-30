@@ -10,6 +10,7 @@ import {
   LuActivity,
   LuPlane,
   LuRoute,
+  LuScanSearch,
   LuSlidersHorizontal,
 } from "react-icons/lu";
 import type { IconType } from "react-icons";
@@ -25,7 +26,8 @@ import {
 } from "./pricing";
 import { PRESETS } from "./presets";
 import type { BackendId, CompetitorId, StreamInput } from "./types";
-import CostComparison from "./CostComparison";
+import type { Route } from "./calculate";
+import { CostBars, CostBreakdowns } from "./CostComparison";
 import StreamEditor, { StreamDraft } from "./StreamEditor";
 import NumberField from "./NumberField";
 import {
@@ -46,6 +48,7 @@ const PRESET_ICONS: Record<string, IconType> = {
   "computer-vision": LuCamera,
   vibration: LuActivity,
   plc: LuCpu,
+  "machine-vision-qa": LuScanSearch,
   ros: LuBot,
   custom: LuSlidersHorizontal,
 };
@@ -53,41 +56,55 @@ const PRESET_ICONS: Record<string, IconType> = {
 const BACKENDS: { id: BackendId; label: string }[] = [
   { id: "aws", label: "AWS S3" },
   { id: "azure", label: "Azure Blob" },
-  { id: "minio", label: "MinIO / on premises" },
+  { id: "minio", label: "MinIO" },
 ];
 
-const COMPETITORS: { id: CompetitorId; label: string; about: string }[] = [
-  {
-    id: "foxglove",
-    label: "Foxglove Pro",
-    about: "Managed robotics data platform",
+const COMPETITORS: Record<CompetitorId, { label: string; about: string }> = {
+  foxglove: {
+    label: "Foxglove",
+    about: "Managed robotics data platform. Every stream is uploaded to it.",
   },
-  {
-    id: "tiger",
-    label: "Tiger Cloud (Timescale) + object storage",
-    about: "Time-series database, binary data in object storage",
+  tiger: {
+    label: "Tiger Cloud",
+    about:
+      "Time-series database for metrics and metadata; binary data and logs go to object storage.",
   },
-  {
-    id: "influx",
-    label: "InfluxDB Cloud Serverless + object storage",
-    about: "Metrics database, other data in object storage",
+  influx: {
+    label: "InfluxDB",
+    about:
+      "InfluxDB Cloud Serverless for metrics; everything else goes to object storage.",
   },
-  {
-    id: "mongodb",
-    label: "MongoDB Atlas + object storage",
-    about: "Document database for results, images in object storage",
+  mongodb: {
+    label: "MongoDB Atlas",
+    about:
+      "Document database for results and metadata; images and logs go to object storage.",
   },
-  {
-    id: "direct",
-    label: "Direct object storage",
-    about: "Custom pipeline that batches records into 64 MB objects",
+  direct: {
+    label: "Object storage only",
+    about:
+      "A custom pipeline that batches records into objects of about 64 MB.",
   },
+};
+
+const PRICE_SOURCES = [
+  pricingConfig.aws,
+  pricingConfig.azure,
+  pricingConfig.foxglove,
+  pricingConfig.tiger,
+  pricingConfig.influx,
+  pricingConfig.mongodb,
 ];
 
-const VERIFIED = new Date(pricingConfig.verifiedAt).toLocaleDateString(
-  "en-GB",
-  { day: "numeric", month: "short", year: "numeric" },
-);
+const formatDate = (iso: string) => {
+  const date = new Date(iso);
+  return Number.isNaN(date.getTime())
+    ? iso
+    : date.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      });
+};
 
 const toDraft = (streams: StreamInput[]): StreamDraft[] =>
   streams.map((s) => ({
@@ -120,6 +137,25 @@ function useDebouncedEffect(effect: () => void, deps: unknown[], ms: number) {
 const backendLabel = (backend: BackendId) =>
   BACKENDS.find((b) => b.id === backend)?.label ?? "";
 
+function Routes({ title, routes }: { title: string; routes: Route[] }) {
+  return (
+    <div className={styles.routeGroup}>
+      <p className={styles.routeTitle}>{title}</p>
+      <ul className={styles.routes}>
+        {routes
+          .filter((route) => route.streams.length > 0)
+          .map((route) => (
+            <li key={route.target}>
+              <span>{route.streams.join(", ")}</span>
+              <span aria-hidden="true">→</span>
+              <strong>{route.target}</strong>
+            </li>
+          ))}
+      </ul>
+    </div>
+  );
+}
+
 export default function CostCalculator(): JSX.Element {
   const [presetId, setPresetId] = useState("mobile-robot");
   const preset = PRESETS.find((p) => p.id === presetId) ?? PRESETS[0];
@@ -138,14 +174,15 @@ export default function CostCalculator(): JSX.Element {
   const [minioCost, setMinioCost] = useState(
     String(DEFAULT_MINIO_EUR_PER_TB_MONTH),
   );
-  const [competitorChoice, setCompetitorChoice] = useState<
-    CompetitorId | "recommended"
-  >("recommended");
+  const [competitor, setCompetitor] = useState<CompetitorId>(
+    preset.recommended,
+  );
+  const [compressionRatio, setCompressionRatio] = useState("1");
   const [seats, setSeats] = useState(
     String(pricingConfig.foxglove.includedDeveloperSeats),
   );
   const [queryHours, setQueryHours] = useState("20");
-  const [compression, setCompression] = useState(
+  const [tigerRatio, setTigerRatio] = useState(
     String(pricingConfig.tiger.defaultCompressionRatio),
   );
   const [influxQueries, setInfluxQueries] = useState(
@@ -153,9 +190,6 @@ export default function CostCalculator(): JSX.Element {
   );
   const [influxRatio, setInfluxRatio] = useState("1");
   const [atlasTier, setAtlasTier] = useState(pricingConfig.mongodb.defaultTier);
-  const competitor =
-    competitorChoice === "recommended" ? preset.recommended : competitorChoice;
-  const competitorInfo = COMPETITORS.find((c) => c.id === competitor);
 
   const selectPreset = (id: string) => {
     const next = PRESETS.find((p) => p.id === id);
@@ -166,6 +200,7 @@ export default function CostCalculator(): JSX.Element {
     setStreams(toDraft(next.streams));
     setHotDays(String(next.hotDays));
     setRetentionDays(String(next.retentionDays));
+    setCompetitor(next.recommended);
     track("calculator_preset_selected", { preset: id });
   };
 
@@ -200,6 +235,7 @@ export default function CostCalculator(): JSX.Element {
         ? null
         : "Between 0 and 100",
     minioCost: atLeast(0, "Cannot be negative")(num(minioCost)),
+    compressionRatio: atLeast(1, "At least 1")(num(compressionRatio)),
   };
 
   const safe = (value: string, fallback: number, min = 0, max = Infinity) => {
@@ -225,6 +261,7 @@ export default function CostCalculator(): JSX.Element {
       hotDays: hot,
       retentionDays: Math.max(hot, safe(retentionDays, hot)),
       readPercentPerMonth: safe(readPercent, 0, 0, 100),
+      compressionRatio: safe(compressionRatio, 1, 1),
       minioEurPerTbMonth: safe(minioCost, 0),
     };
     return compare(workload, storage, {
@@ -232,14 +269,14 @@ export default function CostCalculator(): JSX.Element {
       licenseTiers: LICENSE_TIERS,
       licenseMinTb: LICENSE_MIN_TB,
       block: REDUCT_BLOCK,
-      backendName: backend === "minio" ? "MinIO" : backendLabel(backend),
+      backendName: backendLabel(backend),
       batch: OBJECT_STORAGE_BATCH,
       prices: pricingConfig,
       competitor,
       assumptions: {
         foxgloveDeveloperSeats: safe(seats, 3),
         foxgloveQueryHoursPerMonth: safe(queryHours, 0),
-        tigerCompressionRatio: safe(compression, 5, 1),
+        tigerCompressionRatio: safe(tigerRatio, 5, 1),
         influxQueriesPerMonth: safe(influxQueries, 0),
         influxStorageToRawRatio: safe(influxRatio, 1),
         atlasTier,
@@ -254,11 +291,12 @@ export default function CostCalculator(): JSX.Element {
     hotDays,
     retentionDays,
     readPercent,
+    compressionRatio,
     minioCost,
     competitor,
     seats,
     queryHours,
-    compression,
+    tigerRatio,
     influxQueries,
     influxRatio,
     atlasTier,
@@ -304,454 +342,461 @@ export default function CostCalculator(): JSX.Element {
     2000,
   );
 
+  let headline: string;
+  let subline: string;
+  if (saving >= 0) {
+    headline = `Save ${lowerBound ? "at least " : ""}${formatEur(saving)} / year`;
+    subline = lowerBound
+      ? "Estimated from public pricing"
+      : `${formatPercent(result.savingPercent)} lower TCO`;
+  } else {
+    headline = `${lowerBound ? "Up to " : ""}${formatEur(-saving)} / year higher`;
+    subline = lowerBound
+      ? "Estimated from public pricing"
+      : "for this configuration";
+  }
+
   return (
-    <div className={styles.calculator}>
-      <div className={styles.inputs}>
-        <section className={styles.step}>
-          <h2 className={styles.stepTitle}>1. Choose a workload</h2>
-          <div
-            className={styles.presets}
-            role="radiogroup"
-            aria-label="Workload"
-          >
-            {PRESETS.map((p) => {
-              const Icon = PRESET_ICONS[p.id];
-              return (
-                <button
-                  key={p.id}
-                  type="button"
-                  role="radio"
-                  aria-checked={p.id === presetId}
-                  className={clsx(styles.preset, {
-                    [styles.presetActive]: p.id === presetId,
-                  })}
-                  onClick={() => selectPreset(p.id)}
-                >
-                  {Icon && <Icon aria-hidden="true" />}
-                  <span>{p.name}</span>
-                </button>
-              );
-            })}
-          </div>
+    <div className={styles.root}>
+      <div className={styles.calculator}>
+        <div className={styles.inputs}>
+          <section className={styles.step}>
+            <h2 className={styles.stepTitle}>
+              1. What does your system record?
+            </h2>
+            <div
+              className={styles.presets}
+              role="radiogroup"
+              aria-label="Application"
+            >
+              {PRESETS.map((p) => {
+                const Icon = PRESET_ICONS[p.id];
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={p.id === presetId}
+                    className={clsx(styles.preset, {
+                      [styles.presetActive]: p.id === presetId,
+                    })}
+                    onClick={() => selectPreset(p.id)}
+                  >
+                    {Icon && <Icon aria-hidden="true" />}
+                    <span>{p.name}</span>
+                  </button>
+                );
+              })}
+            </div>
 
-          <div className={styles.fields}>
-            <NumberField
-              label={preset.unitLabel}
-              value={units}
-              onChange={setUnits}
-              min={1}
-              step={1}
-              error={errors.units}
-            />
-            <NumberField
-              label="Recording hours per day"
-              value={hours}
-              onChange={setHours}
-              min={0}
-              max={24}
-              step={1}
-              suffix="h"
-              error={errors.hours}
-            />
-          </div>
+            <div className={styles.fields}>
+              <NumberField
+                label={preset.unitLabel}
+                value={units}
+                onChange={setUnits}
+                min={1}
+                step={1}
+                error={errors.units}
+              />
+              <NumberField
+                label="Recording per day"
+                value={hours}
+                onChange={setHours}
+                min={0}
+                max={24}
+                step={1}
+                suffix="h"
+                error={errors.hours}
+              />
+            </div>
 
-          <p className={styles.streamSummary}>
-            {streams.filter((s) => s.enabled).length === 0
-              ? "No data streams enabled."
-              : streams
-                  .filter((s) => s.enabled)
-                  .map(
-                    (s) =>
-                      `${s.count} × ${s.name} (${s.frequencyHz} Hz, ${s.recordSizeKb} KB)`,
-                  )
-                  .join(" · ")}
-          </p>
-
-          <details
-            className={styles.disclosure}
-            onToggle={(event) => {
-              if ((event.target as HTMLDetailsElement).open) {
-                track("calculator_advanced_opened", { preset: presetId });
-              }
-            }}
-          >
-            <summary>Customize data streams</summary>
             <StreamEditor
               streams={streams}
-              workload={workload}
               classEditable={presetId === "custom"}
               onChange={setStreams}
             />
-          </details>
-        </section>
+            <p className={styles.generated}>
+              {hasData
+                ? `≈ ${formatTb(workload.totalDataMonthTb)} generated per month`
+                : "Enable at least one stream with a frequency and record size."}
+            </p>
+          </section>
 
-        <section className={styles.step}>
-          <h2 className={styles.stepTitle}>2. Choose backend and retention</h2>
-          <div
-            className={styles.segmented}
-            role="radiogroup"
-            aria-label="Storage backend"
-          >
-            {BACKENDS.map((b) => (
-              <button
-                key={b.id}
-                type="button"
-                role="radio"
-                aria-checked={b.id === backend}
-                className={clsx({ [styles.segmentActive]: b.id === backend })}
-                onClick={() => {
-                  setBackend(b.id);
-                  track("calculator_backend_selected", { backend: b.id });
-                }}
-              >
-                {b.label}
-              </button>
-            ))}
-          </div>
+          <section className={styles.step}>
+            <h2 className={styles.stepTitle}>2. Where should the data live?</h2>
+            <p className={styles.fieldLabel} id="calculator-backend">
+              Storage backend
+            </p>
+            <div
+              className={styles.segmented}
+              role="radiogroup"
+              aria-labelledby="calculator-backend"
+            >
+              {BACKENDS.map((b) => (
+                <button
+                  key={b.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={b.id === backend}
+                  className={clsx({
+                    [styles.segmentActive]: b.id === backend,
+                  })}
+                  onClick={() => {
+                    setBackend(b.id);
+                    track("calculator_backend_selected", { backend: b.id });
+                  }}
+                >
+                  {b.label}
+                </button>
+              ))}
+            </div>
 
-          <div className={styles.fields}>
-            {backend === "minio" && (
+            <div className={styles.fields}>
+              {backend === "minio" && (
+                <NumberField
+                  label="Infrastructure storage cost"
+                  value={minioCost}
+                  onChange={setMinioCost}
+                  min={0}
+                  step={1}
+                  prefix="€"
+                  suffix="/ TB / month"
+                  error={errors.minioCost}
+                  wide
+                />
+              )}
               <NumberField
-                label="Raw disk cost"
-                value={minioCost}
-                onChange={setMinioCost}
-                min={0}
+                label="Retention"
+                value={retentionDays}
+                onChange={setRetentionDays}
+                min={1}
                 step={1}
-                prefix="€"
-                suffix="/ TB / month"
-                error={errors.minioCost}
-                wide
+                suffix="days"
+                error={errors.retentionDays}
               />
-            )}
-            <NumberField
-              label="Edge disk per unit"
-              value={edgeDisk}
-              onChange={setEdgeDisk}
-              min={0}
-              step={0.5}
-              suffix="TB"
-              error={errors.edgeDisk}
-            />
-            <NumberField
-              label="Hot storage duration"
-              value={hotDays}
-              onChange={changeHotDays}
-              min={1}
-              step={1}
-              suffix="days"
-              error={errors.hotDays}
-            />
-            <NumberField
-              label="Total retention"
-              value={retentionDays}
-              onChange={setRetentionDays}
-              min={1}
-              step={1}
-              suffix="days"
-              error={errors.retentionDays}
-            />
-            <NumberField
-              label="Data read per month"
-              value={readPercent}
-              onChange={setReadPercent}
-              min={0}
-              max={100}
-              step={1}
-              suffix="% of retained"
-              error={errors.readPercent}
-            />
-          </div>
-        </section>
+              <NumberField
+                label="Data read per month"
+                value={readPercent}
+                onChange={setReadPercent}
+                min={0}
+                max={100}
+                step={1}
+                suffix="% of retained"
+                error={errors.readPercent}
+              />
+              <NumberField
+                label="Edge disk per unit"
+                value={edgeDisk}
+                onChange={setEdgeDisk}
+                min={0}
+                step={0.5}
+                suffix="TB"
+                error={errors.edgeDisk}
+              />
+              <NumberField
+                label="Hot storage duration"
+                value={hotDays}
+                onChange={changeHotDays}
+                min={1}
+                step={1}
+                suffix="days"
+                error={errors.hotDays}
+              />
+            </div>
+          </section>
 
-        <section className={styles.step}>
-          <h2 className={styles.stepTitle}>3. Compare against</h2>
-          <div className={styles.field}>
-            <label htmlFor="calculator-competitor">
-              Alternative architecture
-            </label>
+          <section className={styles.step}>
+            <h2 className={styles.stepTitle}>3. Compare ReductStore with</h2>
             <select
-              id="calculator-competitor"
+              aria-label="Compare ReductStore with"
               className={styles.select}
-              value={competitorChoice}
+              value={competitor}
               onChange={(event) => {
-                const value = event.target.value as
-                  | CompetitorId
-                  | "recommended";
-                setCompetitorChoice(value);
-                track("calculator_competitor_selected", {
-                  competitor:
-                    value === "recommended" ? preset.recommended : value,
-                });
+                const value = event.target.value as CompetitorId;
+                setCompetitor(value);
+                track("calculator_competitor_selected", { competitor: value });
               }}
             >
-              <option value="recommended">
-                Recommended:{" "}
-                {COMPETITORS.find((c) => c.id === preset.recommended)?.label}
-              </option>
-              {COMPETITORS.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.label}
+              {preset.competitors.map((id) => (
+                <option key={id} value={id}>
+                  {COMPETITORS[id].label}
                 </option>
               ))}
             </select>
-          </div>
-          <p className={styles.competitorAbout}>{competitorInfo?.about}</p>
-          <ul className={styles.routes}>
-            {result.alternative.routes
-              .filter((route) => route.streams.length > 0)
-              .map((route) => (
-                <li key={route.target}>
-                  <span>{route.streams.join(" + ")}</span>
-                  <span aria-hidden="true">→</span>
-                  <strong>{route.target}</strong>
-                </li>
-              ))}
-          </ul>
+            <p className={styles.competitorAbout}>
+              {COMPETITORS[competitor].about}
+            </p>
 
-          <details className={styles.disclosure}>
-            <summary>Competitor assumptions</summary>
-            <div className={clsx(styles.fields, styles.competitorFields)}>
-              {competitor === "foxglove" && (
-                <>
-                  <NumberField
-                    label="Developer seats"
-                    value={seats}
-                    onChange={setSeats}
-                    min={0}
-                    step={1}
-                  />
-                  <NumberField
-                    label="Query time"
-                    value={queryHours}
-                    onChange={setQueryHours}
-                    min={0}
-                    step={1}
-                    suffix="hours / month"
-                  />
-                </>
-              )}
-              {competitor === "tiger" && (
+            <div className={styles.architectures}>
+              <Routes
+                title={result.alternative.label}
+                routes={result.alternative.routes}
+              />
+              <Routes
+                title={result.reduct.label}
+                routes={result.reduct.routes}
+              />
+            </div>
+
+            <details
+              className={styles.disclosure}
+              onToggle={(event) => {
+                if ((event.target as HTMLDetailsElement).open) {
+                  track("calculator_advanced_opened", { preset: presetId });
+                }
+              }}
+            >
+              <summary>Advanced assumptions</summary>
+              <div className={clsx(styles.fields, styles.competitorFields)}>
                 <NumberField
-                  label="Compression ratio"
-                  value={compression}
-                  onChange={setCompression}
+                  label="Compression ratio, both sides"
+                  value={compressionRatio}
+                  onChange={setCompressionRatio}
                   min={1}
                   step={0.5}
                   suffix="×"
+                  error={errors.compressionRatio}
                 />
-              )}
-              {competitor === "influx" && (
-                <>
+                {competitor === "foxglove" && (
+                  <>
+                    <NumberField
+                      label="Foxglove developer seats"
+                      value={seats}
+                      onChange={setSeats}
+                      min={0}
+                      step={1}
+                    />
+                    <NumberField
+                      label="Foxglove query time"
+                      value={queryHours}
+                      onChange={setQueryHours}
+                      min={0}
+                      step={1}
+                      suffix="h / month"
+                    />
+                  </>
+                )}
+                {competitor === "tiger" && (
                   <NumberField
-                    label="Queries"
-                    value={influxQueries}
-                    onChange={setInfluxQueries}
-                    min={0}
-                    step={1000}
-                    suffix="per month"
-                  />
-                  <NumberField
-                    label="Billable storage to raw data"
-                    value={influxRatio}
-                    onChange={setInfluxRatio}
-                    min={0}
-                    step={0.1}
+                    label="Tiger Cloud compression"
+                    value={tigerRatio}
+                    onChange={setTigerRatio}
+                    min={1}
+                    step={0.5}
                     suffix="×"
                   />
-                </>
-              )}
-              {competitor === "mongodb" && (
-                <div className={styles.field}>
-                  <label htmlFor="calculator-atlas">Atlas cluster</label>
-                  <select
-                    id="calculator-atlas"
-                    className={styles.select}
-                    value={atlasTier}
-                    onChange={(event) => setAtlasTier(event.target.value)}
-                  >
-                    {Object.entries(pricingConfig.mongodb.tiers).map(
-                      ([name, tier]) => (
-                        <option key={name} value={name}>
-                          {name} ({tier.defaultStorageGb} GB)
-                        </option>
-                      ),
-                    )}
-                  </select>
-                </div>
-              )}
-              {competitor === "direct" && (
-                <p className={styles.competitorAbout}>
-                  Records are batched into objects of about 64 MB, with one
-                  request per object.
+                )}
+                {competitor === "influx" && (
+                  <>
+                    <NumberField
+                      label="InfluxDB queries"
+                      value={influxQueries}
+                      onChange={setInfluxQueries}
+                      min={0}
+                      step={1000}
+                      suffix="/ month"
+                    />
+                    <NumberField
+                      label="InfluxDB storage to raw data"
+                      value={influxRatio}
+                      onChange={setInfluxRatio}
+                      min={0}
+                      step={0.1}
+                      suffix="×"
+                    />
+                  </>
+                )}
+                {competitor === "mongodb" && (
+                  <div className={styles.field}>
+                    <label htmlFor="calculator-atlas">Atlas cluster</label>
+                    <select
+                      id="calculator-atlas"
+                      className={styles.select}
+                      value={atlasTier}
+                      onChange={(event) => setAtlasTier(event.target.value)}
+                    >
+                      {Object.entries(pricingConfig.mongodb.tiers).map(
+                        ([name, tier]) => (
+                          <option key={name} value={name}>
+                            {name} ({tier.defaultStorageGb} GB)
+                          </option>
+                        ),
+                      )}
+                    </select>
+                  </div>
+                )}
+                <p className={styles.fieldHint}>
+                  A compression ratio of 2× means 100 TB of recorded data takes
+                  about 50 TB of storage.
                 </p>
-              )}
-            </div>
-          </details>
-        </section>
+              </div>
+            </details>
+          </section>
+        </div>
 
-        <details className={clsx(styles.disclosure, styles.assumptions)}>
-          <summary>Calculation assumptions and sources</summary>
-          <div className={styles.assumptionsBody}>
-            <p>
-              An estimate, not a quote. Both sides use the same workload,
-              retention, and reads.
+        <aside className={styles.result} aria-live="polite">
+          {!hasData ? (
+            <p className={styles.empty}>
+              Enable at least one data stream with a frequency and record size
+              to see an estimate.
             </p>
-            <ul>
-              <li>
-                Each stream is costed with its own record size. Months have 30
-                days; 1 TB is 10<sup>9</sup> KB.
-              </li>
-              <li>
-                Data moves from hot to cold (up to 90 days) to archive only when
-                that is cheaper, respecting minimum storage durations and
-                billable object sizes.
-              </li>
-              <li>
-                ReductStore packs up to 1,024 records into 64 MB blocks, with
-                two backend operations per block.
-              </li>
-              <li>
-                License: ReductStore Pro at €0.015 per GB per month on retained
-                data, 1 TB minimum.
-              </li>
-              <li>
-                MinIO stores each object as 8 + 4 erasure shards on 4 KB disk
-                blocks; ReductStore uses a file system with the same protection.
-              </li>
-              <li>
-                Alternatives keep binary data in object storage batched into 64
-                MB objects, and put only metrics, metadata, or results in a
-                database.
-              </li>
-              <li>
-                Costs are annualized at steady state, once retained data has
-                reached its full size.
-              </li>
-            </ul>
-            <p>
-              Vendor prices are public list prices in USD, verified {VERIFIED},
-              converted at 1 USD = {pricingConfig.fx.usdToEur} EUR. AWS uses{" "}
-              {pricingConfig.aws.region} rates; Azure prices are placeholders.
-              Prices vary by region, workload, and commercial agreement.
-            </p>
-            <ul className={styles.sources}>
-              <li>
-                <Link to={pricingConfig.aws.source}>AWS S3 pricing</Link>
-              </li>
-              <li>
-                <Link to={pricingConfig.foxglove.source}>Foxglove pricing</Link>
-              </li>
-              <li>
-                <Link to={pricingConfig.tiger.source}>Tiger Cloud pricing</Link>
-              </li>
-              <li>
-                <Link to={pricingConfig.influx.source}>InfluxDB pricing</Link>
-              </li>
-              <li>
-                <Link to={pricingConfig.mongodb.source}>
-                  MongoDB Atlas pricing
+          ) : (
+            <>
+              <h2 className={styles.resultTitle}>Estimated annual cost</h2>
+              <CostBars
+                alternative={result.alternative}
+                reduct={result.reduct}
+              />
+              <p
+                className={clsx(styles.headline, {
+                  [styles.headlineHigher]: saving < 0,
+                })}
+              >
+                {headline}
+              </p>
+              <p className={styles.subline}>{subline}</p>
+
+              <CostBreakdowns
+                alternative={result.alternative}
+                reduct={result.reduct}
+              />
+
+              <ul className={styles.notes}>
+                {result.alternative.notes.map((note) => (
+                  <li key={note}>{note}</li>
+                ))}
+              </ul>
+
+              <dl className={styles.summary}>
+                <div>
+                  <dt>Generated</dt>
+                  <dd>{formatTb(workload.totalDataMonthTb)} / month</dd>
+                </div>
+                <div>
+                  <dt>Retained</dt>
+                  <dd>{formatTb(retained)}</dd>
+                </div>
+                <div>
+                  <dt>Records</dt>
+                  <dd>{formatCount(workload.totalRecordsMonth)} / month</dd>
+                </div>
+                <div>
+                  <dt>Local history</dt>
+                  <dd>{formatDays(result.estimate.localHistoryDays)}</dd>
+                </div>
+              </dl>
+
+              <div className={styles.cta}>
+                <Link
+                  className="button button--primary button--lg"
+                  to="/architecture-review"
+                  onClick={() =>
+                    track("calculator_cta_clicked", {
+                      preset: presetId,
+                      backend,
+                    })
+                  }
+                >
+                  Book an architecture review
                 </Link>
-              </li>
-            </ul>
-            <p>
-              Excludes compute, egress, networking, support, VAT, extra backups,
-              labor, and migration.
-            </p>
-          </div>
-        </details>
+                <Link to="/docs/how-does-it-work">
+                  See how ReductStore stores data →
+                </Link>
+              </div>
+            </>
+          )}
+        </aside>
       </div>
 
-      <aside className={styles.result} aria-live="polite">
-        {!hasData ? (
-          <p className={styles.empty}>
-            Enable at least one data stream with a frequency and record size to
-            see an estimate.
+      <details className={clsx(styles.disclosure, styles.assumptions)}>
+        <summary>Calculation assumptions</summary>
+        <div className={styles.assumptionsBody}>
+          <p>
+            An estimate, not a quote. Both architectures use the same workload,
+            retention, reads, and storage backend. Costs are annualized at
+            steady state, once retained data has reached its full size.
           </p>
-        ) : (
-          <>
-            <p className={styles.eyebrow}>
-              Annualized steady-state cost
-              {competitorChoice === "recommended" &&
-                ` · recommended comparison`}
-            </p>
-            <p
-              className={clsx(styles.headline, {
-                [styles.headlineHigher]: saving < 0,
-              })}
-            >
-              {saving >= 0
-                ? `Save ${lowerBound ? "at least " : ""}${formatEur(saving)} / year`
-                : `${lowerBound ? "Up to " : ""}${formatEur(-saving)} / year higher`}
-            </p>
-            <p className={styles.subline}>
-              {saving >= 0
-                ? `${formatPercent(result.savingPercent)} lower than ${result.alternative.label}`
-                : `than ${result.alternative.label}`}
-            </p>
-            <p className={styles.compare}>
-              {result.alternative.label} vs {result.reduct.label}, including the
-              ReductStore license.
-            </p>
-
-            <CostComparison
-              alternative={result.alternative}
-              reduct={result.reduct}
-            />
-
-            <ul className={styles.notes}>
-              {result.alternative.notes.map((note) => (
-                <li key={note}>{note}</li>
-              ))}
-            </ul>
-
-            <dl className={styles.summary}>
-              <div>
-                <dt>Generated data</dt>
-                <dd>{formatTb(workload.totalDataMonthTb)} / month</dd>
-              </div>
-              <div>
-                <dt>Retained data</dt>
-                <dd>{formatTb(retained)}</dd>
-              </div>
-              <div>
-                <dt>Records</dt>
-                <dd>{formatCount(workload.totalRecordsMonth)} / month</dd>
-              </div>
-              <div>
-                <dt>Read per month</dt>
-                <dd>
-                  {formatTb((retained * safe(readPercent, 0, 0, 100)) / 100)}
-                </dd>
-              </div>
-              <div>
-                <dt>Local history (estimate)</dt>
-                <dd>
-                  {formatDays(result.estimate.localHistoryDays)} on the edge
-                  disk
-                </dd>
-              </div>
-            </dl>
-
-            <div className={styles.cta}>
-              <Link
-                className="button button--primary button--lg"
-                to="/architecture-review"
-                onClick={() =>
-                  track("calculator_cta_clicked", {
-                    preset: presetId,
-                    backend,
-                  })
-                }
-              >
-                Book an architecture review
-              </Link>
-              <Link to="/docs/how-does-it-work">
-                See how ReductStore stores data →
-              </Link>
-            </div>
-          </>
-        )}
-      </aside>
+          <ul>
+            <li>
+              Data per month = units × count × frequency × record size ×
+              recording hours × 30 days. Retained data = data per month ×
+              retention / 30.
+            </li>
+            <li>
+              ReductStore keeps recent data on the edge disk and writes records
+              in blocks of up to 64 MB or 1,024 records to the storage backend,
+              with two requests per block. Local history = edge disk / data
+              recorded per unit per day.
+            </li>
+            <li>
+              Alternatives that keep raw data in object storage are assumed to
+              batch it into objects of about 64 MB as well, with one request per
+              object. Only metrics, metadata, or results go into their database.
+            </li>
+            <li>
+              Compression (default none) applies equally to raw data on both
+              sides. Tiger Cloud's own compression applies only to data in its
+              database.
+            </li>
+            <li>
+              On AWS S3 and Azure Blob, data moves to colder storage classes
+              only when that is cheaper, respecting minimum storage durations
+              and billable object sizes. MinIO costs retained TB × the
+              infrastructure price × 12.
+            </li>
+            <li>
+              ReductStore license: ReductStore Pro at €
+              {pricingConfig.reductstore.eurPerGbMonth} per GB per month on
+              retained data, {pricingConfig.reductstore.minTb} TB minimum.
+            </li>
+            <li>
+              Foxglove: base plan, extra seats and devices, storage on retained
+              data, indexing on uploaded data, bandwidth on data read, and query
+              hours, each with its public marginal tiers. Tiger Cloud: minimum
+              published compute plus hot and tiered storage. InfluxDB Cloud
+              Serverless: data in, storage, queries, and data out. MongoDB
+              Atlas: cluster price including the tier's default storage.
+            </li>
+            <li>
+              Excludes compute outside the listed services, egress, networking,
+              support, VAT, extra backups, labor, and migration.
+            </li>
+          </ul>
+          <p>
+            Competitor and cloud prices are public list prices in USD, converted
+            at 1 USD = {pricingConfig.fx.usdToEur} EUR (
+            {formatDate(pricingConfig.fx.lastVerified)}). They vary by region,
+            workload, and commercial agreement. AWS uses{" "}
+            {pricingConfig.aws.region} rates; Azure prices are placeholders.
+          </p>
+          <div className={styles.sourcesTable}>
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Vendor</th>
+                  <th scope="col">Product</th>
+                  <th scope="col">Pricing units</th>
+                  <th scope="col">Verified</th>
+                </tr>
+              </thead>
+              <tbody>
+                {PRICE_SOURCES.map((source) => (
+                  <tr key={source.vendor}>
+                    <th scope="row">
+                      <Link to={source.source}>{source.vendor}</Link>
+                    </th>
+                    <td>{source.product}</td>
+                    <td>
+                      {source.currency} {source.units}
+                    </td>
+                    <td>{formatDate(source.lastVerified)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </details>
     </div>
   );
 }

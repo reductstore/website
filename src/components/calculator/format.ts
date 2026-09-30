@@ -33,9 +33,3 @@ export function formatDays(days: number): string {
   if (days < 1) return `${decimal(1).format(days * 24)} hours`;
   return `${decimal(days < 10 ? 1 : 0).format(days)} days`;
 }
-
-export function formatReduction(share: number): string {
-  if (!Number.isFinite(share) || share <= 0) return "0%";
-  const percent = Math.floor(share * 1000) / 10;
-  return `${new Intl.NumberFormat("en", { maximumFractionDigits: 1 }).format(percent)}%`;
-}
