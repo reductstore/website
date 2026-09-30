@@ -107,7 +107,7 @@ A time-indexed object store and a traditional time series database can serve sim
 
 With a time-indexed object store, each chunk of vibration data is stored as a binary object with a timestamp along with metadata such as preprocess metrics that can be useful for filtering and replication (more on that later).
 
-![Data Flow Schema](./img/vibration_data_flow.webp)
+![Data Flow Schema](./img/vibration-data-flow.svg)
 
 This method allows efficient management of large vibration datasets by providing fast access to specific time periods. In fact, [**ReductStore outperforms TimescaleDB for blobs ranging from 1KB and larger**](https://www.reduct.store/blog/comparisons/iot/reductstore-vs-timescaledb) using this method, with improvements ranging from 205% to 1300%.
 
@@ -136,7 +136,7 @@ With [**ReductStore's volume-based retention policy**](/docs/guides/buckets#quot
 
 By preprocessing vibration data to extract key metrics such as peak amplitude, frequency content, and RMS values, the system can prioritize these summarized metrics for replication.
 
-![Data Replication Schema](./img/data_replication.webp)
+![Data Replication Schema](./img/vibration-replication.svg)
 
 In this example, the system stores raw data locally and pre-processed metrics in a time-indexed object store.
 Both the pre-processed metrics and the raw data are then automatically replicated to a central database.
@@ -393,7 +393,7 @@ Replication tasks can be configured in a variety of ways, such as:
 - Replicate only specific entries, e.g. `sensor_readings`.
 - Replicate data based on labels, e.g. replicate only data with `high` peak-to-peak values to `high_peak_to_peak` bucket.
 
-![Data Replication Flow](./img/vibration_data_flow_replication.webp)
+![Data Replication Flow](./img/vibration-bucket-replication.svg)
 
 The replication task can be set using client libraries, HTTP API, CLI, provisioning, or the ReductStore web console.
 

@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 750 660" width="100%" height="100%">
+  <defs>
+    <style>
+      :root {
+        --card-bg: #FFFFFF;
+        --card-brand: #2B0548;
+        --card-stroke: #333333;
+        --shadow: #000000;
+        --text-main: #333333;
+        --text-muted: #666666;
+        --text-inverse: #FFFFFF;
+        --line: #333333;
+        --zone: #F7F4FA;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --card-bg: #1E1E1E;
+          --card-stroke: #555555;
+          --shadow: #000000;
+          --text-main: #EFEFEF;
+          --text-muted: #A0A0A0;
+          --line: #EFEFEF;
+          --zone: #262129;
+        }
+      }
+
+      text {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      .mono {
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        white-space: pre;
+      }
+
+      .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .shadow { fill: var(--shadow); }
+      .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
+      .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .hatch-line { stroke: var(--line); stroke-width: 1.5; }
+      .record { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1; }
+      .dot { fill: var(--text-muted); }
+
+      .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
+      .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
+      .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-item { font-weight: 600; font-size: 15px; fill: var(--text-main); }
+      .text-item-inverse { font-weight: 600; font-size: 15px; fill: var(--text-inverse); }
+      .text-subtitle { font-size: 14px; fill: var(--text-muted); }
+      .text-subtitle-inverse { font-size: 14px; fill: var(--text-inverse); }
+      .text-bullet { font-size: 15px; fill: var(--text-main); }
+      .text-bullet-inverse { font-size: 15px; fill: var(--text-inverse); }
+      .text-label { font-size: 13px; fill: var(--text-muted); }
+      .text-label-strong { font-size: 13px; font-weight: 700; fill: var(--text-main); }
+      .text-label-inverse { font-size: 13px; fill: var(--text-inverse); }
+      .text-note { font-size: 13px; font-style: italic; fill: var(--text-muted); }
+
+      .connector { stroke: var(--line); stroke-width: 2; fill: none; }
+      .link { stroke: var(--line); stroke-width: 2; stroke-dasharray: 5 5; fill: none; }
+      .guide { stroke: var(--text-muted); stroke-width: 1; stroke-dasharray: 3 4; fill: none; }
+      .arrow-head { fill: var(--line); }
+    </style>
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
+    </marker>
+    <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" class="hatch-line" />
+    </pattern>
+  </defs>
+  <rect x="150" y="0" width="580" height="640" rx="18" class="zone" />
+  <rect x="0" y="70" width="120" height="70" rx="16" class="card-standard" />
+  <text x="60" y="111" class="text-title" text-anchor="middle">CV Camera</text>
+  <text x="168" y="26" class="text-zone" text-anchor="start">Edge Device</text>
+  <rect x="175" y="70" width="155" height="70" rx="10" class="card-plain" />
+  <text x="252.5" y="110" class="text-item" text-anchor="middle">Camera Driver</text>
+  <rect x="360" y="70" width="155" height="70" rx="10" class="card-plain" />
+  <text x="437.5" y="110" class="text-item" text-anchor="middle">Model</text>
+  <path d="M330,105 L356,105" class="connector" marker-end="url(#arrow)" />
+  <rect x="545" y="70" width="155" height="70" rx="10" class="card-plain" />
+  <text x="622.5" y="110" class="text-item" text-anchor="middle">UI</text>
+  <path d="M515,105 L541,105" class="connector" marker-end="url(#arrow)" />
+  <path d="M120,105 L171,105" class="connector" marker-end="url(#arrow)" />
+  <path d="M252,140 L252,216" class="connector" marker-end="url(#arrow)" />
+  <text x="262" y="184" class="text-label mono" text-anchor="start">images</text>
+  <path d="M437,140 L437,216" class="connector" marker-end="url(#arrow)" />
+  <text x="447" y="184" class="text-label mono" text-anchor="start">images labeled with results</text>
+  <rect x="175" y="220" width="530" height="390" rx="18" class="card-brand" />
+  <text x="683" y="252" class="text-title-inverse" text-anchor="end">ReductStore</text>
+  <rect x="195" y="262" width="490" height="326" rx="10" class="card-plain" />
+  <text x="440" y="430" class="text-item" text-anchor="middle"></text>
+  <text x="213" y="292" class="text-item mono" text-anchor="start">&quot;camera&quot; entry</text>
+  <rect x="213" y="320" width="78" height="50" rx="10" class="card-plain" />
+  <text x="252" y="350" class="text-item" text-anchor="middle">Block 1</text>
+  <rect x="301" y="320" width="78" height="50" rx="10" class="card-plain" />
+  <text x="340" y="350" class="text-item" text-anchor="middle">Block 2</text>
+  <circle cx="396" cy="345" r="3" class="dot" />
+  <circle cx="410" cy="345" r="3" class="dot" />
+  <circle cx="424" cy="345" r="3" class="dot" />
+  <rect x="436" y="320" width="230" height="50" rx="10" class="card-plain" />
+  <rect x="468.5" y="330" width="9" height="30" rx="2" class="record" />
+  <rect x="482.5" y="330" width="9" height="30" rx="2" class="record" />
+  <rect x="496.5" y="330" width="9" height="30" rx="2" class="record" />
+  <rect x="510.5" y="330" width="9" height="30" rx="2" class="record" />
+  <rect x="524.5" y="330" width="9" height="30" rx="2" class="record" />
+  <text x="652" y="350" class="text-item" text-anchor="end">Block N</text>
+  <text x="501" y="310" class="text-label" text-anchor="middle">records</text>
+  <path d="M551,370 L551,398" class="connector" marker-end="url(#arrow)" />
+  <rect x="446" y="402" width="220" height="170" rx="8" class="card-plain" />
+  <text x="460" y="428" class="text-label-strong mono" text-anchor="start">timestamp: 1231781923</text>
+  <text x="460" y="452" class="text-label-strong mono" text-anchor="start">labels:</text>
+  <text x="460" y="476" class="text-label mono" text-anchor="start">  class-id: &quot;1&quot;</text>
+  <text x="460" y="500" class="text-label mono" text-anchor="start">  anomaly-score: &quot;0.2&quot;</text>
+  <text x="460" y="536" class="text-label-strong mono" text-anchor="start">&lt;image in JPEG&gt;</text>
+  <path d="M454,518 L658,518" class="guide" />
+  <text x="430" y="470" class="text-label" text-anchor="end">meta information</text>
+  <text x="430" y="550" class="text-label" text-anchor="end">content</text>
+  <path d="M434,412 L438,412 L438,510 L434,510" class="connector" />
+  <path d="M434,526 L438,526 L438,564 L434,564" class="connector" />
+</svg>

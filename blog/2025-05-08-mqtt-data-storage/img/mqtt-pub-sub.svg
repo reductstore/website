@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 760 329" width="100%" height="100%">
+  <defs>
+    <style>
+      :root {
+        --card-bg: #FFFFFF;
+        --card-brand: #2B0548;
+        --card-stroke: #333333;
+        --shadow: #000000;
+        --text-main: #333333;
+        --text-muted: #666666;
+        --text-inverse: #FFFFFF;
+        --line: #333333;
+        --zone: #F7F4FA;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --card-bg: #1E1E1E;
+          --card-stroke: #555555;
+          --shadow: #000000;
+          --text-main: #EFEFEF;
+          --text-muted: #A0A0A0;
+          --line: #EFEFEF;
+          --zone: #262129;
+        }
+      }
+
+      text {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      .mono {
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        white-space: pre;
+      }
+
+      .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .shadow { fill: var(--shadow); }
+      .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
+      .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .hatch-line { stroke: var(--line); stroke-width: 1.5; }
+      .record { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1; }
+      .dot { fill: var(--text-muted); }
+
+      .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
+      .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
+      .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-item { font-weight: 600; font-size: 15px; fill: var(--text-main); }
+      .text-item-inverse { font-weight: 600; font-size: 15px; fill: var(--text-inverse); }
+      .text-subtitle { font-size: 14px; fill: var(--text-muted); }
+      .text-subtitle-inverse { font-size: 14px; fill: var(--text-inverse); }
+      .text-bullet { font-size: 15px; fill: var(--text-main); }
+      .text-bullet-inverse { font-size: 15px; fill: var(--text-inverse); }
+      .text-label { font-size: 13px; fill: var(--text-muted); }
+      .text-label-strong { font-size: 13px; font-weight: 700; fill: var(--text-main); }
+      .text-label-inverse { font-size: 13px; fill: var(--text-inverse); }
+      .text-note { font-size: 13px; font-style: italic; fill: var(--text-muted); }
+
+      .connector { stroke: var(--line); stroke-width: 2; fill: none; }
+      .link { stroke: var(--line); stroke-width: 2; stroke-dasharray: 5 5; fill: none; }
+      .guide { stroke: var(--text-muted); stroke-width: 1; stroke-dasharray: 3 4; fill: none; }
+      .arrow-head { fill: var(--line); }
+    </style>
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
+    </marker>
+    <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" class="hatch-line" />
+    </pattern>
+  </defs>
+  <rect x="8" y="58" width="140" height="70" rx="16" class="shadow" />
+  <rect x="0" y="50" width="140" height="70" rx="16" class="card-standard" />
+  <text x="70" y="91" class="text-title" text-anchor="middle">Camera</text>
+  <rect x="8" y="238" width="140" height="70" rx="16" class="shadow" />
+  <rect x="0" y="230" width="140" height="70" rx="16" class="card-standard" />
+  <text x="70" y="271" class="text-title" text-anchor="middle">Sensor</text>
+  <rect x="190" y="60" width="130" height="50" rx="25" class="card-plain" />
+  <text x="255" y="90" class="text-label-strong mono" text-anchor="middle">image</text>
+  <rect x="190" y="240" width="130" height="50" rx="25" class="card-plain" />
+  <text x="255" y="270" class="text-label-strong mono" text-anchor="middle">temperature</text>
+  <rect x="388" y="8" width="190" height="70" rx="16" class="shadow" />
+  <rect x="380" y="0" width="190" height="70" rx="16" class="card-standard" />
+  <text x="475" y="41" class="text-title" text-anchor="middle">Anomaly detection</text>
+  <rect x="388" y="158" width="190" height="70" rx="16" class="shadow" />
+  <rect x="380" y="150" width="190" height="70" rx="16" class="card-standard" />
+  <text x="475" y="191" class="text-title" text-anchor="middle">Control</text>
+  <rect x="610" y="160" width="130" height="50" rx="25" class="card-plain" />
+  <text x="675" y="190" class="text-label-strong mono" text-anchor="middle">setpoint</text>
+  <path d="M140,85 L186,85" class="connector" marker-end="url(#arrow)" />
+  <path d="M140,265 L186,265" class="connector" marker-end="url(#arrow)" />
+  <path d="M320,85 L345,85 L345,35 L376,35" class="connector" marker-end="url(#arrow)" />
+  <path d="M320,85 L345,85 L345,175 L376,175" class="connector" marker-end="url(#arrow)" />
+  <path d="M320,265 L345,265 L345,195 L376,195" class="connector" marker-end="url(#arrow)" />
+  <path d="M570,185 L606,185" class="connector" marker-end="url(#arrow)" />
+  <rect x="470" y="262" width="88" height="44" rx="12" class="card-standard" />
+  <text x="514" y="289" class="text-label-strong" text-anchor="middle">node</text>
+  <rect x="590" y="259" width="110" height="50" rx="25" class="card-plain" />
+  <text x="645" y="289" class="text-label-strong mono" text-anchor="middle">topic</text>
+</svg>

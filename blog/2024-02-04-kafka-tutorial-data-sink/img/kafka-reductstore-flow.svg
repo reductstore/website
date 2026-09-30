@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 768 358" width="100%" height="100%">
+  <defs>
+    <style>
+      :root {
+        --card-bg: #FFFFFF;
+        --card-brand: #2B0548;
+        --card-stroke: #333333;
+        --shadow: #000000;
+        --text-main: #333333;
+        --text-muted: #666666;
+        --text-inverse: #FFFFFF;
+        --line: #333333;
+        --zone: #F7F4FA;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --card-bg: #1E1E1E;
+          --card-stroke: #555555;
+          --shadow: #000000;
+          --text-main: #EFEFEF;
+          --text-muted: #A0A0A0;
+          --line: #EFEFEF;
+          --zone: #262129;
+        }
+      }
+
+      text {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      .mono {
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        white-space: pre;
+      }
+
+      .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .shadow { fill: var(--shadow); }
+      .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
+      .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .hatch-line { stroke: var(--line); stroke-width: 1.5; }
+      .record { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1; }
+      .dot { fill: var(--text-muted); }
+
+      .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
+      .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
+      .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-item { font-weight: 600; font-size: 15px; fill: var(--text-main); }
+      .text-item-inverse { font-weight: 600; font-size: 15px; fill: var(--text-inverse); }
+      .text-subtitle { font-size: 14px; fill: var(--text-muted); }
+      .text-subtitle-inverse { font-size: 14px; fill: var(--text-inverse); }
+      .text-bullet { font-size: 15px; fill: var(--text-main); }
+      .text-bullet-inverse { font-size: 15px; fill: var(--text-inverse); }
+      .text-label { font-size: 13px; fill: var(--text-muted); }
+      .text-label-strong { font-size: 13px; font-weight: 700; fill: var(--text-main); }
+      .text-label-inverse { font-size: 13px; fill: var(--text-inverse); }
+      .text-note { font-size: 13px; font-style: italic; fill: var(--text-muted); }
+
+      .connector { stroke: var(--line); stroke-width: 2; fill: none; }
+      .link { stroke: var(--line); stroke-width: 2; stroke-dasharray: 5 5; fill: none; }
+      .guide { stroke: var(--text-muted); stroke-width: 1; stroke-dasharray: 3 4; fill: none; }
+      .arrow-head { fill: var(--line); }
+    </style>
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
+    </marker>
+    <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" class="hatch-line" />
+    </pattern>
+  </defs>
+  <rect x="8" y="8" width="250" height="330" rx="18" class="shadow" />
+  <rect x="0" y="0" width="250" height="330" rx="18" class="card-standard" />
+  <text x="22" y="32" class="text-title" text-anchor="start">Kafka broker</text>
+  <text x="22" y="72" class="text-label mono" text-anchor="start">partitions</text>
+  <rect x="32" y="90" width="34" height="34" rx="6" class="card-plain" />
+  <text x="49" y="112" class="text-label-strong mono" text-anchor="middle">1</text>
+  <rect x="72" y="90" width="34" height="34" rx="6" class="card-plain" />
+  <text x="89" y="112" class="text-label-strong mono" text-anchor="middle">4</text>
+  <rect x="112" y="90" width="34" height="34" rx="6" class="card-plain" />
+  <text x="129" y="112" class="text-label-strong mono" text-anchor="middle">7</text>
+  <rect x="152" y="90" width="34" height="34" rx="6" class="card-plain" />
+  <rect x="192" y="90" width="34" height="34" rx="6" class="card-plain" />
+  <rect x="32" y="154" width="34" height="34" rx="6" class="card-plain" />
+  <text x="49" y="176" class="text-label-strong mono" text-anchor="middle">2</text>
+  <rect x="72" y="154" width="34" height="34" rx="6" class="card-plain" />
+  <text x="89" y="176" class="text-label-strong mono" text-anchor="middle">5</text>
+  <rect x="112" y="154" width="34" height="34" rx="6" class="card-plain" />
+  <text x="129" y="176" class="text-label-strong mono" text-anchor="middle">8</text>
+  <rect x="152" y="154" width="34" height="34" rx="6" class="card-plain" />
+  <rect x="192" y="154" width="34" height="34" rx="6" class="card-plain" />
+  <rect x="32" y="218" width="34" height="34" rx="6" class="card-plain" />
+  <text x="49" y="240" class="text-label-strong mono" text-anchor="middle">3</text>
+  <rect x="72" y="218" width="34" height="34" rx="6" class="card-plain" />
+  <text x="89" y="240" class="text-label-strong mono" text-anchor="middle">6</text>
+  <rect x="112" y="218" width="34" height="34" rx="6" class="card-plain" />
+  <text x="129" y="240" class="text-label-strong mono" text-anchor="middle">…</text>
+  <rect x="152" y="218" width="34" height="34" rx="6" class="card-plain" />
+  <rect x="192" y="218" width="34" height="34" rx="6" class="card-plain" />
+  <path d="M32,290 L220,290" class="connector" marker-end="url(#arrow)" />
+  <text x="126" y="312" class="text-label mono" text-anchor="middle">time</text>
+  <rect x="388" y="48" width="360" height="250" rx="18" class="shadow" />
+  <rect x="380" y="40" width="360" height="250" rx="18" class="card-brand" />
+  <text x="402" y="72" class="text-title-inverse" text-anchor="start">ReductStore</text>
+  <rect x="400" y="110" width="320" height="130" rx="12" class="card-plain" />
+  <text x="418" y="138" class="text-label-strong mono" text-anchor="start">bucket / entry</text>
+  <rect x="418" y="156" width="34" height="34" rx="6" class="card-plain" />
+  <text x="435" y="178" class="text-label-strong mono" text-anchor="middle">1</text>
+  <rect x="458" y="156" width="34" height="34" rx="6" class="card-plain" />
+  <text x="475" y="178" class="text-label-strong mono" text-anchor="middle">2</text>
+  <rect x="498" y="156" width="34" height="34" rx="6" class="card-plain" />
+  <text x="515" y="178" class="text-label-strong mono" text-anchor="middle">3</text>
+  <rect x="538" y="156" width="34" height="34" rx="6" class="card-plain" />
+  <text x="555" y="178" class="text-label-strong mono" text-anchor="middle">4</text>
+  <rect x="578" y="156" width="34" height="34" rx="6" class="card-plain" />
+  <text x="595" y="178" class="text-label-strong mono" text-anchor="middle">…</text>
+  <rect x="618" y="156" width="34" height="34" rx="6" class="card-plain" />
+  <rect x="658" y="156" width="34" height="34" rx="6" class="card-plain" />
+  <path d="M418,212 L690,212" class="connector" marker-end="url(#arrow)" />
+  <text x="554" y="230" class="text-label mono" text-anchor="middle">time</text>
+  <path d="M238,108 L320,108 L320,176" class="connector" />
+  <path d="M238,172 L320,172 L320,176" class="connector" />
+  <path d="M238,236 L320,236 L320,176" class="connector" />
+  <path d="M320,176 L396,176" class="connector" marker-end="url(#arrow)" />
+</svg>

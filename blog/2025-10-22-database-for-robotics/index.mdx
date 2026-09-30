@@ -163,17 +163,7 @@ Replication tasks can be configured to replicate only specific data based on lab
 
 In the cloud, by batching multiple records into single data blocks, ReductStore minimizes both the number of blobs and the number of API calls to S3. This design reduces storage and retrieval costs by leveraging S3's pricing model.
 
-<img
-  src={require("./img/cloud-integration.tinified.png").default}
-  alt="Diagram Cloud Integration"
-  style={{
-    maxWidth: "640px",
-    width: "100%",
-    height: "auto",
-    display: "block",
-    margin: "0 auto",
-  }}
-/>
+![Diagram Cloud Integration](./img/cloud-integration.svg)
 
 > This approach can deliver major savings when working with large volumes of robotics data.
 
