@@ -427,6 +427,12 @@ const regressions = [
   ["drone", "influx", 33.73, 31.77],
   ["industrial-robot", "foxglove", 33.46, 31.64],
   ["industrial-robot", "influx", 96.3, 96.2],
+  ["vibration", "foxglove", 38.04, 36.15],
+  ["vibration", "influx", 80.3, 79.7],
+  ["plc", "foxglove", 37.62, 35.94],
+  ["plc", "influx", 98.01, 97.96],
+  ["custom", "foxglove", 36.71, 34.78],
+  ["custom", "influx", -115.94, -122.55],
 ];
 
 const runPreset = (preset, competitor, currency) =>
@@ -447,7 +453,15 @@ for (const [presetId, competitor, eurPercent, usdPercent] of regressions) {
 test("every example is 30 to 40% cheaper than Foxglove in both currencies", () => {
   assert.deepEqual(
     PRESETS.map((p) => p.id),
-    ["mobile-robot", "autonomous-vehicle", "drone", "industrial-robot"],
+    [
+      "mobile-robot",
+      "autonomous-vehicle",
+      "drone",
+      "industrial-robot",
+      "vibration",
+      "plc",
+      "custom",
+    ],
   );
   for (const preset of PRESETS) {
     for (const currency of ["EUR", "USD"]) {

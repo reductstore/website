@@ -1,7 +1,15 @@
 import React, { JSX, useEffect, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 import Link from "@docusaurus/Link";
-import { LuCar, LuFactory, LuPlane, LuRoute } from "react-icons/lu";
+import {
+  LuActivity,
+  LuCar,
+  LuCpu,
+  LuFactory,
+  LuPlane,
+  LuRoute,
+  LuSlidersHorizontal,
+} from "react-icons/lu";
 import type { IconType } from "react-icons";
 import { compare } from "./calculate";
 import type { Route } from "./calculate";
@@ -41,12 +49,15 @@ const PRESET_ICONS: Record<string, IconType> = {
   "autonomous-vehicle": LuCar,
   drone: LuPlane,
   "industrial-robot": LuFactory,
+  vibration: LuActivity,
+  plc: LuCpu,
+  custom: LuSlidersHorizontal,
 };
 
-const BACKENDS: { id: BackendId; label: string }[] = [
-  { id: "aws", label: "AWS S3" },
-  { id: "azure", label: "Azure Blob" },
-  { id: "minio", label: "MinIO" },
+const BACKENDS: { id: BackendId; label: string; name: string }[] = [
+  { id: "aws", label: "S3", name: "AWS S3" },
+  { id: "azure", label: "Azure", name: "Azure Blob" },
+  { id: "minio", label: "On-prem", name: "On-prem" },
 ];
 
 const COMPETITORS: { id: CompetitorId; label: string; about: string }[] = [
@@ -111,8 +122,8 @@ function useDebouncedEffect(effect: () => void, deps: unknown[], ms: number) {
   }, deps);
 }
 
-const backendLabel = (backend: BackendId) =>
-  BACKENDS.find((b) => b.id === backend)?.label ?? "";
+const backendName = (backend: BackendId) =>
+  BACKENDS.find((b) => b.id === backend)?.name ?? "";
 
 function Routes({ title, routes }: { title: string; routes: Route[] }) {
   return (
@@ -203,7 +214,7 @@ export default function CostCalculator(): JSX.Element {
       licenseTiers: licenseTiers(REDUCTSTORE_PRICING[currency].perTbMonth),
       licenseMinTb: REDUCTSTORE_MIN_TB,
       block: REDUCT_BLOCK,
-      backendName: backendLabel(backend),
+      backendName: backendName(backend),
       batch: OBJECT_STORAGE_BATCH,
       prices: pricingConfig,
       usdRate: usdRate(currency),
@@ -325,7 +336,11 @@ export default function CostCalculator(): JSX.Element {
               />
             </div>
 
-            <StreamEditor streams={streams} onChange={setStreams} />
+            <StreamEditor
+              streams={streams}
+              classEditable={presetId === "custom"}
+              onChange={setStreams}
+            />
             <p className={styles.generated}>
               {hasData
                 ? `≈ ${formatTb(workload.totalDataMonthTb)} generated per month`
@@ -370,7 +385,7 @@ export default function CostCalculator(): JSX.Element {
               />
               {backend === "minio" && (
                 <NumberField
-                  label="MinIO storage cost"
+                  label="On-prem storage cost"
                   value={minioCost}
                   onChange={setMinioCost}
                   min={0}
@@ -526,7 +541,8 @@ export default function CostCalculator(): JSX.Element {
               back. On AWS S3 and Azure Blob, data older than {preset.hotDays}{" "}
               days moves to colder storage classes only when that is cheaper,
               respecting minimum storage durations and billable object sizes.
-              MinIO costs retained TB × the infrastructure price × 12.
+              On-prem object storage (for example MinIO) costs retained TB × the
+              storage price you enter × 12.
             </li>
             <li>
               ReductStore license: ReductStore Pro list price of{" "}

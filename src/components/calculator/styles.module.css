@@ -211,6 +211,15 @@
   border-color: var(--ifm-color-danger);
 }
 
+.streamTable select {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  background-color: var(--reduct-surface-0);
+  font: inherit;
+  color: inherit;
+}
+
 .streamTable input[type="checkbox"] {
   width: 1rem;
   height: 1rem;
@@ -458,6 +467,7 @@ html[data-theme="dark"] .presetActive:hover {
 html[data-theme="dark"] .inputWrap,
 html[data-theme="dark"] .streamTable input[type="text"],
 html[data-theme="dark"] .streamTable input[type="number"],
+html[data-theme="dark"] .streamTable select,
 html[data-theme="dark"] .segmentActive {
   background-color: var(--reduct-surface-0) !important;
 }
