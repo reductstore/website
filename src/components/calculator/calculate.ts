@@ -385,7 +385,6 @@ export type CostSide = {
   label: string;
   components: CostComponent[];
   totalYear: number;
-  notes: string[];
   routes: Route[];
 };
 
@@ -556,7 +555,6 @@ export function alternativeCost(
       label: "Foxglove",
       components,
       totalYear: sumAmount(components),
-      notes: ["Foxglove Pro public list prices. Enterprise pricing is custom."],
       routes: [{ target: "Foxglove", streams: names(workload.streams) }],
     };
   }
@@ -601,10 +599,6 @@ export function alternativeCost(
     label: withBackend("InfluxDB Cloud", rest, config.backendName),
     components,
     totalYear: sumAmount(components),
-    notes: [
-      "InfluxDB Cloud Serverless public list-price estimate.",
-      "At larger production scale, InfluxData positions Cloud Dedicated; its pricing is not public.",
-    ],
     routes,
   };
 }
@@ -632,7 +626,6 @@ export function compare(
     label: `ReductStore + ${config.backendName}`,
     components: reductComponents,
     totalYear: result.reduct.totalYear,
-    notes: [],
     routes: [
       {
         target: `ReductStore → ${config.backendName}`,

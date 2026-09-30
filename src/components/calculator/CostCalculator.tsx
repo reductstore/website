@@ -473,12 +473,6 @@ export default function CostCalculator(): JSX.Element {
                 currency={currency}
               />
 
-              <ul className={styles.notes}>
-                {result.alternative.notes.map((note) => (
-                  <li key={note}>{note}</li>
-                ))}
-              </ul>
-
               <dl className={styles.summary}>
                 <div>
                   <dt>Generated</dt>
