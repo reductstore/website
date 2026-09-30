@@ -4,57 +4,57 @@ import {
   ageBands,
   compare,
   estimate,
-  licenseEurYear,
+  licenseCostYear,
   marginalCost,
   packFactor,
 } from "./calculate.ts";
 import {
-  AWS_S3,
-  LICENSE_MIN_TB,
-  LICENSE_TIERS,
   OBJECT_STORAGE_BATCH,
   REDUCT_BLOCK,
   backendPricing,
+  licenseTiers,
   pricingConfig,
+  usdRate,
 } from "./pricing.ts";
+import { REDUCTSTORE_MIN_TB, REDUCTSTORE_PRICING } from "../../lib/currency.ts";
 import { PRESETS } from "./presets.ts";
 
 // The reference tests from the calculator specification use this tiered
 // license; the published Pro price is tested separately.
 const SPEC_LICENSE_TIERS = [
-  { upToTb: 100, eurPerTbYear: 150 },
-  { upToTb: 1000, eurPerTbYear: 100 },
-  { upToTb: Infinity, eurPerTbYear: 50 },
+  { upToTb: 100, perTbYear: 150 },
+  { upToTb: 1000, perTbYear: 100 },
+  { upToTb: Infinity, perTbYear: 50 },
 ];
 
 // The AWS numbers of the calculator specification, used as-is so the
 // reference results do not depend on the exchange rate.
 const SPEC_AWS = {
   name: "AWS S3",
-  putEurPer1000: 0.005,
+  putPer1000: 0.005,
   hot: {
-    storageEurPerTbMonth: 23,
-    getEurPer1000: 0.0004,
-    retrievalEurPerTb: 0,
+    storagePerTbMonth: 23,
+    getPer1000: 0.0004,
+    retrievalPerTb: 0,
     minBillableObjectKb: 0,
     minResidenceDays: 0,
-    transitionEurPer1000: 0,
+    transitionPer1000: 0,
   },
   cold: {
-    storageEurPerTbMonth: 12.5,
-    getEurPer1000: 0.001,
-    retrievalEurPerTb: 10,
+    storagePerTbMonth: 12.5,
+    getPer1000: 0.001,
+    retrievalPerTb: 10,
     minBillableObjectKb: 128,
     minResidenceDays: 30,
-    transitionEurPer1000: 0.01,
+    transitionPer1000: 0.01,
   },
   archive: {
-    storageEurPerTbMonth: 4,
-    getEurPer1000: 0.01,
-    retrievalEurPerTb: 30,
+    storagePerTbMonth: 4,
+    getPer1000: 0.01,
+    retrievalPerTb: 30,
     minBillableObjectKb: 128,
     minResidenceDays: 90,
-    transitionEurPer1000: 0.02,
+    transitionPer1000: 0.02,
   },
 };
 
@@ -64,10 +64,10 @@ const config = (pricing = SPEC_AWS) => ({
   block: REDUCT_BLOCK,
 });
 
-const published = (pricing = AWS_S3) => ({
-  pricing,
-  licenseTiers: LICENSE_TIERS,
-  licenseMinTb: LICENSE_MIN_TB,
+const published = (currency = "EUR", backend = "aws") => ({
+  pricing: backendPricing(backend, currency, 10),
+  licenseTiers: licenseTiers(REDUCTSTORE_PRICING[currency].perTbMonth),
+  licenseMinTb: REDUCTSTORE_MIN_TB,
   block: REDUCT_BLOCK,
 });
 
@@ -120,20 +120,26 @@ test("pack factor follows the block size and record limits", () => {
 });
 
 test("license tiers", () => {
-  close(licenseEurYear(50, SPEC_LICENSE_TIERS), 7_500);
-  close(licenseEurYear(500, SPEC_LICENSE_TIERS), 55_000);
-  close(licenseEurYear(1_500, SPEC_LICENSE_TIERS), 130_000);
-  assert.equal(licenseEurYear(0, SPEC_LICENSE_TIERS), 0);
+  close(licenseCostYear(50, SPEC_LICENSE_TIERS), 7_500);
+  close(licenseCostYear(500, SPEC_LICENSE_TIERS), 55_000);
+  close(licenseCostYear(1_500, SPEC_LICENSE_TIERS), 130_000);
+  assert.equal(licenseCostYear(0, SPEC_LICENSE_TIERS), 0);
 });
 
-test("published Pro price: €0.015 per GB per month, 1 TB minimum", () => {
-  close(licenseEurYear(100, LICENSE_TIERS), 18_000);
-  const tiny = estimate(
-    { units: 1, recordingHoursPerDay: 1, streams: [stream("s", 1, 1, 1)] },
-    storage(),
-    published(),
-  );
-  close(tiny.reduct.licenseEurYear, 180);
+test("published Pro prices: €15 and $18 per TB per month, 1 TB minimum", () => {
+  close(licenseCostYear(100, published("EUR").licenseTiers), 18_000);
+  close(licenseCostYear(100, published("USD").licenseTiers), 21_600);
+  for (const [currency, minimum] of [
+    ["EUR", 180],
+    ["USD", 216],
+  ]) {
+    const tiny = estimate(
+      { units: 1, recordingHoursPerDay: 1, streams: [stream("s", 1, 1, 1)] },
+      storage(),
+      published(currency),
+    );
+    close(tiny.reduct.licenseYear, minimum);
+  }
 });
 
 test("age bands", () => {
@@ -161,11 +167,11 @@ test("A: default mobile robot preset", () => {
   close(result.workload.totalDataMonthTb, 57.672, 1e-9);
   assert.equal(result.workload.totalRecordsMonth, 1_036_800_000);
   close(result.workload.totalRetainedTb, 701.676, 1e-9);
-  close(result.reduct.licenseEurYear, 75_167.6);
-  close(result.direct.totalEurYear, 180_237.74);
-  close(result.reduct.totalEurYear - result.reduct.licenseEurYear, 75_654.77);
-  close(result.reduct.totalEurYear, 150_822.37);
-  close(result.savingEurYear, 29_415.37);
+  close(result.reduct.licenseYear, 75_167.6);
+  close(result.direct.totalYear, 180_237.74);
+  close(result.reduct.totalYear - result.reduct.licenseYear, 75_654.77);
+  close(result.reduct.totalYear, 150_822.37);
+  close(result.savingYear, 29_415.37);
   close(result.savingPercent, 16.32);
 });
 
@@ -181,8 +187,8 @@ test("B: small records stay in the hot tier for direct S3", () => {
   );
   close(result.workload.totalDataMonthTb, 16.5888, 1e-9);
   close(result.workload.totalRetainedTb, 49.7664, 1e-9);
-  close(result.direct.totalEurYear, 29_474.15);
-  assert.ok(result.savingEurYear > 0);
+  close(result.direct.totalYear, 29_474.15);
+  assert.ok(result.savingYear > 0);
 });
 
 test("C: large records can make ReductStore more expensive", () => {
@@ -197,9 +203,9 @@ test("C: large records can make ReductStore more expensive", () => {
   );
   close(result.workload.totalDataMonthTb, 25.92, 1e-9);
   close(result.workload.totalRetainedTb, 315.36, 1e-9);
-  close(result.direct.totalEurYear, 45_464.72);
-  close(result.reduct.totalEurYear, 70_172.9);
-  close(result.savingEurYear, -24_708.19);
+  close(result.direct.totalYear, 45_464.72);
+  close(result.reduct.totalYear, 70_172.9);
+  close(result.savingYear, -24_708.19);
 });
 
 test("streams are costed separately, not with an average record size", () => {
@@ -223,8 +229,8 @@ test("streams are costed separately, not with an average record size", () => {
     config(),
   );
   close(
-    mixed.direct.totalEurYear,
-    small.direct.totalEurYear + large.direct.totalEurYear,
+    mixed.direct.totalYear,
+    small.direct.totalYear + large.direct.totalYear,
   );
 });
 
@@ -239,9 +245,9 @@ test("no NaN or Infinity when every stream is disabled", () => {
     config(),
   );
   for (const value of [
-    result.direct.totalEurYear,
-    result.reduct.totalEurYear,
-    result.savingEurYear,
+    result.direct.totalYear,
+    result.reduct.totalYear,
+    result.savingYear,
     result.savingPercent,
     result.ingestReduction,
   ]) {
@@ -254,12 +260,12 @@ test("MinIO costs retained TB times the infrastructure price", () => {
   const result = estimate(
     { units: 1, recordingHoursPerDay: 24, streams: [stream("s", 1, 100, 2)] },
     storage({ backend: "minio" }),
-    config(backendPricing("minio", 10)),
+    config(backendPricing("minio", "EUR", 10)),
   );
   const retained = result.workload.totalRetainedTb;
-  close(result.reduct.storageEurYear, retained * 10 * 12, 1e-9);
-  close(result.direct.storageEurYear, retained * 10 * 12, 1e-9);
-  assert.equal(result.reduct.operationsEurYear, 0);
+  close(result.reduct.storageYear, retained * 10 * 12, 1e-9);
+  close(result.direct.storageYear, retained * 10 * 12, 1e-9);
+  assert.equal(result.reduct.operationsYear, 0);
 });
 
 test("compression shrinks stored data on both sides but not Tiger's database", () => {
@@ -270,7 +276,7 @@ test("compression shrinks stored data on both sides but not Tiger's database", (
     comparison("tiger"),
   );
   const part = (result, side, label) =>
-    result[side].components.find((c) => c.label === label).eurYear;
+    result[side].components.find((c) => c.label === label).amountYear;
   const half = (a, b) => close(a / b, 0.5, 0.01);
   half(
     part(packed, "reduct", "AWS S3 storage"),
@@ -297,10 +303,10 @@ test("every preset produces finite results on every backend", () => {
       const result = estimate(
         preset,
         storage({ backend }),
-        config(backendPricing(backend, 10)),
+        config(backendPricing(backend, "EUR", 10)),
       );
-      assert.ok(Number.isFinite(result.direct.totalEurYear), preset.id);
-      assert.ok(Number.isFinite(result.reduct.totalEurYear), preset.id);
+      assert.ok(Number.isFinite(result.direct.totalYear), preset.id);
+      assert.ok(Number.isFinite(result.reduct.totalYear), preset.id);
       assert.ok(result.workload.totalDataMonthTb > 0, preset.id);
     }
   }
@@ -315,11 +321,12 @@ const assumptions = {
   atlasTier: "M30",
 };
 
-const comparison = (competitor, overrides = {}) => ({
-  ...published(AWS_S3),
+const comparison = (competitor, overrides = {}, currency = "EUR") => ({
+  ...published(currency),
   backendName: "AWS S3",
   batch: OBJECT_STORAGE_BATCH,
   prices: pricingConfig,
+  usdRate: usdRate(currency),
   competitor,
   assumptions: { ...assumptions, ...overrides },
 });
@@ -379,7 +386,7 @@ test("Foxglove receives every stream and charges extra devices", () => {
   ]);
   assert.equal(result.alternative.lowerBound, false);
   const platform = (r) =>
-    r.alternative.components.find((c) => c.label === "Platform").eurYear;
+    r.alternative.components.find((c) => c.label === "Platform").amountYear;
   close(platform(result), 20 * 12 * pricingConfig.fx.usdToEur);
   const more = compare(
     { ...mixed, units: 8 },
@@ -424,11 +431,11 @@ test("MongoDB Atlas is a lower bound once data outgrows the tier's storage", () 
 test("direct object storage batches records like a well built pipeline", () => {
   const result = compare(mixed, storage(), comparison("direct"));
   const reductInfra =
-    result.reduct.totalEurYear -
+    result.reduct.totalYear -
     result.reduct.components.find((c) => c.label === "ReductStore license")
-      .eurYear;
-  assert.ok(result.alternative.totalEurYear <= reductInfra);
-  assert.ok(result.alternative.totalEurYear > 0.9 * reductInfra);
+      .amountYear;
+  assert.ok(result.alternative.totalYear <= reductInfra);
+  assert.ok(result.alternative.totalYear > 0.9 * reductInfra);
 });
 
 test("presets recommend an application-aware comparison", () => {
@@ -461,3 +468,42 @@ test("the default mobile robot example lands near 30% below Foxglove", () => {
     `${result.savingPercent}`,
   );
 });
+
+test("cloud and competitor prices stay in USD for a USD display", () => {
+  const eur = compare(mixed, storage(), comparison("tiger", {}, "EUR"));
+  const usd = compare(mixed, storage(), comparison("tiger", {}, "USD"));
+  for (const component of usd.alternative.components) {
+    const inEur = eur.alternative.components.find(
+      (c) => c.label === component.label,
+    );
+    close(
+      inEur.amountYear,
+      component.amountYear * pricingConfig.fx.usdToEur,
+      1e-6,
+    );
+  }
+});
+
+const regressions = [
+  ["mobile-robot", "foxglove", 29.78, 27.69],
+  ["vibration", "tiger", -87.09, -92.46],
+  ["plc", "tiger", -143.34, -148.95],
+  ["computer-vision", "mongodb", -65.31, -69.31],
+];
+
+for (const [presetId, competitor, eurPercent, usdPercent] of regressions) {
+  test(`${presetId} + AWS S3 + ${competitor} in EUR and USD`, () => {
+    const preset = PRESETS.find((p) => p.id === presetId);
+    const run = (currency) =>
+      compare(
+        preset,
+        storage({
+          hotDays: preset.hotDays,
+          retentionDays: preset.retentionDays,
+        }),
+        comparison(competitor, {}, currency),
+      );
+    close(run("EUR").savingPercent, eurPercent);
+    close(run("USD").savingPercent, usdPercent);
+  });
+}

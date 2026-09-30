@@ -25,21 +25,21 @@ export type StorageInput = {
   retentionDays: number;
   readPercentPerMonth: number;
   compressionRatio?: number;
-  minioEurPerTbMonth?: number;
+  minioPerTbMonth?: number;
 };
 
 export type StorageTier = {
-  storageEurPerTbMonth: number;
-  getEurPer1000: number;
-  retrievalEurPerTb: number;
+  storagePerTbMonth: number;
+  getPer1000: number;
+  retrievalPerTb: number;
   minBillableObjectKb: number;
   minResidenceDays: number;
-  transitionEurPer1000: number;
+  transitionPer1000: number;
 };
 
 export type BackendPricing = {
   name: string;
-  putEurPer1000: number;
+  putPer1000: number;
   hot: StorageTier;
   cold?: StorageTier;
   archive?: StorageTier;
@@ -47,15 +47,15 @@ export type BackendPricing = {
 
 export type LicenseTier = {
   upToTb: number;
-  eurPerTbYear: number;
+  perTbYear: number;
 };
 
 export type CostBreakdown = {
-  storageEurYear: number;
-  operationsEurYear: number;
-  retrievalEurYear: number;
-  licenseEurYear: number;
-  totalEurYear: number;
+  storageYear: number;
+  operationsYear: number;
+  retrievalYear: number;
+  licenseYear: number;
+  totalYear: number;
 };
 
 export type WorkloadPreset = {

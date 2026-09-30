@@ -666,8 +666,17 @@ html[data-theme="dark"] .fieldHint {
   color: var(--ifm-heading-color);
 }
 
-.resultTitle {
+.resultHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
   margin-bottom: 1rem;
+}
+
+.resultTitle {
+  margin: 0;
   font-size: 1.1rem;
 }
 

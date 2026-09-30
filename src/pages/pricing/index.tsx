@@ -4,6 +4,13 @@ import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import Faq from "@site/src/components/shared/Faq";
 import CostCalculator from "@site/src/components/calculator/CostCalculator";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import {
+  type Currency,
+  REDUCTSTORE_MIN_TB,
+  REDUCTSTORE_PRICING,
+  formatCurrency,
+} from "@site/src/lib/currency";
+import useCurrency from "@site/src/lib/useCurrency";
 import { JSX } from "react";
 import styles from "./styles.module.css";
 
@@ -12,10 +19,11 @@ type ReductProCustomFields = { portalUrl?: string };
 export default function Pricing(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
   const { portalUrl } = siteConfig.customFields as ReductProCustomFields;
+  const currency = useCurrency();
   return (
     <Layout
       title="Pricing"
-      description="ReductStore pricing: free open source Core, self-serve Pro at €0.015 per GB per month, and Enterprise. Estimate your storage cost on AWS S3, Azure Blob, or MinIO."
+      description="ReductStore pricing: free open source Core, self-serve Pro at €15 or $18 per TB per month, and Enterprise. Estimate your storage cost on AWS S3, Azure Blob, or MinIO."
     >
       <main>
         <SimpleHeader pageTitle="Pricing" />
@@ -46,14 +54,14 @@ export default function Pricing(): JSX.Element {
 
         <SimpleHeader pageTitle="Frequently Asked Questions" pageTitleAs="h2" />
         <section className="container">
-          <Faq faqs={pricingFaqs(portalUrl)} defaultOpenCount={3} />
+          <Faq faqs={pricingFaqs(currency, portalUrl)} defaultOpenCount={3} />
         </section>
       </main>
     </Layout>
   );
 }
 
-const pricingFaqs = (portalUrl?: string) => [
+const pricingFaqs = (currency: Currency, portalUrl?: string) => [
   {
     question:
       "What is the difference between ReductStore Core and ReductStore Pro?",
@@ -63,12 +71,11 @@ const pricingFaqs = (portalUrl?: string) => [
   {
     question: "How does ReductStore Pro licensing work?",
     answer:
-      "ReductStore Pro is a self-serve monthly subscription for business customers, in EUR.",
+      "ReductStore Pro is a self-serve monthly subscription for business customers, billed in EUR or USD.",
   },
   {
     question: "How is Pro billed?",
-    answer:
-      "Monthly, on the peak storage during the billing period. 1 TB minimum, then per GB. 1.2 TB costs €18.",
+    answer: `Monthly, on the peak storage during the billing period. ${REDUCTSTORE_MIN_TB} TB minimum, then per GB. 1.2 TB costs ${formatCurrency(1200 * REDUCTSTORE_PRICING[currency].perGbMonth, currency, 2)}.`,
   },
   {
     question: "When am I charged?",

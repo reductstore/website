@@ -4,6 +4,14 @@ import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import { FaCheckCircle, FaTimes } from "react-icons/fa";
 import PricingPlan from "./PricingPlan";
+import CurrencySwitch from "../CurrencySwitch";
+import {
+  type Currency,
+  REDUCTSTORE_MIN_TB,
+  REDUCTSTORE_PRICING,
+  formatCurrency,
+} from "@site/src/lib/currency";
+import useCurrency from "@site/src/lib/useCurrency";
 import styles from "./styles.module.css";
 
 type ReductProCustomFields = {
@@ -118,8 +126,20 @@ const availabilityIcon = (available: boolean) =>
     <FaTimes aria-label="Not included" className={styles.unavailableIcon} />
   );
 
+const perGb = (currency: Currency) =>
+  formatCurrency(REDUCTSTORE_PRICING[currency].perGbMonth, currency, 3);
+const perTb = (currency: Currency) =>
+  formatCurrency(REDUCTSTORE_PRICING[currency].perTbMonth, currency);
+
+export function checkoutHref(checkoutUrl: string, currency: Currency) {
+  const url = new URL(checkoutUrl);
+  url.searchParams.set("currency", currency);
+  return url.toString();
+}
+
 export function PricingComparison() {
   const features = createFeatures("free");
+  const currency = useCurrency();
 
   return (
     <section className={styles.comparisonSection} aria-label="Plan comparison">
@@ -138,8 +158,11 @@ export function PricingComparison() {
           <tbody>
             <tr>
               <th scope="row">Price</th>
-              <td>€0</td>
-              <td>€0.015 per GB per month, excl. VAT</td>
+              <td>{formatCurrency(0, currency)}</td>
+              <td>
+                {perTb(currency)} per TB per month ({perGb(currency)} per GB),
+                excl. VAT
+              </td>
               <td>Custom pricing</td>
               <td>Custom pricing</td>
             </tr>
@@ -252,16 +275,22 @@ export default function PricingTable() {
   const { siteConfig } = useDocusaurusContext();
   const { checkoutEnabled, checkoutUrl } =
     siteConfig.customFields as ReductProCustomFields;
-  const [storageGb, setStorageGb] = useState(1000);
-  const monthlyPrice = Math.floor(storageGb * 0.015);
+  const currency = useCurrency();
+  const [storageGb, setStorageGb] = useState(REDUCTSTORE_MIN_TB * 1000);
+  const monthlyPrice = storageGb * REDUCTSTORE_PRICING[currency].perGbMonth;
 
   return (
     <>
+      <div className={styles.currencyRow}>
+        <CurrencySwitch />
+      </div>
       <div className={styles.pricingTable}>
         <PricingPlan
           title="Free"
           tagline="Open source, self hosted"
-          price={<span className={styles.price}>€0</span>}
+          price={
+            <span className={styles.price}>{formatCurrency(0, currency)}</span>
+          }
           actions={
             <Link
               className="button button--secondary button--lg"
@@ -278,10 +307,11 @@ export default function PricingTable() {
           price={
             <div className={styles.proPrice}>
               <p>
-                <span>€0.015</span> per GB per month, excl. VAT
+                <span>{perTb(currency)}</span> per TB per month, excl. VAT
               </p>
               <p className={styles.billingNote}>
-                Billed monthly on peak storage. 1 TB minimum.
+                {perGb(currency)} per GB. Billed monthly on peak storage.{" "}
+                {REDUCTSTORE_MIN_TB} TB minimum.
               </p>
               <label className={styles.storageGauge}>
                 <span className={styles.storageGaugeHeader}>
@@ -299,7 +329,7 @@ export default function PricingTable() {
               </label>
               {storageGb < 100000 ? (
                 <output className={styles.gaugePrice}>
-                  €{monthlyPrice} per month
+                  {formatCurrency(monthlyPrice, currency, 2)} per month
                 </output>
               ) : (
                 <div className={styles.volumeBanner}>
@@ -319,7 +349,9 @@ export default function PricingTable() {
           }
           actions={
             checkoutEnabled &&
-            checkoutUrl && <SubscribeButton href={checkoutUrl} />
+            checkoutUrl && (
+              <SubscribeButton href={checkoutHref(checkoutUrl, currency)} />
+            )
           }
           bullets={summaryBullets("pro")}
           isHighlight

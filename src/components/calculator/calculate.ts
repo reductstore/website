@@ -48,16 +48,16 @@ export type TierName = "hot" | "cold" | "archive";
 
 export type StreamCost = {
   path: [TierName, TierName, TierName];
-  storageEurMonth: number;
-  operationsEurMonth: number;
-  retrievalEurMonth: number;
+  storageMonth: number;
+  operationsMonth: number;
+  retrievalMonth: number;
 };
 
 export type Estimate = {
   workload: Workload;
   direct: CostBreakdown;
   reduct: CostBreakdown;
-  savingEurYear: number;
+  savingYear: number;
   savingPercent: number;
   directIngestObjectsMonth: number;
   reductIngestOperationsMonth: number;
@@ -145,13 +145,13 @@ export function ageBands(hotDays: number, retentionDays: number): Bands {
   return { hot, cold, archive: Math.max(0, remaining - cold) };
 }
 
-export function licenseEurYear(retainedTb: number, tiers: LicenseTier[]) {
+export function licenseCostYear(retainedTb: number, tiers: LicenseTier[]) {
   let cost = 0;
   let lower = 0;
   for (const tier of tiers) {
     const inTier = Math.min(retainedTb, tier.upToTb) - lower;
     if (inTier <= 0) break;
-    cost += inTier * tier.eurPerTbYear;
+    cost += inTier * tier.perTbYear;
     lower = tier.upToTb;
   }
   return cost;
@@ -209,7 +209,7 @@ export function streamCost(
   for (const path of lifecyclePaths(pricing)) {
     if (!respectsResidence(path, bandDays, pricing)) continue;
     let storage = 0;
-    let operations = (ingestOps / 1000) * pricing.putEurPer1000;
+    let operations = (ingestOps / 1000) * pricing.putPer1000;
     let retrieval = 0;
 
     path.forEach((name, i) => {
@@ -222,49 +222,45 @@ export function streamCost(
         tier.minBillableObjectKb > 0
           ? Math.max(1, tier.minBillableObjectKb / objectSizeKb)
           : 1;
-      storage += bandTb * tier.storageEurPerTbMonth * billable;
+      storage += bandTb * tier.storagePerTbMonth * billable;
       operations +=
-        ((bandRecords * readShare * objectsPerRecord) / 1000) *
-        tier.getEurPer1000;
-      retrieval += bandTb * readShare * tier.retrievalEurPerTb;
+        ((bandRecords * readShare * objectsPerRecord) / 1000) * tier.getPer1000;
+      retrieval += bandTb * readShare * tier.retrievalPerTb;
 
       const previous = i > 0 ? path[i - 1] : "hot";
       if (i > 0 && name !== previous) {
-        operations += (ingestOps / 1000) * tier.transitionEurPer1000;
+        operations += (ingestOps / 1000) * tier.transitionPer1000;
       }
     });
 
     const total = storage + operations + retrieval;
     if (
       !best ||
-      total <
-        best.storageEurMonth + best.operationsEurMonth + best.retrievalEurMonth
+      total < best.storageMonth + best.operationsMonth + best.retrievalMonth
     ) {
       best = {
         path,
-        storageEurMonth: storage,
-        operationsEurMonth: operations,
-        retrievalEurMonth: retrieval,
+        storageMonth: storage,
+        operationsMonth: operations,
+        retrievalMonth: retrieval,
       };
     }
   }
   return best as StreamCost;
 }
 
-function breakdown(costs: StreamCost[], licenseEur: number): CostBreakdown {
-  const storageEurYear =
-    12 * costs.reduce((sum, c) => sum + c.storageEurMonth, 0);
-  const operationsEurYear =
-    12 * costs.reduce((sum, c) => sum + c.operationsEurMonth, 0);
-  const retrievalEurYear =
-    12 * costs.reduce((sum, c) => sum + c.retrievalEurMonth, 0);
+function breakdown(costs: StreamCost[], licenseAmount: number): CostBreakdown {
+  const storageYear = 12 * costs.reduce((sum, c) => sum + c.storageMonth, 0);
+  const operationsYear =
+    12 * costs.reduce((sum, c) => sum + c.operationsMonth, 0);
+  const retrievalYear =
+    12 * costs.reduce((sum, c) => sum + c.retrievalMonth, 0);
   return {
-    storageEurYear,
-    operationsEurYear,
-    retrievalEurYear,
-    licenseEurYear: licenseEur,
-    totalEurYear:
-      storageEurYear + operationsEurYear + retrievalEurYear + licenseEur,
+    storageYear,
+    operationsYear,
+    retrievalYear,
+    licenseYear: licenseAmount,
+    totalYear: storageYear + operationsYear + retrievalYear + licenseAmount,
   };
 }
 
@@ -314,14 +310,14 @@ export function estimate(
   const direct = breakdown(directCosts, 0);
   const reduct = breakdown(
     reductCosts,
-    licenseEurYear(
+    licenseCostYear(
       storedRetainedTb > 0
         ? Math.max(storedRetainedTb, config.licenseMinTb ?? 0)
         : 0,
       config.licenseTiers,
     ),
   );
-  const savingEurYear = direct.totalEurYear - reduct.totalEurYear;
+  const savingYear = direct.totalYear - reduct.totalYear;
 
   const directIngestObjectsMonth = workload.totalRecordsMonth;
   const reductIngestOperationsMonth = stored.reduce(
@@ -336,9 +332,9 @@ export function estimate(
     workload,
     direct,
     reduct,
-    savingEurYear,
+    savingYear,
     savingPercent:
-      direct.totalEurYear > 0 ? (savingEurYear / direct.totalEurYear) * 100 : 0,
+      direct.totalYear > 0 ? (savingYear / direct.totalYear) * 100 : 0,
     directIngestObjectsMonth,
     reductIngestOperationsMonth,
     ingestReduction:
@@ -381,14 +377,14 @@ export function marginalCost(
 
 type Prices = typeof import("./pricing").pricingConfig;
 
-export type CostComponent = { label: string; eurYear: number };
+export type CostComponent = { label: string; amountYear: number };
 
 export type Route = { target: string; streams: string[] };
 
 export type CostSide = {
   label: string;
   components: CostComponent[];
-  totalEurYear: number;
+  totalYear: number;
   lowerBound: boolean;
   notes: string[];
   routes: Route[];
@@ -404,6 +400,7 @@ export type ComparisonConfig = CalculatorConfig & {
   backendName: string;
   batch: BatchConfig;
   prices: Prices;
+  usdRate: number;
   competitor: CompetitorId;
   assumptions: CompetitorAssumptions;
 };
@@ -412,15 +409,15 @@ export type Comparison = {
   estimate: Estimate;
   reduct: CostSide;
   alternative: CostSide;
-  savingEurYear: number;
+  savingYear: number;
   savingPercent: number;
 };
 
-const sumEur = (components: CostComponent[]) =>
-  components.reduce((sum, c) => sum + c.eurYear, 0);
+const sumAmount = (components: CostComponent[]) =>
+  components.reduce((sum, c) => sum + c.amountYear, 0);
 
 // Object storage for a subset of streams, written as batched objects.
-export function objectStorageEurYear(
+export function objectStorageYear(
   streams: StreamWorkload[],
   bands: Bands,
   readPercent: number,
@@ -438,8 +435,7 @@ export function objectStorageEurYear(
       s.stream.recordSizeKb * perObject,
       batch.opsPerObject / perObject,
     );
-    monthly +=
-      cost.storageEurMonth + cost.operationsEurMonth + cost.retrievalEurMonth;
+    monthly += cost.storageMonth + cost.operationsMonth + cost.retrievalMonth;
   }
   return 12 * monthly;
 }
@@ -466,7 +462,7 @@ function withObjectStorage(
   if (rest.length === 0) return;
   components.push({
     label: `${ctx.config.backendName} storage`,
-    eurYear: objectStorageEurYear(
+    amountYear: objectStorageYear(
       rest,
       ctx.bands,
       ctx.readPercent,
@@ -488,7 +484,7 @@ export function alternativeCost(
   config: ComparisonConfig,
 ): CostSide {
   const { prices, assumptions } = config;
-  const usd = (value: number) => value * prices.fx.usdToEur;
+  const usd = (value: number) => value * config.usdRate;
   const retention = Math.max(storage.retentionDays, storage.hotDays);
   const bands = ageBands(storage.hotDays, retention);
   const readShare =
@@ -507,7 +503,7 @@ export function alternativeCost(
     const components: CostComponent[] = [
       {
         label: "Platform",
-        eurYear: usd(
+        amountYear: usd(
           12 *
             (f.baseUsdPerMonth +
               Math.max(0, seats - f.includedDeveloperSeats) *
@@ -518,14 +514,14 @@ export function alternativeCost(
       },
       {
         label: "Storage",
-        eurYear: usd(
+        amountYear: usd(
           12 *
             marginalCost(retained, f.storageIncludedTb, f.storageUsdPerTbMonth),
         ),
       },
       {
         label: "Indexing",
-        eurYear: usd(
+        amountYear: usd(
           12 *
             marginalCost(
               uploadedMonthTb,
@@ -536,7 +532,7 @@ export function alternativeCost(
       },
       {
         label: "Bandwidth",
-        eurYear: usd(
+        amountYear: usd(
           12 *
             marginalCost(
               retained * readShare,
@@ -547,7 +543,7 @@ export function alternativeCost(
       },
       {
         label: "Query",
-        eurYear: usd(
+        amountYear: usd(
           12 *
             marginalCost(
               assumptions.foxgloveQueryHoursPerMonth,
@@ -560,7 +556,7 @@ export function alternativeCost(
     return {
       label: "Foxglove",
       components,
-      totalEurYear: sumEur(components),
+      totalYear: sumAmount(components),
       lowerBound: false,
       notes: ["Foxglove Pro public list prices. Enterprise pricing is custom."],
       routes: [{ target: "Foxglove", streams: names(workload.streams) }],
@@ -582,15 +578,15 @@ export function alternativeCost(
     const components: CostComponent[] = [
       {
         label: "Minimum published compute",
-        eurYear: usd(12 * t.scaleMinComputeUsdPerMonth),
+        amountYear: usd(12 * t.scaleMinComputeUsdPerMonth),
       },
       {
         label: "Hot database storage",
-        eurYear: usd(12 * hotGb * t.scaleStorageUsdPerGbMonth),
+        amountYear: usd(12 * hotGb * t.scaleStorageUsdPerGbMonth),
       },
       {
         label: "Tiered database storage",
-        eurYear: usd(12 * tieredGb * t.tieredStorageUsdPerGbMonth),
+        amountYear: usd(12 * tieredGb * t.tieredStorageUsdPerGbMonth),
       },
     ];
     const routes: Route[] = [{ target: "Tiger Cloud", streams: names(inDb) }];
@@ -598,7 +594,7 @@ export function alternativeCost(
     return {
       label: withBackend("Tiger Cloud", rest, config.backendName),
       components,
-      totalEurYear: sumEur(components),
+      totalYear: sumAmount(components),
       lowerBound: true,
       notes: [
         "Uses Tiger Cloud's minimum published compute price. Actual compute depends on workload.",
@@ -620,11 +616,11 @@ export function alternativeCost(
     const components: CostComponent[] = [
       {
         label: "Data in",
-        eurYear: usd(12 * monthly * 1_000_000 * i.dataInUsdPerMb),
+        amountYear: usd(12 * monthly * 1_000_000 * i.dataInUsdPerMb),
       },
       {
         label: "Storage",
-        eurYear: usd(
+        amountYear: usd(
           12 *
             retainedGb *
             prices.mongodb.hoursPerMonth *
@@ -633,7 +629,7 @@ export function alternativeCost(
       },
       {
         label: "Queries",
-        eurYear: usd(
+        amountYear: usd(
           12 *
             (Math.max(0, assumptions.influxQueriesPerMonth) / 100) *
             i.queryUsdPer100,
@@ -641,7 +637,7 @@ export function alternativeCost(
       },
       {
         label: "Data out",
-        eurYear: usd(
+        amountYear: usd(
           12 *
             retainedTb(inDb, retention) *
             1000 *
@@ -657,7 +653,7 @@ export function alternativeCost(
     return {
       label: withBackend("InfluxDB Cloud", rest, config.backendName),
       components,
-      totalEurYear: sumEur(components),
+      totalYear: sumAmount(components),
       lowerBound: false,
       notes: [
         "InfluxDB Cloud Serverless public list-price estimate.",
@@ -678,7 +674,7 @@ export function alternativeCost(
     const components: CostComponent[] = [
       {
         label: `Atlas ${tierName} base cluster`,
-        eurYear: usd(12 * tier.usdPerHour * m.hoursPerMonth),
+        amountYear: usd(12 * tier.usdPerHour * m.hoursPerMonth),
       },
     ];
     const routes: Route[] = [{ target: "MongoDB Atlas", streams: names(inDb) }];
@@ -687,7 +683,7 @@ export function alternativeCost(
     return {
       label: withBackend("MongoDB Atlas", rest, config.backendName),
       components,
-      totalEurYear: sumEur(components),
+      totalYear: sumAmount(components),
       lowerBound: overflow,
       notes: [
         "MongoDB Atlas public base price; region, storage, IOPS, and backups change the cluster price.",
@@ -707,7 +703,7 @@ export function alternativeCost(
   return {
     label: `${config.backendName} only`,
     components,
-    totalEurYear: sumEur(components),
+    totalYear: sumAmount(components),
     lowerBound: false,
     notes: [
       "A custom pipeline that batches records into objects of about 64 MB.",
@@ -723,22 +719,22 @@ export function compare(
 ): Comparison {
   const result = estimate(workloadInput, storage, config);
   const reductComponents: CostComponent[] = [
-    { label: "ReductStore license", eurYear: result.reduct.licenseEurYear },
+    { label: "ReductStore license", amountYear: result.reduct.licenseYear },
     {
       label: `${config.backendName} storage`,
-      eurYear: result.reduct.storageEurYear,
+      amountYear: result.reduct.storageYear,
     },
   ];
   if (storage.backend !== "minio") {
     reductComponents.push({
       label: "Requests and retrieval",
-      eurYear: result.reduct.operationsEurYear + result.reduct.retrievalEurYear,
+      amountYear: result.reduct.operationsYear + result.reduct.retrievalYear,
     });
   }
   const reduct: CostSide = {
     label: `ReductStore + ${config.backendName}`,
     components: reductComponents,
-    totalEurYear: result.reduct.totalEurYear,
+    totalYear: result.reduct.totalYear,
     lowerBound: false,
     notes: [],
     routes: [
@@ -755,15 +751,15 @@ export function compare(
     nonNegative(workloadInput.units),
     config,
   );
-  const savingEurYear = alternative.totalEurYear - reduct.totalEurYear;
+  const savingYear = alternative.totalYear - reduct.totalYear;
   return {
     estimate: result,
     reduct,
     alternative,
-    savingEurYear,
+    savingYear,
     savingPercent:
-      alternative.totalEurYear > 0
-        ? (savingEurYear / alternative.totalEurYear) * 100
+      alternative.totalYear > 0
+        ? (savingYear / alternative.totalYear) * 100
         : 0,
   };
 }

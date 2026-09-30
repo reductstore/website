@@ -1,6 +1,6 @@
 import React, { JSX } from "react";
 import type { CostSide } from "./calculate";
-import { formatEur } from "./format";
+import { type Currency, formatCurrency } from "../../lib/currency";
 import styles from "./styles.module.css";
 
 const LICENSE = "ReductStore license";
@@ -8,31 +8,41 @@ const LICENSE = "ReductStore license";
 const segmentClass = (label: string, index: number) =>
   label === LICENSE ? styles.segLicense : styles[`seg${index % 5}`];
 
-const total = (side: CostSide) =>
-  `${side.lowerBound ? "From " : ""}${formatEur(side.totalEurYear)} / year`;
+type Sides = { alternative: CostSide; reduct: CostSide; currency: Currency };
 
-function Bar({ side, max }: { side: CostSide; max: number }) {
-  const parts = side.components.filter((c) => c.eurYear > 0);
+const total = (side: CostSide, currency: Currency) =>
+  `${side.lowerBound ? "From " : ""}${formatCurrency(side.totalYear, currency)} / year`;
+
+function Bar({
+  side,
+  max,
+  currency,
+}: {
+  side: CostSide;
+  max: number;
+  currency: Currency;
+}) {
+  const parts = side.components.filter((c) => c.amountYear > 0);
   return (
     <div className={styles.barRow}>
       <div className={styles.barLabel}>
         <span>{side.label}</span>
-        <strong>{total(side)}</strong>
+        <strong>{total(side, currency)}</strong>
       </div>
       <div
         className={styles.barTrack}
         role="img"
         aria-label={`${side.label}: ${parts
-          .map((c) => `${c.label} ${formatEur(c.eurYear)}`)
+          .map((c) => `${c.label} ${formatCurrency(c.amountYear, currency)}`)
           .join(", ")}`}
       >
         {side.components.map((c, i) =>
-          c.eurYear > 0 ? (
+          c.amountYear > 0 ? (
             <span
               key={c.label}
               className={segmentClass(c.label, i)}
-              style={{ width: `${(c.eurYear / max) * 100}%` }}
-              title={`${c.label}: ${formatEur(c.eurYear)}`}
+              style={{ width: `${(c.amountYear / max) * 100}%` }}
+              title={`${c.label}: ${formatCurrency(c.amountYear, currency)}`}
             />
           ) : null,
         )}
@@ -44,20 +54,18 @@ function Bar({ side, max }: { side: CostSide; max: number }) {
 export function CostBars({
   alternative,
   reduct,
-}: {
-  alternative: CostSide;
-  reduct: CostSide;
-}): JSX.Element {
-  const max = Math.max(alternative.totalEurYear, reduct.totalEurYear, 1);
+  currency,
+}: Sides): JSX.Element {
+  const max = Math.max(alternative.totalYear, reduct.totalYear, 1);
   return (
     <div className={styles.comparison}>
-      <Bar side={alternative} max={max} />
-      <Bar side={reduct} max={max} />
+      <Bar side={alternative} max={max} currency={currency} />
+      <Bar side={reduct} max={max} currency={currency} />
     </div>
   );
 }
 
-function Breakdown({ side }: { side: CostSide }) {
+function Breakdown({ side, currency }: { side: CostSide; currency: Currency }) {
   return (
     <table className={styles.legend}>
       <thead>
@@ -74,14 +82,14 @@ function Breakdown({ side }: { side: CostSide }) {
               <span className={segmentClass(c.label, i)} aria-hidden="true" />
               {c.label}
             </th>
-            <td>{formatEur(c.eurYear)}</td>
+            <td>{formatCurrency(c.amountYear, currency)}</td>
           </tr>
         ))}
       </tbody>
       <tfoot>
         <tr>
           <th scope="row">Total</th>
-          <td>{total(side)}</td>
+          <td>{total(side, currency)}</td>
         </tr>
       </tfoot>
     </table>
@@ -91,14 +99,12 @@ function Breakdown({ side }: { side: CostSide }) {
 export function CostBreakdowns({
   alternative,
   reduct,
-}: {
-  alternative: CostSide;
-  reduct: CostSide;
-}): JSX.Element {
+  currency,
+}: Sides): JSX.Element {
   return (
     <div className={styles.breakdowns}>
-      <Breakdown side={alternative} />
-      <Breakdown side={reduct} />
+      <Breakdown side={alternative} currency={currency} />
+      <Breakdown side={reduct} currency={currency} />
     </div>
   );
 }

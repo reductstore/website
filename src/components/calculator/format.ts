@@ -1,9 +1,3 @@
-const eur = new Intl.NumberFormat("en-IE", {
-  style: "currency",
-  currency: "EUR",
-  maximumFractionDigits: 0,
-});
-
 const compact = new Intl.NumberFormat("en", {
   notation: "compact",
   maximumFractionDigits: 2,
@@ -11,9 +5,6 @@ const compact = new Intl.NumberFormat("en", {
 
 const decimal = (digits: number) =>
   new Intl.NumberFormat("en", { maximumFractionDigits: digits });
-
-export const formatEur = (value: number) =>
-  eur.format(Number.isFinite(value) ? value : 0);
 
 export function formatTb(tb: number): string {
   if (!Number.isFinite(tb) || tb <= 0) return "0 TB";

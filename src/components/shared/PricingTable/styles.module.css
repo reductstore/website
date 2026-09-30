@@ -3,7 +3,13 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: start;
   gap: 2em;
-  margin: 4em auto 1.5em;
+  margin: 1.25em auto 1.5em;
+}
+
+.currencyRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2.75em;
 }
 
 .plan {

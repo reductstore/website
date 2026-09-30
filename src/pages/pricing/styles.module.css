@@ -27,7 +27,13 @@ html[data-theme="dark"] .calculatorIntro {
 }
 
 .detailsIntro {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
+}
+
+.detailsCurrency {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
 }
 
 .offer {

@@ -1,3 +1,4 @@
+import type { Currency } from "../../lib/currency";
 import type { BackendId, BackendPricing, LicenseTier } from "./types";
 
 export type MarginalTier = {
@@ -5,8 +6,9 @@ export type MarginalTier = {
   rate: number;
 };
 
-// Vendor prices are kept in their source currency (USD) and converted to EUR
-// only through usdToEur.
+// Vendor prices are kept in their source currency (USD). For a EUR display
+// they are converted only through fx.usdToEur, which never applies to
+// ReductStore's own list prices.
 export const pricingConfig = {
   lastVerified: "2026-09-30",
 
@@ -173,118 +175,108 @@ export const pricingConfig = {
       M700: { usdPerHour: 33.26, defaultStorageGb: 4000 },
     } as Record<string, { usdPerHour: number; defaultStorageGb: number }>,
   },
-
-  // ReductStore Pro as published on the pricing page: €0.015 per GB per month
-  // on peak storage, 1 TB minimum.
-  reductstore: {
-    vendor: "ReductStore",
-    product: "ReductStore Pro",
-    currency: "EUR",
-    units: "per GB-month of retained data",
-    source: "/pricing",
-    eurPerGbMonth: 0.015,
-    minTb: 1,
-  },
 };
 
-export const usdToEur = (usd: number) => usd * pricingConfig.fx.usdToEur;
+export const usdRate = (currency: Currency) =>
+  currency === "EUR" ? pricingConfig.fx.usdToEur : 1;
 
-const perTb = (usdPerGb: number) => usdToEur(usdPerGb * 1000);
-const eur = (usd: number) => usdToEur(usd);
-
-const aws = pricingConfig.aws;
-export const AWS_S3: BackendPricing = {
-  name: "AWS S3",
-  putEurPer1000: eur(aws.putUsdPer1000),
-  hot: {
-    storageEurPerTbMonth: perTb(aws.standard.storageUsdPerGbMonth),
-    getEurPer1000: eur(aws.standard.getUsdPer1000),
-    retrievalEurPerTb: 0,
-    minBillableObjectKb: 0,
-    minResidenceDays: 0,
-    transitionEurPer1000: 0,
-  },
-  cold: {
-    storageEurPerTbMonth: perTb(aws.standardIa.storageUsdPerGbMonth),
-    getEurPer1000: eur(aws.standardIa.getUsdPer1000),
-    retrievalEurPerTb: perTb(aws.standardIa.retrievalUsdPerGb),
-    minBillableObjectKb: aws.standardIa.minBillableObjectKb,
-    minResidenceDays: aws.standardIa.minStorageDays,
-    transitionEurPer1000: eur(aws.standardIa.transitionUsdPer1000),
-  },
-  archive: {
-    storageEurPerTbMonth: perTb(aws.glacierIr.storageUsdPerGbMonth),
-    getEurPer1000: eur(aws.glacierIr.getUsdPer1000),
-    retrievalEurPerTb: perTb(aws.glacierIr.retrievalUsdPerGb),
-    minBillableObjectKb: aws.glacierIr.minBillableObjectKb,
-    minResidenceDays: aws.glacierIr.minStorageDays,
-    transitionEurPer1000: eur(aws.glacierIr.transitionUsdPer1000),
-  },
-};
-
-const az = pricingConfig.azure;
-export const AZURE_BLOB: BackendPricing = {
-  name: "Azure Blob",
-  putEurPer1000: eur(az.putUsdPer1000),
-  hot: {
-    storageEurPerTbMonth: perTb(az.hot.storageUsdPerGbMonth),
-    getEurPer1000: eur(az.hot.getUsdPer1000),
-    retrievalEurPerTb: 0,
-    minBillableObjectKb: 0,
-    minResidenceDays: 0,
-    transitionEurPer1000: 0,
-  },
-  cold: {
-    storageEurPerTbMonth: perTb(az.cool.storageUsdPerGbMonth),
-    getEurPer1000: eur(az.cool.getUsdPer1000),
-    retrievalEurPerTb: perTb(az.cool.retrievalUsdPerGb),
-    minBillableObjectKb: 0,
-    minResidenceDays: az.cool.minStorageDays,
-    transitionEurPer1000: eur(az.cool.transitionUsdPer1000),
-  },
-  archive: {
-    storageEurPerTbMonth: perTb(az.cold.storageUsdPerGbMonth),
-    getEurPer1000: eur(az.cold.getUsdPer1000),
-    retrievalEurPerTb: perTb(az.cold.retrievalUsdPerGb),
-    minBillableObjectKb: 0,
-    minResidenceDays: az.cold.minStorageDays,
-    transitionEurPer1000: eur(az.cold.transitionUsdPer1000),
-  },
-};
-
-export const DEFAULT_MINIO_EUR_PER_TB_MONTH = 10;
-
-export function minioPricing(storageEurPerTbMonth: number): BackendPricing {
+function awsPricing(rate: number): BackendPricing {
+  const aws = pricingConfig.aws;
+  const perTb = (usdPerGb: number) => usdPerGb * 1000 * rate;
   return {
-    name: "MinIO",
-    putEurPer1000: 0,
+    name: "AWS S3",
+    putPer1000: aws.putUsdPer1000 * rate,
     hot: {
-      storageEurPerTbMonth,
-      getEurPer1000: 0,
-      retrievalEurPerTb: 0,
+      storagePerTbMonth: perTb(aws.standard.storageUsdPerGbMonth),
+      getPer1000: aws.standard.getUsdPer1000 * rate,
+      retrievalPerTb: 0,
       minBillableObjectKb: 0,
       minResidenceDays: 0,
-      transitionEurPer1000: 0,
+      transitionPer1000: 0,
+    },
+    cold: {
+      storagePerTbMonth: perTb(aws.standardIa.storageUsdPerGbMonth),
+      getPer1000: aws.standardIa.getUsdPer1000 * rate,
+      retrievalPerTb: perTb(aws.standardIa.retrievalUsdPerGb),
+      minBillableObjectKb: aws.standardIa.minBillableObjectKb,
+      minResidenceDays: aws.standardIa.minStorageDays,
+      transitionPer1000: aws.standardIa.transitionUsdPer1000 * rate,
+    },
+    archive: {
+      storagePerTbMonth: perTb(aws.glacierIr.storageUsdPerGbMonth),
+      getPer1000: aws.glacierIr.getUsdPer1000 * rate,
+      retrievalPerTb: perTb(aws.glacierIr.retrievalUsdPerGb),
+      minBillableObjectKb: aws.glacierIr.minBillableObjectKb,
+      minResidenceDays: aws.glacierIr.minStorageDays,
+      transitionPer1000: aws.glacierIr.transitionUsdPer1000 * rate,
     },
   };
 }
 
-export function backendPricing(
-  backend: BackendId,
-  minioEurPerTbMonth = DEFAULT_MINIO_EUR_PER_TB_MONTH,
-): BackendPricing {
-  if (backend === "aws") return AWS_S3;
-  if (backend === "azure") return AZURE_BLOB;
-  return minioPricing(minioEurPerTbMonth);
+function azurePricing(rate: number): BackendPricing {
+  const az = pricingConfig.azure;
+  const perTb = (usdPerGb: number) => usdPerGb * 1000 * rate;
+  return {
+    name: "Azure Blob",
+    putPer1000: az.putUsdPer1000 * rate,
+    hot: {
+      storagePerTbMonth: perTb(az.hot.storageUsdPerGbMonth),
+      getPer1000: az.hot.getUsdPer1000 * rate,
+      retrievalPerTb: 0,
+      minBillableObjectKb: 0,
+      minResidenceDays: 0,
+      transitionPer1000: 0,
+    },
+    cold: {
+      storagePerTbMonth: perTb(az.cool.storageUsdPerGbMonth),
+      getPer1000: az.cool.getUsdPer1000 * rate,
+      retrievalPerTb: perTb(az.cool.retrievalUsdPerGb),
+      minBillableObjectKb: 0,
+      minResidenceDays: az.cool.minStorageDays,
+      transitionPer1000: az.cool.transitionUsdPer1000 * rate,
+    },
+    archive: {
+      storagePerTbMonth: perTb(az.cold.storageUsdPerGbMonth),
+      getPer1000: az.cold.getUsdPer1000 * rate,
+      retrievalPerTb: perTb(az.cold.retrievalUsdPerGb),
+      minBillableObjectKb: 0,
+      minResidenceDays: az.cold.minStorageDays,
+      transitionPer1000: az.cold.transitionUsdPer1000 * rate,
+    },
+  };
 }
 
-export const LICENSE_TIERS: LicenseTier[] = [
-  {
-    upToTb: Infinity,
-    eurPerTbYear: pricingConfig.reductstore.eurPerGbMonth * 1000 * 12,
-  },
+export const DEFAULT_MINIO_PER_TB_MONTH = 10;
+
+export function minioPricing(storagePerTbMonth: number): BackendPricing {
+  return {
+    name: "MinIO",
+    putPer1000: 0,
+    hot: {
+      storagePerTbMonth,
+      getPer1000: 0,
+      retrievalPerTb: 0,
+      minBillableObjectKb: 0,
+      minResidenceDays: 0,
+      transitionPer1000: 0,
+    },
+  };
+}
+
+// minioPerTbMonth is entered by the visitor in the display currency.
+export function backendPricing(
+  backend: BackendId,
+  currency: Currency,
+  minioPerTbMonth = DEFAULT_MINIO_PER_TB_MONTH,
+): BackendPricing {
+  if (backend === "aws") return awsPricing(usdRate(currency));
+  if (backend === "azure") return azurePricing(usdRate(currency));
+  return minioPricing(minioPerTbMonth);
+}
+
+export const licenseTiers = (perTbMonth: number): LicenseTier[] => [
+  { upToTb: Infinity, perTbYear: perTbMonth * 12 },
 ];
-export const LICENSE_MIN_TB = pricingConfig.reductstore.minTb;
 
 export const REDUCT_BLOCK = {
   sizeKb: 64_000,

@@ -16,27 +16,29 @@ import {
 import type { IconType } from "react-icons";
 import { compare } from "./calculate";
 import {
-  LICENSE_TIERS,
-  LICENSE_MIN_TB,
   OBJECT_STORAGE_BATCH,
   REDUCT_BLOCK,
-  DEFAULT_MINIO_EUR_PER_TB_MONTH,
+  DEFAULT_MINIO_PER_TB_MONTH,
   backendPricing,
+  licenseTiers,
   pricingConfig,
+  usdRate,
 } from "./pricing";
+import {
+  REDUCTSTORE_MIN_TB,
+  REDUCTSTORE_PRICING,
+  currencySymbol,
+  formatCurrency,
+} from "../../lib/currency";
+import useCurrency from "../../lib/useCurrency";
+import CurrencySwitch from "../shared/CurrencySwitch";
 import { PRESETS } from "./presets";
 import type { BackendId, CompetitorId, StreamInput } from "./types";
 import type { Route } from "./calculate";
 import { CostBars, CostBreakdowns } from "./CostComparison";
 import StreamEditor, { StreamDraft } from "./StreamEditor";
 import NumberField from "./NumberField";
-import {
-  formatCount,
-  formatDays,
-  formatEur,
-  formatPercent,
-  formatTb,
-} from "./format";
+import { formatCount, formatDays, formatPercent, formatTb } from "./format";
 import { bucket, track } from "./analytics";
 import styles from "./styles.module.css";
 
@@ -157,6 +159,7 @@ function Routes({ title, routes }: { title: string; routes: Route[] }) {
 }
 
 export default function CostCalculator(): JSX.Element {
+  const currency = useCurrency();
   const [presetId, setPresetId] = useState("mobile-robot");
   const preset = PRESETS.find((p) => p.id === presetId) ?? PRESETS[0];
   const [units, setUnits] = useState(String(preset.units));
@@ -172,7 +175,7 @@ export default function CostCalculator(): JSX.Element {
   );
   const [readPercent, setReadPercent] = useState("5");
   const [minioCost, setMinioCost] = useState(
-    String(DEFAULT_MINIO_EUR_PER_TB_MONTH),
+    String(DEFAULT_MINIO_PER_TB_MONTH),
   );
   const [competitor, setCompetitor] = useState<CompetitorId>(
     preset.recommended,
@@ -262,16 +265,17 @@ export default function CostCalculator(): JSX.Element {
       retentionDays: Math.max(hot, safe(retentionDays, hot)),
       readPercentPerMonth: safe(readPercent, 0, 0, 100),
       compressionRatio: safe(compressionRatio, 1, 1),
-      minioEurPerTbMonth: safe(minioCost, 0),
+      minioPerTbMonth: safe(minioCost, 0),
     };
     return compare(workload, storage, {
-      pricing: backendPricing(backend, storage.minioEurPerTbMonth),
-      licenseTiers: LICENSE_TIERS,
-      licenseMinTb: LICENSE_MIN_TB,
+      pricing: backendPricing(backend, currency, storage.minioPerTbMonth),
+      licenseTiers: licenseTiers(REDUCTSTORE_PRICING[currency].perTbMonth),
+      licenseMinTb: REDUCTSTORE_MIN_TB,
       block: REDUCT_BLOCK,
       backendName: backendLabel(backend),
       batch: OBJECT_STORAGE_BATCH,
       prices: pricingConfig,
+      usdRate: usdRate(currency),
       competitor,
       assumptions: {
         foxgloveDeveloperSeats: safe(seats, 3),
@@ -283,6 +287,7 @@ export default function CostCalculator(): JSX.Element {
       },
     });
   }, [
+    currency,
     units,
     hours,
     streams,
@@ -304,7 +309,7 @@ export default function CostCalculator(): JSX.Element {
 
   const workload = result.estimate.workload;
   const hasData = workload.totalRecordsMonth > 0;
-  const saving = result.savingEurYear;
+  const saving = result.savingYear;
   const retained = workload.totalRetainedTb;
   const lowerBound = result.alternative.lowerBound;
 
@@ -319,6 +324,7 @@ export default function CostCalculator(): JSX.Element {
         preset: presetId,
         backend,
         competitor,
+        currency,
         units_bucket: bucket(safe(units, 1, 1), [2, 5, 10, 50, 100, 1000]),
         monthly_tb_bucket: bucket(
           workload.totalDataMonthTb,
@@ -345,12 +351,12 @@ export default function CostCalculator(): JSX.Element {
   let headline: string;
   let subline: string;
   if (saving >= 0) {
-    headline = `Save ${lowerBound ? "at least " : ""}${formatEur(saving)} / year`;
+    headline = `Save ${lowerBound ? "at least " : ""}${formatCurrency(saving, currency)} / year`;
     subline = lowerBound
       ? "Estimated from public pricing"
       : `${formatPercent(result.savingPercent)} lower TCO`;
   } else {
-    headline = `${lowerBound ? "Up to " : ""}${formatEur(-saving)} / year higher`;
+    headline = `${lowerBound ? "Up to " : ""}${formatCurrency(-saving, currency)} / year higher`;
     subline = lowerBound
       ? "Estimated from public pricing"
       : "for this configuration";
@@ -459,7 +465,7 @@ export default function CostCalculator(): JSX.Element {
                   onChange={setMinioCost}
                   min={0}
                   step={1}
-                  prefix="€"
+                  prefix={currencySymbol(currency)}
                   suffix="/ TB / month"
                   error={errors.minioCost}
                   wide
@@ -642,10 +648,14 @@ export default function CostCalculator(): JSX.Element {
             </p>
           ) : (
             <>
-              <h2 className={styles.resultTitle}>Estimated annual cost</h2>
+              <div className={styles.resultHeader}>
+                <h2 className={styles.resultTitle}>Estimated annual cost</h2>
+                <CurrencySwitch />
+              </div>
               <CostBars
                 alternative={result.alternative}
                 reduct={result.reduct}
+                currency={currency}
               />
               <p
                 className={clsx(styles.headline, {
@@ -659,6 +669,7 @@ export default function CostCalculator(): JSX.Element {
               <CostBreakdowns
                 alternative={result.alternative}
                 reduct={result.reduct}
+                currency={currency}
               />
 
               <ul className={styles.notes}>
@@ -745,9 +756,14 @@ export default function CostCalculator(): JSX.Element {
               infrastructure price × 12.
             </li>
             <li>
-              ReductStore license: ReductStore Pro at €
-              {pricingConfig.reductstore.eurPerGbMonth} per GB per month on
-              retained data, {pricingConfig.reductstore.minTb} TB minimum.
+              ReductStore license: ReductStore Pro list price of{" "}
+              {formatCurrency(
+                REDUCTSTORE_PRICING[currency].perTbMonth,
+                currency,
+              )}{" "}
+              per TB per month on retained data, {REDUCTSTORE_MIN_TB} TB
+              minimum. It is a fixed price in each currency and is never
+              converted.
             </li>
             <li>
               Foxglove: base plan, extra seats and devices, storage on retained
@@ -763,10 +779,11 @@ export default function CostCalculator(): JSX.Element {
             </li>
           </ul>
           <p>
-            Competitor and cloud prices are public list prices in USD, converted
-            at 1 USD = {pricingConfig.fx.usdToEur} EUR (
-            {formatDate(pricingConfig.fx.lastVerified)}). They vary by region,
-            workload, and commercial agreement. AWS uses{" "}
+            Competitor and cloud prices are public list prices in USD
+            {currency === "EUR"
+              ? `, converted for comparison at $1 = €${pricingConfig.fx.usdToEur} (FX reference date ${formatDate(pricingConfig.fx.lastVerified)})`
+              : ""}
+            . They vary by region, workload, and commercial agreement. AWS uses{" "}
             {pricingConfig.aws.region} rates; Azure prices are placeholders.
           </p>
           <div className={styles.sourcesTable}>
