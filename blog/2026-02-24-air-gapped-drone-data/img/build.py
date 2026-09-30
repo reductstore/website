@@ -33,7 +33,21 @@ def architecture():
     return d
 
 
+def workflow():
+    d = Diagram()
+    d.card(0, 0, 284, 80, "Drone sensors", "camera, IMU, lidar")
+    d.arrow((142, 80), (142, 141))
+    d.card(0, 145, 284, 96, "Edge ReductStore", bullets=["write with labels", "FIFO retention"], brand=True)
+    d.arrow((142, 241), (142, 321))
+    d.text(152, 286, "(when trusted link is available)", "text-note", "start")
+    d.card(0, 325, 284, 96, "Replication task", bullets=["filter by labels", "include context"])
+    d.arrow((142, 421), (142, 501))
+    d.card(0, 505, 284, 80, "Ground ReductStore", bullets=["query & audit"], brand=True)
+    return d
+
+
 if __name__ == "__main__":
+    workflow().save(HERE / "drone-workflow.svg")
     diagram = architecture()
     diagram.save(HERE / "architecture-drone.svg")
     render_social(diagram, HERE / "architecture-drone-social.png")

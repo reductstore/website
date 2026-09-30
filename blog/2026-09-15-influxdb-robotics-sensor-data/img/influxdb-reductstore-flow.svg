@@ -1,15 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 10 628 470" width="100%" height="100%">
-<defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.1 -10 629.1 473.9" width="100%" height="100%">
+  <defs>
     <style>
       :root {
         --card-bg: #FFFFFF;
-        --card-brand: #2B0548;
+        --card-brand: #8A6FA8;
         --card-stroke: #333333;
         --shadow: #000000;
         --text-main: #333333;
         --text-muted: #666666;
         --text-inverse: #FFFFFF;
         --line: #333333;
+        --zone: #F7F4FA;
+        --label-a: #D5E8D4;
+        --label-a-stroke: #82B366;
+        --label-b: #E1D5E7;
+        --label-b-stroke: #9673A6;
+        --label-c: #F8CECC;
+        --label-c-stroke: #B85450;
       }
 
       @media (prefers-color-scheme: dark) {
@@ -20,6 +27,7 @@
           --text-main: #EFEFEF;
           --text-muted: #A0A0A0;
           --line: #EFEFEF;
+          --zone: #262129;
         }
       }
 
@@ -28,50 +36,72 @@
       }
       .mono {
         font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        white-space: pre;
       }
 
       .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
       .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
       .shadow { fill: var(--shadow); }
+      .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
+      .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .hatch-line { stroke: var(--line); stroke-width: 1.5; }
+      .record { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1; }
+      .label-a { fill: var(--label-a); stroke: var(--label-a-stroke); }
+      .label-b { fill: var(--label-b); stroke: var(--label-b-stroke); }
+      .label-c { fill: var(--label-c); stroke: var(--label-c-stroke); }
+      .dot { fill: var(--text-muted); }
 
+      .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
       .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
       .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-item { font-weight: 600; font-size: 15px; fill: var(--text-main); }
+      .text-item-inverse { font-weight: 600; font-size: 15px; fill: var(--text-inverse); }
       .text-subtitle { font-size: 14px; fill: var(--text-muted); }
       .text-subtitle-inverse { font-size: 14px; fill: var(--text-inverse); }
+      .text-bullet { font-size: 15px; fill: var(--text-main); }
+      .text-bullet-inverse { font-size: 15px; fill: var(--text-inverse); }
       .text-label { font-size: 13px; fill: var(--text-muted); }
       .text-label-strong { font-size: 13px; font-weight: 700; fill: var(--text-main); }
+      .text-label-inverse { font-size: 13px; fill: var(--text-inverse); }
+      .text-note { font-size: 13px; font-style: italic; fill: var(--text-muted); }
 
       .connector { stroke: var(--line); stroke-width: 2; fill: none; }
       .link { stroke: var(--line); stroke-width: 2; stroke-dasharray: 5 5; fill: none; }
+      .guide { stroke: var(--text-muted); stroke-width: 1; stroke-dasharray: 3 4; fill: none; }
       .arrow-head { fill: var(--line); }
     </style>
 
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
     </marker>
+    <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" class="hatch-line" />
+    </pattern>
   </defs>
-<rect x="168.0" y="28" width="280" height="80" rx="16" class="shadow" />
-<rect x="160.0" y="20" width="280" height="80" rx="16" class="card-standard" />
-<text x="300.0" y="54.0" class="text-title" text-anchor="middle">Robot sensors</text>
-<text x="300.0" y="78.0" class="text-subtitle mono" text-anchor="middle">camera, LiDAR, waveform</text>
-<path d="M300.0,100 L300.0,146" class="connector" marker-end="url(#arrow)" />
-<rect x="168.0" y="158" width="280" height="80" rx="16" class="shadow" />
-<rect x="160.0" y="150" width="280" height="80" rx="16" class="card-standard" />
-<text x="300.0" y="184.0" class="text-title" text-anchor="middle">Processing and fan-out</text>
-<text x="300.0" y="208.0" class="text-subtitle mono" text-anchor="middle">event time + stable IDs</text>
-<path d="M300.0,230 L300.0,262 M135.0,262 L465.0,262" class="connector" />
-<path d="M135.0,262 L135.0,326" class="connector" marker-end="url(#arrow)" />
-<path d="M465.0,262 L465.0,326" class="connector" marker-end="url(#arrow)" />
-<text x="145.0" y="292" class="text-label mono" text-anchor="start">numeric metrics</text>
-<text x="455.0" y="292" class="text-label-strong mono" text-anchor="end">raw binary payloads</text>
-<rect x="8" y="338" width="270" height="80" rx="16" class="shadow" />
-<rect x="0" y="330" width="270" height="80" rx="16" class="card-standard" />
-<text x="135.0" y="364.0" class="text-title" text-anchor="middle">InfluxDB</text>
-<text x="135.0" y="388.0" class="text-subtitle mono" text-anchor="middle">metrics, dashboards, alerts</text>
-<rect x="338" y="338" width="270" height="80" rx="16" class="shadow" />
-<rect x="330" y="330" width="270" height="80" rx="16" class="card-brand" />
-<text x="465.0" y="364.0" class="text-title-inverse" text-anchor="middle">ReductStore</text>
-<text x="465.0" y="388.0" class="text-subtitle-inverse mono" text-anchor="middle">frames, scans, chunks</text>
-<path d="M135.0,422 L135.0,446 L465.0,446 L465.0,422" class="link" />
-<text x="300.0" y="470" class="text-label mono" text-anchor="middle">same event time, robot_id, sensor_id</text>
+  <rect x="168" y="8" width="280" height="80" rx="16" class="shadow" />
+  <rect x="160" y="0" width="280" height="80" rx="16" class="card-standard" />
+  <text x="300" y="34" class="text-title" text-anchor="middle">Robot sensors</text>
+  <text x="300" y="58" class="text-subtitle mono" text-anchor="middle">camera, LiDAR, waveform</text>
+  <path d="M300,80 L300,126" class="connector" marker-end="url(#arrow)" />
+  <rect x="168" y="138" width="280" height="80" rx="16" class="shadow" />
+  <rect x="160" y="130" width="280" height="80" rx="16" class="card-standard" />
+  <text x="300" y="164" class="text-title" text-anchor="middle">Processing and fan-out</text>
+  <text x="300" y="188" class="text-subtitle mono" text-anchor="middle">event time + stable IDs</text>
+  <path d="M300,210 L300,242" class="connector" />
+  <path d="M135,242 L465,242" class="connector" />
+  <path d="M135,242 L135,306" class="connector" marker-end="url(#arrow)" />
+  <path d="M465,242 L465,306" class="connector" marker-end="url(#arrow)" />
+  <text x="145" y="272" class="text-label mono" text-anchor="start">numeric metrics</text>
+  <text x="455" y="272" class="text-label-strong mono" text-anchor="end">raw binary payloads</text>
+  <rect x="8" y="318" width="270" height="80" rx="16" class="shadow" />
+  <rect x="0" y="310" width="270" height="80" rx="16" class="card-standard" />
+  <text x="135" y="344" class="text-title" text-anchor="middle">InfluxDB</text>
+  <text x="135" y="368" class="text-subtitle mono" text-anchor="middle">metrics, dashboards, alerts</text>
+  <rect x="338" y="318" width="270" height="80" rx="16" class="shadow" />
+  <rect x="330" y="310" width="270" height="80" rx="16" class="card-brand" />
+  <text x="465" y="344" class="text-title-inverse" text-anchor="middle">ReductStore</text>
+  <text x="465" y="368" class="text-subtitle-inverse mono" text-anchor="middle">frames, scans, chunks</text>
+  <path d="M135,402 L135,426 L465,426 L465,402" class="link" />
+  <text x="300" y="450" class="text-label mono" text-anchor="middle">same event time, robot_id, sensor_id</text>
 </svg>

@@ -9,7 +9,7 @@ const useCases = [
   },
   {
     title: "Mobile Robots",
-    link: "/blog/amr-fleet-data-infrastructure",
+    link: "/blog/database-for-robotics",
     icon: "LuRoute",
     data: "LiDAR scans, cameras",
   },
