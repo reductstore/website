@@ -312,7 +312,7 @@ const config = {
                 to: "/docs/getting-started",
               },
               {
-                label: "Playground Datasets",
+                label: "Playground",
                 to: "/datasets",
               },
               {
@@ -430,7 +430,7 @@ const config = {
                 href: "/docs/http-api",
               },
               {
-                label: "Playground Datasets",
+                label: "Playground",
                 to: "/datasets",
               },
               {

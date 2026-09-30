@@ -20,7 +20,7 @@ const DESCRIPTIONS = {
   // Developers
   "/download": "Binaries, Docker images, and packages",
   "/docs/getting-started": "Guides, API reference, and SDK docs",
-  "/datasets": "Sample datasets for local testing",
+  "/datasets": "Live robot, factory, and image data to query",
   "https://github.com/reductstore/reductstore": "Open source, Apache-2.0",
   "https://community.reduct.store": "Forums, Discord, and GitHub issues",
   ...Object.fromEntries(useCases.map(({ link, data }) => [link, data])),

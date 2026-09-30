@@ -1,0 +1,224 @@
+.intro {
+  max-width: 44rem;
+  margin: 2rem 0 1.5rem;
+  font-size: var(--reduct-font-size-subtitle);
+  line-height: 1.6;
+}
+
+.connection {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0 0 1.5rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+  background-color: #f7f4fa;
+}
+
+.connection dt {
+  font-size: 0.8rem;
+  color: var(--reduct-dimmed);
+}
+
+.connection dd {
+  margin: 0.25rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+.sectionTitle {
+  margin: 3rem 0 1.25rem;
+}
+
+.sectionTitle code,
+.bucket h3 code {
+  font-size: 0.7em;
+  vertical-align: middle;
+}
+
+.buckets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.bucket {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(43, 5, 72, 0.1);
+  border-radius: 12px;
+  background-color: var(--reduct-surface-0);
+}
+
+.bucketImage {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.bucketBody {
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.bucketBody h3 {
+  margin-bottom: 0.4rem;
+  font-size: 1.1rem;
+}
+
+.bucketBody p {
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.bucketBody ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+}
+
+.bucketBody li {
+  margin: 0.3rem 0;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.bucketBody li code {
+  margin-right: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.examples {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.example {
+  padding: 1.25rem 1.5rem 1.5rem;
+  border: 1px solid rgba(43, 5, 72, 0.1);
+  border-radius: 12px;
+  background-color: var(--reduct-surface-0);
+}
+
+.example h3 {
+  margin-bottom: 0.3rem;
+  font-size: 1.15rem;
+}
+
+.summary {
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.exampleBody {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.exampleCode :global(.theme-code-block) {
+  margin-bottom: 0;
+}
+
+.exampleOutput {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.exampleOutput :global(.theme-code-block) {
+  margin-bottom: 0.75rem;
+}
+
+.exampleOutput pre code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.outputTitle {
+  margin: 0 0 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--reduct-dimmed);
+}
+
+.images {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.images img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.setupIntro {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+}
+
+.fullScript {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.fullScript summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--ifm-color-primary);
+}
+
+.fullScript :global(.theme-code-block) {
+  margin-top: 0.5rem;
+}
+
+.docsLink {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.footnote {
+  margin: 2.5rem 0 var(--reduct-bottom-page-margin);
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+html[data-theme="dark"] .connection {
+  background-color: var(--reduct-surface-1);
+}
+
+html[data-theme="dark"] .bucket,
+html[data-theme="dark"] .example {
+  background-color: var(--reduct-surface-1);
+  border-color: var(--reduct-border);
+}
+
+@media (max-width: 996px) {
+  .buckets,
+  .exampleBody {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .connection {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
