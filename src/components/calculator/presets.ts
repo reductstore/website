@@ -10,9 +10,11 @@ export const PRESETS: WorkloadPreset[] = [
     recordingHoursPerDay: 2,
     hotDays: 30,
     retentionDays: 90,
+    recommended: "foxglove",
     streams: [
       {
         id: "drone-0",
+        dataClass: "blob",
         name: "Camera",
         enabled: true,
         count: 1,
@@ -21,6 +23,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "drone-1",
+        dataClass: "blob",
         name: "LiDAR",
         enabled: true,
         count: 1,
@@ -29,6 +32,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "drone-2",
+        dataClass: "metric",
         name: "Telemetry",
         enabled: true,
         count: 1,
@@ -37,6 +41,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "drone-3",
+        dataClass: "metric",
         name: "IMU",
         enabled: true,
         count: 1,
@@ -45,6 +50,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "drone-4",
+        dataClass: "log",
         name: "Logs",
         enabled: true,
         count: 1,
@@ -61,9 +67,11 @@ export const PRESETS: WorkloadPreset[] = [
     recordingHoursPerDay: 8,
     hotDays: 30,
     retentionDays: 90,
+    recommended: "foxglove",
     streams: [
       {
         id: "mobile-robot-0",
+        dataClass: "blob",
         name: "Cameras",
         enabled: true,
         count: 2,
@@ -72,6 +80,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "mobile-robot-1",
+        dataClass: "blob",
         name: "LiDAR",
         enabled: true,
         count: 1,
@@ -80,6 +89,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "mobile-robot-2",
+        dataClass: "metric",
         name: "Telemetry",
         enabled: true,
         count: 1,
@@ -88,6 +98,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "mobile-robot-3",
+        dataClass: "metric",
         name: "IMU",
         enabled: true,
         count: 1,
@@ -96,6 +107,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "mobile-robot-4",
+        dataClass: "log",
         name: "Logs",
         enabled: true,
         count: 1,
@@ -112,9 +124,11 @@ export const PRESETS: WorkloadPreset[] = [
     recordingHoursPerDay: 8,
     hotDays: 30,
     retentionDays: 30,
+    recommended: "foxglove",
     streams: [
       {
         id: "autonomous-vehicle-0",
+        dataClass: "blob",
         name: "Cameras",
         enabled: true,
         count: 6,
@@ -123,6 +137,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "autonomous-vehicle-1",
+        dataClass: "blob",
         name: "LiDAR",
         enabled: true,
         count: 2,
@@ -131,6 +146,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "autonomous-vehicle-2",
+        dataClass: "blob",
         name: "Radar",
         enabled: true,
         count: 4,
@@ -139,6 +155,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "autonomous-vehicle-3",
+        dataClass: "metric",
         name: "CAN / telemetry",
         enabled: true,
         count: 1,
@@ -147,6 +164,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "autonomous-vehicle-4",
+        dataClass: "log",
         name: "Logs",
         enabled: true,
         count: 1,
@@ -163,9 +181,11 @@ export const PRESETS: WorkloadPreset[] = [
     recordingHoursPerDay: 16,
     hotDays: 30,
     retentionDays: 90,
+    recommended: "tiger",
     streams: [
       {
         id: "industrial-robot-0",
+        dataClass: "blob",
         name: "Camera",
         enabled: true,
         count: 1,
@@ -174,6 +194,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "industrial-robot-1",
+        dataClass: "metric",
         name: "Joint telemetry",
         enabled: true,
         count: 1,
@@ -182,6 +203,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "industrial-robot-2",
+        dataClass: "metric",
         name: "Force / torque",
         enabled: true,
         count: 1,
@@ -190,6 +212,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "industrial-robot-3",
+        dataClass: "metric",
         name: "PLC data",
         enabled: true,
         count: 1,
@@ -198,6 +221,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "industrial-robot-4",
+        dataClass: "log",
         name: "Logs",
         enabled: true,
         count: 1,
@@ -214,9 +238,11 @@ export const PRESETS: WorkloadPreset[] = [
     recordingHoursPerDay: 24,
     hotDays: 30,
     retentionDays: 30,
+    recommended: "mongodb",
     streams: [
       {
         id: "computer-vision-0",
+        dataClass: "blob",
         name: "Images",
         enabled: true,
         count: 1,
@@ -225,6 +251,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "computer-vision-1",
+        dataClass: "metadata",
         name: "Detection metadata",
         enabled: true,
         count: 1,
@@ -233,6 +260,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "computer-vision-2",
+        dataClass: "metadata",
         name: "Events",
         enabled: true,
         count: 1,
@@ -241,6 +269,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "computer-vision-3",
+        dataClass: "metric",
         name: "Diagnostics",
         enabled: true,
         count: 1,
@@ -257,9 +286,11 @@ export const PRESETS: WorkloadPreset[] = [
     recordingHoursPerDay: 24,
     hotDays: 30,
     retentionDays: 90,
+    recommended: "tiger",
     streams: [
       {
         id: "vibration-0",
+        dataClass: "blob",
         name: "Vibration windows",
         enabled: true,
         count: 4,
@@ -268,6 +299,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "vibration-1",
+        dataClass: "metric",
         name: "Machine telemetry",
         enabled: true,
         count: 1,
@@ -276,6 +308,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "vibration-2",
+        dataClass: "metric",
         name: "Condition metrics",
         enabled: true,
         count: 1,
@@ -284,6 +317,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "vibration-3",
+        dataClass: "metadata",
         name: "Events",
         enabled: true,
         count: 1,
@@ -300,9 +334,11 @@ export const PRESETS: WorkloadPreset[] = [
     recordingHoursPerDay: 24,
     hotDays: 30,
     retentionDays: 90,
+    recommended: "influx",
     streams: [
       {
         id: "plc-0",
+        dataClass: "metric",
         name: "Process telemetry",
         enabled: true,
         count: 1,
@@ -311,6 +347,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "plc-1",
+        dataClass: "metric",
         name: "Fast signals",
         enabled: true,
         count: 1,
@@ -319,6 +356,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "plc-2",
+        dataClass: "metadata",
         name: "Events",
         enabled: true,
         count: 1,
@@ -327,6 +365,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "plc-3",
+        dataClass: "log",
         name: "Logs",
         enabled: true,
         count: 1,
@@ -343,9 +382,11 @@ export const PRESETS: WorkloadPreset[] = [
     recordingHoursPerDay: 4,
     hotDays: 30,
     retentionDays: 90,
+    recommended: "foxglove",
     streams: [
       {
         id: "ros-0",
+        dataClass: "blob",
         name: "Camera topics",
         enabled: true,
         count: 2,
@@ -354,6 +395,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "ros-1",
+        dataClass: "blob",
         name: "Point clouds",
         enabled: true,
         count: 1,
@@ -362,6 +404,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "ros-2",
+        dataClass: "metric",
         name: "ROS telemetry",
         enabled: true,
         count: 1,
@@ -370,6 +413,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "ros-3",
+        dataClass: "metric",
         name: "TF / poses",
         enabled: true,
         count: 1,
@@ -378,6 +422,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "ros-4",
+        dataClass: "log",
         name: "Logs",
         enabled: true,
         count: 1,
@@ -394,9 +439,11 @@ export const PRESETS: WorkloadPreset[] = [
     recordingHoursPerDay: 8,
     hotDays: 30,
     retentionDays: 90,
+    recommended: "direct",
     streams: [
       {
         id: "custom-0",
+        dataClass: "blob",
         name: "Stream 1",
         enabled: true,
         count: 1,
@@ -405,6 +452,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "custom-1",
+        dataClass: "metric",
         name: "Stream 2",
         enabled: false,
         count: 1,
@@ -413,6 +461,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "custom-2",
+        dataClass: "metric",
         name: "Stream 3",
         enabled: false,
         count: 1,
@@ -421,6 +470,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "custom-3",
+        dataClass: "metadata",
         name: "Stream 4",
         enabled: false,
         count: 1,
@@ -429,6 +479,7 @@ export const PRESETS: WorkloadPreset[] = [
       },
       {
         id: "custom-4",
+        dataClass: "log",
         name: "Stream 5",
         enabled: false,
         count: 1,

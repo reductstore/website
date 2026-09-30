@@ -1,5 +1,7 @@
 import type {
   BackendPricing,
+  CompetitorAssumptions,
+  CompetitorId,
   CostBreakdown,
   LicenseTier,
   ErasureCoding,
@@ -67,7 +69,10 @@ export type Estimate = {
 const finite = (value: number) => (Number.isFinite(value) ? value : 0);
 const nonNegative = (value: number) => Math.max(0, finite(value));
 
-export function packFactor(recordSizeKb: number, block: BlockConfig): number {
+export function packFactor(
+  recordSizeKb: number,
+  block: { sizeKb: number; maxRecords: number },
+): number {
   if (!(recordSizeKb > 0)) return 1;
   return Math.max(
     1,
@@ -329,5 +334,428 @@ export function estimate(
       dailyPerUnitTb > 0
         ? nonNegative(storage.edgeDiskTbPerUnit) / dailyPerUnitTb
         : Infinity,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Alternative architectures
+
+export type MarginalTier = { upTo: number | null; rate: number };
+
+export function marginalCost(
+  usage: number,
+  included: number,
+  tiers: MarginalTier[],
+): number {
+  let remaining = Math.max(0, finite(usage) - included);
+  let lower = included;
+  let total = 0;
+  for (const tier of tiers) {
+    if (remaining <= 0) break;
+    const capacity =
+      tier.upTo == null ? remaining : Math.max(0, tier.upTo - lower);
+    const amount = Math.min(remaining, capacity);
+    total += amount * tier.rate;
+    remaining -= amount;
+    if (tier.upTo != null) lower = tier.upTo;
+  }
+  return total;
+}
+
+type Prices = typeof import("./pricing").pricingConfig;
+
+export type CostComponent = { label: string; eurYear: number };
+
+export type Route = { target: string; streams: string[] };
+
+export type CostSide = {
+  label: string;
+  components: CostComponent[];
+  totalEurYear: number;
+  lowerBound: boolean;
+  notes: string[];
+  routes: Route[];
+};
+
+export type BatchConfig = {
+  sizeKb: number;
+  maxRecords: number;
+  opsPerObject: number;
+};
+
+export type ComparisonConfig = CalculatorConfig & {
+  backendName: string;
+  batch: BatchConfig;
+  prices: Prices;
+  competitor: CompetitorId;
+  assumptions: CompetitorAssumptions;
+};
+
+export type Comparison = {
+  estimate: Estimate;
+  reduct: CostSide;
+  alternative: CostSide;
+  savingEurYear: number;
+  savingPercent: number;
+};
+
+const sumEur = (components: CostComponent[]) =>
+  components.reduce((sum, c) => sum + c.eurYear, 0);
+
+// Object storage for a subset of streams, written as batched objects.
+export function objectStorageEurYear(
+  streams: StreamWorkload[],
+  bands: Bands,
+  readPercent: number,
+  pricing: BackendPricing,
+  batch: BatchConfig,
+): number {
+  let monthly = 0;
+  for (const s of streams) {
+    const perObject = packFactor(s.stream.recordSizeKb, batch);
+    const cost = streamCost(
+      s,
+      bands,
+      readPercent,
+      pricing,
+      s.stream.recordSizeKb * perObject,
+      batch.opsPerObject / perObject,
+    );
+    monthly +=
+      cost.storageEurMonth + cost.operationsEurMonth + cost.retrievalEurMonth;
+  }
+  return 12 * monthly;
+}
+
+const retainedTb = (streams: StreamWorkload[], retentionDays: number) =>
+  streams.reduce((sum, s) => sum + s.dataMonthTb, 0) *
+  (retentionDays / DAYS_PER_MONTH);
+
+const monthlyTb = (streams: StreamWorkload[]) =>
+  streams.reduce((sum, s) => sum + s.dataMonthTb, 0);
+
+const names = (streams: StreamWorkload[]) => streams.map((s) => s.stream.name);
+
+function withObjectStorage(
+  components: CostComponent[],
+  routes: Route[],
+  rest: StreamWorkload[],
+  ctx: {
+    bands: Bands;
+    readPercent: number;
+    config: ComparisonConfig;
+  },
+) {
+  if (rest.length === 0) return;
+  components.push({
+    label: `${ctx.config.backendName} object storage`,
+    eurYear: objectStorageEurYear(
+      rest,
+      ctx.bands,
+      ctx.readPercent,
+      ctx.config.pricing,
+      ctx.config.batch,
+    ),
+  });
+  routes.push({ target: ctx.config.backendName, streams: names(rest) });
+}
+
+export function alternativeCost(
+  workload: Workload,
+  storage: StorageInput,
+  units: number,
+  config: ComparisonConfig,
+): CostSide {
+  const { prices, assumptions } = config;
+  const usd = (value: number) => value * prices.fx.usdToEur;
+  const retention = Math.max(storage.retentionDays, storage.hotDays);
+  const bands = ageBands(storage.hotDays, retention);
+  const readShare =
+    Math.min(100, nonNegative(storage.readPercentPerMonth)) / 100;
+  const ctx = { bands, readPercent: storage.readPercentPerMonth, config };
+  const byClass = (...classes: string[]) =>
+    workload.streams.filter((s) => classes.includes(s.stream.dataClass));
+
+  if (config.competitor === "foxglove") {
+    const f = prices.foxglove;
+    const retained = workload.totalRetainedTb;
+    const seats = Math.max(0, assumptions.foxgloveDeveloperSeats);
+    const components: CostComponent[] = [
+      { label: "Pro base", eurYear: usd(f.baseUsdPerMonth * 12) },
+      {
+        label: "Storage",
+        eurYear: usd(
+          12 *
+            marginalCost(retained, f.storageIncludedTb, f.storageUsdPerTbMonth),
+        ),
+      },
+      {
+        label: "Indexing",
+        eurYear: usd(
+          12 *
+            marginalCost(
+              workload.totalDataMonthTb,
+              f.indexingIncludedTb,
+              f.indexingUsdPerTb,
+            ),
+        ),
+      },
+      {
+        label: "Bandwidth",
+        eurYear: usd(
+          12 *
+            marginalCost(
+              retained * readShare,
+              f.bandwidthIncludedTb,
+              f.bandwidthUsdPerTb,
+            ),
+        ),
+      },
+      {
+        label: "Query",
+        eurYear: usd(
+          12 *
+            marginalCost(
+              assumptions.foxgloveQueryHoursPerMonth,
+              f.queryIncludedHours,
+              f.queryUsdPerHour,
+            ),
+        ),
+      },
+      {
+        label: "Developer seats",
+        eurYear: usd(
+          12 *
+            Math.max(0, seats - f.includedDeveloperSeats) *
+            f.extraDeveloperSeatUsdPerMonth,
+        ),
+      },
+      {
+        label: "Devices",
+        eurYear: usd(
+          12 *
+            Math.max(0, Math.ceil(units) - f.includedDevices) *
+            f.extraDeviceUsdPerMonth,
+        ),
+      },
+    ];
+    return {
+      label: "Foxglove Pro",
+      components,
+      totalEurYear: sumEur(components),
+      lowerBound: false,
+      notes: [
+        "Foxglove Pro public list-price estimate. Enterprise pricing is custom.",
+      ],
+      routes: [{ target: "Foxglove Pro", streams: names(workload.streams) }],
+    };
+  }
+
+  if (config.competitor === "tiger") {
+    const t = prices.tiger;
+    const inDb = byClass("metric", "metadata");
+    const rest = byClass("blob", "log");
+    const ratio = Math.max(1, assumptions.tigerCompressionRatio);
+    const monthly = monthlyTb(inDb);
+    const hotGb = ((monthly * bands.hot) / DAYS_PER_MONTH / ratio) * 1000;
+    const tieredGb =
+      ((monthly * Math.max(0, retention - bands.hot)) /
+        DAYS_PER_MONTH /
+        ratio) *
+      1000;
+    const components: CostComponent[] = [
+      {
+        label: "Minimum published compute",
+        eurYear: usd(12 * t.scaleMinComputeUsdPerMonth),
+      },
+      {
+        label: "Hot database storage",
+        eurYear: usd(12 * hotGb * t.scaleStorageUsdPerGbMonth),
+      },
+      {
+        label: "Tiered database storage",
+        eurYear: usd(12 * tieredGb * t.tieredStorageUsdPerGbMonth),
+      },
+    ];
+    const routes: Route[] = [{ target: "Tiger Cloud", streams: names(inDb) }];
+    withObjectStorage(components, routes, rest, ctx);
+    return {
+      label: `Tiger Cloud + ${config.backendName}`,
+      components,
+      totalEurYear: sumEur(components),
+      lowerBound: true,
+      notes: [
+        "Uses Tiger Cloud's minimum published compute price. Actual compute depends on workload.",
+        `Database storage assumes ${ratio}× compression.`,
+      ],
+      routes,
+    };
+  }
+
+  if (config.competitor === "influx") {
+    const i = prices.influx;
+    const inDb = byClass("metric");
+    const rest = byClass("metadata", "blob", "log");
+    const monthly = monthlyTb(inDb);
+    const retainedGb =
+      retainedTb(inDb, retention) *
+      1000 *
+      Math.max(0, assumptions.influxStorageToRawRatio);
+    const components: CostComponent[] = [
+      {
+        label: "Data in",
+        eurYear: usd(12 * monthly * 1_000_000 * i.dataInUsdPerMb),
+      },
+      {
+        label: "Storage",
+        eurYear: usd(
+          12 *
+            retainedGb *
+            prices.mongodb.hoursPerMonth *
+            i.storageUsdPerGbHour,
+        ),
+      },
+      {
+        label: "Queries",
+        eurYear: usd(
+          12 *
+            (Math.max(0, assumptions.influxQueriesPerMonth) / 100) *
+            i.queryUsdPer100,
+        ),
+      },
+      {
+        label: "Data out",
+        eurYear: usd(
+          12 *
+            retainedTb(inDb, retention) *
+            1000 *
+            readShare *
+            i.dataOutUsdPerGb,
+        ),
+      },
+    ];
+    const routes: Route[] = [
+      { target: "InfluxDB Cloud Serverless", streams: names(inDb) },
+    ];
+    withObjectStorage(components, routes, rest, ctx);
+    return {
+      label: `InfluxDB Cloud Serverless + ${config.backendName}`,
+      components,
+      totalEurYear: sumEur(components),
+      lowerBound: false,
+      notes: [
+        "InfluxDB Cloud Serverless public list-price estimate.",
+        "At larger production scale, InfluxData positions Cloud Dedicated; its pricing is not public.",
+      ],
+      routes,
+    };
+  }
+
+  if (config.competitor === "mongodb") {
+    const m = prices.mongodb;
+    const tierName = m.tiers[assumptions.atlasTier]
+      ? assumptions.atlasTier
+      : m.defaultTier;
+    const tier = m.tiers[tierName];
+    const inDb = byClass("metadata", "metric");
+    const rest = byClass("blob", "log");
+    const components: CostComponent[] = [
+      {
+        label: `Atlas ${tierName} base cluster`,
+        eurYear: usd(12 * tier.usdPerHour * m.hoursPerMonth),
+      },
+    ];
+    const routes: Route[] = [
+      { target: `MongoDB Atlas ${tierName}`, streams: names(inDb) },
+    ];
+    withObjectStorage(components, routes, rest, ctx);
+    const overflow = retainedTb(inDb, retention) * 1000 > tier.defaultStorageGb;
+    return {
+      label: `MongoDB Atlas ${tierName} + ${config.backendName}`,
+      components,
+      totalEurYear: sumEur(components),
+      lowerBound: overflow,
+      notes: [
+        "MongoDB Atlas public base price; region, storage, IOPS, and backups change the cluster price.",
+        ...(overflow
+          ? [
+              `The ${tierName} tier includes ${tier.defaultStorageGb} GB. Additional Atlas storage is not included in this public base-price estimate.`,
+            ]
+          : []),
+      ],
+      routes,
+    };
+  }
+
+  const components: CostComponent[] = [];
+  const routes: Route[] = [];
+  withObjectStorage(components, routes, workload.streams, ctx);
+  return {
+    label: `Direct ${config.backendName}`,
+    components,
+    totalEurYear: sumEur(components),
+    lowerBound: false,
+    notes: [
+      "A custom pipeline that batches records into objects of about 64 MB.",
+    ],
+    routes,
+  };
+}
+
+export function compare(
+  workloadInput: WorkloadInput,
+  storage: StorageInput,
+  config: ComparisonConfig,
+): Comparison {
+  const result = estimate(workloadInput, storage, config);
+  const reductComponents: CostComponent[] = [
+    {
+      label:
+        storage.backend === "minio"
+          ? "File system storage"
+          : `${config.backendName} storage`,
+      eurYear: result.reduct.storageEurYear,
+    },
+    {
+      label: "Requests and retrieval",
+      eurYear: result.reduct.operationsEurYear + result.reduct.retrievalEurYear,
+    },
+    { label: "ReductStore license", eurYear: result.reduct.licenseEurYear },
+  ];
+  const reduct: CostSide = {
+    label:
+      storage.backend === "minio"
+        ? "ReductStore on a file system"
+        : `ReductStore + ${config.backendName}`,
+    components: reductComponents,
+    totalEurYear: result.reduct.totalEurYear,
+    lowerBound: false,
+    notes: [],
+    routes: [
+      {
+        target:
+          storage.backend === "minio"
+            ? "ReductStore"
+            : `ReductStore + ${config.backendName}`,
+        streams: names(result.workload.streams),
+      },
+    ],
+  };
+  const alternative = alternativeCost(
+    result.workload,
+    storage,
+    nonNegative(workloadInput.units),
+    config,
+  );
+  const savingEurYear = alternative.totalEurYear - reduct.totalEurYear;
+  return {
+    estimate: result,
+    reduct,
+    alternative,
+    savingEurYear,
+    savingPercent:
+      alternative.totalEurYear > 0
+        ? (savingEurYear / alternative.totalEurYear) * 100
+        : 0,
   };
 }

@@ -13,22 +13,23 @@ import {
   LuSlidersHorizontal,
 } from "react-icons/lu";
 import type { IconType } from "react-icons";
-import { estimate } from "./calculate";
+import { compare } from "./calculate";
 import {
   LICENSE_TIERS,
   LICENSE_MIN_TB,
+  OBJECT_STORAGE_BATCH,
   REDUCT_BLOCK,
   DEFAULT_MINIO_EUR_PER_TB_MONTH,
   backendPricing,
+  pricingConfig,
 } from "./pricing";
 import { PRESETS } from "./presets";
-import type { BackendId, StreamInput } from "./types";
+import type { BackendId, CompetitorId, StreamInput } from "./types";
 import CostComparison from "./CostComparison";
 import StreamEditor, { StreamDraft } from "./StreamEditor";
 import NumberField from "./NumberField";
 import {
   formatCount,
-  formatReduction,
   formatDays,
   formatEur,
   formatPercent,
@@ -54,6 +55,39 @@ const BACKENDS: { id: BackendId; label: string }[] = [
   { id: "azure", label: "Azure Blob" },
   { id: "minio", label: "MinIO / on premises" },
 ];
+
+const COMPETITORS: { id: CompetitorId; label: string; about: string }[] = [
+  {
+    id: "foxglove",
+    label: "Foxglove Pro",
+    about: "Managed robotics data platform",
+  },
+  {
+    id: "tiger",
+    label: "Tiger Cloud (Timescale) + object storage",
+    about: "Time-series database, binary data in object storage",
+  },
+  {
+    id: "influx",
+    label: "InfluxDB Cloud Serverless + object storage",
+    about: "Metrics database, other data in object storage",
+  },
+  {
+    id: "mongodb",
+    label: "MongoDB Atlas + object storage",
+    about: "Document database for results, images in object storage",
+  },
+  {
+    id: "direct",
+    label: "Direct object storage",
+    about: "Custom pipeline that batches records into 64 MB objects",
+  },
+];
+
+const VERIFIED = new Date(pricingConfig.verifiedAt).toLocaleDateString(
+  "en-GB",
+  { day: "numeric", month: "short", year: "numeric" },
+);
 
 const toDraft = (streams: StreamInput[]): StreamDraft[] =>
   streams.map((s) => ({
@@ -83,6 +117,9 @@ function useDebouncedEffect(effect: () => void, deps: unknown[], ms: number) {
   }, deps);
 }
 
+const backendLabel = (backend: BackendId) =>
+  BACKENDS.find((b) => b.id === backend)?.label ?? "";
+
 export default function CostCalculator(): JSX.Element {
   const [presetId, setPresetId] = useState("mobile-robot");
   const preset = PRESETS.find((p) => p.id === presetId) ?? PRESETS[0];
@@ -101,6 +138,24 @@ export default function CostCalculator(): JSX.Element {
   const [minioCost, setMinioCost] = useState(
     String(DEFAULT_MINIO_EUR_PER_TB_MONTH),
   );
+  const [competitorChoice, setCompetitorChoice] = useState<
+    CompetitorId | "recommended"
+  >("recommended");
+  const [seats, setSeats] = useState(
+    String(pricingConfig.foxglove.includedDeveloperSeats),
+  );
+  const [queryHours, setQueryHours] = useState("20");
+  const [compression, setCompression] = useState(
+    String(pricingConfig.tiger.defaultCompressionRatio),
+  );
+  const [influxQueries, setInfluxQueries] = useState(
+    String(pricingConfig.influx.defaultQueriesPerMonth),
+  );
+  const [influxRatio, setInfluxRatio] = useState("1");
+  const [atlasTier, setAtlasTier] = useState(pricingConfig.mongodb.defaultTier);
+  const competitor =
+    competitorChoice === "recommended" ? preset.recommended : competitorChoice;
+  const competitorInfo = COMPETITORS.find((c) => c.id === competitor);
 
   const selectPreset = (id: string) => {
     const next = PRESETS.find((p) => p.id === id);
@@ -172,11 +227,23 @@ export default function CostCalculator(): JSX.Element {
       readPercentPerMonth: safe(readPercent, 0, 0, 100),
       minioEurPerTbMonth: safe(minioCost, 0),
     };
-    return estimate(workload, storage, {
+    return compare(workload, storage, {
       pricing: backendPricing(backend, storage.minioEurPerTbMonth),
       licenseTiers: LICENSE_TIERS,
       licenseMinTb: LICENSE_MIN_TB,
       block: REDUCT_BLOCK,
+      backendName: backend === "minio" ? "MinIO" : backendLabel(backend),
+      batch: OBJECT_STORAGE_BATCH,
+      prices: pricingConfig,
+      competitor,
+      assumptions: {
+        foxgloveDeveloperSeats: safe(seats, 3),
+        foxgloveQueryHoursPerMonth: safe(queryHours, 0),
+        tigerCompressionRatio: safe(compression, 5, 1),
+        influxQueriesPerMonth: safe(influxQueries, 0),
+        influxStorageToRawRatio: safe(influxRatio, 1),
+        atlasTier,
+      },
     });
   }, [
     units,
@@ -188,12 +255,20 @@ export default function CostCalculator(): JSX.Element {
     retentionDays,
     readPercent,
     minioCost,
+    competitor,
+    seats,
+    queryHours,
+    compression,
+    influxQueries,
+    influxRatio,
+    atlasTier,
   ]);
 
-  const hasData = result.workload.totalRecordsMonth > 0;
+  const workload = result.estimate.workload;
+  const hasData = workload.totalRecordsMonth > 0;
   const saving = result.savingEurYear;
-  const backendName = BACKENDS.find((b) => b.id === backend)?.label ?? "";
-  const retained = result.workload.totalRetainedTb;
+  const retained = workload.totalRetainedTb;
+  const lowerBound = result.alternative.lowerBound;
 
   useEffect(() => {
     track("calculator_viewed");
@@ -205,9 +280,10 @@ export default function CostCalculator(): JSX.Element {
       const props = {
         preset: presetId,
         backend,
+        competitor,
         units_bucket: bucket(safe(units, 1, 1), [2, 5, 10, 50, 100, 1000]),
         monthly_tb_bucket: bucket(
-          result.workload.totalDataMonthTb,
+          workload.totalDataMonthTb,
           [1, 10, 50, 100, 500, 1000],
         ),
         retained_tb_bucket: bucket(retained, [10, 100, 500, 1000, 5000]),
@@ -302,7 +378,8 @@ export default function CostCalculator(): JSX.Element {
             <summary>Customize data streams</summary>
             <StreamEditor
               streams={streams}
-              workload={result.workload}
+              workload={workload}
+              classEditable={presetId === "custom"}
               onChange={setStreams}
             />
           </details>
@@ -386,8 +463,134 @@ export default function CostCalculator(): JSX.Element {
           </div>
         </section>
 
+        <section className={styles.step}>
+          <h2 className={styles.stepTitle}>3. Compare against</h2>
+          <div className={styles.field}>
+            <label htmlFor="calculator-competitor">
+              Alternative architecture
+            </label>
+            <select
+              id="calculator-competitor"
+              className={styles.select}
+              value={competitorChoice}
+              onChange={(event) => {
+                const value = event.target.value as
+                  | CompetitorId
+                  | "recommended";
+                setCompetitorChoice(value);
+                track("calculator_competitor_selected", {
+                  competitor:
+                    value === "recommended" ? preset.recommended : value,
+                });
+              }}
+            >
+              <option value="recommended">
+                Recommended:{" "}
+                {COMPETITORS.find((c) => c.id === preset.recommended)?.label}
+              </option>
+              {COMPETITORS.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <p className={styles.competitorAbout}>{competitorInfo?.about}</p>
+          <ul className={styles.routes}>
+            {result.alternative.routes
+              .filter((route) => route.streams.length > 0)
+              .map((route) => (
+                <li key={route.target}>
+                  <span>{route.streams.join(" + ")}</span>
+                  <span aria-hidden="true">→</span>
+                  <strong>{route.target}</strong>
+                </li>
+              ))}
+          </ul>
+
+          <details className={styles.disclosure}>
+            <summary>Competitor assumptions</summary>
+            <div className={clsx(styles.fields, styles.competitorFields)}>
+              {competitor === "foxglove" && (
+                <>
+                  <NumberField
+                    label="Developer seats"
+                    value={seats}
+                    onChange={setSeats}
+                    min={0}
+                    step={1}
+                  />
+                  <NumberField
+                    label="Query time"
+                    value={queryHours}
+                    onChange={setQueryHours}
+                    min={0}
+                    step={1}
+                    suffix="hours / month"
+                  />
+                </>
+              )}
+              {competitor === "tiger" && (
+                <NumberField
+                  label="Compression ratio"
+                  value={compression}
+                  onChange={setCompression}
+                  min={1}
+                  step={0.5}
+                  suffix="×"
+                />
+              )}
+              {competitor === "influx" && (
+                <>
+                  <NumberField
+                    label="Queries"
+                    value={influxQueries}
+                    onChange={setInfluxQueries}
+                    min={0}
+                    step={1000}
+                    suffix="per month"
+                  />
+                  <NumberField
+                    label="Billable storage to raw data"
+                    value={influxRatio}
+                    onChange={setInfluxRatio}
+                    min={0}
+                    step={0.1}
+                    suffix="×"
+                  />
+                </>
+              )}
+              {competitor === "mongodb" && (
+                <div className={styles.field}>
+                  <label htmlFor="calculator-atlas">Atlas cluster</label>
+                  <select
+                    id="calculator-atlas"
+                    className={styles.select}
+                    value={atlasTier}
+                    onChange={(event) => setAtlasTier(event.target.value)}
+                  >
+                    {Object.entries(pricingConfig.mongodb.tiers).map(
+                      ([name, tier]) => (
+                        <option key={name} value={name}>
+                          {name} ({tier.defaultStorageGb} GB)
+                        </option>
+                      ),
+                    )}
+                  </select>
+                </div>
+              )}
+              {competitor === "direct" && (
+                <p className={styles.competitorAbout}>
+                  Records are batched into objects of about 64 MB, with one
+                  request per object.
+                </p>
+              )}
+            </div>
+          </details>
+        </section>
+
         <details className={clsx(styles.disclosure, styles.assumptions)}>
-          <summary>Calculation assumptions</summary>
+          <summary>Calculation assumptions and sources</summary>
           <div className={styles.assumptionsBody}>
             <p>
               An estimate, not a quote. Both sides use the same workload,
@@ -412,9 +615,42 @@ export default function CostCalculator(): JSX.Element {
                 data, 1 TB minimum.
               </li>
               <li>
-                Cloud prices are list price estimates in EUR. MinIO stores each
-                object as 8 + 4 erasure shards on 4 KB disk blocks; ReductStore
-                uses a file system with the same protection.
+                MinIO stores each object as 8 + 4 erasure shards on 4 KB disk
+                blocks; ReductStore uses a file system with the same protection.
+              </li>
+              <li>
+                Alternatives keep binary data in object storage batched into 64
+                MB objects, and put only metrics, metadata, or results in a
+                database.
+              </li>
+              <li>
+                Costs are annualized at steady state, once retained data has
+                reached its full size.
+              </li>
+            </ul>
+            <p>
+              Vendor prices are public list prices in USD, verified {VERIFIED},
+              converted at 1 USD = {pricingConfig.fx.usdToEur} EUR. AWS uses{" "}
+              {pricingConfig.aws.region} rates; Azure prices are placeholders.
+              Prices vary by region, workload, and commercial agreement.
+            </p>
+            <ul className={styles.sources}>
+              <li>
+                <Link to={pricingConfig.aws.source}>AWS S3 pricing</Link>
+              </li>
+              <li>
+                <Link to={pricingConfig.foxglove.source}>Foxglove pricing</Link>
+              </li>
+              <li>
+                <Link to={pricingConfig.tiger.source}>Tiger Cloud pricing</Link>
+              </li>
+              <li>
+                <Link to={pricingConfig.influx.source}>InfluxDB pricing</Link>
+              </li>
+              <li>
+                <Link to={pricingConfig.mongodb.source}>
+                  MongoDB Atlas pricing
+                </Link>
               </li>
             </ul>
             <p>
@@ -433,43 +669,45 @@ export default function CostCalculator(): JSX.Element {
           </p>
         ) : (
           <>
+            <p className={styles.eyebrow}>
+              Annualized steady-state cost
+              {competitorChoice === "recommended" &&
+                ` · recommended comparison`}
+            </p>
             <p
               className={clsx(styles.headline, {
                 [styles.headlineHigher]: saving < 0,
               })}
             >
               {saving >= 0
-                ? `Save ${formatEur(saving)} / year`
-                : `${formatEur(-saving)} / year higher`}
+                ? `Save ${lowerBound ? "at least " : ""}${formatEur(saving)} / year`
+                : `${lowerBound ? "Up to " : ""}${formatEur(-saving)} / year higher`}
             </p>
             <p className={styles.subline}>
               {saving >= 0
-                ? `${formatPercent(result.savingPercent)} lower TCO`
-                : "for this configuration"}
+                ? `${formatPercent(result.savingPercent)} lower than ${result.alternative.label}`
+                : `than ${result.alternative.label}`}
             </p>
             <p className={styles.compare}>
-              {backend === "minio"
-                ? "MinIO vs ReductStore on a file system, on the same disks, including the ReductStore license."
-                : `Direct ${backendName} vs ReductStore + ${backendName}, including the ReductStore license.`}
+              {result.alternative.label} vs {result.reduct.label}, including the
+              ReductStore license.
             </p>
 
             <CostComparison
-              directLabel={
-                backend === "minio" ? "Direct MinIO" : `Direct ${backendName}`
-              }
-              reductLabel={
-                backend === "minio"
-                  ? "ReductStore on a file system"
-                  : `ReductStore + ${backendName}`
-              }
-              direct={result.direct}
+              alternative={result.alternative}
               reduct={result.reduct}
             />
+
+            <ul className={styles.notes}>
+              {result.alternative.notes.map((note) => (
+                <li key={note}>{note}</li>
+              ))}
+            </ul>
 
             <dl className={styles.summary}>
               <div>
                 <dt>Generated data</dt>
-                <dd>{formatTb(result.workload.totalDataMonthTb)} / month</dd>
+                <dd>{formatTb(workload.totalDataMonthTb)} / month</dd>
               </div>
               <div>
                 <dt>Retained data</dt>
@@ -477,17 +715,20 @@ export default function CostCalculator(): JSX.Element {
               </div>
               <div>
                 <dt>Records</dt>
+                <dd>{formatCount(workload.totalRecordsMonth)} / month</dd>
+              </div>
+              <div>
+                <dt>Read per month</dt>
                 <dd>
-                  {formatCount(result.workload.totalRecordsMonth)} / month
+                  {formatTb((retained * safe(readPercent, 0, 0, 100)) / 100)}
                 </dd>
               </div>
               <div>
-                <dt>Backend ingest writes</dt>
-                <dd>{formatReduction(result.ingestReduction)} fewer</dd>
-              </div>
-              <div>
                 <dt>Local history (estimate)</dt>
-                <dd>{formatDays(result.localHistoryDays)} on the edge disk</dd>
+                <dd>
+                  {formatDays(result.estimate.localHistoryDays)} on the edge
+                  disk
+                </dd>
               </div>
             </dl>
 

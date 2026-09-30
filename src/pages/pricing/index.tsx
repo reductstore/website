@@ -38,7 +38,8 @@ export default function Pricing(): JSX.Element {
         <section className="container">
           <p className={styles.calculatorIntro}>
             Tell us what your system records. We estimate the data volume and
-            compare direct object storage with ReductStore on the same backend.
+            compare ReductStore with the stack teams usually build for that
+            workload, using public list prices.
           </p>
           <CostCalculator />
         </section>

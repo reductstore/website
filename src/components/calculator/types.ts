@@ -1,7 +1,10 @@
+export type DataClass = "blob" | "metric" | "metadata" | "log";
+
 export type StreamInput = {
   id: string;
   name: string;
   enabled: boolean;
+  dataClass: DataClass;
   count: number;
   frequencyHz: number;
   recordSizeKb: number;
@@ -69,5 +72,22 @@ export type WorkloadPreset = {
   recordingHoursPerDay: number;
   hotDays: number;
   retentionDays: number;
+  recommended: CompetitorId;
   streams: StreamInput[];
+};
+
+export type CompetitorId =
+  | "foxglove"
+  | "tiger"
+  | "influx"
+  | "mongodb"
+  | "direct";
+
+export type CompetitorAssumptions = {
+  foxgloveDeveloperSeats: number;
+  foxgloveQueryHoursPerMonth: number;
+  tigerCompressionRatio: number;
+  influxQueriesPerMonth: number;
+  influxStorageToRawRatio: number;
+  atlasTier: string;
 };

@@ -1,5 +1,5 @@
 import React, { JSX } from "react";
-import type { StreamInput } from "./types";
+import type { DataClass, StreamInput } from "./types";
 import type { Workload } from "./calculate";
 import { formatTb } from "./format";
 import styles from "./styles.module.css";
@@ -24,6 +24,13 @@ const NUMERIC: {
   { key: "recordSizeKb", label: "Record size, KB", step: 1, min: 0 },
 ];
 
+const DATA_CLASSES: { id: DataClass; label: string }[] = [
+  { id: "blob", label: "Binary" },
+  { id: "metric", label: "Metric" },
+  { id: "metadata", label: "Metadata" },
+  { id: "log", label: "Log" },
+];
+
 const invalid = (key: string, value: string) => {
   const n = value.trim() === "" ? NaN : Number(value);
   if (!Number.isFinite(n) || n < 0) return true;
@@ -33,10 +40,12 @@ const invalid = (key: string, value: string) => {
 export default function StreamEditor({
   streams,
   workload,
+  classEditable,
   onChange,
 }: {
   streams: StreamDraft[];
   workload: Workload;
+  classEditable: boolean;
   onChange: (streams: StreamDraft[]) => void;
 }): JSX.Element {
   const update = (id: string, patch: Partial<StreamDraft>) =>
@@ -52,6 +61,7 @@ export default function StreamEditor({
           <tr>
             <th scope="col">On</th>
             <th scope="col">Stream</th>
+            <th scope="col">Data class</th>
             {NUMERIC.map((field) => (
               <th key={field.key} scope="col">
                 {field.label}
@@ -82,6 +92,27 @@ export default function StreamEditor({
                     update(stream.id, { name: event.target.value })
                   }
                 />
+              </td>
+              <td>
+                {classEditable ? (
+                  <select
+                    value={stream.dataClass}
+                    aria-label={`${stream.name}: Data class`}
+                    onChange={(event) =>
+                      update(stream.id, {
+                        dataClass: event.target.value as DataClass,
+                      })
+                    }
+                  >
+                    {DATA_CLASSES.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.label}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  DATA_CLASSES.find((c) => c.id === stream.dataClass)?.label
+                )}
               </td>
               {NUMERIC.map((field) => (
                 <td key={field.key}>

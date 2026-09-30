@@ -184,7 +184,7 @@
 .streamTable input[type="text"],
 .streamTable input[type="number"] {
   width: 100%;
-  min-width: 5.5rem;
+  min-width: 4.5rem;
   padding: 0.35rem 0.5rem;
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 6px;
@@ -194,7 +194,16 @@
 }
 
 .streamTable input[type="text"] {
-  min-width: 9rem;
+  min-width: 7.5rem;
+}
+
+.streamTable select {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  background-color: var(--reduct-surface-0);
+  font: inherit;
+  color: inherit;
 }
 
 .streamTable input[aria-invalid="true"] {
@@ -318,20 +327,34 @@
   height: 100%;
 }
 
-.segStorage {
+.seg0 {
   background-color: #2b0548;
 }
 
-.segOperations {
+.seg1 {
   background-color: #8a6fa8;
 }
 
-.segRetrieval {
+.seg2 {
   background-color: #c9b6dc;
+}
+
+.seg3 {
+  background-color: #5c3a7d;
+}
+
+.seg4 {
+  background-color: #e4d9ee;
 }
 
 .segLicense {
   background-color: var(--reduct-accent);
+}
+
+.breakdowns {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .legend {
@@ -358,6 +381,10 @@
 .legend thead th {
   font-weight: 600;
   color: var(--reduct-dimmed);
+}
+
+.legend thead th:first-child {
+  text-align: left;
 }
 
 .legend tbody th {
@@ -441,20 +468,37 @@ html[data-theme="dark"] .presetActive:hover {
 html[data-theme="dark"] .inputWrap,
 html[data-theme="dark"] .streamTable input[type="text"],
 html[data-theme="dark"] .streamTable input[type="number"],
+html[data-theme="dark"] .streamTable select,
 html[data-theme="dark"] .segmentActive {
   background-color: var(--reduct-surface-0) !important;
 }
 
-html[data-theme="dark"] .segStorage {
+html[data-theme="dark"] .seg0 {
   background-color: #bfa6dc;
 }
 
-html[data-theme="dark"] .segOperations {
+html[data-theme="dark"] .seg1 {
   background-color: #8f78a8;
 }
 
-html[data-theme="dark"] .segRetrieval {
+html[data-theme="dark"] .seg2 {
   background-color: #5d4a70;
+}
+
+html[data-theme="dark"] .seg3 {
+  background-color: #e4d9ee;
+}
+
+html[data-theme="dark"] .seg4 {
+  background-color: #7a6391;
+}
+
+html[data-theme="dark"] .select {
+  background-color: var(--reduct-surface-0);
+}
+
+html[data-theme="dark"] .routes li {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 html[data-theme="dark"] .barTrack {
@@ -510,4 +554,91 @@ html[data-theme="dark"] .volume {
   .preset {
     transition: none;
   }
+}
+
+.select {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  background-color: var(--reduct-surface-0);
+  font: inherit;
+  color: inherit;
+}
+
+.select:focus-visible {
+  outline: none;
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 1px var(--ifm-color-primary);
+}
+
+.competitorAbout {
+  margin: 0.75rem 0;
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.competitorFields {
+  margin-top: 1rem;
+}
+
+.competitorFields .competitorAbout {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.routes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+}
+
+.routes li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.routes li span:first-child {
+  color: var(--ifm-color-emphasis-800);
+}
+
+.routes li span[aria-hidden] {
+  color: var(--reduct-dimmed);
+}
+
+.eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--reduct-dimmed);
+}
+
+.notes {
+  margin: 0 0 1.5rem;
+  padding-left: 1.1rem;
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.notes:empty {
+  display: none;
+}
+
+.sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  padding: 0;
+  list-style: none;
 }
