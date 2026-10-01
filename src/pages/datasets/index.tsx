@@ -346,7 +346,12 @@ export default function Playground(): JSX.Element {
           <h2 className={styles.sectionTitle}>What&apos;s on the server</h2>
           <div className={styles.buckets}>
             {BUCKETS.map((bucket) => (
-              <section key={bucket.name} className={styles.bucket}>
+              <a
+                key={bucket.name}
+                href={`#${bucket.name}`}
+                className={styles.bucket}
+                aria-label={`${bucket.title}: see the ${bucket.name} examples`}
+              >
                 {bucket.image && (
                   <img
                     src={bucket.image}
@@ -366,13 +371,20 @@ export default function Playground(): JSX.Element {
                       </li>
                     ))}
                   </ul>
+                  <span className={styles.bucketLink}>
+                    See examples <span aria-hidden="true">↓</span>
+                  </span>
                 </div>
-              </section>
+              </a>
             ))}
           </div>
 
           {GROUPS.map((group) => (
-            <section key={group.title}>
+            <section
+              key={group.title}
+              id={group.bucket}
+              className={styles.group}
+            >
               <h2 className={styles.sectionTitle}>
                 {group.title} <code>{group.bucket}</code>
               </h2>
