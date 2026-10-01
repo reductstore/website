@@ -11,7 +11,7 @@ const stats = [
     description: "faster writes for 100 KB records than TimescaleDB",
   },
   { value: "15x", description: "faster reads for 100 KB records than MinIO" },
-  { value: "90%", description: "lower cloud cost by batching 100 KB records" },
+  { value: "35%", description: "lower storage cost than Foxglove" },
   { value: "4+", description: "years of active development" },
 ];
 

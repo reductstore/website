@@ -42,7 +42,7 @@ import { CostBars, CostBreakdowns } from "./CostComparison";
 import StreamEditor, { StreamDraft } from "./StreamEditor";
 import NumberField from "./NumberField";
 import { formatPercent, formatTb } from "./format";
-import { bucket, track } from "./analytics";
+import { bucket, track } from "../../lib/analytics";
 import styles from "./styles.module.css";
 
 const PRESET_ICONS: Record<string, IconType> = {
