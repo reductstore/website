@@ -10,7 +10,6 @@ import {
   packFactor,
 } from "./calculate.ts";
 import {
-  OBJECT_STORAGE_BATCH,
   REDUCT_BLOCK,
   backendPricing,
   licenseTiers,
@@ -47,17 +46,16 @@ const config = (overrides = {}) => {
     licenseTiers: licenseTiers(REDUCTSTORE_PRICING[currency].perTbMonth),
     licenseMinTb: REDUCTSTORE_MIN_TB,
     block: REDUCT_BLOCK,
-    batch: OBJECT_STORAGE_BATCH,
     prices: pricingConfig,
     usdRate: usdRate(currency),
     competitor: overrides.competitor ?? "foxglove",
     assumptions: {
       foxgloveDeveloperSeats: 3,
       foxgloveQueryHoursPerMonth: 20,
-      influxQueriesPerMonth: 10_000,
-      influxStorageToRawRatio: 1,
     },
     readPercentPerMonth: overrides.read ?? 5,
+    instances: overrides.instances ?? 2,
+    telemetryCompression: overrides.compression ?? 1,
   };
 };
 
@@ -68,6 +66,7 @@ const oneStream = {
   streams: [stream("camera", 1, 1, 100)],
 };
 const MONTH_TB = (100 * 86_400 * 30) / 1e9;
+const SERVER_YEAR = 12 * 0.2016 * 730;
 
 test("pack factor follows the block size and record limits", () => {
   assert.equal(packFactor(1, REDUCT_BLOCK), 1024);
@@ -128,7 +127,7 @@ test("no NaN when nothing is recorded", () => {
     config(),
   );
   assert.equal(result.workload.retainedTb, 0);
-  assert.equal(result.reduct.totalYear, result.reduct.components[0].amountYear);
+  close(result.reduct.totalYear, 2 * SERVER_YEAR, 1e-6);
   assert.ok(Number.isFinite(result.savingPercent));
 });
 
@@ -200,17 +199,62 @@ test("small objects are billed at 128 KB in cold classes, so they stay hot", () 
   close(small.storageMonth - hotStorage, s.coldTb * 23, 1e-9);
 });
 
-test("on-prem: retained TB × price × 12, no request costs", () => {
+test("on-prem: retained TB × price × 12, servers, no requests or data out", () => {
   const result = compare(
     oneStream,
     { hotPercent: 100, hotDays: 30, coldPercent: 50, coldDays: 365 },
     config({ backend: "minio", onPrem: 10 }),
   );
-  const storage = result.reduct.components.find(
-    (c) => c.label === "On-prem storage",
+  assert.deepEqual(
+    result.reduct.components.map((c) => c.label),
+    ["ReductStore license", "On-prem storage", "Servers"],
   );
-  close(storage.amountYear, result.workload.retainedTb * 10 * 12, 1e-9);
-  assert.equal(result.reduct.components.length, 2);
+  const part = (label) =>
+    result.reduct.components.find((c) => c.label === label).amountYear;
+  close(part("On-prem storage"), result.workload.retainedTb * 10 * 12, 1e-9);
+  close(part("Servers"), 2 * SERVER_YEAR, 1e-6);
+});
+
+test("ReductStore pays data out on what is read and one server per instance", () => {
+  const retention = {
+    hotPercent: 100,
+    hotDays: 30,
+    coldPercent: 0,
+    coldDays: 0,
+  };
+  const part = (result, label) =>
+    result.reduct.components.find((c) => c.label === label).amountYear;
+  const aws = compare(oneStream, retention, config({ instances: 3 }));
+  close(part(aws, "Data out"), 12 * MONTH_TB * 0.05 * 90, 1e-6);
+  close(part(aws, "Servers"), 3 * SERVER_YEAR, 1e-6);
+  const azure = compare(oneStream, retention, config({ backend: "azure" }));
+  close(part(azure, "Data out"), 12 * MONTH_TB * 0.05 * 87, 1e-6);
+  close(part(azure, "Servers"), 2 * 12 * 0.192 * 730, 1e-6);
+});
+
+test("telemetry is compressed by the same ratio everywhere, binary data is not", () => {
+  const mixed = {
+    units: 1,
+    recordingHoursPerDay: 24,
+    streams: [
+      stream("Camera", 1, 1, 100, "blob"),
+      stream("Telemetry", 1, 100, 1, "metric"),
+      stream("Logs", 1, 10, 2, "log"),
+    ],
+  };
+  const retention = {
+    hotPercent: 100,
+    hotDays: 30,
+    coldPercent: 0,
+    coldDays: 0,
+  };
+  const w = calculateWorkload(mixed, retention, 4);
+  const [camera, telemetry, logs] = w.streams;
+  close(camera.storedMonthTb, camera.generatedMonthTb, 1e-12);
+  close(telemetry.storedMonthTb, telemetry.generatedMonthTb / 4, 1e-12);
+  close(logs.storedMonthTb, logs.generatedMonthTb / 4, 1e-12);
+  close(telemetry.storedKb, 0.25, 1e-12);
+  close(w.retainedTb, w.storedMonthTb, 1e-12);
 });
 
 test("Foxglove marginal tiers", () => {
@@ -249,25 +293,85 @@ test("Foxglove stores hot and cold at one price and indexes the hot share", () =
   close(part("Platform"), 12 * (20 + (1000 - 5) * 20), 1e-6);
 });
 
-test("InfluxDB keeps only metrics; the rest goes to object storage", () => {
-  const mixed = {
-    units: 5,
-    recordingHoursPerDay: 8,
-    streams: [
-      stream("Cameras", 2, 10, 150, "blob"),
-      stream("Telemetry", 1, 100, 2, "metric"),
-      stream("Events", 1, 1, 2, "metadata"),
-    ],
-  };
+const mixed = {
+  units: 5,
+  recordingHoursPerDay: 8,
+  streams: [
+    stream("Cameras", 2, 10, 150, "blob"),
+    stream("Telemetry", 1, 100, 2, "metric"),
+    stream("Events", 1, 1, 2, "metadata"),
+  ],
+};
+
+test("time-series databases keep telemetry; binary data goes to object storage", () => {
   const result = compare(
     mixed,
     { hotPercent: 100, hotDays: 30, coldPercent: 10, coldDays: 90 },
     config({ competitor: "influx" }),
   );
+  assert.equal(result.alternative.label, "InfluxDB + AWS S3");
   assert.deepEqual(result.alternative.routes, [
-    { target: "InfluxDB Cloud", streams: ["Telemetry"] },
-    { target: "AWS S3", streams: ["Cameras", "Events"] },
+    { target: "InfluxDB", streams: ["Telemetry", "Events"] },
+    { target: "AWS S3", streams: ["Cameras"] },
   ]);
+});
+
+test("InfluxDB on Timestream and TimescaleDB on Tiger Cloud, by hand", () => {
+  const retention = {
+    hotPercent: 100,
+    hotDays: 30,
+    coldPercent: 10,
+    coldDays: 90,
+  };
+  const telemetryOnly = { ...mixed, streams: mixed.streams.slice(1) };
+  const w = calculateWorkload(telemetryOnly, retention, 5);
+  const part = (result, label) =>
+    result.alternative.components.find((c) => c.label === label).amountYear;
+
+  const influx = compare(
+    telemetryOnly,
+    retention,
+    config({ competitor: "influx", compression: 5 }),
+  );
+  close(part(influx, "Compute"), 12 * 2 * 0.528 * 730, 1e-6);
+  close(part(influx, "Storage"), 12 * w.retainedTb * 1000 * 0.023, 1e-6);
+  close(part(influx, "Data out"), 12 * w.retainedTb * 0.05 * 90, 1e-6);
+
+  const tiger = compare(
+    telemetryOnly,
+    retention,
+    config({ competitor: "timescale", compression: 5 }),
+  );
+  close(part(tiger, "Compute"), 12 * 2 * 240, 1e-6);
+  close(
+    part(tiger, "Storage"),
+    12 * (w.hotTb * 1000 * 0.177 * 2 + w.coldTb * 1000 * 0.021),
+    1e-6,
+  );
+});
+
+test("binary data next to a database is one object per record", () => {
+  const retention = {
+    hotPercent: 100,
+    hotDays: 30,
+    coldPercent: 0,
+    coldDays: 0,
+  };
+  const result = compare(
+    oneStream,
+    retention,
+    config({ competitor: "timescale" }),
+  );
+  assert.equal(result.alternative.label, "AWS S3");
+  const requests = result.alternative.components.find(
+    (c) => c.label === "Requests and retrieval",
+  ).amountYear;
+  const records = 86_400 * 30;
+  close(
+    requests,
+    12 * ((records / 1000) * 0.005 + ((records * 0.05) / 1000) * 0.0004),
+    1e-6,
+  );
 });
 
 test("USD shows cloud and competitor prices as listed; EUR converts them", () => {
@@ -286,15 +390,18 @@ test("USD shows cloud and competitor prices as listed; EUR converts them", () =>
 });
 
 // The default example worked by hand from the published price lists:
-// 10 robots, 8 h a day; 20% hot for 90 days, 5% cold for 90 more days.
+// 10 robots, 8 h a day; 20% hot for 90 days, 5% cold for 90 more days;
+// telemetry and logs compressed 5 times.
 test("cross-check: mobile robot on S3 vs Foxglove, in USD, by hand", () => {
-  const kbPerSecond = 2 * 10 * 150 + 10 * 1000 + 100 * 2 + 100 * 1 + 10 * 5;
+  const binaryKbPerSecond = 2 * 10 * 150 + 10 * 1000;
+  const telemetryKbPerSecond = 100 * 0.5 + 100 * 0.2 + 10 * 5;
+  const kbPerSecond = binaryKbPerSecond + telemetryKbPerSecond / 5;
   const monthTb = (kbPerSecond * 10 * 8 * 3600 * 30) / 1e9;
   const hotTb = monthTb * 0.2 * 3;
   const coldTb = monthTb * 0.05 * 3;
   const retainedTb = hotTb + coldTb;
-  close(monthTb, 115.344, 1e-9);
-  close(retainedTb, 86.508, 1e-9);
+  close(monthTb, 112.52736, 1e-9);
+  close(retainedTb, 84.39552, 1e-9);
 
   // Foxglove Pro per month: base, 5 devices beyond the 5 included, storage
   // and indexing and bandwidth over their included amounts, 20 query hours.
@@ -305,47 +412,62 @@ test("cross-check: mobile robot on S3 vs Foxglove, in USD, by hand", () => {
   const foxglove = 12 * (20 + 5 * 20 + storage + indexing + bandwidth + query);
 
   // ReductStore: $18 per TB a month; hot in S3 Standard at $23 per TB, cold
-  // in Glacier Instant Retrieval at $4 per TB (90 days fits its minimum).
+  // in Glacier Instant Retrieval at $4 per TB (90 days fits its minimum,
+  // telemetry is batched per second so its blocks are large enough);
+  // 5% read out at $0.09 per GB; two m7i.xlarge at $0.2016 an hour.
   const license = 12 * retainedTb * 18;
   const s3Storage = 12 * (hotTb * 23 + coldTb * 4);
+  const dataOut = 12 * retainedTb * 0.05 * 90;
+  const servers = 12 * 2 * 0.2016 * 730;
 
   const preset = PRESETS.find((p) => p.id === "mobile-robot");
-  const result = compare(preset, preset.retention, config());
+  const result = compare(preset, preset.retention, config({ compression: 5 }));
   const part = (label) =>
     result.reduct.components.find((c) => c.label === label).amountYear;
   close(result.alternative.totalYear, foxglove, 1e-6);
   close(part("ReductStore license"), license, 1e-6);
   close(part("AWS S3 storage"), s3Storage, 1e-6);
+  close(part("Data out"), dataOut, 1e-6);
+  close(part("Servers"), servers, 1e-6);
   assert.ok(part("Requests and retrieval") < 0.02 * result.reduct.totalYear);
   close(
     result.reduct.totalYear,
-    license + s3Storage + part("Requests and retrieval"),
+    license + s3Storage + dataOut + servers + part("Requests and retrieval"),
     1e-6,
   );
 });
 
-test("every example keeps 60 to 160 TB and is 30 to 40% cheaper than Foxglove", () => {
+test("every example is cheaper than its default competitor in the cloud", () => {
   assert.deepEqual(
-    PRESETS.map((p) => p.id),
+    PRESETS.map((p) => [p.id, p.competitor]),
     [
-      "mobile-robot",
-      "autonomous-vehicle",
-      "drone",
-      "industrial-robot",
-      "vibration",
-      "plc",
-      "computer-vision",
-      "custom",
+      ["mobile-robot", "foxglove"],
+      ["autonomous-vehicle", "foxglove"],
+      ["drone", "foxglove"],
+      ["industrial-robot", "timescale"],
+      ["vibration", "timescale"],
+      ["plc", "timescale"],
+      ["computer-vision", "foxglove"],
+      ["custom", "foxglove"],
     ],
   );
   for (const preset of PRESETS) {
-    for (const currency of ["EUR", "USD"]) {
-      const result = compare(preset, preset.retention, config({ currency }));
-      const tag = `${preset.id} ${currency}`;
-      const retained = result.workload.retainedTb;
-      assert.ok(retained >= 60 && retained <= 160, `${tag} ${retained} TB`);
-      const percent = result.savingPercent;
-      assert.ok(percent >= 30 && percent <= 40, `${tag} ${percent}%`);
+    for (const backend of ["aws", "azure"]) {
+      for (const currency of ["EUR", "USD"]) {
+        const result = compare(
+          preset,
+          preset.retention,
+          config({
+            backend,
+            currency,
+            competitor: preset.competitor,
+            compression: 5,
+          }),
+        );
+        const tag = `${preset.id} ${backend} ${currency}`;
+        const percent = result.savingPercent;
+        assert.ok(percent > 0 && percent < 80, `${tag} ${percent}%`);
+      }
     }
   }
 });

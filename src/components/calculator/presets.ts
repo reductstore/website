@@ -6,6 +6,7 @@ export const PRESETS: WorkloadPreset[] = [
     id: "mobile-robot",
     name: "Mobile robot",
     unitLabel: "Mobile robots",
+    competitor: "foxglove",
     units: 10,
     recordingHoursPerDay: 8,
     retention: {
@@ -40,7 +41,7 @@ export const PRESETS: WorkloadPreset[] = [
         enabled: true,
         count: 1,
         frequencyHz: 100,
-        recordSizeKb: 2,
+        recordSizeKb: 0.5,
       },
       {
         id: "mobile-robot-3",
@@ -49,7 +50,7 @@ export const PRESETS: WorkloadPreset[] = [
         enabled: true,
         count: 1,
         frequencyHz: 100,
-        recordSizeKb: 1,
+        recordSizeKb: 0.2,
       },
       {
         id: "mobile-robot-4",
@@ -66,6 +67,7 @@ export const PRESETS: WorkloadPreset[] = [
     id: "autonomous-vehicle",
     name: "Autonomous vehicle",
     unitLabel: "Vehicles",
+    competitor: "foxglove",
     units: 5,
     recordingHoursPerDay: 8,
     retention: {
@@ -109,7 +111,7 @@ export const PRESETS: WorkloadPreset[] = [
         enabled: true,
         count: 1,
         frequencyHz: 200,
-        recordSizeKb: 2,
+        recordSizeKb: 0.5,
       },
       {
         id: "autonomous-vehicle-4",
@@ -126,6 +128,7 @@ export const PRESETS: WorkloadPreset[] = [
     id: "drone",
     name: "Drone",
     unitLabel: "Drones",
+    competitor: "foxglove",
     units: 10,
     recordingHoursPerDay: 4,
     retention: {
@@ -160,7 +163,7 @@ export const PRESETS: WorkloadPreset[] = [
         enabled: true,
         count: 1,
         frequencyHz: 100,
-        recordSizeKb: 1,
+        recordSizeKb: 0.3,
       },
       {
         id: "drone-3",
@@ -169,7 +172,7 @@ export const PRESETS: WorkloadPreset[] = [
         enabled: true,
         count: 1,
         frequencyHz: 200,
-        recordSizeKb: 0.5,
+        recordSizeKb: 0.2,
       },
       {
         id: "drone-4",
@@ -186,6 +189,7 @@ export const PRESETS: WorkloadPreset[] = [
     id: "industrial-robot",
     name: "Industrial robot",
     unitLabel: "Industrial robots",
+    competitor: "timescale",
     units: 25,
     recordingHoursPerDay: 16,
     retention: {
@@ -211,7 +215,7 @@ export const PRESETS: WorkloadPreset[] = [
         enabled: true,
         count: 1,
         frequencyHz: 250,
-        recordSizeKb: 2,
+        recordSizeKb: 0.5,
       },
       {
         id: "industrial-robot-2",
@@ -220,7 +224,7 @@ export const PRESETS: WorkloadPreset[] = [
         enabled: true,
         count: 1,
         frequencyHz: 100,
-        recordSizeKb: 2,
+        recordSizeKb: 0.2,
       },
       {
         id: "industrial-robot-3",
@@ -229,7 +233,7 @@ export const PRESETS: WorkloadPreset[] = [
         enabled: true,
         count: 1,
         frequencyHz: 20,
-        recordSizeKb: 2,
+        recordSizeKb: 0.5,
       },
       {
         id: "industrial-robot-4",
@@ -246,6 +250,7 @@ export const PRESETS: WorkloadPreset[] = [
     id: "vibration",
     name: "Vibration data",
     unitLabel: "Machines",
+    competitor: "timescale",
     units: 60,
     recordingHoursPerDay: 24,
     retention: {
@@ -271,7 +276,7 @@ export const PRESETS: WorkloadPreset[] = [
         enabled: true,
         count: 1,
         frequencyHz: 10,
-        recordSizeKb: 2,
+        recordSizeKb: 0.5,
       },
       {
         id: "vibration-2",
@@ -280,7 +285,7 @@ export const PRESETS: WorkloadPreset[] = [
         enabled: true,
         count: 1,
         frequencyHz: 1,
-        recordSizeKb: 2,
+        recordSizeKb: 0.5,
       },
       {
         id: "vibration-3",
@@ -297,6 +302,7 @@ export const PRESETS: WorkloadPreset[] = [
     id: "plc",
     name: "PLC & telemetry",
     unitLabel: "PLCs",
+    competitor: "timescale",
     units: 50,
     recordingHoursPerDay: 24,
     retention: {
@@ -313,7 +319,7 @@ export const PRESETS: WorkloadPreset[] = [
         enabled: true,
         count: 1,
         frequencyHz: 10,
-        recordSizeKb: 2,
+        recordSizeKb: 0.5,
       },
       {
         id: "plc-1",
@@ -322,7 +328,7 @@ export const PRESETS: WorkloadPreset[] = [
         enabled: true,
         count: 1,
         frequencyHz: 100,
-        recordSizeKb: 1,
+        recordSizeKb: 0.2,
       },
       {
         id: "plc-2",
@@ -348,6 +354,7 @@ export const PRESETS: WorkloadPreset[] = [
     id: "computer-vision",
     name: "Computer vision",
     unitLabel: "Cameras",
+    competitor: "foxglove",
     units: 40,
     recordingHoursPerDay: 24,
     retention: {
@@ -390,6 +397,7 @@ export const PRESETS: WorkloadPreset[] = [
     id: "custom",
     name: "Custom",
     unitLabel: "Data sources",
+    competitor: "foxglove",
     units: 20,
     recordingHoursPerDay: 24,
     retention: {

@@ -10,7 +10,8 @@ export type MarginalTier = {
 // they are converted only through fx.usdToEur, which never applies to
 // ReductStore's own list prices.
 export const pricingConfig = {
-  lastVerified: "2026-09-30",
+  lastVerified: "2026-10-01",
+  hoursPerMonth: 730,
 
   fx: {
     usdToEur: 0.880906,
@@ -26,7 +27,9 @@ export const pricingConfig = {
     classesSource:
       "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html",
     region: "US East (N. Virginia)",
-    lastVerified: "2026-09-30",
+    lastVerified: "2026-10-01",
+    egressUsdPerGb: 0.09,
+    server: { instance: "m7i.xlarge", usdPerHour: 0.2016 },
     putUsdPer1000: 0.005,
     standard: { storageUsdPerGbMonth: 0.023, getUsdPer1000: 0.0004 },
     standardIa: {
@@ -58,7 +61,9 @@ export const pricingConfig = {
     apiSource:
       "https://prices.azure.com/api/retail/prices?$filter=serviceName eq 'Storage' and armRegionName eq 'eastus' and productName eq 'General Block Blob v2'",
     region: "East US",
-    lastVerified: "2026-09-30",
+    lastVerified: "2026-10-01",
+    egressUsdPerGb: 0.087,
+    server: { instance: "D4s v5", usdPerHour: 0.192 },
     putUsdPer1000: 0.005,
     hot: { storageUsdPerGbMonth: 0.0208, getUsdPer1000: 0.0004 },
     cool: {
@@ -85,7 +90,7 @@ export const pricingConfig = {
       "per month base, per seat and device per month, per TB stored per month, per TB indexed, per TB of bandwidth, per query hour",
     source: "https://docs.foxglove.dev/docs/pricing",
     publicPlanUrl: "https://www.foxglove.dev/pricing",
-    lastVerified: "2026-09-30",
+    lastVerified: "2026-10-01",
     baseUsdPerMonth: 20,
     includedDeveloperSeats: 3,
     extraDeveloperSeatUsdPerMonth: 42,
@@ -123,20 +128,32 @@ export const pricingConfig = {
   },
 
   influx: {
-    vendor: "InfluxData",
-    product: "InfluxDB Cloud Serverless (usage-based)",
+    vendor: "Amazon Web Services",
+    product: "Timestream for InfluxDB 3 (db.influxIOIncluded.xlarge)",
     currency: "USD",
-    units: "per MB written, per 100 queries, per GB-hour stored, per GB out",
-    source: "https://www.influxdata.com/influxdb-pricing/",
-    plansSource:
-      "https://docs.influxdata.com/influxdb3/cloud-serverless/admin/billing/pricing-plans/",
-    lastVerified: "2026-09-30",
-    dataInUsdPerMb: 0.0025,
-    queryUsdPer100: 0.012,
-    storageUsdPerGbHour: 0.002,
-    dataOutUsdPerGb: 0.09,
-    defaultQueriesPerMonth: 10_000,
-    hoursPerMonth: 730,
+    units: "per instance-hour, per GB-month stored, per GB out",
+    source: "https://aws.amazon.com/timestream/pricing/",
+    lastVerified: "2026-10-01",
+    instanceUsdPerHour: 0.528,
+    instances: 2,
+    storageUsdPerGbMonth: 0.023,
+    egressUsdPerGb: 0.09,
+  },
+
+  timescale: {
+    vendor: "Tiger Data",
+    product: "Tiger Cloud Performance (TimescaleDB), primary and HA replica",
+    currency: "USD",
+    units: "per service-month, per GB-month stored, per GB out",
+    source: "https://www.tigerdata.com/pricing",
+    lastVerified: "2026-10-01",
+    // Only the entry price is public: $30 a month for 0.5 CPU. A 4 CPU
+    // service is priced at 8 times that.
+    serviceUsdPerMonth: 240,
+    instances: 2,
+    storageUsdPerGbMonth: 0.177,
+    tieredUsdPerGbMonth: 0.021,
+    egressUsdPerGb: 0.09,
   },
 };
 
@@ -149,6 +166,8 @@ function awsPricing(rate: number): BackendPricing {
   return {
     name: "AWS S3",
     putPer1000: aws.putUsdPer1000 * rate,
+    egressPerTb: perTb(aws.egressUsdPerGb),
+    serverPerMonth: aws.server.usdPerHour * pricingConfig.hoursPerMonth * rate,
     hot: {
       label: "S3 Standard",
       storagePerTbMonth: perTb(aws.standard.storageUsdPerGbMonth),
@@ -185,6 +204,8 @@ function azurePricing(rate: number): BackendPricing {
   return {
     name: "Azure Blob",
     putPer1000: az.putUsdPer1000 * rate,
+    egressPerTb: perTb(az.egressUsdPerGb),
+    serverPerMonth: az.server.usdPerHour * pricingConfig.hoursPerMonth * rate,
     hot: {
       label: "Azure Hot",
       storagePerTbMonth: perTb(az.hot.storageUsdPerGbMonth),
@@ -217,10 +238,17 @@ function azurePricing(rate: number): BackendPricing {
 
 export const DEFAULT_MINIO_PER_TB_MONTH = 10;
 
-export function minioPricing(storagePerTbMonth: number): BackendPricing {
+// On-prem servers are priced like the AWS instance; there is no data out fee.
+export function minioPricing(
+  storagePerTbMonth: number,
+  rate: number,
+): BackendPricing {
   return {
     name: "MinIO",
     putPer1000: 0,
+    egressPerTb: 0,
+    serverPerMonth:
+      pricingConfig.aws.server.usdPerHour * pricingConfig.hoursPerMonth * rate,
     hot: {
       label: "on-prem storage",
       storagePerTbMonth,
@@ -241,7 +269,7 @@ export function backendPricing(
 ): BackendPricing {
   if (backend === "aws") return awsPricing(usdRate(currency));
   if (backend === "azure") return azurePricing(usdRate(currency));
-  return minioPricing(minioPerTbMonth);
+  return minioPricing(minioPerTbMonth, usdRate(currency));
 }
 
 export const licenseTiers = (perTbMonth: number): LicenseTier[] => [
@@ -252,12 +280,4 @@ export const REDUCT_BLOCK = {
   sizeKb: 64_000,
   maxRecords: 1_024,
   backendOpsPerBlock: 2,
-};
-
-// Alternative stacks that keep data in object storage are assumed to batch
-// records into objects of about 64 MB, like ReductStore does.
-export const OBJECT_STORAGE_BATCH = {
-  sizeKb: 64_000,
-  maxRecords: 1_024,
-  opsPerObject: 1,
 };

@@ -82,7 +82,7 @@ export default function StreamEditor({
                 Data class{" "}
                 <InfoTip
                   below
-                  text="Where the other stack keeps it: InfluxDB stores metrics; binary data, metadata, and logs go to object storage. ReductStore stores every class."
+                  text="Binary data is stored as recorded; the other classes are compressed. Time-series databases keep every class except binary data, which goes to object storage. ReductStore stores every class."
                 />
               </th>
             )}

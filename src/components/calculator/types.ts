@@ -41,6 +41,8 @@ export type StorageTier = {
 export type BackendPricing = {
   name: string;
   putPer1000: number;
+  egressPerTb: number;
+  serverPerMonth: number;
   hot: StorageTier;
   cold?: StorageTier;
   archive?: StorageTier;
@@ -59,13 +61,12 @@ export type WorkloadPreset = {
   recordingHoursPerDay: number;
   retention: Retention;
   streams: StreamInput[];
+  competitor: CompetitorId;
 };
 
-export type CompetitorId = "foxglove" | "influx";
+export type CompetitorId = "foxglove" | "influx" | "timescale";
 
 export type CompetitorAssumptions = {
   foxgloveDeveloperSeats: number;
   foxgloveQueryHoursPerMonth: number;
-  influxQueriesPerMonth: number;
-  influxStorageToRawRatio: number;
 };

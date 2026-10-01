@@ -15,7 +15,6 @@ import type { IconType } from "react-icons";
 import { compare } from "./calculate";
 import type { Route } from "./calculate";
 import {
-  OBJECT_STORAGE_BATCH,
   REDUCT_BLOCK,
   DEFAULT_MINIO_PER_TB_MONTH,
   backendPricing,
@@ -63,29 +62,25 @@ const BACKENDS: { id: BackendId; label: string; name: string }[] = [
 ];
 
 const COMPETITORS: { id: CompetitorId; label: string }[] = [
-  {
-    id: "foxglove",
-    label: "Foxglove",
-  },
-  {
-    id: "influx",
-    label: "InfluxDB + object storage",
-  },
+  { id: "foxglove", label: "Foxglove" },
+  { id: "influx", label: "InfluxDB" },
+  { id: "timescale", label: "TimescaleDB" },
 ];
 
 const ASSUMPTIONS: CompetitorAssumptions = {
   foxgloveDeveloperSeats: pricingConfig.foxglove.includedDeveloperSeats,
   foxgloveQueryHoursPerMonth: 20,
-  influxQueriesPerMonth: pricingConfig.influx.defaultQueriesPerMonth,
-  influxStorageToRawRatio: 1,
 };
 const READ_PERCENT_PER_MONTH = 5;
+const DEFAULT_INSTANCES = 2;
+const DEFAULT_COMPRESSION = 5;
 
 const PRICE_SOURCES = [
   pricingConfig.aws,
   pricingConfig.azure,
   pricingConfig.foxglove,
   pricingConfig.influx,
+  pricingConfig.timescale,
 ];
 
 const formatDate = (iso: string) => {
@@ -164,7 +159,9 @@ export default function CostCalculator(): JSX.Element {
   const [minioCost, setMinioCost] = useState(
     String(DEFAULT_MINIO_PER_TB_MONTH),
   );
-  const [competitor, setCompetitor] = useState<CompetitorId>("foxglove");
+  const [competitor, setCompetitor] = useState<CompetitorId>(preset.competitor);
+  const [instances, setInstances] = useState(String(DEFAULT_INSTANCES));
+  const [compression, setCompression] = useState(String(DEFAULT_COMPRESSION));
 
   const selectPreset = (id: string) => {
     const next = PRESETS.find((p) => p.id === id);
@@ -177,6 +174,7 @@ export default function CostCalculator(): JSX.Element {
     setHotDays(String(next.retention.hotDays));
     setColdPercent(String(next.retention.coldPercent));
     setColdDays(String(next.retention.coldDays));
+    setCompetitor(next.competitor);
     track("calculator_preset_selected", { preset: id });
   };
 
@@ -194,6 +192,11 @@ export default function CostCalculator(): JSX.Element {
       : "Between 0 and the hot share",
     coldDays: valid(coldDays, 0) ? null : "Cannot be negative",
     minioCost: valid(minioCost, 0) ? null : "Cannot be negative",
+    instances:
+      valid(instances, 1) && Number.isInteger(num(instances))
+        ? null
+        : "A whole number, at least 1",
+    compression: valid(compression, 1) ? null : "At least 1",
   };
 
   const safe = (value: string, fallback: number, min = 0, max = Infinity) => {
@@ -225,12 +228,13 @@ export default function CostCalculator(): JSX.Element {
       licenseTiers: licenseTiers(REDUCTSTORE_PRICING[currency].perTbMonth),
       licenseMinTb: REDUCTSTORE_MIN_TB,
       block: REDUCT_BLOCK,
-      batch: OBJECT_STORAGE_BATCH,
       prices: pricingConfig,
       usdRate: usdRate(currency),
       competitor,
       assumptions: ASSUMPTIONS,
       readPercentPerMonth: READ_PERCENT_PER_MONTH,
+      instances: Math.round(safe(instances, DEFAULT_INSTANCES, 1)),
+      telemetryCompression: safe(compression, 1, 1),
     });
   }, [
     currency,
@@ -244,6 +248,8 @@ export default function CostCalculator(): JSX.Element {
     coldDays,
     minioCost,
     competitor,
+    instances,
+    compression,
   ]);
 
   const workload = result.workload;
@@ -443,6 +449,25 @@ export default function CostCalculator(): JSX.Element {
                 suffix="days"
                 error={errors.coldDays}
               />
+              <NumberField
+                label="ReductStore instances"
+                hint="Servers running ReductStore, by default a primary and a standby. More instances add server cost only: the license counts stored data once."
+                value={instances}
+                onChange={setInstances}
+                min={1}
+                step={1}
+                error={errors.instances}
+              />
+              <NumberField
+                label="Telemetry compression"
+                hint="How much smaller telemetry, metadata, and logs get when compressed, applied the same on every side. ReductStore compresses batched records in the client; time-series databases and Foxglove compress internally. Images and other binary data stay as they are."
+                value={compression}
+                onChange={setCompression}
+                min={1}
+                step={1}
+                suffix="×"
+                error={errors.compression}
+              />
               {backend === "minio" && (
                 <NumberField
                   label="On-prem storage cost"
@@ -593,8 +618,11 @@ export default function CostCalculator(): JSX.Element {
             kept for the hot retention. Cold data is the cold share, kept for
             the cold retention after the hot window. So stored hot data =
             recorded per month × hot share × hot days / 30, and the same for
-            cold. Both sides store exactly this data. Each month,{" "}
-            {READ_PERCENT_PER_MONTH}% of the stored data is read back.
+            cold. Telemetry, metadata, and logs are stored smaller by the
+            telemetry compression; binary data is stored as recorded. Both sides
+            store exactly this data. Each month, {READ_PERCENT_PER_MONTH}% of
+            the stored data is read back and leaves the cloud at its data out
+            price.
           </p>
 
           <h3>ReductStore</h3>
@@ -603,7 +631,11 @@ export default function CostCalculator(): JSX.Element {
             {formatCurrency(REDUCTSTORE_PRICING[currency].perTbMonth, currency)}{" "}
             per TB per month of stored data, hot and cold, with a{" "}
             {REDUCTSTORE_MIN_TB} TB minimum. It is a fixed price in each
-            currency, never converted. ReductStore groups records into blocks of
+            currency, never converted. Each instance runs on an{" "}
+            {pricingConfig.aws.server.instance} on AWS, a{" "}
+            {pricingConfig.azure.server.instance} on Azure, or a server priced
+            like the AWS one on-prem. Telemetry faster than 1 Hz is written as
+            one record per second, and ReductStore groups records into blocks of
             up to 64 MB before writing them to storage, so storage sees few,
             large objects.
           </p>
@@ -629,21 +661,20 @@ export default function CostCalculator(): JSX.Element {
             bandwidth.
           </p>
 
-          <h3>InfluxDB + object storage</h3>
+          <h3>InfluxDB and TimescaleDB</h3>
           <p>
-            Metrics go to InfluxDB Cloud Serverless, which charges for data
-            written, storage,{" "}
-            {ASSUMPTIONS.influxQueriesPerMonth.toLocaleString("en")} queries a
-            month, and data read. Everything else goes to the same object
-            storage in 64 MB batches. Large production deployments usually run
-            InfluxDB Cloud Dedicated, whose price is not public.
+            Telemetry, metadata, and logs go to the database; binary data goes
+            to the same object storage as one object per record. InfluxDB runs
+            on {pricingConfig.influx.instances} Amazon Timestream for InfluxDB 3
+            instances with data in object storage. TimescaleDB runs on Tiger
+            Cloud with a primary and an HA replica, hot data on primary storage
+            and cold data on tiered storage. Tiger Cloud publishes only its
+            entry compute price, so a 4 CPU service is estimated at 8 times
+            that.
           </p>
 
           <h3>Not included</h3>
-          <p>
-            Compute outside these services, network transfer, support, VAT,
-            extra backups, engineering time, and migration.
-          </p>
+          <p>Support, VAT, extra backups, engineering time, and migration.</p>
 
           <h3>Prices</h3>
           <p>
@@ -667,7 +698,7 @@ export default function CostCalculator(): JSX.Element {
               </thead>
               <tbody>
                 {PRICE_SOURCES.map((source) => (
-                  <tr key={source.vendor}>
+                  <tr key={source.product}>
                     <th scope="row">
                       <Link to={source.source}>{source.vendor}</Link>
                     </th>

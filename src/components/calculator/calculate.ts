@@ -21,16 +21,12 @@ export type BlockConfig = {
   backendOpsPerBlock: number;
 };
 
-export type BatchConfig = {
-  sizeKb: number;
-  maxRecords: number;
-  opsPerObject: number;
-};
-
 export type StreamWorkload = {
   stream: StreamInput;
   recordsMonth: number;
   generatedMonthTb: number;
+  storedKb: number;
+  storedMonthTb: number;
   hotTb: number;
   coldTb: number;
 };
@@ -39,6 +35,7 @@ export type Workload = {
   streams: StreamWorkload[];
   recordsMonth: number;
   generatedMonthTb: number;
+  storedMonthTb: number;
   hotTb: number;
   coldTb: number;
   retainedTb: number;
@@ -61,12 +58,13 @@ export type ComparisonConfig = {
   licenseTiers: LicenseTier[];
   licenseMinTb: number;
   block: BlockConfig;
-  batch: BatchConfig;
   prices: Prices;
   usdRate: number;
   competitor: CompetitorId;
   assumptions: CompetitorAssumptions;
   readPercentPerMonth: number;
+  instances: number;
+  telemetryCompression: number;
 };
 
 export type Comparison = {
@@ -94,11 +92,17 @@ export function normalizeRetention(retention: Retention): Retention {
   };
 }
 
+export const isBinary = (stream: StreamInput) => stream.dataClass === "blob";
+
+// Telemetry, metadata, and logs are stored compressed by the same ratio on
+// every side; binary data such as images is already compressed.
 export function calculateWorkload(
   input: WorkloadInput,
   retention: Retention,
+  telemetryCompression = 1,
 ): Workload {
   const r = normalizeRetention(retention);
+  const compression = Math.max(1, finite(telemetryCompression));
   const secondsMonth =
     nonNegative(input.units) *
     nonNegative(input.recordingHoursPerDay) *
@@ -113,15 +117,18 @@ export function calculateWorkload(
         nonNegative(stream.frequencyHz) *
         secondsMonth;
       const generatedMonthTb = (recordsMonth * stream.recordSizeKb) / KB_PER_TB;
+      const ratio = isBinary(stream) ? 1 : compression;
+      const storedMonthTb = generatedMonthTb / ratio;
       return {
         stream,
         recordsMonth,
         generatedMonthTb,
+        storedKb: stream.recordSizeKb / ratio,
+        storedMonthTb,
         hotTb:
-          (generatedMonthTb * share(r.hotPercent) * r.hotDays) / DAYS_PER_MONTH,
+          (storedMonthTb * share(r.hotPercent) * r.hotDays) / DAYS_PER_MONTH,
         coldTb:
-          (generatedMonthTb * share(r.coldPercent) * r.coldDays) /
-          DAYS_PER_MONTH,
+          (storedMonthTb * share(r.coldPercent) * r.coldDays) / DAYS_PER_MONTH,
       };
     })
     .filter((stream) => stream.recordsMonth > 0);
@@ -134,6 +141,7 @@ export function calculateWorkload(
     streams,
     recordsMonth: sum((s) => s.recordsMonth),
     generatedMonthTb: sum((s) => s.generatedMonthTb),
+    storedMonthTb: sum((s) => s.storedMonthTb),
     hotTb,
     coldTb,
     retainedTb: hotTb + coldTb,
@@ -289,16 +297,27 @@ const sumAmount = (components: CostComponent[]) =>
 
 const names = (streams: StreamWorkload[]) => streams.map((s) => s.stream.name);
 
+const dataOutYear = (
+  storedTb: number,
+  perTb: number,
+  config: ComparisonConfig,
+) => 12 * storedTb * share(config.readPercentPerMonth) * perTb;
+
 function reductSide(
   workload: Workload,
   retention: Retention,
   config: ComparisonConfig,
 ): { side: CostSide; costs: Costs } {
+  // Telemetry faster than 1 Hz is batched into one record per second before
+  // it is compressed, so a block holds seconds rather than single samples.
   const costs = storeAll(workload.streams, retention, config, (s) => {
-    const pack = packFactor(s.stream.recordSizeKb, config.block);
+    const batch = isBinary(s.stream)
+      ? 1
+      : Math.max(1, nonNegative(s.stream.frequencyHz));
+    const pack = packFactor(s.storedKb * batch, config.block);
     return {
-      objectKb: s.stream.recordSizeKb * pack,
-      objectsPerRecord: config.block.backendOpsPerBlock / pack,
+      objectKb: s.storedKb * batch * pack,
+      objectsPerRecord: config.block.backendOpsPerBlock / (pack * batch),
     };
   });
   const licensedTb =
@@ -318,6 +337,19 @@ function reductSide(
       amountYear: costs.requests,
     });
   }
+  const dataOut = dataOutYear(
+    workload.retainedTb,
+    config.pricing.egressPerTb,
+    config,
+  );
+  if (dataOut > 0) components.push({ label: "Data out", amountYear: dataOut });
+  components.push({
+    label: "Servers",
+    amountYear:
+      12 *
+      Math.max(1, Math.round(nonNegative(config.instances))) *
+      config.pricing.serverPerMonth,
+  });
   return {
     costs,
     side: {
@@ -344,7 +376,7 @@ function foxgloveSide(
   const usd = (value: number) => value * config.usdRate;
   const { assumptions } = config;
   const uploadedMonthTb =
-    workload.generatedMonthTb * share(normalizeRetention(retention).hotPercent);
+    workload.storedMonthTb * share(normalizeRetention(retention).hotPercent);
   const seats = Math.max(0, assumptions.foxgloveDeveloperSeats);
   const components: CostComponent[] = [
     {
@@ -411,62 +443,59 @@ function foxgloveSide(
   };
 }
 
-function influxSide(
+// Time-series databases keep telemetry, metadata, and logs; binary data goes
+// to object storage as one object per record.
+function databaseSide(
   workload: Workload,
   retention: Retention,
   config: ComparisonConfig,
+  name: string,
 ): CostSide {
-  const i = config.prices.influx;
   const usd = (value: number) => value * config.usdRate;
-  const metrics = workload.streams.filter(
-    (s) => s.stream.dataClass === "metric",
-  );
-  const rest = workload.streams.filter((s) => s.stream.dataClass !== "metric");
-  const r = normalizeRetention(retention);
-  const writtenMb =
-    metrics.reduce((sum, s) => sum + s.generatedMonthTb, 0) *
-    share(r.hotPercent) *
-    1_000_000;
-  const retainedGb =
-    metrics.reduce((sum, s) => sum + s.hotTb + s.coldTb, 0) * 1000;
-  const components: CostComponent[] = [
-    { label: "Data in", amountYear: usd(12 * writtenMb * i.dataInUsdPerMb) },
-    {
-      label: "Storage",
-      amountYear: usd(
-        12 *
-          retainedGb *
-          Math.max(0, config.assumptions.influxStorageToRawRatio) *
-          i.hoursPerMonth *
-          i.storageUsdPerGbHour,
-      ),
-    },
-    {
-      label: "Queries",
-      amountYear: usd(
-        12 *
-          (Math.max(0, config.assumptions.influxQueriesPerMonth) / 100) *
-          i.queryUsdPer100,
-      ),
-    },
-    {
-      label: "Data out",
-      amountYear: usd(
-        12 * retainedGb * share(config.readPercentPerMonth) * i.dataOutUsdPerGb,
-      ),
-    },
-  ];
-  const routes: Route[] = [
-    { target: "InfluxDB Cloud", streams: names(metrics) },
-  ];
-  if (rest.length > 0) {
-    const costs = storeAll(rest, retention, config, (s) => {
-      const pack = packFactor(s.stream.recordSizeKb, config.batch);
-      return {
-        objectKb: s.stream.recordSizeKb * pack,
-        objectsPerRecord: config.batch.opsPerObject / pack,
-      };
-    });
+  const db = workload.streams.filter((s) => !isBinary(s.stream));
+  const binary = workload.streams.filter((s) => isBinary(s.stream));
+  const dbHotTb = db.reduce((sum, s) => sum + s.hotTb, 0);
+  const dbColdTb = db.reduce((sum, s) => sum + s.coldTb, 0);
+  const components: CostComponent[] = [];
+  const routes: Route[] = [];
+  let dataOut = 0;
+
+  if (db.length > 0) {
+    const vendor =
+      config.competitor === "influx"
+        ? config.prices.influx
+        : config.prices.timescale;
+    let compute: number;
+    let storage: number;
+    if (config.competitor === "influx") {
+      const i = config.prices.influx;
+      compute =
+        i.instances * i.instanceUsdPerHour * config.prices.hoursPerMonth;
+      storage = (dbHotTb + dbColdTb) * 1000 * i.storageUsdPerGbMonth;
+    } else {
+      const t = config.prices.timescale;
+      compute = t.instances * t.serviceUsdPerMonth;
+      storage =
+        dbHotTb * 1000 * t.storageUsdPerGbMonth * t.instances +
+        dbColdTb * 1000 * t.tieredUsdPerGbMonth;
+    }
+    components.push(
+      { label: "Compute", amountYear: usd(12 * compute) },
+      { label: "Storage", amountYear: usd(12 * storage) },
+    );
+    dataOut += dataOutYear(
+      dbHotTb + dbColdTb,
+      usd(vendor.egressUsdPerGb * 1000),
+      config,
+    );
+    routes.push({ target: name, streams: names(db) });
+  }
+
+  if (binary.length > 0) {
+    const costs = storeAll(binary, retention, config, (s) => ({
+      objectKb: s.storedKb,
+      objectsPerRecord: 1,
+    }));
     components.push({
       label: `${config.backendName} storage`,
       amountYear: costs.storage,
@@ -477,13 +506,22 @@ function influxSide(
         amountYear: costs.requests,
       });
     }
-    routes.push({ target: config.backendName, streams: names(rest) });
+    dataOut += dataOutYear(
+      binary.reduce((sum, s) => sum + s.hotTb + s.coldTb, 0),
+      config.pricing.egressPerTb,
+      config,
+    );
+    routes.push({ target: config.backendName, streams: names(binary) });
   }
+
+  if (dataOut > 0) components.push({ label: "Data out", amountYear: dataOut });
   return {
     label:
-      rest.length > 0
-        ? `InfluxDB Cloud + ${config.backendName}`
-        : "InfluxDB Cloud",
+      db.length > 0 && binary.length > 0
+        ? `${name} + ${config.backendName}`
+        : db.length > 0
+          ? name
+          : config.backendName,
     components,
     totalYear: sumAmount(components),
     routes,
@@ -495,12 +533,21 @@ export function compare(
   retention: Retention,
   config: ComparisonConfig,
 ): Comparison {
-  const workload = calculateWorkload(input, retention);
+  const workload = calculateWorkload(
+    input,
+    retention,
+    config.telemetryCompression,
+  );
   const { side: reduct, costs } = reductSide(workload, retention, config);
   const alternative =
     config.competitor === "foxglove"
       ? foxgloveSide(workload, retention, nonNegative(input.units), config)
-      : influxSide(workload, retention, config);
+      : databaseSide(
+          workload,
+          retention,
+          config,
+          config.competitor === "influx" ? "InfluxDB" : "TimescaleDB",
+        );
   const savingYear = alternative.totalYear - reduct.totalYear;
   const largest = workload.streams.reduce(
     (best, s, i) => (s.coldTb > workload.streams[best].coldTb ? i : best),
