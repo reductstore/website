@@ -3,12 +3,28 @@
   margin-bottom: var(--reduct-bottom-page-margin);
 }
 
-.hero {
+.whitePaperContainer > * {
+  max-width: 56rem;
+}
+
+.overview {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 16rem;
+  grid-template-columns: 13rem minmax(0, 1fr);
   gap: 3rem;
-  align-items: center;
-  margin-bottom: 3rem;
+  align-items: start;
+  margin-bottom: 2.5rem;
+}
+
+.bulletPoints {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+}
+
+.subBulletPoints {
+  list-style: none;
+  margin: 0 0 0 2rem;
+  padding: 0;
 }
 
 .actions {
@@ -23,55 +39,12 @@
 }
 
 .section {
-  margin-bottom: 3rem;
-}
-
-.contents {
-  max-width: 44rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  counter-reset: section;
-}
-
-.contents li {
-  counter-increment: section;
-}
-
-.contents a {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  padding: 0.4rem 0;
-  color: var(--ifm-font-color-base);
-}
-
-.contents a::before {
-  content: counter(section) ".";
-  min-width: 1.75rem;
-  color: var(--reduct-dimmed);
-}
-
-.contents a:hover {
-  color: var(--ifm-color-primary);
-  text-decoration: none;
-}
-
-.dots {
-  flex: 1 1 auto;
-  border-bottom: 1px dotted var(--ifm-color-emphasis-400);
-  transform: translateY(-0.25em);
-}
-
-.pageNumber {
-  min-width: 2.75em;
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-  color: var(--reduct-dimmed);
+  margin-bottom: 2.5rem;
 }
 
 .tryIt {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
   padding: 1.5rem 2rem;
   border-radius: 12px;
@@ -98,7 +71,7 @@
 
 .lead {
   max-width: 44rem;
-  margin-bottom: 1.75rem;
+  margin-bottom: 2rem;
   font-size: var(--reduct-font-size-subtitle);
   line-height: 1.6;
   color: var(--ifm-color-emphasis-700);
@@ -212,8 +185,7 @@
 .inside img {
   display: block;
   width: 100%;
-  aspect-ratio: 640 / 905;
-  object-fit: cover;
+  height: auto;
   border-radius: 3px;
   background: #fff;
   box-shadow:
@@ -258,7 +230,7 @@ html[data-theme="dark"] .highlightLabel {
 }
 
 @media (max-width: 600px) {
-  .hero {
+  .overview {
     grid-template-columns: minmax(0, 1fr);
     gap: 2rem;
   }

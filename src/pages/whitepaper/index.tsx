@@ -5,6 +5,8 @@ import Link from "@docusaurus/Link";
 import CodeBlock from "@theme/CodeBlock";
 import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import { LuBot, LuDownload, LuFactory, LuPlane } from "react-icons/lu";
+import BulletPointItem from "@site/src/components/shared/BulletPointItem";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { track } from "@site/src/lib/analytics";
 import styles from "./styles.module.css";
 
@@ -13,19 +15,6 @@ const PDF = "/pdf/whitepaper/ReductStore_WhitePaper.pdf";
 const cover = require("@site/static/img/whitepaper/whitepaper.png").default;
 const pageThree = require("@site/static/img/whitepaper/page-3.webp").default;
 const pageEleven = require("@site/static/img/whitepaper/page-11.webp").default;
-
-const contents = [
-  { title: "The problem at the edge", page: 3 },
-  { title: "Why ReductStore is different", page: 3 },
-  { title: "The mental model: buckets, entries, records", page: 5 },
-  { title: "How to integrate: SDKs, HTTP API, ReductBridge, Zenoh", page: 6 },
-  { title: "The reduction strategy", page: 7 },
-  { title: "The cloud tier", page: 8 },
-  { title: "Robotics", page: 9 },
-  { title: "Industrial IoT", page: 10 },
-  { title: "Drones", page: 12 },
-  { title: "Vision and roadmap", page: 12 },
-];
 
 const insidePages = [
   { src: pageThree, caption: "Benchmarks vs. MinIO and TimescaleDB", page: 3 },
@@ -59,37 +48,12 @@ export default function WhitePaper(): JSX.Element {
       <main>
         <SimpleHeader pageTitle="White Paper" />
         <div className={clsx("container", styles.whitePaperContainer)}>
-          <section className={styles.hero}>
-            <div>
-              <p className={styles.lead}>
-                A data backbone for robotics and industrial IoT. Capture
-                everything raw at the edge, reduce it on the way to the next
-                tier, and extract it to any format or query it with SQL.
-              </p>
-              <div className={styles.actions}>
-                <a
-                  className="button button--primary button--lg"
-                  href={PDF}
-                  download
-                  onClick={onDownload("download")}
-                >
-                  <LuDownload aria-hidden="true" className={styles.icon} />
-                  Download PDF
-                </a>
-                <a
-                  className="button button--secondary button--lg"
-                  href={PDF}
-                  target="_blank"
-                  rel="noopener"
-                  onClick={onDownload("read")}
-                >
-                  Read in browser
-                </a>
-              </div>
-              <p className={styles.meta}>
-                PDF · 13 pages · 1 MB · 2026 edition · no sign-up
-              </p>
-            </div>
+          <p className={styles.lead}>
+            A data backbone for robotics and industrial IoT. Capture everything
+            raw at the edge, reduce it on the way to the next tier, and extract
+            it to any format or query it with SQL.
+          </p>
+          <section className={styles.overview}>
             <a
               className={styles.preview}
               href={PDF}
@@ -118,26 +82,61 @@ export default function WhitePaper(): JSX.Element {
                 />
               </div>
             </a>
-          </section>
-
-          <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>Contents</h2>
-            <ol className={styles.contents}>
-              {contents.map((item) => (
-                <li key={item.title}>
-                  <a
-                    href={`${PDF}#page=${item.page}`}
-                    target="_blank"
-                    rel="noopener"
-                    onClick={onDownload("read")}
-                  >
-                    <span>{item.title}</span>
-                    <span className={styles.dots} aria-hidden="true" />
-                    <span className={styles.pageNumber}>p. {item.page}</span>
-                  </a>
-                </li>
-              ))}
-            </ol>
+            <div>
+              <h2 className={styles.sectionTitle}>What's inside</h2>
+              <ul className={styles.bulletPoints}>
+                <BulletPointItem>
+                  Why time-series databases and object storage fall short for
+                  robotics & industrial use cases
+                </BulletPointItem>
+                <BulletPointItem>
+                  Three use cases end to end: robotics with ROS, industrial IoT
+                  over MQTT, and drones
+                </BulletPointItem>
+                <BulletPointItem>
+                  Benchmarks and comparisons vs. MinIO, TimescaleDB, MongoDB,
+                  InfluxDB, and IoTDB
+                </BulletPointItem>
+                <BulletPointItem>Key features:</BulletPointItem>
+                <ul className={styles.subBulletPoints}>
+                  <BulletPointItem icon={faArrowRight} size="xs">
+                    FIFO quota to prevent disk overflow on edge
+                  </BulletPointItem>
+                  <BulletPointItem icon={faArrowRight} size="xs">
+                    Metadata labels for selective replication
+                  </BulletPointItem>
+                  <BulletPointItem icon={faArrowRight} size="xs">
+                    SQL over stored records with ReductSelect and DataFusion
+                  </BulletPointItem>
+                  <BulletPointItem icon={faArrowRight} size="xs">
+                    S3 and Azure Blob backends for cloud deployments
+                  </BulletPointItem>
+                </ul>
+              </ul>
+              <div className={styles.actions}>
+                <a
+                  className="button button--primary button--lg"
+                  href={PDF}
+                  download
+                  onClick={onDownload("download")}
+                >
+                  <LuDownload aria-hidden="true" className={styles.icon} />
+                  Download PDF
+                </a>
+                <a
+                  className="button button--secondary button--lg"
+                  href={PDF}
+                  target="_blank"
+                  rel="noopener"
+                  onClick={onDownload("read")}
+                >
+                  Read in browser
+                </a>
+              </div>
+              <p className={styles.meta}>
+                PDF · 13 pages · 1 MB · 2026 edition · no sign-up
+              </p>
+            </div>
           </section>
 
           <section className={styles.section}>

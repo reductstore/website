@@ -403,11 +403,15 @@
 
 .summary {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   gap: 0.75rem 1rem;
   margin: 0 0 1.5rem;
-  padding: 1rem 0 0;
+  padding: 1rem 0.25rem 0;
   border-top: 1px solid rgba(43, 5, 72, 0.1);
+}
+
+.summary > :last-child {
+  justify-self: end;
 }
 
 .summary dt {

@@ -542,8 +542,8 @@ export default function CostCalculator(): JSX.Element {
 
               <dl className={styles.summary}>
                 <div>
-                  <dt>Recorded</dt>
-                  <dd>{formatTb(workload.generatedMonthTb)} / month</dd>
+                  <dt>Recorded / mo</dt>
+                  <dd>{formatTb(workload.generatedMonthTb)}</dd>
                 </div>
                 <div>
                   <dt>Hot</dt>
