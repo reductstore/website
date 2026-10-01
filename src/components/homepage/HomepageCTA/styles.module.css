@@ -39,6 +39,11 @@
     transform 160ms ease;
 }
 
+.icon {
+  margin-right: 0.5rem;
+  vertical-align: -0.15em;
+}
+
 .buttonSecondary:hover {
   color: #fff;
   background-color: rgba(255, 255, 255, 0.1);
