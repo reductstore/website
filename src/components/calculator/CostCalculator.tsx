@@ -41,7 +41,7 @@ import type {
 import { CostBars, CostBreakdowns } from "./CostComparison";
 import StreamEditor, { StreamDraft } from "./StreamEditor";
 import NumberField from "./NumberField";
-import { formatCount, formatPercent, formatTb } from "./format";
+import { formatPercent, formatTb } from "./format";
 import { bucket, track } from "./analytics";
 import styles from "./styles.module.css";
 
@@ -153,10 +153,14 @@ export default function CostCalculator(): JSX.Element {
     toDraft(preset.streams),
   );
   const [backend, setBackend] = useState<BackendId>("aws");
-  const [keepPercent, setKeepPercent] = useState(String(preset.keepPercent));
-  const [retentionDays, setRetentionDays] = useState(
-    String(preset.retentionDays),
+  const [hotPercent, setHotPercent] = useState(
+    String(preset.retention.hotPercent),
   );
+  const [hotDays, setHotDays] = useState(String(preset.retention.hotDays));
+  const [coldPercent, setColdPercent] = useState(
+    String(preset.retention.coldPercent),
+  );
+  const [coldDays, setColdDays] = useState(String(preset.retention.coldDays));
   const [minioCost, setMinioCost] = useState(
     String(DEFAULT_MINIO_PER_TB_MONTH),
   );
@@ -169,8 +173,10 @@ export default function CostCalculator(): JSX.Element {
     setUnits(String(next.units));
     setHours(String(next.recordingHoursPerDay));
     setStreams(toDraft(next.streams));
-    setKeepPercent(String(next.keepPercent));
-    setRetentionDays(String(next.retentionDays));
+    setHotPercent(String(next.retention.hotPercent));
+    setHotDays(String(next.retention.hotDays));
+    setColdPercent(String(next.retention.coldPercent));
+    setColdDays(String(next.retention.coldDays));
     track("calculator_preset_selected", { preset: id });
   };
 
@@ -181,8 +187,12 @@ export default function CostCalculator(): JSX.Element {
   const errors = {
     units: valid(units, 1) ? null : "At least 1",
     hours: valid(hours, 0.1, 24) ? null : "Between 0 and 24",
-    keepPercent: valid(keepPercent, 1, 100) ? null : "Between 1 and 100",
-    retentionDays: valid(retentionDays, 1) ? null : "At least 1 day",
+    hotPercent: valid(hotPercent, 1, 100) ? null : "Between 1 and 100",
+    hotDays: valid(hotDays, 1) ? null : "At least 1 day",
+    coldPercent: valid(coldPercent, 0, num(hotPercent) || 100)
+      ? null
+      : "Between 0 and the hot share",
+    coldDays: valid(coldDays, 0) ? null : "Cannot be negative",
     minioCost: valid(minioCost, 0) ? null : "Cannot be negative",
   };
 
@@ -195,7 +205,6 @@ export default function CostCalculator(): JSX.Element {
     const workload = {
       units: safe(units, 1, 1),
       recordingHoursPerDay: safe(hours, 0, 0, 24),
-      keepPercent: safe(keepPercent, 100, 1, 100),
       streams: streams.map((s) => ({
         ...s,
         count: safe(s.count, 0),
@@ -203,44 +212,44 @@ export default function CostCalculator(): JSX.Element {
         recordSizeKb: safe(s.recordSizeKb, 0),
       })),
     };
-    const hot = preset.hotDays;
-    const storage = {
-      backend,
-      edgeDiskTbPerUnit: 0,
-      hotDays: hot,
-      retentionDays: Math.max(1, safe(retentionDays, hot)),
-      readPercentPerMonth: READ_PERCENT_PER_MONTH,
-      minioPerTbMonth: safe(minioCost, 0),
+    const hot = safe(hotPercent, 100, 1, 100);
+    const retention = {
+      hotPercent: hot,
+      hotDays: safe(hotDays, 30, 1),
+      coldPercent: safe(coldPercent, 0, 0, hot),
+      coldDays: safe(coldDays, 0, 0),
     };
-    return compare(workload, storage, {
-      pricing: backendPricing(backend, currency, storage.minioPerTbMonth),
+    return compare(workload, retention, {
+      pricing: backendPricing(backend, currency, safe(minioCost, 0)),
+      backendName: backendName(backend),
       licenseTiers: licenseTiers(REDUCTSTORE_PRICING[currency].perTbMonth),
       licenseMinTb: REDUCTSTORE_MIN_TB,
       block: REDUCT_BLOCK,
-      backendName: backendName(backend),
       batch: OBJECT_STORAGE_BATCH,
       prices: pricingConfig,
       usdRate: usdRate(currency),
       competitor,
       assumptions: ASSUMPTIONS,
+      readPercentPerMonth: READ_PERCENT_PER_MONTH,
     });
   }, [
     currency,
-    preset,
     units,
     hours,
     streams,
     backend,
-    keepPercent,
-    retentionDays,
+    hotPercent,
+    hotDays,
+    coldPercent,
+    coldDays,
     minioCost,
     competitor,
   ]);
 
-  const workload = result.estimate.workload;
-  const hasData = workload.totalRecordsMonth > 0;
+  const workload = result.workload;
+  const hasData = workload.recordsMonth > 0;
   const saving = result.savingYear;
-  const retained = workload.totalRetainedTb;
+  const retained = workload.retainedTb;
 
   useEffect(() => {
     track("calculator_viewed");
@@ -256,7 +265,7 @@ export default function CostCalculator(): JSX.Element {
         currency,
         units_bucket: bucket(safe(units, 1, 1), [2, 5, 10, 50, 100, 1000]),
         monthly_tb_bucket: bucket(
-          workload.totalDataMonthTb,
+          workload.generatedMonthTb,
           [1, 10, 50, 100, 500, 1000],
         ),
         retained_tb_bucket: bucket(retained, [10, 100, 500, 1000, 5000]),
@@ -361,7 +370,7 @@ export default function CostCalculator(): JSX.Element {
             />
             <p className={styles.generated}>
               {hasData
-                ? `≈ ${formatTb(workload.generatedMonthTb)} generated per month`
+                ? `≈ ${formatTb(workload.generatedMonthTb)} recorded per month`
                 : "Enable at least one stream with a frequency and record size."}
             </p>
           </section>
@@ -393,30 +402,51 @@ export default function CostCalculator(): JSX.Element {
             </div>
             <div className={styles.fields}>
               <NumberField
-                label="Data kept"
-                hint="Share of the recorded data you keep, for example only events plus a sample of normal operation. 100% keeps everything. Both sides store the same share."
-                value={keepPercent}
-                onChange={setKeepPercent}
+                label="Hot data kept"
+                hint="Share of the recorded data kept in standard storage, ready to query. 100% keeps everything."
+                value={hotPercent}
+                onChange={setHotPercent}
                 min={1}
                 max={100}
                 step={5}
                 suffix="%"
-                error={errors.keepPercent}
+                error={errors.hotPercent}
               />
               <NumberField
-                label="Retention"
-                hint="How many days each kept record is stored before it is deleted."
-                value={retentionDays}
-                onChange={setRetentionDays}
+                label="Hot retention"
+                hint="Days the hot data stays in standard storage."
+                value={hotDays}
+                onChange={setHotDays}
                 min={1}
                 step={1}
                 suffix="days"
-                error={errors.retentionDays}
+                error={errors.hotDays}
+              />
+              <NumberField
+                label="Cold data kept"
+                hint="Share of the recorded data kept longer after the hot window, for example events and samples for training. It cannot be more than the hot share."
+                value={coldPercent}
+                onChange={setColdPercent}
+                min={0}
+                max={100}
+                step={5}
+                suffix="%"
+                error={errors.coldPercent}
+              />
+              <NumberField
+                label="Cold retention"
+                hint="Days the cold data is kept after the hot window, in the cheapest storage class whose minimum storage time fits."
+                value={coldDays}
+                onChange={setColdDays}
+                min={0}
+                step={1}
+                suffix="days"
+                error={errors.coldDays}
               />
               {backend === "minio" && (
                 <NumberField
                   label="On-prem storage cost"
-                  hint="What one TB of your own object storage (for example MinIO) costs per month, with disks, servers, and power."
+                  hint="What one TB of your own object storage (for example MinIO) costs per month, with disks, servers, and power. Hot and cold data both use this price."
                   value={minioCost}
                   onChange={setMinioCost}
                   min={0}
@@ -427,6 +457,15 @@ export default function CostCalculator(): JSX.Element {
                 />
               )}
             </div>
+            {hasData && (
+              <p className={styles.generated}>
+                {formatTb(workload.hotTb)} hot + {formatTb(workload.coldTb)}{" "}
+                cold
+                {backend !== "minio" && workload.coldTb > 0
+                  ? ` in ${result.coldTier}`
+                  : ""}
+              </p>
+            )}
           </section>
 
           <section className={styles.step}>
@@ -503,16 +542,16 @@ export default function CostCalculator(): JSX.Element {
 
               <dl className={styles.summary}>
                 <div>
-                  <dt>Generated</dt>
+                  <dt>Recorded</dt>
                   <dd>{formatTb(workload.generatedMonthTb)} / month</dd>
                 </div>
                 <div>
-                  <dt>Retained</dt>
-                  <dd>{formatTb(retained)}</dd>
+                  <dt>Hot</dt>
+                  <dd>{formatTb(workload.hotTb)}</dd>
                 </div>
                 <div>
-                  <dt>Records kept</dt>
-                  <dd>{formatCount(workload.totalRecordsMonth)} / month</dd>
+                  <dt>Cold</dt>
+                  <dd>{formatTb(workload.coldTb)}</dd>
                 </div>
               </dl>
 
@@ -549,29 +588,35 @@ export default function CostCalculator(): JSX.Element {
 
           <h3>Your data</h3>
           <p>
-            Each stream produces count × frequency × record size of data for
-            every hour it records, over 30-day months. You keep the share set in
-            Data kept, and Retained is that share for one retention window. Both
-            sides store the same data. Each month, {READ_PERCENT_PER_MONTH}% of
-            the retained data is read back.
+            Each stream records count × frequency × record size for every hour
+            it records, over 30-day months. Hot data is the hot share of that,
+            kept for the hot retention. Cold data is the cold share, kept for
+            the cold retention after the hot window. So stored hot data =
+            recorded per month × hot share × hot days / 30, and the same for
+            cold. Both sides store exactly this data. Each month,{" "}
+            {READ_PERCENT_PER_MONTH}% of the stored data is read back.
           </p>
 
           <h3>ReductStore</h3>
           <p>
             ReductStore Pro costs{" "}
             {formatCurrency(REDUCTSTORE_PRICING[currency].perTbMonth, currency)}{" "}
-            per TB per month of retained data, with a {REDUCTSTORE_MIN_TB} TB
-            minimum. It is a fixed price in each currency, never converted.
-            ReductStore groups records into blocks of up to 64 MB before writing
-            them to storage, so storage sees few, large objects.
+            per TB per month of stored data, hot and cold, with a{" "}
+            {REDUCTSTORE_MIN_TB} TB minimum. It is a fixed price in each
+            currency, never converted. ReductStore groups records into blocks of
+            up to 64 MB before writing them to storage, so storage sees few,
+            large objects.
           </p>
 
           <h3>Storage</h3>
           <p>
-            On S3 and Azure, data older than {preset.hotDays} days moves to a
-            cheaper storage class when that saves money, following each
-            class&apos;s minimum storage time. On-prem storage costs the price
-            you enter per TB per month.
+            Hot data is in the standard class (S3 Standard, Azure Hot). Cold
+            data moves to the cheapest class whose minimum storage time fits the
+            cold retention: S3 Standard-IA or Azure Cool from 30 days, S3
+            Glacier Instant Retrieval or Azure Cold from 90 days. Moving and
+            reading cold data has its own request and retrieval prices, which
+            are included. On-prem, hot and cold data both cost the price you
+            enter per TB per month.
           </p>
 
           <h3>Foxglove</h3>
@@ -579,8 +624,9 @@ export default function CostCalculator(): JSX.Element {
             Foxglove Pro with {ASSUMPTIONS.foxgloveDeveloperSeats} developer
             seats, one device per unit, and{" "}
             {ASSUMPTIONS.foxgloveQueryHoursPerMonth} query hours a month. Every
-            stream is uploaded to Foxglove, which charges for storage, indexing,
-            and bandwidth.
+            stream is uploaded to Foxglove, which charges for indexing what is
+            uploaded, for storing hot and cold data at the same price, and for
+            bandwidth.
           </p>
 
           <h3>InfluxDB + object storage</h3>

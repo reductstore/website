@@ -8,9 +8,12 @@ export const PRESETS: WorkloadPreset[] = [
     unitLabel: "Mobile robots",
     units: 10,
     recordingHoursPerDay: 8,
-    keepPercent: 25,
-    hotDays: 30,
-    retentionDays: 90,
+    retention: {
+      hotPercent: 20,
+      hotDays: 90,
+      coldPercent: 5,
+      coldDays: 90,
+    },
     streams: [
       {
         id: "mobile-robot-0",
@@ -63,11 +66,14 @@ export const PRESETS: WorkloadPreset[] = [
     id: "autonomous-vehicle",
     name: "Autonomous vehicle",
     unitLabel: "Vehicles",
-    units: 10,
+    units: 5,
     recordingHoursPerDay: 8,
-    keepPercent: 10,
-    hotDays: 30,
-    retentionDays: 90,
+    retention: {
+      hotPercent: 20,
+      hotDays: 60,
+      coldPercent: 5,
+      coldDays: 90,
+    },
     streams: [
       {
         id: "autonomous-vehicle-0",
@@ -122,9 +128,12 @@ export const PRESETS: WorkloadPreset[] = [
     unitLabel: "Drones",
     units: 10,
     recordingHoursPerDay: 4,
-    keepPercent: 25,
-    hotDays: 30,
-    retentionDays: 180,
+    retention: {
+      hotPercent: 50,
+      hotDays: 90,
+      coldPercent: 10,
+      coldDays: 180,
+    },
     streams: [
       {
         id: "drone-0",
@@ -179,9 +188,12 @@ export const PRESETS: WorkloadPreset[] = [
     unitLabel: "Industrial robots",
     units: 25,
     recordingHoursPerDay: 16,
-    keepPercent: 60,
-    hotDays: 30,
-    retentionDays: 90,
+    retention: {
+      hotPercent: 40,
+      hotDays: 90,
+      coldPercent: 5,
+      coldDays: 365,
+    },
     streams: [
       {
         id: "industrial-robot-0",
@@ -234,11 +246,14 @@ export const PRESETS: WorkloadPreset[] = [
     id: "vibration",
     name: "Vibration data",
     unitLabel: "Machines",
-    units: 30,
+    units: 60,
     recordingHoursPerDay: 24,
-    keepPercent: 100,
-    hotDays: 30,
-    retentionDays: 180,
+    retention: {
+      hotPercent: 100,
+      hotDays: 90,
+      coldPercent: 10,
+      coldDays: 180,
+    },
     streams: [
       {
         id: "vibration-0",
@@ -284,9 +299,12 @@ export const PRESETS: WorkloadPreset[] = [
     unitLabel: "PLCs",
     units: 50,
     recordingHoursPerDay: 24,
-    keepPercent: 100,
-    hotDays: 30,
-    retentionDays: 180,
+    retention: {
+      hotPercent: 100,
+      hotDays: 180,
+      coldPercent: 10,
+      coldDays: 365,
+    },
     streams: [
       {
         id: "plc-0",
@@ -330,11 +348,14 @@ export const PRESETS: WorkloadPreset[] = [
     id: "computer-vision",
     name: "Computer vision",
     unitLabel: "Cameras",
-    units: 20,
+    units: 40,
     recordingHoursPerDay: 24,
-    keepPercent: 100,
-    hotDays: 30,
-    retentionDays: 120,
+    retention: {
+      hotPercent: 50,
+      hotDays: 90,
+      coldPercent: 10,
+      coldDays: 180,
+    },
     streams: [
       {
         id: "computer-vision-0",
@@ -369,11 +390,14 @@ export const PRESETS: WorkloadPreset[] = [
     id: "custom",
     name: "Custom",
     unitLabel: "Data sources",
-    units: 10,
+    units: 20,
     recordingHoursPerDay: 24,
-    keepPercent: 75,
-    hotDays: 30,
-    retentionDays: 120,
+    retention: {
+      hotPercent: 60,
+      hotDays: 90,
+      coldPercent: 10,
+      coldDays: 180,
+    },
     streams: [
       {
         id: "custom-0",

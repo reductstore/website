@@ -2,9 +2,8 @@ import type {
   BackendPricing,
   CompetitorAssumptions,
   CompetitorId,
-  CostBreakdown,
   LicenseTier,
-  StorageInput,
+  Retention,
   StorageTier,
   StreamInput,
   WorkloadInput,
@@ -13,7 +12,8 @@ import type {
 export const KB_PER_TB = 1_000_000_000;
 export const DAYS_PER_MONTH = 30;
 export const SECONDS_PER_HOUR = 3600;
-const COLD_BAND_DAYS = 90;
+
+type Prices = typeof import("./pricing").pricingConfig;
 
 export type BlockConfig = {
   sizeKb: number;
@@ -21,55 +21,124 @@ export type BlockConfig = {
   backendOpsPerBlock: number;
 };
 
-export type CalculatorConfig = {
-  pricing: BackendPricing;
-  licenseTiers: LicenseTier[];
-  licenseMinTb?: number;
-  block: BlockConfig;
+export type BatchConfig = {
+  sizeKb: number;
+  maxRecords: number;
+  opsPerObject: number;
 };
 
 export type StreamWorkload = {
   stream: StreamInput;
   recordsMonth: number;
-  dataMonthTb: number;
-  packFactor: number;
+  generatedMonthTb: number;
+  hotTb: number;
+  coldTb: number;
 };
 
 export type Workload = {
   streams: StreamWorkload[];
-  totalRecordsMonth: number;
+  recordsMonth: number;
   generatedMonthTb: number;
-  totalDataMonthTb: number;
-  totalRetainedTb: number;
+  hotTb: number;
+  coldTb: number;
+  retainedTb: number;
 };
 
-export type Bands = { hot: number; cold: number; archive: number };
+export type CostComponent = { label: string; amountYear: number };
 
-export type TierName = "hot" | "cold" | "archive";
+export type Route = { target: string; streams: string[] };
 
-export type StreamCost = {
-  path: [TierName, TierName, TierName];
-  storageMonth: number;
-  operationsMonth: number;
-  retrievalMonth: number;
+export type CostSide = {
+  label: string;
+  components: CostComponent[];
+  totalYear: number;
+  routes: Route[];
 };
 
-export type Estimate = {
+export type ComparisonConfig = {
+  pricing: BackendPricing;
+  backendName: string;
+  licenseTiers: LicenseTier[];
+  licenseMinTb: number;
+  block: BlockConfig;
+  batch: BatchConfig;
+  prices: Prices;
+  usdRate: number;
+  competitor: CompetitorId;
+  assumptions: CompetitorAssumptions;
+  readPercentPerMonth: number;
+};
+
+export type Comparison = {
   workload: Workload;
-  direct: CostBreakdown;
-  reduct: CostBreakdown;
+  coldTier: string;
+  reduct: CostSide;
+  alternative: CostSide;
   savingYear: number;
   savingPercent: number;
-  directIngestObjectsMonth: number;
-  reductIngestOperationsMonth: number;
-  ingestReduction: number;
-  localHistoryDays: number;
-  stored: StreamWorkload[];
-  storedRetainedTb: number;
 };
 
 const finite = (value: number) => (Number.isFinite(value) ? value : 0);
 const nonNegative = (value: number) => Math.max(0, finite(value));
+const share = (percent: number) => Math.min(100, nonNegative(percent)) / 100;
+
+// Cold data is a subset of the hot data that is kept longer, so its share
+// can never exceed the hot share.
+export function normalizeRetention(retention: Retention): Retention {
+  const hotPercent = Math.min(100, nonNegative(retention.hotPercent));
+  return {
+    hotPercent,
+    hotDays: nonNegative(retention.hotDays),
+    coldPercent: Math.min(hotPercent, nonNegative(retention.coldPercent)),
+    coldDays: nonNegative(retention.coldDays),
+  };
+}
+
+export function calculateWorkload(
+  input: WorkloadInput,
+  retention: Retention,
+): Workload {
+  const r = normalizeRetention(retention);
+  const secondsMonth =
+    nonNegative(input.units) *
+    nonNegative(input.recordingHoursPerDay) *
+    SECONDS_PER_HOUR *
+    DAYS_PER_MONTH;
+
+  const streams = input.streams
+    .filter((stream) => stream.enabled && stream.recordSizeKb > 0)
+    .map((stream) => {
+      const recordsMonth =
+        nonNegative(stream.count) *
+        nonNegative(stream.frequencyHz) *
+        secondsMonth;
+      const generatedMonthTb = (recordsMonth * stream.recordSizeKb) / KB_PER_TB;
+      return {
+        stream,
+        recordsMonth,
+        generatedMonthTb,
+        hotTb:
+          (generatedMonthTb * share(r.hotPercent) * r.hotDays) / DAYS_PER_MONTH,
+        coldTb:
+          (generatedMonthTb * share(r.coldPercent) * r.coldDays) /
+          DAYS_PER_MONTH,
+      };
+    })
+    .filter((stream) => stream.recordsMonth > 0);
+
+  const sum = (pick: (s: StreamWorkload) => number) =>
+    streams.reduce((total, s) => total + pick(s), 0);
+  const hotTb = sum((s) => s.hotTb);
+  const coldTb = sum((s) => s.coldTb);
+  return {
+    streams,
+    recordsMonth: sum((s) => s.recordsMonth),
+    generatedMonthTb: sum((s) => s.generatedMonthTb),
+    hotTb,
+    coldTb,
+    retainedTb: hotTb + coldTb,
+  };
+}
 
 export function packFactor(
   recordSizeKb: number,
@@ -80,78 +149,6 @@ export function packFactor(
     1,
     Math.min(block.maxRecords, Math.floor(block.sizeKb / recordSizeKb)),
   );
-}
-
-export function calculateWorkload(
-  input: WorkloadInput,
-  retentionDays: number,
-  block: BlockConfig,
-): Workload {
-  const units = nonNegative(input.units);
-  const keep = Math.min(100, nonNegative(input.keepPercent ?? 100)) / 100;
-  const activeSecondsMonth =
-    nonNegative(input.recordingHoursPerDay) * SECONDS_PER_HOUR * DAYS_PER_MONTH;
-
-  const streams = input.streams
-    .filter((stream) => stream.enabled && stream.recordSizeKb > 0)
-    .map((stream) => {
-      const generatedRecords =
-        units *
-        nonNegative(stream.count) *
-        nonNegative(stream.frequencyHz) *
-        activeSecondsMonth;
-      return {
-        stream,
-        recordsMonth: generatedRecords * keep,
-        dataMonthTb:
-          (generatedRecords * keep * stream.recordSizeKb) / KB_PER_TB,
-        generatedMonthTb: (generatedRecords * stream.recordSizeKb) / KB_PER_TB,
-        packFactor: packFactor(stream.recordSizeKb, block),
-      };
-    })
-    .filter((stream) => stream.recordsMonth > 0);
-
-  const totalRecordsMonth = streams.reduce((sum, s) => sum + s.recordsMonth, 0);
-  const totalDataMonthTb = streams.reduce((sum, s) => sum + s.dataMonthTb, 0);
-  const generatedMonthTb = streams.reduce(
-    (sum, s) => sum + s.generatedMonthTb,
-    0,
-  );
-  return {
-    streams: streams.map(({ generatedMonthTb: _generated, ...s }) => s),
-    totalRecordsMonth,
-    generatedMonthTb,
-    totalDataMonthTb,
-    totalRetainedTb:
-      (totalDataMonthTb * nonNegative(retentionDays)) / DAYS_PER_MONTH,
-  };
-}
-
-// Records as they land in storage when both sides store the same compressed
-// payloads.
-export function storedStreams(
-  streams: StreamWorkload[],
-  compressionRatio: number | undefined,
-  block: { sizeKb: number; maxRecords: number },
-): StreamWorkload[] {
-  const ratio = Math.max(1, finite(compressionRatio ?? 1));
-  return streams.map((s) => {
-    const recordSizeKb = s.stream.recordSizeKb / ratio;
-    return {
-      ...s,
-      stream: { ...s.stream, recordSizeKb },
-      dataMonthTb: s.dataMonthTb / ratio,
-      packFactor: packFactor(recordSizeKb, block),
-    };
-  });
-}
-
-export function ageBands(hotDays: number, retentionDays: number): Bands {
-  const retention = nonNegative(retentionDays);
-  const hot = Math.min(retention, Math.max(1, finite(hotDays)));
-  const remaining = Math.max(0, retention - hot);
-  const cold = Math.min(remaining, COLD_BAND_DAYS);
-  return { hot, cold, archive: Math.max(0, remaining - cold) };
 }
 
 export function licenseCostYear(retainedTb: number, tiers: LicenseTier[]) {
@@ -165,202 +162,6 @@ export function licenseCostYear(retainedTb: number, tiers: LicenseTier[]) {
   }
   return cost;
 }
-
-const TIER_ORDER: TierName[] = ["hot", "cold", "archive"];
-
-// The cold age band may stay hot or move to cold; the archive band may use
-// any tier that is not hotter than the cold band's.
-function lifecyclePaths(pricing: BackendPricing) {
-  const available = TIER_ORDER.filter((name) => pricing[name]);
-  const paths: [TierName, TierName, TierName][] = [];
-  for (const cold of available.filter((name) => name !== "archive")) {
-    for (const archive of available) {
-      if (TIER_ORDER.indexOf(archive) >= TIER_ORDER.indexOf(cold)) {
-        paths.push(["hot", cold, archive]);
-      }
-    }
-  }
-  return paths;
-}
-
-function respectsResidence(
-  path: TierName[],
-  bandDays: number[],
-  pricing: BackendPricing,
-) {
-  for (const name of new Set(path)) {
-    const tier = pricing[name] as StorageTier;
-    const days = path.reduce(
-      (sum, tierName, i) => (tierName === name ? sum + bandDays[i] : sum),
-      0,
-    );
-    if (days > 0 && days < tier.minResidenceDays) return false;
-  }
-  return true;
-}
-
-// One month of a stream, stored either as individual objects (direct) or as
-// ReductStore blocks. objectsPerRecord is 1 for direct and
-// backendOpsPerBlock / packFactor for ReductStore.
-export function streamCost(
-  workload: StreamWorkload,
-  bands: Bands,
-  readPercent: number,
-  pricing: BackendPricing,
-  objectSizeKb: number,
-  objectsPerRecord: number,
-): StreamCost {
-  const bandDays = [bands.hot, bands.cold, bands.archive];
-  const readShare = Math.min(100, nonNegative(readPercent)) / 100;
-  const ingestOps = workload.recordsMonth * objectsPerRecord;
-
-  let best: StreamCost | null = null;
-  for (const path of lifecyclePaths(pricing)) {
-    if (!respectsResidence(path, bandDays, pricing)) continue;
-    let storage = 0;
-    let operations = (ingestOps / 1000) * pricing.putPer1000;
-    let retrieval = 0;
-
-    path.forEach((name, i) => {
-      const days = bandDays[i];
-      if (days <= 0) return;
-      const tier = pricing[name] as StorageTier;
-      const bandTb = (workload.dataMonthTb * days) / DAYS_PER_MONTH;
-      const bandRecords = (workload.recordsMonth * days) / DAYS_PER_MONTH;
-      const billable =
-        tier.minBillableObjectKb > 0
-          ? Math.max(1, tier.minBillableObjectKb / objectSizeKb)
-          : 1;
-      storage += bandTb * tier.storagePerTbMonth * billable;
-      operations +=
-        ((bandRecords * readShare * objectsPerRecord) / 1000) * tier.getPer1000;
-      retrieval += bandTb * readShare * tier.retrievalPerTb;
-
-      const previous = i > 0 ? path[i - 1] : "hot";
-      if (i > 0 && name !== previous) {
-        operations += (ingestOps / 1000) * tier.transitionPer1000;
-      }
-    });
-
-    const total = storage + operations + retrieval;
-    if (
-      !best ||
-      total < best.storageMonth + best.operationsMonth + best.retrievalMonth
-    ) {
-      best = {
-        path,
-        storageMonth: storage,
-        operationsMonth: operations,
-        retrievalMonth: retrieval,
-      };
-    }
-  }
-  return best as StreamCost;
-}
-
-function breakdown(costs: StreamCost[], licenseAmount: number): CostBreakdown {
-  const storageYear = 12 * costs.reduce((sum, c) => sum + c.storageMonth, 0);
-  const operationsYear =
-    12 * costs.reduce((sum, c) => sum + c.operationsMonth, 0);
-  const retrievalYear =
-    12 * costs.reduce((sum, c) => sum + c.retrievalMonth, 0);
-  return {
-    storageYear,
-    operationsYear,
-    retrievalYear,
-    licenseYear: licenseAmount,
-    totalYear: storageYear + operationsYear + retrievalYear + licenseAmount,
-  };
-}
-
-export function estimate(
-  workloadInput: WorkloadInput,
-  storage: StorageInput,
-  config: CalculatorConfig,
-): Estimate {
-  const retentionDays = Math.max(storage.retentionDays, storage.hotDays);
-  const workload = calculateWorkload(
-    workloadInput,
-    retentionDays,
-    config.block,
-  );
-  const bands = ageBands(storage.hotDays, retentionDays);
-  const opsPerBlock = config.block.backendOpsPerBlock;
-  const stored = storedStreams(
-    workload.streams,
-    storage.compressionRatio,
-    config.block,
-  );
-  const storedRetainedTb =
-    (stored.reduce((sum, s) => sum + s.dataMonthTb, 0) * retentionDays) /
-    DAYS_PER_MONTH;
-
-  const directCosts = stored.map((s) =>
-    streamCost(
-      s,
-      bands,
-      storage.readPercentPerMonth,
-      config.pricing,
-      s.stream.recordSizeKb,
-      1,
-    ),
-  );
-  const reductCosts = stored.map((s) =>
-    streamCost(
-      s,
-      bands,
-      storage.readPercentPerMonth,
-      config.pricing,
-      s.stream.recordSizeKb * s.packFactor,
-      opsPerBlock / s.packFactor,
-    ),
-  );
-
-  const direct = breakdown(directCosts, 0);
-  const reduct = breakdown(
-    reductCosts,
-    licenseCostYear(
-      storedRetainedTb > 0
-        ? Math.max(storedRetainedTb, config.licenseMinTb ?? 0)
-        : 0,
-      config.licenseTiers,
-    ),
-  );
-  const savingYear = direct.totalYear - reduct.totalYear;
-
-  const directIngestObjectsMonth = workload.totalRecordsMonth;
-  const reductIngestOperationsMonth = stored.reduce(
-    (sum, s) => sum + (opsPerBlock * s.recordsMonth) / s.packFactor,
-    0,
-  );
-  const units = nonNegative(workloadInput.units);
-  const dailyPerUnitTb =
-    units > 0 ? workload.totalDataMonthTb / units / DAYS_PER_MONTH : 0;
-
-  return {
-    workload,
-    direct,
-    reduct,
-    savingYear,
-    savingPercent:
-      direct.totalYear > 0 ? (savingYear / direct.totalYear) * 100 : 0,
-    directIngestObjectsMonth,
-    reductIngestOperationsMonth,
-    ingestReduction:
-      directIngestObjectsMonth > 0
-        ? 1 - reductIngestOperationsMonth / directIngestObjectsMonth
-        : 0,
-    localHistoryDays:
-      dailyPerUnitTb > 0
-        ? nonNegative(storage.edgeDiskTbPerUnit) / dailyPerUnitTb
-        : Infinity,
-    stored,
-    storedRetainedTb,
-  };
-}
-
-// ---------------------------------------------------------------------------
-// Alternative architectures
 
 export type MarginalTier = { upTo: number | null; rate: number };
 
@@ -384,228 +185,305 @@ export function marginalCost(
   return total;
 }
 
-type Prices = typeof import("./pricing").pricingConfig;
-
-export type CostComponent = { label: string; amountYear: number };
-
-export type Route = { target: string; streams: string[] };
-
-export type CostSide = {
-  label: string;
-  components: CostComponent[];
-  totalYear: number;
-  routes: Route[];
+export type ObjectStorageCost = {
+  storageMonth: number;
+  requestsMonth: number;
+  retrievalMonth: number;
+  coldTier: StorageTier;
 };
 
-export type BatchConfig = {
-  sizeKb: number;
-  maxRecords: number;
-  opsPerObject: number;
-};
+// One month of a stream kept in object storage as objects of objectKb, with
+// objectsPerRecord requests per record. Hot data sits in the hot class for
+// the hot window; the cold share then moves to the cheapest class whose
+// minimum storage time fits in the cold window.
+export function objectStorageCost(
+  s: StreamWorkload,
+  retention: Retention,
+  readPercent: number,
+  pricing: BackendPricing,
+  objectKb: number,
+  objectsPerRecord: number,
+): ObjectStorageCost {
+  const r = normalizeRetention(retention);
+  const read = share(readPercent);
+  const billable = (tier: StorageTier) =>
+    tier.minBillableObjectKb > 0 && objectKb > 0
+      ? Math.max(1, tier.minBillableObjectKb / objectKb)
+      : 1;
+  const hot = pricing.hot;
+  const writtenObjects =
+    s.recordsMonth * share(r.hotPercent) * objectsPerRecord;
+  const coldObjects = s.recordsMonth * share(r.coldPercent) * objectsPerRecord;
+  const hotStoredObjects = (writtenObjects * r.hotDays) / DAYS_PER_MONTH;
+  const coldStoredObjects = (coldObjects * r.coldDays) / DAYS_PER_MONTH;
 
-export type ComparisonConfig = CalculatorConfig & {
-  backendName: string;
-  batch: BatchConfig;
-  prices: Prices;
-  usdRate: number;
-  competitor: CompetitorId;
-  assumptions: CompetitorAssumptions;
-};
+  const hotPart = {
+    storage: s.hotTb * hot.storagePerTbMonth * billable(hot),
+    requests:
+      (writtenObjects / 1000) * pricing.putPer1000 +
+      ((hotStoredObjects * read) / 1000) * hot.getPer1000,
+    retrieval: s.hotTb * read * hot.retrievalPerTb,
+  };
 
-export type Comparison = {
-  estimate: Estimate;
-  reduct: CostSide;
-  alternative: CostSide;
-  savingYear: number;
-  savingPercent: number;
-};
+  const candidates = [hot, pricing.cold, pricing.archive].filter(
+    (tier): tier is StorageTier =>
+      tier !== undefined && tier.minResidenceDays <= r.coldDays,
+  );
+  let best: ObjectStorageCost | null = null;
+  for (const tier of candidates) {
+    const storage = s.coldTb * tier.storagePerTbMonth * billable(tier);
+    const requests =
+      (tier === hot ? 0 : (coldObjects / 1000) * tier.transitionPer1000) +
+      ((coldStoredObjects * read) / 1000) * tier.getPer1000;
+    const retrieval = s.coldTb * read * tier.retrievalPerTb;
+    const total = storage + requests + retrieval;
+    if (
+      !best ||
+      total < best.storageMonth + best.requestsMonth + best.retrievalMonth
+    ) {
+      best = {
+        storageMonth: storage,
+        requestsMonth: requests,
+        retrievalMonth: retrieval,
+        coldTier: tier,
+      };
+    }
+  }
+  const cold = best as ObjectStorageCost;
+  return {
+    storageMonth: hotPart.storage + cold.storageMonth,
+    requestsMonth: hotPart.requests + cold.requestsMonth,
+    retrievalMonth: hotPart.retrieval + cold.retrievalMonth,
+    coldTier: cold.coldTier,
+  };
+}
+
+type Costs = { storage: number; requests: number; tiers: StorageTier[] };
+
+function storeAll(
+  streams: StreamWorkload[],
+  retention: Retention,
+  config: ComparisonConfig,
+  layout: (s: StreamWorkload) => { objectKb: number; objectsPerRecord: number },
+): Costs {
+  const costs: Costs = { storage: 0, requests: 0, tiers: [] };
+  for (const s of streams) {
+    const { objectKb, objectsPerRecord } = layout(s);
+    const cost = objectStorageCost(
+      s,
+      retention,
+      config.readPercentPerMonth,
+      config.pricing,
+      objectKb,
+      objectsPerRecord,
+    );
+    costs.storage += 12 * cost.storageMonth;
+    costs.requests += 12 * (cost.requestsMonth + cost.retrievalMonth);
+    costs.tiers.push(cost.coldTier);
+  }
+  return costs;
+}
 
 const sumAmount = (components: CostComponent[]) =>
   components.reduce((sum, c) => sum + c.amountYear, 0);
 
-// Object storage for a subset of streams, written as batched objects.
-export function objectStorageYear(
-  streams: StreamWorkload[],
-  bands: Bands,
-  readPercent: number,
-  pricing: BackendPricing,
-  batch: BatchConfig,
-): number {
-  let monthly = 0;
-  for (const s of streams) {
-    const perObject = packFactor(s.stream.recordSizeKb, batch);
-    const cost = streamCost(
-      s,
-      bands,
-      readPercent,
-      pricing,
-      s.stream.recordSizeKb * perObject,
-      batch.opsPerObject / perObject,
-    );
-    monthly += cost.storageMonth + cost.operationsMonth + cost.retrievalMonth;
-  }
-  return 12 * monthly;
-}
-
-const retainedTb = (streams: StreamWorkload[], retentionDays: number) =>
-  streams.reduce((sum, s) => sum + s.dataMonthTb, 0) *
-  (retentionDays / DAYS_PER_MONTH);
-
-const monthlyTb = (streams: StreamWorkload[]) =>
-  streams.reduce((sum, s) => sum + s.dataMonthTb, 0);
-
 const names = (streams: StreamWorkload[]) => streams.map((s) => s.stream.name);
 
-function withObjectStorage(
-  components: CostComponent[],
-  routes: Route[],
-  rest: StreamWorkload[],
-  ctx: {
-    bands: Bands;
-    readPercent: number;
-    config: ComparisonConfig;
-  },
-) {
-  if (rest.length === 0) return;
-  components.push({
-    label: `${ctx.config.backendName} storage`,
-    amountYear: objectStorageYear(
-      rest,
-      ctx.bands,
-      ctx.readPercent,
-      ctx.config.pricing,
-      ctx.config.batch,
-    ),
+function reductSide(
+  workload: Workload,
+  retention: Retention,
+  config: ComparisonConfig,
+): { side: CostSide; costs: Costs } {
+  const costs = storeAll(workload.streams, retention, config, (s) => {
+    const pack = packFactor(s.stream.recordSizeKb, config.block);
+    return {
+      objectKb: s.stream.recordSizeKb * pack,
+      objectsPerRecord: config.block.backendOpsPerBlock / pack,
+    };
   });
-  routes.push({ target: ctx.config.backendName, streams: names(rest) });
+  const licensedTb =
+    workload.retainedTb > 0
+      ? Math.max(workload.retainedTb, config.licenseMinTb)
+      : 0;
+  const components: CostComponent[] = [
+    {
+      label: "ReductStore license",
+      amountYear: licenseCostYear(licensedTb, config.licenseTiers),
+    },
+    { label: `${config.backendName} storage`, amountYear: costs.storage },
+  ];
+  if (costs.requests > 0) {
+    components.push({
+      label: "Requests and retrieval",
+      amountYear: costs.requests,
+    });
+  }
+  return {
+    costs,
+    side: {
+      label: `ReductStore + ${config.backendName}`,
+      components,
+      totalYear: sumAmount(components),
+      routes: [
+        {
+          target: `ReductStore → ${config.backendName}`,
+          streams: names(workload.streams),
+        },
+      ],
+    },
+  };
 }
 
-const withBackend = (name: string, rest: StreamWorkload[], backend: string) =>
-  rest.length > 0 ? `${name} + ${backend}` : name;
-
-export function alternativeCost(
+function foxgloveSide(
   workload: Workload,
-  stored: StreamWorkload[],
-  storage: StorageInput,
+  retention: Retention,
   units: number,
   config: ComparisonConfig,
 ): CostSide {
-  const { prices, assumptions } = config;
+  const f = config.prices.foxglove;
   const usd = (value: number) => value * config.usdRate;
-  const retention = Math.max(storage.retentionDays, storage.hotDays);
-  const bands = ageBands(storage.hotDays, retention);
-  const readShare =
-    Math.min(100, nonNegative(storage.readPercentPerMonth)) / 100;
-  const ctx = { bands, readPercent: storage.readPercentPerMonth, config };
-  const byClass = (...classes: string[]) =>
-    workload.streams.filter((s) => classes.includes(s.stream.dataClass));
-  const storedByClass = (...classes: string[]) =>
-    stored.filter((s) => classes.includes(s.stream.dataClass));
-
-  if (config.competitor === "foxglove") {
-    const f = prices.foxglove;
-    const uploadedMonthTb = monthlyTb(stored);
-    const retained = retainedTb(stored, retention);
-    const seats = Math.max(0, assumptions.foxgloveDeveloperSeats);
-    const components: CostComponent[] = [
-      {
-        label: "Platform",
-        amountYear: usd(
-          12 *
-            (f.baseUsdPerMonth +
-              Math.max(0, seats - f.includedDeveloperSeats) *
-                f.extraDeveloperSeatUsdPerMonth +
-              Math.max(0, Math.ceil(units) - f.includedDevices) *
-                f.extraDeviceUsdPerMonth),
-        ),
-      },
-      {
-        label: "Storage",
-        amountYear: usd(
-          12 *
-            marginalCost(retained, f.storageIncludedTb, f.storageUsdPerTbMonth),
-        ),
-      },
-      {
-        label: "Indexing",
-        amountYear: usd(
-          12 *
-            marginalCost(
-              uploadedMonthTb,
-              f.indexingIncludedTb,
-              f.indexingUsdPerTb,
-            ),
-        ),
-      },
-      {
-        label: "Bandwidth",
-        amountYear: usd(
-          12 *
-            marginalCost(
-              retained * readShare,
-              f.bandwidthIncludedTb,
-              f.bandwidthUsdPerTb,
-            ),
-        ),
-      },
-      {
-        label: "Query",
-        amountYear: usd(
-          12 *
-            marginalCost(
-              assumptions.foxgloveQueryHoursPerMonth,
-              f.queryIncludedHours,
-              f.queryUsdPerHour,
-            ),
-        ),
-      },
-    ];
-    return {
-      label: "Foxglove",
-      components,
-      totalYear: sumAmount(components),
-      routes: [{ target: "Foxglove", streams: names(workload.streams) }],
-    };
-  }
-
-  const i = prices.influx;
-  const inDb = byClass("metric");
-  const rest = storedByClass("metadata", "blob", "log");
-  const monthly = monthlyTb(inDb);
-  const retainedGb =
-    retainedTb(inDb, retention) *
-    1000 *
-    Math.max(0, assumptions.influxStorageToRawRatio);
+  const { assumptions } = config;
+  const uploadedMonthTb =
+    workload.generatedMonthTb * share(normalizeRetention(retention).hotPercent);
+  const seats = Math.max(0, assumptions.foxgloveDeveloperSeats);
   const components: CostComponent[] = [
     {
-      label: "Data in",
-      amountYear: usd(12 * monthly * 1_000_000 * i.dataInUsdPerMb),
+      label: "Platform",
+      amountYear: usd(
+        12 *
+          (f.baseUsdPerMonth +
+            Math.max(0, seats - f.includedDeveloperSeats) *
+              f.extraDeveloperSeatUsdPerMonth +
+            Math.max(0, Math.ceil(units) - f.includedDevices) *
+              f.extraDeviceUsdPerMonth),
+      ),
     },
     {
       label: "Storage",
       amountYear: usd(
-        12 * retainedGb * i.hoursPerMonth * i.storageUsdPerGbHour,
+        12 *
+          marginalCost(
+            workload.retainedTb,
+            f.storageIncludedTb,
+            f.storageUsdPerTbMonth,
+          ),
+      ),
+    },
+    {
+      label: "Indexing",
+      amountYear: usd(
+        12 *
+          marginalCost(
+            uploadedMonthTb,
+            f.indexingIncludedTb,
+            f.indexingUsdPerTb,
+          ),
+      ),
+    },
+    {
+      label: "Bandwidth",
+      amountYear: usd(
+        12 *
+          marginalCost(
+            workload.retainedTb * share(config.readPercentPerMonth),
+            f.bandwidthIncludedTb,
+            f.bandwidthUsdPerTb,
+          ),
+      ),
+    },
+    {
+      label: "Query",
+      amountYear: usd(
+        12 *
+          marginalCost(
+            assumptions.foxgloveQueryHoursPerMonth,
+            f.queryIncludedHours,
+            f.queryUsdPerHour,
+          ),
+      ),
+    },
+  ];
+  return {
+    label: "Foxglove",
+    components,
+    totalYear: sumAmount(components),
+    routes: [{ target: "Foxglove", streams: names(workload.streams) }],
+  };
+}
+
+function influxSide(
+  workload: Workload,
+  retention: Retention,
+  config: ComparisonConfig,
+): CostSide {
+  const i = config.prices.influx;
+  const usd = (value: number) => value * config.usdRate;
+  const metrics = workload.streams.filter(
+    (s) => s.stream.dataClass === "metric",
+  );
+  const rest = workload.streams.filter((s) => s.stream.dataClass !== "metric");
+  const r = normalizeRetention(retention);
+  const writtenMb =
+    metrics.reduce((sum, s) => sum + s.generatedMonthTb, 0) *
+    share(r.hotPercent) *
+    1_000_000;
+  const retainedGb =
+    metrics.reduce((sum, s) => sum + s.hotTb + s.coldTb, 0) * 1000;
+  const components: CostComponent[] = [
+    { label: "Data in", amountYear: usd(12 * writtenMb * i.dataInUsdPerMb) },
+    {
+      label: "Storage",
+      amountYear: usd(
+        12 *
+          retainedGb *
+          Math.max(0, config.assumptions.influxStorageToRawRatio) *
+          i.hoursPerMonth *
+          i.storageUsdPerGbHour,
       ),
     },
     {
       label: "Queries",
       amountYear: usd(
         12 *
-          (Math.max(0, assumptions.influxQueriesPerMonth) / 100) *
+          (Math.max(0, config.assumptions.influxQueriesPerMonth) / 100) *
           i.queryUsdPer100,
       ),
     },
     {
       label: "Data out",
       amountYear: usd(
-        12 * retainedTb(inDb, retention) * 1000 * readShare * i.dataOutUsdPerGb,
+        12 * retainedGb * share(config.readPercentPerMonth) * i.dataOutUsdPerGb,
       ),
     },
   ];
-  const routes: Route[] = [{ target: "InfluxDB Cloud", streams: names(inDb) }];
-  withObjectStorage(components, routes, rest, ctx);
+  const routes: Route[] = [
+    { target: "InfluxDB Cloud", streams: names(metrics) },
+  ];
+  if (rest.length > 0) {
+    const costs = storeAll(rest, retention, config, (s) => {
+      const pack = packFactor(s.stream.recordSizeKb, config.batch);
+      return {
+        objectKb: s.stream.recordSizeKb * pack,
+        objectsPerRecord: config.batch.opsPerObject / pack,
+      };
+    });
+    components.push({
+      label: `${config.backendName} storage`,
+      amountYear: costs.storage,
+    });
+    if (costs.requests > 0) {
+      components.push({
+        label: "Requests and retrieval",
+        amountYear: costs.requests,
+      });
+    }
+    routes.push({ target: config.backendName, streams: names(rest) });
+  }
   return {
-    label: withBackend("InfluxDB Cloud", rest, config.backendName),
+    label:
+      rest.length > 0
+        ? `InfluxDB Cloud + ${config.backendName}`
+        : "InfluxDB Cloud",
     components,
     totalYear: sumAmount(components),
     routes,
@@ -613,45 +491,24 @@ export function alternativeCost(
 }
 
 export function compare(
-  workloadInput: WorkloadInput,
-  storage: StorageInput,
+  input: WorkloadInput,
+  retention: Retention,
   config: ComparisonConfig,
 ): Comparison {
-  const result = estimate(workloadInput, storage, config);
-  const reductComponents: CostComponent[] = [
-    { label: "ReductStore license", amountYear: result.reduct.licenseYear },
-    {
-      label: `${config.backendName} storage`,
-      amountYear: result.reduct.storageYear,
-    },
-  ];
-  if (storage.backend !== "minio") {
-    reductComponents.push({
-      label: "Requests and retrieval",
-      amountYear: result.reduct.operationsYear + result.reduct.retrievalYear,
-    });
-  }
-  const reduct: CostSide = {
-    label: `ReductStore + ${config.backendName}`,
-    components: reductComponents,
-    totalYear: result.reduct.totalYear,
-    routes: [
-      {
-        target: `ReductStore → ${config.backendName}`,
-        streams: names(result.workload.streams),
-      },
-    ],
-  };
-  const alternative = alternativeCost(
-    result.workload,
-    result.stored,
-    storage,
-    nonNegative(workloadInput.units),
-    config,
-  );
+  const workload = calculateWorkload(input, retention);
+  const { side: reduct, costs } = reductSide(workload, retention, config);
+  const alternative =
+    config.competitor === "foxglove"
+      ? foxgloveSide(workload, retention, nonNegative(input.units), config)
+      : influxSide(workload, retention, config);
   const savingYear = alternative.totalYear - reduct.totalYear;
+  const largest = workload.streams.reduce(
+    (best, s, i) => (s.coldTb > workload.streams[best].coldTb ? i : best),
+    0,
+  );
   return {
-    estimate: result,
+    workload,
+    coldTier: costs.tiers[largest]?.label ?? config.pricing.hot.label,
     reduct,
     alternative,
     savingYear,

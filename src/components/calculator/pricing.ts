@@ -150,6 +150,7 @@ function awsPricing(rate: number): BackendPricing {
     name: "AWS S3",
     putPer1000: aws.putUsdPer1000 * rate,
     hot: {
+      label: "S3 Standard",
       storagePerTbMonth: perTb(aws.standard.storageUsdPerGbMonth),
       getPer1000: aws.standard.getUsdPer1000 * rate,
       retrievalPerTb: 0,
@@ -158,6 +159,7 @@ function awsPricing(rate: number): BackendPricing {
       transitionPer1000: 0,
     },
     cold: {
+      label: "S3 Standard-IA",
       storagePerTbMonth: perTb(aws.standardIa.storageUsdPerGbMonth),
       getPer1000: aws.standardIa.getUsdPer1000 * rate,
       retrievalPerTb: perTb(aws.standardIa.retrievalUsdPerGb),
@@ -166,6 +168,7 @@ function awsPricing(rate: number): BackendPricing {
       transitionPer1000: aws.standardIa.transitionUsdPer1000 * rate,
     },
     archive: {
+      label: "S3 Glacier Instant Retrieval",
       storagePerTbMonth: perTb(aws.glacierIr.storageUsdPerGbMonth),
       getPer1000: aws.glacierIr.getUsdPer1000 * rate,
       retrievalPerTb: perTb(aws.glacierIr.retrievalUsdPerGb),
@@ -183,6 +186,7 @@ function azurePricing(rate: number): BackendPricing {
     name: "Azure Blob",
     putPer1000: az.putUsdPer1000 * rate,
     hot: {
+      label: "Azure Hot",
       storagePerTbMonth: perTb(az.hot.storageUsdPerGbMonth),
       getPer1000: az.hot.getUsdPer1000 * rate,
       retrievalPerTb: 0,
@@ -191,6 +195,7 @@ function azurePricing(rate: number): BackendPricing {
       transitionPer1000: 0,
     },
     cold: {
+      label: "Azure Cool",
       storagePerTbMonth: perTb(az.cool.storageUsdPerGbMonth),
       getPer1000: az.cool.getUsdPer1000 * rate,
       retrievalPerTb: perTb(az.cool.retrievalUsdPerGb),
@@ -199,6 +204,7 @@ function azurePricing(rate: number): BackendPricing {
       transitionPer1000: az.cool.transitionUsdPer1000 * rate,
     },
     archive: {
+      label: "Azure Cold",
       storagePerTbMonth: perTb(az.cold.storageUsdPerGbMonth),
       getPer1000: az.cold.getUsdPer1000 * rate,
       retrievalPerTb: perTb(az.cold.retrievalUsdPerGb),
@@ -216,6 +222,7 @@ export function minioPricing(storagePerTbMonth: number): BackendPricing {
     name: "MinIO",
     putPer1000: 0,
     hot: {
+      label: "on-prem storage",
       storagePerTbMonth,
       getPer1000: 0,
       retrievalPerTb: 0,

@@ -12,24 +12,24 @@ export type StreamInput = {
 
 export type WorkloadInput = {
   units: number;
-  keepPercent?: number;
   recordingHoursPerDay: number;
   streams: StreamInput[];
 };
 
-export type BackendId = "aws" | "azure" | "minio";
-
-export type StorageInput = {
-  backend: BackendId;
-  edgeDiskTbPerUnit: number;
+// Hot: the share of recorded data kept in standard storage, and for how many
+// days. Cold: the share of recorded data kept longer in a cheaper class, for
+// how many days after the hot window.
+export type Retention = {
+  hotPercent: number;
   hotDays: number;
-  retentionDays: number;
-  readPercentPerMonth: number;
-  compressionRatio?: number;
-  minioPerTbMonth?: number;
+  coldPercent: number;
+  coldDays: number;
 };
 
+export type BackendId = "aws" | "azure" | "minio";
+
 export type StorageTier = {
+  label: string;
   storagePerTbMonth: number;
   getPer1000: number;
   retrievalPerTb: number;
@@ -51,23 +51,13 @@ export type LicenseTier = {
   perTbYear: number;
 };
 
-export type CostBreakdown = {
-  storageYear: number;
-  operationsYear: number;
-  retrievalYear: number;
-  licenseYear: number;
-  totalYear: number;
-};
-
 export type WorkloadPreset = {
   id: string;
   name: string;
   unitLabel: string;
   units: number;
   recordingHoursPerDay: number;
-  keepPercent: number;
-  hotDays: number;
-  retentionDays: number;
+  retention: Retention;
   streams: StreamInput[];
 };
 
