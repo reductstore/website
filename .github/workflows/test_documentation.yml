@@ -1,5 +1,7 @@
 name: Test examples from documentation
 
+# Every push to main runs all jobs, which also checks the release images.
+# Pull requests run them only when the tested examples change.
 on:
   push:
     branches:
@@ -8,6 +10,11 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
+    paths:
+      - "docs/examples/**"
+      - "versioned_docs/*/examples/**"
+      - "docs/ros/example/**"
+      - ".github/workflows/test_documentation.yml"
 
 jobs:
   test_examples:
