@@ -38,11 +38,102 @@
 }
 
 .heroSubTitle {
-  margin-bottom: 3.5rem;
+  margin-bottom: 2.5rem;
   max-width: 900px;
   margin-left: auto;
   margin-right: auto;
   color: var(--reduct-on-primary-muted);
+}
+
+.command {
+  display: flex;
+  align-items: stretch;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.3);
+  font-family: var(--ifm-font-family-monospace);
+  text-align: left;
+}
+
+.commandText {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border: 0;
+  background: none;
+  color: #fff;
+  font-size: 1.1rem;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+.prompt {
+  color: var(--reduct-accent);
+  user-select: none;
+}
+
+.copyButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 1.25rem;
+  border: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0 10px 10px 0;
+  background: none;
+  color: var(--reduct-accent);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.copyButton:hover,
+.copyButton:focus-visible {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.copyButton svg {
+  font-size: 1rem;
+}
+
+.commandMeta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 1.5rem;
+  margin: 1rem auto 2.75rem;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.8rem;
+  color: var(--reduct-on-primary-muted);
+}
+
+.commandMeta > * {
+  white-space: nowrap;
+}
+
+.commandMeta strong {
+  font-weight: 600;
+  color: #fff;
+}
+
+.commandMeta a {
+  color: var(--reduct-accent);
+}
+
+.commandMeta a:hover {
+  color: #fff;
+  text-decoration: none;
 }
 
 .buttonContainer {
@@ -50,15 +141,16 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }
 
 .buttonPrimary,
 .buttonSecondary {
-  width: 211px;
-  height: 52px;
+  width: 160px;
+  height: 42px;
   border-radius: 8px;
+  font-size: 1rem;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -88,7 +180,7 @@
 /* Secondary */
 .buttonSecondary {
   background-color: transparent;
-  border: 2px solid rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   color: rgba(255, 255, 255, 0.92);
 }
 
@@ -170,17 +262,43 @@ html[data-theme="dark"] .buttonSecondary:hover {
   }
 
   .buttonContainer {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
   }
 
   .buttonPrimary,
   .buttonSecondary {
-    width: min(320px, 100%);
-    margin-left: auto;
-    margin-right: auto;
+    width: auto;
+    padding: 0 0.25rem;
+    font-size: 0.8rem;
+  }
+
+  .commandText {
+    gap: 0.5rem;
+    align-items: baseline;
+    padding: 0.85rem 1rem;
+    font-size: 0.9rem;
+    white-space: normal;
+  }
+
+  .copyButton {
+    padding: 0 0.9rem;
+  }
+
+  .copyButton span {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .buttonContainer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .buttonPrimary,
+  .buttonSecondary {
+    font-size: 0.9rem;
   }
 }
 

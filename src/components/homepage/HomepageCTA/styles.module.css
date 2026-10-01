@@ -55,4 +55,9 @@ html[data-theme="dark"] .title {
     font-size: 1.75rem;
     padding: 0 1rem;
   }
+
+  .button {
+    max-width: calc(100% - 2rem);
+    white-space: normal;
+  }
 }
