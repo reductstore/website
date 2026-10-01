@@ -7,26 +7,6 @@
   max-width: 56rem;
 }
 
-.overview {
-  display: grid;
-  grid-template-columns: 13rem minmax(0, 1fr);
-  gap: 3rem;
-  align-items: start;
-  margin-bottom: 2.5rem;
-}
-
-.bulletPoints {
-  list-style: none;
-  margin: 0 0 1.5rem;
-  padding: 0;
-}
-
-.subBulletPoints {
-  list-style: none;
-  margin: 0 0 0 2rem;
-  padding: 0;
-}
-
 .actions {
   display: flex;
   flex-wrap: wrap;
@@ -82,46 +62,6 @@
   font-size: 1.4rem;
 }
 
-.preview {
-  display: block;
-  margin: 0;
-}
-
-.stack {
-  position: relative;
-  width: 72%;
-  aspect-ratio: 932 / 1320;
-}
-
-.page {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 4px;
-  background: #fff;
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.12),
-    0 12px 32px rgba(43, 5, 72, 0.18);
-  transition: transform 200ms ease;
-}
-
-.pageBack {
-  transform: translate(34%, 2%) rotate(7deg) scale(0.92);
-}
-
-.pageMiddle {
-  transform: translate(17%, 1%) rotate(3.5deg) scale(0.96);
-}
-
-.preview:hover .pageBack {
-  transform: translate(40%, 2%) rotate(9deg) scale(0.92);
-}
-
-.preview:hover .pageMiddle {
-  transform: translate(21%, 1%) rotate(4.5deg) scale(0.96);
-}
-
 .meta {
   margin: 1rem 0 0;
   font-size: 0.9rem;
@@ -132,7 +72,7 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
-  margin: 0 0 2.5rem;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
@@ -230,26 +170,11 @@ html[data-theme="dark"] .highlightLabel {
 }
 
 @media (max-width: 600px) {
-  .overview {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 2rem;
-  }
-
   .tryIt {
     padding: 1.25rem;
   }
 
-  .stack {
-    width: min(12rem, 55%);
-  }
-
   .highlights {
     grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .page {
-    transition: none;
   }
 }
