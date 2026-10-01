@@ -8,20 +8,26 @@ function HomepageCTA() {
   return (
     <section className={styles.section}>
       <Heading as="h2" className={styles.title}>
-        A data backbone for robotics and industrial IoT
+        Start with one machine, scale to the fleet
       </Heading>
       <p>
-        Learn how ReductStore helps robotics and industrial teams store images,
-        sensor data, and logs on edge devices, then replicate to on-prem or
-        cloud. With benchmarks and comparisons vs. TimescaleDB, MongoDB, and
-        MinIO.
+        Run ReductStore on a single device in minutes, or talk to us about how
+        it fits your robots, factory, or cloud.
       </p>
-      <Link
-        className={clsx("button button--lg", styles.button)}
-        to="/whitepaper"
-      >
-        Download White Paper (PDF)
-      </Link>
+      <div className={styles.buttons}>
+        <Link
+          className={clsx("button button--lg", styles.button)}
+          to="/docs/getting-started"
+        >
+          Get started
+        </Link>
+        <Link
+          className={clsx("button button--lg", styles.buttonSecondary)}
+          to="/architecture-review"
+        >
+          Book an architecture review
+        </Link>
+      </div>
     </section>
   );
 }
