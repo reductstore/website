@@ -2,6 +2,7 @@ import React, { JSX } from "react";
 import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
 import CodeBlock from "@theme/CodeBlock";
+import clsx from "clsx";
 import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import rosJson from "!!raw-loader!./_examples/ros_json.py";
 import rosJpeg from "!!raw-loader!./_examples/ros_jpeg.py";
@@ -38,6 +39,7 @@ type Example = {
   code: string;
   output?: string;
   images?: { src: string; alt: string }[];
+  pixelated?: boolean;
   docs: { label: string; to: string };
 };
 
@@ -175,17 +177,18 @@ mqtt/line1/state 1790784065000000 {"value": "running"}
         id: "dataset-labels",
         title: "Select labeled training images",
         summary:
-          "Cat images with keypoint labels. The query picks images where the left eye is right of x = 150.",
+          "MNIST handwritten digits labeled with their value. The query picks five images of the digit 7.",
         file: "dataset_labels.py",
         code: datasetLabels,
-        output: `1 175 160
-3 318 222
-4 167 173
+        output: `23957 7 208
+23958 7 207
+23959 7 218
 ...`,
         images: [1, 2, 3].map((i) => ({
-          src: `/img/playground/cats-${i}.jpg`,
-          alt: `Cat image ${i} with its keypoint labels drawn`,
+          src: `/img/playground/mnist-7-${i}.png`,
+          alt: `Handwritten digit 7, MNIST record ${23956 + i}`,
         })),
+        pixelated: true,
         docs: {
           label: "Stream a dataset into PyTorch",
           to: "/blog/ai/datastreaming/pytorch/implement-database-data-streaming-pytorch",
@@ -225,10 +228,10 @@ const BUCKETS = [
     name: "datasets",
     title: "Training datasets",
     text: "Labeled images for machine learning.",
-    image: "/img/playground/cats-2.jpg",
+    image: "/img/playground/mnist-digits.png",
     entries: [
+      ["mnist_training", "60k handwritten digits, digit label"],
       ["cats", "10k images, keypoint labels"],
-      ["mnist_training", "60k handwritten digits"],
       ["imdb", "47k celebrity photos, name and birth date labels"],
     ],
   },
@@ -274,7 +277,11 @@ function ExampleCard({ example }: { example: Example }) {
             <CodeBlock language="text">{example.output}</CodeBlock>
           )}
           {example.images && (
-            <div className={styles.images}>
+            <div
+              className={clsx(styles.images, {
+                [styles.pixelated]: example.pixelated,
+              })}
+            >
               {example.images.map((image) => (
                 <img
                   key={image.src}

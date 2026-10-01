@@ -9,16 +9,12 @@ TOKEN = "reductstore"
 async def main():
     async with Client(URL, api_token=TOKEN) as client:
         bucket = await client.get_bucket("datasets")
-        when = {"&left-eye-x": {"$gt": 150}, "$limit": 5}
+        when = {"&digit": {"$eq": 7}, "$limit": 5}
 
-        async for record in bucket.query("cats", when=when):
-            with open(f"cat-{record.timestamp}.jpg", "wb") as file:
+        async for record in bucket.query("mnist_training", when=when):
+            with open(f"digit-{record.timestamp}.png", "wb") as file:
                 file.write(await record.read_all())
-            print(
-                record.timestamp,
-                record.labels["left-eye-x"],
-                record.labels["left-eye-y"],
-            )
+            print(record.timestamp, record.labels["digit"], record.size)
 
 
 asyncio.run(main())

@@ -183,6 +183,11 @@
   margin-top: 0.5rem;
 }
 
+.pixelated img {
+  aspect-ratio: 1;
+  image-rendering: pixelated;
+}
+
 .docsLink {
   font-size: 0.9rem;
   font-weight: 600;
