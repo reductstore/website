@@ -22,28 +22,6 @@
   margin-bottom: 2.5rem;
 }
 
-.tryIt {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 1rem;
-  padding: 1.5rem 2rem;
-  border-radius: 12px;
-  background-color: #f7f4fa;
-}
-
-.tryIt p {
-  max-width: 44rem;
-  margin: 0;
-}
-
-.tryIt .sectionTitle {
-  margin-bottom: 0.5rem;
-}
-
-.tryIt :global(.theme-code-block) {
-  margin: 0;
-}
-
 .contact {
   font-size: 1rem;
   color: var(--ifm-color-emphasis-700);
@@ -154,7 +132,6 @@
   color: var(--reduct-dimmed);
 }
 
-html[data-theme="dark"] .tryIt,
 html[data-theme="dark"] .highlights li {
   background-color: var(--reduct-surface-1);
   border-color: var(--reduct-border);
@@ -170,10 +147,6 @@ html[data-theme="dark"] .highlightLabel {
 }
 
 @media (max-width: 600px) {
-  .tryIt {
-    padding: 1.25rem;
-  }
-
   .highlights {
     grid-template-columns: minmax(0, 1fr);
   }

@@ -26,16 +26,15 @@ function HomepageHeader() {
           <span className={styles.heroAccent}>machines</span>
         </h1>
         <p className={clsx("hero__subtitle", styles.heroSubTitle)}>
-          Make your data queryable. Store images, telemetry and logs on the
-          machine, replicate what matters to the cloud, and query it from any
-          app.
+          Store images, telemetry and logs on the machine. Replicate what
+          matters to the cloud. Query it from any app.
         </p>
         <div className={styles.buttonContainer}>
           <Link
             className={clsx("button button--lg", styles.buttonPrimary)}
             to="/docs/getting-started"
           >
-            Start for free
+            Get started
           </Link>
           <Link
             className={clsx("button button--lg", styles.buttonSecondary)}
@@ -43,10 +42,8 @@ function HomepageHeader() {
           >
             White paper
           </Link>
-          <Link className={styles.textLink} to="/pricing">
-            See pricing →
-          </Link>
         </div>
+        <p className={styles.heroFootnote}>Open source core · Apache 2.0</p>
       </div>
     </header>
   );

@@ -99,16 +99,11 @@
   transform: translateY(-1px);
 }
 
-.textLink {
+.heroFootnote {
+  margin: 1.75rem 0 0;
+  font-size: 0.9rem;
   color: var(--reduct-on-primary-muted);
-  font-size: 1.125rem;
-  text-decoration: none;
-  transition: color 160ms ease;
-}
-
-.textLink:hover {
-  color: #fff;
-  text-decoration: none;
+  opacity: 0.8;
 }
 
 /* Dark mode: hero matches page background + readable text */

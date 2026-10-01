@@ -2,7 +2,6 @@ import React, { JSX } from "react";
 import clsx from "clsx";
 import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
-import CodeBlock from "@theme/CodeBlock";
 import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import { LuBot, LuDownload, LuFactory, LuPlane } from "react-icons/lu";
 import { track } from "@site/src/lib/analytics";
@@ -114,27 +113,7 @@ export default function WhitePaper(): JSX.Element {
                 Read in browser
               </a>
             </div>
-            <p className={styles.meta}>
-              PDF · 13 pages · 1 MB · 2026 edition · no sign-up
-            </p>
-          </section>
-
-          <section className={clsx(styles.section, styles.tryIt)}>
-            <div>
-              <h2 className={styles.sectionTitle}>Try it in a minute</h2>
-              <p>
-                Run ReductStore locally with Docker, then follow{" "}
-                <Link to="/docs/getting-started">Getting Started</Link> to write
-                and query your first records. Or query live robot, factory, and
-                image data on the <Link to="/datasets">Playground</Link> without
-                installing anything.
-              </p>
-            </div>
-            <CodeBlock language="bash">
-              {
-                'docker run -p 8383:8383 -e RS_API_TOKEN="my-token" reduct/store:latest'
-              }
-            </CodeBlock>
+            <p className={styles.meta}>PDF · 13 pages · 1 MB · 2026 edition</p>
           </section>
 
           <p className={styles.contact}>
