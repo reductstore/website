@@ -76,9 +76,9 @@ test("pack factor follows the block size and record limits", () => {
   assert.equal(packFactor(100_000, REDUCT_BLOCK), 1);
 });
 
-test("license: €10 and $12 per TB per month, 1 TB minimum", () => {
-  close(licenseCostYear(100, licenseTiers(10)), 12_000);
-  close(licenseCostYear(100, licenseTiers(12)), 14_400);
+test("license: €15 and $18 per TB per month, 1 TB minimum", () => {
+  close(licenseCostYear(100, licenseTiers(15)), 18_000);
+  close(licenseCostYear(100, licenseTiers(18)), 21_600);
   const tiny = compare(
     oneStream,
     { hotPercent: 1, hotDays: 1, coldPercent: 0, coldDays: 0 },
@@ -87,7 +87,7 @@ test("license: €10 and $12 per TB per month, 1 TB minimum", () => {
   close(
     tiny.reduct.components.find((c) => c.label === "ReductStore license")
       .amountYear,
-    120,
+    180,
   );
 });
 
@@ -442,12 +442,12 @@ test("cross-check: mobile robot on S3 vs Foxglove, in USD, by hand", () => {
   const foxglove =
     12 * (20 + 5 * 20 + storage + indexing + bandwidth + query) + 12 * 4 * 100;
 
-  // ReductStore: $12 per TB a month; hot in S3 Standard at $23 per TB, cold
+  // ReductStore: $18 per TB a month; hot in S3 Standard at $23 per TB, cold
   // in Glacier Instant Retrieval at $4 per TB (90 days fits its minimum,
   // telemetry is batched per second so its blocks are large enough);
   // 5% read out at $0.09 per GB; two m7i.xlarge at $0.2016 an hour; 4 hours
   // of engineering a month at $100.
-  const license = 12 * retainedTb * 12;
+  const license = 12 * retainedTb * 18;
   const s3Storage = 12 * (hotTb * 23 + coldTb * 4);
   const dataOut = 12 * retainedTb * 0.05 * 90;
   const servers = 12 * 2 * 0.2016 * 730;
@@ -505,7 +505,7 @@ test("in the cloud, every example is cheaper than every competitor", () => {
               currency,
               competitor,
               compression: 5,
-              engineeringRate: currency === "EUR" ? 90 : 100,
+              engineeringRate: currency === "EUR" ? 130 : 150,
             }),
           );
           const tag = `${preset.id} ${backend} ${currency} ${competitor}`;

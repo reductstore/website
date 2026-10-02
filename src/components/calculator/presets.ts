@@ -380,7 +380,7 @@ export const PRESETS: WorkloadPreset[] = [
         enabled: true,
         count: 1,
         frequencyHz: 1,
-        recordSizeKb: 200,
+        recordSizeKb: 100,
       },
       {
         id: "computer-vision-2",

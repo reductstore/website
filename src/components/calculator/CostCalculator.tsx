@@ -76,8 +76,8 @@ const READ_PERCENT_PER_MONTH = 5;
 const DEFAULT_INSTANCES = 2;
 const DEFAULT_COMPRESSION = 5;
 const DEFAULT_ENGINEERING_RATE: Record<Currency, number> = {
-  EUR: 90,
-  USD: 100,
+  EUR: 130,
+  USD: 150,
 };
 
 const PRICE_SOURCES = [
