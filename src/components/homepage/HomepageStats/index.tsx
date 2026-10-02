@@ -4,14 +4,14 @@ import styles from "./styles.module.css";
 const stats = [
   { value: "60k+", description: "downloads" },
   { value: "100+", description: "production deployments" },
-  { value: "1+ PB", description: "time series data managed" },
+  { value: "1+ PB", description: "time-indexed data managed" },
   { value: "99.99%", description: "uptime across production deployments" },
   {
     value: "10x",
     description: "faster writes for 100 KB records than TimescaleDB",
   },
   { value: "15x", description: "faster reads for 100 KB records than MinIO" },
-  { value: "90%", description: "lower cloud cost by batching 100 KB records" },
+  { value: "35%", description: "lower storage cost than Foxglove" },
   { value: "4+", description: "years of active development" },
 ];
 

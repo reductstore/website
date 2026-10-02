@@ -8,7 +8,11 @@ description: ReductStore basic concepts like buckets, entries, blocks, records, 
   <link rel="canonical" href="https://www.reduct.store/docs/how-does-it-work" />
 </head>
 
-# 💡 Basic Concepts Behind ReductStore
+import BucketsDiagram from "./img/buckets.svg";
+import EntriesDiagram from "./img/entries.svg";
+import BlocksDiagram from "./img/blocks.svg";
+
+# 💡 Basic Concepts
 
 :::info
 To work efficiently with robotics and industrial systems, you need to store and access large amounts of data quickly. This data is often unstructured: images, sensor readings, logs, video, ROS bags, and more. And it's generated continuously over time, often at high frequency.
@@ -59,8 +63,12 @@ All these features make ReductStore a perfect solution for applications when you
 
 A bucket is a container for data with a unique name and settings for storage.
 
-![An example of a ReductStore instance with two buckets.
-](./img/buckets.png)
+<BucketsDiagram
+  className="rs-diagram"
+  role="img"
+  aria-label="A ReductStore instance with two buckets: data is ingested into Bucket A with a 10 GB FIFO quota and replicated to Bucket B with a 1 TB hard quota"
+  style={{ display: "block", width: "100%", height: "auto" }}
+/>
 
 <small style={{ textAlign: "right" }}>
   An example of a ReductStore instance with two buckets.
@@ -84,7 +92,12 @@ Entries are used to separate data with different sources or purposes within a bu
 They are completely independent and can be used in parallel without conflict.
 Entry names can be hierarchical paths such as `robot/front/camera/image`, where each part is a segment of the full entry name.
 
-![The internal structure of ReductStore entry](./img/entries.png)
+<EntriesDiagram
+  className="rs-diagram"
+  role="img"
+  aria-label="A bucket holds entries A, B and C. Entry C keeps a block index, write-ahead logs, and blocks 1 to N"
+  style={{ display: "block", width: "100%", height: "auto" }}
+/>
 
 <small style={{ textAlign: "right" }}>
   Internal structure of ReductStore entry.
@@ -126,7 +139,12 @@ Blocks are also used to optimise data storage and access. The storage engine sto
 You don't waste disk space because of the minimum file system block size.
 In addition, ReductStore pre-allocates block space to improve performance during write operations.
 
-![The internal structure of data block in ReductStore](./img/blocks.png)
+<BlocksDiagram
+  className="rs-diagram"
+  role="img"
+  aria-label="A block stores record contents in a data block and their metadata in a block descriptor, with a write-ahead log and a block index for fast search"
+  style={{ display: "block", width: "100%", height: "auto" }}
+/>
 
 <small style={{ textAlign: "right" }}>
   Internal structure of data block in ReductStore.

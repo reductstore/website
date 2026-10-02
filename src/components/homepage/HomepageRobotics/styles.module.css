@@ -1,46 +1,90 @@
-.roboticsSection {
-  padding: 2rem 0;
-}
-
-.description {
-  max-width: 720px;
-  margin: 0 auto 2.5rem;
-}
-
 .logos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.logoCard {
+  color: inherit;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  padding: 0.75rem 0.75rem 1.25rem;
+  border-radius: 12px;
+  background-color: var(--reduct-surface-0);
+  border: 1px solid rgba(43, 5, 72, 0.1);
+  box-shadow:
+    0 1px 2px rgba(43, 5, 72, 0.04),
+    0 8px 24px rgba(43, 5, 72, 0.06);
 }
 
 .logoBox {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 180px;
-  height: 90px;
-  padding: 1rem 1.5rem;
-  background: white;
+  align-self: stretch;
+  height: 120px;
+  margin-bottom: 1rem;
+  padding: 1rem;
   border-radius: 8px;
+  background-color: #fff;
 }
 
 .logoImage {
-  max-width: 130px;
-  max-height: 58px;
+  max-width: 80%;
+  max-height: 64px;
   width: auto;
   height: auto;
   object-fit: contain;
 }
 
-.btn {
-  margin-top: 1rem;
+.logoName {
+  font-weight: 700;
+  color: var(--ifm-heading-color);
+}
+
+.logoRole {
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--ifm-color-emphasis-700);
+}
+
+[data-theme="dark"] .logoCard {
+  background-color: var(--reduct-surface-1);
+  border-color: var(--reduct-border);
+  box-shadow: none;
+}
+
+[data-theme="dark"] .logoRole {
+  color: var(--ifm-color-emphasis-600);
 }
 
 @media (max-width: 996px) {
   .logos {
-    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .logoBox {
+    height: 96px;
+  }
+}
+
+.logoCard:hover {
+  color: inherit;
+  text-decoration: none;
+  transform: translateY(-2px);
+  box-shadow:
+    0 1px 2px rgba(43, 5, 72, 0.06),
+    0 12px 32px rgba(43, 5, 72, 0.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logoCard {
+    transition: none;
   }
 }

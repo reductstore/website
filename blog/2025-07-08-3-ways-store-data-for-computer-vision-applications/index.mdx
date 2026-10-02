@@ -17,7 +17,7 @@ In this post, we’ll look at three common approaches to storing data in compute
 
 For demonstration purposes, we’ll use a simple computer vision (CV) application which is connected to a CV camera and runs on an edge device:
 
-![Computer Vision Application](./img/computer-vision-application.png)
+![Computer Vision Application](./img/cv-application.svg)
 
 The camera driver captures images from the CV camera every second and forwards them to the model, which then detects objects and displays the results in the user interface.
 
@@ -29,7 +29,7 @@ Your images and results need to be stored for training and validation purposes. 
 
 One of the most straightforward ways to store images from a (CV) camera is to write them directly to a local file system. Each image can be saved using a timestamp as a unique identifier, and the directory structure can be organized by time intervals for easier access.
 
-![File System Usage](./img/file-system-usage.png)
+![File System Usage](./img/cv-file-system.svg)
 
 The main advantage of this approach is its simplicity — no external dependencies, no infrastructure setup, and it works out of the box. However, it comes with significant limitations:
 
@@ -55,7 +55,7 @@ In summary, while the file system is an easy starting point, it rarely scales we
 
 A more advanced approach to storing images is to use an object storage system, such as an S3-compatible service. This allows data to be organized similarly to folders and files, but accessed and managed through an HTTP-based API.
 
-![S3-like Storage Usage](./img/s3-like-storage-usage.png)
+![S3-like Storage Usage](./img/cv-object-storage.svg)
 
 This method offers more flexibility than a local file system and comes with several advantages:
 
@@ -87,7 +87,7 @@ We’ve explored this **[alternative in detail](/blog/comparison/iot/reductstore
 It is purpose-built to ingest and store unstructured time-series data — such as images, sensor payloads, or inference results — directly at the edge.
 Once stored locally, the data can be selectively replicated to central storage or the cloud, enabling efficient data consolidation without sacrificing real-time performance at the edge.
 
-![ReductStore Usage](./img/reductStore-usage.png)
+![ReductStore Usage](./img/cv-reductstore.svg)
 
 As you can see, instead of a tree-like structure, it has a flat structure of entries where data is batched and partitioned into blocks.
 This approach is more efficient for writing, since blocks can be pre-allocated for incoming records.

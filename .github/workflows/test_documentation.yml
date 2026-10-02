@@ -1,5 +1,7 @@
 name: Test examples from documentation
 
+# Every push to main runs all jobs, which also checks the release images.
+# Pull requests run them only when the tested examples change.
 on:
   push:
     branches:
@@ -8,6 +10,11 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
+    paths:
+      - "docs/examples/**"
+      - "versioned_docs/*/examples/**"
+      - "docs/ros/example/**"
+      - ".github/workflows/test_documentation.yml"
 
 jobs:
   test_examples:
@@ -100,7 +107,15 @@ jobs:
             sleep 1
           done
 
-          reduct-cli cp https://reductstore@play.reduct.store/datasets  http://my-token@127.0.0.1:8384/example-bucket --limit 100
+          for attempt in 1 2 3; do
+            if reduct-cli cp https://reductstore@play.reduct.store/datasets http://my-token@127.0.0.1:8384/example-bucket --limit 100; then
+              break
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              exit 1
+            fi
+            sleep 10
+          done
 
       - name: Install Python
         uses: actions/setup-python@v5
@@ -317,8 +332,11 @@ jobs:
             fi
           done
 
+          # The readiness poll above can reach ReductStore before it has started,
+          # which it answers with a 503 logged at error level. That line is
+          # expected; any other error is not.
           logs=$(docker compose logs --no-color)
-          if printf '%s\n' "$logs" | grep -Eiq '(error|panic|fatal|failed|failure|backtrace)'; then
+          if printf '%s\n' "$logs" | grep -v 'The server is starting up' | grep -Eiq '(error|panic|fatal|failed|failure|backtrace)'; then
             printf '%s\n' "$logs"
             exit 1
           fi

@@ -1,0 +1,38 @@
+.switch {
+  display: inline-flex;
+  gap: 0.15rem;
+  padding: 0.2rem;
+  border-radius: 8px;
+  background-color: #f7f4fa;
+}
+
+.switch button {
+  padding: 0.2rem 0.6rem;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--reduct-dimmed);
+  cursor: pointer;
+}
+
+.switch button:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+.switch .active {
+  background-color: var(--reduct-surface-0);
+  color: var(--ifm-color-primary);
+  box-shadow: 0 1px 2px rgba(43, 5, 72, 0.12);
+}
+
+html[data-theme="dark"] .switch {
+  background-color: var(--reduct-surface-1);
+}
+
+html[data-theme="dark"] .switch .active {
+  box-shadow: none;
+}

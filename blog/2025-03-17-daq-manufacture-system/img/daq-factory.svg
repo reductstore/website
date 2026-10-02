@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 720 616" width="100%" height="100%">
+  <defs>
+    <style>
+      :root {
+        --card-bg: #FFFFFF;
+        --card-brand: #2B0548;
+        --brand-line: #2B0548;
+        --card-accent: #DB817B;
+        --card-stroke: #333333;
+        --text-main: #333333;
+        --text-muted: #666666;
+        --text-inverse: #FFFFFF;
+        --line: #333333;
+        --zone: #F7F4FA;
+        --label-a: #D5E8D4;
+        --label-a-stroke: #82B366;
+        --label-b: #E1D5E7;
+        --label-b-stroke: #9673A6;
+        --label-c: #F8CECC;
+        --label-c-stroke: #B85450;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --card-bg: #1E1E1E;
+          --card-stroke: #555555;
+            --text-main: #EFEFEF;
+          --text-muted: #A0A0A0;
+          --line: #EFEFEF;
+          --zone: #262129;
+          --brand-line: #BFA6DC;
+        }
+      }
+
+      text {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      .mono {
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        white-space: pre;
+      }
+
+      .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand-frame { fill: var(--card-bg); stroke: var(--brand-line); stroke-width: 2; }
+      .card-accent { fill: var(--card-accent); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
+      .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .hatch-line { stroke: var(--line); stroke-width: 1.5; }
+      .record { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1; }
+      .label-a { fill: var(--label-a); stroke: var(--label-a-stroke); }
+      .label-b { fill: var(--label-b); stroke: var(--label-b-stroke); }
+      .label-c { fill: var(--label-c); stroke: var(--label-c-stroke); }
+      .dot { fill: var(--text-muted); }
+
+      .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
+      .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
+      .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-title-brand { font-weight: 700; font-size: 18px; fill: var(--brand-line); }
+      .text-item-brand { font-weight: 700; font-size: 15px; fill: var(--brand-line); }
+      .text-item { font-weight: 600; font-size: 15px; fill: var(--text-main); }
+      .text-item-inverse { font-weight: 600; font-size: 15px; fill: var(--text-inverse); }
+      .text-subtitle { font-size: 14px; fill: var(--text-muted); }
+      .text-subtitle-inverse { font-size: 14px; fill: var(--text-inverse); }
+      .text-bullet { font-size: 15px; fill: var(--text-main); }
+      .text-bullet-inverse { font-size: 15px; fill: var(--text-inverse); }
+      .text-label { font-size: 13px; fill: var(--text-muted); }
+      .text-label-strong { font-size: 13px; font-weight: 700; fill: var(--text-main); }
+      .text-label-inverse { font-size: 13px; fill: var(--text-inverse); }
+      .text-note { font-size: 13px; font-style: italic; fill: var(--text-muted); }
+
+      .connector { stroke: var(--line); stroke-width: 2; fill: none; }
+      .link { stroke: var(--line); stroke-width: 2; stroke-dasharray: 5 5; fill: none; }
+      .guide { stroke: var(--text-muted); stroke-width: 1; stroke-dasharray: 3 4; fill: none; }
+      .arrow-head { fill: var(--line); }
+    </style>
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
+    </marker>
+    <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" class="hatch-line" />
+    </pattern>
+  </defs>
+  <rect x="0" y="130" width="700" height="330" rx="18" class="zone" />
+  <rect x="40" y="0" width="220" height="76" rx="16" class="card-standard" />
+  <text x="150" y="32" class="text-title" text-anchor="middle">Cloud Storage</text>
+  <text x="150" y="56" class="text-subtitle mono" text-anchor="middle">cloud tier</text>
+  <text x="680" y="156" class="text-zone" text-anchor="end">Central Storage</text>
+  <rect x="22" y="150" width="420" height="50" rx="10" class="card-plain" />
+  <text x="232" y="180" class="text-item" text-anchor="middle">Replication</text>
+  <rect x="22" y="250" width="290" height="104" rx="10" class="card-brand-frame" />
+  <rect x="34.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="48.8" y="258" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="62.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="76.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="90.8" y="258" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="104.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="118.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="132.8" y="258" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="146.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="160.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="174.8" y="258" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="188.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="34.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="48.8" y="305" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="62.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="76.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="90.8" y="305" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="104.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="118.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="132.8" y="305" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="146.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="160.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="174.8" y="305" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="188.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <text x="298" y="307" class="text-item-brand" text-anchor="end">Bucket #1</text>
+  <circle cx="336" cy="302" r="3" class="dot" />
+  <circle cx="350" cy="302" r="3" class="dot" />
+  <circle cx="364" cy="302" r="3" class="dot" />
+  <rect x="388" y="250" width="290" height="104" rx="10" class="card-brand-frame" />
+  <rect x="400.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="414.8" y="258" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="428.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="442.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="456.8" y="258" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="470.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="484.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="498.8" y="258" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="512.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="526.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="540.8" y="258" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="554.8" y="258" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="400.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="414.8" y="305" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="428.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="442.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="456.8" y="305" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="470.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="484.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="498.8" y="305" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="512.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="526.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <rect x="540.8" y="305" width="9" height="41" rx="2" class="record label-b" />
+  <rect x="554.8" y="305" width="9" height="41" rx="2" class="record label-a" />
+  <text x="664" y="307" class="text-item-brand" text-anchor="end">Bucket #N</text>
+  <text x="292" y="396" class="text-bullet" text-anchor="start">• Fast access</text>
+  <text x="292" y="420" class="text-bullet" text-anchor="start">• Data management by labels</text>
+  <path d="M150,150 L150,80" class="connector" marker-end="url(#arrow)" />
+  <path d="M150,250 L150,204" class="connector" marker-end="url(#arrow)" />
+  <path d="M533,250 L533,226 L360,226" class="connector" />
+  <path d="M360,226 L360,204" class="connector" marker-end="url(#arrow)" />
+  <rect x="50" y="520" width="220" height="76" rx="16" class="card-standard" />
+  <text x="160" y="552" class="text-title" text-anchor="middle">Edge Device #1</text>
+  <text x="160" y="576" class="text-subtitle mono" text-anchor="middle">ReductStore</text>
+  <path d="M160,520 L160,358" class="connector" marker-end="url(#arrow)" />
+  <rect x="430" y="520" width="220" height="76" rx="16" class="card-standard" />
+  <text x="540" y="552" class="text-title" text-anchor="middle">Edge Device #N</text>
+  <text x="540" y="576" class="text-subtitle mono" text-anchor="middle">ReductStore</text>
+  <path d="M540,520 L540,358" class="connector" marker-end="url(#arrow)" />
+  <circle cx="336" cy="558" r="3" class="dot" />
+  <circle cx="350" cy="558" r="3" class="dot" />
+  <circle cx="364" cy="558" r="3" class="dot" />
+</svg>

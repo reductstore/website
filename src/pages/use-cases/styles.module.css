@@ -1,8 +1,0 @@
-.useCasesContainer {
-  max-width: 1200px;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 60px;
-  margin-bottom: 50px;
-}

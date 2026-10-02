@@ -4,10 +4,9 @@
 }
 
 .benefitsRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
 }
 
 .benefitCard {
@@ -15,25 +14,41 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1.5rem;
-  border-radius: 8px;
-  border: 1px solid var(--ifm-color-emphasis-200);
-  flex: 1 1 220px;
+  padding: 2rem 1.5rem;
+  border-radius: 12px;
+  background-color: var(--reduct-surface-0);
+  border: 1px solid rgba(43, 5, 72, 0.1);
+  box-shadow:
+    0 1px 2px rgba(43, 5, 72, 0.04),
+    0 8px 24px rgba(43, 5, 72, 0.06);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
 }
 
-[data-theme="dark"] .benefitCard {
-  border-color: var(--ifm-color-emphasis-300);
+.benefitCard:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 1px 2px rgba(43, 5, 72, 0.06),
+    0 12px 32px rgba(43, 5, 72, 0.1);
 }
 
 .benefitIcon {
-  margin-bottom: 1rem;
-  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1.25rem;
+  border-radius: 12px;
+  font-size: 1.5rem;
   color: var(--ifm-color-primary);
+  background-color: rgba(43, 5, 72, 0.07);
 }
 
 .benefitTitle {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 1.2rem;
+  font-weight: 700;
   margin-bottom: 0.75rem;
   color: var(--ifm-heading-color);
 }
@@ -45,6 +60,34 @@
   margin: 0;
 }
 
+[data-theme="dark"] .benefitCard {
+  background-color: var(--reduct-surface-1);
+  border-color: var(--reduct-border);
+  box-shadow: none;
+}
+
+[data-theme="dark"] .benefitIcon {
+  background-color: rgba(218, 190, 237, 0.1);
+}
+
 [data-theme="dark"] .benefitDescription {
   color: var(--ifm-color-emphasis-600);
+}
+
+@media (max-width: 996px) {
+  .benefitsRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .benefitsRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .benefitCard {
+    transition: none;
+  }
 }

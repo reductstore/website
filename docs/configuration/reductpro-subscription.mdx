@@ -1,0 +1,34 @@
+---
+title: ReductPro subscription
+sidebar_label: ReductPro subscription
+---
+
+# ReductPro subscription
+
+This page explains how to activate and manage a ReductPro subscription on a self-hosted ReductStore instance.
+
+## Get your license key
+
+The license server creates your checkout and, once payment is confirmed, provisions your license for the subscription.
+
+<!-- TODO: confirm with Alexey how the license key is delivered after checkout. -->
+
+## Configure the license key
+
+Set `RS_LICENSE_KEY` on the ReductStore instance to the license key from your subscription. The instance validates the key with the ReductStore license server.
+
+Self-hosted deployments with a license document instead of a subscription key can use `RS_LICENSE` or `RS_LICENSE_PATH`. See **[License Configuration](/docs/configuration#license-configuration)** for details.
+
+## Usage reporting
+
+The database sends peak storage in GB and the Stripe customer ID to the license server for subscription usage.
+
+<!-- TODO: confirm with Alexey how often usage is reported. -->
+
+<!-- TODO: confirm with Alexey what happens when the license server cannot be reached. -->
+
+<!-- TODO: confirm with Alexey what happens when a payment fails or the subscription ends. -->
+
+## Manage your subscription
+
+Manage or cancel the subscription through the customer portal. Open the portal from the **[Pricing page](/pricing)**. Cancellation takes effect at the end of the current billing period, and the license stays active until then.

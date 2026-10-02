@@ -1,0 +1,132 @@
+@media (min-width: 1101px) {
+  .navbarDropdown {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+  }
+
+  .navbarDropdown :global(.navbar__link) {
+    white-space: nowrap;
+  }
+}
+
+.megaPanel {
+  position: absolute;
+  top: calc(
+    100% + var(--panel-gap, var(--ifm-navbar-padding-vertical)) + 0.375rem
+  );
+  left: 0;
+  z-index: 200;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+  min-width: 300px;
+  padding: 0.75rem 0.5rem 0.5rem;
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.07),
+    0 10px 24px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* Keeps the hover alive while the pointer crosses the gap below the navbar */
+.megaPanel::before {
+  content: "";
+  position: absolute;
+  left: -1.5rem;
+  right: -1.5rem;
+  bottom: 100%;
+  height: calc(var(--panel-gap, var(--ifm-navbar-padding-vertical)) + 0.75rem);
+}
+
+.twoCol {
+  grid-template-columns: 1fr 1fr;
+  min-width: 580px;
+}
+
+.compactPanel {
+  max-height: 13rem;
+  min-width: 9rem;
+  padding: 0.25rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.compactPanel .megaItem {
+  padding: 0.45rem 0.7rem;
+}
+
+.compactPanel .megaDesc {
+  display: none;
+}
+
+/* Anchor panels that would overflow right edge to the right-hand side instead */
+.alignRight {
+  left: auto;
+  right: 0;
+}
+
+.megaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 8px;
+  color: var(--ifm-font-color-base) !important;
+  text-decoration: none !important;
+  transition: background 0.12s ease;
+}
+
+.withIcon {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  column-gap: 0.75rem;
+  row-gap: 0.2rem;
+  align-items: center;
+}
+
+.withIcon .megaLabel,
+.withIcon .megaDesc {
+  grid-column: 2;
+}
+
+.megaIcon {
+  grid-row: 1 / span 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  font-size: 1.05rem;
+  color: var(--ifm-color-primary);
+  background-color: rgba(43, 5, 72, 0.07);
+}
+
+html[data-theme="dark"] .megaIcon {
+  background-color: rgba(218, 190, 237, 0.1);
+}
+
+.megaItem:hover {
+  background: var(--ifm-color-emphasis-100);
+  text-decoration: none !important;
+}
+
+.megaItem:hover .megaLabel {
+  color: var(--ifm-color-primary);
+}
+
+.megaLabel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ifm-font-color-base);
+  transition: color 0.12s ease;
+}
+
+.megaDesc {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--reduct-dimmed);
+  line-height: 1.4;
+}

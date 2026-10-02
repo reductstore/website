@@ -1,50 +1,153 @@
 .whitePaperContainer {
-  padding-top: 1rem;
+  padding-top: 0.5rem;
   margin-bottom: var(--reduct-bottom-page-margin);
 }
 
-/* Bullet Points */
-.bulletTitle {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
+.whitePaperContainer > * {
+  max-width: 56rem;
 }
 
-.bulletPoints {
-  list-style: none;
-  margin-left: 2rem;
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.icon {
+  margin-right: 0.5rem;
+  vertical-align: -0.15em;
+}
+
+.section {
+  margin-bottom: 2.5rem;
+}
+
+.contact {
+  font-size: 1rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.lead {
+  max-width: 44rem;
+  margin-bottom: 2rem;
+  font-size: var(--reduct-font-size-subtitle);
+  line-height: 1.6;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.sectionTitle {
   margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.meta {
+  margin: 1rem 0 0;
+  font-size: 0.9rem;
+  color: var(--reduct-dimmed);
+}
+
+.highlights {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
   padding: 0;
-}
-
-.subBulletPoints {
   list-style: none;
-  margin-left: 2rem;
-  margin-bottom: 1rem;
-  padding: 0;
 }
 
-.subBulletPoints .bulletPointItem {
+.highlights li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 0.75rem;
+  text-align: center;
+  border-radius: 12px;
+  background-color: #f7f4fa;
+  border: 1px solid rgba(43, 5, 72, 0.06);
+}
+
+.useCaseIcon {
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-bottom: 0.75rem;
+  border-radius: 12px;
+  font-size: 1.35rem;
+  color: var(--ifm-color-primary);
+  background-color: rgba(43, 5, 72, 0.07);
 }
 
-.subBulletPoints .bulletIcon {
-  margin-right: 0.5rem;
+.useCaseTitle {
+  margin-bottom: 0.3rem;
+  font-weight: 700;
+  color: var(--ifm-heading-color);
 }
 
-/* Form column */
-.formColumn {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  height: 100%;
-  padding-left: 2rem;
+.highlightLabel {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--ifm-color-emphasis-700);
 }
 
-@media (max-width: 996px) {
-  .formColumn {
-    padding-left: 0;
-    margin-top: 2rem;
+.inside {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.inside img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.12),
+    0 6px 16px rgba(43, 5, 72, 0.12);
+}
+
+.inside a {
+  display: block;
+  color: inherit;
+}
+
+.inside a:hover {
+  text-decoration: none;
+}
+
+.inside a:hover span {
+  color: var(--ifm-color-primary);
+}
+
+.inside span {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  color: var(--reduct-dimmed);
+}
+
+html[data-theme="dark"] .highlights li {
+  background-color: var(--reduct-surface-1);
+  border-color: var(--reduct-border);
+}
+
+html[data-theme="dark"] .useCaseIcon {
+  background-color: rgba(218, 190, 237, 0.1);
+}
+
+html[data-theme="dark"] .lead,
+html[data-theme="dark"] .highlightLabel {
+  color: var(--ifm-color-emphasis-600);
+}
+
+@media (max-width: 600px) {
+  .highlights {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

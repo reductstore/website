@@ -219,8 +219,26 @@ body {
 .navbar__items--right .DocSearch-Button {
   color: var(--ifm-font-color-base) !important;
   background-color: var(--ifm-background-surface-color) !important;
-  border: 0 !important;
-  transition: none !important;
+  border: 1.5px solid var(--ifm-color-emphasis-300) !important;
+  border-radius: 8px !important;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease !important;
+}
+
+.navbar__items--right .DocSearch-Button:hover {
+  border-color: var(--ifm-color-primary) !important;
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--ifm-color-primary) 20%, transparent) !important;
+}
+
+html[data-theme="dark"] .navbar__items--right .DocSearch-Button:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--ifm-color-primary) 40%,
+    var(--ifm-color-emphasis-300)
+  ) !important;
+  box-shadow: none !important;
 }
 
 .navbar__items--right .DocSearch-Button-Key {
@@ -264,6 +282,32 @@ article .markdown header h1 {
   justify-content: flex-start;
   margin-top: 0.2rem;
   margin-bottom: 1rem;
+}
+
+nav.theme-doc-breadcrumbs:has(.markdown-copy-container) {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+nav.theme-doc-breadcrumbs .markdown-copy-container {
+  flex: 0 0 auto;
+  margin: 0 0 0 auto;
+}
+
+@media (max-width: 996px) {
+  nav.theme-doc-breadcrumbs:has(.markdown-copy-container) {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  nav.theme-doc-breadcrumbs .breadcrumbs {
+    flex: 1 1 100%;
+  }
+
+  nav.theme-doc-breadcrumbs .markdown-copy-container {
+    margin: 0;
+  }
 }
 
 .markdown-copy-button {
@@ -320,7 +364,8 @@ article .markdown svg.svgbob text {
 
 /* News announcement bar: a bit larger than the default */
 div[class*="announcementBar_"] {
-  --docusaurus-announcement-bar-height: 3rem;
+  --docusaurus-announcement-bar-height: auto;
+  min-height: 3rem;
   font-size: 1.05rem;
   font-weight: 600;
 }
@@ -328,4 +373,32 @@ div[class*="announcementBar_"] {
 div[class*="announcementBarContent_"] a {
   color: inherit;
   text-decoration: underline;
+}
+/* Navbar right-side item order: search → color mode → version → GitHub */
+.navbar__items--right [class*="searchBar"],
+.navbar__items--right [class*="navbarSearchContainer"] {
+  order: 1;
+}
+
+.navbar__items--right [class*="colorModeToggle"] {
+  order: 2;
+}
+
+.navbar__items--right .dropdown {
+  order: 3;
+}
+
+.navbar__items--right .header-github-link {
+  order: 4;
+}
+
+/* Collapse desktop navigation before its labels or brand need to compress. */
+@media (max-width: 1100px) {
+  .navbar__toggle {
+    display: inherit;
+  }
+
+  .navbar__item {
+    display: none;
+  }
 }

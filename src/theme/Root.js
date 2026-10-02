@@ -258,10 +258,14 @@ export default function Root({ children }) {
       }
     };
 
+    const findTarget = () =>
+      document.querySelector("nav.theme-doc-breadcrumbs") ||
+      document.querySelector("article .markdown header");
+
     const injectButton = () => {
-      const articleHeader = document.querySelector("article .markdown header");
-      if (!articleHeader) return false;
-      if (articleHeader.querySelector(".markdown-copy-container")) return true;
+      const target = findTarget();
+      if (!target) return false;
+      if (target.querySelector(".markdown-copy-container")) return true;
 
       if (buttonRootRef.current) {
         buttonRootRef.current.unmount();
@@ -270,7 +274,7 @@ export default function Root({ children }) {
 
       const container = document.createElement("div");
       container.className = "markdown-copy-container";
-      articleHeader.appendChild(container);
+      target.appendChild(container);
       containerRef.current = container;
 
       const root = createRoot(container);
@@ -283,8 +287,8 @@ export default function Root({ children }) {
     injectButton();
 
     const observer = new MutationObserver(() => {
-      const header = document.querySelector("article .markdown header");
-      if (header && !header.querySelector(".markdown-copy-container")) {
+      const target = findTarget();
+      if (target && !target.querySelector(".markdown-copy-container")) {
         injectButton();
       }
     });

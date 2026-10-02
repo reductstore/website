@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.9 -10 751.8 420" width="100%" height="100%">
+  <defs>
+    <style>
+      :root {
+        --card-bg: #FFFFFF;
+        --card-brand: #2B0548;
+        --brand-line: #2B0548;
+        --card-accent: #DB817B;
+        --card-stroke: #333333;
+        --text-main: #333333;
+        --text-muted: #666666;
+        --text-inverse: #FFFFFF;
+        --line: #333333;
+        --zone: #F7F4FA;
+        --label-a: #D5E8D4;
+        --label-a-stroke: #82B366;
+        --label-b: #E1D5E7;
+        --label-b-stroke: #9673A6;
+        --label-c: #F8CECC;
+        --label-c-stroke: #B85450;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --card-bg: #1E1E1E;
+          --card-stroke: #555555;
+            --text-main: #EFEFEF;
+          --text-muted: #A0A0A0;
+          --line: #EFEFEF;
+          --zone: #262129;
+          --brand-line: #BFA6DC;
+        }
+      }
+
+      text {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      .mono {
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        white-space: pre;
+      }
+
+      .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand-frame { fill: var(--card-bg); stroke: var(--brand-line); stroke-width: 2; }
+      .card-accent { fill: var(--card-accent); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
+      .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .hatch-line { stroke: var(--line); stroke-width: 1.5; }
+      .record { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1; }
+      .label-a { fill: var(--label-a); stroke: var(--label-a-stroke); }
+      .label-b { fill: var(--label-b); stroke: var(--label-b-stroke); }
+      .label-c { fill: var(--label-c); stroke: var(--label-c-stroke); }
+      .dot { fill: var(--text-muted); }
+
+      .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
+      .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
+      .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-title-brand { font-weight: 700; font-size: 18px; fill: var(--brand-line); }
+      .text-item-brand { font-weight: 700; font-size: 15px; fill: var(--brand-line); }
+      .text-item { font-weight: 600; font-size: 15px; fill: var(--text-main); }
+      .text-item-inverse { font-weight: 600; font-size: 15px; fill: var(--text-inverse); }
+      .text-subtitle { font-size: 14px; fill: var(--text-muted); }
+      .text-subtitle-inverse { font-size: 14px; fill: var(--text-inverse); }
+      .text-bullet { font-size: 15px; fill: var(--text-main); }
+      .text-bullet-inverse { font-size: 15px; fill: var(--text-inverse); }
+      .text-label { font-size: 13px; fill: var(--text-muted); }
+      .text-label-strong { font-size: 13px; font-weight: 700; fill: var(--text-main); }
+      .text-label-inverse { font-size: 13px; fill: var(--text-inverse); }
+      .text-note { font-size: 13px; font-style: italic; fill: var(--text-muted); }
+
+      .connector { stroke: var(--line); stroke-width: 2; fill: none; }
+      .link { stroke: var(--line); stroke-width: 2; stroke-dasharray: 5 5; fill: none; }
+      .guide { stroke: var(--text-muted); stroke-width: 1; stroke-dasharray: 3 4; fill: none; }
+      .arrow-head { fill: var(--line); }
+    </style>
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
+    </marker>
+    <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" class="hatch-line" />
+    </pattern>
+  </defs>
+  <rect x="260" y="0" width="220" height="220" rx="18" class="zone" />
+  <rect x="0" y="270" width="590" height="130" rx="18" class="zone" />
+  <rect x="0" y="0" width="200" height="96" rx="16" class="card-standard" />
+  <text x="100" y="30" class="text-item" text-anchor="middle">Data processing</text>
+  <text x="100" y="52" class="text-label" text-anchor="middle">Downstream users, ELT</text>
+  <text x="100" y="70" class="text-label" text-anchor="middle">pipelines, Jupyter notebooks</text>
+  <rect x="0" y="124" width="200" height="96" rx="16" class="card-standard" />
+  <text x="100" y="154" class="text-item" text-anchor="middle">Visualization</text>
+  <text x="100" y="176" class="text-label" text-anchor="middle">Foxglove, Grafana,</text>
+  <text x="100" y="194" class="text-label" text-anchor="middle">custom dashboards</text>
+  <rect x="280" y="24" width="180" height="56" rx="10" class="card-brand" />
+  <text x="370" y="57" class="text-item-inverse" text-anchor="middle">ReductStore</text>
+  <path d="M370,80 L370,136" class="link" />
+  <rect x="280" y="136" width="180" height="60" rx="10" class="card-accent" />
+  <text x="370" y="163" class="text-item-inverse" text-anchor="middle">S3 storage</text>
+  <text x="370" y="182" class="text-label-inverse" text-anchor="middle">backend</text>
+  <path d="M204,48 L276,48" class="connector" marker-end="url(#arrow)" marker-start="url(#arrow)" />
+  <text x="240" y="38" class="text-note" text-anchor="middle">SDKs</text>
+  <path d="M260,172 L204,172" class="connector" marker-end="url(#arrow)" />
+  <text x="130" y="305" class="text-label mono" text-anchor="end">/camera/image</text>
+  <path d="M138,300 L160,300 L160,334" class="connector" />
+  <text x="130" y="339" class="text-label mono" text-anchor="end">/vectornav/IMU</text>
+  <path d="M138,334 L160,334 L160,334" class="connector" />
+  <text x="130" y="373" class="text-label mono" text-anchor="end">/rosout</text>
+  <path d="M138,368 L160,368 L160,334" class="connector" />
+  <path d="M160,334 L196,334" class="connector" marker-end="url(#arrow)" />
+  <rect x="200" y="306" width="150" height="56" rx="10" class="card-accent" />
+  <text x="275" y="339" class="text-item-inverse" text-anchor="middle">ReductBridge</text>
+  <path d="M350,334 L396,334" class="connector" marker-end="url(#arrow)" />
+  <rect x="400" y="306" width="160" height="56" rx="10" class="card-brand" />
+  <text x="480" y="339" class="text-item-inverse" text-anchor="middle">ReductStore</text>
+  <path d="M560,334 L620,334 L620,110 L484,110" class="connector" marker-end="url(#arrow)" />
+  <text x="628" y="214" class="text-note" text-anchor="start">replicate</text>
+  <text x="628" y="232" class="text-note" text-anchor="start">subset of data</text>
+</svg>

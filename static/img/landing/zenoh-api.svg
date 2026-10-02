@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="rs-diagram" viewBox="-2 0 424 336" width="100%" height="100%" role="img" aria-label="ReductStore joins a Zenoh network as a peer. Zenoh keys become entries, encodings become content types, attachments become labels, HLC timestamps become record timestamps, and get() selectors become time-range queries."><defs><style>
+:root{--rs-card-bg:#FFFFFF;--rs-card-stroke:#DAD4E0;--rs-brand:#2B0548;--rs-accent:#2B0548;
+--rs-halo:rgba(43,5,72,.05);--rs-inner:#FBF9FC;--rs-text-main:#333333;--rs-text-muted:#707070;--rs-wire:#B8AEC3;--rs-boxline:#C4B2D4}
+[data-theme='dark']{--rs-card-bg:#1E1E1E;--rs-card-stroke:#3A3440;--rs-accent:#BFA6DC;
+--rs-halo:rgba(205,184,230,.07);--rs-inner:#232026;--rs-text-main:#EFEFEF;--rs-text-muted:#A0A0A0;--rs-wire:#6E6478;--rs-boxline:#5C4F69}
+:where(.rs-diagram) text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.rs-mono{font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace}
+.rs-card{fill:var(--rs-card-bg);stroke:var(--rs-card-stroke);stroke-width:1.5}
+.rs-halo{fill:var(--rs-halo)}
+.rs-box{fill:var(--rs-inner);stroke:var(--rs-boxline);stroke-width:1.5;stroke-dasharray:6 5}
+.rs-pill{fill:var(--rs-brand)}
+.rs-chip{fill:var(--rs-card-bg);stroke:var(--rs-card-stroke);stroke-width:1.2}
+.rs-t{font-weight:600;font-size:15px;fill:var(--rs-text-main)}
+.rs-bt{font-weight:600;font-size:14px;fill:var(--rs-accent)}
+.rs-pt{font-weight:600;font-size:15px;fill:#FFFFFF}
+.rs-s{font-size:12.5px;fill:var(--rs-text-muted)}
+.rs-wire{fill:none;stroke:var(--rs-wire);stroke-width:1.5;stroke-dasharray:4 6;stroke-linecap:round}
+.rs-flow-in{animation:rs-flow 1.6s linear infinite}
+.rs-flow-rep{stroke:var(--rs-accent);stroke-width:2;animation:rs-flow 1.6s linear infinite}
+.rs-bl{font-weight:600;font-size:14px;fill:var(--rs-accent)}
+.rs-small{font-size:12px;font-weight:600}
+.rs-big{font-size:26px}
+.rs-static{animation:none}
+.rs-logo{fill:var(--rs-accent)}
+.rs-head{font-size:15px;fill:var(--rs-text-muted)}
+.rs-coral{fill:#DB817B}
+.rs-cchip{fill:none;stroke:#FFFFFF;stroke-opacity:.7;stroke-width:1.2}
+.rs-ct{font-weight:600;font-size:14px;fill:#FFFFFF}
+.rs-cs{font-size:12.5px;fill:#FFFFFF}
+.rs-cap{font-size:13px;font-style:italic;fill:var(--rs-text-muted)}
+.rs-si{font-size:12.5px;fill:#D9CCE6}
+.rs-flow-out{animation:rs-flow 1.6s linear infinite}
+[data-theme='dark'] .rs-pill{fill:#CDB8E6}
+[data-theme='dark'] .rs-pill+.rs-pt{fill:#2B0548}
+@keyframes rs-flow{to{stroke-dashoffset:-20}}
+.rs-port{fill:var(--rs-card-bg);stroke:var(--rs-wire);stroke-width:1.5}
+@media (prefers-reduced-motion: reduce){.rs-flow-in,.rs-flow-out,.rs-flow-rep{animation:none}}
+</style></defs><path d="M204,86.0 L264,86.0" class="rs-wire rs-flow-in"/>
+<path d="M204,142.0 L264,142.0" class="rs-wire rs-flow-in"/>
+<path d="M204,198.0 L264,198.0" class="rs-wire rs-flow-in"/>
+<path d="M204,254.0 L264,254.0" class="rs-wire rs-flow-in"/>
+<path d="M204,310.0 L264,310.0" class="rs-wire rs-flow-in"/>
+<g transform="translate(55.5,10) scale(0.75) translate(-179.9,-28)"><g class="rs-logo" transform="translate(179.9,28.0) scale(0.06426)"><g transform="translate(0.000000,498.000000) scale(0.100000,-0.100000)"><path d="M2067 4950 c-71 -437 -134 -663 -269 -970 -78 -178 -266 -515 -297 -534 -9 -6 -52 246 -76 449 -9 72 -19 224 -22 339 l-6 209 -24 -29 c-128 -156 -227 -479 -309 -1009 -26 -170 -49 -312 -51 -314 -1 -2 -43 4 -92 13 -108 20 -244 63 -348 111 -42 19 -78 33 -80 31 -7 -7 94 -164 148 -233 28 -34 104 -114 170 -176 71 -69 119 -122 119 -133 0 -11 -33 -262 -74 -559 -60 -433 -73 -550 -66 -591 38 -233 155 -372 348 -413 29 -6 71 -11 92 -11 l40 0 0 46 c0 73 28 174 68 249 l38 69 459 333 c253 183 497 360 542 393 l83 59 -34 63 c-63 115 -72 248 -23 345 63 123 204 193 392 193 201 0 347 -90 429 -264 52 -110 61 -161 60 -346 -1 -387 -108 -642 -389 -925 -128 -128 -249 -227 -500 -406 -344 -245 -557 -435 -697 -624 -75 -100 -158 -253 -158 -291 l0 -24 1026 0 c1086 0 1196 4 1363 46 310 78 559 329 630 634 39 166 41 251 41 1709 l0 1416 -88 39 c-131 57 -301 112 -447 142 -109 22 -157 27 -295 28 -100 0 -194 -5 -240 -13 -102 -19 -120 -17 -141 10 -63 82 -8 308 110 454 22 27 39 50 38 52 -2 1 -45 -2 -97 -8 -345 -35 -740 -241 -1160 -604 -60 -52 -111 -95 -112 -95 -2 0 -3 154 -3 343 0 225 -4 376 -13 442 -15 112 -57 329 -71 366 -8 23 -9 23 -14 -11z m-312 -1928 c8 -37 15 -105 15 -152 0 -201 -76 -354 -204 -412 -45 -20 -67 -23 -178 -23 -69 0 -129 3 -133 7 -4 3 17 36 46 72 36 45 56 63 63 56 15 -15 89 -12 114 6 51 35 66 108 32 159 -18 28 -18 31 -2 55 66 99 144 241 168 306 l28 78 19 -43 c10 -23 25 -72 32 -109z M911 4599 c-288 -22 -468 -97 -636 -264 -168 -168 -239 -336 -265 -626 -14 -156 -13 -2645 1 -2804 18 -213 54 -335 141 -483 43 -73 197 -227 270 -270 199 -117 378 -151 788 -152 l186 0 12 58 c33 159 185 377 420 603 134 129 246 219 511 408 236 169 362 273 482 398 235 245 329 476 329 813 0 188 -36 296 -127 381 -68 64 -126 82 -251 77 -164 -5 -251 -64 -260 -173 -7 -81 19 -149 87 -235 33 -41 58 -77 55 -79 -3 -3 -267 -195 -587 -426 l-582 -421 -32 -64 c-37 -73 -53 -158 -53 -274 l0 -79 -137 5 c-206 8 -326 53 -435 165 -64 65 -114 152 -143 248 -49 158 -50 154 30 734 l73 526 -76 70 c-88 81 -197 210 -264 310 -34 52 -288 519 -288 531 0 1 118 -58 263 -131 167 -85 299 -145 365 -165 56 -18 105 -31 107 -28 3 2 21 105 41 229 41 263 53 320 99 494 72 276 162 461 279 575 25 24 46 48 46 52 0 10 -309 8 -449 -3z M1546 4518 c-13 -195 -2 -530 23 -648 l7 -35 31 60 c46 89 118 262 159 378 38 110 94 302 94 324 0 10 -33 13 -154 13 l-153 0 -7 -92z M2294 4568 c3 -24 9 -134 13 -245 3 -112 8 -203 9 -203 2 0 55 38 117 84 223 166 446 291 653 366 l109 39 -454 0 -454 1 7 -42z M3703 4477 c-61 -61 -122 -131 -137 -154 -27 -45 -73 -170 -64 -178 3 -3 60 0 128 5 251 22 549 -27 823 -134 48 -19 87 -30 87 -25 0 20 -51 133 -86 191 -48 79 -162 199 -238 251 -108 73 -219 117 -382 152 -16 3 -46 -21 -131 -108z M17186 4079 c-44 -5 -104 -15 -135 -22 l-56 -12 0 -1540 c0 -1487 1 -1542 19 -1589 43 -112 122 -158 302 -178 105 -12 287 -1 397 23 l47 11 0 889 0 888 29 15 c75 40 188 76 265 88 194 28 380 -44 446 -172 44 -85 44 -85 49 -820 l6 -705 23 -50 c49 -107 122 -148 298 -167 105 -12 287 -1 397 23 l47 11 0 791 c0 814 -4 907 -41 1052 -111 433 -489 664 -1049 642 -177 -7 -270 -28 -452 -102 -17 -7 -18 12 -18 311 0 356 -9 429 -58 499 -32 46 -89 81 -165 101 -69 18 -252 25 -351 13z M6307 3816 c-104 -37 -158 -109 -178 -236 -19 -122 11 -292 65 -376 l16 -24 663 -2 663 -3 -624 -765 c-343 -421 -643 -790 -666 -820 -110 -143 -166 -280 -166 -409 0 -142 31 -237 114 -349 l46 -62 1058 2 1057 3 41 22 c99 53 139 141 139 303 -1 108 -20 189 -67 283 l-18 37 -690 0 c-380 0 -690 2 -690 5 0 3 289 362 643 798 354 435 658 814 676 840 74 108 111 221 111 339 0 151 -43 267 -137 368 l-55 60 -982 0 c-799 -1 -988 -3 -1019 -14z M9696 3244 c-413 -64 -711 -274 -885 -622 -103 -205 -148 -491 -122 -773 56 -607 409 -1004 1002 -1123 198 -40 469 -44 696 -11 290 44 492 153 561 304 36 79 36 183 -1 264 -27 59 -120 167 -144 167 -7 0 -45 -16 -84 -36 -87 -43 -245 -97 -359 -121 -129 -27 -397 -24 -505 5 -184 50 -298 135 -371 275 -21 42 -36 78 -34 81 3 2 308 50 678 106 371 55 695 108 720 116 101 34 175 94 208 172 22 50 29 211 14 313 -68 471 -422 806 -930 884 -117 18 -325 18 -444 -1z m429 -587 c104 -48 191 -151 219 -261 9 -33 15 -61 13 -62 -8 -8 -949 -156 -954 -150 -13 13 25 163 58 233 38 80 128 174 205 215 86 46 146 58 279 55 106 -3 127 -6 180 -30z M12370 3254 c-237 -28 -432 -80 -589 -154 -179 -86 -297 -186 -349 -298 l-27 -57 0 -880 c0 -819 1 -884 18 -938 45 -146 197 -208 477 -193 103 5 204 18 253 32 16 5 17 56 17 894 l0 890 42 21 c302 154 652 97 735 -120 16 -42 18 -109 23 -776 l5 -730 28 -57 c46 -93 119 -132 281 -150 109 -12 300 -2 409 23 l47 11 0 796 c0 473 -4 834 -10 887 -48 426 -323 692 -805 781 -87 16 -468 28 -555 18z M15180 3253 c-162 -17 -336 -69 -478 -143 -326 -168 -537 -467 -608 -860 -23 -128 -24 -420 -1 -545 107 -593 496 -946 1107 -1006 348 -33 676 40 929 208 255 170 419 427 488 769 14 69 18 137 18 304 0 189 -3 228 -23 320 -118 531 -507 883 -1047 949 -84 10 -306 13 -385 4z m276 -604 c282 -52 437 -360 396 -791 -35 -373 -197 -558 -490 -558 -159 0 -250 37 -341 136 -90 99 -133 216 -153 421 -27 279 32 524 161 664 102 113 258 159 427 128z"/></g></g></g>
+<rect x="273.3" y="12" width="137.4" height="34" rx="17" class="rs-pill"/>
+<text x="342.0" y="34" class="rs-pt" text-anchor="middle">ReductStore</text>
+<rect x="0" y="64" width="204" height="44" rx="22" class="rs-card"/>
+<text x="18" y="91.0" class="rs-t" text-anchor="start">key</text>
+<text x="188" y="91.0" class="rs-s rs-mono" text-anchor="end">robot/cam</text>
+<rect x="264" y="64" width="156" height="44" rx="22" class="rs-card"/>
+<text x="342.0" y="91.0" class="rs-t" text-anchor="middle">entry</text>
+<circle cx="204" cy="86.0" r="4" class="rs-port"/><circle cx="264" cy="86.0" r="4" class="rs-port"/>
+<rect x="0" y="120" width="204" height="44" rx="22" class="rs-card"/>
+<text x="18" y="147.0" class="rs-t" text-anchor="start">encoding</text>
+<text x="188" y="147.0" class="rs-s rs-mono" text-anchor="end">image/jpeg</text>
+<rect x="264" y="120" width="156" height="44" rx="22" class="rs-card"/>
+<text x="342.0" y="147.0" class="rs-t" text-anchor="middle">content type</text>
+<circle cx="204" cy="142.0" r="4" class="rs-port"/><circle cx="264" cy="142.0" r="4" class="rs-port"/>
+<rect x="0" y="176" width="204" height="44" rx="22" class="rs-card"/>
+<text x="18" y="203.0" class="rs-t" text-anchor="start">attachment</text>
+<text x="188" y="203.0" class="rs-s rs-mono" text-anchor="end">JSON</text>
+<rect x="264" y="176" width="156" height="44" rx="22" class="rs-card"/>
+<text x="342.0" y="203.0" class="rs-t" text-anchor="middle">labels</text>
+<circle cx="204" cy="198.0" r="4" class="rs-port"/><circle cx="264" cy="198.0" r="4" class="rs-port"/>
+<rect x="0" y="232" width="204" height="44" rx="22" class="rs-card"/>
+<text x="18" y="259.0" class="rs-t" text-anchor="start">timestamp</text>
+<text x="188" y="259.0" class="rs-s rs-mono" text-anchor="end">HLC</text>
+<rect x="264" y="232" width="156" height="44" rx="22" class="rs-card"/>
+<text x="342.0" y="259.0" class="rs-t" text-anchor="middle">timestamp</text>
+<circle cx="204" cy="254.0" r="4" class="rs-port"/><circle cx="264" cy="254.0" r="4" class="rs-port"/>
+<rect x="0" y="288" width="204" height="44" rx="22" class="rs-card"/>
+<text x="18" y="315.0" class="rs-t" text-anchor="start">get()</text>
+<text x="188" y="315.0" class="rs-s rs-mono" text-anchor="end">?start;stop</text>
+<rect x="264" y="288" width="156" height="44" rx="22" class="rs-card"/>
+<text x="342.0" y="315.0" class="rs-t" text-anchor="middle">query</text>
+<circle cx="204" cy="310.0" r="4" class="rs-port"/><circle cx="264" cy="310.0" r="4" class="rs-port"/></svg>

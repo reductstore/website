@@ -1,0 +1,166 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 840 696" width="100%" height="100%">
+  <defs>
+    <style>
+      :root {
+        --card-bg: #FFFFFF;
+        --card-brand: #2B0548;
+        --brand-line: #2B0548;
+        --card-accent: #DB817B;
+        --card-stroke: #333333;
+        --text-main: #333333;
+        --text-muted: #666666;
+        --text-inverse: #FFFFFF;
+        --line: #333333;
+        --zone: #F7F4FA;
+        --label-a: #D5E8D4;
+        --label-a-stroke: #82B366;
+        --label-b: #E1D5E7;
+        --label-b-stroke: #9673A6;
+        --label-c: #F8CECC;
+        --label-c-stroke: #B85450;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --card-bg: #1E1E1E;
+          --card-stroke: #555555;
+            --text-main: #EFEFEF;
+          --text-muted: #A0A0A0;
+          --line: #EFEFEF;
+          --zone: #262129;
+          --brand-line: #BFA6DC;
+        }
+      }
+
+      text {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      .mono {
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        white-space: pre;
+      }
+
+      .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand-frame { fill: var(--card-bg); stroke: var(--brand-line); stroke-width: 2; }
+      .card-accent { fill: var(--card-accent); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
+      .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .hatch-line { stroke: var(--line); stroke-width: 1.5; }
+      .record { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1; }
+      .label-a { fill: var(--label-a); stroke: var(--label-a-stroke); }
+      .label-b { fill: var(--label-b); stroke: var(--label-b-stroke); }
+      .label-c { fill: var(--label-c); stroke: var(--label-c-stroke); }
+      .dot { fill: var(--text-muted); }
+
+      .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
+      .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
+      .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-title-brand { font-weight: 700; font-size: 18px; fill: var(--brand-line); }
+      .text-item-brand { font-weight: 700; font-size: 15px; fill: var(--brand-line); }
+      .text-item { font-weight: 600; font-size: 15px; fill: var(--text-main); }
+      .text-item-inverse { font-weight: 600; font-size: 15px; fill: var(--text-inverse); }
+      .text-subtitle { font-size: 14px; fill: var(--text-muted); }
+      .text-subtitle-inverse { font-size: 14px; fill: var(--text-inverse); }
+      .text-bullet { font-size: 15px; fill: var(--text-main); }
+      .text-bullet-inverse { font-size: 15px; fill: var(--text-inverse); }
+      .text-label { font-size: 13px; fill: var(--text-muted); }
+      .text-label-strong { font-size: 13px; font-weight: 700; fill: var(--text-main); }
+      .text-label-inverse { font-size: 13px; fill: var(--text-inverse); }
+      .text-note { font-size: 13px; font-style: italic; fill: var(--text-muted); }
+
+      .connector { stroke: var(--line); stroke-width: 2; fill: none; }
+      .link { stroke: var(--line); stroke-width: 2; stroke-dasharray: 5 5; fill: none; }
+      .guide { stroke: var(--text-muted); stroke-width: 1; stroke-dasharray: 3 4; fill: none; }
+      .arrow-head { fill: var(--line); }
+    </style>
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
+    </marker>
+    <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" class="hatch-line" />
+    </pattern>
+  </defs>
+  <rect x="0" y="0" width="820" height="100" rx="18" class="zone" />
+  <rect x="0" y="140" width="404" height="400" rx="18" class="zone" />
+  <rect x="430" y="140" width="200" height="400" rx="18" class="zone" />
+  <text x="410" y="26" class="text-zone" text-anchor="middle">Control Plane</text>
+  <text x="22" y="36" class="text-label" text-anchor="start">• Automated deployment</text>
+  <text x="22" y="58" class="text-label" text-anchor="start">• Metrics and diagnostics</text>
+  <text x="22" y="80" class="text-label" text-anchor="start">• Cloud resource management</text>
+  <text x="18" y="166" class="text-zone" text-anchor="start">Cloud Instance #1</text>
+  <text x="380" y="166" class="text-label" text-anchor="end">• Cost-effective storage</text>
+  <text x="380" y="186" class="text-label" text-anchor="end">• Fully managed instance</text>
+  <rect x="20" y="204" width="236" height="310" rx="18" class="card-brand-frame" />
+  <text x="40" y="236" class="text-title-brand" text-anchor="start">ReductStore instance</text>
+  <rect x="38" y="254" width="200" height="238" rx="10" class="card-brand-frame" />
+  <rect x="53.7" y="262" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="67.7" y="262" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="81.7" y="262" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="95.7" y="262" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="109.7" y="262" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="123.7" y="262" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="137.7" y="262" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="53.7" y="307.6" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="67.7" y="307.6" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="81.7" y="307.6" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="95.7" y="307.6" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="109.7" y="307.6" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="123.7" y="307.6" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="137.7" y="307.6" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="53.7" y="353.2" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="67.7" y="353.2" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="81.7" y="353.2" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="95.7" y="353.2" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="109.7" y="353.2" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="123.7" y="353.2" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="137.7" y="353.2" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="53.7" y="398.8" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="67.7" y="398.8" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="81.7" y="398.8" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="95.7" y="398.8" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="109.7" y="398.8" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="123.7" y="398.8" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="137.7" y="398.8" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="53.7" y="444.4" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="67.7" y="444.4" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="81.7" y="444.4" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="95.7" y="444.4" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="109.7" y="444.4" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="123.7" y="444.4" width="9" height="39.6" rx="2" class="record label-a" />
+  <rect x="137.7" y="444.4" width="9" height="39.6" rx="2" class="record label-a" />
+  <text x="224" y="378" class="text-item-brand" text-anchor="end">Bucket</text>
+  <rect x="276" y="264" width="108" height="54" rx="10" class="card-plain" />
+  <text x="330" y="296" class="text-item" text-anchor="middle">ETL logic</text>
+  <rect x="276" y="408" width="108" height="54" rx="10" class="card-plain" />
+  <text x="330" y="440" class="text-item" text-anchor="middle">FUSE driver</text>
+  <text x="448" y="166" class="text-zone" text-anchor="start">Cloud Services</text>
+  <rect x="448" y="250" width="164" height="80" rx="10" class="card-plain" />
+  <text x="530" y="287" class="text-item" text-anchor="middle">Aggregated data</text>
+  <text x="530" y="306" class="text-label mono" text-anchor="middle">tables</text>
+  <rect x="448" y="395" width="164" height="80" rx="10" class="card-plain" />
+  <text x="530" y="432" class="text-item" text-anchor="middle">Object storage</text>
+  <text x="530" y="451" class="text-label mono" text-anchor="middle">S3, Azure Blob</text>
+  <path d="M256,291 L272,291" class="connector" marker-end="url(#arrow)" />
+  <path d="M384,291 L444,291" class="connector" marker-end="url(#arrow)" />
+  <path d="M256,435 L272,435" class="connector" marker-end="url(#arrow)" marker-start="url(#arrow)" />
+  <path d="M384,435 L444,435" class="connector" marker-end="url(#arrow)" marker-start="url(#arrow)" />
+  <rect x="660" y="140" width="160" height="72" rx="10" class="card-plain" />
+  <text x="740" y="173" class="text-item" text-anchor="middle">Cloud Instance #2</text>
+  <text x="740" y="192" class="text-label mono" text-anchor="middle">ReductStore</text>
+  <rect x="660" y="236" width="160" height="72" rx="10" class="card-plain" />
+  <text x="740" y="269" class="text-item" text-anchor="middle">Cloud Instance #3</text>
+  <text x="740" y="288" class="text-label mono" text-anchor="middle">ReductStore</text>
+  <circle cx="726" cy="352" r="3" class="dot" />
+  <circle cx="740" cy="352" r="3" class="dot" />
+  <circle cx="754" cy="352" r="3" class="dot" />
+  <rect x="660" y="468" width="160" height="72" rx="10" class="card-plain" />
+  <text x="740" y="501" class="text-item" text-anchor="middle">Cloud Instance #N</text>
+  <text x="740" y="520" class="text-label mono" text-anchor="middle">ReductStore</text>
+  <rect x="30" y="600" width="200" height="76" rx="16" class="card-standard" />
+  <text x="130" y="632" class="text-title" text-anchor="middle">Factory Storage</text>
+  <text x="130" y="656" class="text-subtitle mono" text-anchor="middle">ReductStore</text>
+  <path d="M130,600 L130,544" class="connector" marker-end="url(#arrow)" />
+</svg>

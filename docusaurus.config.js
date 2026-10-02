@@ -8,12 +8,13 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import remarkSVGBob from "remark-svgbob";
 import remarkResponsiveSVGBob from "./src/plugins/remark-responsive-svgbob/index.js";
+import { svgoConfig } from "./src/plugins/svgo-config.js";
+import useCases from "./src/data/useCases.js";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "ReductStore",
-  tagline:
-    "High Performance Data Storage and Streaming for Robotics and Industrial IoT",
+  tagline: "The Data Backbone for Robots and Machines",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
@@ -33,6 +34,12 @@ const config = {
   // Otherwise, GitHub Pages will add an extra trailing slash to your site urls only on direct-access (not when navigation) with a server redirect.
   // This behavior can have SEO impacts and create relative link issues.
   trailingSlash: false,
+
+  customFields: {
+    checkoutUrl: process.env.REDUCTPRO_CHECKOUT_URL,
+    portalUrl: process.env.REDUCTPRO_PORTAL_URL,
+    checkoutEnabled: process.env.REDUCTPRO_CHECKOUT_ENABLED === "true",
+  },
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
@@ -140,6 +147,9 @@ const config = {
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
+        },
+        svgr: {
+          svgrConfig: { svgoConfig },
         },
         sitemap: {
           lastmod: "date",
@@ -283,32 +293,10 @@ const config = {
             type: "dropdown",
             label: "Use Cases",
             position: "left",
-            items: [
-              {
-                label: "Robotics Data",
-                to: "/blog/database-for-robotics",
-              },
-              {
-                label: "DAQ for Manufacturing",
-                to: "/blog/daq-manufacture-system",
-              },
-              {
-                label: "Computer Vision",
-                to: "/blog/computer-vision-applications",
-              },
-              {
-                label: "Vibration Data",
-                to: "/blog/how-to-store-vibration-sensor-data",
-              },
-              {
-                label: "IIoT (MQTT)",
-                to: "/blog/advice/database/mqtt-data-storage",
-              },
-              {
-                label: "Explore More",
-                to: "/use-cases",
-              },
-            ],
+            items: useCases.map(({ title, link }) => ({
+              label: title,
+              to: link,
+            })),
           },
           {
             type: "dropdown",
@@ -324,7 +312,7 @@ const config = {
                 to: "/docs/getting-started",
               },
               {
-                label: "Playground Datasets",
+                label: "Playground",
                 to: "/datasets",
               },
               {
@@ -347,10 +335,12 @@ const config = {
             to: "/pricing",
             position: "left",
           },
+          { type: "search", position: "right" },
           {
             type: "docsVersionDropdown",
             position: "right",
             dropdownActiveClassDisabled: true,
+            className: "navbar-version-dropdown",
           },
           {
             href: "https://github.com/reductstore/reductstore",
@@ -440,7 +430,7 @@ const config = {
                 href: "/docs/http-api",
               },
               {
-                label: "Playground Datasets",
+                label: "Playground",
                 to: "/datasets",
               },
               {

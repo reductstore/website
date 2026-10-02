@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 780 630" width="100%" height="100%">
+  <defs>
+    <style>
+      :root {
+        --card-bg: #FFFFFF;
+        --card-brand: #2B0548;
+        --brand-line: #2B0548;
+        --card-accent: #DB817B;
+        --card-stroke: #333333;
+        --text-main: #333333;
+        --text-muted: #666666;
+        --text-inverse: #FFFFFF;
+        --line: #333333;
+        --zone: #F7F4FA;
+        --label-a: #D5E8D4;
+        --label-a-stroke: #82B366;
+        --label-b: #E1D5E7;
+        --label-b-stroke: #9673A6;
+        --label-c: #F8CECC;
+        --label-c-stroke: #B85450;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --card-bg: #1E1E1E;
+          --card-stroke: #555555;
+            --text-main: #EFEFEF;
+          --text-muted: #A0A0A0;
+          --line: #EFEFEF;
+          --zone: #262129;
+          --brand-line: #BFA6DC;
+        }
+      }
+
+      text {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      .mono {
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        white-space: pre;
+      }
+
+      .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand-frame { fill: var(--card-bg); stroke: var(--brand-line); stroke-width: 2; }
+      .card-accent { fill: var(--card-accent); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
+      .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .hatch-line { stroke: var(--line); stroke-width: 1.5; }
+      .record { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1; }
+      .label-a { fill: var(--label-a); stroke: var(--label-a-stroke); }
+      .label-b { fill: var(--label-b); stroke: var(--label-b-stroke); }
+      .label-c { fill: var(--label-c); stroke: var(--label-c-stroke); }
+      .dot { fill: var(--text-muted); }
+
+      .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
+      .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
+      .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-title-brand { font-weight: 700; font-size: 18px; fill: var(--brand-line); }
+      .text-item-brand { font-weight: 700; font-size: 15px; fill: var(--brand-line); }
+      .text-item { font-weight: 600; font-size: 15px; fill: var(--text-main); }
+      .text-item-inverse { font-weight: 600; font-size: 15px; fill: var(--text-inverse); }
+      .text-subtitle { font-size: 14px; fill: var(--text-muted); }
+      .text-subtitle-inverse { font-size: 14px; fill: var(--text-inverse); }
+      .text-bullet { font-size: 15px; fill: var(--text-main); }
+      .text-bullet-inverse { font-size: 15px; fill: var(--text-inverse); }
+      .text-label { font-size: 13px; fill: var(--text-muted); }
+      .text-label-strong { font-size: 13px; font-weight: 700; fill: var(--text-main); }
+      .text-label-inverse { font-size: 13px; fill: var(--text-inverse); }
+      .text-note { font-size: 13px; font-style: italic; fill: var(--text-muted); }
+
+      .connector { stroke: var(--line); stroke-width: 2; fill: none; }
+      .link { stroke: var(--line); stroke-width: 2; stroke-dasharray: 5 5; fill: none; }
+      .guide { stroke: var(--text-muted); stroke-width: 1; stroke-dasharray: 3 4; fill: none; }
+      .arrow-head { fill: var(--line); }
+    </style>
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
+    </marker>
+    <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" class="hatch-line" />
+    </pattern>
+  </defs>
+  <rect x="180" y="0" width="580" height="270" rx="18" class="zone" />
+  <rect x="180" y="380" width="580" height="230" rx="18" class="zone" />
+  <rect x="0" y="110" width="130" height="76" rx="16" class="card-standard" />
+  <text x="65" y="142" class="text-title" text-anchor="middle">Vibration</text>
+  <text x="65" y="166" class="text-subtitle" text-anchor="middle">sensor</text>
+  <path d="M130,148 L176,148" class="connector" marker-end="url(#arrow)" />
+  <text x="200" y="26" class="text-zone" text-anchor="start">sensor_data</text>
+  <text x="202" y="72" class="text-label" text-anchor="start">Label</text>
+  <rect x="202" y="80" width="170" height="82" rx="10" class="card-plain" />
+  <text x="218" y="104" class="text-bullet" text-anchor="start">+ RMS</text>
+  <text x="218" y="126" class="text-bullet" text-anchor="start">+ Peak-to-Peak</text>
+  <text x="218" y="148" class="text-bullet" text-anchor="start">+ Crest Factor</text>
+  <rect x="202" y="172" width="170" height="44" rx="4" class="card-plain" />
+  <rect x="202" y="172" width="170" height="44" rx="4" class="hatch" />
+  <text x="287" y="240" class="text-label" text-anchor="middle">Binary chunk 1</text>
+  <text x="388" y="72" class="text-label" text-anchor="start">Label</text>
+  <rect x="388" y="80" width="170" height="82" rx="10" class="card-plain" />
+  <text x="404" y="104" class="text-bullet" text-anchor="start">+ RMS</text>
+  <text x="404" y="126" class="text-bullet" text-anchor="start">+ Peak-to-Peak</text>
+  <text x="404" y="148" class="text-bullet" text-anchor="start">+ Crest Factor</text>
+  <rect x="388" y="172" width="170" height="44" rx="4" class="card-plain" />
+  <rect x="388" y="172" width="170" height="44" rx="4" class="hatch" />
+  <text x="473" y="240" class="text-label" text-anchor="middle">Binary chunk 2</text>
+  <text x="574" y="72" class="text-label" text-anchor="start">Label</text>
+  <rect x="574" y="80" width="170" height="82" rx="10" class="card-brand" />
+  <text x="590" y="104" class="text-bullet-inverse" text-anchor="start">+ RMS</text>
+  <text x="590" y="126" class="text-bullet-inverse" text-anchor="start">+ Peak-to-Peak</text>
+  <text x="590" y="148" class="text-bullet-inverse" text-anchor="start">+ Crest Factor</text>
+  <rect x="574" y="172" width="170" height="44" rx="4" class="card-plain" />
+  <rect x="574" y="172" width="170" height="44" rx="4" class="hatch" />
+  <text x="659" y="240" class="text-label" text-anchor="middle">Binary chunk 3</text>
+  <text x="200" y="406" class="text-zone" text-anchor="start">backup_data</text>
+  <text x="202" y="452" class="text-label" text-anchor="start">Label</text>
+  <rect x="202" y="460" width="170" height="82" rx="10" class="card-brand" />
+  <text x="218" y="484" class="text-bullet-inverse" text-anchor="start">+ RMS</text>
+  <text x="218" y="506" class="text-bullet-inverse" text-anchor="start">+ Peak-to-Peak</text>
+  <text x="218" y="528" class="text-bullet-inverse" text-anchor="start">+ Crest Factor</text>
+  <rect x="202" y="552" width="170" height="44" rx="4" class="card-plain" />
+  <rect x="202" y="552" width="170" height="44" rx="4" class="hatch" />
+  <circle cx="456" cy="572" r="3" class="dot" />
+  <circle cx="470" cy="572" r="3" class="dot" />
+  <circle cx="484" cy="572" r="3" class="dot" />
+  <text x="574" y="452" class="text-label" text-anchor="start">Label</text>
+  <rect x="574" y="460" width="170" height="82" rx="10" class="card-brand" />
+  <text x="590" y="484" class="text-bullet-inverse" text-anchor="start">+ RMS</text>
+  <text x="590" y="506" class="text-bullet-inverse" text-anchor="start">+ Peak-to-Peak</text>
+  <text x="590" y="528" class="text-bullet-inverse" text-anchor="start">+ Crest Factor</text>
+  <rect x="574" y="552" width="170" height="44" rx="4" class="card-plain" />
+  <rect x="574" y="552" width="170" height="44" rx="4" class="hatch" />
+  <path d="M659,262 L659,376" class="connector" marker-end="url(#arrow)" />
+  <text x="649" y="332" class="text-label mono" text-anchor="end">replication task</text>
+</svg>
