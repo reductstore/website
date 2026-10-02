@@ -307,11 +307,7 @@ export default function PricingTable() {
           price={
             <div className={styles.proPrice}>
               <p>
-                <span>{perTb(currency)}</span> per TB per month, excl. VAT
-              </p>
-              <p className={styles.billingNote}>
-                {perGb(currency)} per GB. Billed monthly on peak storage.{" "}
-                {REDUCTSTORE_MIN_TB} TB minimum.
+                <span>{perGb(currency)}</span> / GB / month
               </p>
               <label className={styles.storageGauge}>
                 <span className={styles.storageGaugeHeader}>

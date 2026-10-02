@@ -75,13 +75,6 @@
   line-height: 1.1;
 }
 
-.billingNote {
-  margin-top: 0.25rem !important;
-  color: var(--reduct-dimmed);
-  font-size: 0.85rem;
-  font-weight: 400;
-}
-
 .storageGauge {
   display: grid;
   gap: 0.35rem;
