@@ -20,7 +20,7 @@ type ReductProCustomFields = {
   portalUrl?: string;
 };
 
-type Plan = "free" | "pro" | "cloudEnterprise" | "cloudSelfHosted";
+type Plan = "free" | "pro" | "enterprise";
 
 type Feature = {
   title: React.ReactNode;
@@ -31,14 +31,12 @@ type Feature = {
 const plans: { id: Plan; label: string }[] = [
   { id: "free", label: "Free" },
   { id: "pro", label: "Pro" },
-  { id: "cloudEnterprise", label: "Cloud Enterprise" },
-  { id: "cloudSelfHosted", label: "Cloud Self-hosted" },
+  { id: "enterprise", label: "Enterprise" },
 ];
 
 const createFeatures = (plan: Plan): Feature[] => {
   const isPaid = plan !== "free";
-  const isCloud = plan === "cloudEnterprise";
-  const isEnterprise = plan === "cloudEnterprise" || plan === "cloudSelfHosted";
+  const isEnterprise = plan === "enterprise";
 
   return [
     { title: "Core Capabilities", available: true, isCategoryHeader: true },
@@ -81,21 +79,21 @@ const createFeatures = (plan: Plan): Feature[] => {
     },
     { title: "Docker & Kubernetes Ready", available: true },
     { title: "Grafana Integration", available: true },
-    { title: "Fully Managed Service", available: isCloud },
-    { title: "Reports subscription usage", available: plan === "pro" },
+    { title: "Works fully offline", available: plan !== "pro" },
+    { title: "Managed hosting by us", available: isEnterprise },
     {
       title: "Support & Maintenance",
       available: true,
       isCategoryHeader: true,
     },
-    { title: "Support", available: true },
-    { title: "Long Term Support (LTS)", available: isPaid },
+    { title: "Community support", available: true },
+    { title: "Commercial support", available: isPaid },
     { title: "Architecture Review", available: isPaid },
-    { title: "Deployment Assistance", available: isPaid },
-    { title: "Works fully offline", available: plan === "cloudSelfHosted" },
+    { title: "Long Term Support (LTS)", available: isEnterprise },
+    { title: "Deployment Assistance", available: isEnterprise },
+    { title: "SLA", available: isEnterprise },
     { title: "Annual contract with invoicing", available: isEnterprise },
     { title: "Volume pricing", available: isEnterprise },
-    { title: "SLA", available: isEnterprise },
   ];
 };
 
@@ -164,40 +162,30 @@ export function PricingComparison() {
                 excl. VAT
               </td>
               <td>Custom pricing</td>
-              <td>Custom pricing</td>
             </tr>
             <tr>
-              <th scope="row">Hosted by</th>
-              <td>You</td>
-              <td>You</td>
-              <td>Us</td>
-              <td>You</td>
+              <th scope="row">Runs on</th>
+              <td>Your hardware or cloud</td>
+              <td>Your hardware, edge devices, or cloud</td>
+              <td>Anywhere, air-gapped, or hosted by us</td>
             </tr>
             <tr>
               <th scope="row">Internet connection</th>
               <td>Not needed</td>
               <td>Once a day for the license check</td>
-              <td>Managed by us</td>
-              <td>Not needed, works offline</td>
+              <td>Not needed, offline license</td>
             </tr>
             <tr>
               <th scope="row">Billing</th>
               <td>Free</td>
               <td>Monthly by card</td>
-              <td>Custom</td>
-              <td>Custom</td>
-            </tr>
-            <tr>
-              <th scope="row">Support</th>
-              {plans.map((plan) => (
-                <td key={plan.id}>{availabilityIcon(true)}</td>
-              ))}
+              <td>Annual contract with invoicing</td>
             </tr>
             {features.map((feature, index) => {
               if (feature.isCategoryHeader) {
                 return (
                   <tr key={index} className={styles.categoryHeader}>
-                    <th colSpan={5} scope="colgroup">
+                    <th colSpan={plans.length + 1} scope="colgroup">
                       <strong>{feature.title}</strong>
                     </th>
                   </tr>
@@ -287,7 +275,7 @@ export default function PricingTable() {
       <div className={styles.pricingTable}>
         <PricingPlan
           title="Free"
-          tagline="Open source, self hosted"
+          tagline="Open source core"
           price={
             <span className={styles.price}>{formatCurrency(0, currency)}</span>
           }
@@ -303,7 +291,7 @@ export default function PricingTable() {
         />
         <PricingPlan
           title="Pro"
-          tagline="Self hosted, commercial"
+          tagline="Pay as you go"
           price={
             <div className={styles.proPrice}>
               <p>
@@ -354,7 +342,7 @@ export default function PricingTable() {
         />
         <PricingPlan
           title="Enterprise"
-          tagline="Self-hosted or Cloud"
+          tagline="Offline license or managed hosting"
           price={<span className={styles.price}>Custom pricing</span>}
           actions={
             <Link
@@ -366,9 +354,10 @@ export default function PricingTable() {
           }
           bullets={[
             <strong key="plus">Everything in Pro, plus</strong>,
-            "Cloud Enterprise or Cloud Self-hosted",
-            "Custom support and SLA",
-            "Architecture and deployment assistance",
+            "Offline license for air-gapped sites",
+            "Annual contract with invoicing",
+            "SLA, LTS, and setup by our team",
+            "Managed hosting on request",
           ]}
         />
       </div>

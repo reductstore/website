@@ -10,7 +10,7 @@ export default function PricingDetails(): JSX.Element {
   return (
     <Layout
       title="Pricing details"
-      description="Compare ReductStore Free, Pro, Cloud Enterprise, and Cloud Self-hosted plans."
+      description="Compare the ReductStore Free, Pro, and Enterprise plans."
     >
       <main>
         <SimpleHeader pageTitle="Pricing details" />

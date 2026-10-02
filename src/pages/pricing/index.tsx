@@ -1,4 +1,5 @@
 import Layout from "@theme/Layout";
+import Link from "@docusaurus/Link";
 import PricingTable from "@site/src/components/shared/PricingTable";
 import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import Faq from "@site/src/components/shared/Faq";
@@ -67,6 +68,21 @@ const pricingFaqs = (currency: Currency, portalUrl?: string) => [
     question: "How does ReductStore Pro licensing work?",
     answer:
       "ReductStore Pro is a self-serve monthly subscription for business customers, billed in EUR or USD.",
+  },
+  {
+    question: "Can Pro run in the cloud?",
+    answer:
+      "Yes. Pro runs wherever you run it: on your own hardware, on edge devices, or in your own AWS, Azure, or other cloud account. It only needs to reach the license server once a day.",
+  },
+  {
+    question: "When do I need Enterprise?",
+    answer: (
+      <p>
+        When ReductStore runs on air-gapped sites without internet access, when
+        you buy through an annual contract with invoicing, or when you want us
+        to host it for you. <Link to="/contact">Contact us</Link> for a quote.
+      </p>
+    ),
   },
   {
     question: "How is Pro billed?",

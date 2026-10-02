@@ -100,6 +100,12 @@ export default function EnterprisePage(): JSX.Element {
         <SimpleHeader pageTitle="ReductStore Enterprise" />
         <div className={clsx("container", styles.pageContainer)}>
           {/* Intro */}
+          <p className={styles.introText}>
+            ReductStore Enterprise is for sites without internet access and for
+            teams that buy through procurement: an offline license, an annual
+            contract with invoicing, SLA and long-term support, setup by our
+            team, and managed hosting if you prefer that we run it.
+          </p>
           <h2 className={styles.sectionTitle}>Co-Development and Licensing</h2>
           <p className={styles.introText}>
             Get a free 30 day ReductStore Pro license with full access to all

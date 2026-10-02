@@ -226,6 +226,10 @@
   font-weight: 500;
 }
 
+.comparisonTable .categoryHeader {
+  background-color: transparent;
+}
+
 .categoryHeader th {
   padding-top: 1.5rem;
   color: var(--ifm-color-primary);
