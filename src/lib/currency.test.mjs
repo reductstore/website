@@ -9,11 +9,24 @@ import {
   resolveCurrency,
 } from "./currency.ts";
 
-test("euro area countries default to EUR, everything else to USD", () => {
-  for (const country of ["DE", "FR", "ES", "NL", "de"]) {
+test("Europe defaults to EUR, everything else to USD", () => {
+  for (const country of [
+    "DE",
+    "FR",
+    "ES",
+    "NL",
+    "de",
+    "GB",
+    "CH",
+    "NO",
+    "SE",
+  ]) {
     assert.equal(currencyForCountry(country), "EUR", country);
   }
-  for (const country of ["US", "GB", "CH", "NO", "SE", "CA", "JP"]) {
+  for (const country of ["DK", "IS", "PL", "CZ", "HU", "RO", "BG", "MC"]) {
+    assert.equal(currencyForCountry(country), "EUR", country);
+  }
+  for (const country of ["US", "CA", "JP", "TR", "RU", "UA", "AU"]) {
     assert.equal(currencyForCountry(country), "USD", country);
   }
   assert.equal(currencyForCountry(undefined), "USD");
@@ -26,16 +39,24 @@ test("the browser time zone decides before the locale", () => {
     "EUR",
   );
   assert.equal(
-    detectCurrency({ timeZone: "Europe/London", languages: ["de-DE"] }),
+    detectCurrency({ timeZone: "America/New_York", languages: ["de-DE"] }),
     "USD",
   );
-  assert.equal(
-    detectCurrency({ timeZone: "Europe/Zurich", languages: ["de-CH"] }),
-    "USD",
-  );
+  for (const timeZone of [
+    "Europe/London",
+    "Europe/Zurich",
+    "Europe/Oslo",
+    "Europe/Stockholm",
+    "Europe/Copenhagen",
+    "Europe/Warsaw",
+  ]) {
+    assert.equal(detectCurrency({ timeZone, languages: ["en-US"] }), "EUR");
+  }
+  assert.equal(detectCurrency({ timeZone: "Europe/Istanbul" }), "USD");
   assert.equal(detectCurrency({ languages: ["fr-FR"] }), "EUR");
   assert.equal(detectCurrency({ languages: ["de"] }), "EUR");
-  assert.equal(detectCurrency({ languages: ["en-GB"] }), "USD");
+  assert.equal(detectCurrency({ languages: ["en-GB"] }), "EUR");
+  assert.equal(detectCurrency({ languages: ["en-US"] }), "USD");
   assert.equal(detectCurrency({}), "USD");
 });
 

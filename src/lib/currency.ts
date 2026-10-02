@@ -12,7 +12,9 @@ export const REDUCTSTORE_MIN_TB = 1;
 
 export const CURRENCY_STORAGE_KEY = "reductstore_currency";
 
-export const EURO_AREA_COUNTRIES = new Set([
+// Euro area members, the rest of Europe that usually buys in EUR, and the
+// small states that use the euro.
+export const EUR_COUNTRIES = new Set([
   "AT",
   "BE",
   "HR",
@@ -33,11 +35,29 @@ export const EURO_AREA_COUNTRIES = new Set([
   "SK",
   "SI",
   "ES",
+  "GB",
+  "CH",
+  "LI",
+  "NO",
+  "IS",
+  "SE",
+  "DK",
+  "PL",
+  "CZ",
+  "HU",
+  "RO",
+  "BG",
+  "MC",
+  "AD",
+  "SM",
+  "VA",
+  "ME",
+  "XK",
 ]);
 
 // Azure Static Web Apps passes no visitor country to a static page, so the
 // browser time zone stands in for it.
-const EURO_AREA_TIME_ZONES: Record<string, string> = {
+const EUR_TIME_ZONES: Record<string, string> = {
   "Europe/Vienna": "AT",
   "Europe/Brussels": "BE",
   "Europe/Zagreb": "HR",
@@ -66,6 +86,29 @@ const EURO_AREA_TIME_ZONES: Record<string, string> = {
   "Europe/Madrid": "ES",
   "Africa/Ceuta": "ES",
   "Atlantic/Canary": "ES",
+  "Europe/London": "GB",
+  "Europe/Belfast": "GB",
+  "Europe/Guernsey": "GB",
+  "Europe/Jersey": "GB",
+  "Europe/Isle_of_Man": "GB",
+  "Europe/Zurich": "CH",
+  "Europe/Vaduz": "LI",
+  "Europe/Oslo": "NO",
+  "Arctic/Longyearbyen": "NO",
+  "Atlantic/Reykjavik": "IS",
+  "Europe/Stockholm": "SE",
+  "Europe/Copenhagen": "DK",
+  "Atlantic/Faroe": "DK",
+  "Europe/Warsaw": "PL",
+  "Europe/Prague": "CZ",
+  "Europe/Budapest": "HU",
+  "Europe/Bucharest": "RO",
+  "Europe/Sofia": "BG",
+  "Europe/Monaco": "MC",
+  "Europe/Andorra": "AD",
+  "Europe/San_Marino": "SM",
+  "Europe/Vatican": "VA",
+  "Europe/Podgorica": "ME",
 };
 
 export function parseCurrency(value: unknown): Currency | undefined {
@@ -76,11 +119,11 @@ export function parseCurrency(value: unknown): Currency | undefined {
 
 export function currencyForCountry(countryCode?: string): Currency {
   if (!countryCode) return "USD";
-  return EURO_AREA_COUNTRIES.has(countryCode.toUpperCase()) ? "EUR" : "USD";
+  return EUR_COUNTRIES.has(countryCode.toUpperCase()) ? "EUR" : "USD";
 }
 
 export function countryFromTimeZone(timeZone?: string): string | undefined {
-  return timeZone ? EURO_AREA_TIME_ZONES[timeZone] : undefined;
+  return timeZone ? EUR_TIME_ZONES[timeZone] : undefined;
 }
 
 export function countryFromLocale(locale?: string): string | undefined {
