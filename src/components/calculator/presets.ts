@@ -189,7 +189,7 @@ export const PRESETS: WorkloadPreset[] = [
     id: "industrial-robot",
     name: "Industrial robot",
     unitLabel: "Industrial robots",
-    competitor: "timescale",
+    competitor: "foxglove",
     units: 25,
     recordingHoursPerDay: 16,
     retention: {
@@ -354,7 +354,7 @@ export const PRESETS: WorkloadPreset[] = [
     id: "computer-vision",
     name: "Computer vision",
     unitLabel: "Cameras",
-    competitor: "foxglove",
+    competitor: "timescale",
     units: 40,
     recordingHoursPerDay: 24,
     retention: {
@@ -397,7 +397,7 @@ export const PRESETS: WorkloadPreset[] = [
     id: "custom",
     name: "Custom",
     unitLabel: "Data sources",
-    competitor: "foxglove",
+    competitor: "timescale",
     units: 20,
     recordingHoursPerDay: 24,
     retention: {

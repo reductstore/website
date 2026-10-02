@@ -56,6 +56,7 @@ const config = (overrides = {}) => {
     readPercentPerMonth: overrides.read ?? 5,
     instances: overrides.instances ?? 2,
     telemetryCompression: overrides.compression ?? 1,
+    engineeringRate: overrides.engineeringRate ?? 0,
   };
 };
 
@@ -75,9 +76,9 @@ test("pack factor follows the block size and record limits", () => {
   assert.equal(packFactor(100_000, REDUCT_BLOCK), 1);
 });
 
-test("license: €15 and $18 per TB per month, 1 TB minimum", () => {
-  close(licenseCostYear(100, licenseTiers(15)), 18_000);
-  close(licenseCostYear(100, licenseTiers(18)), 21_600);
+test("license: €10 and $12 per TB per month, 1 TB minimum", () => {
+  close(licenseCostYear(100, licenseTiers(10)), 12_000);
+  close(licenseCostYear(100, licenseTiers(12)), 14_400);
   const tiny = compare(
     oneStream,
     { hotPercent: 1, hotDays: 1, coldPercent: 0, coldDays: 0 },
@@ -86,7 +87,7 @@ test("license: €15 and $18 per TB per month, 1 TB minimum", () => {
   close(
     tiny.reduct.components.find((c) => c.label === "ReductStore license")
       .amountYear,
-    180,
+    120,
   );
 });
 
@@ -207,7 +208,7 @@ test("on-prem: retained TB × price × 12, servers, no requests or data out", ()
   );
   assert.deepEqual(
     result.reduct.components.map((c) => c.label),
-    ["ReductStore license", "On-prem storage", "Servers"],
+    ["ReductStore license", "On-prem storage", "Servers", "Engineering"],
   );
   const part = (label) =>
     result.reduct.components.find((c) => c.label === label).amountYear;
@@ -343,11 +344,40 @@ test("InfluxDB on Timestream and TimescaleDB on Tiger Cloud, by hand", () => {
     config({ competitor: "timescale", compression: 5 }),
   );
   close(part(tiger, "Compute"), 12 * 2 * 240, 1e-6);
+  // The newest 7 of the 30 hot days are on primary storage, doubled by the HA
+  // replica; the rest of the hot data and all cold data are tiered.
+  const primaryTb = (w.hotTb * 7) / 30;
   close(
     part(tiger, "Storage"),
-    12 * (w.hotTb * 1000 * 0.177 * 2 + w.coldTb * 1000 * 0.021),
+    12 *
+      (primaryTb * 1000 * 0.177 * 2 +
+        (w.hotTb - primaryTb + w.coldTb) * 1000 * 0.021),
     1e-6,
   );
+});
+
+test("engineering: 4 hours a month for ReductStore and Foxglove, 16 for a database", () => {
+  const retention = {
+    hotPercent: 100,
+    hotDays: 30,
+    coldPercent: 0,
+    coldDays: 0,
+  };
+  const engineering = (side) =>
+    side.components.find((c) => c.label === "Engineering").amountYear;
+  const fox = compare(
+    mixed,
+    retention,
+    config({ engineeringRate: 90, currency: "EUR" }),
+  );
+  close(engineering(fox.reduct), 12 * 4 * 90, 1e-9);
+  close(engineering(fox.alternative), 12 * 4 * 90, 1e-9);
+  const db = compare(
+    mixed,
+    retention,
+    config({ engineeringRate: 90, competitor: "influx" }),
+  );
+  close(engineering(db.alternative), 12 * 16 * 90, 1e-9);
 });
 
 test("binary data next to a database is one object per record", () => {
@@ -409,19 +439,26 @@ test("cross-check: mobile robot on S3 vs Foxglove, in USD, by hand", () => {
   const indexing = 9 * 35 + (monthTb * 0.2 - 10) * 28;
   const bandwidth = (retainedTb * 0.05 - 0.1) * 150;
   const query = 9 * 3.65 + 10 * 2.75;
-  const foxglove = 12 * (20 + 5 * 20 + storage + indexing + bandwidth + query);
+  const foxglove =
+    12 * (20 + 5 * 20 + storage + indexing + bandwidth + query) + 12 * 4 * 100;
 
-  // ReductStore: $18 per TB a month; hot in S3 Standard at $23 per TB, cold
+  // ReductStore: $12 per TB a month; hot in S3 Standard at $23 per TB, cold
   // in Glacier Instant Retrieval at $4 per TB (90 days fits its minimum,
   // telemetry is batched per second so its blocks are large enough);
-  // 5% read out at $0.09 per GB; two m7i.xlarge at $0.2016 an hour.
-  const license = 12 * retainedTb * 18;
+  // 5% read out at $0.09 per GB; two m7i.xlarge at $0.2016 an hour; 4 hours
+  // of engineering a month at $100.
+  const license = 12 * retainedTb * 12;
   const s3Storage = 12 * (hotTb * 23 + coldTb * 4);
   const dataOut = 12 * retainedTb * 0.05 * 90;
   const servers = 12 * 2 * 0.2016 * 730;
+  const engineering = 12 * 4 * 100;
 
   const preset = PRESETS.find((p) => p.id === "mobile-robot");
-  const result = compare(preset, preset.retention, config({ compression: 5 }));
+  const result = compare(
+    preset,
+    preset.retention,
+    config({ compression: 5, engineeringRate: 100 }),
+  );
   const part = (label) =>
     result.reduct.components.find((c) => c.label === label).amountYear;
   close(result.alternative.totalYear, foxglove, 1e-6);
@@ -432,41 +469,49 @@ test("cross-check: mobile robot on S3 vs Foxglove, in USD, by hand", () => {
   assert.ok(part("Requests and retrieval") < 0.02 * result.reduct.totalYear);
   close(
     result.reduct.totalYear,
-    license + s3Storage + dataOut + servers + part("Requests and retrieval"),
+    license +
+      s3Storage +
+      dataOut +
+      servers +
+      engineering +
+      part("Requests and retrieval"),
     1e-6,
   );
 });
 
-test("every example is cheaper than its default competitor in the cloud", () => {
+test("in the cloud, every example is cheaper than every competitor", () => {
   assert.deepEqual(
     PRESETS.map((p) => [p.id, p.competitor]),
     [
       ["mobile-robot", "foxglove"],
       ["autonomous-vehicle", "foxglove"],
       ["drone", "foxglove"],
-      ["industrial-robot", "timescale"],
+      ["industrial-robot", "foxglove"],
       ["vibration", "timescale"],
       ["plc", "timescale"],
-      ["computer-vision", "foxglove"],
-      ["custom", "foxglove"],
+      ["computer-vision", "timescale"],
+      ["custom", "timescale"],
     ],
   );
   for (const preset of PRESETS) {
     for (const backend of ["aws", "azure"]) {
       for (const currency of ["EUR", "USD"]) {
-        const result = compare(
-          preset,
-          preset.retention,
-          config({
-            backend,
-            currency,
-            competitor: preset.competitor,
-            compression: 5,
-          }),
-        );
-        const tag = `${preset.id} ${backend} ${currency}`;
-        const percent = result.savingPercent;
-        assert.ok(percent > 0 && percent < 80, `${tag} ${percent}%`);
+        for (const competitor of ["foxglove", "influx", "timescale"]) {
+          const result = compare(
+            preset,
+            preset.retention,
+            config({
+              backend,
+              currency,
+              competitor,
+              compression: 5,
+              engineeringRate: currency === "EUR" ? 90 : 100,
+            }),
+          );
+          const tag = `${preset.id} ${backend} ${currency} ${competitor}`;
+          const percent = result.savingPercent;
+          assert.ok(percent >= 5 && percent < 80, `${tag} ${percent}%`);
+        }
       }
     }
   }

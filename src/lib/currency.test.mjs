@@ -63,12 +63,12 @@ test("only EUR and USD are accepted", () => {
 
 test("list prices are fixed per currency, not converted", () => {
   assert.deepEqual(REDUCTSTORE_PRICING, {
-    EUR: { perGbMonth: 0.015, perTbMonth: 15 },
-    USD: { perGbMonth: 0.018, perTbMonth: 18 },
+    EUR: { perGbMonth: 0.01, perTbMonth: 10 },
+    USD: { perGbMonth: 0.012, perTbMonth: 12 },
   });
-  assert.equal(formatCurrency(15, "EUR"), "€15");
-  assert.equal(formatCurrency(18, "USD"), "$18");
-  assert.equal(formatCurrency(0.018, "USD", 3), "$0.018");
+  assert.equal(formatCurrency(10, "EUR"), "€10");
+  assert.equal(formatCurrency(12, "USD"), "$12");
+  assert.equal(formatCurrency(0.012, "USD", 3), "$0.012");
   assert.equal(formatCurrency(21.6, "USD", 2), "$21.60");
   assert.equal(formatCurrency(142_000, "EUR"), "€142,000");
 });

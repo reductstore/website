@@ -12,7 +12,7 @@ import {
   LuSlidersHorizontal,
 } from "react-icons/lu";
 import type { IconType } from "react-icons";
-import { compare } from "./calculate";
+import { ENGINEERING_HOURS, compare } from "./calculate";
 import type { Route } from "./calculate";
 import {
   REDUCT_BLOCK,
@@ -28,6 +28,7 @@ import {
   currencySymbol,
   formatCurrency,
 } from "../../lib/currency";
+import type { Currency } from "../../lib/currency";
 import useCurrency from "../../lib/useCurrency";
 import CurrencySwitch from "../shared/CurrencySwitch";
 import { PRESETS } from "./presets";
@@ -74,6 +75,10 @@ const ASSUMPTIONS: CompetitorAssumptions = {
 const READ_PERCENT_PER_MONTH = 5;
 const DEFAULT_INSTANCES = 2;
 const DEFAULT_COMPRESSION = 5;
+const DEFAULT_ENGINEERING_RATE: Record<Currency, number> = {
+  EUR: 90,
+  USD: 100,
+};
 
 const PRICE_SOURCES = [
   pricingConfig.aws,
@@ -162,6 +167,8 @@ export default function CostCalculator(): JSX.Element {
   const [competitor, setCompetitor] = useState<CompetitorId>(preset.competitor);
   const [instances, setInstances] = useState(String(DEFAULT_INSTANCES));
   const [compression, setCompression] = useState(String(DEFAULT_COMPRESSION));
+  const [engineeringRate, setEngineeringRate] = useState<string | null>(null);
+  const rate = engineeringRate ?? String(DEFAULT_ENGINEERING_RATE[currency]);
 
   const selectPreset = (id: string) => {
     const next = PRESETS.find((p) => p.id === id);
@@ -197,6 +204,7 @@ export default function CostCalculator(): JSX.Element {
         ? null
         : "A whole number, at least 1",
     compression: valid(compression, 1) ? null : "At least 1",
+    engineeringRate: valid(rate, 0) ? null : "Cannot be negative",
   };
 
   const safe = (value: string, fallback: number, min = 0, max = Infinity) => {
@@ -235,6 +243,7 @@ export default function CostCalculator(): JSX.Element {
       readPercentPerMonth: READ_PERCENT_PER_MONTH,
       instances: Math.round(safe(instances, DEFAULT_INSTANCES, 1)),
       telemetryCompression: safe(compression, 1, 1),
+      engineeringRate: safe(rate, 0),
     });
   }, [
     currency,
@@ -250,6 +259,7 @@ export default function CostCalculator(): JSX.Element {
     competitor,
     instances,
     compression,
+    rate,
   ]);
 
   const workload = result.workload;
@@ -468,6 +478,17 @@ export default function CostCalculator(): JSX.Element {
                 suffix="×"
                 error={errors.compression}
               />
+              <NumberField
+                label="Engineering rate"
+                hint={`What an engineer costs per hour. ReductStore and Foxglove take about ${ENGINEERING_HOURS.reduct} hours a month to run; time-series databases with object storage about ${ENGINEERING_HOURS.database}, including building the upload, indexing, and retention code, spread over three years.`}
+                value={rate}
+                onChange={setEngineeringRate}
+                min={0}
+                step={5}
+                prefix={currencySymbol(currency)}
+                suffix="/ hour"
+                error={errors.engineeringRate}
+              />
               {backend === "minio" && (
                 <NumberField
                   label="On-prem storage cost"
@@ -667,14 +688,25 @@ export default function CostCalculator(): JSX.Element {
             to the same object storage as one object per record. InfluxDB runs
             on {pricingConfig.influx.instances} Amazon Timestream for InfluxDB 3
             instances with data in object storage. TimescaleDB runs on Tiger
-            Cloud with a primary and an HA replica, hot data on primary storage
-            and cold data on tiered storage. Tiger Cloud publishes only its
+            Cloud with a primary and an HA replica, the newest{" "}
+            {pricingConfig.timescale.primaryStorageDays} days on primary storage
+            and older data on tiered storage. Tiger Cloud publishes only its
             entry compute price, so a 4 CPU service is estimated at 8 times
             that.
           </p>
 
+          <h3>Engineering</h3>
+          <p>
+            Running ReductStore or Foxglove takes about{" "}
+            {ENGINEERING_HOURS.reduct} hours a month. A time-series database
+            with object storage takes about {ENGINEERING_HOURS.database}: the
+            upload pipeline, object naming, metadata schema, queries by time and
+            label, and retention have to be built, which is spread over three
+            years, and then maintained. Both are priced at the engineering rate.
+          </p>
+
           <h3>Not included</h3>
-          <p>Support, VAT, extra backups, engineering time, and migration.</p>
+          <p>Support, VAT, extra backups, and migration.</p>
 
           <h3>Prices</h3>
           <p>

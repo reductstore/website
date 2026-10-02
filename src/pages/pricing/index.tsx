@@ -23,7 +23,7 @@ export default function Pricing(): JSX.Element {
   return (
     <Layout
       title="Pricing"
-      description="ReductStore pricing: free open source Core, self-serve Pro at €15 or $18 per TB per month, and Enterprise. Estimate your storage cost on AWS S3, Azure Blob, or MinIO."
+      description="ReductStore pricing: free open source Core, self-serve Pro at €10 or $12 per TB per month, and Enterprise. Estimate your storage cost on AWS S3, Azure Blob, or MinIO."
     >
       <main>
         <SimpleHeader pageTitle="Pricing" />

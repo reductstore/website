@@ -4,8 +4,8 @@ export const CURRENCIES: Currency[] = ["EUR", "USD"];
 
 // Fixed commercial list prices. USD is not derived from EUR.
 export const REDUCTSTORE_PRICING = {
-  EUR: { perGbMonth: 0.015, perTbMonth: 15 },
-  USD: { perGbMonth: 0.018, perTbMonth: 18 },
+  EUR: { perGbMonth: 0.01, perTbMonth: 10 },
+  USD: { perGbMonth: 0.012, perTbMonth: 12 },
 } as const;
 
 export const REDUCTSTORE_MIN_TB = 1;

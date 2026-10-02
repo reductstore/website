@@ -10,6 +10,10 @@ import type {
 } from "./types";
 
 export const KB_PER_TB = 1_000_000_000;
+
+// Engineering hours a month to run each architecture, including the build
+// work spread over three years.
+export const ENGINEERING_HOURS = { reduct: 4, foxglove: 4, database: 16 };
 export const DAYS_PER_MONTH = 30;
 export const SECONDS_PER_HOUR = 3600;
 
@@ -65,6 +69,7 @@ export type ComparisonConfig = {
   readPercentPerMonth: number;
   instances: number;
   telemetryCompression: number;
+  engineeringRate: number;
 };
 
 export type Comparison = {
@@ -297,6 +302,11 @@ const sumAmount = (components: CostComponent[]) =>
 
 const names = (streams: StreamWorkload[]) => streams.map((s) => s.stream.name);
 
+const engineering = (hours: number, config: ComparisonConfig) => ({
+  label: "Engineering",
+  amountYear: 12 * hours * nonNegative(config.engineeringRate),
+});
+
 const dataOutYear = (
   storedTb: number,
   perTb: number,
@@ -350,6 +360,7 @@ function reductSide(
       Math.max(1, Math.round(nonNegative(config.instances))) *
       config.pricing.serverPerMonth,
   });
+  components.push(engineering(ENGINEERING_HOURS.reduct, config));
   return {
     costs,
     side: {
@@ -434,6 +445,7 @@ function foxgloveSide(
           ),
       ),
     },
+    engineering(ENGINEERING_HOURS.foxglove, config),
   ];
   return {
     label: "Foxglove",
@@ -473,11 +485,18 @@ function databaseSide(
         i.instances * i.instanceUsdPerHour * config.prices.hoursPerMonth;
       storage = (dbHotTb + dbColdTb) * 1000 * i.storageUsdPerGbMonth;
     } else {
+      // Only the newest days stay on primary storage, which the HA replica
+      // doubles; older data is on tiered storage.
       const t = config.prices.timescale;
+      const hotDays = normalizeRetention(retention).hotDays;
+      const primaryTb =
+        hotDays > 0
+          ? (dbHotTb * Math.min(t.primaryStorageDays, hotDays)) / hotDays
+          : 0;
       compute = t.instances * t.serviceUsdPerMonth;
       storage =
-        dbHotTb * 1000 * t.storageUsdPerGbMonth * t.instances +
-        dbColdTb * 1000 * t.tieredUsdPerGbMonth;
+        primaryTb * 1000 * t.storageUsdPerGbMonth * t.instances +
+        (dbHotTb - primaryTb + dbColdTb) * 1000 * t.tieredUsdPerGbMonth;
     }
     components.push(
       { label: "Compute", amountYear: usd(12 * compute) },
@@ -515,6 +534,7 @@ function databaseSide(
   }
 
   if (dataOut > 0) components.push({ label: "Data out", amountYear: dataOut });
+  components.push(engineering(ENGINEERING_HOURS.database, config));
   return {
     label:
       db.length > 0 && binary.length > 0

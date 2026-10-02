@@ -151,6 +151,7 @@ export const pricingConfig = {
     // service is priced at 8 times that.
     serviceUsdPerMonth: 240,
     instances: 2,
+    primaryStorageDays: 7,
     storageUsdPerGbMonth: 0.177,
     tieredUsdPerGbMonth: 0.021,
     egressUsdPerGb: 0.09,

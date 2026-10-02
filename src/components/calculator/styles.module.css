@@ -346,6 +346,10 @@
   background-color: #e4d9ee;
 }
 
+.seg5 {
+  background-color: #9b93a3;
+}
+
 .segLicense {
   background-color: var(--reduct-accent);
 }
@@ -494,6 +498,10 @@ html[data-theme="dark"] .seg3 {
 
 html[data-theme="dark"] .seg4 {
   background-color: #7a6391;
+}
+
+html[data-theme="dark"] .seg5 {
+  background-color: #a8a1ae;
 }
 
 html[data-theme="dark"] .routes li {

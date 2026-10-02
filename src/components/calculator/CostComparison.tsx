@@ -6,7 +6,7 @@ import styles from "./styles.module.css";
 const LICENSE = "ReductStore license";
 
 const segmentClass = (label: string, index: number) =>
-  label === LICENSE ? styles.segLicense : styles[`seg${index % 5}`];
+  label === LICENSE ? styles.segLicense : styles[`seg${index % 6}`];
 
 type Sides = { alternative: CostSide; reduct: CostSide; currency: Currency };
 
