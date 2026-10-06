@@ -86,7 +86,7 @@ const pricingFaqs = (currency: Currency, portalUrl?: string) => [
   },
   {
     question: "How is Pro billed?",
-    answer: `Monthly, on the peak storage during the billing period. ${REDUCTSTORE_MIN_TB} TB minimum, then per GB. 1.2 TB costs ${formatCurrency(1200 * REDUCTSTORE_PRICING[currency].perGbMonth, currency, 2)}.`,
+    answer: `Monthly, based on peak storage during the billing period, with a ${REDUCTSTORE_MIN_TB} TB minimum per device; additional storage is billed per GB. For example, 1.2 TB on one device costs ${formatCurrency(1200 * REDUCTSTORE_PRICING[currency].perGbMonth, currency, 2)}.`,
   },
   {
     question: "When am I charged?",
