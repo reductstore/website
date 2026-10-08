@@ -7,21 +7,19 @@ import {
   LuLayers,
   LuRefreshCw,
   LuSearch,
-  LuKey,
+  LuDatabase,
   LuPuzzle,
 } from "react-icons/lu";
 import styles from "./styles.module.css";
 
 function Feature({ IconComponent, title, description }) {
   return (
-    <div className="col col--4">
-      <div className={styles.feature}>
-        <div className={styles.featureIcon}>
-          <IconComponent />
-        </div>
-        <h3>{title}</h3>
-        <p>{description}</p>
+    <div className={styles.feature}>
+      <div className={styles.featureIcon}>
+        <IconComponent />
       </div>
+      <h3 className={styles.featureTitle}>{title}</h3>
+      <p className={styles.featureDescription}>{description}</p>
     </div>
   );
 }
@@ -29,11 +27,16 @@ function Feature({ IconComponent, title, description }) {
 export default function HomepageFeatures() {
   return (
     <section className={styles.features}>
-      <div className="row">
+      <div className={styles.grid}>
         <Feature
           IconComponent={LuTimer}
-          title="Multimodal Time Series Storage"
-          description="Store time ordered records of any type and size: log files, images, video, LiDAR, ROS bags and more."
+          title="Multimodal Time-Indexed Storage"
+          description="Store records of any type and size, indexed by time: log files, images, video, LiDAR, ROS bags and more."
+        />
+        <Feature
+          IconComponent={LuDatabase}
+          title="SQL with DataFusion"
+          description="Run SQL on JSON, CSV, Parquet, and Protobuf records on the server and export the results as bigger batches."
         />
         <Feature
           IconComponent={LuTags}
@@ -45,9 +48,6 @@ export default function HomepageFeatures() {
           title="Selective Edge to Cloud Replication"
           description="Replicate using rules based on labels or events, even with limited bandwidth and intermittent connectivity."
         />
-      </div>
-
-      <div className="row">
         <Feature
           IconComponent={LuLayers}
           title="Batching for Lower Cloud Cost"
@@ -63,9 +63,6 @@ export default function HomepageFeatures() {
           title="Retention and Quotas"
           description="FIFO quotas based on volume keep edge disks from filling up and maintain a rolling window of recent data."
         />
-      </div>
-
-      <div className="row">
         <Feature
           IconComponent={LuSearch}
           title="Fast Event Retrieval"
@@ -75,11 +72,6 @@ export default function HomepageFeatures() {
           IconComponent={LuPuzzle}
           title="Extensible Query Engine"
           description="Use extensions to transform data during queries, like resizing images, filtering CSV, or extracting ROS topics."
-        />
-        <Feature
-          IconComponent={LuKey}
-          title="Token Authorization"
-          description="Secure access for devices and services with token based authorization."
         />
       </div>
     </section>

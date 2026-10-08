@@ -47,7 +47,11 @@
         "type": "doc",
         "id": "configuration/index"
       },
-      "items": ["configuration/settings", "configuration/provisioning"]
+      "items": [
+        "configuration/settings",
+        "configuration/provisioning",
+        "configuration/reductpro-subscription"
+      ]
     },
     {
       "type": "category",

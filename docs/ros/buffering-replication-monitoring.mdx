@@ -10,6 +10,8 @@ description: Configure ReductStore to buffer ROS data on a robot, replicate sele
   />
 </head>
 
+import BufferingDiagram from "./img/ros-buffering.svg";
+
 # Buffering, replication, and monitoring
 
 This guide explains how to configure a robot-side ReductStore instance to keep a
@@ -30,28 +32,18 @@ When connectivity returns, the replication task resumes sending queued camera
 and IMU records. A lifecycle policy compresses older local blocks, while system
 events expose the state of each background operation.
 
-<div style={{ textAlign: "center" }}>
-
-```svgbob
-  +------------------+     +----------------------+     +----------------------+
-  | "ReductBridge"   |---->| "robot-data"         |---->| "replication task"   |
-  | "ROS records"    |     | "20 GB FIFO buffer"  |     | "camera + IMU only"  |
-  +------------------+     +----------+-----------+     +----------+-----------+
-                                      |                            |
-                                      |                            | "HTTPS"
-                                      v                            v
-                           +----------------------+     +----------------------+
-                           | "compression policy" |     | "Play server"        |
-                           | "zstd after one day" |     | "bucket: demo"       |
-                           +----------+-----------+     | "<robot-name>/*"     |
-                                      |                 +----------------------+
-                                      v
-  +---------------------------------------------------------------------------+
-  | "$system bucket"                                                          |
-  | "replication + lifecycle diagnostics | usage | warnings and errors"       |
-  +---------------------------------------------------------------------------+
-```
-
+<div style={{ overflowX: "auto" }}>
+  <BufferingDiagram
+    className="rs-diagram"
+    role="img"
+    aria-label="ReductBridge writes ROS records to the robot-data bucket with a 20 GB FIFO buffer. A replication task sends camera and IMU records over HTTPS to the demo bucket on the Play server under the robot name. A compression policy applies zstd after one day, and replication and lifecycle diagnostics, usage, warnings and errors go to the $system bucket."
+    style={{
+      display: "block",
+      width: "100%",
+      minWidth: "640px",
+      height: "auto",
+    }}
+  />
 </div>
 
 ## Deployment

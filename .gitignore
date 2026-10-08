@@ -48,3 +48,6 @@ package-lock.json
 
 # Local secrets
 .local-secrets/
+
+# Python
+__pycache__/

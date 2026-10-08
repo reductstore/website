@@ -39,7 +39,7 @@ If you are new to MQTT, you can check out our tutorials [**Keeping MQTT Data in 
 
 In an MQTT-based system, devices (known as publishers) publish messages to a central broker, which then distributes these messages to other devices (known as subscribers) that have subscribed to specific topics. The subscriber can then process the message and take appropriate action. For example, a sensor may publish a message containing its current temperature, which is then received by a subscriber that has subscribed to the topic `temperature`.
 
-![Example of Pub/Sub architecture](./img/example-pub-sub.webp "Example of Pub/Sub architecture")<small>Example of Pub/Sub architecture (image by authors)</small>
+![Example of Pub/Sub architecture](./img/mqtt-pub-sub.svg "Example of Pub/Sub architecture")<small>Example of Pub/Sub architecture (image by authors)</small>
 
 MQTT is easy to use and keeps subscription and publishing tasks separate. To get info from a device, you don't need to know all its details like its address or password. You just need to connect to a _middleman_ called a broker and know the topic's name. This pattern offers many advantages for IoT over other protocols, such as HTTP, which requires servers and clients to be aware of each other's details and communicate directly.
 

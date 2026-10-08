@@ -10,6 +10,8 @@ description: Configure ReductBridge to subscribe to ROS 2 topics, preserve schem
   />
 </head>
 
+import DataCollectionDiagram from "./img/ros-data-collection.svg";
+
 # Collecting ROS 2 data with ReductBridge
 
 This guide explains how to configure ReductBridge to collect ROS 2 messages as
@@ -23,41 +25,18 @@ local ReductStore instance.
 ReductBridge moves each ROS message through the input, pipeline, and remote
 stages before writing it to the local ReductStore bucket.
 
-<div style={{ textAlign: "center" }}>
-
-```svgbob
-                    +--------------------------------+
-                    | "ROS 2 topics"                 |
-                    |                                |
-                    | "/camera/image_raw"            |
-                    | "/gps/fix"                     |
-                    | "/imu/data"                    |
-                    +---------------+----------------+
-                                    |
-                                    | "serialized messages"
-                                    v
-  +------------------------------------------------------------------------+
-  | "ReductBridge"                                                         |
-  |                                                                        |
-  | +----------------------+  +----------------------+  +----------------+ |
-  | | "ROS 2 input"        |  | "pipeline"           |  | "remote"       | |
-  | |                      |  |                      |  | "local"        | |
-  | | * "subscriptions"    |->| * "label routing"    |->| * "batching"   | |
-  | | * "timestamps"       |  | * "GPS propagation"  |  | * "HTTP write" | |
-  | | * "schema + labels"  |  | * "robot label"      |  |                | |
-  | +----------------------+  +----------------------+  +-------+--------+ |
-  +-------------------------------------------------------------|----------+
-                                                                |
-                                                                | "HTTP"
-                                                                v
-                                             +-----------------------------+
-                                             | "ReductStore"               |
-                                             | "bucket: robot-data"        |
-                                             | "one entry per topic"       |
-                                             | "CDR records + $schema"     |
-                                             +-----------------------------+
-```
-
+<div style={{ overflowX: "auto" }}>
+  <DataCollectionDiagram
+    className="rs-diagram"
+    role="img"
+    aria-label="ROS 2 topics send serialized messages to ReductBridge, which subscribes and timestamps them, routes labels in a pipeline, and batches HTTP writes to the robot-data bucket in ReductStore, one entry per topic with CDR records and the $schema attachment."
+    style={{
+      display: "block",
+      width: "100%",
+      minWidth: "640px",
+      height: "auto",
+    }}
+  />
 </div>
 
 ## Deployment

@@ -16,7 +16,8 @@
     "fmt": "prettier --write .",
     "fmt:check": "prettier --check .",
     "build:azure": "npm run clear && npm run build",
-    "depcheck": "depcheck . --config=.depcheckrc"
+    "depcheck": "depcheck . --config=.depcheckrc",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"src/**/*.test.mjs\""
   },
   "dependencies": {
     "@algolia/client-search": "^5.47.0",
@@ -37,7 +38,6 @@
     "dotenv": "^17.2.3",
     "https-browserify": "^1.0.0",
     "js-cookie": "^3.0.5",
-    "lodash": "^4.17.23",
     "prism-react-renderer": "^2.2.0",
     "raw-loader": "^4.0.2",
     "react": "^19.2.3",
@@ -46,7 +46,6 @@
     "react-icons": "^5.3.0",
     "react-loadable": "^5.5.0",
     "react-router-dom": "^7.12.0",
-    "react-tooltip": "^5.26.0",
     "reduct-js": "^1.17.1",
     "rehype-katex": "7",
     "remark-math": "6",
@@ -69,6 +68,7 @@
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.2.5",
     "remark-code-snippets": "^1.1.0",
+    "svgo": "^3.2.0",
     "typedoc": "^0.28.16",
     "typedoc-plugin-markdown": "^4.9.0",
     "typescript": "^5.2.2",

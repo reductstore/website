@@ -1,28 +1,16 @@
 import React from "react";
 import styles from "./styles.module.css";
-import UseCaseCards from "../../useCases/UseCaseCards";
+import UseCaseTiles from "../../useCases/UseCaseTiles";
 import Heading from "@theme/Heading";
-import Link from "@docusaurus/Link";
-import clsx from "clsx";
-import useCases from "@site/src/data/useCasesData";
+import useCases from "@site/src/data/useCases";
 
 export default function HomepageUseCase() {
   return (
     <section className={styles.section}>
-      <Heading as="h2" className={styles.sectionTitle}>
+      <Heading as="h2" id="use-cases" className={styles.sectionTitle}>
         Typical Use Cases
       </Heading>
-      <div className={clsx("container", styles.useCasesContainer)}>
-        <UseCaseCards useCases={useCases.slice(0, 6)} />
-      </div>
-      <div className={styles.buttonContainer}>
-        <Link
-          to="/use-cases"
-          className="button button--outline button--primary  button--block button--lg"
-        >
-          Explore More &rarr;
-        </Link>
-      </div>
+      <UseCaseTiles useCases={useCases} />
     </section>
   );
 }

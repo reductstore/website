@@ -5,13 +5,19 @@ import { WebLinksAddon } from "@xterm/addon-web-links";
 import "@xterm/xterm/css/xterm.css";
 import styles from "./styles.module.css";
 
-const TerminalAnimation = () => {
+const TerminalAnimation = ({
+  fontSize = 13,
+  minColumns = 0,
+}: {
+  fontSize?: number;
+  minColumns?: number;
+}) => {
   const terminalRef = useRef(null);
 
   useEffect(() => {
     const terminal = new Terminal({
       cursorBlink: true,
-      fontSize: 13,
+      fontSize,
       fontFamily: 'Menlo, Monaco, "Courier New", monospace',
       scrollback: 0,
       scrollOnUserInput: false,
@@ -26,9 +32,25 @@ const TerminalAnimation = () => {
     terminal.loadAddon(fitAddon);
     terminal.loadAddon(webLinksAddon);
 
+    // The terminal can be created inside a hidden tab, where fitting yields
+    // the default width; fit again whenever the container gets a real size.
+    const resizeObserver = new ResizeObserver(() => {
+      const width = terminalRef.current?.offsetWidth;
+      if (!width) return;
+      if (minColumns) {
+        // Monospace glyphs are about 0.62 of the font size wide.
+        terminal.options.fontSize = Math.max(
+          8,
+          Math.min(fontSize, Math.floor(width / (minColumns * 0.62))),
+        );
+      }
+      fitAddon.fit();
+    });
+
     if (terminalRef.current) {
       terminal.open(terminalRef.current);
       fitAddon.fit();
+      resizeObserver.observe(terminalRef.current);
 
       const welcomeMessage =
         "\r\n \x1b[1mAdmin Tool for ReductStore\x1b[0m (https://github.com/reductstore/reduct-cli)\r\n";
@@ -134,6 +156,8 @@ const TerminalAnimation = () => {
 
       typeCommand();
     }
+
+    return () => resizeObserver.disconnect();
   }, []);
 
   return <div ref={terminalRef} className={styles.terminal}></div>;
