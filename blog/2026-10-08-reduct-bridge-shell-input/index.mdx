@@ -2,17 +2,20 @@
 title: "Capture Output from Legacy Equipment with the Reduct Bridge Shell Input"
 description: "Legacy shop-floor machines often expose only a command line and speak no protocol worth integrating. The Reduct Bridge shell input runs any command on a fixed interval, stores its output as time-indexed records, and labels them from regex capture groups or static values."
 authors: alexey
-tags: [tutorials, reduct-bridge, iiot]
+tags: [tutorials, reduct-bridge, iot]
 slug: reduct-bridge-shell-input
 date: 2026-10-08
+image: ./img/shell-input-social.png
 ---
+
+![A legacy machine sends command output through the Reduct Bridge shell input to a time-indexed ReductStore entry](./img/shell-input-flow.svg)
 
 Plenty of equipment on the shop floor will never speak MQTT or OPC-UA. It predates both. What it
 has is a command line: a vendor tool that prints status, a diagnostic command on a serial console,
 or a script the previous engineer left behind. The data exists. There is just no protocol to
 integrate.
 
-**[Reduct Bridge](/docs/reduct-bridge)** has a shell input for exactly this situation. You point it
+**[Reduct Bridge](/docs/reduct-bridge)** has a shell input for exactly this case. You point it
 at a command, set an interval, and the bridge runs it on schedule. Each line the command prints
 becomes a time-indexed record in **[ReductStore](https://github.com/reductstore/reductstore)**.
 Labels come from regex capture groups in the output or from static key-value pairs in the config.
@@ -48,21 +51,10 @@ enough. It is also part of every published build type (`ros1`, `ros2`, `iot`) an
 
 ## Architecture
 
-```svgbob
-+--------------- -+     +--------------------+     +---------------------+
-| "Legacy machine" |     |   Reduct Bridge    |     |   ReductStore       |
-|                 |     |                    |     |                     |
-| vendor tool    |     | shell input        |     | bucket:             |
-| prints status  |     | "runs every 10 s"  |     | "factory-data"      |
-| to stdout      +---->+ "regex -> labels"  +---->+                     |
-|                |     | static labels      |     | entry:              |
-+----------------+     +--------------------+     | "chamber-01/status" |
-                                                  +---------------------+
-```
-
-The bridge is the only component that talks to the machine. ReductStore only sees records with
-timestamps, content types, and labels. Everything downstream, including querying, dashboards, and
-replication, works the same as for any other input.
+The edge device runs both the shell script and the bridge. The script communicates with the legacy
+machine and prints status to stdout; the bridge turns each output line into a record. ReductStore
+only sees records with timestamps, content types, and labels. Everything downstream, including
+querying, dashboards, and replication, works the same as for any other input.
 
 ## Install ReductStore and Reduct Bridge
 
@@ -134,6 +126,8 @@ inputs = ["chamber"]
 url = "http://127.0.0.1:8383"
 token_api = "my-token"
 bucket = "factory-data"
+# Keep the input's entry names unchanged.
+prefix = ""
 
 [remotes.reduct.local.create_bucket]
 quota_type = "FIFO"
@@ -161,7 +155,7 @@ data is removed when the budget is reached, so the edge node never fills its dis
 ```bash
 docker run --rm --network host \
   -v "$PWD/bridge.toml:/etc/reduct-bridge/config.toml:ro" \
-  reduct/bridge:latest-iot reduct-bridge /etc/reduct-bridge/config.toml
+  reduct/bridge:latest-iot /etc/reduct-bridge/config.toml
 ```
 
 The `--network host` option keeps the example short because the container can reach
@@ -202,25 +196,23 @@ async def main():
             payload = await record.read_all()
             print(record.timestamp, record.labels, payload.decode().strip())
 
+        # The query engine casts label values for numeric comparisons.
+        async for record in bucket.query(
+            "chamber-01/status",
+            start="2026-10-08T08:00:00Z",
+            stop="2026-10-08T09:00:00Z",
+            when={"&temperature": {"$gte": 50}},
+        ):
+            payload = await record.read_all()
+            print(record.timestamp, record.labels["temperature"], payload.decode().strip())
+
 
 if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-To chart temperature over time, query the records that carry a `temperature` label above a
-threshold. The query engine casts label values when comparing, so the string label `45.2` compares
-correctly against the number `50`:
-
-```python
-async for record in bucket.query(
-    "chamber-01/status",
-    start="2026-10-08T08:00:00Z",
-    stop="2026-10-08T09:00:00Z",
-    when={"&temperature": {"$gte": 50}},
-):
-    payload = await record.read_all()
-    print(record.timestamp, record.labels["temperature"], payload.decode().strip())
-```
+The second query returns readings at or above 50. The query engine casts label values when
+comparing, so the string label `45.2` compares correctly against the number `50`.
 
 Dashboards read the store directly. The **[Grafana data source](/docs/integrations/grafana)** pulls
 time series out of ReductStore buckets, so the temperature stream becomes a panel without an
