@@ -1,0 +1,300 @@
+---
+title: "Capture Output from Legacy Equipment with the Reduct Bridge Shell Input"
+description: "Legacy shop-floor machines often expose only a command line and speak no protocol worth integrating. The Reduct Bridge shell input runs any command on a fixed interval, stores its output as time-indexed records, and labels them from regex capture groups or static values."
+authors: alexey
+tags: [tutorials, reduct-bridge, iot]
+slug: reduct-bridge-shell-input
+date: 2026-10-08
+image: ./img/shell-input-social.png
+---
+
+![A legacy machine sends command output through the Reduct Bridge shell input to a time-indexed ReductStore entry](./img/shell-input-flow.svg)
+
+Plenty of equipment on the shop floor will never speak MQTT or OPC-UA. It predates both. What it
+has is a command line: a vendor tool that prints status, a diagnostic command on a serial console,
+or a script the previous engineer left behind. The data exists. There is just no protocol to
+integrate.
+
+**[Reduct Bridge](/docs/reduct-bridge)** has a shell input for exactly this case. You point it
+at a command, set an interval, and the bridge runs it on schedule. Each line the command prints
+becomes a time-indexed record in **[ReductStore](https://github.com/reductstore/reductstore)**.
+Labels come from regex capture groups in the output or from static key-value pairs in the config.
+Wrap whatever the vendor tool prints, put it on an interval, label it, and it lands time-indexed
+beside everything else.
+
+This post walks through capturing telemetry from a legacy test chamber that only exposes a
+`chamber-status` command.
+
+{/* truncate */}
+
+## What the shell input does
+
+The shell input runs a shell command on a fixed interval and stores the output:
+
+- **`repeat_interval`**: how often to run the command, in seconds.
+- **`command`**: the shell command to run.
+- **`entry_name`**: where records are stored in the target bucket.
+- **`content_type`**: optional content type for the records.
+- **`labels`**: optional rules that extract labels from the output with regex capture groups, or add
+  static key-value pairs.
+
+Each non-empty output line becomes one record. Empty lines are ignored, and a command failure
+skips that cycle, so a machine that is temporarily offline does not produce bad data.
+
+Labels are extracted per line. A regex rule only applies to lines that match the pattern, so a line
+`TEMP: 45.2` can carry a `temperature=45.2` label while a line `STATE: RUNNING` carries
+`state=RUNNING`. Static labels apply to every record the input produces. Rules are applied in
+order, and later rules override earlier ones for the same key.
+
+The shell input is included in the default Reduct Bridge build, so `cargo install reduct-bridge` is
+enough. It is also part of every published build type (`ros1`, `ros2`, `iot`) and Docker image.
+
+## Architecture
+
+The edge device runs both the shell script and the bridge. The script communicates with the legacy
+machine and prints status to stdout; the bridge turns each output line into a record. ReductStore
+only sees records with timestamps, content types, and labels. Everything downstream, including
+querying, dashboards, and replication, works the same as for any other input.
+
+## Install ReductStore and Reduct Bridge
+
+Start ReductStore with Docker:
+
+```bash
+mkdir -p ./reduct-data
+sudo chown -R 10001:10001 ./reduct-data
+
+docker run -d --name reductstore \
+  -p 8383:8383 \
+  -e RS_API_TOKEN="my-token" \
+  -v "$PWD/reduct-data:/data" \
+  reduct/store:latest
+```
+
+ReductStore listens on `http://127.0.0.1:8383`. The `RS_API_TOKEN` value is used by the bridge.
+
+For Reduct Bridge, the shell input is in the default build. With Docker, any build type works; the
+`iot` image is a reasonable choice:
+
+```bash
+docker pull reduct/bridge:latest-iot
+```
+
+If you prefer a binary, download it from the **[ReductBridge
+releases](https://github.com/reductstore/reduct-bridge/releases/latest)**, or install from source
+with `cargo install reduct-bridge`, which builds only the shell input.
+
+## Configure the bridge
+
+Assume the chamber exposes a `chamber-status` command that prints something like:
+
+```text
+TEMP: 45.2
+HUMIDITY: 61.0
+PRESSURE: 3.14
+STATE: RUNNING
+CYCLE: 1423
+```
+
+Create `bridge.toml`:
+
+```toml
+# Shell input: run the vendor status command every 10 seconds.
+# Each non-empty output line becomes one record.
+[inputs.shell.chamber]
+repeat_interval = 10
+command = "chamber-status"
+entry_name = "chamber-01/status"
+content_type = "text/plain"
+labels = [
+  { regex = "TEMP:\\s*([\\d.]+)", labels = ["temperature"] },
+  { regex = "HUMIDITY:\\s*([\\d.]+)", labels = ["humidity"] },
+  { regex = "PRESSURE:\\s*([\\d.]+)", labels = ["pressure"] },
+  { regex = "STATE:\\s*(\\w+)", labels = ["state"] },
+  { regex = "CYCLE:\\s*(\\d+)", labels = ["cycle"] },
+  { static = { source = "shell", machine = "chamber-01", line = "test-lab" } }
+]
+
+# Pipeline routes records from the shell input to ReductStore.
+[pipelines.chamber_to_store]
+remote = "local"
+inputs = ["chamber"]
+
+# ReductStore remote. The bucket is created on startup with a FIFO quota,
+# so the oldest records are removed when the 5 GB budget is reached.
+[remotes.reduct.local]
+url = "http://127.0.0.1:8383"
+token_api = "my-token"
+bucket = "factory-data"
+# Keep the input's entry names unchanged.
+prefix = ""
+
+[remotes.reduct.local.create_bucket]
+quota_type = "FIFO"
+quota_size = "5GB"
+```
+
+A few things to note in this config.
+
+The `repeat_interval` of 10 seconds matches how fast the chamber state actually changes. There is
+no point polling faster than the machine updates, and polling slower loses resolution.
+
+The regex labels use one capture group per rule. Group 1 becomes the value of the named label.
+Because each output line is stored as its own record, the `TEMP: 45.2` line lands in the store with
+`temperature=45.2`, and the `STATE: RUNNING` line lands with `state=RUNNING`. You can query each
+reading type by its label without parsing the payload.
+
+The static label adds context the command output does not carry: which machine this is and which
+line it sits on. Static labels are applied to every record the input produces.
+
+The bucket is created with a FIFO quota of 5 GB. The bridge keeps accepting records and the oldest
+data is removed when the budget is reached, so the edge node never fills its disk.
+
+## Run the bridge
+
+```bash
+docker run --rm --network host \
+  -v "$PWD/bridge.toml:/etc/reduct-bridge/config.toml:ro" \
+  reduct/bridge:latest-iot /etc/reduct-bridge/config.toml
+```
+
+The `--network host` option keeps the example short because the container can reach
+`127.0.0.1:8383` on the host. In production, run ReductStore and Reduct Bridge as systemd services
+or in your own container stack.
+
+After a minute, verify that records are arriving with the **[Reduct
+CLI](https://github.com/reductstore/reduct-cli)**:
+
+```bash
+reduct-cli alias add local -L http://localhost:8383 -t "my-token"
+reduct-cli bucket ls --full local
+```
+
+You should see the `factory-data` bucket with a growing entry count.
+
+## Query the data
+
+Use the Python SDK to read an interval back and filter by label. This query returns only the
+records that carry `state=ALARM`, the `STATE: ALARM` lines from the command output:
+
+```python
+import asyncio
+
+from reduct import Client
+
+
+async def main():
+    async with Client("http://127.0.0.1:8383", api_token="my-token") as client:
+        bucket = await client.get_bucket("factory-data")
+
+        async for record in bucket.query(
+            "chamber-01/status",
+            start="2026-10-08T08:00:00Z",
+            stop="2026-10-08T09:00:00Z",
+            when={"&state": {"$eq": "ALARM"}},
+        ):
+            payload = await record.read_all()
+            print(record.timestamp, record.labels, payload.decode().strip())
+
+        # The query engine casts label values for numeric comparisons.
+        async for record in bucket.query(
+            "chamber-01/status",
+            start="2026-10-08T08:00:00Z",
+            stop="2026-10-08T09:00:00Z",
+            when={"&temperature": {"$gte": 50}},
+        ):
+            payload = await record.read_all()
+            print(record.timestamp, record.labels["temperature"], payload.decode().strip())
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+The second query returns readings at or above 50. The query engine casts label values when
+comparing, so the string label `45.2` compares correctly against the number `50`.
+
+Dashboards read the store directly. The **[Grafana data source](/docs/integrations/grafana)** pulls
+time series out of ReductStore buckets, so the temperature stream becomes a panel without an
+export step. Replication tasks can copy alarm records, with context, to a central instance using
+the **[data replication guide](/docs/guides/data-replication)**.
+
+## Patterns for real deployments
+
+**One input per machine.** Add a second `[inputs.shell.*]` block for each additional machine, with
+its own `command` and `entry_name`. Give every input a static `machine` label so queries can tell
+them apart:
+
+```toml
+[inputs.shell.chamber_02]
+repeat_interval = 10
+command = "chamber-status --id 2"
+entry_name = "chamber-02/status"
+labels = [
+  { regex = "TEMP:\\s*([\\d.]+)", labels = ["temperature"] },
+  { regex = "STATE:\\s*(\\w+)", labels = ["state"] },
+  { static = { source = "shell", machine = "chamber-02", line = "test-lab" } }
+]
+```
+
+Then add both inputs to the pipeline:
+
+```toml
+[pipelines.chamber_to_store]
+remote = "local"
+inputs = ["chamber", "chamber_02"]
+```
+
+**Multi-line output is a feature.** When the command prints several lines, each line becomes a
+record with its own labels. That turns a status dump into a labeled stream without any parsing
+code. If the machine prints one reading per line, you get one labeled record per reading.
+
+**Commands that need arguments or a remote host.** The command is passed to the shell, so anything
+`sh` can run works, including `ssh chamber-01 chamber-status` or a vendor tool with flags. Keep
+credentials out of the command line; use SSH keys or environment variables the bridge process can
+read.
+
+**Combine with other inputs.** The shell input runs alongside MQTT, HTTP, and ROS inputs in the
+same bridge config. Label the shell records and the MQTT records with the same `line` key, and a
+single query can join a chamber reading with the conveyor state from the same moment.
+
+**Failed commands are skipped.** If the machine is offline or the command exits non-zero, that
+cycle produces no records. The store simply has a gap, which is usually the honest representation
+of "the machine did not answer."
+
+## When shell input is the right tool
+
+The shell input fits when the machine has a command line and nothing else:
+
+- **Legacy PLCs, CNC controllers, scales, and test equipment** with a vendor CLI or serial
+  console.
+- **Log scraping.** A command that dumps recent events or errors, run on an interval.
+- **Machines behind a gateway.** One host runs the bridge and reaches several machines over SSH or
+  a serial-to-Ethernet converter.
+
+It is not the right tool when:
+
+- **The machine already speaks MQTT or HTTP.** The **[MQTT input](/docs/reduct-bridge/input/mqtt)**
+  and **[HTTP input](/docs/reduct-bridge/input/http)** are more efficient and give structured
+  labels without regex.
+- **You need sub-second resolution.** The interval is in whole seconds, and each poll spawns a
+  process. For high-frequency data, write records directly with the SDK or use an input built for
+  the protocol.
+- **The output is binary.** Shell output is text lines. For binary payloads, use the MQTT or HTTP
+  input and store the raw bytes.
+
+## Conclusion
+
+Legacy equipment does not have to stay outside the data pipeline. If a machine can print something
+to a command line, the Reduct Bridge shell input can wrap that output, put it on an interval, label
+it, and land it time-indexed beside everything else, alongside MQTT topics, HTTP payloads, and ROS
+messages in the same bucket.
+
+The **[shell input documentation](/docs/reduct-bridge/input/shell)** covers the full configuration
+reference, and the **[Reduct Bridge docs](/docs/reduct-bridge)** cover the other inputs and
+pipeline options. The **[data querying guide](/docs/guides/data-querying)** covers reading an
+interval back out.
+
+---
+
+If you have any questions or comments, feel free to use the [**ReductStore Community Forum**](https://community.reduct.store).
