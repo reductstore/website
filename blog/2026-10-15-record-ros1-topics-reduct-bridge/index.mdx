@@ -1,0 +1,199 @@
+---
+title: "Record ROS 1 Topics in ReductStore with Reduct Bridge"
+description: "Record ROS 1 topics into ReductStore with Reduct Bridge: subscribe to a running master, use the header stamp as the record time, and query the data back by time and label."
+authors: anthony
+tags: [tutorials, reduct-bridge, ros, robotics]
+slug: record-ros1-topics-reduct-bridge
+date: 2026-10-15
+image: ./img/ros1-bridge-social.png
+---
+
+![A ROS 1 master publishes camera and IMU topics to the Reduct Bridge ros input, which writes them to two ReductStore entries on one shared time axis](./img/ros1-bridge-flow.svg)
+
+ROS 1 Noetic reached end of life in May 2025, but a lot of robots still run on it. Recording data from them usually means rosbag files, or a custom recording node that you have to maintain yourself.
+
+Reduct Bridge is another way to do it. It subscribes to topics on a ROS 1 master and stores each message it receives in ReductStore as a record, so you can query by time and by label later. It can also use the timestamp from the message header instead of the time the message arrived.
+
+In this tutorial we'll record a camera topic and an IMU topic, set a retention limit, and read the data back with the ReductStore CLI and the Python SDK.
+
+{/* truncate */}
+
+## How it works
+
+The bridge is one program that you configure with one TOML file. The file has three parts. A remote is where the data goes: a ReductStore instance, with its URL, a token and a bucket. An input is where the data comes from, which for us is a ROS 1 master and the topics we want from it.
+
+A _pipeline_ connects the two, and says which inputs write to which remote.
+
+When it runs, the bridge registers with the master as a normal ROS node and sends each message on the topics you listed to ReductStore.
+
+## Prerequisites
+
+- A running ROS 1 master. `roscore` listens on `http://localhost:11311` by default.
+- Nodes publishing on the topics you want to record.
+- Network access from the machine running the bridge to the ROS master and to the machines publishing the topics.
+- A ReductStore instance that the bridge can reach.
+- `reduct-cli`, which we'll use to check the data and export it.
+
+## Install the bridge
+
+Reduct Bridge is built per input family, and the one way to get it is the prebuilt archive. For example, you can get the x86-64 Linux binary with:
+
+```bash
+wget https://github.com/reductstore/reduct-bridge/releases/latest/download/bridge-ros1.x86_64-unknown-linux-gnu.tar.gz
+tar -xzf bridge-ros1.x86_64-unknown-linux-gnu.tar.gz
+chmod +x reduct-bridge
+```
+
+There is also a Docker image, `reduct/bridge:latest-ros1`, and a snap called `reduct-bridge-ros1`. If you would prefer to build from source, this is possible with Cargo: `cargo build --no-default-features --features ros1`. In that case the binary ends up in `target/debug/reduct-bridge` (or `target/release/reduct-bridge` with `--release`).
+
+## Create the config file
+
+Create a file called `config.toml`. The example below records a camera topic and an IMU topic into a single bucket called `robot`:
+
+```toml
+[remotes.reduct.local]
+url = "http://localhost:8383"
+token_api = "my-token"
+bucket = "robot"
+prefix = "ros_data/"
+
+[remotes.reduct.local.create_bucket]
+quota_type = "FIFO"
+quota_size = "500GB"
+
+[inputs.ros.ros_local]
+uri = "http://localhost:11311"
+node_name = "reduct_bridge"
+queue_size = 128
+
+[[inputs.ros.ros_local.topics]]
+name = "/camera/image_raw"
+timestamp = { field = "header.stamp", format = "ros_stamp" }
+labels = [{ static = { robot = "robot-01" } }]
+
+[[inputs.ros.ros_local.topics]]
+name = "/imu/data"
+entry_name = "imu"
+timestamp = { field = "header.stamp", format = "ros_stamp" }
+labels = [{ static = { robot = "robot-01" } }]
+
+[pipelines.telemetry]
+remote = "local"
+inputs = ["ros_local"]
+```
+
+The remote is the ReductStore side. Change `url` and `token_api` to match your instance. The `create_bucket` block makes the bridge create the `robot` bucket if it doesn't exist yet, with a FIFO quota: when the bucket reaches 500 GB, ReductStore removes the oldest storage blocks.
+
+In the config file, the input is called `inputs.ros`. The `uri` is your master, and `node_name` is the name the bridge registers under.
+
+Each `topics` block picks a topic to record. The name can also have a `*` wildcard, for example `/camera/*` for all camera topics.
+
+Labels let you filter later:
+
+- **static label** sets a fixed value, and
+- **field label** copies a value out of the message.
+
+In our config every record gets a static `robot` label that you can use when querying. If several robots share a bucket, give each robot its own `prefix`, for example `robot-01/ros_data/`, to keep their recordings in separate entries.
+
+Records are stored in _entries_, and the entry name is the `prefix` plus either the `entry_name` or the topic name. So `/imu/data` with `entry_name = "imu"` ends up in `ros_data/imu`, and `/camera/image_raw` keeps its topic name, so it ends up in `ros_data/camera/image_raw`.
+
+![The prefix ros_data/ is added to the entry_name imu to give the entry ros_data/imu, and to the topic name when entry_name is omitted to give ros_data/camera/image_raw](./img/entry-naming.svg)
+
+## Run the bridge
+
+Start the bridge with the config file as argument:
+
+```bash
+./reduct-bridge config.toml
+```
+
+It connects to the master, subscribes to the topics that match at that point, and creates the bucket if needed.
+
+To check that data is arriving, you can use the CLI:
+
+```bash
+reduct-cli alias add --url http://localhost:8383 --token my-token local
+```
+
+Then copy out a few of the records the bridge has written:
+
+```bash
+reduct-cli cp local/robot ./check --limit 5
+```
+
+If you see files under `./check`, it works. If the directory is empty, check that something is publishing on the topics, and that the bridge can reach both the master and the publishers.
+
+## Read the data back
+
+To export the last ten minutes of the IMU entry, with the record metadata:
+
+```bash
+reduct-cli cp local/robot ./export --entries "ros_data/imu" --start "now - 10m" --with-meta
+```
+
+`--start` accepts relative times like `now - 10m`, as well as RFC3339 timestamps and Unix microseconds. `--entries` supports prefix wildcards, so `ros_data/*` covers every entry the bridge wrote.
+
+To get everything one robot recorded, you can filter on the label:
+
+```bash
+reduct-cli cp local/robot ./export --entries "ros_data/*" --when '{"&robot": {"$eq": "robot-01"}}'
+```
+
+Keep in mind that what you export here are the original serialized ROS messages, with content type `application/ros1`. They are not very useful outside ROS. The next section shows how to get the messages as JSON instead.
+
+## Decode ROS messages as JSON
+
+Raw ROS messages are hard to work with outside ROS. The ReductROS extension decodes them when you query and returns each message as a JSON record. It's a ReductStore Pro feature, so you need a Pro license for this part.
+
+The extension needs the message definition to decode a message. The bridge stores it with every entry it writes, so there is nothing more to configure.
+
+You use the extension by adding an `#ext` block to the query condition. With the CLI it looks like this:
+
+```bash
+reduct-cli cp local/robot ./json --entries "ros_data/imu" --start "now - 1m" --when '{"#ext": {"ros": {"extract": {"topic": "/imu/data"}}}}'
+```
+
+With the Python SDK you pass the same condition to `query`:
+
+```python
+import asyncio
+import json
+from time import time
+
+from reduct import Client
+
+
+async def main():
+    async with Client("http://localhost:8383", api_token="my-token") as client:
+        bucket = await client.get_bucket("robot")
+
+        condition = {"#ext": {"ros": {"extract": {"topic": "/imu/data"}}}}
+        start = int((time() - 60) * 1_000_000)
+
+        async for record in bucket.query("ros_data/imu", start=start, when=condition):
+            message = json.loads(await record.read_all())
+            print(record.timestamp, record.labels, message["linear_acceleration"])
+
+
+asyncio.run(main())
+```
+
+Every record is now a JSON object with the same fields as the ROS message, so for a `sensor_msgs/Imu` message you can read `linear_acceleration` directly.
+
+For camera frames, you can add `"encode": {"data": "jpeg"}` next to `topic` in the `extract` block and a `sensor_msgs/Image` message comes back as JSON with the picture as a JPEG in the base64 encoded `data` field.
+
+## Timestamps
+
+By default, a record gets the time at which the message reached the bridge (ingest time). That is of course not when the sensor produced the data. But in our config, each topic has this line instead: `timestamp = { field = "header.stamp", format = "ros_stamp" }`. It tells the bridge to read the time from the header of the ROS message and use it as the timestamp of the record.
+
+Two more details: ROS timestamps have nanosecond precision, but ReductStore stores microseconds, so the last three digits are dropped. Also, if a publisher never fills in the header, the stamp is zero. The bridge treats zero as a valid time, so those records end up at the start of 1970 (the Unix epoch) instead of at the ingest time.
+
+## Performance considerations
+
+- `queue_size` is the size of the ROS subscriber queue, and it defaults to 128 messages. A bigger queue helps with short bursts. It won't help if the bridge is slower than the topic for a long time, and it doesn't cover the bridge's own internal channels.
+- Setting a `timestamp` field means the bridge has to decode each message, which costs some CPU.
+- The ReductStore remote buffers records and flushes them when a batch goes over 80 records or 8 MiB, or when a periodic 1000 ms timer fires. You can change these limits with `batch_max_records`, `batch_max_size_bytes` and `batch_max_interval_ms`. The timer helps keep latency down on slow topics, but when a record is actually written also depends on the connection and on ReductStore.
+
+## Further reading
+
+This tutorial is about recording from a live ROS 1 master. If you have a pile of bag files instead, [**three ways to store ROS topics**](/blog/store-ros-topics) compares the options. The bridge also has a [**shell input**](/blog/reduct-bridge-shell-input) for equipment that only gives you a command line, and [**storing robotics data**](/blog/store-robotic-data) covers the bigger picture.
