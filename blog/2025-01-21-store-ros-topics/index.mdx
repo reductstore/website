@@ -108,3 +108,7 @@ Rosbag is still the recording unit in methods 1 and 2 above. Past a certain volu
 turns into a directory of split files that has to be merged before anything reads it
 end to end. **[Continuous ingest for ROS 2](/blog/continuous-ingest-ros2)** covers what
 changes when the split step goes away entirely.
+
+On a ROS 1 robot, method 3 needs no custom recording node.
+**[Record ROS 1 topics in ReductStore with Reduct Bridge](/blog/record-ros1-topics-reduct-bridge)**
+sets it up from one config file, with each message stored as its own record.

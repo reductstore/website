@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 946 268" width="100%" height="100%">
+  <defs>
+    <style>
+      :root {
+        --card-bg: #FFFFFF;
+        --card-brand: #2B0548;
+        --brand-line: #2B0548;
+        --card-accent: #DB817B;
+        --card-stroke: #333333;
+        --text-main: #333333;
+        --text-muted: #666666;
+        --text-inverse: #FFFFFF;
+        --line: #333333;
+        --zone: #F7F4FA;
+        --label-a: #D5E8D4;
+        --label-a-stroke: #82B366;
+        --label-b: #E1D5E7;
+        --label-b-stroke: #9673A6;
+        --label-c: #F8CECC;
+        --label-c-stroke: #B85450;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --card-bg: #1E1E1E;
+          --card-stroke: #555555;
+            --text-main: #EFEFEF;
+          --text-muted: #A0A0A0;
+          --line: #EFEFEF;
+          --zone: #262129;
+          --brand-line: #BFA6DC;
+        }
+      }
+
+      text {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      .mono {
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        white-space: pre;
+      }
+
+      .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand-frame { fill: var(--card-bg); stroke: var(--brand-line); stroke-width: 2; }
+      .card-accent { fill: var(--card-accent); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
+      .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .hatch-line { stroke: var(--line); stroke-width: 1.5; }
+      .record { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1; }
+      .label-a { fill: var(--label-a); stroke: var(--label-a-stroke); }
+      .label-b { fill: var(--label-b); stroke: var(--label-b-stroke); }
+      .label-c { fill: var(--label-c); stroke: var(--label-c-stroke); }
+      .dot { fill: var(--text-muted); }
+
+      .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
+      .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
+      .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-title-brand { font-weight: 700; font-size: 18px; fill: var(--brand-line); }
+      .text-item-brand { font-weight: 700; font-size: 15px; fill: var(--brand-line); }
+      .text-item { font-weight: 600; font-size: 15px; fill: var(--text-main); }
+      .text-item-inverse { font-weight: 600; font-size: 15px; fill: var(--text-inverse); }
+      .text-subtitle { font-size: 14px; fill: var(--text-muted); }
+      .text-subtitle-inverse { font-size: 14px; fill: var(--text-inverse); }
+      .text-bullet { font-size: 15px; fill: var(--text-main); }
+      .text-bullet-inverse { font-size: 15px; fill: var(--text-inverse); }
+      .text-label { font-size: 13px; fill: var(--text-muted); }
+      .text-label-strong { font-size: 13px; font-weight: 700; fill: var(--text-main); }
+      .text-label-inverse { font-size: 13px; fill: var(--text-inverse); }
+      .text-note { font-size: 13px; font-style: italic; fill: var(--text-muted); }
+
+      .connector { stroke: var(--line); stroke-width: 2; fill: none; }
+      .link { stroke: var(--line); stroke-width: 2; stroke-dasharray: 5 5; fill: none; }
+      .guide { stroke: var(--text-muted); stroke-width: 1; stroke-dasharray: 3 4; fill: none; }
+      .arrow-head { fill: var(--line); }
+    </style>
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
+    </marker>
+    <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" class="hatch-line" />
+    </pattern>
+  </defs>
+  <rect x="0" y="0" width="210" height="230" rx="18" class="zone" />
+  <text x="18" y="26" class="text-zone" text-anchor="start">Robot, ROS 1</text>
+  <rect x="16" y="52" width="178" height="56" rx="10" class="card-plain" />
+  <text x="105" y="77" class="text-item" text-anchor="middle">roscore</text>
+  <text x="105" y="96" class="text-label mono" text-anchor="middle">master:11311</text>
+  <rect x="16" y="122" width="178" height="40" rx="10" class="card-plain" />
+  <text x="105" y="147" class="text-item" text-anchor="middle">/camera/image_raw</text>
+  <rect x="16" y="172" width="178" height="40" rx="10" class="card-plain" />
+  <text x="105" y="197" class="text-item" text-anchor="middle">/imu/data</text>
+  <rect x="304" y="88" width="160" height="68" rx="10" class="card-accent" />
+  <text x="384" y="119" class="text-item-inverse" text-anchor="middle">Reduct Bridge</text>
+  <text x="384" y="138" class="text-label-inverse mono" text-anchor="middle">ros input</text>
+  <text x="384" y="182" class="text-label mono" text-anchor="middle">[inputs.ros.ros_local]</text>
+  <text x="384" y="202" class="text-label mono" text-anchor="middle">[pipelines.telemetry]</text>
+  <rect x="506" y="0" width="420" height="248" rx="18" class="card-brand-frame" />
+  <text x="526" y="32" class="text-title-brand" text-anchor="start">ReductStore</text>
+  <text x="526" y="54" class="text-subtitle mono" text-anchor="start">bucket: robot</text>
+  <text x="526" y="96" class="text-item mono" text-anchor="start">ros_data/camera/image_raw</text>
+  <rect x="571.5" y="106" width="9" height="20" rx="2" class="record" />
+  <rect x="585.5" y="106" width="9" height="20" rx="2" class="record" />
+  <rect x="599.5" y="106" width="9" height="20" rx="2" class="record" />
+  <rect x="613.5" y="106" width="9" height="20" rx="2" class="record" />
+  <rect x="627.5" y="106" width="9" height="20" rx="2" class="record" />
+  <rect x="641.5" y="106" width="9" height="20" rx="2" class="record" />
+  <rect x="655.5" y="106" width="9" height="20" rx="2" class="record" />
+  <rect x="669.5" y="106" width="9" height="20" rx="2" class="record" />
+  <rect x="683.5" y="106" width="9" height="20" rx="2" class="record" />
+  <rect x="697.5" y="106" width="9" height="20" rx="2" class="record" />
+  <rect x="711.5" y="106" width="9" height="20" rx="2" class="record" />
+  <text x="526" y="152" class="text-item mono" text-anchor="start">ros_data/imu</text>
+  <rect x="571.5" y="162" width="9" height="20" rx="2" class="record" />
+  <rect x="585.5" y="162" width="9" height="20" rx="2" class="record" />
+  <rect x="599.5" y="162" width="9" height="20" rx="2" class="record" />
+  <rect x="613.5" y="162" width="9" height="20" rx="2" class="record" />
+  <rect x="627.5" y="162" width="9" height="20" rx="2" class="record" />
+  <rect x="641.5" y="162" width="9" height="20" rx="2" class="record" />
+  <rect x="655.5" y="162" width="9" height="20" rx="2" class="record" />
+  <rect x="669.5" y="162" width="9" height="20" rx="2" class="record" />
+  <rect x="683.5" y="162" width="9" height="20" rx="2" class="record" />
+  <rect x="697.5" y="162" width="9" height="20" rx="2" class="record" />
+  <rect x="711.5" y="162" width="9" height="20" rx="2" class="record" />
+  <path d="M526,200 L766,200" class="connector" marker-end="url(#arrow)" />
+  <text x="774" y="204" class="text-label mono" text-anchor="start">t</text>
+  <text x="526" y="228" class="text-label" text-anchor="start">record time from header.stamp</text>
+  <path d="M210,122 L300,122" class="connector" marker-end="url(#arrow)" />
+  <text x="255" y="110" class="text-label mono" text-anchor="middle">subscribe</text>
+  <path d="M464,122 L502,122" class="connector" marker-end="url(#arrow)" />
+</svg>
