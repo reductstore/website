@@ -190,11 +190,9 @@ Two more details: ROS timestamps have nanosecond precision, but ReductStore stor
 
 ## Performance considerations
 
-`queue_size` is the size of the ROS subscriber queue, and it defaults to 128 messages. A bigger queue helps with short bursts. It won't help if the bridge is slower than the topic for a long time, and it doesn't cover the bridge's own internal channels.
-
-Setting a `timestamp` field means the bridge has to decode each message, which costs some CPU.
-
-The ReductStore remote buffers records and flushes them when a batch goes over 80 records or 8 MiB, or when a periodic 1000 ms timer fires. You can change these limits with `batch_max_records`, `batch_max_size_bytes` and `batch_max_interval_ms`. The timer helps keep latency down on slow topics, but when a record is actually written also depends on the connection and on ReductStore.
+- `queue_size` is the size of the ROS subscriber queue, and it defaults to 128 messages. A bigger queue helps with short bursts. It won't help if the bridge is slower than the topic for a long time, and it doesn't cover the bridge's own internal channels.
+- Setting a `timestamp` field means the bridge has to decode each message, which costs some CPU.
+- The ReductStore remote buffers records and flushes them when a batch goes over 80 records or 8 MiB, or when a periodic 1000 ms timer fires. You can change these limits with `batch_max_records`, `batch_max_size_bytes` and `batch_max_interval_ms`. The timer helps keep latency down on slow topics, but when a record is actually written also depends on the connection and on ReductStore.
 
 ## Further reading
 
