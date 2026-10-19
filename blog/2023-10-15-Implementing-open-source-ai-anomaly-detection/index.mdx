@@ -1,130 +1,285 @@
 ---
-title: "Implementing AI for Real-Time Anomaly Detection in Images"
+title: "Unsupervised anomaly detection with Anomalib in Python"
 description: Explore the process of deploying open-source AI models for real-time image anomaly detection, bridging the gap between research and practical applications.
 authors: anthony
 tags: [computer vision, edge computing, ai]
 slug: computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection
-date: 2023-10-15
+date: 2026-10-20
+image: ./img/anomaly-query-social.png
 ---
 
-The journey of taking an open-source artificial intelligence (AI) model from a laboratory setting to real-world implementation can seem daunting. However, with the right understanding and approach, this transition becomes a manageable task.
+Anomalib makes it relatively easy to train an anomaly detection model on your own images. But once you want to use it in production, you also need to handle inference, evaluate predictions, and keep track of the images that triggered them.
 
-This blog post aims to serve as a compass on this technical adventure. We'll demystify key concepts, and delve into practical steps for implementing anomaly detection models effectively in real-time scenarios.
-
-Let's dive in and see how open-source models can be implemented in production, bridging the gap between research and practical applications.
+In this tutorial, we'll use anomalib to train and run an anomaly detection model in Python. Then we'll look at how to store images alongside their anomaly scores, so you can review detections and use them for future training.
 
 {/* truncate */}
 
-## Understanding Unsupervised Anomaly Detection
+## Understanding unsupervised anomaly detection
 
-Unsupervised anomaly detection is a machine learning technique that uncovers unusual patterns or outliers in data, without any prior training on what these anomalies might look like. In the context of images, this means identifying areas within the image that deviate significantly from what's considered 'normal'.
+Unsupervised anomaly detection identifies patterns that differ from normal data without requiring examples of every possible defect.
 
-Implementing that in real-time involves using deep-learning models which can rapidly process incoming visual data, detect irregularities in a matter of milliseconds, and respond accordingly. It's like having a vigilant digital watchdog capable of recognizing anything out-of-the-ordinary at high speed.
+This is particularly useful in manufacturing. You can usually collect thousands of images of good parts, but defective parts are harder to come by. You also can't predict every type of defect that might appear.
 
-With open-source models, you have access to this technology as well as the collective wisdom of researchers and developers worldwide who continually refine these tools for better performance.
+Instead of learning specific defects, the model learns what normal looks like and flags anything that differs significantly. Depending on the model and hardware, inference can be fast enough to inspect parts directly on a production line.
 
-### Role and Importance of Anomaly Detection in Images
+## Anomalib, a deep learning library for image anomaly detection
 
-Anomaly detection in images plays a crucial role in numerous fields, ranging from healthcare to security. In healthcare, it can aid in identifying abnormal structures or changes in medical imagery like X-Rays or MRI scans, potentially flagging early signs of diseases. In security applications such as surveillance systems, it can help detect unusual activities or objects within the monitored area.
+[**anomalib**](https://github.com/open-edge-platform/anomalib) is an open source Python library for training and evaluating anomaly detection models on your own images.
 
-The importance of anomaly detection also extends to quality control in manufacturing, where it can spot defects on assembly lines avoiding costly recalls and, hopefully, ensuring customer satisfaction.
+It handles much of the work around data loading, training, evaluation, and model export, so you can focus on choosing and testing a model.
 
-Real-time implementation of open-source models for this purpose allows these sectors to react quickly to anomalies and make informed decisions instantly.
+![An anomaly detected with anomalib](./img/anomalib_image_example.webp)
 
-## Anomalib: A Deep Learning Library for Anomaly Detection in Images
+<small>Example of an anomaly detected with anomalib.</small>
 
-[**Anomalib**](https://github.com/openvinotoolkit/anomalib) is an open-source library for unsupervised anomaly detection in images. It offers a collection of state-of-the-art models that can be trained on your specific images.
+Version 2.7.0 requires Python 3.10 or later. Install it with:
 
-![Anomalib](./img/anomalib_image_example.webp)
+```bash
+pip install anomalib
+```
+
+Before starting, you'll need:
+
+- A few hundred images of defect-free parts for training. This is enough for an initial experiment, although more data may improve results.
+- A test set containing some real defects to evaluate how well the model performs.
+- Anomaly masks if you want to evaluate where defects are located, rather than just whether an image contains one.
+
+An anomaly mask is an image with the same dimensions as the original, where white pixels mark the defective area and black pixels mark everything else. You can create these manually in an image editor such as GIMP.
+
+Masks are used for evaluation and localization, not for training the unsupervised model. If you only need image-level classification, you can start without them.
+
+### Choosing a model
+
+Anomalib includes several models, and it's worth comparing at least two before settling on one.
+
+**EfficientAd** is a good starting point when inference speed matters, especially on a production line. **Patchcore** is another option that can provide strong detection performance, although it generally requires more memory and computation.
+
+The best choice depends on your images, hardware, and latency requirements. Check the anomalib documentation for the current list of supported models.
+
+## Train a model on your own images in Python
+
+You can train a model using either the command line or the Python API. We'll use Python here because it's easier to integrate into a larger application.
+
+You need three components: a datamodule to load your images, a model to detect anomalies, and an engine to handle training and evaluation.
+
+First, organize your images into two directories:
+
+```
+datasets/panel/
+├── good/
+└── defect/
+```
+
+Then configure the `Folder` datamodule and train EfficientAd:
+
+```python
+from anomalib.data import Folder
+from anomalib.engine import Engine
+from anomalib.models import EfficientAd
+
+datamodule = Folder(
+    name="panel",
+    root="datasets/panel",
+    normal_dir="good",
+    abnormal_dir="defect",
+    train_batch_size=1,
+)
+
+model = EfficientAd()
+engine = Engine(max_epochs=200)
+
+engine.fit(datamodule=datamodule, model=model)
+print(engine.test(datamodule=datamodule, model=model))
+```
+
+The `normal_dir` and `abnormal_dir` paths are relative to `root`.
+
+Notice that `train_batch_size` is set to 1. This is required by EfficientAd, rather than a workaround for limited GPU memory. Other models can use larger batches.
+
+You can run the same training from the command line:
+
+```bash
+anomalib train --model EfficientAd --data anomalib.data.Folder \
+  --data.name panel --data.root datasets/panel \
+  --data.normal_dir good --data.abnormal_dir defect \
+  --data.train_batch_size 1 --trainer.max_epochs 200
+```
+
+Once training finishes, anomalib saves a checkpoint under `results/`.
+
+### Run inference on new images
+
+To test the trained model on a new image, create a `PredictDataset` and load the checkpoint:
+
+```python
+from anomalib.data import PredictDataset
+
+dataset = PredictDataset(path="frames/0001.png", image_size=(256, 256))
+
+predictions = engine.predict(
+    model=model,
+    dataset=dataset,
+    ckpt_path="results/EfficientAd/panel/latest/weights/lightning/model.ckpt",
+)
+
+for prediction in predictions:
+    print(prediction.image_path, prediction.pred_score, prediction.pred_label)
+```
+
+Check the checkpoint path in your own `results/` directory, since it depends on the model and dataset names.
+
+Each prediction contains several useful fields:
+
+- `pred_score`: a numerical score indicating how anomalous the image is.
+- `pred_label`: the classification after applying a threshold.
+- `anomaly_map`: a pixel-level heatmap showing where the model detected anomalies.
+- `image_path`: the original image path.
+
+In practice, you'll often use `pred_score` to decide whether a part needs inspection. The anomaly map helps an operator understand which area triggered the detection.
+
+## From training to production with ONNX or OpenVINO
+
+So far, we've been using PyTorch for training and inference. For deployment, you may want to export the model to a runtime better suited to your target hardware.
+
+ONNX provides a portable model format supported by different inference runtimes. OpenVINO is optimized for Intel hardware and is particularly relevant for industrial edge computers.
+
+Anomalib supports exporting trained models directly:
+
+```python
+from anomalib.deploy import ExportType
+
+engine.export(model=model, export_type=ExportType.OPENVINO)
+```
+
+You can also export from the command line using `anomalib export --export_type OPENVINO` with the appropriate checkpoint.
+
+The resulting model can be loaded using OpenVINO, or ONNX Runtime if you chose ONNX.
+
+If you've used an older anomalib tutorial, you might have seen an `export_mode` setting inside an `optimization` block in `config.yaml`. That was part of the 1.x configuration and doesn't apply to the current version.
+
+### Test the model in shadow mode
+
+Before allowing a new model to affect production, it's useful to run it in shadow mode.
+
+In shadow mode, the model processes live images without affecting production decisions.
+
+Your existing inspection process continues as usual. Meanwhile, the new model scores the same images, and you compare the results afterward.
+
+This lets you measure false positives, missed defects, and inference performance on real production data before relying on the model.
+
+To do that comparison, however, you need to know exactly which frame produced each prediction.
+
+## Keep each anomaly score with its original image
+
+Anomalib gives you the anomaly score and heatmap, but it doesn't manage how you store those results. That's something you need to handle in your application.
+
+One approach is to send anomaly scores to a database or MQTT topic and store the images separately in a filesystem or object store. This works, but you then need a way to match each score back to its original image, usually by filename or timestamp, and that mapping gets harder to keep correct as the system grows.
+
+An alternative is to store the score directly with the image.
+
+### Store images and scores in ReductStore
+
+With ReductStore, you can store each camera frame as a timestamped record and attach the anomaly score as a label.
+
+Here's an example using the Python SDK:
+
+```python
+import time
+from reduct import Client
+
+async with Client("http://127.0.0.1:8383", api_token="my-token") as client:
+    bucket = await client.create_bucket("inspection", exist_ok=True)
+
+    await bucket.write(
+        "camera-1",
+        frame_jpeg,
+        time.time(),
+        labels={
+            "anomaly_score": prediction.pred_score,
+            "anomaly": prediction.pred_label,
+            "model": "efficientad-2026-10",
+        },
+        content_type="image/jpeg",
+    )
+```
+
+![ReductStore stores each camera-1 frame with its anomaly_score, anomaly and model labels; a query selects the frames above the threshold and a head read returns labels only](./img/anomaly-query.svg)
 
 <small>
-  Example of an anomaly detected with
-  [**Anomalib**](https://github.com/openvinotoolkit/anomalib)
+  A query filters the same records by their anomaly_score label, and a head read
+  returns labels while the image payloads stay in the store.
 </small>
 
-For achieving the best training results, it is advised to obtain a suitable quantity of images that are free from any abnormalities. It is preferable to have a few hundred images for this purpose. Furthermore, in order to perform testing and validation, it is recommended to acquire a few images that do include anomalies as well.
+Each record contains the image, its timestamp, and the labels produced by the model.
 
-If your images have anomalies, you'll need to make a mask highlighting these areas. You don't need a sophisticated tool for that. For example with [**GIMP**](https://www.gimp.org/), it's as simple as:
+Now, instead of retrieving scores and images separately, you can query the records directly.
 
-- Drag and drop your original image (e.g., "001.png”) into GIMP.
-- Go to the Layer menu and select New Layer.
-- With the new layer selected, use the Pencil tool set to white to mark the anomalies.
-- Use the Bucket Fill tool to color the unmarked areas in black.
-- Save the mask using File -> Export As, naming it "001_mask.png".
+For example, to retrieve frames with an anomaly score above 0.7 during a specific shift:
 
-Keep in mind that masks are for testing, not training. Thus, only a few anomaly images are required for this.
-
-Afterward, you can train one of the Anomalib models and test its performance under simulated conditions. I would recommend [**EfficientAd**](https://arxiv.org/abs/2303.14535) or [**FastFlow**](https://arxiv.org/abs/2111.07677) for real-time applications, as they are significantly faster than other models as of October 2023. Additionally, you can explore [**Anomaly Detection on Paper With Code**](https://paperswithcode.com/task/anomaly-detection) to find the ideal model for your specific use case.
-
-The easiest way to get started with Anomalib, is to clone their [**repository from Github**](https://github.com/openvinotoolkit/anomalib) and use the train script as follows:
-
-```bash
-python tools/train.py --config <path/to/model/config.yaml> --model <model name>
+```python
+async for record in bucket.query(
+    "camera-1",
+    start=shift_start,
+    stop=shift_end,
+    when={"&anomaly_score": {"$gt": 0.7}},
+):
+    image = await record.read_all()
 ```
 
-Sample config files are available in the repo, and it lets you set the paths of the folders containing your pictures for training and testing. Then, once your model is trained and validated, you can use the inference script to test it under simulated conditions on a single image or a folder of images. For example, with [**PyTorch**](https://pytorch.org/), you can run the inference script as follows:
+The `&` prefix refers to a label stored on the record, while `$gt` means greater than.
 
-```bash
-python tools/inference/torch_inference.py \
-    --weights results/your/model.pt \
-    --input your/image.png \
-    --output results
-```
+The condition is evaluated within the specified `start` and `stop` window. It's worth providing a time range even when it's optional, since otherwise the query may need to examine every record in the entry.
 
-This will generate a visualization that highlights the areas of the image that the model has identified as anomalies. You can set the flag `--visualization_mode` between `full` and `simple` to change the visualization mode. Select `full` to view the original image with its mask, heatmap, and segmentation.
+You can also use the `head` parameter to retrieve only the metadata and labels, without downloading the image payloads.
 
-## From Lab to Live: Implementing Your Models With ONNX or OpenVINO
+This is useful when you want to analyze anomaly scores over several hours or days without transferring all the camera images.
 
-Once your model has been trained and validated using Anomalib, the next step is to prepare it for real-time implementation. This is where [**ONNX**](https://onnx.ai/) (Open Neural Network Exchange) or OpenVINO (Open Visual Inference and Neural network Optimization) comes into play.
+### Reviewing anomalies and preparing new training data
 
-ONNX offers a standardized platform that allows you to export your trained model into a format that can be easily implemented and run in various environments.
+You can also use these records to review false positives and prepare new training datasets.
 
-OpenVINO is another toolkit but developed by Intel. Its primary purpose is to facilitate the rapid deployment of deep learning models for inference.
+For example, an operator can retrieve all frames flagged during the previous shift, inspect them, and mark false positives. Those corrections can be stored as additional labels on the same records.
 
-To convert your model, you will need to add this configuration to your `config.yaml` file to export your model to ONNX or OpenVINO format after training.
+When you prepare the next training dataset, you can query the same data again to find relevant images.
 
-```bash
-optimization:
-  export_mode: < openvino or onnx >
-```
+You can also store the model version as a label. This makes it easier to identify which model produced a prediction and compare results from different deployments.
 
-Once converted, the model can be embedded in your application with ONNX Runtime or OpenVINO Inference Engine respectively.
+For shadow-mode testing, you can retain the outputs from both the existing process and the new model, then compare them against the same recorded frames.
 
-### Deploying New Models in Shadow Mode
+### Why time-indexed storage helps
 
-Deploying in shadow mode is a crucial step when introducing a new model to production. This deployment strategy involves running the new model alongside your existing system without directly influencing the output, essentially running in the "shadow".
+A time series database works well for numerical values such as anomaly scores, but storing large image payloads alongside them is often less practical.
 
-It's like having a student trying to outperform the master. During this phase, both models process each image concurrently but only results from your current system are utilized, while outputs of the new model are monitored and compared for any discrepancies.
+Object storage handles images well, but querying those objects by timestamp and anomaly score typically requires additional indexing.
 
-This allows you to assess how well the new model performs under real-world conditions without risking any impact on your operations if it doesn't perform as expected. It also provides an opportunity to fine-tune parameters or retrain the model with more specific data based on its performance during shadow operation.
+With time-indexed storage, the image and its metadata can be queried together.
 
-Once satisfied with its performance and reliability, you can then switch over from your old system to this newly deployed model.
+In this example, each camera has its own entry, and records are indexed by timestamp. You can retrieve frames from a particular time window, filter them using their labels, or read only the metadata.
 
-### ReductStore: Storing AI Labels and Models at the Edge with a Time-Series Database for Blob Data
+One thing to keep in mind is that timestamps don't automatically synchronize different cameras. If you need millisecond-level alignment between devices, you still need synchronized clocks.
 
-[**ReductStore**](https://www.reduct.store/) is an innovative time-series database designed specifically for managing Blob data, making it ideal for our needs in real-time unsupervised anomaly detection. The true strength of ReductStore lies in its ability to store not just raw data but also AI labels within the metadata and models at the edge.
+## Storing images, annotations, and models at the edge
 
-To better visualize how ReductStore can integrate with your machine learning workflow, from data capture to inference, consider the following diagram. It provides an overview of how we can make the most out of AI labels and models stationed at the edge.
+For a production line, running anomaly detection close to the camera can also reduce network traffic.
 
-![ML Data Flow Diagram](./img/ml-data-flow.svg)
+Instead of continuously sending every image to a central server, you can process frames locally, retain recent recordings, and transfer only the data needed for inspection or further analysis.
 
-<small>
-  Diagram illustrating the flow of data capture, storage, inference, and
-  training with ReductStore.
-</small>
+ReductStore's retention policies can automatically remove older records when storage limits are reached.
 
-AI labels indicate the outcomes of your model's evaluation on each picture, like the presence or absence of an anomaly in our case. [**By storing these labels alongside your images in ReductStore**](/blog/computer-vision-applications), you can streamline your system's workflow and make the whole process simpler.
+You can also use separate entries to store related data. For example, manually reviewed annotations and segmentation masks can be stored with the timestamp of the original frame.
 
-Furthermore, annotated images are manually labeled or validated by a human operator, and then stored in ReductStore. This annotation can be the actual label inferred by the model which is then validated by a human operator, or it can be more complex, like a mask highlighting the areas of the image that the model should identify as anomalies. This allows for continuous improvement of your model's performance over time.
+This lets you keep the original recording unchanged while adding information from later reviews.
 
-Meanwhile, keeping models at the edge means deploying your trained models directly onto end-user devices or closer to where data is generated. This method cuts down on latency issues since you don't need to transmit large volumes of image data over networks; instead, you analyze it right where it’s collected.
+The same applies to model files. You can store model versions in a bucket and use the model label on each prediction to identify which version was running at the time.
 
-## Conclusion
+This lets you investigate older detections using the model version that originally produced them.
 
-In conclusion, implementing open-source models for real-time unsupervised anomaly detection in images is a multi-step process that involves transitioning from lab to live.
+## Further reading
 
-By selecting the right model, testing under simulated conditions, integrating it into your existing system and regularly monitoring its performance, you can effectively detect anomalies in image data.
+For details about filtering records by labels, see the ReductStore [**conditional query reference**](/docs/conditional-query). The [**data querying guide**](/docs/guides/data-querying) explains time ranges, the `when` parameter, and metadata-only reads using `head`.
 
-Utilizing tools like Anomalib and ReductStore help to facilitate this process by providing robust models and storage solutions respectively. Deploying new models in shadow mode further minimizes risk during the transition phase ensuring that your operations remain unaffected while introducing new models into your system.
+If you're recording at camera frame rate, the [**data ingestion guide**](/docs/guides/data-ingestion) also covers batch writes.
 
-Stay tuned for more advancements in the field of unsupervised anomaly detection and the continuous evolution of tools and techniques that will make the process even more streamlined and efficient in the future!
+For robotics applications, the [**ROS image storage tutorial**](/blog/tutorials/ros/optimal-image-storage-solutions-for-ros-based-computer-vision) shows how to record image topics with their original timestamps.
+
+You can also explore the [**computer vision applications overview**](/blog/computer-vision-applications) or the [**open source alternatives to Landing AI**](/blog/computer-vision/ai/mlops/opensource/open-source-alternatives-to-landing-ai) comparison if you're deciding between building your own anomaly detection pipeline and using an existing platform.
