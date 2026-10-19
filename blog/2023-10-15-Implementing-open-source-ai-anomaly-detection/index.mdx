@@ -5,8 +5,10 @@ authors: anthony
 tags: [computer vision, edge computing, ai]
 slug: computer-vision/edge-computing/ai/Implementing-open-source-ai-anomaly-detection
 date: 2026-10-20
-image: ./img/anomaly-query-social.png
+image: ./img/anomaly-pipeline-social.png
 ---
+
+![Anomaly detection pipeline: a camera feeds Anomalib, which scores each frame, and ReductStore keeps every frame with its anomaly labels](./img/anomaly-pipeline.svg)
 
 Anomalib makes it relatively easy to train an anomaly detection model on your own images. But once you want to use it in production, you also need to handle inference, evaluate predictions, and keep track of the images that triggered them.
 

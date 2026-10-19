@@ -8,6 +8,24 @@ from blogkit import Diagram, render_social  # noqa: E402
 HERE = Path(__file__).parent
 
 
+def pipeline():
+    d = Diagram()
+
+    # The end-to-end path the tutorial walks: capture, score, store, review.
+    d.card(0, 26, 150, 76, "Camera", "frames")
+    d.arrow((150, 64), (206, 64))
+    d.card(206, 20, 170, 92, "Anomalib", bullets=["train a model", "score each frame"])
+    d.arrow((376, 64), (520, 64))
+    d.text(448, 52, "frame + score", "text-label", "middle", mono=True)
+    d.item(520, 28, 200, 72, "ReductStore", "camera-1 entry", brand=True)
+
+    # Reviewed frames feed the next training set.
+    d.arrow((620, 100), (620, 150), (291, 150), (291, 112))
+    d.text(455, 170, "review flagged frames, build the next training set", "text-note")
+
+    return d
+
+
 def anomaly_query():
     d = Diagram()
 
@@ -23,23 +41,24 @@ def anomaly_query():
     d.arrow((205, 170), (205, 224))
     d.text(218, 198, "query", "text-label-strong", "start")
     d.text(218, 216, "when &anomaly_score $gt 0.7", "text-note", "start", mono=True)
-    d.zone(40, 236, 330, 118, "matching frames")
-    d.records(95, 276, 220, 36, count=3, labels="ccc")
-    d.text(72, 336, "the same records, image and labels", "text-label", "start")
+    d.zone(40, 236, 330, 140, "matching frames")
+    d.records(95, 288, 220, 36, count=3, labels="ccc")
+    d.text(72, 352, "the same records, image and labels", "text-label", "start")
 
     # Head read: labels come back, the payloads stay in the store.
     d.arrow((500, 170), (500, 224))
     d.text(513, 198, "head read", "text-label-strong", "start")
-    d.zone(410, 236, 190, 118, "labels only")
-    d.text(432, 272, "anomaly_score", "text-label", "start", mono=True)
-    d.text(432, 294, "anomaly", "text-label", "start", mono=True)
-    d.text(432, 316, "model", "text-label", "start", mono=True)
-    d.text(432, 342, "payloads stay in the store", "text-note", "start")
+    d.zone(410, 236, 190, 140, "labels only")
+    d.text(432, 290, "anomaly_score", "text-label", "start", mono=True)
+    d.text(432, 312, "anomaly", "text-label", "start", mono=True)
+    d.text(432, 334, "model", "text-label", "start", mono=True)
+    d.text(432, 360, "payloads stay in the store", "text-note", "start")
 
     return d
 
 
 if __name__ == "__main__":
-    diagram = anomaly_query()
-    diagram.save(HERE / "anomaly-query.svg")
-    render_social(diagram, HERE / "anomaly-query-social.png")
+    lead = pipeline()
+    lead.save(HERE / "anomaly-pipeline.svg")
+    render_social(lead, HERE / "anomaly-pipeline-social.png")
+    anomaly_query().save(HERE / "anomaly-query.svg")
