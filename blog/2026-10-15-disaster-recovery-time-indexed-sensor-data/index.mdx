@@ -156,7 +156,7 @@ Replicas protect reads, not writes. If the ingestion endpoint itself must surviv
 Plainly:
 
 - **You can stop the instance** (a maintenance window, a nightly shutdown): cold backup for full restore points, plus hot backup with the CLI on a schedule for incrementals.
-- **You cannot stop it** — a robot on a line, a plant running 24/7: hot standby. It is the only shipped mechanism that keeps ingestion alive through a node failure, with failover in seconds. Add read-only replicas on top if reads need their own availability and capacity. Keep a cold backup regardless, because hot standby shares one dataset and does not protect against corruption or operational errors.
+- **You cannot stop it** — a robot on a line, a plant running 24/7: hot standby. It is the only shipped mechanism that keeps ingestion alive through a node failure, with failover in seconds. Add read-only replicas on top if reads need their own availability and capacity.
 
 Cold backup and hot backup answer "how do I get my data back". Hot standby and replicas answer "how do I keep running". Most deployments need one mechanism from each side.
 
