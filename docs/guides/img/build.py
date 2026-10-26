@@ -45,8 +45,8 @@ def hot_standby():
 
     d.arrow((300, 70), (300, 96), (242, 96), (242, 254))
     d.text(271, 88, "traffic", "text-label")
-    d.arrow((460, 70), (460, 96), (650, 96), (650, 254), dashed=True)
-    d.text(555, 88, "health check", "text-label")
+    d.arrow((460, 70), (460, 96), (518, 96), (518, 254), dashed=True)
+    d.text(489, 88, "health check", "text-label")
 
     d.arrow((335, 144), (250, 196))
     d.text(292, 160, "check status", "text-label")
@@ -55,8 +55,8 @@ def hot_standby():
 
     d.arrow((176, 328), (176, 398), (330, 398), (330, 434), both=True)
     d.text(272, 390, "writes + refreshes lock", "text-label")
-    d.arrow((584, 328), (584, 398), (438, 398), (438, 434), dashed=True, both=True)
-    d.text(511, 390, "watches stale lock", "text-label")
+    d.arrow((584, 328), (584, 398), (430, 398), (430, 434), dashed=True, both=True)
+    d.text(488, 390, "watches stale lock", "text-label")
     return d
 
 
