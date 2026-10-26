@@ -10,7 +10,7 @@ date: 2026-10-26
 
 A robot or production line writes sensor data continuously. Eventually, a machine crashes, a disk fails, or a bad deployment corrupts an index. The real question is how much data loss and downtime you can afford when that happens.
 
-The [**Disaster Recovery guide**](../../docs/guides/disaster-recovery.mdx) is the product reference: it describes the available mechanisms and their settings. This post focuses on choosing and deploying them. It covers cold backup, hot backup with the CLI, hot standby, and read-only replicas, including the downtime each requires and when each is appropriate for a robot or plant that cannot stop.
+The [**Disaster Recovery guide**](/docs/guides/disaster-recovery) is the product reference: it describes the available mechanisms and their settings. This post focuses on choosing and deploying them. It covers cold backup, hot backup with the CLI, hot standby, and read-only replicas, including the downtime each requires and when each is appropriate for a robot or plant that cannot stop.
 
 {/* truncate */}
 
@@ -43,7 +43,7 @@ Use this option when you have a maintenance window and need the lowest-cost solu
 
 ## Hot backup with the CLI
 
-A hot backup uses the [**ReductStore CLI**](https://www.reduct.store/download) to copy data from a live instance to a backup instance without interrupting ingestion.
+A hot backup uses the [**ReductStore CLI**](https://github.com/reductstore/reduct-cli) to copy data from a live instance to a backup instance without interrupting ingestion.
 
 ![A ReductStore CLI command copies data from a primary instance to a backup instance, with a reverse restore path.](../../docs/guides/img/disaster_recovery_hot_backup.svg)
 
