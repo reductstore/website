@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -2 760 516" width="100%" height="100%">
+  <defs>
+    <style>
+      :root {
+        --card-bg: #FFFFFF;
+        --card-brand: #2B0548;
+        --brand-line: #2B0548;
+        --card-accent: #DB817B;
+        --card-stroke: #333333;
+        --text-main: #333333;
+        --text-muted: #666666;
+        --text-inverse: #FFFFFF;
+        --line: #333333;
+        --zone: #F7F4FA;
+        --label-a: #D5E8D4;
+        --label-a-stroke: #82B366;
+        --label-b: #E1D5E7;
+        --label-b-stroke: #9673A6;
+        --label-c: #F8CECC;
+        --label-c-stroke: #B85450;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --card-bg: #1E1E1E;
+          --card-stroke: #555555;
+            --text-main: #EFEFEF;
+          --text-muted: #A0A0A0;
+          --line: #EFEFEF;
+          --zone: #262129;
+          --brand-line: #BFA6DC;
+        }
+      }
+
+      text {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      .mono {
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        white-space: pre;
+      }
+
+      .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand-frame { fill: var(--card-bg); stroke: var(--brand-line); stroke-width: 2; }
+      .card-accent { fill: var(--card-accent); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
+      .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .hatch-line { stroke: var(--line); stroke-width: 1.5; }
+      .record { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1; }
+      .label-a { fill: var(--label-a); stroke: var(--label-a-stroke); }
+      .label-b { fill: var(--label-b); stroke: var(--label-b-stroke); }
+      .label-c { fill: var(--label-c); stroke: var(--label-c-stroke); }
+      .dot { fill: var(--text-muted); }
+
+      .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
+      .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
+      .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-title-brand { font-weight: 700; font-size: 18px; fill: var(--brand-line); }
+      .text-item-brand { font-weight: 700; font-size: 15px; fill: var(--brand-line); }
+      .text-item { font-weight: 600; font-size: 15px; fill: var(--text-main); }
+      .text-item-inverse { font-weight: 600; font-size: 15px; fill: var(--text-inverse); }
+      .text-subtitle { font-size: 14px; fill: var(--text-muted); }
+      .text-subtitle-inverse { font-size: 14px; fill: var(--text-inverse); }
+      .text-bullet { font-size: 15px; fill: var(--text-main); }
+      .text-bullet-inverse { font-size: 15px; fill: var(--text-inverse); }
+      .text-label { font-size: 13px; fill: var(--text-muted); }
+      .text-label-strong { font-size: 13px; font-weight: 700; fill: var(--text-main); }
+      .text-label-inverse { font-size: 13px; fill: var(--text-inverse); }
+      .text-note { font-size: 13px; font-style: italic; fill: var(--text-muted); }
+
+      .connector { stroke: var(--line); stroke-width: 2; fill: none; }
+      .link { stroke: var(--line); stroke-width: 2; stroke-dasharray: 5 5; fill: none; }
+      .guide { stroke: var(--text-muted); stroke-width: 1; stroke-dasharray: 3 4; fill: none; }
+      .arrow-head { fill: var(--line); }
+    </style>
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
+    </marker>
+    <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" class="hatch-line" />
+    </pattern>
+  </defs>
+  <rect x="10" y="196" width="332" height="174" rx="18" class="zone" />
+  <rect x="418" y="196" width="332" height="174" rx="18" class="zone" />
+  <rect x="280" y="8" width="200" height="62" rx="16" class="card-standard" />
+  <text x="380" y="33" class="text-title" text-anchor="middle">Load balancer</text>
+  <text x="380" y="57" class="text-subtitle mono" text-anchor="middle">GET /api/v1/ready</text>
+  <rect x="315" y="104" width="130" height="40" rx="16" class="card-standard" />
+  <text x="380" y="130" class="text-title" text-anchor="middle">Failover</text>
+  <path d="M380,104 L380,70" class="connector" marker-end="url(#arrow)" />
+  <text x="392" y="83" class="text-label" text-anchor="start">switch</text>
+  <text x="392" y="99" class="text-label" text-anchor="start">traffic</text>
+  <text x="30" y="222" class="text-zone" text-anchor="start">Primary node</text>
+  <text x="30" y="242" class="text-label mono" text-anchor="start">RS_INSTANCE_ROLE=PRIMARY</text>
+  <rect x="62" y="254" width="228" height="74" rx="16" class="card-brand" />
+  <text x="176" y="285" class="text-title-inverse" text-anchor="middle">ReductStore</text>
+  <text x="176" y="309" class="text-subtitle-inverse mono" text-anchor="middle">active writer</text>
+  <text x="438" y="222" class="text-zone" text-anchor="start">Secondary node</text>
+  <text x="438" y="242" class="text-label mono" text-anchor="start">RS_INSTANCE_ROLE=SECONDARY</text>
+  <rect x="470" y="254" width="228" height="74" rx="16" class="card-brand" />
+  <text x="584" y="285" class="text-title-inverse" text-anchor="middle">ReductStore</text>
+  <text x="584" y="309" class="text-subtitle-inverse mono" text-anchor="middle">standby</text>
+  <rect x="214" y="434" width="332" height="70" rx="16" class="card-accent" />
+  <text x="380" y="463" class="text-title-inverse" text-anchor="middle">Shared storage</text>
+  <text x="380" y="487" class="text-subtitle-inverse mono" text-anchor="middle">RS_DATA_PATH + lock file</text>
+  <path d="M300,70 L300,96 L242,96 L242,254" class="connector" marker-end="url(#arrow)" />
+  <text x="271" y="88" class="text-label" text-anchor="middle">traffic</text>
+  <path d="M460,70 L460,96 L650,96 L650,254" class="link" marker-end="url(#arrow)" />
+  <text x="555" y="88" class="text-label" text-anchor="middle">health check</text>
+  <path d="M335,144 L250,196" class="connector" marker-end="url(#arrow)" />
+  <text x="292" y="160" class="text-label" text-anchor="middle">check status</text>
+  <path d="M425,144 L510,196" class="link" marker-end="url(#arrow)" />
+  <text x="468" y="160" class="text-label" text-anchor="middle">check status</text>
+  <path d="M176,328 L176,398 L330,398 L330,434" class="connector" marker-end="url(#arrow)" marker-start="url(#arrow)" />
+  <text x="272" y="390" class="text-label" text-anchor="middle">writes + refreshes lock</text>
+  <path d="M584,328 L584,398 L438,398 L438,434" class="link" marker-end="url(#arrow)" marker-start="url(#arrow)" />
+  <text x="511" y="390" class="text-label" text-anchor="middle">watches stale lock</text>
+</svg>
