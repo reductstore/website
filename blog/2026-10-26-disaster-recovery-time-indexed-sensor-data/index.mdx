@@ -1,0 +1,176 @@
+---
+title: "Disaster Recovery for Time-Indexed Sensor Data"
+description: "Cold backup, hot backup with the CLI, hot standby, and read-only replicas: how to protect a ReductStore instance that records sensor data, and which mechanism fits a robot or a plant that cannot be stopped."
+authors: alexey
+tags: [system-design, database, edge-computing]
+image: ./img/hot-backup-social.png
+slug: disaster-recovery-time-indexed-sensor-data
+date: 2026-10-26
+---
+
+A robot or production line writes sensor data continuously. Eventually, a machine crashes, a disk fails, or a bad deployment corrupts an index. The real question is how much data loss and downtime you can afford when that happens.
+
+The [**Disaster Recovery guide**](/docs/guides/disaster-recovery) is the product reference: it describes the available mechanisms and their settings. This post focuses on choosing and deploying them. It covers cold backup, hot backup with the CLI, hot standby, and read-only replicas, including the downtime each requires and when each is appropriate for a robot or plant that cannot stop.
+
+{/* truncate */}
+
+## The four mechanisms at a glance
+
+| Mechanism                                           | Downtime on failure | Stops ingestion? | Protects against                                 |
+| --------------------------------------------------- | ------------------- | ---------------- | ------------------------------------------------ |
+| Cold backup (copy the data path)                    | minutes to hours    | yes              | hardware failure, corruption, operational errors |
+| Hot backup (`reduct-cli cp`)                        | zero                | no               | data loss on the primary instance                |
+| Hot standby (primary + secondary on shared storage) | seconds             | no               | hardware failure, network outage                 |
+| Read-only replicas                                  | zero                | no               | read downtime, read load                         |
+
+ReductStore can also detect and isolate data loss on its own: at startup, it replays write-ahead logs and checks index CRCs; during I/O, it drops corrupted blocks instead of serving them. These safeguards can keep an instance running, but they are not a disaster recovery plan. The mechanisms below provide recovery.
+
+## Cold backup: copy the data path
+
+This is the simplest approach: back up the entire data directory, then restore it when something fails.
+
+The procedure:
+
+1. Stop the ReductStore instance. File backups are only consistent when the instance is stopped.
+2. Copy the entire `RS_DATA_PATH` directory to the backup location.
+3. Start the instance again.
+
+Verify every backup before you need it. Copy it to a new directory, start a test instance (`RS_DATA_PATH=/path/to/backup RS_API_TOKEN=my-token reductstore`), check the logs, and query `GET /api/v1/list` to confirm the data is available.
+
+To restore, reverse the process: stop the instance, replace its data directory, and start it again. You can restore the whole dataset or a single bucket or entry under `RS_DATA_PATH/<bucket_name>/<entry_name>`.
+
+Use this option when you have a maintenance window and need the lowest-cost solution. Keep several generations of backups: it is the only mechanism that protects against both data corruption and operational errors, because a hot copy of corrupted data is still corrupted.
+
+## Hot backup with the CLI
+
+A hot backup uses the [**ReductStore CLI**](https://github.com/reductstore/reduct-cli) to copy data from a live instance to a backup instance without interrupting ingestion.
+
+![A ReductStore CLI command copies data from a primary instance to a backup instance, with a reverse restore path.](../../docs/guides/img/disaster_recovery_hot_backup.svg)
+
+```bash
+reduct-cli alias add primary -L <URL of the primary instance> --token <API token>
+reduct-cli alias add backup -L <URL of the backup instance> --token <API token>
+
+reduct-cli cp primary/<bucket_name> backup/<bucket_name> \
+  --start <OPTIONAL start timestamp> \
+  --stop <OPTIONAL end timestamp>
+```
+
+For scheduled incremental backups, copy everything new since the last run:
+
+```bash
+reduct-cli cp primary/* backup --from-last
+```
+
+Schedule this command with cron to automate backups without downtime. To restore, run the same command in reverse, copying from `backup` to `primary`.
+
+The CLI copies data, not instance configuration. It does not copy buckets, quotas, or replication rules, so recreate them on the backup instance or provision it with the same configuration as the primary.
+
+Use this option when you need scheduled backups without interrupting ingestion and can accommodate the time needed to copy data back and restore configuration.
+
+## Hot standby: primary and secondary on shared storage
+
+This approach is designed for robots and plants that cannot stop.
+
+Two ReductStore instances use the same dataset, either through a shared `RS_DATA_PATH` (NFS, EFS, or CephFS) or the same S3 backend. The active node holds and refreshes a lock file; the secondary waits for that lock to become stale, then takes over.
+
+![A load balancer routes traffic to the primary ReductStore node while a secondary watches the lock file on shared storage for failover.](../../docs/guides/img/disaster_recovery_hot_standby.svg)
+
+```yaml
+version: "3.9"
+services:
+  reduct-primary:
+    image: reduct/store:latest
+    environment:
+      RS_API_TOKEN: my-token
+      RS_INSTANCE_ROLE: PRIMARY
+      RS_DATA_PATH: /data
+      RS_LOCK_FILE_TTL: 45s
+      RS_LOCK_FILE_TIMEOUT: 0
+    volumes:
+      - reduct-data:/data
+    ports:
+      - "8383:8383"
+
+  reduct-secondary:
+    image: reduct/store:latest
+    environment:
+      RS_API_TOKEN: my-token
+      RS_INSTANCE_ROLE: SECONDARY
+      RS_DATA_PATH: /data
+      RS_LOCK_FILE_TTL: 45s
+      RS_LOCK_FILE_TIMEOUT: 0
+    volumes:
+      - reduct-data:/data
+    ports:
+      - "8384:8383"
+
+volumes:
+  reduct-data:
+```
+
+Place both nodes behind a load balancer that uses `GET /api/v1/ready`: the active node returns `200`, while the standby returns `503` until it acquires the lock. Use `GET /api/v1/alive` for liveness checks. `RS_LOCK_FILE_TTL` determines the failover time: how long the secondary waits after the primary fails before taking over.
+
+When the primary fails, its lock becomes stale, the secondary acquires it, and the load balancer routes traffic to the secondary. Downtime is measured in seconds rather than minutes. For an end-to-end active-passive S3 setup, see [**Cloud Storage Integration**](https://www.reduct.store/docs/integrations/cloud-storage#active-passive-on-cloud-storage).
+
+Two rules are essential:
+
+- Never run two active writers on the same dataset. If both nodes write at the same time, data corruption is likely. Use `RS_INSTANCE_ROLE=PRIMARY` and `RS_INSTANCE_ROLE=SECONDARY`, not `STANDALONE`.
+- Hot standby does not protect against data corruption or operational errors because both nodes share the same data. Maintain a cold backup as well.
+
+## Read-only replicas
+
+Replicas improve read availability and capacity. One writer accepts ingestion, while any number of `RS_INSTANCE_ROLE=REPLICA` nodes serve queries from the same dataset:
+
+![A dedicated ReductStore writer stores data on shared storage while read-only replicas refresh indexes and serve queries through a load balancer.](../../docs/guides/img/disaster_recovery_read_replicas.svg)
+
+```yaml
+version: "3.9"
+services:
+  reduct-writer:
+    image: reduct/store:latest
+    environment:
+      RS_API_TOKEN: my-token
+      RS_INSTANCE_ROLE: PRIMARY
+      RS_DATA_PATH: /data
+    volumes:
+      - reduct-data:/data
+    ports:
+      - "8383:8383"
+
+  reduct-replica:
+    image: reduct/store:latest
+    environment:
+      RS_API_TOKEN: my-token
+      RS_INSTANCE_ROLE: REPLICA
+      RS_DATA_PATH: /data
+      RS_ENGINE_REPLICA_UPDATE_INTERVAL: 30s
+    volumes:
+      - reduct-data:/data
+    ports:
+      - "8384:8383"
+
+volumes:
+  reduct-data:
+```
+
+Route write traffic to the writer and read traffic to replicas through a separate endpoint. Because replicas poll for metadata and index updates, newly written data appears after a delay. Tune `RS_ENGINE_REPLICA_UPDATE_INTERVAL` to control staleness and `RS_ENGINE_COMPACTION_INTERVAL` on the writer. For a complete S3 walkthrough, see [**Cloud Storage Integration**](https://www.reduct.store/docs/integrations/cloud-storage#read-only-replica-on-cloud-storage).
+
+Replicas protect read availability, not writes. If the ingestion endpoint must also survive a failure, combine replicas with hot standby: use a primary-secondary writer pair and replicas for queries.
+
+## Which one do I need?
+
+In short:
+
+- **You can stop the instance** (a maintenance window, a nightly shutdown): cold backup for full restore points, plus hot backup with the CLI on a schedule for incrementals.
+- **You cannot stop it** — such as a robot on a production line or a plant running 24/7: use hot standby. It is the only built-in mechanism that keeps ingestion available through a node failure, with failover in seconds. Add read-only replicas if reads need dedicated availability and capacity.
+
+Cold and hot backups answer, "How do I recover my data?" Hot standby and replicas answer, "How do I keep running?" Most deployments need at least one mechanism from each category.
+
+One important distinction: if a device's disk is filling up and data must leave the edge before deletion, you need replication, not disaster recovery. The [**Data Replication guide**](https://www.reduct.store/docs/guides/data-replication) explains how to forward records from an edge instance to central storage over an unreliable network. The two approaches complement each other: first replicate data off the device, then protect the central instance with the mechanisms above.
+
+## Conclusions
+
+- Match the mechanism to your downtime tolerance: use cold backup and scheduled hot backups for an instance that can stop; use hot standby for a robot or plant that cannot, adding read-only replicas when reads need more availability or capacity.
+- Verify cold backups by restoring them, and never run two active writers against the same dataset.
+- The [**Disaster Recovery guide**](https://www.reduct.store/docs/guides/disaster-recovery) is the complete reference for settings and edge cases. This post helps you choose the right approach.

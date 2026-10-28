@@ -184,7 +184,7 @@ This method allows you to back up data **without stopping** the ReductStore inst
 
 While this approach offers more flexibility and control—such as specifying time ranges for incremental backups—it **does not copy instance configuration** (e.g., bucket definitions, replication rules, etc.).
 
-![Hot Backup via CLI](./img/disaster_recovery_hot_backup.png)
+![A ReductStore CLI command copies data from a primary instance to a backup instance, with a reverse restore path.](./img/disaster_recovery_hot_backup.svg)
 
 This method is a good option for:
 
@@ -238,7 +238,7 @@ A **hot standby** setup runs two ReductStore instances against the **same storag
 When the primary fails, the secondary waits for the lock file to become stale (TTL) and then takes over. From the client side, you should expose a single virtual endpoint (for example, a load balancer) that routes traffic only to the active node.
 This model requires failover logic that can switch traffic in your load balancer or reverse proxy, including solutions that support backup upstreams (for example, NGINX).
 
-![Hot Standby Setup](./img/disaster_recovery_hot_standby.png)
+![A load balancer routes traffic to the primary ReductStore node while a secondary watches the lock file on shared storage for failover.](./img/disaster_recovery_hot_standby.svg)
 
 ### Prerequisites
 
@@ -313,7 +313,7 @@ This deployment pattern helps you:
 Read-only replicas provide high availability for **reads**. To keep writes available during failures, combine replicas with **[Hot Standby Setup](#hot-standby-setup)** for the ingestion endpoint.
 :::
 
-![Read-only Replicas](./img/disaster_recovery_read_replicas.png)
+![A dedicated ReductStore writer stores data on shared storage while read-only replicas refresh indexes and serve queries through a load balancer.](./img/disaster_recovery_read_replicas.svg)
 
 ### Prerequisites
 
