@@ -249,7 +249,7 @@ The `as_label` mapping adds the SQL result as `@peak` on each returned record. S
 
 Computed labels belong to the query results; they do not update the original records in storage. If the SQL result has multiple rows, a computed label uses the value from the last row. That's why an aggregate such as `MAX` is useful here: it produces one value per record.
 
-## What about JSON, Parquet, and Protobuf?
+## Other formats
 
 The same SQL approach works with JSON and Parquet input. ReductSelect can infer the parser from the record's content type, or you can specify `json` or `parquet` in the condition. Parquet fields become SQL columns, and nested fields can be selected with dotted paths, such as `temp.value`.
 
