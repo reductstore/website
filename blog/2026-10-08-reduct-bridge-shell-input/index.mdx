@@ -219,6 +219,9 @@ time series out of ReductStore buckets, so the temperature stream becomes a pane
 export step. Replication tasks can copy alarm records, with context, to a central instance using
 the **[data replication guide](/docs/guides/data-replication)**.
 
+When a command prints CSV, **[ReductSelect can query the stored rows with SQL on the server](/blog/query-csv-parquet-reductselect)**
+and return them as CSV or Parquet.
+
 ## Patterns for real deployments
 
 **One input per machine.** Add a second `[inputs.shell.*]` block for each additional machine, with
