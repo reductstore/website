@@ -1,0 +1,262 @@
+---
+title: "Query CSV and Parquet Records in Place with ReductSelect"
+description: "Store CSV packets as ReductStore records and process them on the server with ReductSelect: filter rows with SQL, combine records across a time window, and export results as Parquet."
+authors: anthony
+tags: [tutorials, iot, database]
+slug: query-csv-parquet-reductselect
+date: 2026-11-03
+image: ./img/reductselect-cover.png
+---
+
+Machines often send several measurements at once. A controller might send a CSV packet every 200 milliseconds, with several readings in each packet. ReductStore stores each packet as a timestamped record, without splitting it into individual measurements. This keeps the original packets intact, even as the number of records grows.
+
+Later, you might want to find readings above a threshold, calculate an average over a time window, or combine the packets into a Parquet file. Rather than downloading all the raw data and processing it in your application, you can use ReductSelect to process the records directly on the server.
+
+{/* truncate */}
+
+In this tutorial, we'll store CSV measurements as records, query them with SQL, combine rows from multiple records, and export the results as Parquet. The workflow is the same whether you're working with a few packets or a continuous stream of measurements.
+
+## How server-side processing works
+
+![ReductSelect reads stored CSV records at query time, combines their rows with export, runs SQL with Apache DataFusion, and streams the result to the client without changing the bucket](./img/reductselect-server-pipeline.svg)
+
+ReductStore stores each CSV packet as a timestamped record. A packet can contain many rows, but ReductStore doesn't need to split them into separate records. When you query the data, the server can pass those records through the ReductSelect extension before sending anything back to the client.
+
+The `export` setting is the key to combining data. Despite its name, it doesn't save a file on the server. Instead, it tells ReductSelect **how to package rows into the query response**. For example, it can take rows from many small CSV records and group them into larger output records, either by time window (`duration`) or row count (`rows`). It can return those records as CSV, JSON, or Parquet. This grouping happens when data is read, not when it is written.
+
+**Apache DataFusion** has a different job: it runs SQL. ReductSelect gives it a table through the `ENTRY()` function, so you can filter rows, choose columns, or calculate an average. On its own, SQL sees one input record at a time.
+
+To calculate something across multiple packets, you can chain two `select` steps. The first uses `export` to combine their rows into a larger record. The second runs SQL with DataFusion on that combined table. If you only want larger Parquet records, you can leave out SQL and return the combined data directly.
+
+All of this runs **on the ReductStore server, during the query**. The new output records are returned to the client; they don't replace the original stored packets or create new records in the bucket.
+
+## Before you start
+
+ReductSelect is included in **[ReductStore Pro](/pricing)**. You'll need a running Pro instance with the extension enabled and an API token that can create buckets and query records.
+
+:::info
+The standard `reduct/store:latest` Docker image contains ReductStore Core, not the Pro extensions. Adding a license key to that image alone does not install ReductSelect.
+:::
+
+Install the Python SDK:
+
+```bash
+pip install reduct-py
+```
+
+The example uses a Pro instance at `http://127.0.0.1:8383` with the API token `my-token`. If your server is hosted elsewhere, change those values in the script. The script creates a `line-data` bucket if it does not already exist.
+
+## Write CSV measurements
+
+Imagine two stations on a press line reporting temperature, pressure, and machine state. Each time the controller sends a packet, we store it as **one record** in the `readings` entry. Each packet contains two CSV rows.
+
+The example writes a few CSV packets 200 milliseconds apart. Each becomes one stored record containing two measurement rows. Later, we'll combine their rows to run SQL over the entire time window.
+
+```python
+import asyncio
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
+from reduct import Client
+
+HEADER = "station,temperature,pressure,state\n"
+
+CSV_PACKETS = [
+    "press-01,45.2,3.14,RUNNING\npress-02,51.8,3.20,RUNNING\n",
+    "press-01,47.0,3.12,RUNNING\npress-02,58.3,3.18,ALARM\n",
+    "press-01,62.4,2.98,ALARM\npress-02,55.1,3.05,RUNNING\n",
+]
+
+START = datetime.now(timezone.utc).replace(microsecond=0)
+
+
+async def main():
+    async with Client("http://127.0.0.1:8383", api_token="my-token") as client:
+        bucket = await client.create_bucket("line-data", exist_ok=True)
+
+        for offset, rows in enumerate(CSV_PACKETS):
+            await bucket.write(
+                "readings",
+                (HEADER + rows).encode("utf-8"),
+                timestamp=START + timedelta(milliseconds=200 * offset),
+                content_type="text/csv",
+            )
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+Run the script to write the sample data. For the following examples, place each snippet inside `main()` after the writes, where `bucket` and `START` are available.
+
+Each CSV packet is stored as a single record, even though it contains multiple readings. Its `text/csv` content type tells ReductSelect how to parse it.
+
+The example uses individual writes to keep things simple. ReductStore also supports **[batch writing](/blog/news/reductstore-v1_7_0-released#batch-writing)**, which sends multiple records in one HTTP request to optimize ingestion.
+
+## Check the records
+
+Before trying SQL, check that the records were written:
+
+```python
+async for record in bucket.query("readings", start=START):
+    print((await record.read_all()).decode())
+```
+
+You should see one CSV payload per stored packet. If nothing appears, check the bucket and entry names and make sure the query starts at the first record's timestamp.
+
+## Filter the rows with SQL
+
+Let's find measurements recorded while a station was in the `ALARM` state. We pass a ReductSelect condition through the SDK's `when` parameter:
+
+```python
+condition = {
+    "#ext": {
+        "select": {
+            "csv": {"has_headers": True},
+            "sql": "SELECT station, temperature FROM ENTRY() WHERE state = 'ALARM'",
+        }
+    }
+}
+
+async for record in bucket.query("readings", start=START, when=condition):
+    print((await record.read_all()).decode())
+```
+
+Here, `ENTRY()` is the table inside **one input record**. Setting `csv.has_headers` to `True` allows us to use `station`, `temperature`, and `state` as SQL column names.
+
+The first packet has no alarm, while the second and third each contain one matching row. The expected results are:
+
+```text
+station,temperature
+press-02,58.3
+
+station,temperature
+press-01,62.4
+```
+
+Each result still comes from a separate input record. The server has removed the non-matching rows and the `pressure` and `state` columns, so the client receives only the selected data.
+
+## Return filtered rows as Parquet
+
+Now let's use SQL and `export` together. SQL chooses which measurements to keep. Then `export` groups the matching rows into output records and returns them as Parquet. The stored source data is still CSV:
+
+```python
+condition = {
+    "#ext": {
+        "select": {
+            "csv": {"has_headers": True},
+            "sql": "SELECT station, temperature FROM ENTRY() WHERE temperature > 50",
+            "export": {"format": "parquet", "rows": 100},
+        }
+    }
+}
+
+count = 0
+async for record in bucket.query("readings", start=START, when=condition):
+    Path(f"result-{count}.parquet").write_bytes(await record.read_all())
+    count += 1
+
+print(f"wrote {count} Parquet files")
+```
+
+With `"rows": 100`, each Parquet output record can contain up to 100 matching rows, including rows from several source packets. The setting controls how many rows are packaged into each returned record, not how many source measurements are read.
+
+The server handles the filtering, grouping, and conversion. The Python loop only saves the returned Parquet data as local files such as `result-0.parquet`. Nothing is written back to the bucket.
+
+## Combine records before running SQL
+
+So far, SQL has looked at each CSV packet separately. That means `AVG(temperature)` would calculate one average per packet, rather than across the full time window.
+
+To calculate an average over all the readings, we first need to merge the rows on the server. This is what a two-step `#ext` pipeline does: the first step groups the packets with `export.duration`, and the second runs SQL on the combined result:
+
+```python
+condition = {
+    "#ext": [
+        {"select": {"csv": {"has_headers": True},
+                    "export": {"duration": "1s"}}},
+        {"select": {"csv": {"has_headers": True},
+                    "sql": "SELECT ROUND(AVG(temperature), 1) AS temperature FROM ENTRY()"}},
+    ]
+}
+
+async for record in bucket.query("readings", start=START, when=condition):
+    print((await record.read_all()).decode())
+```
+
+The first step collects rows from the time window into one output record, without running SQL. The second passes that combined table to DataFusion to calculate the average. The first export step combines the packet rows into one CSV table, preserving a single header row so the second step can query all six measurements.
+
+All three packets are in the same one-second window, so DataFusion sees six rows rather than three separate two-row tables. The expected output is:
+
+```text
+temperature
+53.3
+```
+
+The average is `53.3`. Using `ROUND` keeps the displayed value simple. In a real deployment, you could use the same pattern to calculate an average, a minimum, or a maximum for each time window, without first downloading the raw packets.
+
+## Combine rows and export without SQL
+
+You can also use `export` without any SQL. For example, if you want to analyze the data later in another tool, ReductSelect can combine many small CSV packets and return larger Parquet records directly:
+
+```python
+condition = {
+    "#ext": {
+        "select": {
+            "csv": {"has_headers": True},
+            "export": {"format": "parquet", "duration": "1s"},
+        }
+    }
+}
+
+count = 0
+async for record in bucket.query("readings", start=START, when=condition):
+    Path(f"merged-{count}.parquet").write_bytes(await record.read_all())
+    count += 1
+
+print(f"wrote {count} merged Parquet files")
+```
+
+For our sample, the one-second window should contain all six measurements. Verify the saved Parquet file contains six rows before relying on this result. ReductSelect groups the rows on the server and returns Parquet output. The loop saves those output records under local paths such as `merged-0.parquet`.
+
+You can replace `"duration": "1s"` with `"rows": 6` to batch by row count instead of time. Either way, you are merging structured rows, not simply concatenating CSV files with repeated headers. Since no SQL was requested, this step does not start a DataFusion SQL query.
+
+## Put a query result in a computed label
+
+Not every consumer needs the processed table. Sometimes a single value in the output record's metadata is enough. For example, we can calculate the peak temperature in each stored CSV packet:
+
+```python
+condition = {
+    "#ext": {
+        "select": {
+            "csv": {"has_headers": True},
+            "sql": "SELECT MAX(temperature) AS peak FROM ENTRY()",
+            "as_label": {"peak": "peak"},
+        }
+    }
+}
+
+async for record in bucket.query("readings", start=START, when=condition):
+    print(record.labels)
+```
+
+The `as_label` mapping adds the SQL result as `@peak` on each returned record. Since this query processes each packet independently, the expected labels are:
+
+```text
+{'@peak': '51.8'}
+{'@peak': '58.3'}
+{'@peak': '62.4'}
+```
+
+Computed labels belong to the query results; they do not update the original records in storage. If the SQL result has multiple rows, a computed label uses the value from the last row. That's why an aggregate such as `MAX` is useful here: it produces one value per record.
+
+## Other formats
+
+The same SQL approach works with JSON and Parquet input. ReductSelect can infer the parser from the record's content type, or you can specify `json` or `parquet` in the condition. Parquet fields become SQL columns, and nested fields can be selected with dotted paths, such as `temp.value`.
+
+ReductSelect can query Protobuf records too. With a Protobuf schema, it can decode messages and make their fields, including nested ones, available to SQL. If you only need top-level values, you can instead specify their field numbers and types without a schema. The **[ReductSelect documentation](/docs/extensions/official/select-ext#protobuf-support)** explains how to configure both approaches.
+
+## Further reading
+
+The **[ReductSelect documentation](/docs/extensions/official/select-ext)** covers SQL, grouping rows into output records, export formats, and computed labels. The **[data querying guide](/docs/guides/data-querying)** explains time-range queries and label filters.
+
+To collect CSV data automatically instead of writing it with the Python SDK, see **[the Reduct Bridge shell input](/blog/reduct-bridge-shell-input)** and its **[documentation](/docs/reduct-bridge/input/shell)**.
