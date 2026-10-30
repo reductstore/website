@@ -1,14 +1,14 @@
 ---
-title: "Data Acquisition System for Manufacturing: Shop Floor to Cloud"
-description: "Learn how to build a modern data acquisition system for manufacturing using ReductStore."
+title: "Store Manufacturing Data at the Edge and in the Cloud"
+description: "Run ReductStore on a shop floor edge device, keep manufacturing sensor data local with a FIFO quota, and replicate only what matters to the cloud."
 authors: alexey
 tags: [daq, iot, tutorials]
 slug: daq-shop-floor
 date: 2025-04-22
-image: ./img/demo_setup.png
+image: ./img/demo-setup-social.png
 ---
 
-![ReductStore on DAQ edge device](./img/shop_floor_daq.png)
+![Machine data reaches an edge device through OPC UA, IO-Link and GenICam connectors, is stored in a ReductStore bucket and replicated to central storage](./img/daq-edge-device.svg)
 
 As modern manufacturing becomes increasingly data-driven, the need for efficient data acquisition systems is more critical than ever.
 In my previous article, [**Building a Data Acquisition System for Manufacturing**](blog/2025-03-17-daq-manufacture-system/index.mdx), we discussed the challenges of data acquisition in manufacturing and how [**ReductStore**](/) can help solve them.
@@ -42,7 +42,7 @@ For demonstration purposes, we will build a simple data acquisition system that 
 - **ReductStore**: A ReductStore instance running on the DAQ device that replicates data to a cloud instance.
 - **Cloud Storage**: A cloud instance of ReductStore at [**play.reduct.store**](https://play.reduct.store) (API token: `reductstore`) that stores the replicated data.
 
-![ReductStore Demo DAQ Setup](./img/demo_setup.png)
+![A data source writes scored records to the data bucket on the edge device, and a replication task forwards only records with a score above 0.8 to the demo bucket on play.reduct.store](./img/demo-setup.svg)
 
 ### Provisioning ReductStore
 
