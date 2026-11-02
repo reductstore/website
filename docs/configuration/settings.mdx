@@ -56,17 +56,37 @@ For end-to-end deployment examples (standalone, active-passive, and read-only re
 
 ## Zenoh API Settings
 
-ReductStore includes an optional Zenoh API that lets you ingest and retrieve data using the **[Zenoh](https://zenoh.io)** pub/sub and query protocol alongside the existing HTTP API. The following environment variables configure it:
+ReductStore includes an optional Zenoh API that lets you ingest and retrieve data using the **[Zenoh](https://zenoh.io)** pub/sub and query protocol alongside the existing HTTP API.
 
-| Name                      | Default | Description                                                                                                                                 |
-| ------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `RS_ZENOH_ENABLED`        | false   | Set to `true`, `1`, `yes`, or `on` to enable the Zenoh API                                                                                  |
-| `RS_ZENOH_CONFIG`         |         | Inline Zenoh session config string, e.g. `mode=client;connect/endpoints=[tcp/127.0.0.1:7447]`. Takes precedence over `RS_ZENOH_CONFIG_PATH` |
-| `RS_ZENOH_CONFIG_PATH`    |         | Path to a Zenoh JSON5 config file                                                                                                           |
-| `RS_ZENOH_BUCKET`         | zenoh   | Target ReductStore bucket. Created automatically if it does not exist.                                                                      |
-| `RS_ZENOH_SUB_KEYEXPRS`   |         | Key expression for the subscriber (write path). Disabled if unset.                                                                          |
-| `RS_ZENOH_QUERY_KEYEXPRS` |         | Key expression for the queryable (read path). Disabled if unset.                                                                            |
-| `RS_ZENOH_QUERY_LOCALITY` | `Any`   | Allowed origin for query replies. One of `SessionLocal`, `Remote`, or `Any`.                                                                |
+One Zenoh session is opened for the whole instance, so the settings below are session-wide:
+
+| Name                   | Default | Description                                                                                                                                 |
+| ---------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `RS_ZENOH_ENABLED`     | false   | Set to `true`, `1`, `yes`, or `on` to enable the Zenoh API                                                                                  |
+| `RS_ZENOH_CONFIG`      |         | Inline Zenoh session config string, e.g. `mode=client;connect/endpoints=[tcp/127.0.0.1:7447]`. Takes precedence over `RS_ZENOH_CONFIG_PATH` |
+| `RS_ZENOH_CONFIG_PATH` |         | Path to a Zenoh JSON5 config file                                                                                                           |
+| `RS_ZENOH_BUCKET`      | zenoh   | Fallback bucket for an unindexed static block when `RS_ZENOH_SUB_BUCKET` or `RS_ZENOH_QUERY_BUCKET` is not set                              |
+
+### Routing Blocks
+
+The write path is configured with `RS_ZENOH_SUB_*` blocks and the read path with `RS_ZENOH_QUERY_*` blocks. A block declares one or more key expressions and the bucket policy applied to the keys that match them.
+
+A path uses either a single **unindexed** block or one or more **indexed** blocks. Omit the `<ID>` for an unindexed block (e.g. `RS_ZENOH_SUB_KEYEXPRS`), or add one for an indexed block (e.g. `RS_ZENOH_SUB_0_KEYEXPRS`). The `<ID>` is any token: numeric IDs are listed first, named IDs after. Indexed and unindexed blocks cannot be mixed on the same path, but the subscriber and queryable paths may each choose independently.
+
+| Name                                           | Default | Description                                                                                                       |
+| ---------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
+| `RS_ZENOH_{SUB,QUERY}[_<ID>]_KEYEXPRS`         |         | Comma-separated key expressions for the block (required)                                                          |
+| `RS_ZENOH_{SUB,QUERY}[_<ID>]_ROUTING`          | static  | Bucket routing mode: `static` or `key-prefix`                                                                     |
+| `RS_ZENOH_{SUB,QUERY}[_<ID>]_BUCKET`           |         | Target bucket in `static` routing; optional single-chunk fallback in `key-prefix` routing                        |
+| `RS_ZENOH_{SUB,QUERY}[_<ID>]_BUCKET_ALLOWLIST` |         | Comma-separated bucket-name globs (leading `!` excludes). Required in `key-prefix` routing, ignored in `static`   |
+| `RS_ZENOH_SUB[_<ID>]_ALLOW_BUCKET_CREATION`    | false   | Allow `key-prefix` routing to create missing buckets on demand. Ignored in `static` routing; queryables never create buckets |
+| `RS_ZENOH_QUERY[_<ID>]_LOCALITY`               | `Any`   | Allowed origin for query replies. One of `SessionLocal`, `Remote`, or `Any`                                      |
+
+In `key-prefix` routing the first chunk of the key selects the bucket and the rest becomes the entry name, e.g. `site_a/motion/welder` maps to bucket `site_a` and entry `motion/welder`. See the **[Zenoh API integration guide](../integrations/zenoh#bucket-routing)** for a full explanation.
+
+::::info
+An invalid routing mode, locality, bucket name, or allowlist, mixing indexed and unindexed settings on the same path, or an indexed variable without a matching `_KEYEXPRS` is a fatal configuration error that aborts startup. Inline configuration, certificates, and credentials are redacted from logs and configuration error messages.
+::::
 
 ### Inline Zenoh Credentials
 
