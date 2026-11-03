@@ -32,21 +32,19 @@ The Zenoh API is compiled under the `zenoh-api` Cargo feature flag. Official Doc
 
 ## How It Works
 
-ReductStore opens a single Zenoh session on startup and registers one or more **subscriber** blocks (for writes) and **queryable** blocks (for reads). Both talk directly to the storage engine without going through HTTP.
+ReductStore opens one Zenoh session. Subscriber blocks write samples; queryable blocks read records. Both use the same stored data as the HTTP API.
 
-| Zenoh concept      | ReductStore mapping                                                                                                                                  |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Subscriber**     | Write path. Each block ingests samples published to keys matching its key expressions and routes them to a bucket.                                   |
-| **Queryable**      | Read path. Each block serves **[records](../glossary#record)** for queries whose selector matches its key expressions.                               |
-| **Key**            | The concrete address of a sample (e.g. `robot/arm/joint1`). Becomes the **[entry](../glossary#entry)** name in the **[bucket](../glossary#bucket)**. |
-| **Key expression** | A wildcard pattern (e.g. `robot/**`). Configures which keys a subscriber or queryable block responds to.                                             |
-| **Encoding**       | Mapped to the record's **content type**.                                                                                                             |
-| **Attachment**     | JSON-encoded map of **[labels](../glossary#label)** (key-value metadata).                                                                            |
-| **Timestamp**      | Zenoh HLC timestamp converted to Unix microseconds.                                                                                                  |
+| Zenoh concept      | ReductStore mapping                                                                                                                    |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **Subscriber**     | Writes samples from matching keys.                                                                                                     |
+| **Queryable**      | Reads **[records](../glossary#record)** from matching keys.                                                                            |
+| **Key**            | A concrete address, e.g. `robot/arm/joint1`. It becomes the **[entry](../glossary#entry)** name in a **[bucket](../glossary#bucket)**. |
+| **Key expression** | A wildcard pattern, e.g. `robot/**`, that selects keys.                                                                                |
+| **Encoding**       | Stored as the record's content type.                                                                                                   |
+| **Attachment**     | JSON metadata stored as **[labels](../glossary#label)**.                                                                               |
+| **Timestamp**      | Stored as the record timestamp.                                                                                                        |
 
-::::info
-Each block maps its keys to a bucket. A `static` block uses one fixed bucket, while a `key-prefix` block derives the bucket from the key. See **[Bucket Routing](#bucket-routing)** below.
-::::
+Each block uses `static` or `key-prefix` routing. See **[Bucket Routing](#bucket-routing)**.
 
 ## Key Expressions
 
@@ -82,26 +80,22 @@ The key expression part is used by Zenoh routers to route the query to the right
 
 ## Bucket Routing
 
-Each block maps the keys it matches to a ReductStore bucket using one of two routing modes. Blocks are independent: a sample or query matching two blocks is handled by each of them, and the block ID only selects environment variables, it does not set any priority.
+Each block maps matching keys to a bucket and entry.
 
-| Routing mode | Incoming key                 | Resulting bucket and entry                              |
-| ------------ | ---------------------------- | ------------------------------------------------------- |
-| `static`     | `single/sensors/temperature` | Fixed configured bucket; the full key is the entry name |
-| `key-prefix` | `site_a/motion/welder`       | Bucket `site_a`, entry `motion/welder`                  |
+| Routing mode | Incoming key                 | Result                                       |
+| ------------ | ---------------------------- | -------------------------------------------- |
+| `static`     | `single/sensors/temperature` | Fixed bucket; the full key is the entry name |
+| `key-prefix` | `site_a/motion/welder`       | Bucket `site_a`; entry `motion/welder`       |
 
 ### Static Routing
 
-Every matching key is written to or read from the block's `_BUCKET`. For subscriber blocks the bucket is created at startup. For an unindexed block, `RS_ZENOH_BUCKET` is used when `_BUCKET` is not set.
+Use one fixed bucket. The full Zenoh key becomes the entry name.
 
 ### Key-prefix Routing
 
-The first chunk of the key selects the bucket and the rest becomes the entry name. The derived bucket must match the block's `_BUCKET_ALLOWLIST`, which takes plain bucket-name globs (not key expressions). A single-chunk key with no `/` falls back to `_BUCKET`, or is rejected when no fallback is set.
+Use the first part of the key as the bucket and the rest as the entry name. Set `_BUCKET_ALLOWLIST` to choose allowed bucket names. A subscriber can create a missing allowed bucket with `_ALLOW_BUCKET_CREATION=true`. Queryable blocks read existing buckets only.
 
-For subscriber blocks, a missing allowed bucket is created only when `_ALLOW_BUCKET_CREATION` is `true`; otherwise the sample is dropped. Queryable blocks never create buckets, so a query for a missing bucket returns no reply.
-
-::::info
-See **[Zenoh API Settings](../configuration/settings#routing-blocks)** for the full list of per-block environment variables and the indexed/unindexed rules.
-::::
+See **[Zenoh API Settings](../configuration/settings#routing-blocks)** for block configuration.
 
 ## Write Path
 
