@@ -80,7 +80,7 @@ The key expression part is used by Zenoh routers to route the query to the right
 
 ## Bucket Routing
 
-Routing decides which bucket a key maps to. A subscriber stores each incoming sample in that bucket, and a queryable answers queries by reading from it. There are two modes: `static` always uses one fixed bucket, and `key-prefix` takes the bucket from the first part of the key (e.g. `site_a/motion/welder` uses bucket `site_a`). The setting names below use a `_` prefix as shorthand: `_BUCKET` means `RS_ZENOH_SUB_BUCKET` for a subscriber or `RS_ZENOH_QUERY_BUCKET` for a queryable (with the ID added for numbered ones, e.g. `RS_ZENOH_SUB_0_BUCKET`).
+Routing decides which bucket a key maps to. A subscriber stores each incoming sample in that bucket, and a queryable answers queries by reading from it. There are two modes: `static` always uses one fixed bucket, and `key-prefix` takes the bucket from the first part of the key (e.g. `site_a/motion/welder` uses bucket `site_a`). A leading `_` in the setting names below is shorthand for the full subscriber or queryable prefix: `_KEYEXPRS`, `_BUCKET`, `_BUCKET_ALLOWLIST`, and `_ALLOW_BUCKET_CREATION` mean `RS_ZENOH_SUB_KEYEXPRS` or `RS_ZENOH_QUERY_KEYEXPRS`, and so on, with the ID added for numbered ones (e.g. `RS_ZENOH_SUB_0_BUCKET`).
 
 | Routing mode | Incoming key                 | Result                                       |
 | ------------ | ---------------------------- | -------------------------------------------- |
@@ -99,10 +99,10 @@ See **[Zenoh API Settings](../configuration/settings#routing-blocks)** for all s
 
 ## Write Path
 
-When a Zenoh publisher sends a sample to a key expression that matches a subscriber block's `_KEYEXPRS`:
+When a Zenoh publisher sends a sample to a key expression that matches a subscriber's `_KEYEXPRS`:
 
 1. The sample's key becomes the entry name (leading and trailing `/` are stripped).
-2. The sample payload is written to the entry in the bucket selected by the block's routing (see **[Bucket Routing](#bucket-routing)**).
+2. The sample payload is written to the entry in the bucket selected by the subscriber's routing (see **[Bucket Routing](#bucket-routing)**).
 3. The sample's **encoding** is mapped to the record's **content type**.
 4. If the sample carries a Zenoh timestamp, it is converted from HLC to Unix microseconds and used as the record timestamp. Otherwise the server clock is used.
 5. If the sample carries a Zenoh attachment, it is decoded as a JSON object and stored as record labels.
@@ -124,7 +124,7 @@ Zenoh samples can also carry an optional attachment, which is a binary blob that
 
 ## Read Path
 
-When a Zenoh client sends a query to a key expression that matches a queryable block's `_KEYEXPRS`, ReductStore looks up the matching records and replies with them.
+When a Zenoh client sends a query to a key expression that matches a queryable's `_KEYEXPRS`, ReductStore looks up the matching records and replies with them.
 
 The query takes the form of a [**selector**](#selectors): the key expression routes the query to the right queryable, and the parameters after `?` control which records are returned. Parameters are `;`-separated `key=value` pairs.
 
