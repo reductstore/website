@@ -80,7 +80,7 @@ The key expression part is used by Zenoh routers to route the query to the right
 
 ## Bucket Routing
 
-Each block maps matching keys to a bucket and entry.
+Routing decides where a block's data lives. When a subscriber receives a sample from Zenoh, routing chooses the bucket to store it in. When a queryable answers a query, routing chooses the bucket to read it from. The block picks one of two modes: `static` for one fixed bucket, or `key-prefix` to derive the bucket from the key.
 
 | Routing mode | Incoming key                 | Result                                       |
 | ------------ | ---------------------------- | -------------------------------------------- |
@@ -89,7 +89,7 @@ Each block maps matching keys to a bucket and entry.
 
 ### Static Routing
 
-Use one fixed bucket. The full Zenoh key becomes the entry name.
+All of the block's data goes to a single bucket, set with `_BUCKET`, and the full Zenoh key becomes the entry name. This fits a key space that already belongs together, such as one site or one robot. For a subscriber, the bucket is created at startup. For an unindexed block, `RS_ZENOH_BUCKET` (default `zenoh`) is used when `_BUCKET` is not set.
 
 ### Key-prefix Routing
 
