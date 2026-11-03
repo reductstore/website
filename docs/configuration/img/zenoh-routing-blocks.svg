@@ -85,15 +85,15 @@
   </defs>
   <rect x="10" y="10" width="740" height="145" rx="18" class="zone" />
   <rect x="10" y="185" width="740" height="180" rx="18" class="zone" />
-  <text x="30" y="36" class="text-zone" text-anchor="start">Unindexed block</text>
+  <text x="30" y="36" class="text-zone" text-anchor="start">One subscriber</text>
   <rect x="35" y="65" width="260" height="56" rx="10" class="card-plain" />
   <text x="165" y="90" class="text-item" text-anchor="middle">RS_ZENOH_SUB_KEYEXPRS</text>
   <text x="165" y="109" class="text-label mono" text-anchor="middle">sensors/**</text>
   <rect x="440" y="65" width="260" height="56" rx="10" class="card-brand" />
-  <text x="570" y="90" class="text-item-inverse" text-anchor="middle">One subscriber block</text>
+  <text x="570" y="90" class="text-item-inverse" text-anchor="middle">Subscriber</text>
   <text x="570" y="109" class="text-label-inverse mono" text-anchor="middle">RS_ZENOH_SUB_*</text>
   <path d="M295,93 L436,93" class="connector" marker-end="url(#arrow)" />
-  <text x="30" y="211" class="text-zone" text-anchor="start">Indexed blocks</text>
+  <text x="30" y="211" class="text-zone" text-anchor="start">Several subscribers</text>
   <rect x="35" y="240" width="260" height="56" rx="10" class="card-plain" />
   <text x="165" y="265" class="text-item" text-anchor="middle">RS_ZENOH_SUB_0_KEYEXPRS</text>
   <text x="165" y="284" class="text-label mono" text-anchor="middle">cameras/**</text>
@@ -101,10 +101,10 @@
   <text x="165" y="327" class="text-item" text-anchor="middle">RS_ZENOH_SUB_1_KEYEXPRS</text>
   <text x="165" y="346" class="text-label mono" text-anchor="middle">sensors/**</text>
   <rect x="440" y="240" width="260" height="56" rx="10" class="card-brand" />
-  <text x="570" y="265" class="text-item-inverse" text-anchor="middle">Subscriber block 0</text>
+  <text x="570" y="265" class="text-item-inverse" text-anchor="middle">Subscriber</text>
   <text x="570" y="284" class="text-label-inverse mono" text-anchor="middle">RS_ZENOH_SUB_0_*</text>
   <rect x="440" y="302" width="260" height="56" rx="10" class="card-brand" />
-  <text x="570" y="327" class="text-item-inverse" text-anchor="middle">Subscriber block 1</text>
+  <text x="570" y="327" class="text-item-inverse" text-anchor="middle">Subscriber</text>
   <text x="570" y="346" class="text-label-inverse mono" text-anchor="middle">RS_ZENOH_SUB_1_*</text>
   <path d="M295,268 L436,268" class="connector" marker-end="url(#arrow)" />
   <path d="M295,330 L436,330" class="connector" marker-end="url(#arrow)" />

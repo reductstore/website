@@ -32,7 +32,7 @@ The Zenoh API is compiled under the `zenoh-api` Cargo feature flag. Official Doc
 
 ## How It Works
 
-ReductStore opens one Zenoh session. Subscriber blocks write samples; queryable blocks read records. Both use the same stored data as the HTTP API.
+ReductStore opens one Zenoh session. On it you declare one or more **subscribers**, which write incoming samples into ReductStore, and one or more **queryables**, which answer queries by reading records back. Both share the same stored data as the HTTP API.
 
 | Zenoh concept      | ReductStore mapping                                                                                                                    |
 | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
@@ -44,7 +44,7 @@ ReductStore opens one Zenoh session. Subscriber blocks write samples; queryable 
 | **Attachment**     | JSON metadata stored as **[labels](../glossary#label)**.                                                                               |
 | **Timestamp**      | Stored as the record timestamp.                                                                                                        |
 
-Each block uses `static` or `key-prefix` routing. See **[Bucket Routing](#bucket-routing)**.
+Each subscriber and queryable maps its keys to a bucket. See **[Bucket Routing](#bucket-routing)**.
 
 ## Key Expressions
 

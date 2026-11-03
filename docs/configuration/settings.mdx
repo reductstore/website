@@ -69,20 +69,20 @@ One Zenoh session is opened for the whole instance, so the settings below are se
 
 ### Routing Blocks
 
-Use `RS_ZENOH_SUB_*` to write samples and `RS_ZENOH_QUERY_*` to read records. Each block matches one or more key expressions and chooses how to find a bucket.
+Use `RS_ZENOH_SUB_*` to declare subscribers (write) and `RS_ZENOH_QUERY_*` to declare queryables (read). Each one matches one or more key expressions and chooses how to find a bucket.
 
-Start with one unindexed block. Add an ID when different keys need different settings. Do not mix the two forms on one path.
+Start with one subscriber or queryable and no ID. Add an ID when different keys need different settings. On one path, use either the no-ID form or numbered IDs, not both.
 
-![Unindexed blocks create one route; indexed blocks create one route per ID](./img/zenoh-routing-blocks.svg)
+![Without an ID you get one subscriber; with numbered IDs you get one per ID. Queryables follow the same pattern with RS_ZENOH_QUERY_*.](./img/zenoh-routing-blocks.svg)
 
-| Name                                           | Default | Description                                                        |
-| ---------------------------------------------- | ------- | ------------------------------------------------------------------ |
-| `RS_ZENOH_{SUB,QUERY}[_<ID>]_KEYEXPRS`         |         | Keys handled by this block. Separate values with commas.           |
-| `RS_ZENOH_{SUB,QUERY}[_<ID>]_ROUTING`          | static  | Routing mode: `static` or `key-prefix`.                            |
-| `RS_ZENOH_{SUB,QUERY}[_<ID>]_BUCKET`           |         | Bucket for `static` routing.                                       |
-| `RS_ZENOH_{SUB,QUERY}[_<ID>]_BUCKET_ALLOWLIST` |         | Allowed buckets for `key-prefix`, e.g. `site_*`.                   |
-| `RS_ZENOH_SUB[_<ID>]_ALLOW_BUCKET_CREATION`    | false   | Create missing allowed buckets for subscriber `key-prefix` routes. |
-| `RS_ZENOH_QUERY[_<ID>]_LOCALITY`               | `Any`   | Allowed origin for query replies.                                  |
+| Name                                           | Default | Description                                                                |
+| ---------------------------------------------- | ------- | -------------------------------------------------------------------------- |
+| `RS_ZENOH_{SUB,QUERY}[_<ID>]_KEYEXPRS`         |         | Keys handled by this subscriber or queryable. Separate values with commas. |
+| `RS_ZENOH_{SUB,QUERY}[_<ID>]_ROUTING`          | static  | Routing mode: `static` or `key-prefix`.                                    |
+| `RS_ZENOH_{SUB,QUERY}[_<ID>]_BUCKET`           |         | Bucket for `static` routing.                                               |
+| `RS_ZENOH_{SUB,QUERY}[_<ID>]_BUCKET_ALLOWLIST` |         | Allowed buckets for `key-prefix`, e.g. `site_*`.                           |
+| `RS_ZENOH_SUB[_<ID>]_ALLOW_BUCKET_CREATION`    | false   | Create missing allowed buckets for subscriber `key-prefix` routes.         |
+| `RS_ZENOH_QUERY[_<ID>]_LOCALITY`               | `Any`   | Allowed origin for query replies.                                          |
 
 With `key-prefix`, the first part of a key is the bucket and the rest is the entry name. For example, `site_a/motion/welder` uses bucket `site_a` and entry `motion/welder`. See the **[Zenoh API integration guide](../integrations/zenoh#bucket-routing)** for routing examples.
 
