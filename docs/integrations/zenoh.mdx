@@ -80,7 +80,7 @@ The key expression part is used by Zenoh routers to route the query to the right
 
 ## Bucket Routing
 
-Routing decides which bucket a key maps to. A subscriber stores each incoming sample in that bucket, and a queryable answers queries by reading from it. There are two modes: `static` always uses one fixed bucket, and `key-prefix` takes the bucket from the key itself.
+Routing decides which bucket a key maps to. A subscriber stores each incoming sample in that bucket, and a queryable answers queries by reading from it. There are two modes: `static` always uses one fixed bucket, and `key-prefix` takes the bucket from the first part of the key (e.g. `site_a/motion/welder` uses bucket `site_a`).
 
 | Routing mode | Incoming key                 | Result                                       |
 | ------------ | ---------------------------- | -------------------------------------------- |
