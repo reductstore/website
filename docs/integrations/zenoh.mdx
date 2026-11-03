@@ -89,7 +89,7 @@ Routing decides which bucket a key maps to. A subscriber stores each incoming sa
 
 ### Static Routing
 
-Every matching key uses the same bucket, set with `_BUCKET`, and the full key becomes the entry name. This suits keys that belong together, such as one site or one robot. A subscriber creates this bucket at startup. For an unindexed block, `RS_ZENOH_BUCKET` (default `zenoh`) is used when `_BUCKET` is not set.
+Every matching key uses the same bucket, set with `_BUCKET`, and the full key becomes the entry name. Use it when you want all matching data collected in one bucket, for example every reading from a single site or robot. A subscriber creates this bucket at startup. For an unindexed block, `RS_ZENOH_BUCKET` (default `zenoh`) is used when `_BUCKET` is not set.
 
 ### Key-prefix Routing
 
