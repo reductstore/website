@@ -80,7 +80,7 @@ The key expression part is used by Zenoh routers to route the query to the right
 
 ## Bucket Routing
 
-Routing decides which bucket a key maps to. A subscriber stores each incoming sample in that bucket, and a queryable answers queries by reading from it. There are two modes: `static` always uses one fixed bucket, and `key-prefix` takes the bucket from the first part of the key (e.g. `site_a/motion/welder` uses bucket `site_a`). A leading `_` in the setting names below is shorthand for the full subscriber or queryable prefix: `_KEYEXPRS`, `_BUCKET`, `_BUCKET_ALLOWLIST`, and `_ALLOW_BUCKET_CREATION` mean `RS_ZENOH_SUB_KEYEXPRS` or `RS_ZENOH_QUERY_KEYEXPRS`, and so on, with the ID added for numbered ones (e.g. `RS_ZENOH_SUB_0_BUCKET`).
+Routing decides which bucket a key maps to. A subscriber stores each incoming sample in that bucket, and a queryable answers queries by reading from it. There are two modes: `static` always uses one fixed bucket, and `key-prefix` takes the bucket from the first part of the key (e.g. `site_a/motion/welder` uses bucket `site_a`).
 
 | Routing mode | Incoming key                 | Result                                       |
 | ------------ | ---------------------------- | -------------------------------------------- |
@@ -89,17 +89,17 @@ Routing decides which bucket a key maps to. A subscriber stores each incoming sa
 
 ### Static Routing
 
-Every matching key uses the same bucket, set with `_BUCKET`, and the full key becomes the entry name. Use it when you want all matching data collected in one bucket, for example every reading from a single site or robot. A subscriber creates this bucket at startup. With no ID, `RS_ZENOH_BUCKET` (default `zenoh`) is used when `_BUCKET` is not set.
+Every matching key uses the same bucket, set with `RS_ZENOH_*_BUCKET`, and the full key becomes the entry name. Use it when you want all matching data collected in one bucket, for example every reading from a single site or robot. A subscriber creates this bucket at startup. With no ID, `RS_ZENOH_BUCKET` (default `zenoh`) is used when `RS_ZENOH_*_BUCKET` is not set.
 
 ### Key-prefix Routing
 
-Use the first part of the key as the bucket and the rest as the entry name. Set `_BUCKET_ALLOWLIST` to choose allowed bucket names. A subscriber can create a missing allowed bucket with `_ALLOW_BUCKET_CREATION=true`. Queryables read existing buckets only.
+Use the first part of the key as the bucket and the rest as the entry name. Set `RS_ZENOH_*_BUCKET_ALLOWLIST` to choose allowed bucket names. A subscriber can create a missing allowed bucket with `RS_ZENOH_*_ALLOW_BUCKET_CREATION=true`. Queryables read existing buckets only.
 
 See **[Zenoh API Settings](../configuration/settings#routing-blocks)** for all settings.
 
 ## Write Path
 
-When a Zenoh publisher sends a sample to a key expression that matches a subscriber's `_KEYEXPRS`:
+When a Zenoh publisher sends a sample to a key expression that matches a subscriber's `RS_ZENOH_SUB_*_KEYEXPRS`:
 
 1. The sample's key becomes the entry name (leading and trailing `/` are stripped).
 2. The sample payload is written to the entry in the bucket selected by the subscriber's routing (see **[Bucket Routing](#bucket-routing)**).
@@ -124,7 +124,7 @@ Zenoh samples can also carry an optional attachment, which is a binary blob that
 
 ## Read Path
 
-When a Zenoh client sends a query to a key expression that matches a queryable's `_KEYEXPRS`, ReductStore looks up the matching records and replies with them.
+When a Zenoh client sends a query to a key expression that matches a queryable's `RS_ZENOH_QUERY_*_KEYEXPRS`, ReductStore looks up the matching records and replies with them.
 
 The query takes the form of a [**selector**](#selectors): the key expression routes the query to the right queryable, and the parameters after `?` control which records are returned. Parameters are `;`-separated `key=value` pairs.
 
