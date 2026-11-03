@@ -80,7 +80,7 @@ The key expression part is used by Zenoh routers to route the query to the right
 
 ## Bucket Routing
 
-Routing decides which bucket a key maps to. A subscriber stores each incoming sample in that bucket, and a queryable answers queries by reading from it. There are two modes: `static` always uses one fixed bucket, and `key-prefix` takes the bucket from the first part of the key (e.g. `site_a/motion/welder` uses bucket `site_a`).
+Routing decides which bucket a key maps to. A subscriber stores each incoming sample in that bucket, and a queryable answers queries by reading from it. There are two modes: `static` always uses one fixed bucket, and `key-prefix` takes the bucket from the first part of the key (e.g. `site_a/motion/welder` uses bucket `site_a`). The setting names below use a `_` prefix as shorthand: `_BUCKET` means `RS_ZENOH_SUB_BUCKET` for a subscriber or `RS_ZENOH_QUERY_BUCKET` for a queryable (with the ID added for numbered ones, e.g. `RS_ZENOH_SUB_0_BUCKET`).
 
 | Routing mode | Incoming key                 | Result                                       |
 | ------------ | ---------------------------- | -------------------------------------------- |
@@ -89,13 +89,13 @@ Routing decides which bucket a key maps to. A subscriber stores each incoming sa
 
 ### Static Routing
 
-Every matching key uses the same bucket, set with `_BUCKET`, and the full key becomes the entry name. Use it when you want all matching data collected in one bucket, for example every reading from a single site or robot. A subscriber creates this bucket at startup. For an unindexed block, `RS_ZENOH_BUCKET` (default `zenoh`) is used when `_BUCKET` is not set.
+Every matching key uses the same bucket, set with `_BUCKET`, and the full key becomes the entry name. Use it when you want all matching data collected in one bucket, for example every reading from a single site or robot. A subscriber creates this bucket at startup. With no ID, `RS_ZENOH_BUCKET` (default `zenoh`) is used when `_BUCKET` is not set.
 
 ### Key-prefix Routing
 
-Use the first part of the key as the bucket and the rest as the entry name. Set `_BUCKET_ALLOWLIST` to choose allowed bucket names. A subscriber can create a missing allowed bucket with `_ALLOW_BUCKET_CREATION=true`. Queryable blocks read existing buckets only.
+Use the first part of the key as the bucket and the rest as the entry name. Set `_BUCKET_ALLOWLIST` to choose allowed bucket names. A subscriber can create a missing allowed bucket with `_ALLOW_BUCKET_CREATION=true`. Queryables read existing buckets only.
 
-See **[Zenoh API Settings](../configuration/settings#routing-blocks)** for block configuration.
+See **[Zenoh API Settings](../configuration/settings#routing-blocks)** for all settings.
 
 ## Write Path
 
