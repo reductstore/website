@@ -36,8 +36,8 @@ ReductStore opens a single Zenoh session on startup and registers one or more **
 
 | Zenoh concept      | ReductStore mapping                                                                                                                                  |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Subscriber**     | Write path. Each block ingests samples published to keys matching its key expressions and routes them to a bucket.          |
-| **Queryable**      | Read path. Each block serves **[records](../glossary#record)** for queries whose selector matches its key expressions.      |
+| **Subscriber**     | Write path. Each block ingests samples published to keys matching its key expressions and routes them to a bucket.                                   |
+| **Queryable**      | Read path. Each block serves **[records](../glossary#record)** for queries whose selector matches its key expressions.                               |
 | **Key**            | The concrete address of a sample (e.g. `robot/arm/joint1`). Becomes the **[entry](../glossary#entry)** name in the **[bucket](../glossary#bucket)**. |
 | **Key expression** | A wildcard pattern (e.g. `robot/**`). Configures which keys a subscriber or queryable block responds to.                                             |
 | **Encoding**       | Mapped to the record's **content type**.                                                                                                             |
@@ -85,9 +85,9 @@ The key expression part is used by Zenoh routers to route the query to the right
 Each block maps the keys it matches to a ReductStore bucket using one of two routing modes. Blocks are independent: a sample or query matching two blocks is handled by each of them, and the block ID only selects environment variables, it does not set any priority.
 
 | Routing mode | Incoming key                 | Resulting bucket and entry                              |
-| ------------ | ---------------------------- | ------------------------------------------------------ |
+| ------------ | ---------------------------- | ------------------------------------------------------- |
 | `static`     | `single/sensors/temperature` | Fixed configured bucket; the full key is the entry name |
-| `key-prefix` | `site_a/motion/welder`       | Bucket `site_a`, entry `motion/welder`                 |
+| `key-prefix` | `site_a/motion/welder`       | Bucket `site_a`, entry `motion/welder`                  |
 
 ### Static Routing
 

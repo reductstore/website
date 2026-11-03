@@ -73,14 +73,14 @@ The write path is configured with `RS_ZENOH_SUB_*` blocks and the read path with
 
 A path uses either a single **unindexed** block or one or more **indexed** blocks. Omit the `<ID>` for an unindexed block (e.g. `RS_ZENOH_SUB_KEYEXPRS`), or add one for an indexed block (e.g. `RS_ZENOH_SUB_0_KEYEXPRS`). The `<ID>` is any token: numeric IDs are listed first, named IDs after. Indexed and unindexed blocks cannot be mixed on the same path, but the subscriber and queryable paths may each choose independently.
 
-| Name                                           | Default | Description                                                                                                       |
-| ---------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
-| `RS_ZENOH_{SUB,QUERY}[_<ID>]_KEYEXPRS`         |         | Comma-separated key expressions for the block (required)                                                          |
-| `RS_ZENOH_{SUB,QUERY}[_<ID>]_ROUTING`          | static  | Bucket routing mode: `static` or `key-prefix`                                                                     |
-| `RS_ZENOH_{SUB,QUERY}[_<ID>]_BUCKET`           |         | Target bucket in `static` routing; optional single-chunk fallback in `key-prefix` routing                        |
-| `RS_ZENOH_{SUB,QUERY}[_<ID>]_BUCKET_ALLOWLIST` |         | Comma-separated bucket-name globs (leading `!` excludes). Required in `key-prefix` routing, ignored in `static`   |
+| Name                                           | Default | Description                                                                                                                  |
+| ---------------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `RS_ZENOH_{SUB,QUERY}[_<ID>]_KEYEXPRS`         |         | Comma-separated key expressions for the block (required)                                                                     |
+| `RS_ZENOH_{SUB,QUERY}[_<ID>]_ROUTING`          | static  | Bucket routing mode: `static` or `key-prefix`                                                                                |
+| `RS_ZENOH_{SUB,QUERY}[_<ID>]_BUCKET`           |         | Target bucket in `static` routing; optional single-chunk fallback in `key-prefix` routing                                    |
+| `RS_ZENOH_{SUB,QUERY}[_<ID>]_BUCKET_ALLOWLIST` |         | Comma-separated bucket-name globs (leading `!` excludes). Required in `key-prefix` routing, ignored in `static`              |
 | `RS_ZENOH_SUB[_<ID>]_ALLOW_BUCKET_CREATION`    | false   | Allow `key-prefix` routing to create missing buckets on demand. Ignored in `static` routing; queryables never create buckets |
-| `RS_ZENOH_QUERY[_<ID>]_LOCALITY`               | `Any`   | Allowed origin for query replies. One of `SessionLocal`, `Remote`, or `Any`                                      |
+| `RS_ZENOH_QUERY[_<ID>]_LOCALITY`               | `Any`   | Allowed origin for query replies. One of `SessionLocal`, `Remote`, or `Any`                                                  |
 
 In `key-prefix` routing the first chunk of the key selects the bucket and the rest becomes the entry name, e.g. `site_a/motion/welder` maps to bucket `site_a` and entry `motion/welder`. See the **[Zenoh API integration guide](../integrations/zenoh#bucket-routing)** for a full explanation.
 
