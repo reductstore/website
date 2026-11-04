@@ -32,21 +32,19 @@ The Zenoh API is compiled under the `zenoh-api` Cargo feature flag. Official Doc
 
 ## How It Works
 
-ReductStore opens a Zenoh session on startup and registers a **subscriber** (for writes) and a **queryable** (for reads). Both talk directly to the storage engine without going through HTTP.
+ReductStore opens one Zenoh session. On it you declare one or more **subscribers**, which write incoming samples into ReductStore, and one or more **queryables**, which answer queries by reading records back. Both share the same stored data as the HTTP API.
 
-| Zenoh concept      | ReductStore mapping                                                                                                                                  |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Subscriber**     | Write path. Samples published to keys matching the configured key expression are ingested.                                                           |
-| **Queryable**      | Read path. Queries whose selector matches the configured key expression retrieve **[records](../glossary#record)**.                                  |
-| **Key**            | The concrete address of a sample (e.g. `robot/arm/joint1`). Becomes the **[entry](../glossary#entry)** name in the **[bucket](../glossary#bucket)**. |
-| **Key expression** | A wildcard pattern (e.g. `robot/**`). Used to configure which keys the subscriber and queryable respond to.                                          |
-| **Encoding**       | Mapped to the record's **content type**.                                                                                                             |
-| **Attachment**     | JSON-encoded map of **[labels](../glossary#label)** (key-value metadata).                                                                            |
-| **Timestamp**      | Zenoh HLC timestamp converted to Unix microseconds.                                                                                                  |
+| Zenoh concept      | ReductStore mapping                                                                                                                    |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **Subscriber**     | Writes samples from matching keys.                                                                                                     |
+| **Queryable**      | Reads **[records](../glossary#record)** from matching keys.                                                                            |
+| **Key**            | A concrete address, e.g. `robot/arm/joint1`. It becomes the **[entry](../glossary#entry)** name in a **[bucket](../glossary#bucket)**. |
+| **Key expression** | A wildcard pattern, e.g. `robot/**`, that selects keys.                                                                                |
+| **Encoding**       | Stored as the record's content type.                                                                                                   |
+| **Attachment**     | JSON metadata stored as **[labels](../glossary#label)**.                                                                               |
+| **Timestamp**      | Stored as the record timestamp.                                                                                                        |
 
-:::info
-All data is stored in a single ReductStore bucket. The bucket is created automatically if it does not exist.
-:::
+Each subscriber and queryable maps its keys to a bucket. See **[Bucket Routing](#bucket-routing)**.
 
 ## Key Expressions
 
@@ -80,12 +78,31 @@ factory/**/temperature?start=1700000000000000;stop=1700086400000000
 
 The key expression part is used by Zenoh routers to route the query to the right queryable. The parameters are passed through to ReductStore and interpreted as query filters (see [**Time-range Query**](#time-range-query) below). Parameters are `;`-separated `key=value` pairs.
 
+## Bucket Routing
+
+Routing decides which bucket a key maps to. A subscriber stores each incoming sample in that bucket, and a queryable answers queries by reading from it. There are two modes: `static` always uses one fixed bucket, and `key-prefix` takes the bucket from the first part of the key (e.g. `site_a/motion/welder` uses bucket `site_a`).
+
+| Routing mode | Incoming key                 | Result                                       |
+| ------------ | ---------------------------- | -------------------------------------------- |
+| `static`     | `single/sensors/temperature` | Fixed bucket; the full key is the entry name |
+| `key-prefix` | `site_a/motion/welder`       | Bucket `site_a`; entry `motion/welder`       |
+
+### Static Routing
+
+Every matching key uses the same bucket, set with `RS_ZENOH_*_BUCKET`, and the full key becomes the entry name. Use it when you want all matching data collected in one bucket, for example every reading from a single site or robot. A subscriber creates this bucket at startup. With no ID, `RS_ZENOH_BUCKET` (default `zenoh`) is used when `RS_ZENOH_*_BUCKET` is not set.
+
+### Key-prefix Routing
+
+Use the first part of the key as the bucket and the rest as the entry name. Set `RS_ZENOH_*_BUCKET_ALLOWLIST` to choose allowed bucket names. A subscriber can create a missing allowed bucket with `RS_ZENOH_*_ALLOW_BUCKET_CREATION=true`. Queryables read existing buckets only.
+
+See **[Zenoh API Settings](../configuration/settings#routing-blocks)** for all settings.
+
 ## Write Path
 
-When a Zenoh publisher sends a sample to a key expression that matches `RS_ZENOH_SUB_KEYEXPRS`:
+When a Zenoh publisher sends a sample to a key expression that matches a subscriber's `RS_ZENOH_SUB_*_KEYEXPRS`:
 
 1. The sample's key becomes the entry name (leading and trailing `/` are stripped).
-2. The sample payload is written to that entry in `RS_ZENOH_BUCKET`.
+2. The sample payload is written to the entry in the bucket selected by the subscriber's routing (see **[Bucket Routing](#bucket-routing)**).
 3. The sample's **encoding** is mapped to the record's **content type**.
 4. If the sample carries a Zenoh timestamp, it is converted from HLC to Unix microseconds and used as the record timestamp. Otherwise the server clock is used.
 5. If the sample carries a Zenoh attachment, it is decoded as a JSON object and stored as record labels.
@@ -107,7 +124,7 @@ Zenoh samples can also carry an optional attachment, which is a binary blob that
 
 ## Read Path
 
-When a Zenoh client sends a query to a key expression that matches `RS_ZENOH_QUERY_KEYEXPRS`, ReductStore looks up the matching records and replies with them.
+When a Zenoh client sends a query to a key expression that matches a queryable's `RS_ZENOH_QUERY_*_KEYEXPRS`, ReductStore looks up the matching records and replies with them.
 
 The query takes the form of a [**selector**](#selectors): the key expression routes the query to the right queryable, and the parameters after `?` control which records are returned. Parameters are `;`-separated `key=value` pairs.
 
@@ -173,5 +190,4 @@ Along with your custom labels, ReductStore also includes Zenoh metadata labels i
 
 ## Current Limitations
 
-- **Single-bucket mode.** All Zenoh data maps to one configured bucket. Routing to different buckets based on the key expression is not yet supported.
 - **No data deletion.** Records, entries, and buckets cannot be deleted through the Zenoh API. Use the [**HTTP API**](/docs/http-api) for data management operations.
