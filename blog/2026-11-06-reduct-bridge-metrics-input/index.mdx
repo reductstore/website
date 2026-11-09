@@ -1,0 +1,347 @@
+---
+title: "Collect Host Metrics with the ReductBridge Metrics Input"
+description: "The ReductBridge metrics input collects CPU, memory, and disk usage from any host and stores them as time-indexed JSON records in ReductStore with no SDK, broker, or robot required."
+authors: alexey
+tags: [tutorials, reduct-bridge, iot]
+slug: reduct-bridge-metrics-input
+date: 2026-11-06
+image: ./img/metrics-input-social.png
+---
+
+![Host CPU, memory, and disk metrics flow through the ReductBridge metrics input to ReductStore, alongside industrial and robotics data from MQTT on one shared time index](./img/metrics-input-flow.svg)
+
+Every host already exposes how busy it is. For observability and deployment-health monitoring,
+CPU, memory, and disk usage show whether the system producing your data is healthy. The
+**[ReductBridge](/docs/reduct-bridge)** metrics input collects these host metrics automatically:
+no SDK in an application, no broker, and no robot. Give the bridge a config file on a host and it
+writes the metrics to
+**[ReductStore](https://github.com/reductstore/reductstore)** as time-indexed JSON records.
+
+The same bridge instance can also collect industrial or robotics data through MQTT, such as camera
+frames or PLC telemetry. Host health and production data then share one time index, so "what was
+the CPU doing when this frame was captured?" is a direct correlation, not an exercise in
+reconciling two monitoring systems.
+
+This post walks through collecting host metrics from an edge PC, storing them beside a camera
+stream, and querying both back over the same time window.
+
+{/* truncate */}
+
+## What the metrics input does
+
+The metrics input samples the host on a fixed interval and writes one JSON record per selected
+metric. It can collect:
+
+- **CPU**: the percentage of time spent in user mode, system mode, and idle.
+- **Memory**: total and free memory in bytes.
+- **Disk**: each filesystem's mount path, type, total capacity, and available capacity in bytes.
+
+Records use the `application/json` content type. Each payload includes `timestamp_us`, while
+ReductStore indexes each record on the bucket's microsecond time axis. Metrics can therefore be
+correlated directly with every other entry in the bucket.
+
+See the **[metrics input documentation](/docs/reduct-bridge/input/metrics)** for configuration
+options, entry naming, filtering, and build details.
+
+### Sample payloads
+
+CPU record at `metrics/cpu`:
+
+```json
+{
+  "timestamp_us": 1793959200000000,
+  "user_percent": 4.1,
+  "system_percent": 1.7,
+  "idle_percent": 94.2
+}
+```
+
+Memory record at `metrics/memory`:
+
+```json
+{
+  "timestamp_us": 1793959200000000,
+  "total_bytes": 16724869120,
+  "free_bytes": 7317061632
+}
+```
+
+Disk record at `metrics/disk`:
+
+```json
+{
+  "timestamp_us": 1793959200000000,
+  "disks": [
+    {
+      "fs_mounted_on": "/",
+      "fs_type": "ext4",
+      "total_bytes": 502392610816,
+      "available_bytes": 37836242944
+    }
+  ]
+}
+```
+
+All three records carry the same `timestamp_us` because the bridge sampled them in one cycle. They
+share a time index with MQTT data, such as the camera frames in this example.
+
+## Install ReductStore and ReductBridge
+
+Start ReductStore with Docker:
+
+```bash
+mkdir -p ./reduct-data
+sudo chown -R 10001:10001 ./reduct-data
+
+docker run -d --name reductstore \
+  -p 8383:8383 \
+  -e RS_API_TOKEN="my-token" \
+  -v "$PWD/reduct-data:/data" \
+  reduct/store:latest
+```
+
+ReductStore listens on `http://127.0.0.1:8383`. The `RS_API_TOKEN` value is used by the bridge.
+
+For ReductBridge, any published build type includes the metrics input. With Docker, the `iot`
+image is a reasonable choice:
+
+```bash
+docker pull reduct/bridge:latest-iot
+```
+
+If you prefer a binary, download it from the **[ReductBridge
+releases](https://github.com/reductstore/reduct-bridge/releases/latest)**. The `iot`, `ros1`, and
+`ros2` archives all contain the metrics input.
+
+## Configure the bridge
+
+Create `bridge.toml`. The example below collects host metrics every 5 seconds and, in the same
+bridge, subscribes to an MQTT topic carrying industrial or robotics data:
+
+```toml
+# Metrics input: sample CPU, memory and disk every 5 seconds.
+# One JSON record per metric lands at metrics/cpu, metrics/memory, metrics/disk.
+[inputs.metrics.host]
+repeat_interval = 5
+metrics = ["cpu", "memory", "disk"]
+entry_prefix = "metrics"
+# Only watch the root filesystem and the data disk.
+mount_points = ["/", "/data"]
+labels = [
+  { field = "user_percent", label = "cpu_user" },
+  { static = { source = "metrics", host = "edge-01", site = "plant-a" } }
+]
+
+# MQTT input: industrial or robotics data in the same bucket.
+[inputs.mqtt.telemetry]
+broker = "mqtt://127.0.0.1:1883"
+client_id = "reduct-bridge"
+version = "v5"
+entry_prefix = "mqtt"
+
+[[inputs.mqtt.telemetry.topics]]
+name = "edge-01/camera/frame"
+entry_name = "camera/frame"
+content_type = "image/jpeg"
+labels = [
+  { static = { source = "mqtt", host = "edge-01", site = "plant-a" } }
+]
+
+# Pipeline routes records from both inputs to ReductStore.
+[pipelines.edge_to_store]
+remote = "local"
+inputs = ["host", "telemetry"]
+
+# ReductStore remote. The bucket is created on startup with a FIFO quota,
+# so the oldest records are removed when the 10 GB budget is reached.
+[remotes.reduct.local]
+url = "http://127.0.0.1:8383"
+token_api = "my-token"
+bucket = "edge-data"
+# Keep the input's entry names unchanged.
+prefix = ""
+
+[remotes.reduct.local.create_bucket]
+quota_type = "FIFO"
+quota_size = "10GB"
+```
+
+A few things to note in this config.
+
+The `repeat_interval` of 5 seconds is a good default for host health: the CPU sample itself takes
+about a second to aggregate, so polling faster than that buys no extra resolution. Pick the
+interval to match how fast you need to see a problem.
+
+The `mount_points` filter keeps the disk entry focused on real storage. `/` is the OS disk, and
+`/data` is where ReductStore keeps its own data volume. Watching the latter helps avoid filling the
+edge node's disk. The default `ignore_fs` list already hides pseudo-filesystems.
+
+The label rules do two different jobs. The field rule `{ field = "user_percent", label =
+"cpu_user" }` copies a value out of each CPU payload into a queryable label, so you can filter
+records by CPU load without parsing the JSON. The static rule tags every record with which host
+and site it came from. The MQTT input uses the same `host` and `site` keys, which is what lets one
+query span both entries.
+
+Both inputs feed one pipeline, one remote, one bucket. That is the whole point: host metrics and
+MQTT data from the same host end up in `edge-data` on a single time index.
+
+## Run the bridge
+
+```bash
+docker run --rm --network host \
+  -v "$PWD/bridge.toml:/etc/reduct-bridge/config.toml:ro" \
+  reduct/bridge:latest-iot /etc/reduct-bridge/config.toml
+```
+
+`--network host` keeps the example short by letting the container reach the host's
+`127.0.0.1:8383` and `127.0.0.1:1883` services. In production, use systemd services or your own
+container stack.
+
+After a minute, verify that records are arriving with the **[Reduct
+CLI](https://github.com/reductstore/reduct-cli)**:
+
+```bash
+reduct-cli alias add local -L http://localhost:8383 -t "my-token"
+reduct-cli bucket ls --full local
+reduct-cli entry ls local edge-data
+```
+
+You should see the `edge-data` bucket with the entries `metrics/cpu`, `metrics/memory`,
+`metrics/disk`, and `camera/frame`, all with growing record counts.
+
+## Query the data
+
+Use the Python SDK to retrieve CPU records from the last hour where user CPU load reached at least
+80 percent. The `cpu_user` label comes from the payload field configured earlier:
+
+```python
+import asyncio
+
+from reduct import Client
+
+
+async def main():
+    async with Client("http://127.0.0.1:8383", api_token="my-token") as client:
+        bucket = await client.get_bucket("edge-data")
+
+        async for record in bucket.query(
+            "metrics/cpu",
+            start="2026-11-06T09:00:00Z",
+            stop="2026-11-06T10:00:00Z",
+            when={"&cpu_user": {"$gte": 80}},
+        ):
+            payload = await record.read_all()
+            print(record.timestamp, record.labels, payload.decode().strip())
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+The shared time index becomes useful when you inspect an event. This snippet reads CPU samples and
+MQTT camera frames from the same bucket and time window, then prints each frame with its nearest
+CPU sample:
+
+```python
+import asyncio
+import json
+
+from reduct import Client
+
+
+async def main():
+    async with Client("http://127.0.0.1:8383", api_token="my-token") as client:
+        bucket = await client.get_bucket("edge-data")
+
+        cpu = {}
+        async for record in bucket.query(
+            "metrics/cpu",
+            start="2026-11-06T09:59:00Z",
+            stop="2026-11-06T10:00:00Z",
+        ):
+            payload = json.loads(await record.read_all())
+            cpu[record.timestamp] = payload["user_percent"]
+
+        async for record in bucket.query(
+            "camera/frame",
+            start="2026-11-06T09:59:00Z",
+            stop="2026-11-06T10:00:00Z",
+            limit=5,
+        ):
+            nearest = min(cpu, key=lambda ts: abs(ts - record.timestamp))
+            size = len(await record.read_all())
+            print(f"frame at {record.timestamp}: {size} bytes, "
+                  f"host CPU {cpu[nearest]}% at {nearest}")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+Both entries use the same bucket and time range, so their timestamps compare directly. There is no
+export or second database to join: the bridge indexed both streams together when they arrived.
+
+Dashboards read the store directly. The **[Grafana data source](/docs/integrations/grafana)**
+turns `metrics/cpu` into a CPU panel without an export step, and replication tasks can copy the
+metrics to a central instance with the **[data replication guide](/docs/guides/data-replication)**.
+
+## Patterns for real deployments
+
+**One bridge per host.** A single metrics input is usually enough for each host. Run one bridge
+instance per host and give every input a static `host` label so fleet-wide queries can distinguish
+machines:
+
+```toml
+[inputs.metrics.host]
+repeat_interval = 5
+entry_prefix = "metrics"
+labels = [
+  { static = { source = "metrics", host = "edge-02", site = "plant-a" } }
+]
+```
+
+**Watch the data disk, not just the root disk.** If ReductStore stores its data volume on a
+separate mount, add it to `mount_points`. That is the disk that usually fills up on an edge node.
+
+**Combine with other inputs.** The metrics input runs alongside MQTT, HTTP, ROS, and shell inputs
+in one bridge config. Use the same `host` and `site` labels on every input to correlate host health
+with production data from the same moment.
+
+**FIFO quota as a safety net.** With a FIFO quota, a runaway camera stream evicts the oldest
+records, including old metrics, instead of filling the disk. Size the quota to retain at least a
+few days of metrics.
+
+## When the metrics input is the right tool
+
+The metrics input fits when you want to know how the machine itself is doing:
+
+- **Edge and gateway health.** CPU, memory, and disk trends on every node, stored next to the
+  data the node produces.
+- **Capacity planning.** Disk growth rates and memory headroom across a fleet, queryable by time.
+- **Correlating load with production data.** One bridge, one bucket, one time index.
+
+It is not the right tool when:
+
+- **You need sub-second resolution.** The interval is in whole seconds and the CPU sample takes
+  about a second to aggregate. For high-frequency signals, write records directly with an SDK.
+- **You need application-level metrics.** The input reports host CPU, memory, and disk, not queue
+  depths or request latencies. Poll those over HTTP with the **[HTTP
+  input](/docs/reduct-bridge/input/http)** or write them with an SDK.
+- **You need per-process or per-container breakdowns.** The payload is host-wide; run one bridge
+  per scope you want to distinguish.
+
+## Conclusion
+
+Host metrics are a low-friction starting point for ReductStore: no SDK, no broker, no robot, just a
+config file on a host. The metrics input samples CPU, memory, and disk as time-indexed JSON
+records. Add the bridge's other inputs and host health stays aligned with industrial or robotics
+data from the same host.
+
+The **[metrics input documentation](/docs/reduct-bridge/input/metrics)** covers the full
+configuration reference, and the **[ReductBridge docs](/docs/reduct-bridge)** cover the other
+inputs and pipeline options. The **[data querying guide](/docs/guides/data-querying)** covers
+reading an interval back out.
+
+---
+
+If you have any questions or comments, feel free to use the [**ReductStore Community Forum**](https://community.reduct.store).
