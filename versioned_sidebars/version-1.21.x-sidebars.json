@@ -198,7 +198,7 @@
         },
         {
           "type": "category",
-          "label": "Reduct Bridge",
+          "label": "ReductBridge",
           "link": {
             "type": "doc",
             "id": "reduct-bridge/index"

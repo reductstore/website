@@ -23,15 +23,15 @@ Developers can run ReductStore on an edge device for local data capture and repl
 
 > It is the first and only database designed specifically for unstructured, time series robotics data.
 
-## Recording ROS 2 Data with Reduct Bridge
+## Recording ROS 2 Data with ReductBridge
 
-Most robotics data starts as ROS 2 topics. [**Reduct Bridge**](/docs/reduct-bridge) records those topics straight into ReductStore on the robot, one entry per topic and one timestamped record per message. From there the same data replicates to the cloud on the labels and time windows you choose.
+Most robotics data starts as ROS 2 topics. [**ReductBridge**](/docs/reduct-bridge) records those topics straight into ReductStore on the robot, one entry per topic and one timestamped record per message. From there the same data replicates to the cloud on the labels and time windows you choose.
 
-![Reduct Bridge architecture: ROS topics go through ReductBridge into an edge ReductStore, which replicates a subset to a cloud ReductStore on S3](./img/reduct-bridge-architecture.svg)
+![ReductBridge architecture: ROS topics go through ReductBridge into an edge ReductStore, which replicates a subset to a cloud ReductStore on S3](./img/reduct-bridge-architecture.svg)
 
 This is the whole path from a running robot to a queryable, cloud replicated dataset.
 
-Reduct Bridge is one way to get ROS 2 topics into ReductStore. And if you want full observability on top of that data, platforms like [**INSAION**](#insaion) build on ReductStore directly: their agent embeds it on the robot and handles the recording for you.
+ReductBridge is one way to get ROS 2 topics into ReductStore. And if you want full observability on top of that data, platforms like [**INSAION**](#insaion) build on ReductStore directly: their agent embeds it on the robot and handles the recording for you.
 
 ## Data Handling and Querying
 

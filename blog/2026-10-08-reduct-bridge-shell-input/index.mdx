@@ -1,6 +1,6 @@
 ---
-title: "Capture Output from Legacy Equipment with the Reduct Bridge Shell Input"
-description: "Legacy shop-floor machines often expose only a command line and speak no protocol worth integrating. The Reduct Bridge shell input runs any command on a fixed interval, stores its output as time-indexed records, and labels them from regex capture groups or static values."
+title: "Capture Output from Legacy Equipment with the ReductBridge Shell Input"
+description: "Legacy shop-floor machines often expose only a command line and speak no protocol worth integrating. The ReductBridge shell input runs any command on a fixed interval, stores its output as time-indexed records, and labels them from regex capture groups or static values."
 authors: alexey
 tags: [tutorials, reduct-bridge, iot]
 slug: reduct-bridge-shell-input
@@ -8,14 +8,14 @@ date: 2026-10-08
 image: ./img/shell-input-social.png
 ---
 
-![A legacy machine sends command output through the Reduct Bridge shell input to a time-indexed ReductStore entry](./img/shell-input-flow.svg)
+![A legacy machine sends command output through the ReductBridge shell input to a time-indexed ReductStore entry](./img/shell-input-flow.svg)
 
 Plenty of equipment on the shop floor will never speak MQTT or OPC-UA. It predates both. What it
 has is a command line: a vendor tool that prints status, a diagnostic command on a serial console,
 or a script the previous engineer left behind. The data exists. There is just no protocol to
 integrate.
 
-**[Reduct Bridge](/docs/reduct-bridge)** has a shell input for exactly this case. You point it
+**[ReductBridge](/docs/reduct-bridge)** has a shell input for exactly this case. You point it
 at a command, set an interval, and the bridge runs it on schedule. Each line the command prints
 becomes a time-indexed record in **[ReductStore](https://github.com/reductstore/reductstore)**.
 Labels come from regex capture groups in the output or from static key-value pairs in the config.
@@ -46,7 +46,7 @@ Labels are extracted per line. A regex rule only applies to lines that match the
 `state=RUNNING`. Static labels apply to every record the input produces. Rules are applied in
 order, and later rules override earlier ones for the same key.
 
-The shell input is included in the default Reduct Bridge build, so `cargo install reduct-bridge` is
+The shell input is included in the default ReductBridge build, so `cargo install reduct-bridge` is
 enough. It is also part of every published build type (`ros1`, `ros2`, `iot`) and Docker image.
 
 ## Architecture
@@ -56,7 +56,7 @@ machine and prints status to stdout; the bridge turns each output line into a re
 only sees records with timestamps, content types, and labels. Everything downstream, including
 querying, dashboards, and replication, works the same as for any other input.
 
-## Install ReductStore and Reduct Bridge
+## Install ReductStore and ReductBridge
 
 Start ReductStore with Docker:
 
@@ -73,7 +73,7 @@ docker run -d --name reductstore \
 
 ReductStore listens on `http://127.0.0.1:8383`. The `RS_API_TOKEN` value is used by the bridge.
 
-For Reduct Bridge, the shell input is in the default build. With Docker, any build type works; the
+For ReductBridge, the shell input is in the default build. With Docker, any build type works; the
 `iot` image is a reasonable choice:
 
 ```bash
@@ -159,7 +159,7 @@ docker run --rm --network host \
 ```
 
 The `--network host` option keeps the example short because the container can reach
-`127.0.0.1:8383` on the host. In production, run ReductStore and Reduct Bridge as systemd services
+`127.0.0.1:8383` on the host. In production, run ReductStore and ReductBridge as systemd services
 or in your own container stack.
 
 After a minute, verify that records are arriving with the **[Reduct
@@ -289,12 +289,12 @@ It is not the right tool when:
 ## Conclusion
 
 Legacy equipment does not have to stay outside the data pipeline. If a machine can print something
-to a command line, the Reduct Bridge shell input can wrap that output, put it on an interval, label
+to a command line, the ReductBridge shell input can wrap that output, put it on an interval, label
 it, and land it time-indexed beside everything else, alongside MQTT topics, HTTP payloads, and ROS
 messages in the same bucket.
 
 The **[shell input documentation](/docs/reduct-bridge/input/shell)** covers the full configuration
-reference, and the **[Reduct Bridge docs](/docs/reduct-bridge)** cover the other inputs and
+reference, and the **[ReductBridge docs](/docs/reduct-bridge)** cover the other inputs and
 pipeline options. The **[data querying guide](/docs/guides/data-querying)** covers reading an
 interval back out.
 

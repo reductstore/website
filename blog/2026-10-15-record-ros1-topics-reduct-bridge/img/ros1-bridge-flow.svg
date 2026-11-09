@@ -93,7 +93,7 @@
   <rect x="16" y="172" width="178" height="40" rx="10" class="card-plain" />
   <text x="105" y="197" class="text-item" text-anchor="middle">/imu/data</text>
   <rect x="304" y="88" width="160" height="68" rx="10" class="card-accent" />
-  <text x="384" y="119" class="text-item-inverse" text-anchor="middle">Reduct Bridge</text>
+  <text x="384" y="119" class="text-item-inverse" text-anchor="middle">ReductBridge</text>
   <text x="384" y="138" class="text-label-inverse mono" text-anchor="middle">ros input</text>
   <text x="384" y="182" class="text-label mono" text-anchor="middle">[inputs.ros.ros_local]</text>
   <text x="384" y="202" class="text-label mono" text-anchor="middle">[pipelines.telemetry]</text>
