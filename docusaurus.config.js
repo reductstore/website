@@ -9,6 +9,7 @@ import rehypeKatex from "rehype-katex";
 import remarkSVGBob from "remark-svgbob";
 import remarkResponsiveSVGBob from "./src/plugins/remark-responsive-svgbob/index.js";
 import { svgoConfig } from "./src/plugins/svgo-config.js";
+import rehypeLlmsTxtCleanup from "./src/plugins/rehype-llms-txt-cleanup/index.js";
 import useCases from "./src/data/useCases.js";
 
 /** @type {import('@docusaurus/types').Config} */
@@ -100,6 +101,49 @@ const config = {
         downloadUrl:
           "https://github.com/reductstore/reduct-cli/releases/latest/download/reduct-cli.x86_64-unknown-linux-gnu.tar.gz",
         destination: "docs/cli",
+      },
+    ],
+    [
+      "@signalwire/docusaurus-plugin-llms-txt",
+      {
+        siteTitle: "ReductStore",
+        siteDescription:
+          "Time indexed storage for robots and machines: record images, LiDAR, telemetry, and logs at the edge, replicate what matters to the cloud, and query it with SQL.",
+        depth: 2,
+        content: {
+          includeDocs: true,
+          includeVersionedDocs: false,
+          includeBlog: true,
+          includePages: true,
+          enableMarkdownFiles: true,
+          enableLlmsFullTxt: true,
+          relativePaths: false,
+          contentSelectors: [
+            ".theme-doc-markdown",
+            "html.blog-post-page article",
+            "html.blog-list-page main",
+            "html.plugin-pages .main-wrapper",
+            "main",
+          ],
+          beforeDefaultRehypePlugins: [
+            [rehypeLlmsTxtCleanup, { siteUrl: "https://www.reduct.store" }],
+          ],
+          excludeRoutes: [
+            "/docs/next/**",
+            "/docs/getting-started/common/**",
+            "/blog/tags/**",
+            "/blog/page/**",
+            "/blog/archive",
+            "/blog/authors/**",
+            "/search",
+            "/search/**",
+            "/imprint",
+            "/privacy",
+            "/terms",
+            "/cookies",
+            "/pro/success",
+          ],
+        },
       },
     ],
   ],
