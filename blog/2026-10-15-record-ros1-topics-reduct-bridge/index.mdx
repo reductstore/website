@@ -1,6 +1,6 @@
 ---
-title: "Record ROS 1 Topics in ReductStore with Reduct Bridge"
-description: "Record ROS 1 topics into ReductStore with Reduct Bridge: subscribe to a running master, use the header stamp as the record time, and query the data back by time and label."
+title: "Record ROS 1 Topics in ReductStore with ReductBridge"
+description: "Record ROS 1 topics into ReductStore with ReductBridge: subscribe to a running master, use the header stamp as the record time, and query the data back by time and label."
 authors: anthony
 tags: [tutorials, reduct-bridge, ros, robotics]
 slug: record-ros1-topics-reduct-bridge
@@ -8,11 +8,11 @@ date: 2026-10-15
 image: ./img/ros1-bridge-social.png
 ---
 
-![A ROS 1 master publishes camera and IMU topics to the Reduct Bridge ros input, which writes them to two ReductStore entries on one shared time axis](./img/ros1-bridge-flow.svg)
+![A ROS 1 master publishes camera and IMU topics to the ReductBridge ros input, which writes them to two ReductStore entries on one shared time axis](./img/ros1-bridge-flow.svg)
 
 ROS 1 Noetic reached end of life in May 2025, but a lot of robots still run on it. Recording data from them usually means rosbag files, or a custom recording node that you have to maintain yourself.
 
-Reduct Bridge is another way to do it. It subscribes to topics on a ROS 1 master and stores each message it receives in ReductStore as a record, so you can query by time and by label later. It can also use the timestamp from the message header instead of the time the message arrived.
+ReductBridge is another way to do it. It subscribes to topics on a ROS 1 master and stores each message it receives in ReductStore as a record, so you can query by time and by label later. It can also use the timestamp from the message header instead of the time the message arrived.
 
 In this tutorial we'll record a camera topic and an IMU topic, set a retention limit, and read the data back with the ReductStore CLI and the Python SDK.
 
@@ -36,7 +36,7 @@ When it runs, the bridge registers with the master as a normal ROS node and send
 
 ## Install the bridge
 
-Reduct Bridge is built per input family, and the one way to get it is the prebuilt archive. For example, you can get the x86-64 Linux binary with:
+ReductBridge is built per input family, and the one way to get it is the prebuilt archive. For example, you can get the x86-64 Linux binary with:
 
 ```bash
 wget https://github.com/reductstore/reduct-bridge/releases/latest/download/bridge-ros1.x86_64-unknown-linux-gnu.tar.gz

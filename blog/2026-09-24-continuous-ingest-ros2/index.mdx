@@ -61,7 +61,7 @@ recording.
 The alternative is to store the data as it is. Messages can be stored separately per topic in the
 original format, rather than recording everything into one file.
 
-**[Reduct Bridge](/docs/reduct-bridge)** subscribes to ROS 2 topics and writes each message as it
+**[ReductBridge](/docs/reduct-bridge)** subscribes to ROS 2 topics and writes each message as it
 arrives, keeping the payload as serialized CDR so nothing is re-encoded on the way in.
 
 The schema is stored alongside the data, selected message fields can become labels, and the
@@ -169,7 +169,7 @@ If a tool still needs a bag, export the topics and time range you need.
 The bag remains useful for playback, exchange and analysis. It just no longer has to define how
 continuous data is recorded and stored.
 
-The **[Reduct Bridge docs](/docs/reduct-bridge)** cover the ROS 2 input and what it writes, and
+The **[ReductBridge docs](/docs/reduct-bridge)** cover the ROS 2 input and what it writes, and
 the **[data querying guide](/docs/guides/data-querying)** covers reading an interval back out.
 
 ---

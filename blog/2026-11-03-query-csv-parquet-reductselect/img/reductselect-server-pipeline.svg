@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 1322 440" width="100%" height="100%">
+  <defs>
+    <style>
+      :root {
+        --card-bg: #FFFFFF;
+        --card-brand: #2B0548;
+        --brand-line: #2B0548;
+        --card-accent: #DB817B;
+        --card-stroke: #333333;
+        --text-main: #333333;
+        --text-muted: #666666;
+        --text-inverse: #FFFFFF;
+        --line: #333333;
+        --zone: #F7F4FA;
+        --label-a: #D5E8D4;
+        --label-a-stroke: #82B366;
+        --label-b: #E1D5E7;
+        --label-b-stroke: #9673A6;
+        --label-c: #F8CECC;
+        --label-c-stroke: #B85450;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --card-bg: #1E1E1E;
+          --card-stroke: #555555;
+            --text-main: #EFEFEF;
+          --text-muted: #A0A0A0;
+          --line: #EFEFEF;
+          --zone: #262129;
+          --brand-line: #BFA6DC;
+        }
+      }
+
+      text {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      .mono {
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        white-space: pre;
+      }
+
+      .card-standard { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand { fill: var(--card-brand); stroke: var(--card-stroke); stroke-width: 2; }
+      .card-brand-frame { fill: var(--card-bg); stroke: var(--brand-line); stroke-width: 2; }
+      .card-accent { fill: var(--card-accent); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .card-plain { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .zone { fill: var(--zone); stroke: var(--card-stroke); stroke-width: 1.5; stroke-dasharray: 6 5; }
+      .hatch { fill: url(#hatch); stroke: var(--card-stroke); stroke-width: 1.5; }
+      .hatch-line { stroke: var(--line); stroke-width: 1.5; }
+      .record { fill: var(--card-bg); stroke: var(--card-stroke); stroke-width: 1; }
+      .label-a { fill: var(--label-a); stroke: var(--label-a-stroke); }
+      .label-b { fill: var(--label-b); stroke: var(--label-b-stroke); }
+      .label-c { fill: var(--label-c); stroke: var(--label-c-stroke); }
+      .dot { fill: var(--text-muted); }
+
+      .text-zone { font-weight: 700; font-size: 15px; fill: var(--text-main); }
+      .text-title { font-weight: 600; font-size: 18px; fill: var(--text-main); }
+      .text-title-inverse { font-weight: 600; font-size: 18px; fill: var(--text-inverse); }
+      .text-title-brand { font-weight: 700; font-size: 18px; fill: var(--brand-line); }
+      .text-item-brand { font-weight: 700; font-size: 15px; fill: var(--brand-line); }
+      .text-item { font-weight: 600; font-size: 15px; fill: var(--text-main); }
+      .text-item-inverse { font-weight: 600; font-size: 15px; fill: var(--text-inverse); }
+      .text-subtitle { font-size: 14px; fill: var(--text-muted); }
+      .text-subtitle-inverse { font-size: 14px; fill: var(--text-inverse); }
+      .text-bullet { font-size: 15px; fill: var(--text-main); }
+      .text-bullet-inverse { font-size: 15px; fill: var(--text-inverse); }
+      .text-label { font-size: 13px; fill: var(--text-muted); }
+      .text-label-strong { font-size: 13px; font-weight: 700; fill: var(--text-main); }
+      .text-label-inverse { font-size: 13px; fill: var(--text-inverse); }
+      .text-note { font-size: 13px; font-style: italic; fill: var(--text-muted); }
+
+      .connector { stroke: var(--line); stroke-width: 2; fill: none; }
+      .link { stroke: var(--line); stroke-width: 2; stroke-dasharray: 5 5; fill: none; }
+      .guide { stroke: var(--text-muted); stroke-width: 1; stroke-dasharray: 3 4; fill: none; }
+      .arrow-head { fill: var(--line); }
+    </style>
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
+    </marker>
+    <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" class="hatch-line" />
+    </pattern>
+  </defs>
+  <rect x="262" y="0" width="760" height="420" rx="18" class="zone" />
+  <rect x="1052" y="0" width="250" height="420" rx="18" class="zone" />
+  <rect x="0" y="40" width="240" height="340" rx="18" class="card-brand-frame" />
+  <text x="20" y="72" class="text-title-brand" text-anchor="start">ReductStore bucket</text>
+  <text x="20" y="94" class="text-subtitle mono" text-anchor="start">entry: readings, text/csv</text>
+  <rect x="18" y="110" width="204" height="70" rx="8" class="card-plain" />
+  <text x="32" y="132" class="text-label mono" text-anchor="start">t0</text>
+  <rect x="32" y="144" width="176" height="10" rx="2" class="record label-a" />
+  <rect x="32" y="160" width="176" height="10" rx="2" class="record label-b" />
+  <path d="M222,145 L250,145 L250,200" class="connector" />
+  <rect x="18" y="196" width="204" height="70" rx="8" class="card-plain" />
+  <text x="32" y="218" class="text-label mono" text-anchor="start">t0 + 200 ms</text>
+  <rect x="32" y="230" width="176" height="10" rx="2" class="record label-a" />
+  <rect x="32" y="246" width="176" height="10" rx="2" class="record label-b" />
+  <path d="M222,231 L250,231 L250,200" class="connector" />
+  <rect x="18" y="282" width="204" height="70" rx="8" class="card-plain" />
+  <text x="32" y="304" class="text-label mono" text-anchor="start">t0 + 400 ms</text>
+  <rect x="32" y="316" width="176" height="10" rx="2" class="record label-a" />
+  <rect x="32" y="332" width="176" height="10" rx="2" class="record label-b" />
+  <path d="M222,317 L250,317 L250,200" class="connector" />
+  <text x="120" y="412" class="text-label mono" text-anchor="middle">stored records stay unchanged</text>
+  <text x="280" y="26" class="text-zone" text-anchor="start">ReductStore server, at query time</text>
+  <rect x="282" y="40" width="720" height="340" rx="18" class="card-brand-frame" />
+  <text x="302" y="72" class="text-title-brand" text-anchor="start">ReductSelect query pipeline</text>
+  <rect x="302" y="165" width="120" height="70" rx="10" class="card-plain" />
+  <text x="362" y="197" class="text-item" text-anchor="middle">CSV parser</text>
+  <text x="362" y="216" class="text-label mono" text-anchor="middle">rows</text>
+  <rect x="452" y="165" width="140" height="70" rx="10" class="card-plain" />
+  <text x="522" y="197" class="text-item" text-anchor="middle">1. export</text>
+  <text x="522" y="216" class="text-label mono" text-anchor="middle">duration or rows</text>
+  <rect x="622" y="150" width="110" height="100" rx="8" class="card-plain" />
+  <rect x="634" y="160" width="86" height="8" rx="2" class="record label-a" />
+  <rect x="634" y="174" width="86" height="8" rx="2" class="record label-b" />
+  <rect x="634" y="188" width="86" height="8" rx="2" class="record label-a" />
+  <rect x="634" y="202" width="86" height="8" rx="2" class="record label-b" />
+  <rect x="634" y="216" width="86" height="8" rx="2" class="record label-a" />
+  <rect x="634" y="230" width="86" height="8" rx="2" class="record label-b" />
+  <text x="677" y="270" class="text-label" text-anchor="middle">one output record</text>
+  <rect x="762" y="150" width="220" height="100" rx="16" class="card-accent" />
+  <text x="872" y="194" class="text-title-inverse" text-anchor="middle">2. Apache DataFusion</text>
+  <text x="872" y="218" class="text-subtitle-inverse mono" text-anchor="middle">SQL engine</text>
+  <text x="872" y="280" class="text-label mono" text-anchor="middle">SELECT AVG(temperature)</text>
+  <text x="872" y="298" class="text-label mono" text-anchor="middle">FROM ENTRY()</text>
+  <text x="1070" y="26" class="text-zone" text-anchor="start">Client</text>
+  <rect x="1067" y="165" width="220" height="70" rx="10" class="card-plain" />
+  <text x="1177" y="197" class="text-item" text-anchor="middle">Query response</text>
+  <text x="1177" y="216" class="text-label mono" text-anchor="middle">not new stored records</text>
+  <rect x="1067" y="300" width="220" height="60" rx="10" class="card-plain" />
+  <text x="1177" y="327" class="text-item" text-anchor="middle">Saved file</text>
+  <text x="1177" y="346" class="text-label mono" text-anchor="middle">CSV or Parquet</text>
+  <path d="M250,200 L298,200" class="connector" marker-end="url(#arrow)" />
+  <path d="M422,200 L448,200" class="connector" marker-end="url(#arrow)" />
+  <path d="M592,200 L618,200" class="connector" marker-end="url(#arrow)" />
+  <path d="M732,200 L758,200" class="connector" marker-end="url(#arrow)" />
+  <path d="M982,185 L1063,185" class="connector" marker-end="url(#arrow)" />
+  <path d="M522,235 L522,345 L1032,345 L1032,220 L1063,220" class="link" marker-end="url(#arrow)" />
+  <text x="777" y="336" class="text-label mono" text-anchor="middle">export only, no SQL</text>
+  <path d="M1177,235 L1177,296" class="connector" marker-end="url(#arrow)" />
+</svg>

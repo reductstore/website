@@ -15,7 +15,7 @@ def shell_input_flow():
 
     d.zone(190, 0, 550, 350, "Edge device")
     d.item(215, 60, 140, 70, "Shell script", "chamber-status")
-    d.item(405, 60, 160, 70, "Reduct Bridge", "shell input", accent=True)
+    d.item(405, 60, 160, 70, "ReductBridge", "shell input", accent=True)
 
     d.panel(215, 180, 500, 145, "ReductStore", brand=True, anchor="start")
     d.item(235, 230, 170, 60, "factory-data")
