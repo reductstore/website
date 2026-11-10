@@ -94,7 +94,7 @@
   <text x="285" y="92" class="text-item" text-anchor="middle">Shell script</text>
   <text x="285" y="111" class="text-label mono" text-anchor="middle">chamber-status</text>
   <rect x="405" y="60" width="160" height="70" rx="10" class="card-accent" />
-  <text x="485" y="92" class="text-item-inverse" text-anchor="middle">Reduct Bridge</text>
+  <text x="485" y="92" class="text-item-inverse" text-anchor="middle">ReductBridge</text>
   <text x="485" y="111" class="text-label-inverse mono" text-anchor="middle">shell input</text>
   <rect x="215" y="180" width="500" height="145" rx="18" class="card-brand-frame" />
   <text x="235" y="212" class="text-title-brand" text-anchor="start">ReductStore</text>
