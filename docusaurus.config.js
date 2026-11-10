@@ -116,7 +116,7 @@ const config = {
       {
         siteTitle: "ReductStore",
         siteDescription:
-          "Time indexed storage for robots and machines: record images, LiDAR, telemetry, and logs at the edge, replicate what matters to the cloud, and query it with SQL.",
+          "ReductStore is a time series object store for robotics and industrial IoT. It stores time series data as objects: each record is a blob of any type and size with a timestamp and labels, so camera frames, LiDAR scans, logs, vibration data and telemetry live in one place and are queried by time range and labels. For industrial IoT it is an alternative to a time series database like InfluxDB paired with a separate object store. For robotics it is an alternative to recording rosbag files (db3 or mcap): each topic goes into its own entry, each message becomes a timestamped record, and any time range can be exported again. It runs at the edge on the robot or machine, keeps disk usage in check with retention quotas, and replicates selected data to the cloud. ReductBridge ingests ROS 1, ROS 2, MQTT, HTTP endpoints, shell command output and host metrics. Core is open source under Apache 2.0, with SDKs for Python, JavaScript, Go, Rust and C++. ReductStore Pro adds ReductROS, which decodes ROS messages and exports time ranges as mcap for Foxglove, ReductSelect for SQL over CSV, JSON and Parquet, and S3 as an optional storage backend.",
         depth: 2,
         content: {
           includeDocs: true,

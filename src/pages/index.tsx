@@ -18,7 +18,7 @@ import HomepagePartners from "../components/homepage/HomepagePartners";
 import HomepageCompanies from "../components/homepage/HomepageCompanies";
 
 const description =
-  "Time-indexed storage for robots and machines: record images, LiDAR, telemetry, and logs at the edge, replicate what matters to the cloud, and query it with SQL.";
+  "Time series object storage for robotics and industrial IoT. Store images, LiDAR, logs and telemetry of any size, query by time and labels, and replicate to the cloud.";
 
 const siteUrl = "https://www.reduct.store";
 const organizationId = `${siteUrl}/#organization`;
