@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import type { JSX } from "react";
 import { FaAngleRight, FaAngleDown } from "react-icons/fa";
 import clsx from "clsx";
 import styles from "./styles.module.css";

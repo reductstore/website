@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import type { JSX } from "react";
 import SimpleHeader from "@site/src/components/shared/SimpleHeader";
 import Layout from "@theme/Layout";
 import clsx from "clsx";

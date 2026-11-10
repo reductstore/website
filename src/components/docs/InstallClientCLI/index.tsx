@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import type { JSX } from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 

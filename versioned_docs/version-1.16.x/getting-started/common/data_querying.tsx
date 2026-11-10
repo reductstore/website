@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import type { JSX } from "react";
 import Link from "@docusaurus/Link";
 import { useActiveVersion } from "@docusaurus/plugin-content-docs/client";
 
