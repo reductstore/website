@@ -112,7 +112,7 @@ const config = {
       },
     ],
     [
-      "@signalwire/docusaurus-plugin-llms-txt",
+      require.resolve("@signalwire/docusaurus-plugin-llms-txt"),
       {
         siteTitle: "ReductStore",
         siteDescription:
