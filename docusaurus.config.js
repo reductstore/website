@@ -497,6 +497,11 @@ const config = {
                 label: "Download",
                 to: "/download",
               },
+              {
+                label: "llms.txt",
+                to: "pathname:///llms.txt",
+                target: "_self",
+              },
             ],
           },
           {
