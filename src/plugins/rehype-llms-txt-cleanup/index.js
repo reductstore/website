@@ -79,16 +79,36 @@ const admonition = (node) => {
   ]);
 };
 
-const absoluteImage = (node, siteUrl) => {
+const figureCaptions = new WeakSet();
+
+const startsWithSpace = (node) =>
+  node.type === "text" && /^\s/.test(node.value);
+
+const separateCaptions = (children) =>
+  children.flatMap((child, index) => {
+    const next = children[index + 1];
+    return figureCaptions.has(child) && next && !startsWithSpace(next)
+      ? [child, text(" ")]
+      : [child];
+  });
+
+const image = (node, siteUrl) => {
   const src = node.properties?.src;
-  if (typeof src !== "string" || !src.startsWith("/") || src.startsWith("//"))
-    return node;
+  if (typeof src !== "string") return node;
+  if (src.startsWith("data:")) {
+    const alt = String(node.properties?.alt ?? "").trim();
+    if (!alt) return null;
+    const caption = element("em", [text(`Figure: ${alt}`)]);
+    figureCaptions.add(caption);
+    return caption;
+  }
+  if (!src.startsWith("/") || src.startsWith("//")) return node;
   return { ...node, properties: { ...node.properties, src: siteUrl + src } };
 };
 
 const transform = (node, siteUrl) => {
   if (node.type !== "element" && node.type !== "root") return node;
-  if (node.tagName === "img") return absoluteImage(node, siteUrl);
+  if (node.tagName === "img") return image(node, siteUrl);
   let current = node;
   if (hasClass(current, "tabs-container")) current = tabs(current);
   else if (hasClass(current, "theme-admonition")) current = admonition(current);
@@ -96,17 +116,20 @@ const transform = (node, siteUrl) => {
     return codeBlock(current);
   return {
     ...current,
-    children: current.children
-      .filter(
-        (child) =>
-          child.type !== "comment" &&
-          !(
-            child.type === "element" &&
-            child.tagName === "a" &&
-            hasClass(child, "hash-link")
-          ),
-      )
-      .map((child) => transform(child, siteUrl)),
+    children: separateCaptions(
+      current.children
+        .filter(
+          (child) =>
+            child.type !== "comment" &&
+            !(
+              child.type === "element" &&
+              child.tagName === "a" &&
+              hasClass(child, "hash-link")
+            ),
+        )
+        .map((child) => transform(child, siteUrl))
+        .filter(Boolean),
+    ),
   };
 };
 
