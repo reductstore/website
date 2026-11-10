@@ -1,6 +1,7 @@
 import React from "react";
 import type { JSX } from "react";
 import clsx from "clsx";
+import Head from "@docusaurus/Head";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
@@ -15,6 +16,49 @@ import styles from "./index.module.css";
 import HomepageStats from "../components/homepage/HomepageStats";
 import HomepagePartners from "../components/homepage/HomepagePartners";
 import HomepageCompanies from "../components/homepage/HomepageCompanies";
+
+const description =
+  "Time-indexed storage for robots and machines: record images, LiDAR, telemetry, and logs at the edge, replicate what matters to the cloud, and query it with SQL.";
+
+const siteUrl = "https://www.reduct.store";
+const organizationId = `${siteUrl}/#organization`;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": organizationId,
+      name: "ReductStore",
+      legalName: "ReductSoftware UG",
+      url: siteUrl,
+      logo: `${siteUrl}/img/logo.svg`,
+      sameAs: [
+        "https://github.com/reductstore",
+        "https://www.linkedin.com/company/reductstore",
+        "https://www.youtube.com/@ReductStore",
+        "https://community.reduct.store",
+      ],
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": `${siteUrl}/#software`,
+      name: "ReductStore",
+      applicationCategory: "DeveloperApplication",
+      operatingSystem: "Linux, macOS, Windows",
+      description,
+      url: siteUrl,
+      license: "https://www.apache.org/licenses/LICENSE-2.0",
+      sameAs: ["https://github.com/reductstore/reductstore"],
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "EUR",
+      },
+      publisher: { "@id": organizationId },
+    },
+  ],
+};
 
 function HomepageHeader() {
   return (
@@ -52,10 +96,12 @@ function HomepageHeader() {
 export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <Layout
-      title={siteConfig.tagline}
-      description="Time-indexed storage for robots and machines: record images, LiDAR, telemetry, and logs at the edge, replicate what matters to the cloud, and query it with SQL."
-    >
+    <Layout title={siteConfig.tagline} description={description}>
+      <Head>
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      </Head>
       <HomepageHeader />
       <main>
         <div className="container">
