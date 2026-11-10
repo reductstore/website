@@ -11,6 +11,14 @@ import remarkResponsiveSVGBob from "./src/plugins/remark-responsive-svgbob/index
 import { svgoConfig } from "./src/plugins/svgo-config.js";
 import rehypeLlmsTxtCleanup from "./src/plugins/rehype-llms-txt-cleanup/index.js";
 import useCases from "./src/data/useCases.js";
+import docsVersions from "./versions.json";
+
+const noIndexDocVersions = Object.fromEntries(
+  ["current", ...docsVersions.slice(1)].map((version) => [
+    version,
+    { noIndex: true },
+  ]),
+);
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -167,6 +175,14 @@ const config = {
         docs: {
           sidebarPath: require.resolve("./sidebars.json"),
           editUrl: "https://github.com/reductstore/docs/tree/main",
+          versions: noIndexDocVersions,
+          exclude: [
+            "**/_*.{js,jsx,ts,tsx,md,mdx}",
+            "**/_*/**",
+            "**/*.test.{js,jsx,ts,tsx}",
+            "**/__tests__/**",
+            "**/common/**",
+          ],
           remarkPlugins: [
             codeImport,
             [remarkSVGBob, { useMdx: true }],
