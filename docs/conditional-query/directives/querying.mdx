@@ -18,6 +18,7 @@ The querying directives are special instructions in **[conditional queries](../.
 | `#ctx_before`    | v1.16               | Add additional records before each matching record as context, either by count or time window. |
 | `#ctx_after`     | v1.16               | Add additional records after each matching record as context, either by count or time window.  |
 | `#select_labels` | v1.16               | Retain only the specified labels in a record after filtering.                                  |
+| `#strict`        | v1.22               | Enable strict mode for conditional queries.                                                     |
 | `#ext`           | v1.17               | Contains query parameters for extensions that process data during querying.                    |
 
 ## `#ctx_before`
@@ -117,6 +118,32 @@ The `#select_labels` directive is ignored in replication conditional queries.
 ```json
 {
   "#select_labels": ["temperature", "humidity"]
+}
+```
+
+## `#strict`
+
+The `#strict` directive enables strict mode for a conditional query. In strict mode, the query fails if a condition is invalid or cannot be evaluated because it contains an unknown field.
+
+### Syntax
+
+```
+{
+  "#strict": <expression>
+}
+```
+
+### Behavior
+
+- The directive must have a single value. It uses the same truthiness rules as conditional values: `false`, zero, and an empty string disable strict mode; `true`, non-zero values, and non-empty strings enable it.
+- The deprecated outer `strict` query field is used only when `#strict` is absent. If both are set, `#strict` takes precedence.
+
+### Example
+
+```json
+{
+  "#strict": true,
+  "&temperature": { "$gt": 30 }
 }
 ```
 
