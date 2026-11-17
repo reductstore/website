@@ -59,7 +59,7 @@ There are also more advanced parameters available in the SDKs and HTTP API to co
 | `head`          | Retrieve only metadata                                                               | Boolean | False   |
 | `continuous`    | Keep the query open for continuous data retrieval                                    | Boolean | False   |
 | `poll_interval` | Time interval in seconds for polling data in continuous mode data in continuous mode | Integer | 1       |
-| `strict`        | Enable strict mode for conditional queries                                           | Boolean | False   |
+| `strict`        | Deprecated. Use `#strict` in the `when` condition instead.                           | Boolean | False   |
 
 **TTL (Time-to-Live)**
 
@@ -75,8 +75,10 @@ The `continuous` flag is used to keep the query open for continuous data retriev
 
 **Strict Mode**
 
-The `strict` flag is used to enable strict mode for conditional queries in the `when` parameter. In strict mode, the query fails if the condition is invalid or contains an unknown field.
+Use the **[`#strict` directive](../conditional-query/directives/querying.mdx#strict)** in the `when` condition to enable strict mode. In strict mode, the query fails if the condition is invalid or contains an unknown field.
 When the strict mode is disabled, the invalid condition is considered as `false` and the unknown field is ignored.
+
+The outer `strict` query parameter is deprecated. It remains supported for compatibility, but `when.#strict` takes precedence when both are set.
 
 ## Typical Data Querying Cases
 
