@@ -14,6 +14,12 @@ description: HTTP Endpoints for writing data to the database.
 
 The API provides several endpoints for writing data to the database. The endpoints allow writing a single **[record](../../glossary#record)** or a batch of records in a single request.
 
+## Synchronous writes
+
+This option applies to both single-record and batch writes. Set the `x-reduct-sync-write` header to the exact lowercase value `true` to make the server wait until the affected entry is synchronized before returning a successful response. If remote storage is configured, this includes waiting for remote publication. The header is opt-in: when it is absent, `false`, or any other value, the write uses the default buffered behavior.
+
+Synchronous writes increase request latency and can reduce throughput. Synchronization or finalization errors fail the HTTP request.
+
 ## Write a Record to an Entry
 
 ReductStore creates an **[entry](../../glossary#entry)** on the first write operation. The record
@@ -34,6 +40,7 @@ drains the sent body and returns an HTTP status.
   `x-reduct-label-`.
 - Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
 - Version 1.19: entry names can be hierarchical paths with multiple segments (for example, `a/b/c`).
+- Version 1.22: supports opt-in synchronous writes with `x-reduct-sync-write: true`.
 
 import SwaggerComponent from "@site/src/components/SwaggerComponent";
 
@@ -81,6 +88,15 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
       details: {
         name: "x-reduct-label-<name>",
         description: "A value of a label assigned to the record",
+        isRequired: false,
+      },
+    },
+    {
+      type: "header",
+      details: {
+        name: "x-reduct-sync-write",
+        description:
+          "Set to exact lowercase true to wait until the entry is synchronized before returning success",
         isRequired: false,
       },
     },
@@ -141,11 +157,23 @@ client should describe the records in headers in the format of [the Batch Protoc
   of labels to a record by using headers that start with `x-reduct-label-`.
 - Version 1.18: returns `409 Conflict` if the bucket or entry is being deleted.
 - Version 1.19: entry names can be hierarchical paths with multiple segments (for example, `a/b/c`).
+- Version 1.22: supports opt-in synchronous writes with `x-reduct-sync-write: true`.
 
 <SwaggerComponent
     method="POST"
     path="/api/v1/b/:bucket_name/:entry_name/batch"
     summary="Write batch of records"
+    parameters={[
+        {
+          type: "header",
+          details: {
+            name: "x-reduct-sync-write",
+            description:
+                "Set to exact lowercase true to wait until the entry is synchronized before returning success",
+            isRequired: false,
+          },
+        },
+    ]}
     responses={[
         {
             status: "200",

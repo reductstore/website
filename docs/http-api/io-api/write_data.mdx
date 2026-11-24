@@ -65,6 +65,15 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
           "Per-record metadata header for each record; body is concatenated in entry index order, then by timestamp.",
       },
     },
+    {
+      type: "header",
+      details: {
+        name: "x-reduct-sync-write",
+        isRequired: false,
+        description:
+          "Set to exact lowercase true to wait until all affected entries are synchronized before returning success",
+      },
+    },
   ]}
   responses={[
     {
@@ -105,6 +114,12 @@ import SwaggerComponent from "@site/src/components/SwaggerComponent";
     },
   ]}
 />
+
+## Synchronous writes
+
+Set the `x-reduct-sync-write` header to the exact lowercase value `true` to make the server wait until all entries affected by the batch are synchronized before returning a successful response. If remote storage is configured, this includes waiting for remote publication. The header is opt-in: when it is absent, `false`, or any other value, the write uses the default buffered behavior.
+
+Synchronous writes increase request latency and can reduce throughput. Synchronization or finalization errors fail the HTTP request.
 
 ## Per-record errors
 
