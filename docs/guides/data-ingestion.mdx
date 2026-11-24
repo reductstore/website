@@ -34,12 +34,6 @@ Additionally, a writer can add the following information:
 
 ReductStore uses a streaming approach to ingest data. The storage engine receives the data in chunks and streams them in a file system. This enables efficient data ingestion and reduces the memory footprint of the server.
 
-### Synchronous writes
-
-By default, successful write requests use buffered behavior. To wait until written data is synchronized before a successful response, set `x-reduct-sync-write: true` on a single-record, legacy entry batch, or I/O batch POST request. Only the exact lowercase value `true` enables this behavior; an absent header, `false`, or any other value keeps buffered behavior.
-
-The synchronization barrier covers the affected entry or entries and, when remote storage is configured, waits for remote publication. This increases request latency and can reduce throughput. Synchronization or finalization errors fail the HTTP request.
-
 :::info
 For small records, ReductStore provides a batch ingestion mode. In this mode, the server receives multiple records in a single request to reduce HTTP overhead. Use the [**I/O API**](../http-api/io-api#batch-protocol-v2) when a batch must write records to multiple entries.
 :::
